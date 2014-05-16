@@ -81,7 +81,7 @@
 #include "TrackPropagation/SteppingHelixPropagator/interface/SteppingHelixPropagator.h"
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
-#include "MuJetAnalysis/DataFormats/interface/interface/eig3.h"
+#include "MuJetAnalysis/DataFormats/interface/eig3.h"
 #include "MuJetAnalysis/DataFormats/src/eig3.cc"
 
 //******************************************************************************
@@ -965,7 +965,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   double min_dz_n = 10000.;
 
 
-  math::XYZTLorentzVector diMuonTmp;
+  math::XYZTLorentzVector diMuonTmp2;
 
 
   if ( muJet1 != NULL && muJet2 != NULL ) {     
@@ -1075,11 +1075,11 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
 	  if (fabs(re_dzmj1-re_dzmj2) < min_dz_n){
 
-	    massmj1 = new_mj1_vtx.M();
-	    massmj2 = new_mj2_vtx.M();
-	    dzmj1 =  re_dzmj1;
-	    dzmj2 =  re_dzmj2;
-	    min_dz_n = fabs(re_dzmj1-re_dzmj2);	    
+	    Float_t massmj1 = new_mj1_vtx.M();
+	    Float_t massmj2 = new_mj2_vtx.M();
+	    Float_t dzmj1 =  re_dzmj1;
+	    Float_t dzmj2 =  re_dzmj2;
+	    Float_t min_dz_n = fabs(re_dzmj1-re_dzmj2);	    
 
 	    final_mj1_vtx = new_mj1_vtx;
 	    final_mj2_vtx = new_mj2_vtx;
@@ -1091,20 +1091,20 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		double isoTmp = 0.0;
 		double n_dz;
 		if ( i == 0 ){
-		  diMuonTmp = final_mj1_vtx;
+		  diMuonTmp2 = final_mj1_vtx;
 		  n_dz = dzmj1;
 		}
 		if ( i == 1 ){
-		  diMuonTmp = final_mj2_vtx;
+		  diMuonTmp2 = final_mj2_vtx;
 		  n_dz = dzmj2;
 		}
 	      
 		for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
 		  bool trackIsMuon = false;
-		  if ( sameTrack( &*track, &*((*muJets)[i].muon(0)->innerTrack()) ) || sameTrack( &*track, &*((*muJets)[i].muon(1)->innerTrack()) ) ) trackIsMuon = true;
+		  if ( muJet1->sameTrack( &*track, &*((*muJets)[i].muon(0)->innerTrack()) ) || muJet1->sameTrack( &*track, &*((*muJets)[i].muon(1)->innerTrack()) ) ) trackIsMuon = true;
 		  if (!trackIsMuon) {
-		    double dPhi = My_dPhi( diMuonTmp.phi(), track->phi() );
-		    double dEta = diMuonTmp.eta() - track->eta();
+		    double dPhi = My_dPhi( diMuonTmp2.phi(), track->phi() );
+		    double dEta = diMuonTmp2.eta() - track->eta();
 		    double dR = sqrt( dPhi*dPhi + dEta*dEta ); 
 
 		    if ( dR < 0.4 && track->pt() > 0.5 ) {
@@ -1115,8 +1115,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		    }    
 		  }
 		}
-		if ( i == 0 ) isomj1 = isoTmp;
-		if ( i == 1 ) isomj2 = isoTmp;
+		if ( i == 0 ) Float_t isomj1 = isoTmp;
+		if ( i == 1 ) Float_t isomj2 = isoTmp;
 	      }
 	    }  
 	  

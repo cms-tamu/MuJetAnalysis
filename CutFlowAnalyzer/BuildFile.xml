@@ -13,6 +13,7 @@
 <use   name="DataFormats/TrackReco"/>
 <use   name="DataFormats/VertexReco"/>
 <use   name="SimDataFormats/GeneratorProducts"/>
+<use   name="TrackingTools/TransientTrack"/>
 <use   name="MuJetAnalysis/DataFormats"/>
 <use   name="root"/>
 <flags EDM_PLUGIN="1"/>
