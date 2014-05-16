@@ -1,0 +1,12 @@
+<use name=DataFormats/Common>
+<use name=DataFormats/GeometryVector>
+<use name=DataFormats/PatCandidates>
+<use name=DataFormats/TrackReco>
+<use name=DataFormats/CaloTowers>
+<use name=rootrflx>
+<use name=root>
+<export>
+  <use name=DataFormats/Common>
+  <use name=DataFormats/PatCandidates>
+  <lib name=AnalysisDataFormatsMuJetAnalysis>
+</export>

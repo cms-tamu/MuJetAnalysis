@@ -1,0 +1,21 @@
+<lcgdict>
+  <class name="pat::MultiMuon"/>
+  <class name="std::vector<pat::MultiMuon>"/>
+  <class name="edm::Wrapper<std::vector<pat::MultiMuon> >"/>
+  <class name="edm::Ref<std::vector<pat::MultiMuon>,pat::MultiMuon,edm::refhelper::FindUsingAdvance<std::vector<pat::MultiMuon>,pat::MultiMuon> >"/>
+  <class name="edm::RefProd<std::vector<pat::MultiMuon> >"/>
+  <class name="edm::RefVector<std::vector<pat::MultiMuon>,pat::MultiMuon,edm::refhelper::FindUsingAdvance<std::vector<pat::MultiMuon>,pat::MultiMuon> >"/>
+  <class name="edm::Wrapper<edm::RefVector<std::vector<pat::MultiMuon>,pat::MultiMuon,edm::refhelper::FindUsingAdvance<std::vector<pat::MultiMuon>,pat::MultiMuon> > >"/>
+  <class name="edm::reftobase::Holder<reco::Candidate, edm::Ref<std::vector<pat::MultiMuon>,pat::MultiMuon,edm::refhelper::FindUsingAdvance<std::vector<pat::MultiMuon>,pat::MultiMuon> > >" />
+
+  <class name="pat::HAA4MuCandidate"/>
+  <class name="std::vector<pat::HAA4MuCandidate>"/>
+  <class name="edm::Wrapper<std::vector<pat::HAA4MuCandidate> >"/>
+  <class name="edm::Ref<std::vector<pat::HAA4MuCandidate>,pat::HAA4MuCandidate,edm::refhelper::FindUsingAdvance<std::vector<pat::HAA4MuCandidate>,pat::HAA4MuCandidate> >"/>
+  <class name="edm::RefProd<std::vector<pat::HAA4MuCandidate> >"/>
+  <class name="edm::RefVector<std::vector<pat::HAA4MuCandidate>,pat::HAA4MuCandidate,edm::refhelper::FindUsingAdvance<std::vector<pat::HAA4MuCandidate>,pat::HAA4MuCandidate> >"/>
+  <class name="edm::Wrapper<edm::RefVector<std::vector<pat::HAA4MuCandidate>,pat::HAA4MuCandidate,edm::refhelper::FindUsingAdvance<std::vector<pat::HAA4MuCandidate>,pat::HAA4MuCandidate> > >"/>
+  <class name="edm::reftobase::Holder<reco::Candidate, edm::Ref<std::vector<pat::HAA4MuCandidate>,pat::HAA4MuCandidate,edm::refhelper::FindUsingAdvance<std::vector<pat::HAA4MuCandidate>,pat::HAA4MuCandidate> > >" />
+
+  <class name="std::vector<Point3DBase<float,GlobalTag> >" />
+</lcgdict>

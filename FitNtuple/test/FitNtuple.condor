@@ -1,0 +1,11 @@
+universe = vanilla
+Executable = FitNtuple.sh
+Requirements = (FileSystemDomain != "DUMMY") && (Memory >= 1) && (OpSys == "LINUX") && (Arch != "DUMMY") && (Disk > 1)
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+Output = FitNtuple_$(Process).stdout
+Error = FitNtuple_$(Process).stderr
+Log = FitNtuple_$(Process).log
+notify_user = pakhotin.queue@gmail.com
+Arguments = $(Process)
+Queue 100

@@ -1,0 +1,11 @@
+universe = vanilla
+Executable = makeMuonJets.sh
+Requirements = (FileSystemDomain != "DUMMY") && (Memory >= 1) && (OpSys == "LINUX") && (Arch != "DUMMY") && (Disk > 1)
+Should_Transfer_Files = YES
+WhenToTransferOutput = ON_EXIT
+Output = makeMuonJets_$(Cluster)_$(Process).stdout
+Error = makeMuonJets_$(Cluster)_$(Process).stderr
+Log = makeMuonJets_$(Cluster)_$(Process).log
+notify_user = ${LOGNAME}@FNAL.GOV
+Arguments = $(Process)
+Queue 112

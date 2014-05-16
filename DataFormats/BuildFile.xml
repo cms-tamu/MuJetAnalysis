@@ -1,0 +1,12 @@
+<use   name="DataFormats/Common"/>
+<use   name="DataFormats/GeometryVector"/>
+<use   name="TrackingTools/TransientTrack"/>
+<use   name="RecoVertex/KalmanVertexFit"/>
+<use   name="DataFormats/PatCandidates"/>
+<use   name="DataFormats/TrackReco"/>
+<use   name="DataFormats/CaloTowers"/>
+<use   name="rootrflx"/>
+<use   name="root"/>
+<export>
+  <lib   name="1"/>
+</export>
