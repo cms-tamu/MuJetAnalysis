@@ -3,7 +3,7 @@
    domain Java Matrix library JAMA. */
 
 #include <math.h>
-#include "AnalysisDataFormats/MuJetAnalysis/interface/eig3.h"
+#include "MuJetAnalysis/DataFormats/interface/eig3.h"
 
 #ifdef MAX
 #undef MAX
