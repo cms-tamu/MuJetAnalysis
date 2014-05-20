@@ -222,9 +222,9 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 }
 
-bool pat::MultiMuon::calculateConsistentVertex( const pat::MultiMuon *&muJet ) {
+bool pat::MultiMuon::calculateConsistentVertex( const pat::MultiMuon *muJet ) {
   bool consistentVertexValid = false;
-  if ( m_vertexValid && muJet.vertexValid() ) {
+  if ( m_vertexValid && muJet->vertexValid() ) {
     std::cout << "QUQU" << std::endl;
     consistentVertexValid = true;
   }
