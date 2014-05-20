@@ -224,7 +224,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 
 bool pat::MultiMuon::calculateConsistentVertex( const pat::MultiMuon *aMultiMuon ) const {
   bool consistentVertexValid = false;
-  if ( m_vertexValid && muJet->vertexValid() ) {
+  if ( m_vertexValid && aMultiMuon->vertexValid() ) {
     std::cout << "QUQU" << std::endl;
     consistentVertexValid = true;
   }
