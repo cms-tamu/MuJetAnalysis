@@ -223,9 +223,13 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 }
 
 bool pat::MultiMuon::calculateConsistentVertex( const pat::MultiMuon *muJet ) {
+  bool consistentVertexValid = false;
   if ( m_vertexValid && muJet->vertexValid() ) {
     std::cout << "QUQU" << std::endl;
-  } 
+    consistentVertexValid = true;
+  }
+  
+  return consistentVertexValid;
 }
 
 void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *tracks,
