@@ -918,220 +918,211 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_isDzDiMuonsOK && b_isVLT ) m_eventsDz2DiMuonsOK++;
   
-  std::cout << "Before calculateConsistentVertex" << std::endl;
-  diMuonC->calculateConsistentVertex(diMuonF);
-  std::cout << "After calculateConsistentVertex" << std::endl;
-  
   //****************************************************************************
   // Begin: new vertex code
   //****************************************************************************
   
-  const unsigned int seed = 0;
-
-  TRandom3 *rnd = new TRandom3(seed);
-
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByLabel("generalTracks", tracks);
 
-  std::vector<reco::TransientTrack> tracksToVertex1;
-  std::vector<reco::TransientTrack> tracksToVertex2;
+  std::vector<reco::TransientTrack> diMuonC_tracksToVertex;
+  std::vector<reco::TransientTrack> diMuonF_tracksToVertex;
   
-  const pat::MultiMuon *muJet1 = NULL;
-  const pat::MultiMuon *muJet2 = NULL;
-  
-  muJet1 = diMuonC;
-  muJet2 = diMuonF;
-  
-  if ( muJet1 != NULL && muJet2 != NULL ) {     
+  if ( diMuonC != NULL && diMuonC->vertexValid() && diMuonF != NULL && diMuonF->vertexValid() ) {     
+    edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
+    iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
 
-   edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
-   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
-
-   for (unsigned int i = 0;  i < muJet1->numberOfDaughters();  i++) {
-     if ( muJet1->muon(i)->innerTrack().isAvailable() ) {
-       tracksToVertex1.push_back( transientTrackBuilder->build( muJet1->muon(i)->innerTrack() ) );
-     }
-     else if (muJet1->muon(i)->outerTrack().isAvailable()) {
-       tracksToVertex1.push_back( transientTrackBuilder->build( muJet1->muon(i)->outerTrack() ) );
-     }
-   }
-
-   for (unsigned int i = 0;  i < muJet2->numberOfDaughters();  i++) {
-     if (muJet2->muon(i)->innerTrack().isAvailable()) {
-       tracksToVertex2.push_back(transientTrackBuilder->build(muJet2->muon(i)->innerTrack()));
-     }
-     else if (muJet2->muon(i)->outerTrack().isAvailable()) {
-       tracksToVertex2.push_back(transientTrackBuilder->build(muJet2->muon(i)->outerTrack()));
-     }
-   }
-  }
-
-  double min_dz_n = 10000.;
-
-
-  math::XYZTLorentzVector diMuonTmp2;
-
-
-  if ( muJet1 != NULL && muJet2 != NULL ) {     
-
-    if (nMuJets == 2) {
-      if ((muJet1->vertexValid()) && (muJet2->vertexValid())){
-
-	double A1[3][3];
-	double V1[3][3];
-	double d1[3];
-	d1[0]=0.;
-	d1[1]=0.;
-	d1[2]=0.;
-
-	double A2[3][3];
-	double V2[3][3];
-	double d2[3];
-	d2[0]=0.;
-	d2[1]=0.;
-	d2[2]=0.;
-
-	for (unsigned int a = 0; a < 3; ++a){
-	  for (unsigned int b = 0; b < 3; ++b){
-	    A1[a][b] = muJet1->vertexCovariance(a,b);
-	    A2[a][b] = muJet2->vertexCovariance(a,b);
-	  }
-	}
-
-	// Perform the decomposition       
-	eigen_decomposition(A1, V1, d1);
-	eigen_decomposition(A2, V2, d2);
-
-
-	double elipiseX1Size = sqrt(d1[0]);
-	double elipiseX2Size = sqrt(d2[0]);
-	double elipiseY1Size = sqrt(d1[1]);
-	double elipiseY2Size = sqrt(d2[1]);
-	double elipiseZ1Size = sqrt(d1[2]);
-	double elipiseZ2Size = sqrt(d2[2]);
-
-	Global3DPoint muonjet1v = muJet1->vertexPoint();
-	Global3DPoint muonjet2v = muJet2->vertexPoint();
-
-	int throws = 100000;
-
-	math::XYZTLorentzVector final_mj1_vtx;
-	math::XYZTLorentzVector final_mj2_vtx;
-
-
-	for (int dice = 0; dice < throws; dice++) {
-
-	  double rnd_X1 = rnd->Gaus(muonjet1v.x(), elipiseX1Size);
-	  double rnd_Y1 = rnd->Gaus(muonjet1v.y(), elipiseY1Size);
-	  double rnd_Z1 = rnd->Gaus(muonjet1v.z(), elipiseZ1Size);
-
-	  double rnd_X2 = rnd->Gaus(muonjet2v.x(), elipiseX2Size);
-	  double rnd_Y2 = rnd->Gaus(muonjet2v.y(), elipiseY2Size);
-	  double rnd_Z2 = rnd->Gaus(muonjet2v.z(), elipiseZ2Size);
-
-
-	  Global3DPoint newVtx1(rnd_X1, rnd_Y1, rnd_Z1);
-	  Global3DPoint newVtx2(rnd_X2, rnd_Y2, rnd_Z2);
-
-	  std::vector<math::XYZTLorentzVector> new_vertex1_P4;
-	  std::vector<math::XYZTLorentzVector> new_vertex2_P4;
-
-	  for (unsigned int i = 0;  i < tracksToVertex1.size();  i++) {
-	    TrajectoryStateClosestToPoint TSCTP1 = tracksToVertex1[i].trajectoryStateClosestToPoint(newVtx1);
-	    Global3DVector momentum1 = TSCTP1.momentum();      
-	    new_vertex1_P4.push_back(math::XYZTLorentzVector(momentum1.x(), momentum1.y(), momentum1.z(), sqrt(momentum1.mag2() + pow(muJet1->muon(i)->mass(), 2))));
-	  }
-	  for (unsigned int i = 0;  i < tracksToVertex2.size();  i++) {
-	    TrajectoryStateClosestToPoint TSCTP2 = tracksToVertex2[i].trajectoryStateClosestToPoint(newVtx2);
-	    Global3DVector momentum2 = TSCTP2.momentum();
-	    new_vertex2_P4.push_back(math::XYZTLorentzVector(momentum2.x(), momentum2.y(), momentum2.z(), sqrt(momentum2.mag2() + pow(muJet2->muon(i)->mass(), 2))));
-	  }
-
-	  math::XYZTLorentzVector new_mj1_vtx;
-	  math::XYZTLorentzVector new_mj2_vtx;
-
-	  for (unsigned int i = 0;  i < tracksToVertex1.size();  i++) {
-	    new_mj1_vtx+= new_vertex1_P4[i];
-	  }
-	  for (unsigned int i = 0;  i < tracksToVertex2.size();  i++) {
-	    new_mj2_vtx+= new_vertex2_P4[i];
-	  }
-
-	  double rez1 = rnd_Z1-beamSpot->position().z();
-	  double rex1 = rnd_X1-beamSpot->position().x();
-	  double rey1 = rnd_Y1-beamSpot->position().y();
-	  double repx1 = new_mj1_vtx.x();
-	  double repy1 = new_mj1_vtx.y();
-	  double repz1 = new_mj1_vtx.z();
-	  double rept1 = pow((new_mj1_vtx.x()*new_mj1_vtx.x())+(new_mj1_vtx.y()*new_mj1_vtx.y()),0.5);			
-
-	  double re_dzmj1 = (rez1) - ((rex1)*repx1+(rey1)*repy1)/rept1 * repz1/rept1;
-
-	  double rez2 = rnd_Z2-beamSpot->position().z();
-	  double rex2 = rnd_X2-beamSpot->position().x();
-	  double rey2 = rnd_Y2-beamSpot->position().y();
-	  double repx2 = new_mj2_vtx.x();
-	  double repy2 = new_mj2_vtx.y();
-	  double repz2 = new_mj2_vtx.z();
-	  double rept2 = pow((new_mj2_vtx.x()*new_mj2_vtx.x())+(new_mj2_vtx.y()*new_mj2_vtx.y()),0.5);
-	    
-	  double re_dzmj2 = (rez2) - ((rex2)*repx2+(rey2)*repy2)/rept2 * repz2/rept2;
-
-	  if (fabs(re_dzmj1-re_dzmj2) < min_dz_n){
-
-	    Float_t massmj1 = new_mj1_vtx.M();
-	    Float_t massmj2 = new_mj2_vtx.M();
-	    Float_t dzmj1 =  re_dzmj1;
-	    Float_t dzmj2 =  re_dzmj2;
-	    Float_t min_dz_n = fabs(re_dzmj1-re_dzmj2);	    
-
-	    final_mj1_vtx = new_mj1_vtx;
-	    final_mj2_vtx = new_mj2_vtx;
-
-
-	    if (min_dz_n < 0.1){
-	      for ( unsigned int i = 0; i <= 1; i++ ) { 
-
-		double isoTmp = 0.0;
-		double n_dz;
-		if ( i == 0 ){
-		  diMuonTmp2 = final_mj1_vtx;
-		  n_dz = dzmj1;
-		}
-		if ( i == 1 ){
-		  diMuonTmp2 = final_mj2_vtx;
-		  n_dz = dzmj2;
-		}
-	      
-		for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-		  bool trackIsMuon = false;
-		  if ( muJet1->sameTrack( &*track, &*((*muJets)[i].muon(0)->innerTrack()) ) || muJet1->sameTrack( &*track, &*((*muJets)[i].muon(1)->innerTrack()) ) ) trackIsMuon = true;
-		  if (!trackIsMuon) {
-		    double dPhi = My_dPhi( diMuonTmp2.phi(), track->phi() );
-		    double dEta = diMuonTmp2.eta() - track->eta();
-		    double dR = sqrt( dPhi*dPhi + dEta*dEta ); 
-
-		    if ( dR < 0.4 && track->pt() > 0.5 ) {
-		      double dz = fabs( track->dz(beamSpot->position()) - n_dz);
-		      if ( dz < 0.1 ){
-			isoTmp += track->pt();
-		      }
-		    }    
-		  }
-		}
-		if ( i == 0 ) Float_t isomj1 = isoTmp;
-		if ( i == 1 ) Float_t isomj2 = isoTmp;
-	      }
-	    }  
-	  
-
-	  }
-	}
-
+    for (unsigned int i = 0;  i < diMuonC->numberOfDaughters();  i++) {
+      if ( diMuonC->muon(i)->innerTrack().isAvailable() ) {
+       diMuonC_tracksToVertex.push_back( transientTrackBuilder->build( diMuonC->muon(i)->innerTrack() ) );
       }
-      else std::cout << "muJet vertex not valid" << std::endl;
+      else if (diMuonC->muon(i)->outerTrack().isAvailable()) {
+       diMuonC_tracksToVertex.push_back( transientTrackBuilder->build( diMuonC->muon(i)->outerTrack() ) );
+      }
     }
+
+    for (unsigned int i = 0;  i < diMuonF->numberOfDaughters();  i++) {
+      if (diMuonF->muon(i)->innerTrack().isAvailable()) {
+        diMuonF_tracksToVertex.push_back(transientTrackBuilder->build(diMuonF->muon(i)->innerTrack()));
+      }
+      else if (diMuonF->muon(i)->outerTrack().isAvailable()) {
+        diMuonF_tracksToVertex.push_back(transientTrackBuilder->build(diMuonF->muon(i)->outerTrack()));
+      }
+    }
+    
+    const unsigned int seed = 0;
+    TRandom3 *rnd = new TRandom3(seed);
+    double dZDiMuons_TmpMin = 10000.;
+    int throws = 100000;
+
+    Global3DPoint diMuonC_finalVtx;
+    Global3DPoint diMuonF_finalVtx;
+    Float_t diMuonC_finalMass;
+    Float_t diMuonF_finalMass;
+    Float_t diMuonC_finaldZ;
+    Float_t diMuonF_finaldZ;
+    
+    double A1[3][3];
+    double V1[3][3];
+    double d1[3];
+    d1[0]=0.;
+    d1[1]=0.;
+    d1[2]=0.;
+
+    double A2[3][3];
+    double V2[3][3];
+    double d2[3];
+    d2[0]=0.;
+    d2[1]=0.;
+    d2[2]=0.;
+
+    for (unsigned int a = 0; a < 3; ++a){
+      for (unsigned int b = 0; b < 3; ++b){
+        A1[a][b] = diMuonC->vertexCovariance(a,b);
+        A2[a][b] = diMuonF->vertexCovariance(a,b);
+      }
+    }
+    
+    // Perform the decomposition       
+    eigen_decomposition(A1, V1, d1);
+    eigen_decomposition(A2, V2, d2);
+
+    double ellipseX1Size = sqrt(d1[0]);
+    double ellipseX2Size = sqrt(d2[0]);
+    double ellipseY1Size = sqrt(d1[1]);
+    double ellipseY2Size = sqrt(d2[1]);
+    double ellipseZ1Size = sqrt(d1[2]);
+    double ellipseZ2Size = sqrt(d2[2]);
+    
+    Global3DPoint diMuonC_vtx = diMuonC->vertexPoint();
+    Global3DPoint diMuonF_vtx = diMuonF->vertexPoint();
+    
+    for (int dice = 0; dice < throws; dice++) {
+      
+      double rnd_X1 = rnd->Gaus(diMuonC_vtx.x(), ellipseX1Size);
+      double rnd_Y1 = rnd->Gaus(diMuonC_vtx.y(), ellipseY1Size);
+      double rnd_Z1 = rnd->Gaus(diMuonC_vtx.z(), ellipseZ1Size);
+
+      double rnd_X2 = rnd->Gaus(diMuonF_vtx.x(), ellipseX2Size);
+      double rnd_Y2 = rnd->Gaus(diMuonF_vtx.y(), ellipseY2Size);
+      double rnd_Z2 = rnd->Gaus(diMuonF_vtx.z(), ellipseZ2Size);
+
+      Global3DPoint newVtx1(rnd_X1, rnd_Y1, rnd_Z1);
+      Global3DPoint newVtx2(rnd_X2, rnd_Y2, rnd_Z2);
+      
+      math::XYZTLorentzVector newVtx1_P4;
+      math::XYZTLorentzVector newVtx2_P4;
+      
+      std::vector<math::XYZTLorentzVector> newVtx1_P4_tracksToVertex;
+      std::vector<math::XYZTLorentzVector> newVtx2_P4_tracksToVertex;
+
+      for (unsigned int i = 0;  i < diMuonC_tracksToVertex.size();  i++) {
+        TrajectoryStateClosestToPoint TSCTP1 = diMuonC_tracksToVertex[i].trajectoryStateClosestToPoint(newVtx1);
+        Global3DVector momentum1 = TSCTP1.momentum();      
+        newVtx1_P4_tracksToVertex.push_back(math::XYZTLorentzVector(momentum1.x(), momentum1.y(), momentum1.z(), sqrt(momentum1.mag2() + pow(diMuonC->muon(i)->mass(), 2))));
+        newVtx1_P4+= newVtx1_P4_tracksToVertex[i];
+      }
+      
+      for (unsigned int i = 0;  i < diMuonF_tracksToVertex.size();  i++) {
+        TrajectoryStateClosestToPoint TSCTP2 = diMuonF_tracksToVertex[i].trajectoryStateClosestToPoint(newVtx2);
+        Global3DVector momentum2 = TSCTP2.momentum();
+        newVtx2_P4_tracksToVertex.push_back(math::XYZTLorentzVector(momentum2.x(), momentum2.y(), momentum2.z(), sqrt(momentum2.mag2() + pow(diMuonF->muon(i)->mass(), 2))));
+        newVtx2_P4+= newVtx2_P4_tracksToVertex[i];
+      }
+
+      double rez1 = rnd_Z1 - beamSpot->position().z();
+      double rex1 = rnd_X1 - beamSpot->position().x();
+      double rey1 = rnd_Y1 - beamSpot->position().y();
+      double repx1 = newVtx1_P4.x();
+      double repy1 = newVtx1_P4.y();
+      double repz1 = newVtx1_P4.z();
+      double rept1 = sqrt( repx1*repx1 + repy1*repy1 );			
+
+      double dZ1_new = (rez1) - ((rex1)*repx1+(rey1)*repy1)/rept1 * repz1/rept1;
+
+      double rez2 = rnd_Z2 - beamSpot->position().z();
+      double rex2 = rnd_X2 - beamSpot->position().x();
+      double rey2 = rnd_Y2 - beamSpot->position().y();
+      double repx2 = newVtx2_P4.x();
+      double repy2 = newVtx2_P4.y();
+      double repz2 = newVtx2_P4.z();
+      double rept2 = sqrt( repx2*repx2 + repy2*repy2 );		
+
+      double dZ2_new = (rez2) - ((rex2)*repx2+(rey2)*repy2)/rept2 * repz2/rept2;
+      
+      double dZDiMuons_New = dZ1_new - dZ2_new;
+      if ( fabs(dZDiMuons_New) < dZDiMuons_TmpMin ){
+        diMuonC_finalMass = newVtx1_P4.M();
+        diMuonF_finalMass = newVtx2_P4.M();
+        diMuonC_finaldZ =  dZ1_new;
+        diMuonF_finaldZ =  dZ2_new;
+        diMuonC_finalVtx = newVtx1;
+        diMuonF_finalVtx = newVtx2;
+      }
+    }
+        
+  } else {
+    std::cout << "Dimuons vertexes not valid" << std::endl;
   }
+  
+//  
+
+//  math::XYZTLorentzVector diMuonTmp2;
+
+
+//  if ( diMuonC != NULL && diMuonF != NULL ) {     
+
+//    if (nMuJets == 2) {
+//      if ((diMuonC->vertexValid()) && (diMuonF->vertexValid())){
+
+//	
+
+
+
+
+//	for (int dice = 0; dice < throws; dice++) {
+
+
+
+
+//	    if (min_dz_n < 0.1){
+//	      for ( unsigned int i = 0; i <= 1; i++ ) { 
+
+//		double isoTmp = 0.0;
+//		double n_dz;
+//		if ( i == 0 ){
+//		  diMuonTmp2 = final_mj1_vtx;
+//		  n_dz = dzmj1;
+//		}
+//		if ( i == 1 ){
+//		  diMuonTmp2 = final_mj2_vtx;
+//		  n_dz = dzmj2;
+//		}
+//	      
+//		for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+//		  bool trackIsMuon = false;
+//		  if ( diMuonC->sameTrack( &*track, &*((*muJets)[i].muon(0)->innerTrack()) ) || diMuonC->sameTrack( &*track, &*((*muJets)[i].muon(1)->innerTrack()) ) ) trackIsMuon = true;
+//		  if (!trackIsMuon) {
+//		    double dPhi = My_dPhi( diMuonTmp2.phi(), track->phi() );
+//		    double dEta = diMuonTmp2.eta() - track->eta();
+//		    double dR = sqrt( dPhi*dPhi + dEta*dEta ); 
+
+//		    if ( dR < 0.4 && track->pt() > 0.5 ) {
+//		      double dz = fabs( track->dz(beamSpot->position()) - n_dz);
+//		      if ( dz < 0.1 ){
+//			isoTmp += track->pt();
+//		      }
+//		    }    
+//		  }
+//		}
+//		if ( i == 0 ) Float_t isomj1 = isoTmp;
+//		if ( i == 1 ) Float_t isomj2 = isoTmp;
+//	      }
+//	    }  
+//	  
+
+//	  }
+//	}
   
   //****************************************************************************
   // End: new vertex code

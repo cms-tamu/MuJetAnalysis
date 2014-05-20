@@ -222,16 +222,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 }
 
-bool pat::MultiMuon::calculateConsistentVertex( const pat::MultiMuon &aMultiMuon) {
-  bool consistentVertexValid = false;
-  if ( m_vertexValid && aMultiMuon.vertexValid() ) {
-    std::cout << "QUQU" << std::endl;
-    consistentVertexValid = true;
-  }
-  
-  return consistentVertexValid;
-}
-
 void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *tracks,
                                                const pat::MuonCollection   *allmuons,
                                                double centralCone,

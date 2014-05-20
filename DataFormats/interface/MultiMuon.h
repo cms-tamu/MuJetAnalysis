@@ -116,7 +116,6 @@ namespace pat {
 	 /// calculate a vertex from the daughter muons (performed by constructor if transientTrackBuilder != NULL)
 	 bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder);
 	 /// calculate a vertex consistent with another MultiMuon
-	 bool calculateConsistentVertex(const pat::MultiMuon &aMultiMuon);
 	 
 	 /// calculate isolation (performed by constructor if tracks, muons, and caloTowers != NULL)
 	 void calculateTrackIsolation(const reco::TrackCollection *tracks, const pat::MuonCollection *allmuons, double centralCone, double unionCone, double centralThreshold, double unionThreshold, TTree *diagnosticTTree = NULL, Float_t *diagnosticdR = NULL, Float_t *diagnosticpT = NULL);
