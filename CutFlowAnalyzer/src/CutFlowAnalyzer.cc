@@ -918,6 +918,10 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_isDzDiMuonsOK && b_isVLT ) m_eventsDz2DiMuonsOK++;
   
+  std::cout << "Before calculateConsistentVertex" << std::endl;
+  diMuonC->calculateConsistentVertex(diMuonF);
+  std::cout << "After calculateConsistentVertex" << std::endl;
+  
   //****************************************************************************
   // Begin: new vertex code
   //****************************************************************************
