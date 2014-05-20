@@ -53,7 +53,7 @@ namespace pat {
       public:
 	 /// default constructor
 	 MultiMuon() : pat::CompositeCandidate()
-		     , m_vertexFitted(false)
+		     , m_vertexValid(false)
 		     , m_chi2(0.)
 		     , m_ndof(0.)
 		     , m_centralTrackIsolationCone(0.)
@@ -76,7 +76,7 @@ namespace pat {
 		     , m_unionNumberAboveThreshold(0) {};
 	 
 	 MultiMuon(double phi) : pat::CompositeCandidate()
-			       , m_vertexFitted(false)
+			       , m_vertexValid(false)
 			       , m_chi2(0.)
 			       , m_ndof(0.)
 			       , m_centralTrackIsolationCone(0.)
@@ -129,7 +129,7 @@ namespace pat {
 	 pat::MultiMuon merge(const pat::MultiMuon &aMultiMuon, const TransientTrackBuilder *transientTrackBuilder = NULL, const reco::TrackCollection *tracks = NULL, const pat::MuonCollection *allmuons = NULL, const CaloTowerCollection *caloTowers = NULL, double centralTrackIsolationCone = 0., double unionTrackIsolationCone = 0., double centralTrackThresholdPt = 1e6, double unionTrackThresholdPt = 1e6, double centralCaloIsolationCone = 0., double unionCaloIsolationCone = 0., double centralNumberAboveThresholdCone = 0., double unionNumberAboveThresholdCone = 0., double centralNumberAboveThresholdPt = 1e6, double unionNumberAboveThresholdPt = 1e6);
 	 
 	 /// return vertex results
-	 bool vertexValid() const { return m_vertexFitted; }
+	 bool vertexValid() const { return m_vertexValid; }
 	 double vertexChi2() const { checkVertex();  return m_chi2; }
 	 double vertexNdof() const { checkVertex();  return m_ndof; }
 	 double vertexNormalizedChi2() const { checkVertex();  return (m_ndof > 0. ? m_chi2/m_ndof : 0.); }
@@ -277,7 +277,7 @@ namespace pat {
 	 double noiseHOcal(const CaloTower &tower) const;
 	 void buildPermutation(std::vector<std::vector<int> > &results, std::vector<int> working, int where, int value) const;
 
-	 bool m_vertexFitted;
+	 bool m_vertexValid;
 	 double m_chi2;
 	 double m_ndof;
 	 CovarianceMatrix m_covarianceMatrix;

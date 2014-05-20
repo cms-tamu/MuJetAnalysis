@@ -80,7 +80,7 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
     setGenParticle(*asGenParticle);
   }
 
-  m_vertexFitted = false;
+  m_vertexValid = false;
   m_chi2 = 0.;
   m_ndof = 0.;
   if (transientTrackBuilder != NULL) {
@@ -130,7 +130,7 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
 
   if (aMultiMuon.genParticle() != NULL) setGenParticle(*(aMultiMuon.genParticle()));
 
-  m_vertexFitted = aMultiMuon.m_vertexFitted;
+  m_vertexValid = aMultiMuon.m_vertexValid;
   m_chi2 = aMultiMuon.m_chi2;
   m_ndof = aMultiMuon.m_ndof;
   m_covarianceMatrix = aMultiMuon.m_covarianceMatrix;
@@ -191,7 +191,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 
   if (!fittedVertex.isValid()  ||  fittedVertex.totalChiSquared() < 0.) return false;
 
-  m_vertexFitted = true;
+  m_vertexValid = true;
   m_chi2 = fittedVertex.totalChiSquared();
   m_ndof = fittedVertex.degreesOfFreedom();
 
@@ -220,6 +220,12 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
   
    return true;
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
+}
+
+bool pat::MultiMuon::calculateUpdatedVertex( const pat::MultiMuon *muJet ) {
+  if ( m_vertexValid && muJet.vertexValid() ) {
+    std::cout << "QUQU" << std::endl;
+  } 
 }
 
 void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *tracks,
@@ -516,7 +522,7 @@ pat::MultiMuon pat::MultiMuon::merge( const pat::MultiMuon &aMultiMuon,
 }
 
 void pat::MultiMuon::checkVertex() const {
-  if (!m_vertexFitted) {
+  if (!m_vertexValid) {
     throw cms::Exception("MultiMuon") << "Request for vertex information, but no vertex has been calculated.";
   }
 }
