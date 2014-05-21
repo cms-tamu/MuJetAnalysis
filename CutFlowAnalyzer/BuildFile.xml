@@ -16,5 +16,6 @@
 <use   name="TrackingTools/TransientTrack"/>
 <use   name="TrackingTools/Records"/>
 <use   name="MuJetAnalysis/DataFormats"/>
+<use   name="MuJetAnalysis/AnalysisTools"/>
 <use   name="root"/>
 <flags EDM_PLUGIN="1"/>
