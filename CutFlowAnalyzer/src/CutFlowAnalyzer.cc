@@ -81,8 +81,9 @@
 #include "TrackPropagation/SteppingHelixPropagator/interface/SteppingHelixPropagator.h"
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
-#include "MuJetAnalysis/DataFormats/interface/eig3.h"
-#include "MuJetAnalysis/DataFormats/src/eig3.cc"
+//#include "MuJetAnalysis/DataFormats/interface/eig3.h"
+//#include "MuJetAnalysis/DataFormats/src/eig3.cc"
+#include "MuJetAnalysis/CutFlowAnalyzer/interface/ConsistentVertexesCalculator.h"
 
 //******************************************************************************
 //              Auxiliary function: Order objects by pT                         
