@@ -170,7 +170,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
   return false;
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
-
+  
   std::vector<reco::TransientTrack> tracksToVertex;
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
     if (muon(i) == NULL) {
@@ -210,12 +210,13 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     m_vertexPCA.push_back(TSCTP.position());
 
     GlobalError error = TSCTP.theState().cartesianError().position();    
-    double covarianceMatrixArray2[6] = {error.cxx(), error.cyy(), error.czz(), error.cyx(), error.czx(), error.czy()};
+//    double covarianceMatrixArray2[6] = {error.cxx(), error.cyy(), error.czz(), error.cyx(), error.czx(), error.czy()};
+    double covarianceMatrixArray2[6] = {error.cxx(), error.cyx(), error.cyy(), error.czx(), error.czy(), error.czz()}; // YP: FIXME! Check if this definition is correct
     CovarianceMatrix covarianceMatrix2 = CovarianceMatrix(covarianceMatrixArray2, 6);
     m_vertexPCACovarianceMatrix.push_back(covarianceMatrix2);
 
     GlobalVector momentum = TSCTP.momentum();
-    m_vertexP4.push_back(LorentzVector(momentum.x(), momentum.y(), momentum.z(), sqrt(momentum.mag2() + pow(daughter(i)->mass(), 2))));
+    m_vertexP4.push_back( LorentzVector( momentum.x(), momentum.y(), momentum.z(), sqrt( momentum.mag2() + daughter(i)->mass()*daughter(i)->mass() ) ) );
   }
   
    return true;

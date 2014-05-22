@@ -2,13 +2,15 @@
 /* Eigen decomposition code for symmetric 3x3 matrices, copied from the public
    domain Java Matrix library JAMA. */
 
+#ifndef _eig_cc
+#define _eig_cc
+
 #include <math.h>
-#include "MuJetAnalysis/DataFormats/interface/eig3.h"
+#include "MuJetAnalysis/AnalysisTools/interface/eig3.h"
 
 #ifdef MAX
 #undef MAX
 #endif
-
 #define MAX(a, b) ((a)>(b)?(a):(b))
 
 #define n 3
@@ -254,7 +256,7 @@ static void tql2(double V[n][n], double d[n], double e[n]) {
   }
 }
 
-void eigen_decomposition(double A[n][n], double V[n][n], double d[n]) {
+inline void eigen_decomposition(double A[n][n], double V[n][n], double d[n]) {
   double e[n];
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n; j++) {
@@ -264,3 +266,5 @@ void eigen_decomposition(double A[n][n], double V[n][n], double d[n]) {
   tred2(V, d, e);
   tql2(V, d, e);
 }
+
+#endif
