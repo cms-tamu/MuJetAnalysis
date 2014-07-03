@@ -297,6 +297,7 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   
   // Auxiliary variables
   TRandom3 m_trandom3;
+  Int_t    m_nThrowsConsistentVertexesCalculator;
   
   // Reco branches in ROOT tree (they all start with b_)
   
@@ -378,6 +379,8 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   // ---------- RECO Level ----------
   m_muons = iConfig.getParameter<edm::InputTag>("muons");
   m_muJets = iConfig.getParameter<edm::InputTag>("muJets");
+  
+  m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   
   m_maxIsoDiMuons = iConfig.getParameter<double>("maxIsoDiMuons");
   m_Mu17_threshold = 17.0;
@@ -931,11 +934,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
     
     ConsistentVertexesCalculator consistentVtx(transientTrackBuilder_ptr, beamSpotPosition);
+    consistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
     consistentVtx.SetDebug(20);
-    consistentVtx.Calculate(diMuonC, diMuonF);
-    std::cout << consistentVtx.dZ() << " \t" << b_dZDiMuons << std::endl;
-    diMuonC->SetA(12);
-    std::cout << "" << diMuonC->GetA() << std::endl;
+    bool res = consistentVtx.Calculate(diMuonC, diMuonF);
+    std::cout << "res: " << res << "consistentVtx.isValid(): " << consistentVtx.isValid() << std::endl;
+    if ( consistentVtx.isValid() ) {
+      std::cout << diMuonC->consistentVtxValid() << " \t" << diMuonC->consistentVtxDZ(beamSpotPosition) << " \t" << b_dZDiMuonC << std::endl;
+      std::cout << diMuonF->consistentVtxValid() << " \t" << diMuonF->consistentVtxDZ(beamSpotPosition) << " \t" << b_dZDiMuonF << std::endl;
+      std::cout << diMuonC->consistentVtxDZ(beamSpotPosition) - diMuonF->consistentVtxDZ(beamSpotPosition) << " \t" << consistentVtx.dz() << " \t" << b_dZDiMuons << std::endl;
+    } else {
+      std::cout << "Consistent vertex is invalid" << std::endl;
+    }
   }
   
   edm::Handle<reco::TrackCollection> tracks;
@@ -1072,7 +1081,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 //        if ( pfCand->particleId() == reco::PFCandidate::h ) {
 //          double dPhi = My_dPhi( diMuonTmp->phi(), pfCand->phi() );
 //          double dEta = diMuonTmp->eta() - pfCand->eta();
-//          double dR   = sqrt( dPhi*dPhi + dEta*dEta ); 
+//          double dR   = sqrt( dPhi*dPhi + dEta*dEta );
 ////          if ( dR < 0.4 && pfCand->pt() > 0.5 ) {
 //          if ( dR < 0.4 ) {
 //            double dz = fabs( pfCand->vertex().z() - beamSpot->position().z() - diMuonTmp->dz(beamSpot->position()) );
@@ -1109,7 +1118,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     if (vertex->isValid() && !vertex->isFake() && vertex->tracksSize() >= 4 && fabs(vertex->z()) < 24.) isVertexOK = true;
   }
   
-  if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon vertex" << std::endl;
+  if ( m_debug > 10 ) std::cout << m_events << " Apply on primary vertex in event" << std::endl;
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_isDzDiMuonsOK && b_isDiMuonHLTFired && b_isMassDiMuonsOK && b_isIsoDiMuonsOK && isVertexOK && b_isVLT ) m_eventsVertexOK++;
   
   // Add dimuons' Lxy to ntuple

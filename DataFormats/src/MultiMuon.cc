@@ -80,12 +80,16 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
     setGenParticle(*asGenParticle);
   }
 
+// Fitted vertex
   m_vertexValid = false;
   m_chi2 = 0.;
   m_ndof = 0.;
   if (transientTrackBuilder != NULL) {
     calculateVertex(transientTrackBuilder);
   }
+
+// Consistent vertex
+  m_consistentVtxValid = false;
   
   m_centralTrackIsolationCone = 0.;
   m_unionTrackIsolationCone   = 0.;
@@ -139,7 +143,9 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
     m_vertexPCACovarianceMatrix.push_back(aMultiMuon.m_vertexPCACovarianceMatrix[i]);
     m_vertexP4.push_back(aMultiMuon.m_vertexP4[i]);
   }
-
+  
+  m_consistentVtxValid = aMultiMuon.m_consistentVtxValid;
+  
   m_centralTrackIsolationCone       = aMultiMuon.m_centralTrackIsolationCone;
   m_unionTrackIsolationCone         = aMultiMuon.m_unionTrackIsolationCone;
   m_centralTrackThresholdPt         = aMultiMuon.m_centralTrackThresholdPt;
@@ -519,6 +525,12 @@ pat::MultiMuon pat::MultiMuon::merge( const pat::MultiMuon &aMultiMuon,
 void pat::MultiMuon::checkVertex() const {
   if (!m_vertexValid) {
     throw cms::Exception("MultiMuon") << "Request for vertex information, but no vertex has been calculated.";
+  }
+}
+
+void pat::MultiMuon::checkConsistentVtx() const {
+  if (!m_consistentVtxValid) {
+    throw cms::Exception("MultiMuon") << "Request for consistent vertex information, but no vertex has been calculated.";
   }
 }
 

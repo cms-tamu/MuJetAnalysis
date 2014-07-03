@@ -175,8 +175,10 @@ namespace pat {
 	                        double unionNumberAboveThresholdCone   = 0.,
 	                        double centralNumberAboveThresholdPt   = 1e6,
 	                        double unionNumberAboveThresholdPt     = 1e6);
-	 
-    /// return vertex results
+
+//------------------------------------------------------------------------------
+// Return vertex results
+//------------------------------------------------------------------------------
     bool            vertexValid()                   const { return m_vertexValid; }
     double          vertexChi2()                    const { checkVertex();  return m_chi2; }
     double          vertexNdof()                    const { checkVertex();  return m_ndof; }
@@ -184,9 +186,6 @@ namespace pat {
     double          vertexProb()                    const { checkVertex();  return (m_ndof > 0. ? TMath::Prob(m_chi2, m_ndof) : 0.); }
     CovarianceMatrix vertexCovariance()              const { checkVertex();  return m_covarianceMatrix; }
     double          vertexCovariance(int i, int j) const { checkVertex();  return m_covarianceMatrix.At(i, j); }
-    
-    bool SetA(int a) const { _a = a; return true; }
-    int GetA() const { return _a; }
     
     /// return position/momentum of each muon closest to vertex
     GlobalPoint      vertexPCA(int i)                 const { checkVertex();  return m_vertexPCA[i]; }
@@ -242,7 +241,63 @@ namespace pat {
     double vertexLxyz(double x, double y, double z) const {
       return vertexLxyz(GlobalPoint(x, y, z));
     };
+  
+//------------------------------------------------------------------------------
+// Return consistent vertex results (two muon jets are used to find such vertex)
+//------------------------------------------------------------------------------
+    
+    bool consistentVtxValid()                            const { return m_consistentVtxValid; }
+    void SetConsistentVtxValid(bool consistentVtxValid) const {  m_consistentVtxValid = consistentVtxValid; }
+    
+    void SetConsistentVtx3D(GlobalPoint                           consistentVtx3D)  const { m_consistentVtx3D  = consistentVtx3D; }
+    void SetConsistentVtxP4(math::XYZTLorentzVector               consistentVtxP4)  const { m_consistentVtxP4  = consistentVtxP4; }
+    void SetVConsistentVtxP4(std::vector<math::XYZTLorentzVector> vConsistentVtxP4) const { m_vConsistentVtxP4 = vConsistentVtxP4; }
+    
+    GlobalPoint                          consistentVtx3D()       const { checkConsistentVtx(); return m_consistentVtx3D; }
+    math::XYZTLorentzVector              consistentVtxP4()       const { checkConsistentVtx(); return m_consistentVtxP4; }
+    std::vector<math::XYZTLorentzVector> vConsistentVtxP4()      const { checkConsistentVtx(); return m_vConsistentVtxP4; }
+    math::XYZTLorentzVector              consistentVtxP4(int i)  const { checkConsistentVtx(); return m_vConsistentVtxP4[i]; }
+    
+    GlobalPoint  consistentVtxPoint()    const { return consistentVtx3D(); }
+    GlobalVector consistentVtxMomentum() const { LorentzVector v = consistentVtxP4();  return GlobalVector(v.x(), v.y(), v.z()); }
+    double      consistentVtxMass()     const { return consistentVtxP4().mass(); }
+  
+    double consistentVtxDZ(GlobalPoint myBeamSpot) const {
+      checkConsistentVtx();
+      GlobalPoint  v      = consistentVtxPoint();
+      GlobalVector p      = consistentVtxMomentum();
+      double      pt_mag = sqrt( p.x()*p.x() + p.y()*p.y() );
+      return (v.z()-myBeamSpot.z()) - ((v.x()-myBeamSpot.x())*p.x()+(v.y()-myBeamSpot.y())*p.y())/pt_mag * p.z()/pt_mag;
+    }
 
+    /// return the distance of flight from the primary vertex in the direction of momentum
+    /// in 2D
+    double consistentVtxLxy(GlobalPoint primaryVertex) const {
+      checkConsistentVtx();
+      GlobalPoint  v = consistentVtxPoint();
+      GlobalVector p = consistentVtxMomentum();
+      double      pt_mag = sqrt( p.x()*p.x() + p.y()*p.y() );
+      return ((v.x()-primaryVertex.x())*p.x() + (v.y()-primaryVertex.y())*p.y())/pt_mag;
+    };
+    
+    double consistentVtxLxy(double x, double y, double z) const {
+      return consistentVtxLxy(GlobalPoint(x, y, z));
+    };
+    
+    /// in 3D
+    double consistentVtxLxyz(GlobalPoint primaryVertex) const {
+      checkConsistentVtx();
+      GlobalPoint  v  = consistentVtxPoint();
+      GlobalVector p  = consistentVtxMomentum();
+      double      p_mag = sqrt( p.x()*p.x() + p.y()*p.y() + p.z()*p.z() );
+      return ( (v.x()-primaryVertex.x())*p.x() + (v.y()-primaryVertex.y())*p.y() + (v.z()-primaryVertex.z())*p.z() ) / p_mag;
+    };
+    
+    double consistentVtxLxyz(double x, double y, double z) const {
+      return consistentVtxLxyz(GlobalPoint(x, y, z));
+    };
+  
+  
     /// return daughter's momentum vector in the COM frame
     GlobalVector daughterCOM(int i, bool vertex = false) const;
     /// return daughter's momentum vector in the COM frame, rotated to the boost axis (+z is parent's direction)
@@ -327,21 +382,27 @@ namespace pat {
     bool sameTrack(const reco::Track *one, const reco::Track *two) const;
 
     protected:
-    void   checkVertex() const;
+    
     double noiseEcal(const CaloTower &tower) const;
     double noiseHcal(const CaloTower &tower) const;
     double noiseHOcal(const CaloTower &tower) const;
     void   buildPermutation(std::vector<std::vector<int> > &results, std::vector<int> working, int where, int value) const;
     
-    int _a;
-    
     bool   m_vertexValid;
+    void   checkVertex() const;
     double m_chi2;
     double m_ndof;
     CovarianceMatrix              m_covarianceMatrix;
     std::vector<GlobalPoint>      m_vertexPCA;
     std::vector<CovarianceMatrix> m_vertexPCACovarianceMatrix;
     std::vector<LorentzVector>    m_vertexP4;
+    
+    // Consistent vertex (calculated by MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h)
+    mutable bool                                 m_consistentVtxValid;
+    void     checkConsistentVtx() const;
+    mutable GlobalPoint                          m_consistentVtx3D;
+    mutable math::XYZTLorentzVector              m_consistentVtxP4;
+    mutable std::vector<math::XYZTLorentzVector> m_vConsistentVtxP4;
 
     double m_centralTrackIsolationCone;
     double m_unionTrackIsolationCone;

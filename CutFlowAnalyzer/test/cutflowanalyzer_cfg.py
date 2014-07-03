@@ -104,7 +104,9 @@ process.cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
 
   trigpt = cms.double(17),
   maxIsoDiMuons = cms.double(2.0),
-  dataset = cms.string("DoubleMu")
+  dataset = cms.string("DoubleMu"),
+  
+  nThrowsConsistentVertexesCalculator = cms.int32(100000),
 
 )
 
