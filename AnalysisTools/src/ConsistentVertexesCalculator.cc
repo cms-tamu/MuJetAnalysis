@@ -253,8 +253,23 @@ bool ConsistentVertexesCalculator::Calculate( const pat::MultiMuon *&mm_0, const
 //        chi2_dxy = ( dxy / 0.002386 ) * ( dxy / 0.002386 );
       }
 
-      chi2_dxy_0 = ( dxy_0 / 0.00284177 ) * ( dxy_0 / 0.00284177 );
-      chi2_dxy_1 = ( dxy_1 / 0.00377043 ) * ( dxy_1 / 0.00377043 );
+
+      if (pix1){
+	chi2_dxy_0 = (dxy_0 / 0.00516114) * (dxy_0 / 0.00516114);
+      }
+      else {
+	chi2_dxy_0 = (dxy_0 / 0.00375716) * (dxy_0 / 0.00375716);
+      }
+      if (pix2){
+	chi2_dxy_1 = (dxy_1 / 0.00560319) * (dxy_1 / 0.00560319);
+      }
+      else {
+	chi2_dxy_1 = (dxy_1 / 0.00391578) * (dxy_1 / 0.00391578);
+      }
+
+
+//       chi2_dxy_0 = ( dxy_0 /  ) * ( dxy_0 / 0.00284177 );
+//       chi2_dxy_1 = ( dxy_1 / 0.00377043 ) * ( dxy_1 / 0.00377043 );
 
       // Check for minimum sum of chi2, store variables for minimum
 //      double chi2_sum   = chi2_dz + chi2_dxy;
