@@ -345,6 +345,16 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Bool_t b_isIsoDiMuonsOK;
   Bool_t b_isVLT;
   Bool_t b_isOK_diMuonsLxy;
+  Bool_t b_isVertexOK;
+
+  Bool_t b_4GenMu;
+  Bool_t b_1GenMu17;
+  Bool_t b_2GenMu8;
+  Bool_t b_3GenMu8;
+  Bool_t b_4GenMu8;
+  Bool_t b_is2SelMu8;
+  Bool_t b_is3SelMu8;
+
 
 };
 
@@ -684,7 +694,12 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   // Sort genMuons by pT (leading pT first)
   if ( genMuons.size() > 1 ) std::sort( genMuons.begin(), genMuons.end(), PtOrder );
   
-  if ( genMuons.size() == 4 ) m_events4GenMu++;
+  b_4GenMu = false;
+
+  if ( genMuons.size() == 4 ){
+    m_events4GenMu++;
+    b_4GenMu = true;
+  }
   
   if ( genMuons.size() > 0 ) {
     b_genMu0_pT  = genMuons[0]->pt();
@@ -735,18 +750,26 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       genMuons8.push_back(genMuons[i]);
     }
   }
-  
+  b_1GenMu17 = false; 
+  b_2GenMu8 = false;
+  b_3GenMu8 = false;
+  b_4GenMu8 = false;
+
 //  std::cout << " b_isVLT: " << b_isVLT << std::endl;
   if ( genMuons17.size() >=1 && b_isVLT) {
     m_events1GenMu17++;
+    b_1GenMu17 = true;
     if ( genMuons8.size() >=2 ) {
       m_events2GenMu8++;
+      b_2GenMu8 = true;
     }
     if ( genMuons8.size() >=3 ) {
       m_events3GenMu8++;
+      b_3GenMu8 = true;
     }
     if ( genMuons8.size() >=4 ) {
       m_events4GenMu8++;
+      b_4GenMu8 = true;
     }
   }
   
@@ -822,15 +845,19 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
   
   b_is1SelMu17 = false;
+  b_is2SelMu8 = false;
+  b_is3SelMu8 = false;
   b_is4SelMu8  = false;
   if ( selMuons17.size() >=1 ) {
     m_events1SelMu17++;
     b_is1SelMu17 = true;
     if ( selMuons8.size() >=2 ) {
       m_events2SelMu8++;
+      b_is2SelMu8 = true;
     }
     if ( selMuons8.size() >=3 ) {
       m_events3SelMu8++;
+      b_is3SelMu8 = true;
     }
     if ( selMuons8.size() >=4 ) {
       m_events4SelMu8++;
@@ -907,25 +934,13 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 //    b_diMuonF_pt  = diMuonF->pt();
   }
   
-  b_isDzDiMuonsOK = false;
-  b_dZDiMuonC = -1000.0;
-  b_dZDiMuonF = -1000.0;
-  b_dZDiMuons = -1000.0;
-  if ( diMuonC != NULL && diMuonF != NULL ) {
-    b_dZDiMuonC = diMuonC->vertexDZ(beamSpot->position());
-    b_dZDiMuonF = diMuonF->vertexDZ(beamSpot->position());
-    b_dZDiMuons = b_dZDiMuonC - b_dZDiMuonF;
-    if ( fabs( b_dZDiMuons ) < 0.1 ) b_isDzDiMuonsOK = true;
-  }
-  
-  if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
-  if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_isDzDiMuonsOK && b_isVLT ) m_eventsDz2DiMuonsOK++;
   
   //****************************************************************************
   // Begin: new vertex code
   //****************************************************************************
-  
+
   if ( diMuonC != NULL && diMuonF != NULL ) {
+
     edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
     const TransientTrackBuilder *transientTrackBuilder_ptr = NULL;
     iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
@@ -937,7 +952,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     consistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
     consistentVtx.SetDebug(20);
     bool res = consistentVtx.Calculate(diMuonC, diMuonF);
-    std::cout << "res: " << res << "consistentVtx.isValid(): " << consistentVtx.isValid() << std::endl;
+
+    std::cout << "res: " << res << " consistentVtx.isValid(): " << consistentVtx.isValid() << std::endl;
     if ( consistentVtx.isValid() ) {
       std::cout << diMuonC->consistentVtxValid() << " \t" << diMuonC->consistentVtxDZ(beamSpotPosition) << " \t" << b_dZDiMuonC << std::endl;
       std::cout << diMuonF->consistentVtxValid() << " \t" << diMuonF->consistentVtxDZ(beamSpotPosition) << " \t" << b_dZDiMuonF << std::endl;
@@ -946,6 +962,25 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       std::cout << "Consistent vertex is invalid" << std::endl;
     }
   }
+
+
+  b_isDzDiMuonsOK = false;
+  b_dZDiMuonC = -1000.0;
+  b_dZDiMuonF = -1000.0;
+  b_dZDiMuons = -1000.0;
+  if ( diMuonC != NULL && diMuonF != NULL ) {
+
+    GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
+    b_dZDiMuonC = diMuonC->consistentVtxDZ(beamSpotPosition);
+    b_dZDiMuonF = diMuonF->consistentVtxDZ(beamSpotPosition);
+    b_dZDiMuons = b_dZDiMuonC - b_dZDiMuonF;
+    if ( fabs( b_dZDiMuons ) < 0.1 ) b_isDzDiMuonsOK = true;
+  }
+  
+  if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
+  if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_isDzDiMuonsOK && b_isVLT ) m_eventsDz2DiMuonsOK++;
+
+
   
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByLabel("generalTracks", tracks);
@@ -1034,8 +1069,10 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   
   b_isMassDiMuonsOK = false;
   if ( diMuonC != NULL && diMuonF != NULL ) {
-    double massC = diMuonC->mass();
-    double massF = diMuonF->mass();
+    // double massC = diMuonC->mass();
+    // double massF = diMuonF->mass();
+    double massC = diMuonC->consistentVtxMass();
+    double massF = diMuonF->consistentVtxMass();
     if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_isMassDiMuonsOK = true;
   }
   
@@ -1058,12 +1095,16 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     double diMuonF_isoTk = 0.0;
     double diMuonC_isoPF = 0.0;
     double diMuonF_isoPF = 0.0;
+
+    GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
+
     const pat::MultiMuon *diMuonTmp = NULL;
     for ( unsigned int i = 1; i <= 2; i++ ) { 
       double diMuonTmp_isoTk = 0.0;
       double diMuonTmp_isoPF = 0.0;
       if ( i == 1 ) diMuonTmp = diMuonC;
       if ( i == 2 ) diMuonTmp = diMuonF;
+
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
         bool trackIsMuon = false;
         if ( diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(0)->innerTrack()) ) || diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(1)->innerTrack()) ) ) trackIsMuon = true;
@@ -1072,7 +1113,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
           double dEta = diMuonTmp->eta() - track->eta();
           double dR   = sqrt( dPhi*dPhi + dEta*dEta ); 
           if ( dR < 0.4 && track->pt() > 0.5 ) {
-            double dz = fabs( track->dz(beamSpot->position()) - diMuonTmp->vertexDZ(beamSpot->position()) );
+            double dz = fabs( track->dz(beamSpot->position()) - diMuonTmp->consistentVtxDZ(beamSpotPosition)) ;
             if ( dz < 0.1 ) diMuonTmp_isoTk += track->pt();
           }    
         }
@@ -1114,8 +1155,13 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   iEvent.getByLabel("offlinePrimaryVertices", primaryVertices);
   
   bool isVertexOK = false;
+  b_isVertexOK = false;
+
   for (reco::VertexCollection::const_iterator vertex = primaryVertices->begin();  vertex != primaryVertices->end();  ++vertex) {
-    if (vertex->isValid() && !vertex->isFake() && vertex->tracksSize() >= 4 && fabs(vertex->z()) < 24.) isVertexOK = true;
+    if (vertex->isValid() && !vertex->isFake() && vertex->tracksSize() >= 4 && fabs(vertex->z()) < 24.) {
+      isVertexOK = true;
+      b_isVertexOK = true;
+    }
   }
   
   if ( m_debug > 10 ) std::cout << m_events << " Apply on primary vertex in event" << std::endl;
@@ -1342,6 +1388,22 @@ CutFlowAnalyzer::beginJob()
   m_ttree->Branch("isMassDiMuonsOK",  &b_isMassDiMuonsOK,  "isMassDiMuonsOK/O");
   m_ttree->Branch("isIsoDiMuonsOK",   &b_isIsoDiMuonsOK,   "isIsoDiMuonsOK/O");
   m_ttree->Branch("isVLT",            &b_isVLT,            "isVLT/O");
+
+  //Recently added:
+
+  m_ttree->Branch("isVertexOK",            &b_isVertexOK,            "isVertexOK/O");
+  m_ttree->Branch("isOK_diMuonsLxy",            &b_isOK_diMuonsLxy,            "isOK_diMuonsLxy/O");
+  m_ttree->Branch("is4GenMu", &b_4GenMu, "is4GenMu/O");
+  m_ttree->Branch("is1GenMu17", &b_1GenMu17, "is1GenMu17/O");
+  m_ttree->Branch("is2GenMu8", &b_2GenMu8, "is2GenMu8/O");
+  m_ttree->Branch("is3GenMu8", &b_3GenMu8, "is3GenMu8/O");
+  m_ttree->Branch("is4GenMu8", &b_4GenMu8, "is4GenMu8/O");
+  m_ttree->Branch("is2SelMu8", &b_is2SelMu8, "is2SelMu8/O");
+  m_ttree->Branch("is3SelMu8", &b_is3SelMu8, "is3SelMu8/O");
+
+
+
+
   
 }
 

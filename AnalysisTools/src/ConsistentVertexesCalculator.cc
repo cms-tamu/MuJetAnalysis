@@ -80,7 +80,7 @@ bool ConsistentVertexesCalculator::Calculate( const pat::MultiMuon *&mm_0, const
 //------------------------------------------------------------------------------
     Global3DPoint mm_0_vtx = mm_0->vertexPoint();
     Global3DPoint mm_1_vtx = mm_1->vertexPoint();
-    
+
 //------------------------------------------------------------------------------
 // Step 2.2: Extract covariance matrixes from muon jets
 //           Perform Cholesky decomposition!
