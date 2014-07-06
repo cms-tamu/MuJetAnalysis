@@ -51,7 +51,10 @@ void PrintAnalysis(){
   
   f->ls();
 
-  Int_t ev;
+
+  Int_t event;
+  Int_t run;
+  Int_t lumi;
 
   Int_t m_events;
   Int_t m_events4GenMu;
@@ -114,6 +117,11 @@ void PrintAnalysis(){
   m_eventsVertexOK = 0;
   m_eventsOK_diMuonsLxy = 0;
 
+
+  t->SetBranchAddress("event", &event);
+  t->SetBranchAddress("run", &run);
+  t->SetBranchAddress("lumi", &lumi);
+
   t->SetBranchAddress("is1SelMu17", &is1SelMu17);
   t->SetBranchAddress("is4SelMu8", &is4SelMu8);
   t->SetBranchAddress("is2MuJets", &is2MuJets);
@@ -171,7 +179,9 @@ void PrintAnalysis(){
     }
 
     if (is2MuJets) m_events2MuJets++;
-    if (is2MuJets && is2DiMuons) m_events2DiMuons++;
+    if (is2MuJets && is2DiMuons){
+      m_events2DiMuons++;
+    }
     if (is2MuJets && is2DiMuons && isDzDiMuonsOK) m_eventsDz2DiMuonsOK++;
     if (is2MuJets && is2DiMuons && isDzDiMuonsOK && isDiMuonsHLTFired) m_eventsDiMuonsHLTFired++;
     if (is2MuJets && is2DiMuons && isDzDiMuonsOK && isDiMuonsHLTFired && isMassDiMuonsOK) m_eventsMassDiMuonsOK++;

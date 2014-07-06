@@ -434,7 +434,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   m_run   = iEvent.id().run();
   m_lumi  = iEvent.id().luminosityBlock();
   m_event = iEvent.id().event();
-  
+
+
   edm::Handle<reco::BeamSpot> beamSpot;
   iEvent.getByLabel("offlineBeamSpot",beamSpot);
   b_beamSpot_x = beamSpot->position().x();
@@ -939,16 +940,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   // Begin: new vertex code
   //****************************************************************************
 
-  if ( diMuonC != NULL && diMuonF != NULL ) {
+  edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
+  const TransientTrackBuilder *transientTrackBuilder_ptr = NULL;
+  iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
+  transientTrackBuilder_ptr = &*transientTrackBuilder;
+    
+  GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
+  
+  ConsistentVertexesCalculator consistentVtx(transientTrackBuilder_ptr, beamSpotPosition);
 
-    edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
-    const TransientTrackBuilder *transientTrackBuilder_ptr = NULL;
-    iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
-    transientTrackBuilder_ptr = &*transientTrackBuilder;
-    
-    GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
-    
-    ConsistentVertexesCalculator consistentVtx(transientTrackBuilder_ptr, beamSpotPosition);
+  if ( diMuonC != NULL && diMuonF != NULL ) {
+   
     consistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
     consistentVtx.SetDebug(20);
     bool res = consistentVtx.Calculate(diMuonC, diMuonF);
@@ -971,9 +973,12 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( diMuonC != NULL && diMuonF != NULL ) {
 
     GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
-    b_dZDiMuonC = diMuonC->consistentVtxDZ(beamSpotPosition);
-    b_dZDiMuonF = diMuonF->consistentVtxDZ(beamSpotPosition);
+    if ( consistentVtx.isValid() ) {
+      b_dZDiMuonC = diMuonC->consistentVtxDZ(beamSpotPosition);
+      b_dZDiMuonF = diMuonF->consistentVtxDZ(beamSpotPosition);
+    }
     b_dZDiMuons = b_dZDiMuonC - b_dZDiMuonF;
+
     if ( fabs( b_dZDiMuons ) < 0.1 ) b_isDzDiMuonsOK = true;
   }
   
@@ -1071,9 +1076,11 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( diMuonC != NULL && diMuonF != NULL ) {
     // double massC = diMuonC->mass();
     // double massF = diMuonF->mass();
-    double massC = diMuonC->consistentVtxMass();
-    double massF = diMuonF->consistentVtxMass();
-    if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_isMassDiMuonsOK = true;
+    if ( consistentVtx.isValid() ) {
+      double massC = diMuonC->consistentVtxMass();
+      double massF = diMuonF->consistentVtxMass();
+      if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_isMassDiMuonsOK = true;
+    }
   }
   
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon mass" << std::endl;
@@ -1113,8 +1120,10 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
           double dEta = diMuonTmp->eta() - track->eta();
           double dR   = sqrt( dPhi*dPhi + dEta*dEta ); 
           if ( dR < 0.4 && track->pt() > 0.5 ) {
-            double dz = fabs( track->dz(beamSpot->position()) - diMuonTmp->consistentVtxDZ(beamSpotPosition)) ;
-            if ( dz < 0.1 ) diMuonTmp_isoTk += track->pt();
+	    if ( consistentVtx.isValid() ) {
+	      double dz = fabs( track->dz(beamSpot->position()) - diMuonTmp->consistentVtxDZ(beamSpotPosition)) ;
+	      if ( dz < 0.1 ) diMuonTmp_isoTk += track->pt();
+	    }
           }    
         }
       }
@@ -1246,6 +1255,12 @@ CutFlowAnalyzer::beginJob()
   
   edm::Service<TFileService> tFileService;
   m_ttree = tFileService->make<TTree>("Events", "Events");
+
+  // Beam spot
+  m_ttree->Branch("event",    &m_event,    "event/I");
+  m_ttree->Branch("run",    &m_run,    "run/I");
+  m_ttree->Branch("lumi",    &m_lumi,    "lumi/I");
+
   // Beam spot
   m_ttree->Branch("beamSpot_x",    &b_beamSpot_x,    "beamSpot_x/F");
   m_ttree->Branch("beamSpot_y",    &b_beamSpot_y,    "beamSpot_y/F");
