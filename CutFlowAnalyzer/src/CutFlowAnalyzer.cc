@@ -166,6 +166,7 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   // ---------- Generator Level ----------
   
   edm::InputTag m_genParticles; // Label to access generator particles
+  bool m_runGen;
   
   // Events counters
   Int_t m_events4GenMu;   // number of events with 4 gen muons
@@ -379,7 +380,8 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   
   // ---------- Generator Level ----------
   m_genParticles = iConfig.getParameter<edm::InputTag>("genParticles");
-  
+  m_runGen = iConfig.getParameter<bool>("fillGenLevel");
+
   m_events4GenMu = 0;
   m_events1GenMu17 = 0;
   m_events2GenMu8 = 0;
@@ -447,335 +449,338 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   // count events
   m_events++;
   if ( !(m_events%1000) ) std::cout << "Event " << m_events << std::endl;
+
   
   //****************************************************************************
   //                              GEN LEVEL                                     
   //****************************************************************************
+
+  if (m_runGen){  
+
+    if ( m_debug > 10 ) std::cout << m_events << " Start GEN Level" << std::endl;
+
+    edm::Handle<reco::GenParticleCollection> genParticles;
+    iEvent.getByLabel(m_genParticles, genParticles);
   
-  if ( m_debug > 10 ) std::cout << m_events << " Start GEN Level" << std::endl;
-  
-  edm::Handle<reco::GenParticleCollection> genParticles;
-  iEvent.getByLabel(m_genParticles, genParticles);
-  
-  // Loop over all genParticles and save prompt muons from particles with codes 36 (a1) or 3000022 (gammaD) in vector genMuons
-  std::vector<const reco::GenParticle*> genH;
-  std::vector<const reco::GenParticle*> genA_unsorted;
-  std::vector<const reco::GenParticle*> genA;
-  std::vector<const reco::GenParticle*> genMuons;
-  std::vector<const reco::Candidate*>   genMuonMothers;
-  // Loop over all gen particles
-  int counterGenParticle = 0;
-  for(reco::GenParticleCollection::const_iterator iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
-    counterGenParticle++;
-//    std::cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << std::endl;
-    // Check if gen particle is muon (pdgId = +/-13) and stable (status = 1)
-    if ( fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1 ) {
-      // Mother of the muon can be muon. Find the last muon in this chain: genMuonCand
-      // Example: a1 -> mu+ (status = 3) mu- (status = 3)
-      //          mu- (status = 3) -> mu- (status = 2) -> mu- (status = 1)
-      const reco::Candidate *genMuonCand = &(*iGenParticle);
-      bool isMuonMother = true;
-      while(isMuonMother) {
-        isMuonMother = false;
-        for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
-          if ( fabs( genMuonCand->mother(iMother)->pdgId() ) == 13 ) {
-            isMuonMother = true;
-            genMuonCand = genMuonCand->mother(iMother);
-          }
-        }
+    // Loop over all genParticles and save prompt muons from particles with codes 36 (a1) or 3000022 (gammaD) in vector genMuons
+    std::vector<const reco::GenParticle*> genH;
+    std::vector<const reco::GenParticle*> genA_unsorted;
+    std::vector<const reco::GenParticle*> genA;
+    std::vector<const reco::GenParticle*> genMuons;
+    std::vector<const reco::Candidate*>   genMuonMothers;
+    // Loop over all gen particles
+    int counterGenParticle = 0;
+    for(reco::GenParticleCollection::const_iterator iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
+      counterGenParticle++;
+      //    std::cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << std::endl;
+      // Check if gen particle is muon (pdgId = +/-13) and stable (status = 1)
+      if ( fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1 ) {
+	// Mother of the muon can be muon. Find the last muon in this chain: genMuonCand
+	// Example: a1 -> mu+ (status = 3) mu- (status = 3)
+	//          mu- (status = 3) -> mu- (status = 2) -> mu- (status = 1)
+	const reco::Candidate *genMuonCand = &(*iGenParticle);
+	bool isMuonMother = true;
+	while(isMuonMother) {
+	  isMuonMother = false;
+	  for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
+	    if ( fabs( genMuonCand->mother(iMother)->pdgId() ) == 13 ) {
+	      isMuonMother = true;
+	      genMuonCand = genMuonCand->mother(iMother);
+	    }
+	  }
+	}
+	// Loop over all real (non-muon) mothers of the muon (here we use genMuonCand)
+	for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
+	  // Check if mother is CP-odd Higgs (PdgId = 36) or gamma_Dark (PdgId = 3000022)
+	  //        if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 || genMuonCand->mother(iMother)->pdgId() == 443 ) {
+	  if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 ) {
+	    // Store the muon (stable, first in chain) into vector
+	    genMuons.push_back(&(*iGenParticle));
+	    // Store mother of the muon into vector. We need this to group muons into dimuons later
+	    genMuonMothers.push_back(genMuonCand->mother(iMother));
+	  }
+	}
       }
-      // Loop over all real (non-muon) mothers of the muon (here we use genMuonCand)
-      for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
-        // Check if mother is CP-odd Higgs (PdgId = 36) or gamma_Dark (PdgId = 3000022)
-//        if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 || genMuonCand->mother(iMother)->pdgId() == 443 ) {
-        if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 ) {
-          // Store the muon (stable, first in chain) into vector
-          genMuons.push_back(&(*iGenParticle));
-          // Store mother of the muon into vector. We need this to group muons into dimuons later
-          genMuonMothers.push_back(genMuonCand->mother(iMother));
-        }
+      // Check if gen particle is
+      if (    ( iGenParticle->status() == 3 && iGenParticle->pdgId() == 25 ) // decaying (status = 3) SM Higgs (pdgId = 25)
+	      || ( iGenParticle->status() == 3 && iGenParticle->pdgId() == 35 ) // decaying (status = 3) CP-even Higgs (pdgId = 35)
+	      ) {
+	genH.push_back(&(*iGenParticle)); // Store the Higgs into vector
+      }
+      // Check if gen particle is
+      if (    ( iGenParticle->status() == 3 && iGenParticle->pdgId() == 36      ) // decaying (status = 3) CP-odd Higgs (pdgId = 36)
+	      || ( iGenParticle->status() == 3 && iGenParticle->pdgId() == 3000022 ) // decaying (status = 3) gamma_Dark (pdgId = 3000022)
+	      //         || ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 443   ) // decaying (status = 2) J/psi (pdgId = 443)
+	      ) {
+	genA_unsorted.push_back(&(*iGenParticle));
       }
     }
-    // Check if gen particle is
-    if (    ( iGenParticle->status() == 3 && iGenParticle->pdgId() == 25 ) // decaying (status = 3) SM Higgs (pdgId = 25)
-         || ( iGenParticle->status() == 3 && iGenParticle->pdgId() == 35 ) // decaying (status = 3) CP-even Higgs (pdgId = 35)
-    ) {
-      genH.push_back(&(*iGenParticle)); // Store the Higgs into vector
+  
+    if ( genH.size() == 1 ) {
+      b_genH_m   = genH[0]->mass();
+      b_genH_p   = genH[0]->p();
+      b_genH_pT  = genH[0]->pt();
+      b_genH_eta = genH[0]->eta();
+      b_genH_phi = genH[0]->phi();
+      b_genH_vx  = genH[0]->vx() - b_beamSpot_x;
+      b_genH_vy  = genH[0]->vy() - b_beamSpot_y;
+      b_genH_vz  = genH[0]->vz() - b_beamSpot_z;
+    } else {
+      //    std::cout << "WARNING! genH.size() != 1" << std::endl;
     }
-    // Check if gen particle is
-    if (    ( iGenParticle->status() == 3 && iGenParticle->pdgId() == 36      ) // decaying (status = 3) CP-odd Higgs (pdgId = 36)
-         || ( iGenParticle->status() == 3 && iGenParticle->pdgId() == 3000022 ) // decaying (status = 3) gamma_Dark (pdgId = 3000022)
-//         || ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 443   ) // decaying (status = 2) J/psi (pdgId = 443)
-    ) {
-      genA_unsorted.push_back(&(*iGenParticle));
+  
+    if ( genA_unsorted.size() >= 2 ) {
+      // Sort genA by pT (leading pT first)
+      std::sort (genA_unsorted.begin(), genA_unsorted.end(), PtOrder);
+      // Remove duplicates from genA
+      //    Float_t A_pT = genA_unsorted[0]->pt();
+      //    for ( unsigned int i = 1; i < genA_unsorted.size(); i++ ) {
+      //      if ( fabs( genA_unsorted[i]->pt() - A_pT) > eq ) {
+      //        A_pT = genA_unsorted[i]->pt();
+      //        genA.push_back( genA_unsorted[i] );
+      //      }
+      //    }
     }
-  }
   
-  if ( genH.size() == 1 ) {
-    b_genH_m   = genH[0]->mass();
-    b_genH_p   = genH[0]->p();
-    b_genH_pT  = genH[0]->pt();
-    b_genH_eta = genH[0]->eta();
-    b_genH_phi = genH[0]->phi();
-    b_genH_vx  = genH[0]->vx() - b_beamSpot_x;
-    b_genH_vy  = genH[0]->vy() - b_beamSpot_y;
-    b_genH_vz  = genH[0]->vz() - b_beamSpot_z;
-  } else {
-//    std::cout << "WARNING! genH.size() != 1" << std::endl;
-  }
+    genA = genA_unsorted;
   
-  if ( genA_unsorted.size() >= 2 ) {
-    // Sort genA by pT (leading pT first)
-    std::sort (genA_unsorted.begin(), genA_unsorted.end(), PtOrder);
-    // Remove duplicates from genA
-//    Float_t A_pT = genA_unsorted[0]->pt();
-//    for ( unsigned int i = 1; i < genA_unsorted.size(); i++ ) {
-//      if ( fabs( genA_unsorted[i]->pt() - A_pT) > eq ) {
-//        A_pT = genA_unsorted[i]->pt();
-//        genA.push_back( genA_unsorted[i] );
-//      }
-//    }
-  }
-  
-  genA = genA_unsorted;
-  
-  if ( genA.size() >= 2 ) {
-    b_genA0_m   = genA[0]->mass();
-    b_genA0_E   = genA[0]->energy();
-    b_genA0_p   = genA[0]->p();
-    b_genA0_pT  = genA[0]->pt();
-    b_genA0_px  = genA[0]->px();
-    b_genA0_py  = genA[0]->py();
-    b_genA0_pz  = genA[0]->pz();
-    b_genA0_eta = genA[0]->eta();
-    b_genA0_phi = genA[0]->phi();
-    b_genA0_vx  = genA[0]->vx() - b_beamSpot_x;
-    b_genA0_vy  = genA[0]->vy() - b_beamSpot_y;
-    b_genA0_vz  = genA[0]->vz() - b_beamSpot_z;
+    if ( genA.size() >= 2 ) {
+      b_genA0_m   = genA[0]->mass();
+      b_genA0_E   = genA[0]->energy();
+      b_genA0_p   = genA[0]->p();
+      b_genA0_pT  = genA[0]->pt();
+      b_genA0_px  = genA[0]->px();
+      b_genA0_py  = genA[0]->py();
+      b_genA0_pz  = genA[0]->pz();
+      b_genA0_eta = genA[0]->eta();
+      b_genA0_phi = genA[0]->phi();
+      b_genA0_vx  = genA[0]->vx() - b_beamSpot_x;
+      b_genA0_vy  = genA[0]->vy() - b_beamSpot_y;
+      b_genA0_vz  = genA[0]->vz() - b_beamSpot_z;
     
-    b_genA1_m   = genA[1]->mass();
-    b_genA1_E   = genA[1]->energy();
-    b_genA1_p   = genA[1]->p();
-    b_genA1_pT  = genA[1]->pt();
-    b_genA1_px  = genA[1]->px();
-    b_genA1_py  = genA[1]->py();
-    b_genA1_pz  = genA[1]->pz();
-    b_genA1_eta = genA[1]->eta();
-    b_genA1_phi = genA[1]->phi();
-    b_genA1_vx  = genA[1]->vx() - b_beamSpot_x;
-    b_genA1_vy  = genA[1]->vy() - b_beamSpot_y;
-    b_genA1_vz  = genA[1]->vz() - b_beamSpot_z;
-  } else {
-    std::cout << "WARNING! genA.size() < 2" << std::endl;
-  }
+      b_genA1_m   = genA[1]->mass();
+      b_genA1_E   = genA[1]->energy();
+      b_genA1_p   = genA[1]->p();
+      b_genA1_pT  = genA[1]->pt();
+      b_genA1_px  = genA[1]->px();
+      b_genA1_py  = genA[1]->py();
+      b_genA1_pz  = genA[1]->pz();
+      b_genA1_eta = genA[1]->eta();
+      b_genA1_phi = genA[1]->phi();
+      b_genA1_vx  = genA[1]->vx() - b_beamSpot_x;
+      b_genA1_vy  = genA[1]->vy() - b_beamSpot_y;
+      b_genA1_vz  = genA[1]->vz() - b_beamSpot_z;
+    } else {
+      std::cout << "WARNING! genA.size() < 2" << std::endl;
+    }
   
-  // Group muons with the same mother
-  std::vector< std::vector<const reco::GenParticle*> > genMuonGroupsUnsorted;
-  std::vector<const reco::Candidate*> genMuonGroupsUnsortedMothers;
-  std::vector<const reco::GenParticle*> genMuonsTMP1       = genMuons;
-  std::vector<const reco::Candidate*>   genMuonMothersTMP1 = genMuonMothers;
-  unsigned int nMuonGroup = 0;
-  while ( genMuonsTMP1.size() > 0 ) {
-    std::vector<const reco::GenParticle*> genMuonsTMP2;
-    std::vector<const reco::Candidate*>   genMuonMothersTMP2;
-    std::vector<const reco::GenParticle*> genMuonsSameMother;
-    std::vector<const reco::Candidate*>   genMuonMothersSame;
-    for ( unsigned int j = 0; j < genMuonsTMP1.size(); j++ ) {
-      // Check if mothers are the same particle
-      if ( fabs( genMuonMothersTMP1[0]->pt() - genMuonMothersTMP1[j]->pt() ) < eq ) {
-        genMuonsSameMother.push_back( genMuonsTMP1[j] );
+    // Group muons with the same mother
+    std::vector< std::vector<const reco::GenParticle*> > genMuonGroupsUnsorted;
+    std::vector<const reco::Candidate*> genMuonGroupsUnsortedMothers;
+    std::vector<const reco::GenParticle*> genMuonsTMP1       = genMuons;
+    std::vector<const reco::Candidate*>   genMuonMothersTMP1 = genMuonMothers;
+    unsigned int nMuonGroup = 0;
+    while ( genMuonsTMP1.size() > 0 ) {
+      std::vector<const reco::GenParticle*> genMuonsTMP2;
+      std::vector<const reco::Candidate*>   genMuonMothersTMP2;
+      std::vector<const reco::GenParticle*> genMuonsSameMother;
+      std::vector<const reco::Candidate*>   genMuonMothersSame;
+      for ( unsigned int j = 0; j < genMuonsTMP1.size(); j++ ) {
+	// Check if mothers are the same particle
+	if ( fabs( genMuonMothersTMP1[0]->pt() - genMuonMothersTMP1[j]->pt() ) < eq ) {
+	  genMuonsSameMother.push_back( genMuonsTMP1[j] );
+	} else {
+	  genMuonsTMP2.push_back( genMuonsTMP1[j] );
+	  genMuonMothersTMP2.push_back( genMuonMothersTMP1[j] );
+	}
+      }
+      genMuonGroupsUnsorted.push_back(genMuonsSameMother);
+      genMuonGroupsUnsortedMothers.push_back(genMuonMothersTMP1[0]);
+      genMuonsTMP1       = genMuonsTMP2;
+      genMuonMothersTMP1 = genMuonMothersTMP2;
+      nMuonGroup++;
+    }
+  
+    // Sort muon groups to match order of genA vector
+    std::vector< std::vector<const reco::GenParticle*> > genMuonGroups;
+    std::vector<const reco::Candidate*> genMuonGroupsMothers;
+    for (unsigned int iA = 0; iA < genA.size(); iA++ ) {
+      bool isMuGroupMatchedToA = false;
+      int  nMuGroup = -1;
+      for ( unsigned int iMuGroup = 0; iMuGroup < genMuonGroupsUnsortedMothers.size(); iMuGroup++ ) {
+	if ( fabs ( genA[iA]->pt() - genMuonGroupsUnsortedMothers[iMuGroup]->pt() ) < 0.000001 ) {
+	  isMuGroupMatchedToA = true;
+	  nMuGroup = iMuGroup;
+	  break;
+	}
+      }
+      if ( isMuGroupMatchedToA && nMuGroup >= 0 ) {
+	genMuonGroups.push_back( genMuonGroupsUnsorted[nMuGroup] );
+	genMuonGroupsMothers.push_back( genMuonGroupsUnsortedMothers[nMuGroup] );
       } else {
-        genMuonsTMP2.push_back( genMuonsTMP1[j] );
-        genMuonMothersTMP2.push_back( genMuonMothersTMP1[j] );
+	std::cout << "Error! Muon group has no matched boson A" << std::endl;
       }
     }
-    genMuonGroupsUnsorted.push_back(genMuonsSameMother);
-    genMuonGroupsUnsortedMothers.push_back(genMuonMothersTMP1[0]);
-    genMuonsTMP1       = genMuonsTMP2;
-    genMuonMothersTMP1 = genMuonMothersTMP2;
-    nMuonGroup++;
-  }
   
-  // Sort muon groups to match order of genA vector
-  std::vector< std::vector<const reco::GenParticle*> > genMuonGroups;
-  std::vector<const reco::Candidate*> genMuonGroupsMothers;
-  for (unsigned int iA = 0; iA < genA.size(); iA++ ) {
-    bool isMuGroupMatchedToA = false;
-    int  nMuGroup = -1;
-    for ( unsigned int iMuGroup = 0; iMuGroup < genMuonGroupsUnsortedMothers.size(); iMuGroup++ ) {
-      if ( fabs ( genA[iA]->pt() - genMuonGroupsUnsortedMothers[iMuGroup]->pt() ) < 0.000001 ) {
-        isMuGroupMatchedToA = true;
-        nMuGroup = iMuGroup;
-        break;
+    bool b_isVLT = true;
+    if ( genMuonGroups.size() == 2 && genMuonGroups[0].size() == 2 && genMuonGroups[1].size() == 2 ) {
+      std::sort( genMuonGroups[0].begin(), genMuonGroups[0].end(), PtOrder );
+      std::sort( genMuonGroups[1].begin(), genMuonGroups[1].end(), PtOrder );
+    
+      b_genA0Mu0_p = genMuonGroups[0][0]->p();
+      b_genA0Mu1_p = genMuonGroups[0][1]->p();
+      b_genA1Mu0_p = genMuonGroups[1][0]->p();
+      b_genA1Mu1_p = genMuonGroups[1][1]->p();
+    
+      b_genA0Mu0_pT = genMuonGroups[0][0]->pt();
+      b_genA0Mu1_pT = genMuonGroups[0][1]->pt();
+      b_genA1Mu0_pT = genMuonGroups[1][0]->pt();
+      b_genA1Mu1_pT = genMuonGroups[1][1]->pt();
+    
+      b_genA0Mu0_eta = genMuonGroups[0][0]->eta();
+      b_genA0Mu1_eta = genMuonGroups[0][1]->eta();
+      b_genA1Mu0_eta = genMuonGroups[1][0]->eta();
+      b_genA1Mu1_eta = genMuonGroups[1][1]->eta();
+    
+      b_genA0Mu0_phi = genMuonGroups[0][0]->phi();
+      b_genA0Mu1_phi = genMuonGroups[0][1]->phi();
+      b_genA1Mu0_phi = genMuonGroups[1][0]->phi();
+      b_genA1Mu1_phi = genMuonGroups[1][1]->phi();
+    
+      b_genA0Mu0_vx = genMuonGroups[0][0]->vx() - b_beamSpot_x;
+      b_genA0Mu1_vx = genMuonGroups[0][1]->vx() - b_beamSpot_x;
+      b_genA1Mu0_vx = genMuonGroups[1][0]->vx() - b_beamSpot_x;
+      b_genA1Mu1_vx = genMuonGroups[1][1]->vx() - b_beamSpot_x;
+    
+      b_genA0Mu0_vy = genMuonGroups[0][0]->vy() - b_beamSpot_y;
+      b_genA0Mu1_vy = genMuonGroups[0][1]->vy() - b_beamSpot_y;
+      b_genA1Mu0_vy = genMuonGroups[1][0]->vy() - b_beamSpot_y;
+      b_genA1Mu1_vy = genMuonGroups[1][1]->vy() - b_beamSpot_y;
+    
+      b_genA0Mu0_vz = genMuonGroups[0][0]->vz() - b_beamSpot_z;
+      b_genA0Mu1_vz = genMuonGroups[0][1]->vz() - b_beamSpot_z;
+      b_genA1Mu0_vz = genMuonGroups[1][0]->vz() - b_beamSpot_z;
+      b_genA1Mu1_vz = genMuonGroups[1][1]->vz() - b_beamSpot_z;
+    
+      if (    fabs(b_genA0Mu0_vx - b_genA0Mu1_vx) < eq
+	      && fabs(b_genA1Mu0_vx - b_genA1Mu1_vx) < eq
+	      && fabs(b_genA0Mu0_vy - b_genA0Mu1_vy) < eq
+	      && fabs(b_genA1Mu0_vy - b_genA1Mu1_vy) < eq
+	      && fabs(b_genA0Mu0_vz - b_genA0Mu1_vz) < eq
+	      && fabs(b_genA1Mu0_vz - b_genA1Mu1_vz) < eq
+	      ) {
+	Float_t genA0_vLx = b_genA0Mu0_vx - b_genA0_vx;
+	Float_t genA1_vLx = b_genA1Mu0_vx - b_genA1_vx;
+    
+	Float_t genA0_vLy = b_genA0Mu0_vy - b_genA0_vy;
+	Float_t genA1_vLy = b_genA1Mu0_vy - b_genA1_vy;
+    
+	Float_t genA0_vLz = b_genA0Mu0_vz - b_genA0_vz;
+	Float_t genA1_vLz = b_genA1Mu0_vz - b_genA1_vz;
+    
+	b_genA0_vLT = sqrt( genA0_vLx * genA0_vLx + genA0_vLy * genA0_vLy );
+	b_genA1_vLT = sqrt( genA1_vLx * genA1_vLx + genA1_vLy * genA1_vLy );
+    
+	if ( b_genA0_vLT < 4. && b_genA0_vLT < 4. ) b_isVLT = true;
+    
+	b_genA0_vL = sqrt( genA0_vLx * genA0_vLx + genA0_vLy * genA0_vLy + genA0_vLz * genA0_vLz );
+	b_genA1_vL = sqrt( genA1_vLx * genA1_vLx + genA1_vLy * genA1_vLy + genA1_vLz * genA1_vLz );
+      } else {
+	std::cout << "WARNING! Muon vertexes are different" << std::endl;
+      }
+    
+      b_genA0Mu_dEta = genMuonGroups[0][0]->eta() - genMuonGroups[0][1]->eta();
+      b_genA1Mu_dEta = genMuonGroups[1][0]->eta() - genMuonGroups[1][1]->eta();
+      b_genA0Mu_dPhi = My_dPhi( genMuonGroups[0][0]->phi(), genMuonGroups[0][1]->phi() );
+      b_genA1Mu_dPhi = My_dPhi( genMuonGroups[1][0]->phi(), genMuonGroups[1][1]->phi() );
+      b_genA0Mu_dR   = sqrt(b_genA0Mu_dEta*b_genA0Mu_dEta + b_genA0Mu_dPhi*b_genA0Mu_dPhi);
+      b_genA1Mu_dR   = sqrt(b_genA1Mu_dEta*b_genA1Mu_dEta + b_genA1Mu_dPhi*b_genA1Mu_dPhi);
+    }
+  
+    // Sort genMuons by pT (leading pT first)
+    if ( genMuons.size() > 1 ) std::sort( genMuons.begin(), genMuons.end(), PtOrder );
+  
+    b_4GenMu = false;
+
+    if ( genMuons.size() == 4 ){
+      m_events4GenMu++;
+      b_4GenMu = true;
+    }
+  
+    if ( genMuons.size() > 0 ) {
+      b_genMu0_pT  = genMuons[0]->pt();
+      b_genMu0_eta = genMuons[0]->eta();
+      b_genMu0_phi = genMuons[0]->phi();
+    } else {
+      b_genMu0_pT  = -100.0;
+      b_genMu0_eta = -100.0;
+      b_genMu0_phi = -100.0;
+    }
+    if ( genMuons.size() > 1 ) {
+      b_genMu1_pT  = genMuons[1]->pt();
+      b_genMu1_eta = genMuons[1]->eta();
+      b_genMu1_phi = genMuons[1]->phi();
+    } else {
+      b_genMu1_pT  = -100.0;
+      b_genMu1_eta = -100.0;
+      b_genMu1_phi = -100.0;
+    }
+    if ( genMuons.size() > 2 ) {
+      b_genMu2_pT  = genMuons[2]->pt();
+      b_genMu2_eta = genMuons[2]->eta();
+      b_genMu2_phi = genMuons[2]->phi();
+    } else {
+      b_genMu2_pT  = -100.0;
+      b_genMu2_eta = -100.0;
+      b_genMu2_phi = -100.0;
+    }
+    if ( genMuons.size() > 3 ) {
+      b_genMu3_pT  = genMuons[3]->pt();
+      b_genMu3_eta = genMuons[3]->eta();
+      b_genMu3_phi = genMuons[3]->phi();
+    } else {
+      b_genMu3_pT  = -100.0;
+      b_genMu3_eta = -100.0;
+      b_genMu3_phi = -100.0;
+    }
+
+  
+    std::vector<const reco::GenParticle*> genMuons17;
+    std::vector<const reco::GenParticle*> genMuons8;
+  
+    for ( unsigned int i = 0; i < genMuons.size(); i++ ) {
+      if ( genMuons[i]->pt() > m_Mu17_threshold && fabs( genMuons[i]->eta() ) < 0.9 ) {
+	genMuons17.push_back(genMuons[i]);
+      }
+      if ( genMuons[i]->pt() > m_Mu8_threshold && fabs( genMuons[i]->eta() ) < 2.4 ) {
+	genMuons8.push_back(genMuons[i]);
       }
     }
-    if ( isMuGroupMatchedToA && nMuGroup >= 0 ) {
-      genMuonGroups.push_back( genMuonGroupsUnsorted[nMuGroup] );
-      genMuonGroupsMothers.push_back( genMuonGroupsUnsortedMothers[nMuGroup] );
-    } else {
-      std::cout << "Error! Muon group has no matched boson A" << std::endl;
-    }
-  }
-  
-  bool b_isVLT = true;
-  if ( genMuonGroups.size() == 2 && genMuonGroups[0].size() == 2 && genMuonGroups[1].size() == 2 ) {
-    std::sort( genMuonGroups[0].begin(), genMuonGroups[0].end(), PtOrder );
-    std::sort( genMuonGroups[1].begin(), genMuonGroups[1].end(), PtOrder );
-    
-    b_genA0Mu0_p = genMuonGroups[0][0]->p();
-    b_genA0Mu1_p = genMuonGroups[0][1]->p();
-    b_genA1Mu0_p = genMuonGroups[1][0]->p();
-    b_genA1Mu1_p = genMuonGroups[1][1]->p();
-    
-    b_genA0Mu0_pT = genMuonGroups[0][0]->pt();
-    b_genA0Mu1_pT = genMuonGroups[0][1]->pt();
-    b_genA1Mu0_pT = genMuonGroups[1][0]->pt();
-    b_genA1Mu1_pT = genMuonGroups[1][1]->pt();
-    
-    b_genA0Mu0_eta = genMuonGroups[0][0]->eta();
-    b_genA0Mu1_eta = genMuonGroups[0][1]->eta();
-    b_genA1Mu0_eta = genMuonGroups[1][0]->eta();
-    b_genA1Mu1_eta = genMuonGroups[1][1]->eta();
-    
-    b_genA0Mu0_phi = genMuonGroups[0][0]->phi();
-    b_genA0Mu1_phi = genMuonGroups[0][1]->phi();
-    b_genA1Mu0_phi = genMuonGroups[1][0]->phi();
-    b_genA1Mu1_phi = genMuonGroups[1][1]->phi();
-    
-    b_genA0Mu0_vx = genMuonGroups[0][0]->vx() - b_beamSpot_x;
-    b_genA0Mu1_vx = genMuonGroups[0][1]->vx() - b_beamSpot_x;
-    b_genA1Mu0_vx = genMuonGroups[1][0]->vx() - b_beamSpot_x;
-    b_genA1Mu1_vx = genMuonGroups[1][1]->vx() - b_beamSpot_x;
-    
-    b_genA0Mu0_vy = genMuonGroups[0][0]->vy() - b_beamSpot_y;
-    b_genA0Mu1_vy = genMuonGroups[0][1]->vy() - b_beamSpot_y;
-    b_genA1Mu0_vy = genMuonGroups[1][0]->vy() - b_beamSpot_y;
-    b_genA1Mu1_vy = genMuonGroups[1][1]->vy() - b_beamSpot_y;
-    
-    b_genA0Mu0_vz = genMuonGroups[0][0]->vz() - b_beamSpot_z;
-    b_genA0Mu1_vz = genMuonGroups[0][1]->vz() - b_beamSpot_z;
-    b_genA1Mu0_vz = genMuonGroups[1][0]->vz() - b_beamSpot_z;
-    b_genA1Mu1_vz = genMuonGroups[1][1]->vz() - b_beamSpot_z;
-    
-    if (    fabs(b_genA0Mu0_vx - b_genA0Mu1_vx) < eq
-         && fabs(b_genA1Mu0_vx - b_genA1Mu1_vx) < eq
-         && fabs(b_genA0Mu0_vy - b_genA0Mu1_vy) < eq
-         && fabs(b_genA1Mu0_vy - b_genA1Mu1_vy) < eq
-         && fabs(b_genA0Mu0_vz - b_genA0Mu1_vz) < eq
-         && fabs(b_genA1Mu0_vz - b_genA1Mu1_vz) < eq
-          ) {
-      Float_t genA0_vLx = b_genA0Mu0_vx - b_genA0_vx;
-      Float_t genA1_vLx = b_genA1Mu0_vx - b_genA1_vx;
-    
-      Float_t genA0_vLy = b_genA0Mu0_vy - b_genA0_vy;
-      Float_t genA1_vLy = b_genA1Mu0_vy - b_genA1_vy;
-    
-      Float_t genA0_vLz = b_genA0Mu0_vz - b_genA0_vz;
-      Float_t genA1_vLz = b_genA1Mu0_vz - b_genA1_vz;
-    
-      b_genA0_vLT = sqrt( genA0_vLx * genA0_vLx + genA0_vLy * genA0_vLy );
-      b_genA1_vLT = sqrt( genA1_vLx * genA1_vLx + genA1_vLy * genA1_vLy );
-    
-      if ( b_genA0_vLT < 4. && b_genA0_vLT < 4. ) b_isVLT = true;
-    
-      b_genA0_vL = sqrt( genA0_vLx * genA0_vLx + genA0_vLy * genA0_vLy + genA0_vLz * genA0_vLz );
-      b_genA1_vL = sqrt( genA1_vLx * genA1_vLx + genA1_vLy * genA1_vLy + genA1_vLz * genA1_vLz );
-    } else {
-      std::cout << "WARNING! Muon vertexes are different" << std::endl;
-    }
-    
-    b_genA0Mu_dEta = genMuonGroups[0][0]->eta() - genMuonGroups[0][1]->eta();
-    b_genA1Mu_dEta = genMuonGroups[1][0]->eta() - genMuonGroups[1][1]->eta();
-    b_genA0Mu_dPhi = My_dPhi( genMuonGroups[0][0]->phi(), genMuonGroups[0][1]->phi() );
-    b_genA1Mu_dPhi = My_dPhi( genMuonGroups[1][0]->phi(), genMuonGroups[1][1]->phi() );
-    b_genA0Mu_dR   = sqrt(b_genA0Mu_dEta*b_genA0Mu_dEta + b_genA0Mu_dPhi*b_genA0Mu_dPhi);
-    b_genA1Mu_dR   = sqrt(b_genA1Mu_dEta*b_genA1Mu_dEta + b_genA1Mu_dPhi*b_genA1Mu_dPhi);
-  }
-  
-  // Sort genMuons by pT (leading pT first)
-  if ( genMuons.size() > 1 ) std::sort( genMuons.begin(), genMuons.end(), PtOrder );
-  
-  b_4GenMu = false;
+    b_1GenMu17 = false; 
+    b_2GenMu8 = false;
+    b_3GenMu8 = false;
+    b_4GenMu8 = false;
 
-  if ( genMuons.size() == 4 ){
-    m_events4GenMu++;
-    b_4GenMu = true;
-  }
-  
-  if ( genMuons.size() > 0 ) {
-    b_genMu0_pT  = genMuons[0]->pt();
-    b_genMu0_eta = genMuons[0]->eta();
-    b_genMu0_phi = genMuons[0]->phi();
-  } else {
-    b_genMu0_pT  = -100.0;
-    b_genMu0_eta = -100.0;
-    b_genMu0_phi = -100.0;
-  }
-  if ( genMuons.size() > 1 ) {
-    b_genMu1_pT  = genMuons[1]->pt();
-    b_genMu1_eta = genMuons[1]->eta();
-    b_genMu1_phi = genMuons[1]->phi();
-  } else {
-    b_genMu1_pT  = -100.0;
-    b_genMu1_eta = -100.0;
-    b_genMu1_phi = -100.0;
-  }
-  if ( genMuons.size() > 2 ) {
-    b_genMu2_pT  = genMuons[2]->pt();
-    b_genMu2_eta = genMuons[2]->eta();
-    b_genMu2_phi = genMuons[2]->phi();
-  } else {
-    b_genMu2_pT  = -100.0;
-    b_genMu2_eta = -100.0;
-    b_genMu2_phi = -100.0;
-  }
-  if ( genMuons.size() > 3 ) {
-    b_genMu3_pT  = genMuons[3]->pt();
-    b_genMu3_eta = genMuons[3]->eta();
-    b_genMu3_phi = genMuons[3]->phi();
-  } else {
-    b_genMu3_pT  = -100.0;
-    b_genMu3_eta = -100.0;
-    b_genMu3_phi = -100.0;
-  }
-
-  
-  std::vector<const reco::GenParticle*> genMuons17;
-  std::vector<const reco::GenParticle*> genMuons8;
-  
-  for ( unsigned int i = 0; i < genMuons.size(); i++ ) {
-    if ( genMuons[i]->pt() > m_Mu17_threshold && fabs( genMuons[i]->eta() ) < 0.9 ) {
-      genMuons17.push_back(genMuons[i]);
+    //  std::cout << " b_isVLT: " << b_isVLT << std::endl;
+    if ( genMuons17.size() >=1 && b_isVLT) {
+      m_events1GenMu17++;
+      b_1GenMu17 = true;
+      if ( genMuons8.size() >=2 ) {
+	m_events2GenMu8++;
+	b_2GenMu8 = true;
+      }
+      if ( genMuons8.size() >=3 ) {
+	m_events3GenMu8++;
+	b_3GenMu8 = true;
+      }
+      if ( genMuons8.size() >=4 ) {
+	m_events4GenMu8++;
+	b_4GenMu8 = true;
+      }
     }
-    if ( genMuons[i]->pt() > m_Mu8_threshold && fabs( genMuons[i]->eta() ) < 2.4 ) {
-      genMuons8.push_back(genMuons[i]);
-    }
-  }
-  b_1GenMu17 = false; 
-  b_2GenMu8 = false;
-  b_3GenMu8 = false;
-  b_4GenMu8 = false;
-
-//  std::cout << " b_isVLT: " << b_isVLT << std::endl;
-  if ( genMuons17.size() >=1 && b_isVLT) {
-    m_events1GenMu17++;
-    b_1GenMu17 = true;
-    if ( genMuons8.size() >=2 ) {
-      m_events2GenMu8++;
-      b_2GenMu8 = true;
-    }
-    if ( genMuons8.size() >=3 ) {
-      m_events3GenMu8++;
-      b_3GenMu8 = true;
-    }
-    if ( genMuons8.size() >=4 ) {
-      m_events4GenMu8++;
-      b_4GenMu8 = true;
-    }
-  }
   
-  if ( m_debug > 10 ) std::cout << m_events << " Stop GEN Level" << std::endl;
-  
+    if ( m_debug > 10 ) std::cout << m_events << " Stop GEN Level" << std::endl;
+  }  
   //****************************************************************************
   //                              RECO LEVEL                                     
   //****************************************************************************
@@ -1079,6 +1084,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     if ( consistentVtx.isValid() ) {
       double massC = diMuonC->consistentVtxMass();
       double massF = diMuonF->consistentVtxMass();
+
       if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_isMassDiMuonsOK = true;
     }
   }
@@ -1152,6 +1158,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonF_isoTk = diMuonF_isoTk;
     b_diMuonC_isoPF = diMuonC_isoPF;
     b_diMuonF_isoPF = diMuonF_isoPF;
+
+
+
 //    std::cout << "diMuonC_isoTk: " << diMuonC_isoTk << " diMuonC_isoPF: " << diMuonC_isoPF << " diMuonF_isoTk: " << diMuonF_isoTk << " diMuonF_isoPF: " <<  diMuonF_isoPF << std::endl;
     if ( diMuonC_isoTk < m_maxIsoDiMuons && diMuonF_isoTk < m_maxIsoDiMuons ) b_isIsoDiMuonsOK = true;
 //    if ( diMuonC_isoPF < m_maxIsoDiMuons && diMuonF_isoPF < m_maxIsoDiMuons ) b_isIsoDiMuonsOK = true;
@@ -1243,6 +1252,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( m_debug > 10 ) std::cout << m_events << " Stop RECO Level" << std::endl;
   
   m_ttree->Fill();
+
+
+
   
 }
 
@@ -1430,15 +1442,16 @@ CutFlowAnalyzer::endJob()
   
   std:: cout << "Total number of events:          " << m_events << std::endl;
   std:: cout << "Total number of events with 4mu: " << m_events4GenMu << " fraction: " <<  m_events4GenMu/m_events << std::endl;
-  
-  std:: cout << "********** GEN **********" << std::endl;
-    std:: cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << std::endl;
-  std:: cout << "pT1>17 |eta1|<0.9:       " << m_events1GenMu17 << " \t" << (float)m_events1GenMu17/(float)m_events << " \t" << (float)m_events1GenMu17/(float)m_events << std::endl;
-  std:: cout << "pT2>8  |eta2|<2.4:       " << m_events2GenMu8  << " \t" << (float)m_events2GenMu8/(float)m_events1GenMu17  << " \t" << (float)m_events2GenMu8/(float)m_events << std::endl;
-  std:: cout << "pT3>8  |eta2|<2.4:       " << m_events3GenMu8  << " \t" << (float)m_events3GenMu8/(float)m_events2GenMu8   << " \t" << (float)m_events3GenMu8/(float)m_events << std::endl;
-  std:: cout << "pT4>8  |eta2|<2.4:       " << m_events4GenMu8  << " \t" << (float)m_events4GenMu8/(float)m_events3GenMu8   << " \t" << (float)m_events4GenMu8/(float)m_events << std::endl;
-  std:: cout << "Basic MC Acceptance:     " << (float)m_events4GenMu8/(float)m_events << std::endl;
 
+  if (m_runGen){  
+    std:: cout << "********** GEN **********" << std::endl;
+    std:: cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << std::endl;
+    std:: cout << "pT1>17 |eta1|<0.9:       " << m_events1GenMu17 << " \t" << (float)m_events1GenMu17/(float)m_events << " \t" << (float)m_events1GenMu17/(float)m_events << std::endl;
+    std:: cout << "pT2>8  |eta2|<2.4:       " << m_events2GenMu8  << " \t" << (float)m_events2GenMu8/(float)m_events1GenMu17  << " \t" << (float)m_events2GenMu8/(float)m_events << std::endl;
+    std:: cout << "pT3>8  |eta2|<2.4:       " << m_events3GenMu8  << " \t" << (float)m_events3GenMu8/(float)m_events2GenMu8   << " \t" << (float)m_events3GenMu8/(float)m_events << std::endl;
+    std:: cout << "pT4>8  |eta2|<2.4:       " << m_events4GenMu8  << " \t" << (float)m_events4GenMu8/(float)m_events3GenMu8   << " \t" << (float)m_events4GenMu8/(float)m_events << std::endl;
+    std:: cout << "Basic MC Acceptance:     " << (float)m_events4GenMu8/(float)m_events << std::endl;
+  }
   std:: cout << "********** RECO **********" << std::endl;
   std:: cout << "Selection                " << "nEv"                   << " \t RelEff"                                                         << " \t Eff" << std::endl;
   std:: cout << "m_events1SelMu17:        " << m_events1SelMu17        << " \t" << (float)m_events1SelMu17/(float)m_events                << " \t" << (float)m_events1SelMu17/(float)m_events        << std::endl;
@@ -1447,7 +1460,7 @@ CutFlowAnalyzer::endJob()
   std:: cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << std::endl;
 
   std:: cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << std::endl;
-  std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl; 
+  if (m_runGen) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl; 
 
   std:: cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << std::endl;
   std:: cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << std::endl;
@@ -1461,7 +1474,7 @@ CutFlowAnalyzer::endJob()
   float e_full = (float)m_eventsVertexOK/(float)m_events;
   float de_full = sqrt( e_full*( 1.0 - e_full )/(float)m_events );
   std:: cout << "Full sel eff e_full:     " << e_full << " +- " << de_full << std::endl;
-  std:: cout << "e_full/a_gen:            " << (float)m_eventsVertexOK/(float)m_events4GenMu8 << std::endl;
+  if (m_runGen) std:: cout << "e_full/a_gen:            " << (float)m_eventsVertexOK/(float)m_events4GenMu8 << std::endl;
   
   std::cout << m_events << std::endl;
   std::cout << m_events1GenMu17 << std::endl;
