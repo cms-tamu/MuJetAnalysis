@@ -94,7 +94,6 @@ process.cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
   analyzerDebug = cms.int32(0),
   
   fillGenLevel = cms.bool(True),
-  genParticles = cms.InputTag("genParticles"),
 
 #  muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),
 #  muJets = cms.InputTag("TrackerMuJetProducer05"),
@@ -102,9 +101,7 @@ process.cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
   muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
   muJets = cms.InputTag("PFMuJetProducer05"),
 
-  trigpt = cms.double(17),
-  maxIsoDiMuons = cms.double(2.0),
-  dataset = cms.string("DoubleMu"),
+  DiMuons_Iso_Max = cms.double(2.0),
   
   nThrowsConsistentVertexesCalculator = cms.int32(100000),
 

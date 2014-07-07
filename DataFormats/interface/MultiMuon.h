@@ -207,7 +207,7 @@ namespace pat {
     GlobalVector  vertexMomentum() const { LorentzVector v = vertexP4();  return GlobalVector(v.x(), v.y(), v.z()); }
     double       vertexMass()     const { return vertexP4().mass(); }
 
-    double vertexDZ(const Point& myBeamSpot) const {
+    double vertexDz(const Point& myBeamSpot) const {
       if (vertexValid()) {
         GlobalPoint  v      = vertexPoint();
         GlobalVector p      = vertexMomentum();
@@ -231,15 +231,15 @@ namespace pat {
     };
     
     /// in 3D
-    double vertexLxyz(GlobalPoint primaryVertex) const {
+    double vertexL(GlobalPoint primaryVertex) const {
       GlobalPoint  v  = vertexPoint();
       GlobalVector p  = vertexMomentum();
       double      p_mag = sqrt( p.x()*p.x() + p.y()*p.y() + p.z()*p.z() );
       return ( (v.x()-primaryVertex.x())*p.x() + (v.y()-primaryVertex.y())*p.y() + (v.z()-primaryVertex.z())*p.z() ) / p_mag;
     };
     
-    double vertexLxyz(double x, double y, double z) const {
-      return vertexLxyz(GlobalPoint(x, y, z));
+    double vertexL(double x, double y, double z) const {
+      return vertexL(GlobalPoint(x, y, z));
     };
   
 //------------------------------------------------------------------------------
@@ -262,7 +262,7 @@ namespace pat {
     GlobalVector consistentVtxMomentum() const { LorentzVector v = consistentVtxP4();  return GlobalVector(v.x(), v.y(), v.z()); }
     double      consistentVtxMass()     const { return consistentVtxP4().mass(); }
   
-    double consistentVtxDZ(GlobalPoint myBeamSpot) const {
+    double consistentVtxDz(GlobalPoint myBeamSpot) const {
       checkConsistentVtx();
       GlobalPoint  v      = consistentVtxPoint();
       GlobalVector p      = consistentVtxMomentum();
@@ -285,7 +285,7 @@ namespace pat {
     };
     
     /// in 3D
-    double consistentVtxLxyz(GlobalPoint primaryVertex) const {
+    double consistentVtxL(GlobalPoint primaryVertex) const {
       checkConsistentVtx();
       GlobalPoint  v  = consistentVtxPoint();
       GlobalVector p  = consistentVtxMomentum();
@@ -293,8 +293,8 @@ namespace pat {
       return ( (v.x()-primaryVertex.x())*p.x() + (v.y()-primaryVertex.y())*p.y() + (v.z()-primaryVertex.z())*p.z() ) / p_mag;
     };
     
-    double consistentVtxLxyz(double x, double y, double z) const {
-      return consistentVtxLxyz(GlobalPoint(x, y, z));
+    double consistentVtxL(double x, double y, double z) const {
+      return consistentVtxL(GlobalPoint(x, y, z));
     };
   
   

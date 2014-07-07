@@ -1200,7 +1200,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
                         double deta = muJet->eta() - track->eta();
                         double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
                         if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-                                double dz = fabs(track->dz(theBeamSpot->position())-muJet->vertexDZ(theBeamSpot->position()));
+                                double dz = fabs(track->dz(theBeamSpot->position())-muJet->vertexDz(theBeamSpot->position()));
                                 if (dz < 0.3) m_lowdimuon_isoTk_3mm += track->pt();
                                 if (dz < 0.2) m_lowdimuon_isoTk_2mm += track->pt();
                                 if (dz < 0.1) m_lowdimuon_isoTk_1mm += track->pt();
@@ -1418,7 +1418,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       if (m_lowdimuon_isoTk > 4.5 || m_lowdimuon_lxy > 0.2) m_lowdimuon_bbbarlike = 1;
       if (m_lowdimuon_isoTk < 4.5 && m_lowdimuon_lxy < 0.2) m_lowdimuon_bbbarlike = 0;
 
-  m_lowdimuon_dz = muJet->vertexDZ(theBeamSpot->position());
+  m_lowdimuon_dz = muJet->vertexDz(theBeamSpot->position());
 
 
 
@@ -1527,7 +1527,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       double deta = muJet->eta() - track->eta();
       double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
       if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-        double dz = fabs(track->dz(theBeamSpot->position())-muJet->vertexDZ(theBeamSpot->position()));
+        double dz = fabs(track->dz(theBeamSpot->position())-muJet->vertexDz(theBeamSpot->position()));
         if (dz < 0.3) m_dimuorphan_isoTk_3mm += track->pt();
         if (dz < 0.2) m_dimuorphan_isoTk_2mm += track->pt();
         if (dz < 0.1) m_dimuorphan_isoTk_1mm += track->pt();
@@ -1545,7 +1545,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       double dR   = sqrt( dPhi*dPhi + dEta*dEta );
 //      if ( dR < 0.4 && pfCand->pt() > 0.5 ) {
       if ( dR < 0.4 ) {
-        double dz = fabs( pfCand->vertex().z() - theBeamSpot->position().z() - muJet->vertexDZ(theBeamSpot->position()) );
+        double dz = fabs( pfCand->vertex().z() - theBeamSpot->position().z() - muJet->vertexDz(theBeamSpot->position()) );
         if ( dz < 0.1 ) m_dimuorphan_isoPF_1mm += pfCand->pt();
       }
     }
@@ -1624,7 +1624,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
    m_dimuorphan_vnchi2 = muJet->vertexNormalizedChi2();
    if (closestPrimaryVertex != primaryVertices->end()) {
       m_dimuorphan_lxy = muJet->vertexLxy(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
-      m_dimuorphan_lxyz = muJet->vertexLxyz(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
+      m_dimuorphan_lxyz = muJet->vertexL(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
    }
 
         double scale0 = scalePt(muJet->vertexMomentum(0).perp(),muJet->vertexMomentum(0).eta(),muJet->vertexMomentum(0).phi(),muJet->muon(0)->charge());
@@ -1970,7 +1970,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
         }
 */
 
-        m_dimuorphan_dz1 = muJet->vertexDZ(theBeamSpot->position());
+        m_dimuorphan_dz1 = muJet->vertexDz(theBeamSpot->position());
   m_dimuorphan_dz2 = orphan->innerTrack()->dz(theBeamSpot->position());
   m_dimuorphan_deltaz = m_dimuorphan_dz1 - m_dimuorphan_dz2;
 
@@ -2101,7 +2101,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       double deta = muJetC->eta() - track->eta();
       double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
       if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-        double dz = fabs(track->dz(theBeamSpot->position())-muJetC->vertexDZ(theBeamSpot->position()));
+        double dz = fabs(track->dz(theBeamSpot->position())-muJetC->vertexDz(theBeamSpot->position()));
         if (dz < 0.3) m_dimudimu_C_isoTk_3mm += track->pt();
         if (dz < 0.2) m_dimudimu_C_isoTk_2mm += track->pt();
         if (dz < 0.1) m_dimudimu_C_isoTk_1mm += track->pt();
@@ -2119,7 +2119,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       double dR   = sqrt( dPhi*dPhi + dEta*dEta );
 //      if ( dR < 0.4 && pfCand->pt() > 0.5 ) {
       if ( dR < 0.4 ) {
-        double dz = fabs( pfCand->vertex().z() - theBeamSpot->position().z() - muJetC->vertexDZ(theBeamSpot->position()) );
+        double dz = fabs( pfCand->vertex().z() - theBeamSpot->position().z() - muJetC->vertexDz(theBeamSpot->position()) );
         if ( dz < 0.1 ) m_dimudimu_C_isoPF_1mm += pfCand->pt();
       }
     }
@@ -2150,7 +2150,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       double deta = muJetF->eta() - track->eta();
       double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
       if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-        double dz = fabs(track->dz(theBeamSpot->position())-muJetF->vertexDZ(theBeamSpot->position()));
+        double dz = fabs(track->dz(theBeamSpot->position())-muJetF->vertexDz(theBeamSpot->position()));
         if (dz < 0.3) m_dimudimu_F_isoTk_3mm += track->pt();
         if (dz < 0.2) m_dimudimu_F_isoTk_2mm += track->pt();
         if (dz < 0.1) m_dimudimu_F_isoTk_1mm += track->pt();
@@ -2168,7 +2168,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       double dR   = sqrt( dPhi*dPhi + dEta*dEta );
 //      if ( dR < 0.4 && pfCand->pt() > 0.5 ) {
       if ( dR < 0.4 ) {
-        double dz = fabs( pfCand->vertex().z() - theBeamSpot->position().z() - muJetF->vertexDZ(theBeamSpot->position()) );
+        double dz = fabs( pfCand->vertex().z() - theBeamSpot->position().z() - muJetF->vertexDz(theBeamSpot->position()) );
         if ( dz < 0.1 ) m_dimudimu_F_isoPF_1mm += pfCand->pt();
       }
     }
@@ -2195,7 +2195,7 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       m_dimudimu_vprobC = muJetC->vertexProb();
       if (closestPrimaryVertex != primaryVertices->end()) {
          m_dimudimu_lxyC = muJetC->vertexLxy(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
-         m_dimudimu_lxyzC = muJetC->vertexLxyz(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
+         m_dimudimu_lxyzC = muJetC->vertexL(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
       }
 
       m_dimudimu_massF = muJetF->vertexMass();
@@ -2208,12 +2208,12 @@ void FitNtuple::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       m_dimudimu_vprobF = muJetF->vertexProb();
       if (closestPrimaryVertex != primaryVertices->end()) {
          m_dimudimu_lxyF = muJetF->vertexLxy(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
-         m_dimudimu_lxyzF = muJetF->vertexLxyz(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
+         m_dimudimu_lxyzF = muJetF->vertexL(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
       }
    }
 
-        m_dimudimu_dz1 = muJet0->vertexDZ(theBeamSpot->position());
-        m_dimudimu_dz2 = muJet1->vertexDZ(theBeamSpot->position());
+        m_dimudimu_dz1 = muJet0->vertexDz(theBeamSpot->position());
+        m_dimudimu_dz2 = muJet1->vertexDz(theBeamSpot->position());
         m_dimudimu_deltaz = m_dimudimu_dz1 - m_dimudimu_dz2;
 
    if (m_dimudimu_containstrig > 0 && fabs(m_dimudimu_deltaz) < 0.1) m_dimudimu->Fill();
