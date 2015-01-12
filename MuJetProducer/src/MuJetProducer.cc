@@ -382,7 +382,7 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   edm::Handle<reco::VertexCollection> primaryVertices;
   iEvent.getByLabel("offlinePrimaryVertices", primaryVertices);
 
-  const reco::Vertex* vtx = &((*primaryVertices)[0]);
+  //  const reco::Vertex* vtx = &((*primaryVertices)[0]);
 
   std::map<const pat::Muon*,bool> used;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {

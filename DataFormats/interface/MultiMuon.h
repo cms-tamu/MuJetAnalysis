@@ -32,12 +32,7 @@
 #include "TMath.h"
 #include "TTree.h"
 
-#ifdef MULTIMUONCANDIDATE_FOR_FWLITE
-typedef int TransientTrackBuilder;
-#endif
-#ifndef MULTIMUONCANDIDATE_FOR_FWLITE
-#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
-#endif
+class TransientTrackBuilder;
 
 // Define typedefs for convenience
 namespace pat {

@@ -7,8 +7,11 @@
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
+#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/TransientTrack/interface/TransientTrack.h"
 #include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
+#else
+class TransientTrackBuilder {};
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 
 /// default constructor
