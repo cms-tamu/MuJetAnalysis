@@ -18,13 +18,13 @@ process.load("Configuration/StandardSequences/FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:startup_GRun', '')
 
-process.load("AnalysisDataFormats.MuJetAnalysis.RECOtoPAT_cff")
+process.load("MuJetAnalysis.DataFormats.RECOtoPAT_cff")
 process.patMuons.addGenMatch = cms.bool(True)
 process.patMuons.embedGenMatch = cms.bool(True)
 process.Path = cms.Path(process.patifyMC)
 
-process.load("AnalysisDataFormats.MuJetAnalysis.EventContent_version9_cff")
-process.patOutput.fileName = cms.untracked.string("output.root")
+process.load("MuJetAnalysis.DataFormats.EventContent_version9_cff")
+process.patOutput.fileName = cms.untracked.string("out_pat.root")
 process.EndPath = cms.EndPath(process.patOutput)
 
 process.schedule = cms.Schedule(process.Path, process.EndPath)
