@@ -93,8 +93,8 @@ bool ConsistentVertexesCalculator::Calculate( const pat::MultiMuon *&mm_0, const
     // Extract
     for (unsigned int i = 0; i < 3; ++i){
       for (unsigned int j = 0; j < 3; ++j){
-        mm_0_covMatrix[i][j] = mm_0->vertexCovariance(i,j);
-        mm_1_covMatrix[i][j] = mm_1->vertexCovariance(i,j);
+        mm_0_covMatrix[i][j] = mm_0->my_vertexCovariance(i,j);
+        mm_1_covMatrix[i][j] = mm_1->my_vertexCovariance(i,j);
       }
     }
     

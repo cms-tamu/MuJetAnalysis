@@ -32,12 +32,7 @@
 #include "TMath.h"
 #include "TTree.h"
 
-#ifdef MULTIMUONCANDIDATE_FOR_FWLITE
-typedef int TransientTrackBuilder;
-#endif
-#ifndef MULTIMUONCANDIDATE_FOR_FWLITE
-#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
-#endif
+class TransientTrackBuilder;
 
 // Define typedefs for convenience
 namespace pat {
@@ -184,8 +179,8 @@ namespace pat {
     double          vertexNdof()                    const { checkVertex();  return m_ndof; }
     double          vertexNormalizedChi2()          const { checkVertex();  return (m_ndof > 0. ? m_chi2/m_ndof : 0.); }
     double          vertexProb()                    const { checkVertex();  return (m_ndof > 0. ? TMath::Prob(m_chi2, m_ndof) : 0.); }
-    CovarianceMatrix vertexCovariance()              const { checkVertex();  return m_covarianceMatrix; }
-    double          vertexCovariance(int i, int j) const { checkVertex();  return m_covarianceMatrix.At(i, j); }
+    CovarianceMatrix my_vertexCovariance()              const { checkVertex();  return m_covarianceMatrix; }
+    double          my_vertexCovariance(int i, int j) const { checkVertex();  return m_covarianceMatrix.At(i, j); }
     
     /// return position/momentum of each muon closest to vertex
     GlobalPoint      vertexPCA(int i)                 const { checkVertex();  return m_vertexPCA[i]; }
