@@ -4,40 +4,54 @@ from Configuration.StandardSequences.MagneticField_cff import *
 from TrackingTools.GeomPropagators.SmartPropagator_cff import *
 from TrackingTools.MaterialEffects.MaterialPropagator_cfi import *
 from TrackingTools.MaterialEffects.OppositeMaterialPropagator_cfi import *
+from PhysicsTools.PatAlgos.patSequences_cff import *
 
-import PhysicsTools.PatAlgos.patSequences_cff
-
-muonMatch = PhysicsTools.PatAlgos.patSequences_cff.muonMatch.clone(src = cms.InputTag("muons"),
-                                                                   resolveByMatchQuality = cms.bool(True))
-patMuons = PhysicsTools.PatAlgos.patSequences_cff.patMuons.clone(muonSource = cms.InputTag("muons"),
-                                                                 genParticleMatch = cms.InputTag("muonMatch"),
-                                                                 addTeVRefits = cms.bool(False),
-                                                                 embedTrack = cms.bool(True),
-                                                                 embedCombinedMuon = cms.bool(True),
-                                                                 embedStandAloneMuon = cms.bool(True),
-                                                                 embedPickyMuon = cms.bool(False),
-                                                                 embedTpfmsMuon = cms.bool(False),
-                                                                 embedHighLevelSelection = cms.bool(True),
-                                                                 usePV = cms.bool(True),
-                                                                 beamLineSrc = cms.InputTag("offlineBeamSpot"),
-                                                                 pvSrc = cms.InputTag("offlinePrimaryVertices"),
-                                                                 isolation = cms.PSet(),
-                                                                 isoDeposits = cms.PSet(),
-                                                                 embedCaloMETMuonCorrs = cms.bool(False),
-                                                                 embedTcMETMuonCorrs = cms.bool(False),
-                                                                 )
+muonMatch = muonMatch.clone(
+    src = cms.InputTag("muons"),
+    resolveByMatchQuality = cms.bool(True)
+)
+patMuons = patMuons.clone(
+    muonSource = cms.InputTag("muons"),
+    genParticleMatch = cms.InputTag("muonMatch"),
+    addTeVRefits = cms.bool(False),
+    embedTrack = cms.bool(True),
+    embedCombinedMuon = cms.bool(True),
+    embedStandAloneMuon = cms.bool(True),
+    embedPickyMuon = cms.bool(False),
+    embedTpfmsMuon = cms.bool(False),
+    embedHighLevelSelection = cms.bool(True),
+    usePV = cms.bool(True),
+    beamLineSrc = cms.InputTag("offlineBeamSpot"),
+    pvSrc = cms.InputTag("offlinePrimaryVertices"),
+    isolation = cms.PSet(),
+    isoDeposits = cms.PSet(),
+    embedCaloMETMuonCorrs = cms.bool(False),
+    embedTcMETMuonCorrs = cms.bool(False),
+)
 # Tracker Muons Part
-selectedPatTrackerMuons = PhysicsTools.PatAlgos.patSequences_cff.selectedPatMuons.clone(src = cms.InputTag("patMuons"),
-    cut = cms.string("pt > 5.0 && isTrackerMuon() && numberOfMatches() > 1 && -2.4 < eta() && eta() < 2.4"))
-cleanPatTrackerMuons = PhysicsTools.PatAlgos.patSequences_cff.cleanPatMuons.clone(src = cms.InputTag("selectedPatTrackerMuons"))
-countPatTrackerMuons = PhysicsTools.PatAlgos.patSequences_cff.countPatMuons.clone(src = cms.InputTag("cleanPatTrackerMuons"))
+selectedPatTrackerMuons = selectedPatMuons.clone(
+    src = cms.InputTag("patMuons"),
+    cut = cms.string("pt > 5.0 && isTrackerMuon() && numberOfMatches() > 1 && -2.4 < eta() && eta() < 2.4")
+)
+cleanPatTrackerMuons = cleanPatMuons.clone(
+    src = cms.InputTag("selectedPatTrackerMuons")
+)
+countPatTrackerMuons = countPatMuons.clone(
+    src = cms.InputTag("cleanPatTrackerMuons")
+)
 # PF Muons Part
-selectedPatPFMuons = PhysicsTools.PatAlgos.patSequences_cff.selectedPatMuons.clone(src = cms.InputTag("patMuons"),
+selectedPatPFMuons = selectedPatMuons.clone(
+    src = cms.InputTag("patMuons"),
     #"Loose Muon" requirement on PF muons as recommended by Muon POG:
     #https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideMuonId#Loose_Muon
-    cut = cms.string("pt > 5.0 && isPFMuon() && ( isTrackerMuon() || isGlobalMuon() ) && -2.4 < eta() && eta() < 2.4"))
-cleanPatPFMuons = PhysicsTools.PatAlgos.patSequences_cff.cleanPatMuons.clone(src = cms.InputTag("selectedPatPFMuons"))
-countPatPFMuons = PhysicsTools.PatAlgos.patSequences_cff.countPatMuons.clone(src = cms.InputTag("cleanPatPFMuons"))
+    cut = cms.string("pt > 5.0 && isPFMuon() && ( isTrackerMuon() || isGlobalMuon() ) && -2.4 < eta() && eta() < 2.4")
+)
+cleanPatPFMuons = cleanPatMuons.clone(
+    src = cms.InputTag("selectedPatPFMuons")
+)
+countPatPFMuons = countPatMuons.clone(
+    src = cms.InputTag("cleanPatPFMuons")
+)
 
 from PhysicsTools.PatAlgos.triggerLayer1.triggerProducer_cfi import *
 from PhysicsTools.PatAlgos.triggerLayer1.triggerEventProducer_cfi import *
@@ -72,8 +86,37 @@ cleanPatPFMuonsTriggerMatch = cms.EDProducer("PATTriggerMatchMuonEmbedder",
                                                                    "cleanPFMuonTriggerMatchHLTIsoMu",
                                                                    "cleanPFMuonTriggerMatchHLTDoubleMu"))
                                                                    
-patifyTrackerMuon = cms.Sequence(selectedPatTrackerMuons * cleanPatTrackerMuons * countPatTrackerMuons * cleanTrackerMuonTriggerMatchHLTMu * cleanTrackerMuonTriggerMatchHLTIsoMu * cleanTrackerMuonTriggerMatchHLTDoubleMu * cleanPatTrackerMuonsTriggerMatch)
-patifyPFMuon = cms.Sequence(selectedPatPFMuons * cleanPatPFMuons * countPatPFMuons * cleanPFMuonTriggerMatchHLTMu * cleanPFMuonTriggerMatchHLTIsoMu * cleanPFMuonTriggerMatchHLTDoubleMu * cleanPatPFMuonsTriggerMatch)
+patifyTrackerMuon = cms.Sequence(
+    selectedPatTrackerMuons * 
+    cleanPatTrackerMuons * 
+    countPatTrackerMuons * 
+    cleanTrackerMuonTriggerMatchHLTMu * 
+    cleanTrackerMuonTriggerMatchHLTIsoMu * 
+    cleanTrackerMuonTriggerMatchHLTDoubleMu * 
+    cleanPatTrackerMuonsTriggerMatch
+)
+patifyPFMuon = cms.Sequence(
+    selectedPatPFMuons * 
+    cleanPatPFMuons * 
+    countPatPFMuons * 
+    cleanPFMuonTriggerMatchHLTMu * 
+    cleanPFMuonTriggerMatchHLTIsoMu * 
+    cleanPFMuonTriggerMatchHLTDoubleMu * 
+    cleanPatPFMuonsTriggerMatch
+)
 
-patifyMC = cms.Sequence(muonMatch * patMuons * patTrigger * patTriggerEvent * patifyTrackerMuon * patifyPFMuon)
-patifyData = cms.Sequence(patMuons * patTrigger * patTriggerEvent * patifyTrackerMuon * patifyPFMuon)
+patifyData = cms.Sequence(
+    patMuons * 
+    patTrigger * 
+    patTriggerEvent * 
+    patifyTrackerMuon * 
+    patifyPFMuon
+)
+patifyMC = cms.Sequence(
+    muonMatch * 
+    patifyData
+)
+
+patDefaultSequence = cms.Sequence()
+patCandidates = cms.Sequence()
+makePatMuons = cms.Sequence()

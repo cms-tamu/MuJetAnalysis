@@ -29,7 +29,7 @@ patOutput = cms.OutputModule("PoolOutputModule",
         "keep L1AcceptBunchCrossings_*_*_*",
         "keep L1GlobalTriggerReadoutRecord_gtDigis_*_*",
         
-        'keep recoPFCandidates_*_*_*',
+        'keep recoPFCandidates_particleFlow_*_*',
 
         "keep *_offlineBeamSpot_*_*",
         "keep *_offlinePrimaryVertices_*_*",
