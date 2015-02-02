@@ -328,6 +328,7 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   //****************************************************************************
 
   std::vector<std::string> hltPaths_;  
+  std::vector<std::string> b_hltPaths;
 
   //****************************************************************************
   //          RECO LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
@@ -1338,13 +1339,16 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   iEvent.getByLabel("patTriggerEvent", triggerEvent);
   
   b_isDiMuonHLTFired = false;
+  b_hltPaths.clear();
   for (auto p : hltPaths_){
     if ( !triggerEvent->path(p) ) {
       if ( m_debug > 10 ) std::cout << p << " is not present in patTriggerEvent!" << std::endl;
     }
     else{
-      if ( triggerEvent->path(p)->wasAccept() )
+      if ( triggerEvent->path(p)->wasAccept() ) {
 	b_isDiMuonHLTFired = true;	
+	b_hltPaths.push_back(p);
+      }
     }
   } 
   
@@ -1871,7 +1875,8 @@ CutFlowAnalyzer::beginJob() {
   
   m_ttree->Branch("is2DiMuonsLxyOK_FittedVtx",      &b_is2DiMuonsLxyOK_FittedVtx,      "is2DiMuonsLxyOK_FittedVtx/O");
   m_ttree->Branch("is2DiMuonsLxyOK_ConsistentVtx",  &b_is2DiMuonsLxyOK_ConsistentVtx,  "is2DiMuonsLxyOK_ConsistentVtx/O");
-  
+
+  m_ttree->Branch("hltPaths",  &b_hltPaths);  
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
