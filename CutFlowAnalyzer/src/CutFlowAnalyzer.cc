@@ -324,6 +324,12 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Float_t b_genA1Mu_dR;
   
   //****************************************************************************
+  //          HLT LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
+  //****************************************************************************
+
+  std::vector<std::string> hltPaths_;  
+
+  //****************************************************************************
   //          RECO LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
   //****************************************************************************
   
@@ -542,6 +548,12 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   
   m_eventsGenALxyOK = 0;
   
+  //****************************************************************************
+  //                 SET HLT LEVEL VARIABLES AND COUNTERS                       
+  //****************************************************************************
+
+  hltPaths_ = iConfig.getParameter<std::vector<std::string> >("hltPaths");
+
   //****************************************************************************
   //                 SET RECO LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
@@ -1326,14 +1338,15 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   iEvent.getByLabel("patTriggerEvent", triggerEvent);
   
   b_isDiMuonHLTFired = false;
-  if (    ( triggerEvent->path("HLT_Mu17_Mu8_v22") && triggerEvent->path("HLT_Mu17_Mu8_v22")->wasAccept() )
-       || ( triggerEvent->path("HLT_Mu17_Mu8_v21") && triggerEvent->path("HLT_Mu17_Mu8_v21")->wasAccept() )
-       || ( triggerEvent->path("HLT_Mu17_Mu8_v19") && triggerEvent->path("HLT_Mu17_Mu8_v19")->wasAccept() )
-       || ( triggerEvent->path("HLT_Mu17_Mu8_v18") && triggerEvent->path("HLT_Mu17_Mu8_v18")->wasAccept() )
-       || ( triggerEvent->path("HLT_Mu17_Mu8_v17") && triggerEvent->path("HLT_Mu17_Mu8_v17")->wasAccept() )
-       || ( triggerEvent->path("HLT_Mu17_Mu8_v16") && triggerEvent->path("HLT_Mu17_Mu8_v16")->wasAccept() ) ) {
-    b_isDiMuonHLTFired = true;
-  }
+  for (auto p : hltPaths_){
+    if ( !triggerEvent->path(p) ) {
+      if ( m_debug > 10 ) std::cout << p << " is not present in patTriggerEvent!" << std::endl;
+    }
+    else{
+      if ( triggerEvent->path(p)->wasAccept() )
+	b_isDiMuonHLTFired = true;	
+    }
+  } 
   
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on HLT" << std::endl;
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsDzOK_FittedVtx     && b_isDiMuonHLTFired ) m_eventsDiMuonHLTFired_FittedVtx++;
