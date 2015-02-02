@@ -5,7 +5,7 @@ from PhysicsTools.PatAlgos.patTemplate_cfg import *
 process.options.allowUnscheduled = cms.untracked.bool(True)
 
 ### Add MuJet Dataformats
-from MuJetAnalysis.DataFormats.EventContent_version9_cff import *
+from MuJetAnalysis.DataFormats.EventContent_version10_cff import *
 process = customizePatOutput(process)
 
 process.load("MuJetAnalysis.DataFormats.RECOtoPAT_cff")
