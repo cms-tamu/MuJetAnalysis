@@ -5,6 +5,9 @@ from TrackingTools.GeomPropagators.SmartPropagator_cff import *
 from TrackingTools.MaterialEffects.MaterialPropagator_cfi import *
 from TrackingTools.MaterialEffects.OppositeMaterialPropagator_cfi import *
 from PhysicsTools.PatAlgos.patSequences_cff import *
+from PhysicsTools.PatAlgos.triggerLayer1.triggerProducer_cfi import *
+from PhysicsTools.PatAlgos.triggerLayer1.triggerEventProducer_cfi import *
+#from PhysicsTools.PatAlgos.triggerLayer1.triggerMatcher_cfi import * -- deprecated in 73
 
 muonMatch = muonMatch.clone(
     src = cms.InputTag("muons"),
@@ -52,10 +55,6 @@ cleanPatPFMuons = cleanPatMuons.clone(
 countPatPFMuons = countPatMuons.clone(
     src = cms.InputTag("cleanPatPFMuons")
 )
-
-from PhysicsTools.PatAlgos.triggerLayer1.triggerProducer_cfi import *
-from PhysicsTools.PatAlgos.triggerLayer1.triggerEventProducer_cfi import *
-from PhysicsTools.PatAlgos.triggerLayer1.triggerMatcher_cfi import *
 
 # Trigger match
 #    First matcher from PhysicsTools/PatAlgos/python/triggerLayer1/triggerMatcher_cfi.py
