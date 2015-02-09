@@ -50,6 +50,7 @@ selectedPatPFMuons = selectedPatMuons.clone(
     cut = cms.string("pt > 5.0 && isPFMuon() && ( isTrackerMuon() || isGlobalMuon() ) && -2.4 < eta() && eta() < 2.4")
 )
 cleanPatPFMuons = cleanPatMuons.clone(
+
     src = cms.InputTag("selectedPatPFMuons")
 )
 countPatPFMuons = countPatMuons.clone(
@@ -69,32 +70,47 @@ cleanMuonTriggerMatchHLTMu17 = cms.EDProducer("PATTriggerMatcherDRDPtLessByR", #
 
 
 # Trigger match
+#    First matcher from PhysicsTools/PatAlgos/python/triggerLayer1/triggerMatcher_cfi.py
+#    is cleanMuonTriggerMatchHLTMu17 . Clone it!
 #    Note in 2012 wildcard HLT_Mu* includes ONLY muon trigger. No more HLT_MultiVertex6 and such!
 # This is trigger match for Tracker muons
-cleanTrackerMuonTriggerMatchHLTMu = cleanMuonTriggerMatchHLTMu17.clone(src = cms.InputTag( "cleanPatTrackerMuons" ),
-    matchedCuts = cms.string('path("HLT_Mu*")'))
-cleanTrackerMuonTriggerMatchHLTIsoMu = cleanMuonTriggerMatchHLTMu17.clone(src = cms.InputTag( "cleanPatTrackerMuons" ),
-    matchedCuts = cms.string('path("HLT_IsoMu*")'))
-cleanTrackerMuonTriggerMatchHLTDoubleMu = cleanMuonTriggerMatchHLTMu17.clone(src = cms.InputTag( "cleanPatTrackerMuons" ),
-    matchedCuts = cms.string('path("HLT_DoubleMu*_v*")'))
+cleanTrackerMuonTriggerMatchHLTMu = cleanMuonTriggerMatchHLTMu17.clone(
+    src = cms.InputTag( "cleanPatTrackerMuons" ),
+    matchedCuts = cms.string('path("HLT_Mu*")')
+)
+cleanTrackerMuonTriggerMatchHLTIsoMu = cleanMuonTriggerMatchHLTMu17.clone(
+    src = cms.InputTag( "cleanPatTrackerMuons" ),
+    matchedCuts = cms.string('path("HLT_IsoMu*")')
+)
+cleanTrackerMuonTriggerMatchHLTDoubleMu = cleanMuonTriggerMatchHLTMu17.clone(
+    src = cms.InputTag( "cleanPatTrackerMuons" ),
+    matchedCuts = cms.string('path("HLT_DoubleMu*_v*")')
+)
 cleanPatTrackerMuonsTriggerMatch = cms.EDProducer("PATTriggerMatchMuonEmbedder",
-                                           src = cms.InputTag("cleanPatTrackerMuons"),
-                                           matches = cms.VInputTag("cleanTrackerMuonTriggerMatchHLTMu",
-                                                                   "cleanTrackerMuonTriggerMatchHLTIsoMu",
-                                                                   "cleanTrackerMuonTriggerMatchHLTDoubleMu"))
+    src = cms.InputTag("cleanPatTrackerMuons"),
+    matches = cms.VInputTag("cleanTrackerMuonTriggerMatchHLTMu",
+                            "cleanTrackerMuonTriggerMatchHLTIsoMu",
+                            "cleanTrackerMuonTriggerMatchHLTDoubleMu")
+)
 # This is trigger match for PF muons
-cleanPFMuonTriggerMatchHLTMu = cleanMuonTriggerMatchHLTMu17.clone(src = cms.InputTag( "cleanPatPFMuons" ),
-    matchedCuts = cms.string('path("HLT_Mu*")')) 
-cleanPFMuonTriggerMatchHLTIsoMu = cleanMuonTriggerMatchHLTMu17.clone(src = cms.InputTag( "cleanPatPFMuons" ),
-    matchedCuts = cms.string('path("HLT_IsoMu*")'))
-cleanPFMuonTriggerMatchHLTDoubleMu = cleanMuonTriggerMatchHLTMu17.clone(src = cms.InputTag( "cleanPatPFMuons" ),
-    matchedCuts = cms.string('path("HLT_DoubleMu*_v*")'))
+cleanPFMuonTriggerMatchHLTMu = cleanMuonTriggerMatchHLTMu17.clone(
+    src = cms.InputTag( "cleanPatPFMuons" ),
+    matchedCuts = cms.string('path("HLT_Mu*")')
+) 
+cleanPFMuonTriggerMatchHLTIsoMu = cleanMuonTriggerMatchHLTMu17.clone(
+    src = cms.InputTag( "cleanPatPFMuons" ),
+    matchedCuts = cms.string('path("HLT_IsoMu*")')
+)
+cleanPFMuonTriggerMatchHLTDoubleMu = cleanMuonTriggerMatchHLTMu17.clone(
+    src = cms.InputTag( "cleanPatPFMuons" ),
+    matchedCuts = cms.string('path("HLT_DoubleMu*_v*")')
+)
 cleanPatPFMuonsTriggerMatch = cms.EDProducer("PATTriggerMatchMuonEmbedder",
-                                           src = cms.InputTag("cleanPatPFMuons"),
-                                           matches = cms.VInputTag("cleanPFMuonTriggerMatchHLTMu",
-                                                                   "cleanPFMuonTriggerMatchHLTIsoMu",
-                                                                   "cleanPFMuonTriggerMatchHLTDoubleMu"))
-                                                                   
+    src = cms.InputTag("cleanPatPFMuons"),
+    matches = cms.VInputTag("cleanPFMuonTriggerMatchHLTMu",
+                            "cleanPFMuonTriggerMatchHLTIsoMu",
+                            "cleanPFMuonTriggerMatchHLTDoubleMu")
+)
 patifyTrackerMuon = cms.Sequence(
     selectedPatTrackerMuons * 
     cleanPatTrackerMuons * 
@@ -113,7 +129,6 @@ patifyPFMuon = cms.Sequence(
     cleanPFMuonTriggerMatchHLTDoubleMu * 
     cleanPatPFMuonsTriggerMatch
 )
-
 patifyData = cms.Sequence(
     patMuons * 
     patTrigger * 

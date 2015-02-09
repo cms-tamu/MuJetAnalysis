@@ -2,6 +2,11 @@
 
 import FWCore.ParameterSet.Config as cms
 
+hltPreTrkMu15DoubleTrkMu5NoFiltersNoVtx = cms.EDFilter( "HLTPrescaler",
+    L1GtReadoutRecordTag = cms.InputTag( "hltGtDigis" ),
+    offset = cms.uint32( 0 )
+)
+
 hltL2pfL1sDoubleMu103p5L1f0L2PreFiltered0NoVtx = cms.EDFilter("HLTMuonL2PreFilter",
     saveTags = cms.bool( True ),
     MaxDr = cms.double( 9999.0 ),
@@ -124,6 +129,7 @@ hltSingleTrkMuFiltered15NoVtx = cms.EDFilter("HLTMuonTrkFilter",
 
 def add_HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1(process):
 
+    process.hltPreTrkMu15DoubleTrkMu5NoFiltersNoVtx = hltPreTrkMu15DoubleTrkMu5NoFiltersNoVtx
     process.hltL2pfL1sDoubleMu103p5L1f0L2PreFiltered0NoVtx = hltL2pfL1sDoubleMu103p5L1f0L2PreFiltered0NoVtx
     process.hltL2fL1sDoubleMu103p5L1f0L2Filtered10OneMuNoVtx = hltL2fL1sDoubleMu103p5L1f0L2Filtered10OneMuNoVtx
     process.hltL3pfL1sDoubleMu103p5L1f0L2pf0TwoMuL3PreFiltered5NoVtx = hltL3pfL1sDoubleMu103p5L1f0L2pf0TwoMuL3PreFiltered5NoVtx
@@ -164,7 +170,7 @@ def add_HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1(process):
     process.HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1 = cms.Path( 
         process.HLTBeginSequence + 
         process.hltL1sL1DoubleMu103p5ORDoubleMu125 + 
-        process.hltPreMu17TrkIsoVVLMu8TrkIsoVVL + 
+        process.hltPreTrkMu15DoubleTrkMu5NoFiltersNoVtx + 
         process.hltL1fL1sDoubleMu103p5ORDoubleMu125L1Filtered0 + 
         process.HLTL2muonrecoSequenceNoVtx +  
         process.hltL2pfL1sDoubleMu103p5L1f0L2PreFiltered0NoVtx + 
