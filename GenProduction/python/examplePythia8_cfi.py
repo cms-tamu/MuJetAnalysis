@@ -1,4 +1,5 @@
 ## this is an example configuration for production with Pythia8 provided by Vitaliano Ciulli
+## Pythia8 for DarkSUSYrem
 
 import FWCore.ParameterSet.Config as cms
 
@@ -15,7 +16,6 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
     PythiaParameters = cms.PSet(
         pythia8CommonSettingsBlock,
         pythia8CUEP8M1SettingsBlock,
-        processParameters = cms.vstring(),
         parameterSets = cms.vstring('pythia8CommonSettings',
                                     'pythia8CUEP8M1Settings',
                                     'processParameters',
