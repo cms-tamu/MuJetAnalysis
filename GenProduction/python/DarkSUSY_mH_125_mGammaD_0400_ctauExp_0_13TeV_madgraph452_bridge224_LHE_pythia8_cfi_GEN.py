@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: DarkSUSY_mH_125_mGammaD_0400_ctauExp_0_13TeV_madgraph452_bridge224_LHE_pythia6_cfi -s GEN --datatier GEN --conditions auto:run2_mc --magField 38T_PostLS1 --eventcontent RECOSIM --evt_type MuJetAnalysis/GenProduction/DarkSUSY_mH_125_mGammaD_0400_ctauExp_0_13TeV_madgraph452_bridge224_LHE_pythia6_cfi --fileout out_gen.root -n 10 --no_exec
+# with command line options: DarkSUSY_mH_125_mGammaD_0400_ctauExp_0_13TeV_madgraph452_bridge224_LHE_pythia8_cfi -s GEN --datatier GEN --conditions auto:run2_mc --magField 38T_PostLS1 --eventcontent RECOSIM --evt_type MuJetAnalysis/GenProduction/DarkSUSY_mH_125_mGammaD_0400_ctauExp_0_13TeV_madgraph452_bridge224_LHE_pythia8_cfi --fileout out_gen.root -n 10 --no_exec
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('GEN')
@@ -37,7 +37,7 @@ process.options = cms.untracked.PSet(
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
     version = cms.untracked.string('$Revision: 1.19 $'),
-    annotation = cms.untracked.string('MuJetAnalysis/GenProduction/DarkSUSY_mH_125_mGammaD_0400_ctauExp_0_13TeV_madgraph452_bridge224_LHE_pythia6_cfi nevts:10'),
+    annotation = cms.untracked.string('MuJetAnalysis/GenProduction/DarkSUSY_mH_125_mGammaD_0400_ctauExp_0_13TeV_madgraph452_bridge224_LHE_pythia8_cfi nevts:10'),
     name = cms.untracked.string('Applications')
 )
 
@@ -64,37 +64,28 @@ process.genstepfilter.triggerConditions=cms.vstring("generation_step")
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
 
-process.generator = cms.EDFilter("Pythia6HadronizerFilter",
-    pythiaPylistVerbosity = cms.untracked.int32(0),
+process.generator = cms.EDFilter("Pythia8GeneratorFilter",
+    pythiaPylistVerbosity = cms.untracked.int32(1),
     filterEfficiency = cms.untracked.double(1.0),
     pythiaHepMCVerbosity = cms.untracked.bool(False),
     comEnergy = cms.double(13000.0),
-    crossSection = cms.untracked.double(1.0),
+    crossSection = cms.untracked.double(0.0),
     maxEventsToPrint = cms.untracked.int32(0),
     PythiaParameters = cms.PSet(
-        pythiaUESettings = cms.vstring('MSTU(21)=1     ! Check on possible errors during program execution', 
-            'MSTJ(22)=2     ! Decay those unstable particles', 
-            'PARJ(71)=10 .  ! for which ctau  10 mm', 
-            'MSTP(33)=0     ! no K factors in hard cross sections', 
-            'MSTP(2)=1      ! which order running alphaS', 
-            'MSTP(51)=10042 ! structure function chosen (external PDF CTEQ6L1)', 
-            'MSTP(52)=2     ! work with LHAPDF', 
-            'PARP(82)=1.921 ! pt cutoff for multiparton interactions', 
-            'PARP(89)=1800. ! sqrts for which PARP82 is set', 
-            'PARP(90)=0.227 ! Multiple interactions: rescaling power', 
-            'MSTP(95)=6     ! CR (color reconnection parameters)', 
-            'PARP(77)=1.016 ! CR', 
-            'PARP(78)=0.538 ! CR', 
-            'PARP(80)=0.1   ! Prob. colored parton from BBR', 
-            'PARP(83)=0.356 ! Multiple interactions: matter distribution parameter', 
-            'PARP(84)=0.651 ! Multiple interactions: matter distribution parameter', 
-            'PARP(62)=1.025 ! ISR cutoff', 
-            'MSTP(91)=1     ! Gaussian primordial kT', 
-            'PARP(93)=10.0  ! primordial kT-max', 
-            'MSTP(81)=21    ! multiple parton interactions 1 is Pythia default', 
-            'MSTP(82)=4     ! Defines the multi-parton model'),
-        processParameters = cms.vstring('MSEL=0          ! User defined processes'),
-        parameterSets = cms.vstring('pythiaUESettings', 
+        pythia8CommonSettings = cms.vstring('Main:timesAllowErrors = 10000', 
+            'Check:epTolErr = 0.01', 
+            'SLHA:keepSM = on', 
+            'SLHA:minMassSM = 1000.', 
+            'ParticleDecays:limitTau0 = on', 
+            'ParticleDecays:tau0Max = 10', 
+            'ParticleDecays:allowPhotonRadiation = on'),
+        pythia8CUEP8M1Settings = cms.vstring('Tune:pp 14', 
+            'Tune:ee 7', 
+            'MultipartonInteractions:pT0Ref=2.4024', 
+            'MultipartonInteractions:ecmPow=0.25208', 
+            'MultipartonInteractions:expPow=1.6'),
+        parameterSets = cms.vstring('pythia8CommonSettings', 
+            'pythia8CUEP8M1Settings', 
             'processParameters')
     )
 )
