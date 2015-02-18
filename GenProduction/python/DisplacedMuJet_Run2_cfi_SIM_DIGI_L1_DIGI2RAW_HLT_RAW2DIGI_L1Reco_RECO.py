@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: DarkSUSY_mH_125_mGammaD_XX_ctauExp_YY_13TeV_madgraph452_bridge224_LHE_pythia6_cfi -s SIM,L1,DIGI2RAW,HLT,RAW2DIGI,L1Reco,RECO --datatier RECO --conditions auto:run2_mc --magField 38T_PostLS1 --eventcontent RECOSIM --customise=SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --fileout out_reco.root -n 10 --no_exec
+# with command line options: DisplacedMuJet_Run2_cfi -s SIM,DIGI,L1,DIGI2RAW,HLT,RAW2DIGI,L1Reco,RECO --datatier RAW-AOD --conditions auto:run2_mc --magField 38T_PostLS1 --eventcontent FEVTSIM --customise=SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --fileout out_reco.root -n 10 --no_exec
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('HLT')
@@ -17,6 +17,7 @@ process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.Geometry.GeometrySimDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
 process.load('Configuration.StandardSequences.SimIdeal_cff')
+process.load('Configuration.StandardSequences.Digi_cff')
 process.load('Configuration.StandardSequences.SimL1Emulator_cff')
 process.load('Configuration.StandardSequences.DigiToRaw_cff')
 process.load('HLTrigger.Configuration.HLT_GRun_cff')
@@ -33,7 +34,7 @@ process.maxEvents = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
     secondaryFileNames = cms.untracked.vstring(),
-    fileNames = cms.untracked.vstring('file:DarkSUSY_mH_125_mGammaD_XX_ctauExp_YY_13TeV_madgraph452_bridge224_LHE_pythia6_cfi_GEN.root')
+    fileNames = cms.untracked.vstring('file:DisplacedMuJet_Run2_cfi_GEN.root')
 )
 
 process.options = cms.untracked.PSet(
@@ -43,20 +44,20 @@ process.options = cms.untracked.PSet(
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
     version = cms.untracked.string('$Revision: 1.19 $'),
-    annotation = cms.untracked.string('DarkSUSY_mH_125_mGammaD_XX_ctauExp_YY_13TeV_madgraph452_bridge224_LHE_pythia6_cfi nevts:10'),
+    annotation = cms.untracked.string('DisplacedMuJet_Run2_cfi nevts:10'),
     name = cms.untracked.string('Applications')
 )
 
 # Output definition
 
-process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
+process.FEVTSIMoutput = cms.OutputModule("PoolOutputModule",
     splitLevel = cms.untracked.int32(0),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    outputCommands = process.RECOSIMEventContent.outputCommands,
+    outputCommands = process.FEVTSIMEventContent.outputCommands,
     fileName = cms.untracked.string('out_reco.root'),
     dataset = cms.untracked.PSet(
         filterName = cms.untracked.string(''),
-        dataTier = cms.untracked.string('RECO')
+        dataTier = cms.untracked.string('RAW-AOD')
     )
 )
 
@@ -68,18 +69,19 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
 
 # Path and EndPath definitions
 process.simulation_step = cms.Path(process.psim)
+process.digitisation_step = cms.Path(process.pdigi)
 process.L1simulation_step = cms.Path(process.SimL1Emulator)
 process.digi2raw_step = cms.Path(process.DigiToRaw)
 process.raw2digi_step = cms.Path(process.RawToDigi)
 process.L1Reco_step = cms.Path(process.L1Reco)
 process.reconstruction_step = cms.Path(process.reconstruction)
 process.endjob_step = cms.EndPath(process.endOfProcess)
-process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
+process.FEVTSIMoutput_step = cms.EndPath(process.FEVTSIMoutput)
 
 # Schedule definition
-process.schedule = cms.Schedule(process.simulation_step,process.L1simulation_step,process.digi2raw_step)
+process.schedule = cms.Schedule(process.simulation_step,process.digitisation_step,process.L1simulation_step,process.digi2raw_step)
 process.schedule.extend(process.HLTSchedule)
-process.schedule.extend([process.raw2digi_step,process.L1Reco_step,process.reconstruction_step,process.endjob_step,process.RECOSIMoutput_step])
+process.schedule.extend([process.raw2digi_step,process.L1Reco_step,process.reconstruction_step,process.endjob_step,process.FEVTSIMoutput_step])
 
 # customisation of the process.
 
