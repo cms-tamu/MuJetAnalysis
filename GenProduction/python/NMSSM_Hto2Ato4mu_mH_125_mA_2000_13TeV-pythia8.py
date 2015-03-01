@@ -1,12 +1,7 @@
-# Auto generated configuration file
-# using: 
-# Revision: 1.381.2.13 
-# Source: /local/reps/CMSSW/CMSSW/Configuration/PyReleaseValidation/python/ConfigBuilder.py,v 
-# with command line options: Configuration/GenProduction/python/EightTeV/MSSM_mH_125_mA_2000_Hto2Ato4mu_8TeV-pythia6_cfi.py --step GEN --datatier GEN --conditions auto:startup --eventcontent RECOSIM --python_filename=MSSM_mH_125_mA_2000_Hto2Ato4mu_8TeV-pythia6_537p4_GEN.py --fileout=MSSM_mH_125_mA_2000_Hto2Ato4mu_8TeV-pythia6_537p4_GEN.root -n 10 --no_exec
+# NMSSM Hto2Ato4mu 13TeV pythia8 configuration file
 import FWCore.ParameterSet.Config as cms
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
 from Configuration.Generator.Pythia8CUEP8M1Settings_cfi import *
-
 
 process = cms.Process('GEN')
 
@@ -43,7 +38,6 @@ process.configurationMetadata = cms.untracked.PSet(
 )
 
 # Output definition
-
 process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
 	splitLevel = cms.untracked.int32(0),
 	eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
@@ -104,7 +98,6 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
  )
 )
 
-
 # Path and EndPath definitions
 process.generation_step = cms.Path(process.pgen)
 process.genfiltersummary_step = cms.EndPath(process.genFilterSummary)
@@ -115,5 +108,4 @@ process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
 process.schedule = cms.Schedule(process.generation_step,process.genfiltersummary_step,process.endjob_step,process.RECOSIMoutput_step)
 # filter all path with the production filter sequence
 for path in process.paths:
-	getattr(process,path)._seq = process.generator * getattr(process,path)._seq 
-
+	getattr(process,path)._seq = process.generator * getattr(process,path)._seq
