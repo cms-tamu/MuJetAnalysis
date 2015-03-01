@@ -78,26 +78,21 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
 		pythiaUESettings = cms.vstring(),
 
 		processParameters = cms.vstring( #This section should be entirely in Pythia 8
-			'Higgs:useBSM = on',
-			'HiggsBSM:gg2H2 = on', #gg->H^0(H_2^0)   
-			'SUSY:all = on', #turn on production of SUSY particles
-			#'Init:showAllParticleData = on	!  list changed particle data',
-			'35:m0 = 125.0			!  mass of H0',
-			'36:m0 = 2.0			!  mass of A0',
-			'Init:showChangedSettings = on	!  list changed settings',
-			#decays of H0
-			'35:onMode = off', #Turn off all decay modes 
-			'35:onIfMatch = 36 36', #Allow decays to A0
-			
-			'25:onMode = off', #Turn off all decays of h0 (NOT ACTUALLY USED)	
-			'25:onIfMatch = 13 13',
-			
-			#decays of the A0 (ACTUALLY USED)
-			
-			'36:onMode = off', #Turn off all decay modes
-			'36:onIfMatch = 13 13', #Allow decays to muons
-
-			
+			'Higgs:useBSM = on',   # initialize and use the two-Higgs-doublet BSM states
+			'HiggsBSM:all = off',  # switch off all BSM Higgs processes
+			'HiggsBSM:gg2H2 = on', # switch on only gg->H^0(H_2^0) process
+			#'SUSY:all = on', #turn on production of SUSY particles
+			'35:m0 = 125.0', #  mass of H0 in GeV
+			'36:m0 = 2.0',   #  mass of A0 in GeV
+			# decays of H0 (PDG ID = 35)
+			'35:onMode = off',      # Turn off all decay modes 
+			'35:onIfMatch = 36 36', # Allow decays to A0: H0 ->A0A0
+			#decays of the A0 (PDG ID = 36)
+			'36:onMode = off',       # Turn off all decay modes
+			'36:onIfMatch = 13 -13', # Allow decays to muons: A0 ->mu+mu-
+			'Init:showProcesses = on',        # Print a list of all processes that will be simulated, with their estimated cross section maxima
+			'Init:showChangedSettings = on',  # Print a list of the changed flag/mode/parameter/word setting
+			#'Init:showAllParticleData = on', # Print a list of all particle and decay data. Warning: this will be a long list
 	),
 		parameterSets = cms.vstring('pythiaUESettings', 
 			'pythia8CommonSettings',
