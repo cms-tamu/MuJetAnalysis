@@ -48,14 +48,14 @@ process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
 	splitLevel = cms.untracked.int32(0),
 	eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
 	outputCommands = process.RECOSIMEventContent.outputCommands,
-	fileName = cms.untracked.string('BAM_MSSM_mH_125_mA_2000_Hto2Ato4mu_8TeV-pythia6_537p4_GEN.root'),
+	fileName = cms.untracked.string('MSSM_mH_125_mA_2000_Hto2Ato4mu_13TeV-pythia8_731p2_GEN.root'),
 	dataset = cms.untracked.PSet(
-	filterName = cms.untracked.string(''),
-	dataTier = cms.untracked.string('GEN')
+		filterName = cms.untracked.string(''),
+		dataTier = cms.untracked.string('GEN'),
 	),
 	SelectEvents = cms.untracked.PSet(
-		SelectEvents = cms.vstring('generation_step')
-	)
+		SelectEvents = cms.vstring('generation_step'),
+	),
 )
 
 # Additional output definition
