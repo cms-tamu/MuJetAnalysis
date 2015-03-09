@@ -43,10 +43,7 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
   }
   
   setCharge(charge);
-  pt_   = lorentzVector.pt();
-  eta_  = lorentzVector.eta();
-  phi_  = lorentzVector.phi();
-  mass_ = lorentzVector.mass();
+  setP4( PolarLorentzVector(lorentzVector.pt(),lorentzVector.eta(),lorentzVector.phi(),lorentzVector.mass()));
 
   std::map<const reco::Candidate*,unsigned int> ancestorCounter;
   for (std::vector<const pat::Muon*>::const_iterator muon = muons.begin();  muon != muons.end();  ++muon) {
@@ -130,10 +127,7 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
 
 /// constructor from MultiMuonType
 pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandidate(aMultiMuon) {
-  pt_ = aMultiMuon.pt_;
-  eta_ = aMultiMuon.eta_;
-  phi_ = aMultiMuon.phi_;
-  mass_ = aMultiMuon.mass_;
+  setP4( PolarLorentzVector(aMultiMuon.pt(),aMultiMuon.eta(),aMultiMuon.phi(),aMultiMuon.mass()));
 
   if (aMultiMuon.genParticle() != NULL) setGenParticle(*(aMultiMuon.genParticle()));
 

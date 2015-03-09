@@ -25,10 +25,7 @@ pat::HAA4MuCandidate::HAA4MuCandidate(const pat::MultiMuon *axialHiggs0, const p
    genParticles.push_back(axialHiggs1->genParticle());
   
    setCharge(charge);
-   pt_ = lorentzVector.pt();
-   eta_ = lorentzVector.eta();
-   phi_ = lorentzVector.phi();
-   mass_ = lorentzVector.mass();
+   setP4( PolarLorentzVector(lorentzVector.pt(),lorentzVector.eta(),lorentzVector.phi(),lorentzVector.mass()));
 
    std::map<const reco::Candidate*,unsigned int> ancestorCounter;
    for (std::vector<const reco::GenParticle*>::const_iterator genParticle = genParticles.begin();  genParticle != genParticles.end();  ++genParticle) {

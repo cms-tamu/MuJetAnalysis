@@ -91,7 +91,7 @@ namespace pat {
       , m_centralHCALIsolation(0.)
       , m_unionHCALIsolation(0.)
       , m_centralNumberAboveThreshold(0)
-      , m_unionNumberAboveThreshold(0) { phi_ = phi; }
+      , m_unionNumberAboveThreshold(0) { setP4( PolarLorentzVector(0,0,phi,0)); }
 	 
     /// constructor with muons
     MultiMuon( std::vector<const pat::Muon*> &muons,
