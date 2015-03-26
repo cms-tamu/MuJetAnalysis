@@ -1,12 +1,7 @@
-# Auto generated configuration file
-# using: 
-# Revision: 1.381.2.13 
-# Source: /local/reps/CMSSW/CMSSW/Configuration/PyReleaseValidation/python/ConfigBuilder.py,v 
-# with command line options: Configuration/GenProduction/python/EightTeV/MSSM_mH_125_mA_2000_Hto2Ato4mu_8TeV-pythia6_cfi.py --step GEN --datatier GEN --conditions auto:startup --eventcontent RECOSIM --python_filename=MSSM_mH_125_mA_2000_Hto2Ato4mu_8TeV-pythia6_537p4_GEN.py --fileout=MSSM_mH_125_mA_2000_Hto2Ato4mu_8TeV-pythia6_537p4_GEN.root -n 10 --no_exec
+# NMSSM Hto2Ato4mu 13TeV pythia8 configuration file
 import FWCore.ParameterSet.Config as cms
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
 from Configuration.Generator.Pythia8CUEP8M1Settings_cfi import *
-
 
 process = cms.Process('GEN')
 
@@ -43,19 +38,18 @@ process.configurationMetadata = cms.untracked.PSet(
 )
 
 # Output definition
-
 process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
 	splitLevel = cms.untracked.int32(0),
 	eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
 	outputCommands = process.RECOSIMEventContent.outputCommands,
-	fileName = cms.untracked.string('BAM_MSSM_mH_125_mA_2000_Hto2Ato4mu_8TeV-pythia6_537p4_GEN.root'),
+	fileName = cms.untracked.string('NMSSM_Hto2Ato4mu_mH_125_mA_2000_13TeV-pythia8_731p2_GEN.root'),
 	dataset = cms.untracked.PSet(
-	filterName = cms.untracked.string(''),
-	dataTier = cms.untracked.string('GEN')
+		filterName = cms.untracked.string(''),
+		dataTier = cms.untracked.string('GEN'),
 	),
 	SelectEvents = cms.untracked.PSet(
-		SelectEvents = cms.vstring('generation_step')
-	)
+		SelectEvents = cms.vstring('generation_step'),
+	),
 )
 
 # Additional output definition
@@ -66,38 +60,36 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:startup', '')
 
 process.generator = cms.EDFilter("Pythia8GeneratorFilter",
-	pythiaPylistVerbosity = cms.untracked.int32(0),
+	pythiaPylistVerbosity = cms.untracked.int32(1),
 	filterEfficiency = cms.untracked.double(1.0),
 	pythiaHepMCVerbosity = cms.untracked.bool(False),
 	comEnergy = cms.double(13000.0),
 	crossSection = cms.untracked.double(1.0),
-	maxEventsToPrint = cms.untracked.int32(1),
+	maxEventsToPrint = cms.untracked.int32(5),
 	PythiaParameters = cms.PSet(
 		pythia8CommonSettingsBlock,
 		pythia8CUEP8M1SettingsBlock,
 		pythiaUESettings = cms.vstring(),
 
-		processParameters = cms.vstring( #This section should be entirely in Pythia 8
-			'Higgs:useBSM = on',
-			'HiggsBSM:gg2H2 = on', #gg->H^0(H_2^0)   
-			'SUSY:all = on', #turn on production of SUSY particles
-			#'Init:showAllParticleData = on	!  list changed particle data',
-			'35:m0 = 125.0			!  mass of H0',
-			'36:m0 = 2.0			!  mass of A0',
-			'Init:showChangedSettings = on	!  list changed settings',
-			#decays of H0
-			'35:onMode = off', #Turn off all decay modes 
-			'35:onIfMatch = 36 36', #Allow decays to A0
-			
-			'25:onMode = off', #Turn off all decays of h0 (NOT ACTUALLY USED)	
-			'25:onIfMatch = 13 13',
-			
-			#decays of the A0 (ACTUALLY USED)
-			
-			'36:onMode = off', #Turn off all decay modes
-			'36:onIfMatch = 13 13', #Allow decays to muons
-
-			
+		processParameters = cms.vstring(
+			# This section should be entirely in Pythia 8. See details in
+		        #   - http://home.thep.lu.se/~torbjorn/pythia82html/HiggsProcesses.html
+		        #   - http://home.thep.lu.se/~torbjorn/pythia82html/ParticleDataScheme.html
+			'Higgs:useBSM = on',     # Initialize and use the two-Higgs-doublet BSM states
+			'HiggsBSM:all = off',    # Switch off all BSM Higgs production
+			'HiggsBSM:gg2H2 = on',   # Switch on gg->H^0(H_2^0) scattering via loop contributions primarily from top. Code 1022. 
+			'35:m0 = 125.0',         #  mass in GeV of H0 (PDG ID = 35)
+			'36:m0 = 2.0',           #  mass in GeV of A0 (PDG ID = 36)
+			# decays of H0 (PDG ID = 35)
+			'35:onMode = off',       # Turn off all H0 decay modes 
+			'35:onIfMatch = 36 36',  # Allow H0 decays to A0: H0 ->A0A0
+			# decays of A0 (PDG ID = 36)
+			'36:onMode = off',       # Turn off all A0 decay modes
+			'36:onIfMatch = 13 -13', # Allow A0 decays to muons: A0 ->mu+mu-
+			# Useful debug printouts
+			'Init:showProcesses = on',        # Print a list of all processes that will be simulated, with their estimated cross section maxima
+			'Init:showChangedSettings = on',  # Print a list of the changed flag/mode/parameter/word setting
+			#'Init:showAllParticleData = on', # Print a list of all particle and decay data. Warning: this will be a long list
 	),
 		parameterSets = cms.vstring('pythiaUESettings', 
 			'pythia8CommonSettings',
@@ -105,7 +97,6 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
 			'processParameters')
  )
 )
-
 
 # Path and EndPath definitions
 process.generation_step = cms.Path(process.pgen)
@@ -117,5 +108,4 @@ process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
 process.schedule = cms.Schedule(process.generation_step,process.genfiltersummary_step,process.endjob_step,process.RECOSIMoutput_step)
 # filter all path with the production filter sequence
 for path in process.paths:
-	getattr(process,path)._seq = process.generator * getattr(process,path)._seq 
-
+	getattr(process,path)._seq = process.generator * getattr(process,path)._seq
