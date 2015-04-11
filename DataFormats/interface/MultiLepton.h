@@ -26,6 +26,14 @@
 #include "TMath.h"
 #include "TTree.h"
 
+#ifndef MULTIMUONCANDIDATE_FOR_FWLITE
+#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
+#include "TrackingTools/TransientTrack/interface/TransientTrack.h"
+#include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
+#else
+class TransientTrackBuilder {};
+#endif // MULTIMUONCANDIDATE_FOR_FWLITE
+
 class TransientTrackBuilder;
 
 // Class definition
@@ -113,7 +121,63 @@ namespace pat {
     const pat::Lepton<LeptonType> *lepton(int i) const { return dynamic_cast<const pat::Lepton<LeptonType>*>(daughter(i)); }
 
     /// calculate a vertex from the daughter leptons (performed by constructor if transientTrackBuilder != NULL)
-    bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder);
+    bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder) {
+#ifdef MULTIMUONCANDIDATE_FOR_FWLITE
+      return false;
+#endif // MULTIMUONCANDIDATE_FOR_FWLITE
+#ifndef MULTIMUONCANDIDATE_FOR_FWLITE
+      
+      std::vector<reco::TransientTrack> tracksToVertex;
+      for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	if (lepton(i) == NULL) {
+	  throw cms::Exception("MultiLepton") << "MultiLeptons should only contain pat::Leptons";
+	}
+	if (lepton(i)->innerTrack().isAvailable()) {
+	  tracksToVertex.push_back(transientTrackBuilder->build(lepton(i)->innerTrack()));
+	}
+	else if (lepton(i)->outerTrack().isAvailable()) {
+	  tracksToVertex.push_back(transientTrackBuilder->build(lepton(i)->outerTrack()));
+	}
+      }
+      
+      if (tracksToVertex.size() < 2) return false;
+      
+      KalmanVertexFitter vertexFitter;
+      CachingVertex<5> fittedVertex = vertexFitter.vertex(tracksToVertex);
+      
+      if (!fittedVertex.isValid()  ||  fittedVertex.totalChiSquared() < 0.) return false;
+      
+      m_vertexValid = true;
+      m_chi2 = fittedVertex.totalChiSquared();
+      m_ndof = fittedVertex.degreesOfFreedom();
+      
+      setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
+      
+      //   double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyy(), fittedVertex.error().czz(), fittedVertex.error().cyx(), fittedVertex.error().czx(), fittedVertex.error().czy()};
+      double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyx(), fittedVertex.error().cyy(), fittedVertex.error().czx(), fittedVertex.error().czy(), fittedVertex.error().czz() }; // YP: FIXME! Check if this definition is correct
+      m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
+      
+      m_vertexPCA.clear();
+      m_vertexPCACovarianceMatrix.clear();
+      m_vertexP4.clear();
+      for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	TrajectoryStateClosestToPoint TSCTP = tracksToVertex[i].trajectoryStateClosestToPoint(vertexPoint());
+	
+	m_vertexPCA.push_back(TSCTP.position());
+	
+	GlobalError error = TSCTP.theState().cartesianError().position();    
+//    double covarianceMatrixArray2[6] = {error.cxx(), error.cyy(), error.czz(), error.cyx(), error.czx(), error.czy()};
+	double covarianceMatrixArray2[6] = {error.cxx(), error.cyx(), error.cyy(), error.czx(), error.czy(), error.czz()}; // YP: FIXME! Check if this definition is correct
+	CovarianceMatrix covarianceMatrix2 = CovarianceMatrix(covarianceMatrixArray2, 6);
+	m_vertexPCACovarianceMatrix.push_back(covarianceMatrix2);
+	
+	GlobalVector momentum = TSCTP.momentum();
+	m_vertexP4.push_back( LorentzVector( momentum.x(), momentum.y(), momentum.z(), sqrt( momentum.mag2() + daughter(i)->mass()*daughter(i)->mass() ) ) );
+      }
+      
+      return true;
+#endif // MULTIMUONCANDIDATE_FOR_FWLITE
+    }
 
     // calculate isolation (performed by constructor if tracks, leptons, and caloTowers != NULL)
     // Track Isolation
@@ -125,10 +189,136 @@ namespace pat {
 				 double unionThreshold,
 				 TTree   *diagnosticTTree = NULL,
 				 Float_t *diagnosticdR    = NULL,
-				 Float_t *diagnosticpT    = NULL);
-
+				 Float_t *diagnosticpT    = NULL) {
+      m_centralTrackIsolationCone = centralCone;
+      m_unionTrackIsolationCone   = unionCone;
+      m_centralTrackThresholdPt   = centralThreshold;
+      m_unionTrackThresholdPt     = unionThreshold;
+      m_centralTrackIsolation     = 0.;
+      m_unionTrackIsolation       = 0.;
+      
+      std::vector<const reco::Track*> nonLeptons;
+      for (reco::TrackCollection::const_iterator track = tracks->begin();  track != tracks->end();  ++track) {
+	bool matchesLepton = false;
+	
+	for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	  const pat::Lepton<LeptonType> *lepton = dynamic_cast<const pat::Lepton<LeptonType>*>(daughter(i));
+	  if (lepton->innerTrack().isAvailable()  &&  sameTrack(&*track, &*(lepton->innerTrack()))) {
+	    matchesLepton = true;
+	    break;
+	  }
+	}
+	
+	for (auto lepton = allleptons->begin();  lepton != allleptons->end();  ++lepton) {
+	  if (lepton->innerTrack().isAvailable()  &&  sameTrack(&*track, &*(lepton->innerTrack()))) {
+	    matchesLepton = true;
+	    break;
+	  }
+	}
+	
+	if (!matchesLepton) nonLeptons.push_back(&*track);
+      }
+      
+      for (auto nonLepton = nonLeptons.begin();  nonLepton != nonLeptons.end();  ++nonLepton) {
+	bool inUnionCone = false;
+	
+	for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	  double dphi = daughter(i)->phi() - (*nonLepton)->phi();
+	  while (dphi > M_PI)  dphi -= 2.*M_PI;
+	  while (dphi < -M_PI) dphi += 2.*M_PI;
+	  double deta = daughter(i)->eta() - (*nonLepton)->eta();
+	  double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+	  if (dR < unionCone) {
+	    inUnionCone = true;
+	    break;
+	  }
+	}
+	
+	if (inUnionCone  &&  (*nonLepton)->pt() > m_unionTrackThresholdPt) {
+	  m_unionTrackIsolation += (*nonLepton)->pt();
+	}
+	
+	double dphi = phi() - (*nonLepton)->phi();
+	while (dphi > M_PI) dphi -= 2.*M_PI;
+	while (dphi < -M_PI) dphi += 2.*M_PI;
+	double deta = eta() - (*nonLepton)->eta();
+	double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+	if (dR < centralCone  &&  (*nonLepton)->pt() > m_centralTrackThresholdPt) {
+	  m_centralTrackIsolation += (*nonLepton)->pt();
+	}
+	
+	if (diagnosticTTree != NULL  &&  dR < 0.5) {
+	  *diagnosticdR = dR;
+	  *diagnosticpT = (*nonLepton)->pt();
+	  diagnosticTTree->Fill();
+	}
+      }
+    }
+    
     // Calorimeter Isolation
-    void calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone);
+    void calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone) {
+      m_centralCaloIsolationCone = centralCone;
+      m_unionCaloIsolationCone   = unionCone;
+      m_centralECALIsolation     = 0.;
+      m_unionECALIsolation       = 0.;
+      m_centralHCALIsolation     = 0.;
+      m_unionHCALIsolation       = 0.;
+      
+      for (CaloTowerCollection::const_iterator caloTower = caloTowers->begin();  caloTower != caloTowers->end();  ++caloTower) {
+	// following http://cmslxr.fnal.gov/lxr/source/RecoMuon/MuonIsolation/plugins/CaloExtractorByAssociator.cc#269
+	// and http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/CMSSW/RecoMuon/MuonIsolationProducers/python/caloExtractorByAssociatorBlocks_cff.py?view=markup
+	// just the "TowersBlock" and the "Towers" else block
+	const double theThreshold_E  = 0.2;
+	const double theThreshold_H  = 0.5;
+	const double theThreshold_HO = 0.5;
+	
+	double ECALcontribution = 0.;
+	double HCALcontribution = 0.;
+	
+	double etecal = caloTower->emEt();
+	double eecal  = caloTower->emEnergy();
+	if (etecal > theThreshold_E  &&  eecal > 3.*noiseEcal(*caloTower)) {
+	  ECALcontribution += etecal;
+	}
+	double ethcal = caloTower->hadEt();
+	double ehcal  = caloTower->hadEnergy();
+	if (ethcal > theThreshold_H  &&  ehcal > 3.*noiseHcal(*caloTower)) {
+	  HCALcontribution += ethcal;
+	}
+	double ethocal = caloTower->outerEt();
+	double ehocal  = caloTower->outerEnergy();
+	if (ethocal > theThreshold_HO  &&  ehocal > 3.*noiseHOcal(*caloTower)) {
+	  HCALcontribution += ethocal;
+	}
+	
+	bool inUnionCone = false;
+	for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	  double dphi = daughter(i)->phi() - caloTower->phi();
+	  while (dphi > M_PI) dphi -= 2.*M_PI;
+	  while (dphi < -M_PI) dphi += 2.*M_PI;
+	  double deta = daughter(i)->eta() - caloTower->eta();
+	  double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+	  if (dR < unionCone) {
+	    inUnionCone = true;
+	    break;
+	  }
+	}
+	if (inUnionCone) {
+	  m_unionECALIsolation += ECALcontribution;
+	  m_unionHCALIsolation += HCALcontribution;
+	}
+	
+	double dphi = phi() - caloTower->phi();
+	while (dphi > M_PI) dphi -= 2.*M_PI;
+	while (dphi < -M_PI) dphi += 2.*M_PI;
+	double deta = eta() - caloTower->eta();
+	double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+	if (dR < centralCone) {
+	  m_centralECALIsolation += ECALcontribution;
+	  m_centralHCALIsolation += HCALcontribution;
+	}
+      }
+    }
 
     void calculateNumberAboveThresholdIsolation(const reco::TrackCollection *tracks,
 						const std::vector< pat::Lepton<LeptonType> > *allleptons,
@@ -138,11 +328,104 @@ namespace pat {
 						double unionThreshold,
 						TTree   *diagnosticTTree = NULL,
 						Float_t *diagnosticdR    = NULL,
-						Float_t *diagnosticpT    = NULL);
+						Float_t *diagnosticpT    = NULL) {
+      m_centralNumberAboveThresholdCone = centralCone;
+      m_unionNumberAboveThresholdCone   = unionCone;
+      m_centralNumberAboveThresholdPt   = centralThreshold;
+      m_unionNumberAboveThresholdPt     = unionThreshold;
+      m_centralNumberAboveThreshold     = 0;
+      m_unionNumberAboveThreshold       = 0;
+      
+      std::vector<const reco::Track*> nonLeptons;
+      for (auto track = tracks->begin();  track != tracks->end();  ++track) {
+	bool matchesLepton = false;
+	
+	for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	  const pat::Lepton<LeptonType> *lepton = dynamic_cast<const pat::Lepton<LeptonType>*>(daughter(i));
+	  if (lepton->innerTrack().isAvailable()  &&  sameTrack(&*track, &*(lepton->innerTrack()))) {
+	    matchesLepton = true;
+	    break;
+	  }
+	}
+	
+	for (auto lepton = allleptons->begin();  lepton != allleptons->end();  ++lepton) {
+	  if (lepton->innerTrack().isAvailable()  &&  sameTrack(&*track, &*(lepton->innerTrack()))) {
+	    matchesLepton = true;
+	    break;
+	  }
+	}
+	
+	if (!matchesLepton) nonLeptons.push_back(&*track);
+      }
+      
+      for (auto nonLepton = nonLeptons.begin();  nonLepton != nonLeptons.end();  ++nonLepton) {
+	if ((*nonLepton)->pt() > unionThreshold) {
+	  bool inUnionCone = false;
+	  for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	    double dphi = daughter(i)->phi() - (*nonLepton)->phi();
+	    while (dphi > M_PI) dphi -= 2.*M_PI;
+	    while (dphi < -M_PI) dphi += 2.*M_PI;
+	    double deta = daughter(i)->eta() - (*nonLepton)->eta();
+	    double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+	    if (dR < unionCone) {
+	      inUnionCone = true;
+	      break;
+	    }
+	  }
+	  if (inUnionCone) {
+	    m_unionNumberAboveThreshold++;
+	  }
+	}
+	
+	double dphi = phi() - (*nonLepton)->phi();
+	while (dphi > M_PI) dphi -= 2.*M_PI;
+	while (dphi < -M_PI) dphi += 2.*M_PI;
+	double deta = eta() - (*nonLepton)->eta();
+	double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+	if (dR < centralCone  &&  (*nonLepton)->pt() > centralThreshold) {
+	  m_centralNumberAboveThreshold++;
+	}
+	
+	if (diagnosticTTree != NULL  &&  dR < 0.5) {
+	  *diagnosticdR = dR;
+	  *diagnosticpT = (*nonLepton)->pt();
+	  diagnosticTTree->Fill();
+	}
+      }      
+    }
 	 
     /// does this MultiLepton overlap another one? or contain a given lepton?
-    bool overlaps(const pat::MultiLepton<LeptonType> &aMultiLepton) const;
-    bool contains(const pat::Lepton<LeptonType> &aLepton) const;
+    bool overlaps(const pat::MultiLepton<LeptonType> &aMultiLepton) const {
+      for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	const pat::Lepton<LeptonType> *daughter_i = lepton(i);
+	
+	for (unsigned int j = 0;  j < aMultiLepton.numberOfDaughters();  j++) {
+	  const pat::Lepton<LeptonType> *daughter_j = aMultiLepton.lepton(j);
+	  
+	  if (daughter_i->innerTrack().isAvailable()  &&  daughter_j->innerTrack().isAvailable()) {
+	    if (sameTrack(&*(daughter_i->innerTrack()), &*(daughter_j->innerTrack()))) return true;
+	  }
+	  else if (daughter_i->outerTrack().isAvailable()  &&  daughter_j->outerTrack().isAvailable()) {
+	    if (sameTrack(&*(daughter_i->outerTrack()), &*(daughter_j->outerTrack()))) return true;
+	  }
+	}
+      }
+      return false;      
+    }
+
+    bool contains(const pat::Lepton<LeptonType> &aLepton) const {
+      for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	const pat::Lepton<LeptonType> *daughter_i = lepton(i);
+	
+	if (daughter_i->innerTrack().isAvailable()  &&  aLepton.innerTrack().isAvailable()) {
+	  if (sameTrack(&*(daughter_i->innerTrack()), &*(aLepton.innerTrack()))) return true;
+	}
+	else if (daughter_i->outerTrack().isAvailable()  &&  aLepton.outerTrack().isAvailable()) {
+	  if (sameTrack(&*(daughter_i->outerTrack()), &*(aLepton.outerTrack()))) return true;
+	}
+      }
+      return false;
+    }
 
     /// create a new MultiLepton which has leptons from this and aMultiLepton
     pat::MultiLepton<LeptonType> merge(const pat::MultiLepton<LeptonType> &aMultiLepton,
