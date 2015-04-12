@@ -71,7 +71,14 @@ namespace pat {
     /// return position/momentum of multilepton object at vertex
     /// for position, use virtual const Point& reco::LeafCandidate::vertex();
     GlobalPoint vertexPoint() const { checkVertex();  Point v = vertex();  return GlobalPoint(v.x(), v.y(), v.z()); }
-    LorentzVector vertexP4() const;
+    LorentzVector vertexP4() const {
+      checkVertex();
+      LorentzVector v;
+      for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	v += vertexP4(i);
+      }
+      return v;
+    };
     GlobalVector vertexMomentum() const { LorentzVector v = vertexP4();  return GlobalVector(v.x(), v.y(), v.z()); }
     double vertexMass() const { return vertexP4().mass(); }
     virtual double vertexDz(const Point& myBeamSpot) const =0;
@@ -365,17 +372,6 @@ namespace pat {
 	m_centralHCALIsolation += HCALcontribution;
       }
     }
-  }
-  
-  template <class LeptonType>
-  LorentzVector MultiLepton<LeptonType>::vertexP4() const
-  {
-    checkVertex();
-    LorentzVector v;
-    for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
-      v += vertexP4(i);
-    }
-    return v;
   }
 
   template <class LeptonType>
