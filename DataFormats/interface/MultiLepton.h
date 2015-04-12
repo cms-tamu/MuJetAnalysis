@@ -104,10 +104,10 @@ namespace pat {
     MultiLepton(const pat::MultiLepton<LeptonType> & aMultilepton);
     
     /// destructor
-    virtual ~MultiLepton()=0;
+    virtual ~MultiLepton() {}
 
     /// required reimplementation of the Candidate's clone method
-    virtual MultiLepton<LeptonType> * clone() const =0;
+    virtual MultiLepton<LeptonType> * clone() const { return new MultiLepton<LeptonType>(*this); };
     
     /// cast daughters as MultiLeptons
     const pat::Lepton<LeptonType> *lepton(int i) const { return dynamic_cast<const pat::Lepton<LeptonType>*>(daughter(i)); }

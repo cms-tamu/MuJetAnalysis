@@ -20,11 +20,9 @@ namespace pat {
 
   public:
     /// default constructor
-  MultiElectron() : MultiLepton<Electron>() {}
+    MultiElectron() : MultiLepton<Electron>() {}
     
-  MultiElectron(double phi) : MultiLepton<Electron>() { 
-      setP4( PolarLorentzVector(0,0,phi,0)); 
-    }
+    MultiElectron(double phi) : MultiLepton<Electron>(phi) {} 
 	 
     /// constructor with electrons
     MultiElectron(std::vector<const pat::Electron*> &electrons,
