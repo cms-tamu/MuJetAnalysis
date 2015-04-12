@@ -1,3 +1,9 @@
+//
+// $Id: MultiMuon.cc,v 1.12 2013/08/04 21:36:36 pakhotin Exp $
+// 
+// Jim Pivarski <pivarski@physics.tamu.edu>
+// 
+
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
@@ -120,9 +126,42 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
 }
 
 /// constructor from MultiMuonType
-pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon) : 
-  pat::MultiLepton<Muon>(aMultiMuon) 
-{
+pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandidate(aMultiMuon) {
+  setP4( PolarLorentzVector(aMultiMuon.pt(),aMultiMuon.eta(),aMultiMuon.phi(),aMultiMuon.mass()));
+
+  if (aMultiMuon.genParticle() != NULL) setGenParticle(*(aMultiMuon.genParticle()));
+
+  m_vertexValid = aMultiMuon.m_vertexValid;
+  m_chi2 = aMultiMuon.m_chi2;
+  m_ndof = aMultiMuon.m_ndof;
+  m_covarianceMatrix = aMultiMuon.m_covarianceMatrix;
+  for (unsigned int i = 0;  i < aMultiMuon.m_vertexPCA.size();  i++) {
+    m_vertexPCA.push_back(aMultiMuon.m_vertexPCA[i]);
+    m_vertexPCACovarianceMatrix.push_back(aMultiMuon.m_vertexPCACovarianceMatrix[i]);
+    m_vertexP4.push_back(aMultiMuon.m_vertexP4[i]);
+  }
+  
+  m_consistentVtxValid = aMultiMuon.m_consistentVtxValid;
+  
+  m_centralTrackIsolationCone       = aMultiMuon.m_centralTrackIsolationCone;
+  m_unionTrackIsolationCone         = aMultiMuon.m_unionTrackIsolationCone;
+  m_centralTrackThresholdPt         = aMultiMuon.m_centralTrackThresholdPt;
+  m_unionTrackThresholdPt           = aMultiMuon.m_unionTrackThresholdPt;
+  m_centralCaloIsolationCone        = aMultiMuon.m_centralCaloIsolationCone;
+  m_unionCaloIsolationCone          = aMultiMuon.m_unionCaloIsolationCone;
+  m_centralNumberAboveThresholdCone = aMultiMuon.m_centralNumberAboveThresholdCone;
+  m_unionNumberAboveThresholdCone   = aMultiMuon.m_unionNumberAboveThresholdCone;
+  m_centralNumberAboveThresholdPt   = aMultiMuon.m_centralNumberAboveThresholdPt;
+  m_unionNumberAboveThresholdPt     = aMultiMuon.m_unionNumberAboveThresholdPt;
+
+  m_centralTrackIsolation       = aMultiMuon.m_centralTrackIsolation;
+  m_unionTrackIsolation         = aMultiMuon.m_unionTrackIsolation;
+  m_centralECALIsolation        = aMultiMuon.m_centralECALIsolation;
+  m_unionECALIsolation          = aMultiMuon.m_unionECALIsolation;
+  m_centralHCALIsolation        = aMultiMuon.m_centralHCALIsolation;
+  m_unionHCALIsolation          = aMultiMuon.m_unionHCALIsolation;
+  m_centralNumberAboveThreshold = aMultiMuon.m_centralNumberAboveThreshold;
+  m_unionNumberAboveThreshold   = aMultiMuon.m_unionNumberAboveThreshold;
 }
 
 /// destructor
@@ -261,16 +300,15 @@ void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *track
   }
 }
 
-void pat::MultiMuon::calculateNumberAboveThresholdIsolation(const reco::TrackCollection *tracks,
-							    const pat::MuonCollection *allmuons,
-							    double centralCone,
-							    double unionCone,
-							    double centralThreshold,
-							    double unionThreshold,
-							    TTree *diagnosticTTree,
-							    Float_t *diagnosticdR,
-							    Float_t *diagnosticpT) 
-{
+void pat::MultiMuon::calculateNumberAboveThresholdIsolation( const reco::TrackCollection *tracks,
+                                                              const pat::MuonCollection *allmuons,
+                                                              double centralCone,
+                                                              double unionCone,
+                                                              double centralThreshold,
+                                                              double unionThreshold,
+                                                              TTree *diagnosticTTree,
+                                                              Float_t *diagnosticdR,
+                                                              Float_t *diagnosticpT) {
   m_centralNumberAboveThresholdCone = centralCone;
   m_unionNumberAboveThresholdCone   = unionCone;
   m_centralNumberAboveThresholdPt   = centralThreshold;
@@ -481,6 +519,27 @@ pat::MultiMuon pat::MultiMuon::merge( const pat::MultiMuon &aMultiMuon,
   return pat::MultiMuon(muons, transientTrackBuilder, tracks, allmuons, caloTowers, centralTrackIsolationCone, unionTrackIsolationCone, centralTrackThresholdPt, unionTrackThresholdPt, centralCaloIsolationCone, unionCaloIsolationCone, centralNumberAboveThresholdCone, unionNumberAboveThresholdCone, centralNumberAboveThresholdPt, unionNumberAboveThresholdPt);
 }
 
+void pat::MultiMuon::checkVertex() const {
+  if (!m_vertexValid) {
+    throw cms::Exception("MultiMuon") << "Request for vertex information, but no vertex has been calculated.";
+  }
+}
+
+void pat::MultiMuon::checkConsistentVtx() const {
+  if (!m_consistentVtxValid) {
+    throw cms::Exception("MultiMuon") << "Request for consistent vertex information, but no vertex has been calculated.";
+  }
+}
+
+bool pat::MultiMuon::sameTrack(const reco::Track *one, const reco::Track *two) const {
+  return (fabs(one->px() - two->px()) < 1e-10  &&
+           fabs(one->py() - two->py()) < 1e-10  &&
+           fabs(one->pz() - two->pz()) < 1e-10  &&
+           fabs(one->vx() - two->vx()) < 1e-10  &&
+           fabs(one->vy() - two->vy()) < 1e-10  &&
+           fabs(one->vz() - two->vz()) < 1e-10    );
+}
+
 double pat::MultiMuon::noiseEcal(const CaloTower &tower) const {
   const double theNoiseTow_EB = 0.04;
   const double theNoiseTow_EE = 0.15;
@@ -496,4 +555,185 @@ double pat::MultiMuon::noiseHcal(const CaloTower &tower) const {
 double pat::MultiMuon::noiseHOcal(const CaloTower &tower) const {
   const double theNoise_HO = 0.2;
   return theNoise_HO;
+}
+
+GlobalVector pat::MultiMuon::daughterCOM(int i, bool vertex) const {
+  double betax = 0.;
+  double betay = 0.;
+  double betaz = 0.;
+  GlobalVector d;
+
+  if (vertex) {
+    LorentzVector p = vertexP4();
+    betax = -p.px() / p.energy();
+    betay = -p.py() / p.energy();
+    betaz = -p.pz() / p.energy();
+    d = vertexMomentum(i);
+  }
+  else {
+    betax = -px() / energy();
+    betay = -py() / energy();
+    betaz = -pz() / energy();
+    d = GlobalVector(daughter(i)->px(), daughter(i)->py(), daughter(i)->pz());
+  }
+
+  double gamma = 1. / sqrt(1. - pow(betax, 2) - pow(betay, 2) - pow(betaz, 2));
+  double bgam = pow(gamma, 2) / (1. + gamma);
+
+  double denergy = sqrt(pow(daughter(i)->mass(), 2) + pow(d.x(), 2) + pow(d.y(), 2) + pow(d.z(), 2));
+
+  // double E  = denergy*(gamma) +       d.x()*(gamma*betax) +             d.y()*(gamma*betay) +             d.z()*(gamma*betaz);
+  double px = denergy*(gamma*betax) + d.x()*(1. + bgam * betax*betax) + d.y()*(bgam * betax * betay) +    d.z()*(bgam * betax * betaz);
+  double py = denergy*(gamma*betay) + d.x()*(bgam * betax * betay) +    d.y()*(1. + bgam * betay*betay) + d.z()*(bgam * betay * betaz);
+  double pz = denergy*(gamma*betaz) + d.x()*(bgam * betax * betaz) +    d.y()*(bgam * betay * betaz) +    d.z()*(1. + bgam * betaz*betaz);
+
+  return GlobalVector(px, py, pz);
+}
+
+GlobalVector pat::MultiMuon::daughterCOMrot(int i, bool vertex) const {
+  GlobalVector d = daughterCOM(i, vertex);
+
+  double anglexz = atan2(px(), pz());
+  double arotxz1 = d.x()*cos(anglexz) + d.y()*0. - d.z()*sin(anglexz);
+  double arotxz2 = d.x()*0.           + d.y()*1. + d.z()*0.;
+  double arotxz3 = d.x()*sin(anglexz) + d.y()*0. + d.z()*cos(anglexz);
+
+  double angleyz = atan2(py(), sqrt(pow(px(), 2) + pow(pz(), 2)));
+  double arot1 = arotxz1*1. + arotxz2*0.           + arotxz3*0.;
+  double arot2 = arotxz1*0. + arotxz2*cos(angleyz) - arotxz3*sin(angleyz);
+  double arot3 = arotxz1*0. + arotxz2*sin(angleyz) + arotxz3*cos(angleyz);
+
+  return GlobalVector(arot1, arot2, arot3);
+}
+
+double pat::MultiMuon::daughterCOMcosTheta(int i, bool vertex) const {
+  GlobalVector d = daughterCOMrot(i, vertex);
+  return d.z() / d.mag();
+}
+
+std::vector<std::pair<int,int> > pat::MultiMuon::consistentPairs(bool vertex) const {
+  std::vector<int> positives, negatives;
+  for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+    if (daughter(i)->charge() > 0) {
+      positives.push_back(i);
+    } else {
+      negatives.push_back(i);
+    }
+  }
+
+  std::vector<int> largerset, smallerset;
+  if (positives.size() > negatives.size()) {
+    largerset = positives;
+    smallerset = negatives;
+  } else {
+    largerset = negatives;
+    smallerset = positives;
+  }
+
+  std::vector<std::vector<int> > permutations;
+  std::vector<int> working;
+  buildPermutation(permutations, working, 0, largerset.size() - 1);
+
+  std::vector<int> bestPermutation;
+  double minMassDistance = -1.;
+  for (std::vector<std::vector<int> >::const_iterator permutation = permutations.begin();  permutation != permutations.end();  ++permutation) {
+    std::vector<double> masses;
+    unsigned int smallerset_index = 0;
+    for (std::vector<int>::const_iterator largerset_index = permutation->begin();  largerset_index != permutation->end();  ++largerset_index, ++smallerset_index) {
+      if (smallerset_index < smallerset.size()) {
+        GlobalVector muon1, muon2;
+
+        if (vertex) {
+          muon1 = vertexMomentum(largerset[*largerset_index]);
+          muon2 = vertexMomentum(smallerset[smallerset_index]);
+        } else {
+          reco::Candidate::Vector v1 = daughter(largerset[*largerset_index])->momentum();
+          reco::Candidate::Vector v2 = daughter(smallerset[smallerset_index])->momentum();
+          muon1 = GlobalVector(v1.x(), v1.y(), v1.z());
+          muon2 = GlobalVector(v2.x(), v2.y(), v2.z());
+        }
+        
+        double muon_mass    = daughter(largerset[*largerset_index])->mass();  // get the muon mass from CMSSW
+        double total_energy = sqrt(muon1.mag2() + pow(muon_mass, 2)) + sqrt(muon2.mag2() + pow(muon_mass, 2));
+        double total_px     = muon1.x() + muon2.x();
+        double total_py     = muon1.y() + muon2.y();
+        double total_pz     = muon1.z() + muon2.z();
+        double mass         = sqrt(pow(total_energy, 2) - pow(total_px, 2) - pow(total_py, 2) - pow(total_pz, 2));
+
+        masses.push_back(mass);
+      }
+    }
+
+    double massDistance = 0.;
+    for (unsigned int i = 0;  i < masses.size();  i++) {
+      for (unsigned int j = i + 1;  j < masses.size();  j++) {
+        massDistance += pow(masses[i] - masses[j], 2);
+      }
+    }
+
+    if (minMassDistance < 0.  ||  massDistance < minMassDistance) {
+      bestPermutation = *permutation;
+      minMassDistance = massDistance;
+    }
+  }
+
+  std::vector<std::pair<int,int> > output;
+  unsigned int smallerset_index = 0;
+  for (std::vector<int>::const_iterator largerset_index = bestPermutation.begin();  largerset_index != bestPermutation.end();  ++largerset_index, ++smallerset_index) {
+    if (smallerset_index < smallerset.size()) {
+	     if (daughter(largerset[*largerset_index])->charge() > 0) {
+	        output.push_back(std::pair<int,int>(largerset[*largerset_index], smallerset[smallerset_index]));
+	     } else {
+	        output.push_back(std::pair<int,int>(smallerset[smallerset_index], largerset[*largerset_index]));
+	     }
+    }
+  }
+  
+  return output;
+}
+
+void pat::MultiMuon::buildPermutation(std::vector<std::vector<int> > &results, std::vector<int> working, int where, int value) const {
+  std::vector<int>::iterator iter = working.begin();
+  for (int i = 0;  i < where;  i++) ++iter;
+  working.insert(iter, value);
+
+  if (value - 1 >= 0) {
+    for (unsigned int i = 0;  i <= working.size();  i++) {
+      buildPermutation(results, working, i, value - 1);
+    }
+  } else {
+    results.push_back(working);
+  }
+}
+
+std::vector<double> pat::MultiMuon::consistentPairMasses(bool vertex) const {
+  std::vector<std::pair<int,int> > pairIndicies = consistentPairs(vertex);
+  std::vector<double> output;
+
+  for (std::vector<std::pair<int,int> >::const_iterator pairIndex = pairIndicies.begin();  pairIndex != pairIndicies.end();  ++pairIndex) {
+    GlobalVector muon1, muon2;
+
+    assert(daughter(pairIndex->first)->charge() > 0);
+    assert(daughter(pairIndex->second)->charge() < 0);
+
+    if (vertex) {
+      muon1 = vertexMomentum(pairIndex->first);
+      muon2 = vertexMomentum(pairIndex->second);
+    } else {
+      reco::Candidate::Vector v1 = daughter(pairIndex->first)->momentum();
+      reco::Candidate::Vector v2 = daughter(pairIndex->second)->momentum();
+      muon1 = GlobalVector(v1.x(), v1.y(), v1.z());
+      muon2 = GlobalVector(v2.x(), v2.y(), v2.z());
+    }
+    double muon_mass = daughter(pairIndex->first)->mass();  // get the muon mass from CMSSW
+    double total_energy = sqrt(muon1.mag2() + pow(muon_mass, 2)) + sqrt(muon2.mag2() + pow(muon_mass, 2));
+    double total_px = muon1.x() + muon2.x();
+    double total_py = muon1.y() + muon2.y();
+    double total_pz = muon1.z() + muon2.z();
+    double mass = sqrt(pow(total_energy, 2) - pow(total_px, 2) - pow(total_py, 2) - pow(total_pz, 2));
+
+    output.push_back(mass);
+  }
+
+  return output;
 }
