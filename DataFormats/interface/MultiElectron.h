@@ -21,7 +21,7 @@ namespace pat {
   public:
     /// default constructor
     MultiElectron() : MultiLepton<Electron>() {}
-    
+    /// constructor
     MultiElectron(double phi) : MultiLepton<Electron>(phi) {} 
 	 
     /// constructor with electrons
@@ -98,6 +98,8 @@ namespace pat {
 			     double unionNumberAboveThresholdCone   = 0.,
 			     double centralNumberAboveThresholdPt   = 1e6,
 			     double unionNumberAboveThresholdPt     = 1e6);
+
+    virtual double vertexDz(const Point& myBeamSpot) const;
 
     virtual double noiseEcal(const CaloTower &tower) const;
     virtual double noiseHcal(const CaloTower &tower) const; 

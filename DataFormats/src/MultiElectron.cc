@@ -121,41 +121,6 @@ pat::MultiElectron::MultiElectron( std::vector<const pat::Electron*> &electrons,
 pat::MultiElectron::MultiElectron(const pat::MultiElectron &aMultiElectron) : 
   pat::MultiLepton<Electron>(aMultiElectron) 
 {
-  setP4( PolarLorentzVector(aMultiElectron.pt(),aMultiElectron.eta(),aMultiElectron.phi(),aMultiElectron.mass()));
-
-  if (aMultiElectron.genParticle() != NULL) setGenParticle(*(aMultiElectron.genParticle()));
-
-  m_vertexValid = aMultiElectron.m_vertexValid;
-  m_chi2 = aMultiElectron.m_chi2;
-  m_ndof = aMultiElectron.m_ndof;
-  m_covarianceMatrix = aMultiElectron.m_covarianceMatrix;
-  for (unsigned int i = 0;  i < aMultiElectron.m_vertexPCA.size();  i++) {
-    m_vertexPCA.push_back(aMultiElectron.m_vertexPCA[i]);
-    m_vertexPCACovarianceMatrix.push_back(aMultiElectron.m_vertexPCACovarianceMatrix[i]);
-    m_vertexP4.push_back(aMultiElectron.m_vertexP4[i]);
-  }
-  
-  m_consistentVtxValid = aMultiElectron.m_consistentVtxValid;
-  
-  m_centralTrackIsolationCone       = aMultiElectron.m_centralTrackIsolationCone;
-  m_unionTrackIsolationCone         = aMultiElectron.m_unionTrackIsolationCone;
-  m_centralTrackThresholdPt         = aMultiElectron.m_centralTrackThresholdPt;
-  m_unionTrackThresholdPt           = aMultiElectron.m_unionTrackThresholdPt;
-  m_centralCaloIsolationCone        = aMultiElectron.m_centralCaloIsolationCone;
-  m_unionCaloIsolationCone          = aMultiElectron.m_unionCaloIsolationCone;
-  m_centralNumberAboveThresholdCone = aMultiElectron.m_centralNumberAboveThresholdCone;
-  m_unionNumberAboveThresholdCone   = aMultiElectron.m_unionNumberAboveThresholdCone;
-  m_centralNumberAboveThresholdPt   = aMultiElectron.m_centralNumberAboveThresholdPt;
-  m_unionNumberAboveThresholdPt     = aMultiElectron.m_unionNumberAboveThresholdPt;
-
-  m_centralTrackIsolation       = aMultiElectron.m_centralTrackIsolation;
-  m_unionTrackIsolation         = aMultiElectron.m_unionTrackIsolation;
-  m_centralECALIsolation        = aMultiElectron.m_centralECALIsolation;
-  m_unionECALIsolation          = aMultiElectron.m_unionECALIsolation;
-  m_centralHCALIsolation        = aMultiElectron.m_centralHCALIsolation;
-  m_unionHCALIsolation          = aMultiElectron.m_unionHCALIsolation;
-  m_centralNumberAboveThreshold = aMultiElectron.m_centralNumberAboveThreshold;
-  m_unionNumberAboveThreshold   = aMultiElectron.m_unionNumberAboveThreshold;
 }
 
 /// destructor
@@ -556,6 +521,19 @@ bool pat::MultiElectron::sameTrack(const reco::Track *one, const reco::Track *tw
 }
 
 */
+double pat::MultiElectron::vertexDz(const Point& myBeamSpot) const
+{
+  // if (vertexValid()) {
+  //   GlobalPoint  v      = vertexPoint();
+  //   GlobalVector p      = vertexMomentum();
+  //   double      pt_mag = sqrt( p.x()*p.x() + p.y()*p.y() );
+  //   return (v.z()-myBeamSpot.z()) - ((v.x()-myBeamSpot.x())*p.x()+(v.y()-myBeamSpot.y())*p.y())/pt_mag * p.z()/pt_mag;
+  // }
+  // else return muon(0)->innerTrack()->dz(myBeamSpot);
+  return 0;
+}
+
+
 double pat::MultiElectron::noiseEcal(const CaloTower &tower) const {
   const double theNoiseTow_EB = 0.04;
   const double theNoiseTow_EE = 0.15;
