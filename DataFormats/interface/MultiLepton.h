@@ -32,8 +32,8 @@ class TransientTrackBuilder;
 namespace pat {
   
   template <class LeptonType>
-  class MultiLepton : public pat::CompositeCandidate {
-
+  class MultiLepton : public pat::CompositeCandidate 
+  {
     public:
 	 /// default constructor
     MultiLepton() : pat::CompositeCandidate()
@@ -82,33 +82,9 @@ namespace pat {
       , m_centralNumberAboveThreshold(0)
       , m_unionNumberAboveThreshold(0) { setP4( PolarLorentzVector(0,0,phi,0)); }
 
-    /// constructor with leptons
-    MultiLepton(std::vector< const pat::Lepton<LeptonType>* > &leptons,
-		const TransientTrackBuilder *transientTrackBuilder = NULL,
-		const reco::TrackCollection *tracks = NULL,
-		const std::vector< pat::Lepton<LeptonType> > *allleptons = NULL,
-		const CaloTowerCollection     *caloTowers = NULL,
-		double centralTrackIsolationCone       = 0.,
-		double unionTrackIsolationCone         = 0.,
-		double centralTrackThresholdPt         = 1e6,
-		double unionTrackThresholdPt           = 1e6,
-		double centralCaloIsolationCone        = 0.,
-		double unionCaloIsolationCone          = 0.,
-		double centralNumberAboveThresholdCone = 0.,
-		double unionNumberAboveThresholdCone   = 0.,
-		double centralNumberAboveThresholdPt   = 1e6,
-		double unionNumberAboveThresholdPt     = 1e6);
-
-    
-    /// constructor from a composite candidate
-    MultiLepton(const pat::MultiLepton<LeptonType> & aMultilepton);
-    
     /// destructor
     virtual ~MultiLepton() {}
 
-    /// required reimplementation of the Candidate's clone method
-    virtual MultiLepton<LeptonType> * clone() const { return new MultiLepton<LeptonType>(*this); };
-    
     /// cast daughters as MultiLeptons
     const pat::Lepton<LeptonType> *lepton(int i) const { return dynamic_cast<const pat::Lepton<LeptonType>*>(daughter(i)); }
     
