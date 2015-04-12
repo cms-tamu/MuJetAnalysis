@@ -161,9 +161,7 @@ pat::MultiElectron::MultiElectron(const pat::MultiElectron &aMultiElectron) :
 }
 
 /// destructor
-pat::MultiElectron::~MultiElectron() {
-  ~MultiLepton<Electron>();
-}
+pat::MultiElectron::~MultiElectron() {}
 
 /*
 /// calculate the vertex from TransientTracks; return true iff successful
