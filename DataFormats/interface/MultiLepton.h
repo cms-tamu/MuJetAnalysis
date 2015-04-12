@@ -78,7 +78,7 @@ namespace pat {
 	v += vertexP4(i);
       }
       return v;
-    };
+    }
     GlobalVector vertexMomentum() const { LorentzVector v = vertexP4();  return GlobalVector(v.x(), v.y(), v.z()); }
     double vertexMass() const { return vertexP4().mass(); }
     virtual double vertexDz(const Point& myBeamSpot) const =0;

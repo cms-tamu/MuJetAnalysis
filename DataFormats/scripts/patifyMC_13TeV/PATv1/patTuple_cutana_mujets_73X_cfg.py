@@ -24,7 +24,7 @@ process.source = cms.Source("PoolSource",
 
 process.maxEvents.input = -1
 
-process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
+process.load("MuJetAnalysis.LeptonJetProducer.MuJetProducer_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cfi")
 
 process.p = cms.Path(
