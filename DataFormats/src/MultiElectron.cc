@@ -121,7 +121,7 @@ pat::MultiElectron::MultiElectron( std::vector<const pat::Electron*> &electrons,
 
 /// constructor from MultiElectronType
 pat::MultiElectron::MultiElectron(const pat::MultiElectron &aMultiElectron) : 
-  pat::MultiLepton<reco::GsfElectron>(aMultiElectron) 
+  pat::MultiLepton<Electron>(aMultiElectron) 
 {
   setP4( PolarLorentzVector(aMultiElectron.pt(),aMultiElectron.eta(),aMultiElectron.phi(),aMultiElectron.mass()));
 
@@ -161,7 +161,9 @@ pat::MultiElectron::MultiElectron(const pat::MultiElectron &aMultiElectron) :
 }
 
 /// destructor
-pat::MultiElectron::~MultiElectron() {}
+pat::MultiElectron::~MultiElectron() {
+  ~MultiLepton<Electron>();
+}
 
 /*
 /// calculate the vertex from TransientTracks; return true iff successful

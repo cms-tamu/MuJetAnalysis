@@ -14,13 +14,13 @@ namespace pat {
 
 // Class definition
 namespace pat {
-  class MultiElectron : public MultiLepton<reco::GsfElectron> {
+  class MultiElectron : public MultiLepton<Electron> {
 
   public:
     /// default constructor
-  MultiElectron() : MultiLepton<reco::GsfElectron>() {}
+  MultiElectron() : MultiLepton<Electron>() {}
     
-  MultiElectron(double phi) : MultiLepton<reco::GsfElectron>() { 
+  MultiElectron(double phi) : MultiLepton<Electron>() { 
       setP4( PolarLorentzVector(0,0,phi,0)); 
     }
 	 
