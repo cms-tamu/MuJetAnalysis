@@ -5,7 +5,7 @@
   \class    pat::MultiLepton<LeptonType> MultiLepton.h "MuJetAnalysis/DataFormats/interface/MultiLepton.h"
   \brief    Analysis-level particle class
 
-   MultiLepton defineds an analysis-level multi-lepton template class within the 'pat'
+   MultiLepton defines an analysis-level multi-lepton template base class within the 'pat'
    namespace.
    MultiLepton is implemented by MultiElectron and MultiMuon
 */
@@ -19,8 +19,6 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/PatCandidates/interface/Lepton.h"
-/* #include "DataFormats/PatCandidates/interface/Muon.h" */
-/* #include "DataFormats/PatCandidates/interface/Electron.h" */
 #include "DataFormats/CaloTowers/interface/CaloTower.h"
 #include "DataFormats/CaloTowers/interface/CaloTowerFwd.h"
 #include "TMath.h"
@@ -35,161 +33,29 @@ namespace pat {
   class MultiLepton : public pat::CompositeCandidate 
   {
     public:
-	 /// default constructor
-    MultiLepton() : pat::CompositeCandidate()
-      , m_vertexValid(false)
-      , m_chi2(0.)
-      , m_ndof(0.)
-      , m_centralTrackIsolationCone(0.)
-      , m_unionTrackIsolationCone(0.)
-      , m_centralTrackThresholdPt(0.)
-      , m_unionTrackThresholdPt(0.)
-      , m_centralCaloIsolationCone(0.)
-      , m_unionCaloIsolationCone(0.)
-      , m_centralNumberAboveThresholdCone(0.)
-      , m_unionNumberAboveThresholdCone(0.)
-      , m_centralNumberAboveThresholdPt(0.)
-      , m_unionNumberAboveThresholdPt(0.)
-      , m_centralTrackIsolation(0.)
-      , m_unionTrackIsolation(0.)
-      , m_centralECALIsolation(0.)
-      , m_unionECALIsolation(0.)
-      , m_centralHCALIsolation(0.)
-      , m_unionHCALIsolation(0.)
-      , m_centralNumberAboveThreshold(0)
-      , m_unionNumberAboveThreshold(0) {};
-
-    MultiLepton(double phi) : pat::CompositeCandidate()
-      , m_vertexValid(false)
-      , m_chi2(0.)
-      , m_ndof(0.)
-      , m_centralTrackIsolationCone(0.)
-      , m_unionTrackIsolationCone(0.)
-      , m_centralTrackThresholdPt(0.)
-      , m_unionTrackThresholdPt(0.)
-      , m_centralCaloIsolationCone(0.)
-      , m_unionCaloIsolationCone(0.)
-      , m_centralNumberAboveThresholdCone(0.)
-      , m_unionNumberAboveThresholdCone(0.)
-      , m_centralNumberAboveThresholdPt(0.)
-      , m_unionNumberAboveThresholdPt(0.)
-      , m_centralTrackIsolation(0.)
-      , m_unionTrackIsolation(0.)
-      , m_centralECALIsolation(0.)
-      , m_unionECALIsolation(0.)
-      , m_centralHCALIsolation(0.)
-      , m_unionHCALIsolation(0.)
-      , m_centralNumberAboveThreshold(0)
-      , m_unionNumberAboveThreshold(0) { setP4( PolarLorentzVector(0,0,phi,0)); }
-
+    /// default constructor
+    MultiLepton();
+    /// constructor
+    MultiLepton(double phi);
     /// destructor
     virtual ~MultiLepton() {}
+
+    /// required reimplementation of the Candidate's clone method
+    //virtual MultiLepton<LeptonType> *clone() const { return new MultiLepton<LeptonType>(*this); }
 
     /// cast daughters as MultiLeptons
     const pat::Lepton<LeptonType> *lepton(int i) const { return dynamic_cast<const pat::Lepton<LeptonType>*>(daughter(i)); }
     
+    /// does this MultiLepton overlap another one? or contain a given lepton?
+    /* virtual bool overlaps(const pat::MultiLepton<LeptonType> &aMultiLepton) const; */
+    /* virtual bool contains(const pat::Lepton<LeptonType> &aLepton) const; */
+
     /// calculate a vertex from the daughter leptons (performed by constructor if transientTrackBuilder != NULL)
     virtual bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder)=0;
 
     // Calorimeter Isolation
-    void calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone)
-    {
-      m_centralCaloIsolationCone = centralCone;
-      m_unionCaloIsolationCone   = unionCone;
-      m_centralECALIsolation     = 0.;
-      m_unionECALIsolation       = 0.;
-      m_centralHCALIsolation     = 0.;
-      m_unionHCALIsolation       = 0.;
-      
-      for (CaloTowerCollection::const_iterator caloTower = caloTowers->begin();  caloTower != caloTowers->end();  ++caloTower) {
-	// following http://cmslxr.fnal.gov/lxr/source/RecoMuon/MuonIsolation/plugins/CaloExtractorByAssociator.cc#269
-	// and http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/CMSSW/RecoMuon/MuonIsolationProducers/python/caloExtractorByAssociatorBlocks_cff.py?view=markup
-	// just the "TowersBlock" and the "Towers" else block
-	const double theThreshold_E  = 0.2;
-	const double theThreshold_H  = 0.5;
-	const double theThreshold_HO = 0.5;
-	
-	double ECALcontribution = 0.;
-	double HCALcontribution = 0.;
-	
-	double etecal = caloTower->emEt();
-	double eecal  = caloTower->emEnergy();
-	if (etecal > theThreshold_E  &&  eecal > 3.*noiseEcal(*caloTower)) {
-	  ECALcontribution += etecal;
-	}
-	double ethcal = caloTower->hadEt();
-	double ehcal  = caloTower->hadEnergy();
-	if (ethcal > theThreshold_H  &&  ehcal > 3.*noiseHcal(*caloTower)) {
-	  HCALcontribution += ethcal;
-	}
-	double ethocal = caloTower->outerEt();
-	double ehocal  = caloTower->outerEnergy();
-	if (ethocal > theThreshold_HO  &&  ehocal > 3.*noiseHOcal(*caloTower)) {
-	  HCALcontribution += ethocal;
-	}
-	
-	bool inUnionCone = false;
-	for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
-	  double dphi = daughter(i)->phi() - caloTower->phi();
-	  while (dphi > M_PI) dphi -= 2.*M_PI;
-	  while (dphi < -M_PI) dphi += 2.*M_PI;
-	  double deta = daughter(i)->eta() - caloTower->eta();
-	  double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
-	  if (dR < unionCone) {
-	    inUnionCone = true;
-	    break;
-	  }
-	}
-	if (inUnionCone) {
-	  m_unionECALIsolation += ECALcontribution;
-	  m_unionHCALIsolation += HCALcontribution;
-	}
-	
-	double dphi = phi() - caloTower->phi();
-	while (dphi > M_PI) dphi -= 2.*M_PI;
-	while (dphi < -M_PI) dphi += 2.*M_PI;
-	double deta = eta() - caloTower->eta();
-	double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
-	if (dR < centralCone) {
-	  m_centralECALIsolation += ECALcontribution;
-	  m_centralHCALIsolation += HCALcontribution;
-	}
-      }
-    }
+    void calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone);
     
-    /// does this MultiLepton overlap another one? or contain a given lepton?
-    bool overlaps(const pat::MultiLepton<LeptonType> &aMultiLepton) const {
-      for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
-	const pat::Lepton<LeptonType> *daughter_i = lepton(i);
-	
-	for (unsigned int j = 0;  j < aMultiLepton.numberOfDaughters();  j++) {
-	  const pat::Lepton<LeptonType> *daughter_j = aMultiLepton.lepton(j);
-	  
-	  if (daughter_i->innerTrack().isAvailable()  &&  daughter_j->innerTrack().isAvailable()) {
-	    if (sameTrack(&*(daughter_i->innerTrack()), &*(daughter_j->innerTrack()))) return true;
-	  }
-	  else if (daughter_i->outerTrack().isAvailable()  &&  daughter_j->outerTrack().isAvailable()) {
-	    if (sameTrack(&*(daughter_i->outerTrack()), &*(daughter_j->outerTrack()))) return true;
-	  }
-	}
-      }
-      return false;      
-    }
-
-    bool contains(const pat::Lepton<LeptonType> &aLepton) const {
-      for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
-	const pat::Lepton<LeptonType> *daughter_i = lepton(i);
-	
-	if (daughter_i->innerTrack().isAvailable()  &&  aLepton.innerTrack().isAvailable()) {
-	  if (sameTrack(&*(daughter_i->innerTrack()), &*(aLepton.innerTrack()))) return true;
-	}
-	else if (daughter_i->outerTrack().isAvailable()  &&  aLepton.outerTrack().isAvailable()) {
-	  if (sameTrack(&*(daughter_i->outerTrack()), &*(aLepton.outerTrack()))) return true;
-	}
-      }
-      return false;
-    }
-
     //------------------------------------------------------------------------------
     // Return vertex results
     //------------------------------------------------------------------------------
@@ -449,6 +315,125 @@ namespace pat {
     int     m_centralNumberAboveThreshold;
     int     m_unionNumberAboveThreshold;
   };
+
+  template <class LeptonType>
+  MultiLepton<LeptonType>::MultiLepton() : pat::CompositeCandidate()
+    , m_vertexValid(false)
+    , m_chi2(0.)
+    , m_ndof(0.)
+    , m_centralTrackIsolationCone(0.)
+    , m_unionTrackIsolationCone(0.)
+    , m_centralTrackThresholdPt(0.)
+    , m_unionTrackThresholdPt(0.)
+    , m_centralCaloIsolationCone(0.)
+    , m_unionCaloIsolationCone(0.)
+    , m_centralNumberAboveThresholdCone(0.)
+    , m_unionNumberAboveThresholdCone(0.)
+    , m_centralNumberAboveThresholdPt(0.)
+    , m_unionNumberAboveThresholdPt(0.)
+    , m_centralTrackIsolation(0.)
+    , m_unionTrackIsolation(0.)
+    , m_centralECALIsolation(0.)
+    , m_unionECALIsolation(0.)
+    , m_centralHCALIsolation(0.)
+    , m_unionHCALIsolation(0.)
+    , m_centralNumberAboveThreshold(0)
+    , m_unionNumberAboveThreshold(0) 
+  {
+  }
+
+  template <class LeptonType>
+  MultiLepton<LeptonType>::MultiLepton(double phi) : pat::CompositeCandidate()
+    , m_vertexValid(false)
+    , m_chi2(0.)
+    , m_ndof(0.)
+    , m_centralTrackIsolationCone(0.)
+    , m_unionTrackIsolationCone(0.)
+    , m_centralTrackThresholdPt(0.)
+    , m_unionTrackThresholdPt(0.)
+    , m_centralCaloIsolationCone(0.)
+    , m_unionCaloIsolationCone(0.)
+    , m_centralNumberAboveThresholdCone(0.)
+    , m_unionNumberAboveThresholdCone(0.)
+    , m_centralNumberAboveThresholdPt(0.)
+    , m_unionNumberAboveThresholdPt(0.)
+    , m_centralTrackIsolation(0.)
+    , m_unionTrackIsolation(0.)
+    , m_centralECALIsolation(0.)
+    , m_unionECALIsolation(0.)
+    , m_centralHCALIsolation(0.)
+    , m_unionHCALIsolation(0.)
+    , m_centralNumberAboveThreshold(0)
+    , m_unionNumberAboveThreshold(0) 
+  { 
+      setP4( PolarLorentzVector(0,0,phi,0)); 
+  }
+
+  template <class LeptonType>
+  void MultiLepton<LeptonType>::calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone)
+  {
+    m_centralCaloIsolationCone = centralCone;
+    m_unionCaloIsolationCone   = unionCone;
+    m_centralECALIsolation     = 0.;
+    m_unionECALIsolation       = 0.;
+    m_centralHCALIsolation     = 0.;
+    m_unionHCALIsolation       = 0.;
+    
+    for (CaloTowerCollection::const_iterator caloTower = caloTowers->begin();  caloTower != caloTowers->end();  ++caloTower) {
+      // following http://cmslxr.fnal.gov/lxr/source/RecoMuon/MuonIsolation/plugins/CaloExtractorByAssociator.cc#269
+      // and http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/CMSSW/RecoMuon/MuonIsolationProducers/python/caloExtractorByAssociatorBlocks_cff.py?view=markup
+      // just the "TowersBlock" and the "Towers" else block
+      const double theThreshold_E  = 0.2;
+      const double theThreshold_H  = 0.5;
+      const double theThreshold_HO = 0.5;
+      
+      double ECALcontribution = 0.;
+      double HCALcontribution = 0.;
+      
+      double etecal = caloTower->emEt();
+      double eecal  = caloTower->emEnergy();
+      if (etecal > theThreshold_E  &&  eecal > 3.*noiseEcal(*caloTower)) {
+	ECALcontribution += etecal;
+      }
+      double ethcal = caloTower->hadEt();
+      double ehcal  = caloTower->hadEnergy();
+      if (ethcal > theThreshold_H  &&  ehcal > 3.*noiseHcal(*caloTower)) {
+	HCALcontribution += ethcal;
+      }
+      double ethocal = caloTower->outerEt();
+      double ehocal  = caloTower->outerEnergy();
+      if (ethocal > theThreshold_HO  &&  ehocal > 3.*noiseHOcal(*caloTower)) {
+	HCALcontribution += ethocal;
+      }
+      
+      bool inUnionCone = false;
+      for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	double dphi = daughter(i)->phi() - caloTower->phi();
+	while (dphi > M_PI) dphi -= 2.*M_PI;
+	while (dphi < -M_PI) dphi += 2.*M_PI;
+	double deta = daughter(i)->eta() - caloTower->eta();
+	double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+	if (dR < unionCone) {
+	  inUnionCone = true;
+	  break;
+	}
+      }
+      if (inUnionCone) {
+	m_unionECALIsolation += ECALcontribution;
+	m_unionHCALIsolation += HCALcontribution;
+      }
+      
+      double dphi = phi() - caloTower->phi();
+      while (dphi > M_PI) dphi -= 2.*M_PI;
+      while (dphi < -M_PI) dphi += 2.*M_PI;
+      double deta = eta() - caloTower->eta();
+      double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+      if (dR < centralCone) {
+	m_centralECALIsolation += ECALcontribution;
+	m_centralHCALIsolation += HCALcontribution;
+      }
+    }
+  }  
 }
 
 #endif // MuJetAnalysis_DataFormats_MultiLepton_h

@@ -53,6 +53,10 @@ namespace pat {
     /// cast daughters as MultiElectrons
     const pat::Electron *electron(int i) const { return dynamic_cast<const pat::Electron*>(daughter(i)); }
 
+    /// does this MultiLepton overlap another one? or contain a given lepton?
+    bool overlaps(const pat::MultiElectron&) const;
+    bool contains(const pat::Electron &) const;
+
     /// calculate a vertex from the daughter leptons (performed by constructor if transientTrackBuilder != NULL)
     virtual bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder);
 

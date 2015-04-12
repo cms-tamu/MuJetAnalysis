@@ -760,3 +760,41 @@ std::vector<double> pat::MultiElectron::consistentPairMasses(bool vertex) const 
 
 // http://stackoverflow.com/questions/25486033/c-class-template-specialization-without-having-to-reimplement-everything
 // static_assert(std::is_same<T, int>::value, "Works only with ints!");
+
+bool pat::MultiElectron::overlaps(const pat::MultiElectron &aMultiElectron) const 
+{
+  /*
+  for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+    const pat::Electron *daughter_i = lepton(i);
+	
+    for (unsigned int j = 0;  j < aMultiElectron.numberOfDaughters();  j++) {
+      const pat::Electron *daughter_j = aMultiElectron.lepton(j);
+	  
+      if (daughter_i->innerTrack().isAvailable()  &&  daughter_j->innerTrack().isAvailable()) {
+	if (sameTrack(&*(daughter_i->innerTrack()), &*(daughter_j->innerTrack()))) return true;
+      }
+      else if (daughter_i->outerTrack().isAvailable()  &&  daughter_j->outerTrack().isAvailable()) {
+	if (sameTrack(&*(daughter_i->outerTrack()), &*(daughter_j->outerTrack()))) return true;
+      }
+    }
+  }
+  */
+  return false;      
+}
+
+bool pat::MultiElectron::contains(const pat::Electron &aElectron) const 
+{
+  /*
+  for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+    const pat::Electron *daughter_i = lepton(i);
+    
+    if (daughter_i->innerTrack().isAvailable()  &&  aElectron.innerTrack().isAvailable()) {
+      if (sameTrack(&*(daughter_i->innerTrack()), &*(aElectron.innerTrack()))) return true;
+    }
+    else if (daughter_i->outerTrack().isAvailable()  &&  aElectron.outerTrack().isAvailable()) {
+      if (sameTrack(&*(daughter_i->outerTrack()), &*(aElectron.outerTrack()))) return true;
+    }
+  }
+  */
+  return false;
+}
