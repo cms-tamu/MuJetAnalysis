@@ -26,14 +26,6 @@
 #include "TMath.h"
 #include "TTree.h"
 
-#ifndef MULTIMUONCANDIDATE_FOR_FWLITE
-#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
-#include "TrackingTools/TransientTrack/interface/TransientTrack.h"
-#include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
-#else
-class TransientTrackBuilder {};
-#endif // MULTIMUONCANDIDATE_FOR_FWLITE
-
 class TransientTrackBuilder;
 
 // Class definition
@@ -112,28 +104,17 @@ namespace pat {
     MultiLepton(const pat::MultiLepton<LeptonType> & aMultilepton);
     
     /// destructor
-    virtual ~MultiLepton();
+    virtual ~MultiLepton()=0;
 
     /// required reimplementation of the Candidate's clone method
-    virtual MultiLepton<LeptonType> * clone() const { return new MultiLepton<LeptonType>(*this); }
+    virtual MultiLepton<LeptonType> * clone() const =0;
     
     /// cast daughters as MultiLeptons
     const pat::Lepton<LeptonType> *lepton(int i) const { return dynamic_cast<const pat::Lepton<LeptonType>*>(daughter(i)); }
     
     /// calculate a vertex from the daughter leptons (performed by constructor if transientTrackBuilder != NULL)
-    bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder);
+    virtual bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder)=0;
 
-    // calculate isolation (performed by constructor if tracks, leptons, and caloTowers != NULL)
-    // Track Isolation
-    void calculateTrackIsolation(const reco::TrackCollection *tracks,
-				 const std::vector< pat::Lepton<LeptonType> > *allleptons,
-				 double centralCone,
-				 double unionCone,
-				 double centralThreshold,
-				 double unionThreshold,
-				 TTree   *diagnosticTTree = NULL,
-				 Float_t *diagnosticdR    = NULL,
-				 Float_t *diagnosticpT    = NULL);    
     // Calorimeter Isolation
     void calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone)
     {
@@ -200,16 +181,6 @@ namespace pat {
       }
     }
     
-    void calculateNumberAboveThresholdIsolation(const reco::TrackCollection *tracks,
-						const std::vector< pat::Lepton<LeptonType> > *allleptons,
-						double centralCone,
-						double unionCone,
-						double centralThreshold,
-						double unionThreshold,
-						TTree   *diagnosticTTree = NULL,
-						Float_t *diagnosticdR    = NULL,
-						Float_t *diagnosticpT    = NULL);
-	 
     /// does this MultiLepton overlap another one? or contain a given lepton?
     bool overlaps(const pat::MultiLepton<LeptonType> &aMultiLepton) const {
       for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
@@ -243,23 +214,6 @@ namespace pat {
       return false;
     }
 
-    /// create a new MultiLepton which has leptons from this and aMultiLepton
-    pat::MultiLepton<LeptonType> merge(const pat::MultiLepton<LeptonType> &aMultiLepton,
-				       const TransientTrackBuilder *transientTrackBuilder = NULL,
-				       const reco::TrackCollection *tracks                = NULL,
-				       const std::vector< pat::Lepton<LeptonType> > *allleptons = NULL,
-				       const CaloTowerCollection   *caloTowers            = NULL,
-				       double centralTrackIsolationCone       = 0.,
-				       double unionTrackIsolationCone         = 0.,
-				       double centralTrackThresholdPt         = 1e6,
-				       double unionTrackThresholdPt           = 1e6,
-				       double centralCaloIsolationCone        = 0.,
-				       double unionCaloIsolationCone          = 0.,
-				       double centralNumberAboveThresholdCone = 0.,
-				       double unionNumberAboveThresholdCone   = 0.,
-				       double centralNumberAboveThresholdPt   = 1e6,
-				       double unionNumberAboveThresholdPt     = 1e6);
-    
     //------------------------------------------------------------------------------
     // Return vertex results
     //------------------------------------------------------------------------------
@@ -465,15 +419,27 @@ namespace pat {
 
     bool sameTrack(const reco::Track *one, const reco::Track *two) const;
 
-    protected:
-    
-    double noiseEcal(const CaloTower &tower) const;
-    double noiseHcal(const CaloTower &tower) const;
-    double noiseHOcal(const CaloTower &tower) const;
+    virtual double noiseEcal(const CaloTower &tower) const =0;
+    virtual double noiseHcal(const CaloTower &tower) const =0;
+    virtual double noiseHOcal(const CaloTower &tower) const =0;
+
     void   buildPermutation(std::vector<std::vector<int> > &results, std::vector<int> working, int where, int value) const;
+
+    void   checkVertex() const {
+      if (!m_vertexValid) {
+	throw cms::Exception("MultiLepton") << "Request for vertex information, but no vertex has been calculated.";
+      }
+    }
+
+    void     checkConsistentVtx() const {
+      if (!m_consistentVtxValid) {
+	throw cms::Exception("MultiLepton") << "Request for consistent vertex information, but no vertex has been calculated.";
+      }
+    }
+
+  protected:
     
     bool   m_vertexValid;
-    void   checkVertex() const;
     double m_chi2;
     double m_ndof;
     CovarianceMatrix              m_covarianceMatrix;
@@ -483,7 +449,7 @@ namespace pat {
     
     // Consistent vertex (calculated by MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h)
     mutable bool                                 m_consistentVtxValid;
-    void     checkConsistentVtx() const;
+
     mutable GlobalPoint                          m_consistentVtx3D;
     mutable math::XYZTLorentzVector              m_consistentVtxP4;
     mutable std::vector<math::XYZTLorentzVector> m_vConsistentVtxP4;

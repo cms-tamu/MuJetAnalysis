@@ -112,10 +112,8 @@ pat::MultiElectron::MultiElectron( std::vector<const pat::Electron*> &electrons,
   m_centralNumberAboveThreshold = 0;
   m_unionNumberAboveThreshold = 0;
   if (tracks != NULL) {
-    calculateNumberAboveThresholdIsolation(tracks, allelectrons, centralNumberAboveThresholdCone,
-                                                             unionNumberAboveThresholdCone,
-                                                             centralNumberAboveThresholdPt, 
-                                                             unionNumberAboveThresholdPt);
+    calculateNumberAboveThresholdIsolation(tracks, allelectrons, centralNumberAboveThresholdCone, unionNumberAboveThresholdCone,
+					   centralNumberAboveThresholdPt, unionNumberAboveThresholdPt);
   }
 }
 
@@ -161,11 +159,19 @@ pat::MultiElectron::MultiElectron(const pat::MultiElectron &aMultiElectron) :
 }
 
 /// destructor
-pat::MultiElectron::~MultiElectron() {}
+pat::MultiElectron::~MultiElectron() 
+{
+}
 
-/*
 /// calculate the vertex from TransientTracks; return true iff successful
-bool pat::MultiElectron::calculateVertex(const TransientTrackBuilder *transientTrackBuilder) {
+bool pat::MultiElectron::calculateVertex(const TransientTrackBuilder *transientTrackBuilder) 
+{
+  return true;
+  // innerTrack does not exist for patElectron
+
+  // closestCtfTrackRef
+
+  /*
 #ifdef MULTIELECTRONCANDIDATE_FOR_FWLITE
   return false;
 #endif // MULTIELECTRONCANDIDATE_FOR_FWLITE
@@ -221,17 +227,23 @@ bool pat::MultiElectron::calculateVertex(const TransientTrackBuilder *transientT
   
    return true;
 #endif // MULTIELECTRONCANDIDATE_FOR_FWLITE
+*/
 }
 
-void pat::MultiElectron::calculateTrackIsolation( const reco::TrackCollection *tracks,
-                                               const pat::ElectronCollection   *allelectrons,
-                                               double centralCone,
-                                               double unionCone,
-                                               double centralThreshold,
-                                               double unionThreshold,
-                                               TTree   *diagnosticTTree,
-                                               Float_t *diagnosticdR,
-                                               Float_t *diagnosticpT) {
+
+// calculate isolation (performed by constructor if tracks, leptons, and caloTowers != NULL)
+// Track Isolation
+void pat::MultiElectron::calculateTrackIsolation(const reco::TrackCollection *tracks,
+						 const pat::ElectronCollection   *allelectrons,
+						 double centralCone,
+						 double unionCone,
+						 double centralThreshold,
+						 double unionThreshold,
+						 TTree   *diagnosticTTree,
+						 Float_t *diagnosticdR,
+						 Float_t *diagnosticpT) 
+{
+  /*
   m_centralTrackIsolationCone = centralCone;
   m_unionTrackIsolationCone   = unionCone;
   m_centralTrackThresholdPt   = centralThreshold;
@@ -295,17 +307,20 @@ void pat::MultiElectron::calculateTrackIsolation( const reco::TrackCollection *t
       diagnosticTTree->Fill();
     }
   }
+  */
 }
 
-void pat::MultiElectron::calculateNumberAboveThresholdIsolation( const reco::TrackCollection *tracks,
-                                                              const pat::ElectronCollection *allelectrons,
-                                                              double centralCone,
-                                                              double unionCone,
-                                                              double centralThreshold,
-                                                              double unionThreshold,
-                                                              TTree *diagnosticTTree,
-                                                              Float_t *diagnosticdR,
-                                                              Float_t *diagnosticpT) {
+void pat::MultiElectron::calculateNumberAboveThresholdIsolation(const reco::TrackCollection *tracks,
+								const pat::ElectronCollection *allelectrons,
+								double centralCone,
+								double unionCone,
+								double centralThreshold,
+								double unionThreshold,
+								TTree *diagnosticTTree,
+								Float_t *diagnosticdR,
+								Float_t *diagnosticpT) 
+{
+  /*
   m_centralNumberAboveThresholdCone = centralCone;
   m_unionNumberAboveThresholdCone   = unionCone;
   m_centralNumberAboveThresholdPt   = centralThreshold;
@@ -369,8 +384,10 @@ void pat::MultiElectron::calculateNumberAboveThresholdIsolation( const reco::Tra
       diagnosticTTree->Fill();
     }
   }
+  */
 }
 
+/*
 void pat::MultiElectron::calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone) {
   m_centralCaloIsolationCone = centralCone;
   m_unionCaloIsolationCone   = unionCone;
@@ -434,8 +451,9 @@ void pat::MultiElectron::calculateCaloIsolation(const CaloTowerCollection *caloT
     }
   }
 }
+  */
 
-bool pat::MultiElectron::overlaps(const pat::MultiElectron &aMultiElectron) const {
+/*bool pat::MultiElectron::overlaps(const pat::MultiElectron &aMultiElectron) const {
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
     const pat::Electron *daughter_i = lepton(i);
 
@@ -466,7 +484,7 @@ bool pat::MultiElectron::contains(const pat::Electron &aElectron) const {
   }
   return false;
 }
-
+*/
 pat::MultiElectron pat::MultiElectron::merge( const pat::MultiElectron &aMultiElectron,
                                       const TransientTrackBuilder *transientTrackBuilder,
                                       const reco::TrackCollection *tracks,
@@ -484,7 +502,7 @@ pat::MultiElectron pat::MultiElectron::merge( const pat::MultiElectron &aMultiEl
                                       double unionNumberAboveThresholdPt) {
   
   std::vector<const pat::Electron*> electrons;
-
+  /*
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
     electrons.push_back(lepton(i));
   }
@@ -512,10 +530,10 @@ pat::MultiElectron pat::MultiElectron::merge( const pat::MultiElectron &aMultiEl
 
     if (!same) electrons.push_back(daughter_j);
   }
-
+  */
   return pat::MultiElectron(electrons, transientTrackBuilder, tracks, allelectrons, caloTowers, centralTrackIsolationCone, unionTrackIsolationCone, centralTrackThresholdPt, unionTrackThresholdPt, centralCaloIsolationCone, unionCaloIsolationCone, centralNumberAboveThresholdCone, unionNumberAboveThresholdCone, centralNumberAboveThresholdPt, unionNumberAboveThresholdPt);
 }
-
+/*
 void pat::MultiElectron::checkVertex() const {
   if (!m_vertexValid) {
     throw cms::Exception("MultiElectron") << "Request for vertex information, but no vertex has been calculated.";
@@ -537,6 +555,7 @@ bool pat::MultiElectron::sameTrack(const reco::Track *one, const reco::Track *tw
            fabs(one->vz() - two->vz()) < 1e-10    );
 }
 
+*/
 double pat::MultiElectron::noiseEcal(const CaloTower &tower) const {
   const double theNoiseTow_EB = 0.04;
   const double theNoiseTow_EE = 0.15;
@@ -553,6 +572,7 @@ double pat::MultiElectron::noiseHOcal(const CaloTower &tower) const {
   const double theNoise_HO = 0.2;
   return theNoise_HO;
 }
+/*
 
 GlobalVector pat::MultiElectron::daughterCOM(int i, bool vertex) const {
   double betax = 0.;
@@ -735,3 +755,8 @@ std::vector<double> pat::MultiElectron::consistentPairMasses(bool vertex) const 
   return output;
 }
 */
+
+
+
+// http://stackoverflow.com/questions/25486033/c-class-template-specialization-without-having-to-reimplement-everything
+// static_assert(std::is_same<T, int>::value, "Works only with ints!");
