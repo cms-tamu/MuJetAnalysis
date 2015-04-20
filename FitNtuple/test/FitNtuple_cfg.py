@@ -27,7 +27,7 @@ process.OneGoodVertexFilter = cms.EDFilter("VertexSelector",
                                            filter = cms.bool(True),
                                            )
 
-process.load("MuJetAnalysis.LeptonJetProducer.MuJetProducer_cff")
+process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
 
 process.MuJetProducerTrackerMuons = process.MuJetProducer.clone()
 process.MuJetProducerTrackerMuons.muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch")

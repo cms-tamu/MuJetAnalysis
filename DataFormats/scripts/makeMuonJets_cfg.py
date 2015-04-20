@@ -181,7 +181,7 @@ else:
 
 process.MessageLogger = cms.Service("MessageLogger", destinations = cms.untracked.vstring("cout"), cout = cms.untracked.PSet(threshold = cms.untracked.string("ERROR")))
 
-process.load("AnalysisAlgos.LeptonJetProducer.MuJetProducer_cff")
+process.load("AnalysisAlgos.MuJetProducer.MuJetProducer_cff")
 process.MuJetProducer.muons = cms.InputTag("cleanPatMuonsTriggerMatch")
 
 process.load("AnalysisAlgos.MuJetPlusFakeMuon.MuJetPlusFakeMuon_cfi")
