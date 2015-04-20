@@ -75,7 +75,7 @@ process.MessageLogger = cms.Service("MessageLogger", destinations = cms.untracke
 process.load("Configuration/StandardSequences/FrontierConditions_GlobalTag_cff")
 process.GlobalTag.globaltag = "FT_53_V6_AN3::All"
 
-process.load("MuJetAnalysis.LeptonJetProducer.LeptonJetProducer_cff")
+process.load("MuJetAnalysis.LeptonJetProducer.MuJetProducer_cff")
 
 process.TrackerMuJetProducer05 = process.MuJetProducer.clone(
   maxMass = cms.double(5.),

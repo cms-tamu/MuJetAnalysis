@@ -23,7 +23,7 @@ process.MessageLogger = cms.Service("MessageLogger",
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 process.GlobalTag.globaltag = "MCRUN2_72_V3::All"
 
-process.load("MuJetAnalysis.LeptonJetProducer.LeptonJetProducer_cff")
+process.load("MuJetAnalysis.LeptonJetProducer.MuJetProducer_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cfi")
 
 process.p = cms.Path(

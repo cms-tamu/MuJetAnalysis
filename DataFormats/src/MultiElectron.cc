@@ -196,11 +196,6 @@ bool pat::MultiElectron::calculateVertex(const TransientTrackBuilder *transientT
 }
 
 
-// Calorimeter Isolation
-void pat::MultiElectron::calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone)
-{
-}
-
 // calculate isolation (performed by constructor if tracks, leptons, and caloTowers != NULL)
 // Track Isolation
 void pat::MultiElectron::calculateTrackIsolation(const reco::TrackCollection *tracks,

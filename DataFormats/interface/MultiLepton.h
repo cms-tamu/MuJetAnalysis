@@ -49,7 +49,7 @@ namespace pat {
     virtual bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder)=0;
 
     // Calorimeter Isolation
-    virtual void calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone)=0;
+    void calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone);
     
     //------------------------------------------------------------------------------
     // Return vertex results
@@ -309,6 +309,72 @@ namespace pat {
   }
 
   template <class LeptonType>
+  void MultiLepton<LeptonType>::calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone)
+  {
+    m_centralCaloIsolationCone = centralCone;
+    m_unionCaloIsolationCone   = unionCone;
+    m_centralECALIsolation     = 0.;
+    m_unionECALIsolation       = 0.;
+    m_centralHCALIsolation     = 0.;
+    m_unionHCALIsolation       = 0.;
+    
+    for (CaloTowerCollection::const_iterator caloTower = caloTowers->begin();  caloTower != caloTowers->end();  ++caloTower) {
+      // following http://cmslxr.fnal.gov/lxr/source/RecoMuon/MuonIsolation/plugins/CaloExtractorByAssociator.cc#269
+      // and http://cmssw.cvs.cern.ch/cgi-bin/cmssw.cgi/CMSSW/RecoMuon/MuonIsolationProducers/python/caloExtractorByAssociatorBlocks_cff.py?view=markup
+      // just the "TowersBlock" and the "Towers" else block
+      const double theThreshold_E  = 0.2;
+      const double theThreshold_H  = 0.5;
+      const double theThreshold_HO = 0.5;
+      
+      double ECALcontribution = 0.;
+      double HCALcontribution = 0.;
+      
+      double etecal = caloTower->emEt();
+      double eecal  = caloTower->emEnergy();
+      if (etecal > theThreshold_E  &&  eecal > 3.*noiseEcal(*caloTower)) {
+	ECALcontribution += etecal;
+      }
+      double ethcal = caloTower->hadEt();
+      double ehcal  = caloTower->hadEnergy();
+      if (ethcal > theThreshold_H  &&  ehcal > 3.*noiseHcal(*caloTower)) {
+	HCALcontribution += ethcal;
+      }
+      double ethocal = caloTower->outerEt();
+      double ehocal  = caloTower->outerEnergy();
+      if (ethocal > theThreshold_HO  &&  ehocal > 3.*noiseHOcal(*caloTower)) {
+	HCALcontribution += ethocal;
+      }
+      
+      bool inUnionCone = false;
+      for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+	double dphi = daughter(i)->phi() - caloTower->phi();
+	while (dphi > M_PI) dphi -= 2.*M_PI;
+	while (dphi < -M_PI) dphi += 2.*M_PI;
+	double deta = daughter(i)->eta() - caloTower->eta();
+	double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+	if (dR < unionCone) {
+	  inUnionCone = true;
+	  break;
+	}
+      }
+      if (inUnionCone) {
+	m_unionECALIsolation += ECALcontribution;
+	m_unionHCALIsolation += HCALcontribution;
+      }
+      
+      double dphi = phi() - caloTower->phi();
+      while (dphi > M_PI) dphi -= 2.*M_PI;
+      while (dphi < -M_PI) dphi += 2.*M_PI;
+      double deta = eta() - caloTower->eta();
+      double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+      if (dR < centralCone) {
+	m_centralECALIsolation += ECALcontribution;
+	m_centralHCALIsolation += HCALcontribution;
+      }
+    }
+  }
+
+  template <class LeptonType>
   double MultiLepton<LeptonType>::vertexLxy(GlobalPoint primaryVertex) const 
   {
     GlobalPoint  v = vertexPoint();
@@ -402,148 +468,6 @@ namespace pat {
       }
     }
     return max;
-  }
-
-  template <class LeptonType>
-  std::vector<std::pair<int,int> > pat::MultiLepton<LeptonType>::consistentPairs(bool vertex) const 
-  {
-    std::vector<int> positives, negatives;
-    for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
-      if (daughter(i)->charge() > 0) {
-	positives.push_back(i);
-      } else {
-	negatives.push_back(i);
-      }
-    }
-
-    std::vector<int> largerset, smallerset;
-    if (positives.size() > negatives.size()) {
-      largerset = positives;
-      smallerset = negatives;
-    } else {
-      largerset = negatives;
-      smallerset = positives;
-    }
-    std::vector<std::vector<int> > permutations;
-    std::vector<int> working;
-    buildPermutation(permutations, working, 0, largerset.size() - 1);
-
-    std::vector<int> bestPermutation;
-    double minMassDistance = -1.;
-    for (std::vector<std::vector<int> >::const_iterator permutation = permutations.begin();  permutation != permutations.end();  ++permutation) {
-      std::vector<double> masses;
-      unsigned int smallerset_index = 0;
-      for (std::vector<int>::const_iterator largerset_index = permutation->begin();  largerset_index != permutation->end();  ++largerset_index, ++smallerset_index) {
-	if (smallerset_index < smallerset.size()) {
-	  GlobalVector lepton1, lepton2;
-
-	  if (vertex) {
-	    lepton1 = vertexMomentum(largerset[*largerset_index]);
-	    lepton2 = vertexMomentum(smallerset[smallerset_index]);
-	  } else {
-	    reco::Candidate::Vector v1 = daughter(largerset[*largerset_index])->momentum();
-	    reco::Candidate::Vector v2 = daughter(smallerset[smallerset_index])->momentum();
-	    lepton1 = GlobalVector(v1.x(), v1.y(), v1.z());
-	    lepton2 = GlobalVector(v2.x(), v2.y(), v2.z());
-	  }
-        
-	  double lepton_mass    = daughter(largerset[*largerset_index])->mass();  // get the lepton mass from CMSSW
-	  double total_energy = sqrt(lepton1.mag2() + pow(lepton_mass, 2)) + sqrt(lepton2.mag2() + pow(lepton_mass, 2));
-	  double total_px     = lepton1.x() + lepton2.x();
-	  double total_py     = lepton1.y() + lepton2.y();
-	  double total_pz     = lepton1.z() + lepton2.z();
-	  double mass         = sqrt(pow(total_energy, 2) - pow(total_px, 2) - pow(total_py, 2) - pow(total_pz, 2));
-
-	  masses.push_back(mass);
-	}
-      }
-      double massDistance = 0.;
-      for (unsigned int i = 0;  i < masses.size();  i++) {
-	for (unsigned int j = i + 1;  j < masses.size();  j++) {
-	  massDistance += pow(masses[i] - masses[j], 2);
-	}
-      }
-
-      if (minMassDistance < 0.  ||  massDistance < minMassDistance) {
-	bestPermutation = *permutation;
-	minMassDistance = massDistance;
-      }
-    }
-
-    std::vector<std::pair<int,int> > output;
-    unsigned int smallerset_index = 0;
-    for (std::vector<int>::const_iterator largerset_index = bestPermutation.begin();  largerset_index != bestPermutation.end();  ++largerset_index, ++smallerset_index) {
-      if (smallerset_index < smallerset.size()) {
-	if (daughter(largerset[*largerset_index])->charge() > 0) {
-	  output.push_back(std::pair<int,int>(largerset[*largerset_index], smallerset[smallerset_index]));
-	} else {
-	  output.push_back(std::pair<int,int>(smallerset[smallerset_index], largerset[*largerset_index]));
-	}
-      }
-    }
-  
-    return output;
-  }
-
-  template <class LeptonType>
-  std::vector<double> pat::MultiLepton<LeptonType>::consistentPairMasses(bool vertex) const 
-  {
-    std::vector<std::pair<int,int> > pairIndicies = consistentPairs(vertex);
-    std::vector<double> output;
-    
-    for (std::vector<std::pair<int,int> >::const_iterator pairIndex = pairIndicies.begin();  pairIndex != pairIndicies.end();  ++pairIndex) {
-      GlobalVector lepton1, lepton2;
-
-      assert(daughter(pairIndex->first)->charge() > 0);
-      assert(daughter(pairIndex->second)->charge() < 0);
-
-      if (vertex) {
-	lepton1 = vertexMomentum(pairIndex->first);
-	lepton2 = vertexMomentum(pairIndex->second);
-      } else {
-	reco::Candidate::Vector v1 = daughter(pairIndex->first)->momentum();
-	reco::Candidate::Vector v2 = daughter(pairIndex->second)->momentum();
-	lepton1 = GlobalVector(v1.x(), v1.y(), v1.z());
-	lepton2 = GlobalVector(v2.x(), v2.y(), v2.z());
-      }
-      double lepton_mass = daughter(pairIndex->first)->mass();  // get the lepton mass from CMSSW
-      double total_energy = sqrt(lepton1.mag2() + pow(lepton_mass, 2)) + sqrt(lepton2.mag2() + pow(lepton_mass, 2));
-      double total_px = lepton1.x() + lepton2.x();
-      double total_py = lepton1.y() + lepton2.y();
-      double total_pz = lepton1.z() + lepton2.z();
-      double mass = sqrt(pow(total_energy, 2) - pow(total_px, 2) - pow(total_py, 2) - pow(total_pz, 2));
-      
-      output.push_back(mass);
-    }
-    
-    return output;
-  }
-
-  template <class LeptonType>
-  void MultiLepton<LeptonType>::buildPermutation(std::vector<std::vector<int> > &results, std::vector<int> working, int where, int value) const 
-  {
-    std::vector<int>::iterator iter = working.begin();
-    for (int i = 0;  i < where;  i++) ++iter;
-    working.insert(iter, value);
-
-    if (value - 1 >= 0) {
-      for (unsigned int i = 0;  i <= working.size();  i++) {
-	buildPermutation(results, working, i, value - 1);
-      }
-    } else {
-      results.push_back(working);
-    }
-  }
-
-  template <class LeptonType>
-  bool MultiLepton<LeptonType>::sameTrack(const reco::Track *one, const reco::Track *two) const 
-  {
-    return (fabs(one->px() - two->px()) < 1e-10  &&
-	    fabs(one->py() - two->py()) < 1e-10  &&
-	    fabs(one->pz() - two->pz()) < 1e-10  &&
-	    fabs(one->vx() - two->vx()) < 1e-10  &&
-	    fabs(one->vy() - two->vy()) < 1e-10  &&
-	    fabs(one->vz() - two->vz()) < 1e-10    );
   }
 
   template <class LeptonType>

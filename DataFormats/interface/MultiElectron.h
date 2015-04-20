@@ -1,14 +1,6 @@
 #ifndef MuJetAnalysis_DataFormats_MultiElectron_h
 #define MuJetAnalysis_DataFormats_MultiElectron_h
 
-/**
-  \class    pat::MultiElectron MultiElectron.h "MuJetAnalysis/DataFormats/interface/MultiElectron.h"
-  \brief    Analysis-level particle class
-
-   MultiElectron implements an analysis-level multi-electron class within the 'pat'
-   namespace.
-*/
-
 #include "DataFormats/PatCandidates/interface/Electron.h"
 #include "MuJetAnalysis/DataFormats/interface/MultiLepton.h"
 
@@ -67,9 +59,6 @@ namespace pat {
 
     /// calculate a vertex from the daughter leptons (performed by constructor if transientTrackBuilder != NULL)
     virtual bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder);
-
-    // Calorimeter Isolation
-    virtual void calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone);
 
     // calculate isolation (performed by constructor if tracks, electrons, and caloTowers != NULL)
     // Track Isolation
