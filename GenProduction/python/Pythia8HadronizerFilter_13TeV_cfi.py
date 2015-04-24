@@ -1,3 +1,4 @@
+## Pythia8 fragment for 13TeV collisions
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
