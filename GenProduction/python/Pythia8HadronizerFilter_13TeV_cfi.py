@@ -1,15 +1,9 @@
-## this is the template configuration for DarkSUSY production with Pythia8 provided by Vitaliano Ciulli
-
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
 from Configuration.Generator.Pythia8CUEP8M1Settings_cfi import *
 
-source = cms.Source("LHESource",
-    fileNames = cms.untracked.vstring('file:DarkSUSY_mH_125_mGammaD_0400_ctauExp_0_13TeV_madgraph452_bridge224_events80k.lhe')
-)
-
-generator = cms.EDFilter("Pythia8GeneratorFilter",
+generator = cms.EDFilter("Pythia8HadronizerFilter",
     pythiaHepMCVerbosity = cms.untracked.bool(False),
     maxEventsToPrint = cms.untracked.int32(0),
     pythiaPylistVerbosity = cms.untracked.int32(1),
@@ -19,6 +13,7 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
     PythiaParameters = cms.PSet(
         pythia8CommonSettingsBlock,
         pythia8CUEP8M1SettingsBlock,
+		processParameters = cms.vstring(),
         parameterSets = cms.vstring(
             'pythia8CommonSettings',
             'pythia8CUEP8M1Settings',
