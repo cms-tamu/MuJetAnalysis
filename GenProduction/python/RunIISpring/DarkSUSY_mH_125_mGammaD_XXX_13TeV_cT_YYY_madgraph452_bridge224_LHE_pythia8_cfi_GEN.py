@@ -1,8 +1,11 @@
-# Auto generated configuration file
-# using: 
-# Revision: 1.19 
-# Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: DarkSUSY_mH_125_mGammaD_0250_13TeV_madgraph452_bridge224_LHE_pythia8_cfi -s GEN --datatier GEN --conditions auto:run2_mc --magField 38T_PostLS1 --eventcontent RECOSIM --evt_type MuJetAnalysis/GenProduction/DarkSUSY_mH_125_mGammaD_0250_13TeV_madgraph452_bridge224_LHE_pythia8_cfi --fileout out_gen.root -n 10 --no_exec
+# Auto generated configuration file using: Revision: 1.19 Source:
+# /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v
+# with command line options:
+# DarkSUSY_mH_125_mGammaD_0250_13TeV_madgraph452_bridge224_LHE_pythia8_cfi
+# -s GEN --datatier GEN --conditions auto:run2_mc --magField
+# 38T_PostLS1 --eventcontent RAWSIM --evt_type
+# MuJetAnalysis/GenProduction/DarkSUSY_mH_125_mGammaD_0250_13TeV_madgraph452_bridge224_LHE_pythia8_cfi
+# --fileout out_gen.root -n 10 --no_exec
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
@@ -45,10 +48,10 @@ process.configurationMetadata = cms.untracked.PSet(
 
 # Output definition
 
-process.RECOSIMoutput = cms.OutputModule("PoolOutputModule",
+process.RAWSIMoutput = cms.OutputModule("PoolOutputModule",
     splitLevel = cms.untracked.int32(0),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
-    outputCommands = process.RECOSIMEventContent.outputCommands,
+    outputCommands = process.RAWSIMEventContent.outputCommands,
     fileName = cms.untracked.string('output.root'),
     dataset = cms.untracked.PSet(
         filterName = cms.untracked.string(''),
@@ -90,10 +93,10 @@ process.generator = cms.EDFilter("Pythia8HadronizerFilter",
 process.generation_step = cms.Path(process.pgen)
 process.genfiltersummary_step = cms.EndPath(process.genFilterSummary)
 process.endjob_step = cms.EndPath(process.endOfProcess)
-process.RECOSIMoutput_step = cms.EndPath(process.RECOSIMoutput)
+process.RAWSIMoutput_step = cms.EndPath(process.RAWSIMoutput)
 
 # Schedule definition
-process.schedule = cms.Schedule(process.generation_step,process.genfiltersummary_step,process.endjob_step,process.RECOSIMoutput_step)
+process.schedule = cms.Schedule(process.generation_step,process.genfiltersummary_step,process.endjob_step,process.RAWSIMoutput_step)
 # filter all path with the production filter sequence
 for path in process.paths:
     getattr(process,path)._seq = process.generator * getattr(process,path)._seq 
