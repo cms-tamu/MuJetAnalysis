@@ -1,0 +1,27 @@
+### GEN ###
+
+cmsDriver.py MuJetAnalysis/GenProduction/Pythia8HadronizerFilter_13TeV_cfi \
+-s GEN \
+--mc \
+--datatier GEN \
+--beamspot NominalCollision2015 \
+--conditions auto:run2_mc \
+--eventcontent RAWSIM \
+--python_filename DarkSUSY_mH_125_mGammaD_0250_ctauExp_0_13TeV_madgraph452_bridge224_LHE_pythia8_cfi_GEN.py \
+--filetype LHE \
+--filein file:DarkSUSY_mH_125_mGammaD_0250_13TeV_madgraph452_bridge224_events80k.lhe \
+--fileout out_gen.root \
+-n 10 \
+--no_exec
+
+cmsDriver.py MuJetAnalysis/GenProduction/Pythia8GeneratorFilter_13TeV_NMSSM_Hto2Ato4mu_mH_125_mA_2000_cfi.py \
+-s GEN \
+--mc \
+--datatier GEN \
+--beamspot NominalCollision2015 \
+--conditions auto:run2_mc \
+--eventcontent RECOSIM \
+--python_filename NMSSM_Hto2Ato4mu_mH_125_mA_2000_13TeV_pythia8_cfi_GEN.py \
+--fileout out_gen.root \
+-n 10 \
+--no_exec
