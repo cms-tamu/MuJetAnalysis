@@ -1,4 +1,6 @@
-### GEN ###
+## GEN ##
+
+### Dark SUSY ###
 
 cmsDriver.py MuJetAnalysis/GenProduction/Pythia8HadronizerFilter_13TeV_cfi \
 -s GEN \
@@ -14,14 +16,43 @@ cmsDriver.py MuJetAnalysis/GenProduction/Pythia8HadronizerFilter_13TeV_cfi \
 -n 10 \
 --no_exec
 
+### NMSSM ###
+
 cmsDriver.py MuJetAnalysis/GenProduction/Pythia8GeneratorFilter_13TeV_NMSSM_Hto2Ato4mu_mH_125_mA_2000_cfi.py \
 -s GEN \
 --mc \
 --datatier GEN \
 --beamspot NominalCollision2015 \
 --conditions auto:run2_mc \
---eventcontent RECOSIM \
+--eventcontent RAWSIM \
 --python_filename NMSSM_Hto2Ato4mu_mH_125_mA_2000_13TeV_pythia8_cfi_GEN.py \
 --fileout out_gen.root \
+-n 10 \
+--no_exec
+
+## SIM-DIGI-RAW ## 
+
+cmsDriver.py DisplacedMuJet_Run2_cfi \
+-s SIM,DIGI,L1,DIGI2RAW \
+--datatier SIM-DIGI-RAW \
+--conditions auto:run2_mc \
+--magField 38T_PostLS1 \
+--eventcontent RAWSIM \
+--customise=SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1,MuJetAnalysis/GenProduction/addPileup.addPileup \
+--pileup AVE_20_BX_25ns \
+--fileout out_raw.root \
+-n 10 \
+--no_exec
+
+## HLT-RECO ## 
+
+cmsDriver.py DisplacedMuJet_Run2_cfi \
+-s HLT,RAW2DIGI,L1Reco,RECO \
+--datatier RECO \
+--conditions auto:run2_mc \
+--magField 38T_PostLS1 \
+--eventcontent RECOSIM \
+--customise=SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 \
+--fileout out_reco.root \
 -n 10 \
 --no_exec
