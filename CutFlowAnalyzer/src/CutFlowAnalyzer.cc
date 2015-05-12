@@ -89,6 +89,15 @@
 //******************************************************************************
 bool PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2) { return (p1->pt() > p2->pt() ); }
 
+bool sameTrack(const reco::Track *one, const reco::Track *two) {
+  return (fabs(one->px() - two->px()) < 1e-10  &&
+	  fabs(one->py() - two->py()) < 1e-10  &&
+	  fabs(one->pz() - two->pz()) < 1e-10  &&
+	  fabs(one->vx() - two->vx()) < 1e-10  &&
+	  fabs(one->vy() - two->vy()) < 1e-10  &&
+	  fabs(one->vz() - two->vz()) < 1e-10);
+}
+
 //******************************************************************************
 // Auxiliary function: Calculate difference between two angles: -PI < phi < PI  
 //******************************************************************************
@@ -433,6 +442,12 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Float_t b_diMuonC_FittedVtx_vy;
   Float_t b_diMuonC_FittedVtx_vz;
   
+
+  Int_t b_diMuonC_m1_FittedVtx_hitpix;
+  Int_t b_diMuonC_m2_FittedVtx_hitpix;
+  Int_t b_diMuonF_m1_FittedVtx_hitpix;
+  Int_t b_diMuonF_m2_FittedVtx_hitpix;
+
   Float_t b_diMuonC_FittedVtx_Lxy;
   Float_t b_diMuonC_FittedVtx_L;
   Float_t b_diMuonC_FittedVtx_dz;
@@ -606,6 +621,11 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 {
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
+
+  b_diMuonC_m1_FittedVtx_hitpix=-1000;
+  b_diMuonC_m2_FittedVtx_hitpix=-1000;
+  b_diMuonF_m1_FittedVtx_hitpix=-1000;
+  b_diMuonF_m2_FittedVtx_hitpix=-1000;
   
   //****************************************************************************
   //                          EVENT LEVEL                                       
@@ -1521,6 +1541,27 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsDzOK_ConsistentVtx && b_isDiMuonHLTFired && b_is2DiMuonsMassOK_ConsistentVtx && b_is2DiMuonsIsoTkOK_ConsistentVtx ) m_events2DiMuonsIsoTkOK_ConsistentVtx++;
   
   
+  if ( b_is2DiMuonsFittedVtxOK ) {
+    for(uint32_t k=0;k<2;k++){
+      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+	if(sameTrack(&*track,&*(diMuonC->muon(k)->innerTrack()))){
+	  const reco::HitPattern& p = track->hitPattern();
+	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+	    if(k==0) b_diMuonC_m1_FittedVtx_hitpix = 1;
+	    if(k==1) b_diMuonC_m2_FittedVtx_hitpix = 1;
+	  }
+	}
+	if(sameTrack(&*track,&*(diMuonF->muon(k)->innerTrack()))){
+	  const reco::HitPattern& p = track->hitPattern();
+	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+	    if(k==0) b_diMuonF_m1_FittedVtx_hitpix = 1;
+	    if(k==1) b_diMuonF_m2_FittedVtx_hitpix = 1;
+	  }
+	}
+      }
+    }
+  }
+
   // Cut on primary vertex in event
   edm::Handle<reco::VertexCollection> primaryVertices;
   iEvent.getByLabel("offlinePrimaryVertices", primaryVertices);
@@ -1853,6 +1894,12 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonF_IsoTk_ConsistentVtx", &b_diMuonF_IsoTk_ConsistentVtx, "diMuonF_IsoTk_ConsistentVtx/F");
 //  m_ttree->Branch("diMuonC_IsoPF_ConsistentVtx", &b_diMuonC_IsoPF_ConsistentVtx, "diMuonC_IsoPF_ConsistentVtx/F");
 //  m_ttree->Branch("diMuonF_IsoPF_ConsistentVtx", &b_diMuonF_IsoPF_ConsistentVtx, "diMuonF_IsoPF_ConsistentVtx/F");
+
+  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix", &b_diMuonC_m1_FittedVtx_hitpix, "diMuonC_m1_FittedVtx_hitpix/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix", &b_diMuonC_m2_FittedVtx_hitpix, "diMuonC_m2_FittedVtx_hitpix/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix", &b_diMuonF_m1_FittedVtx_hitpix, "diMuonF_m1_FittedVtx_hitpix/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix", &b_diMuonF_m2_FittedVtx_hitpix, "diMuonF_m2_FittedVtx_hitpix/I");
+
   
   // RECO Level Selectors
   m_ttree->Branch("is1SelMu17",                     &b_is1SelMu17,                     "is1SelMu17/O");
