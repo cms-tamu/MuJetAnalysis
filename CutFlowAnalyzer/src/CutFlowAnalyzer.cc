@@ -622,7 +622,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
 
-  b_diMuonC_m1_FittedVtx_hitpix=-1000;
+    b_diMuonC_m1_FittedVtx_hitpix=-1000;
   b_diMuonC_m2_FittedVtx_hitpix=-1000;
   b_diMuonF_m1_FittedVtx_hitpix=-1000;
   b_diMuonF_m2_FittedVtx_hitpix=-1000;
