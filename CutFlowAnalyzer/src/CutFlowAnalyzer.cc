@@ -729,7 +729,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     }
   
     if ( genH.size() == 1 ) {
-      b_genH_m   = genH[0]->mass();
+       b_genH_m   = genH[0]->mass();
       b_genH_px  = genH[0]->px();
       b_genH_py  = genH[0]->py();
       b_genH_pz  = genH[0]->pz();
