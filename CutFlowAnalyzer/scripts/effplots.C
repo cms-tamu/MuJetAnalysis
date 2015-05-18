@@ -64,7 +64,7 @@ void effplots(){
   Float_t ev_is2DimMassOK2[40]={0.0};
 
 
-  Int_t ev_is2DimHitPix[40]={0.0};
+  Int_t ev_is2DimHitPix[40]={0};
 
   Float_t ev_2dimhit[40]={0.0};
   Float_t ev_2dimhit_allcut[40]={0.0};
