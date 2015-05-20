@@ -221,9 +221,16 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
   // m_chi2 = fittedVertex.totalChiSquared();
   // m_ndof = fittedVertex.degreesOfFreedom();
 
-  if( fittedVertex.isValid()){
+  if(fittedVertex.isValid()){
     setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
-    double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyx(), fittedVertex.error().cyy(), fittedVertex.error().czx(), fittedVertex.error().czy(), fittedVertex.error().czz() }; // YP: FIXME! Check if this definition is correct
+    double covarianceMatrixArray[6] = {
+      fittedVertex.error().cxx(), 
+      fittedVertex.error().cyx(), 
+      fittedVertex.error().cyy(), 
+      fittedVertex.error().czx(), 
+      fittedVertex.error().czy(), 
+      fittedVertex.error().czz() 
+    }; // YP: FIXME! Check if this definition is correct
     m_chi2 = fittedVertex.totalChiSquared();
     m_ndof = fittedVertex.degreesOfFreedom();
     m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
@@ -300,7 +307,8 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	double z_at_x_1 = muonTracks[0]->vz() + (muonTracks[0]->pz()*xscale_1);
 	
 	double euclid1 = sqrt( pow(current_x_bdy1, 2) + pow(y_at_x_1, 2));
-	
+
+	// FIXME: add parameters in this section!!!	
 	if (fabs(z_at_x_1) > 34.5) break;
 	//std::cout << "Euclidian distance: " << euclid1 << std::endl;
 	if (euclid1 > 4.4) break;
@@ -338,17 +346,9 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	}
       }
       
-      std::cout<<"  scan  vertex 1   "<<
-	"   vx   "<<newx1<<
-	"   vy   "<<newy1<<
-	"   vz   "<<newz1<<std::endl;
-      
-      std::cout<<"  scan  vertex 2   "<<
-	"   vx   "<<newx2<<
-	"   vy   "<<newy2<<
-	"   vz   "<<newz2<<std::endl;
-      
-      std::cout << "min: " << minSeparation << std::endl;
+      // std::cout<<"  scan  vertex 1   "<<"   vx   "<<newx1<<"   vy   "<<newy1<<"   vz   "<<newz1<<std::endl;      
+      // std::cout<<"  scan  vertex 2   "<<"   vx   "<<newx2<<"   vy   "<<newy2<<"   vz   "<<newz2<<std::endl;      
+      // std::cout << "min: " << minSeparation << std::endl;
       
       m_mindisttrack_scan = minSeparation;
       
@@ -373,10 +373,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     //     std::cout<<" minimim distance   "<<dca<<std::endl;
     
     
-    std::cout<<"  dca vertex   "<<
-      "   vx   "<<cxPt.x()<<
-      "   vy   "<<cxPt.y()<<
-      "   vz   "<<cxPt.z()<<std::endl;
+    // std::cout<<"  dca vertex   "<<"   vx   "<<cxPt.x()<<"   vy   "<<cxPt.y()<<"   vz   "<<cxPt.z()<<std::endl;
         
     setVertex(Point(m_vtx_x_scan,m_vtx_y_scan,m_vtx_z_scan));
     // setVertex(Point(cxPt.x(),cxPt.y(),cxPt.z()));
