@@ -49,8 +49,15 @@ namespace pat {
 	 /// default constructor
     MultiMuon() : pat::CompositeCandidate()
       , m_vertexValid(false)
+      , m_vertexValid_fitted(false)
+      , m_vertexValid_mindist(false)      
       , m_chi2(0.)
       , m_ndof(0.)
+      , m_mindisttrack(0.)
+      , m_mindisttrack_scan(0.)
+      , m_vtx_x_scan(0.)
+      , m_vtx_y_scan(0.)
+      , m_vtx_z_scan(0.)      
       , m_centralTrackIsolationCone(0.)
       , m_unionTrackIsolationCone(0.)
       , m_centralTrackThresholdPt(0.)
@@ -72,8 +79,15 @@ namespace pat {
 
     MultiMuon(double phi) : pat::CompositeCandidate()
       , m_vertexValid(false)
+      , m_vertexValid_fitted(false)
+      , m_vertexValid_mindist(false)      
       , m_chi2(0.)
       , m_ndof(0.)
+      , m_mindisttrack(0.)
+      , m_mindisttrack_scan(0.)
+      , m_vtx_x_scan(0.)
+      , m_vtx_y_scan(0.)
+      , m_vtx_z_scan(0.)      
       , m_centralTrackIsolationCone(0.)
       , m_unionTrackIsolationCone(0.)
       , m_centralTrackThresholdPt(0.)
@@ -175,11 +189,19 @@ namespace pat {
 // Return vertex results
 //------------------------------------------------------------------------------
     bool            vertexValid()                   const { return m_vertexValid; }
+    bool            vertexValid_fitted()            const { return m_vertexValid_fitted; }
+    bool            vertexValid_mindist()           const { return m_vertexValid_mindist; }    
     double          vertexChi2()                    const { checkVertex();  return m_chi2; }
     double          vertexNdof()                    const { checkVertex();  return m_ndof; }
+    double          mindist_track()                 const { checkVertex();  return m_mindisttrack; }
+    double          mindist_trackscan()             const { checkVertex();  return m_mindisttrack_scan; }
+    double          get_vtx_x_scan()                const { return m_vtx_x_scan; }
+    double          get_vtx_y_scan()                const { return m_vtx_y_scan; }
+    double          get_vtx_z_scan()                const { return m_vtx_z_scan; }
+    
     double          vertexNormalizedChi2()          const { checkVertex();  return (m_ndof > 0. ? m_chi2/m_ndof : 0.); }
     double          vertexProb()                    const { checkVertex();  return (m_ndof > 0. ? TMath::Prob(m_chi2, m_ndof) : 0.); }
-    CovarianceMatrix my_vertexCovariance()              const { checkVertex();  return m_covarianceMatrix; }
+    CovarianceMatrix my_vertexCovariance()            const { checkVertex();  return m_covarianceMatrix; }
     double          my_vertexCovariance(int i, int j) const { checkVertex();  return m_covarianceMatrix.At(i, j); }
     
     /// return position/momentum of each muon closest to vertex
@@ -384,9 +406,18 @@ namespace pat {
     void   buildPermutation(std::vector<std::vector<int> > &results, std::vector<int> working, int where, int value) const;
     
     bool   m_vertexValid;
+    bool   m_vertexValid_fitted;
+    bool   m_vertexValid_mindist;
+    
     void   checkVertex() const;
     double m_chi2;
     double m_ndof;
+    double m_mindisttrack;
+    double m_mindisttrack_scan;
+    double m_vtx_x_scan;
+    double m_vtx_y_scan;
+    double m_vtx_z_scan;
+
     CovarianceMatrix              m_covarianceMatrix;
     std::vector<GlobalPoint>      m_vertexPCA;
     std::vector<CovarianceMatrix> m_vertexPCACovarianceMatrix;

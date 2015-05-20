@@ -10,6 +10,9 @@
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/TransientTrack/interface/TransientTrack.h"
 #include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
+#include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
+#include "TrackingTools/PatternTools/interface/TwoTrackMinimumDistance.h"
+
 #else
 class TransientTrackBuilder {};
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
@@ -80,15 +83,23 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
     setGenParticle(*asGenParticle);
   }
 
-// Fitted vertex
+  // Fitted vertex
   m_vertexValid = false;
+  m_vertexValid_fitted = false;
+  m_vertexValid_mindist = false;
   m_chi2 = 0.;
   m_ndof = 0.;
+  m_mindisttrack=0.;
+  m_mindisttrack_scan=0.;
+  m_vtx_x_scan=0.;
+  m_vtx_y_scan=0.;
+  m_vtx_z_scan=0.;
+  
   if (transientTrackBuilder != NULL) {
     calculateVertex(transientTrackBuilder);
   }
 
-// Consistent vertex
+  // Consistent vertex
   m_consistentVtxValid = false;
   
   m_centralTrackIsolationCone = 0.;
@@ -132,8 +143,17 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
   if (aMultiMuon.genParticle() != NULL) setGenParticle(*(aMultiMuon.genParticle()));
 
   m_vertexValid = aMultiMuon.m_vertexValid;
+  m_vertexValid_fitted = aMultiMuon.m_vertexValid_fitted;
+  m_vertexValid_mindist = aMultiMuon.m_vertexValid_mindist;
   m_chi2 = aMultiMuon.m_chi2;
   m_ndof = aMultiMuon.m_ndof;
+  m_mindisttrack = aMultiMuon.m_mindisttrack;
+  m_mindisttrack = aMultiMuon.m_mindisttrack;
+  m_mindisttrack_scan = aMultiMuon.m_mindisttrack_scan;
+  m_vtx_x_scan = aMultiMuon.m_vtx_x_scan;
+  m_vtx_y_scan = aMultiMuon.m_vtx_y_scan;
+  m_vtx_z_scan = aMultiMuon.m_vtx_z_scan;
+
   m_covarianceMatrix = aMultiMuon.m_covarianceMatrix;
   for (unsigned int i = 0;  i < aMultiMuon.m_vertexPCA.size();  i++) {
     m_vertexPCA.push_back(aMultiMuon.m_vertexPCA[i]);
@@ -175,15 +195,18 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
   
   std::vector<reco::TransientTrack> tracksToVertex;
+  std::vector<const reco::Track*> muonTracks;
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
     if (muon(i) == NULL) {
       throw cms::Exception("MultiMuon") << "MultiMuons should only contain pat::Muons";
     }
     if (muon(i)->innerTrack().isAvailable()) {
       tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->innerTrack()));
+      muonTracks.push_back(&*muon(i)->innerTrack()); //&*track
     }
     else if (muon(i)->outerTrack().isAvailable()) {
       tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->outerTrack()));
+      muonTracks.push_back(&*muon(i)->outerTrack()); //&*track
     }
   }
 
@@ -192,18 +215,183 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
   KalmanVertexFitter vertexFitter;
   CachingVertex<5> fittedVertex = vertexFitter.vertex(tracksToVertex);
 
-  if (!fittedVertex.isValid()  ||  fittedVertex.totalChiSquared() < 0.) return false;
+  // if (!fittedVertex.isValid()  ||  fittedVertex.totalChiSquared() < 0.) return false;
 
-  m_vertexValid = true;
-  m_chi2 = fittedVertex.totalChiSquared();
-  m_ndof = fittedVertex.degreesOfFreedom();
+  // m_vertexValid = true;
+  // m_chi2 = fittedVertex.totalChiSquared();
+  // m_ndof = fittedVertex.degreesOfFreedom();
 
-  setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
+  if( fittedVertex.isValid()){
+    setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
+    double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyx(), fittedVertex.error().cyy(), fittedVertex.error().czx(), fittedVertex.error().czy(), fittedVertex.error().czz() }; // YP: FIXME! Check if this definition is correct
+    m_chi2 = fittedVertex.totalChiSquared();
+    m_ndof = fittedVertex.degreesOfFreedom();
+    m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
+    m_vertexValid_fitted = true;
+    
+    FreeTrajectoryState const & posState2 = tracksToVertex[0].impactPointTSCP().theState();
+    FreeTrajectoryState const & negState2 = tracksToVertex[1].impactPointTSCP().theState();
+    
+    TwoTrackMinimumDistance cApp2;
+    cApp2.calculate(posState2, negState2);
+    //    float dca2 = fabs( cApp2.distance() );
+    
+    //    m_mindisttrack = dca2;
+    
+    //     std::cout<<" Fitted Vtx   "<<
+    //       "  vx    "<<fittedVertex.position().x()<<
+    //       "  vy    "<<fittedVertex.position().y()<<
+    //      "  vz    "<<fittedVertex.position().z()<<std::endl;    
+  }
+  else if( !fittedVertex.isValid()){
+    
+    FreeTrajectoryState const & posState = tracksToVertex[0].impactPointTSCP().theState();
+    FreeTrajectoryState const & negState = tracksToVertex[1].impactPointTSCP().theState();
+    
+    //    ClosestApproachInRPhi cApp;
+    TwoTrackMinimumDistance cApp;
+    cApp.calculate(posState, negState);
+    //    if( cApp.status() )     m_vertexValid_mindist = true;
+    float dca = fabs( cApp.distance() );
+    GlobalPoint cxPt = cApp.crossingPoint();
+    
+    m_mindisttrack = dca;
+    
+    if (muonTracks.size() > 0){
+      
+      double newx1 = 0.0;
+      double newy1 = 0.0;
+      double newz1 = 0.0;
+      
+      double newx2 = 0.0;
+      double newy2 = 0.0;
+      double newz2 = 0.0;
+      
+      float minSeparation = std::numeric_limits<float>::max();
+      
+      // GlobalPoint v1(muonTracks[0]->vx(), muonTracks[0]->vy(), muonTracks[0]->vz());
+      // GlobalPoint v2(muonTracks[1]->vx(), muonTracks[1]->vy(), muonTracks[1]->vz());
+      
+      // GlobalVector p1(muonTracks[0]->px(), muonTracks[0]->py(), muonTracks[0]->pz());
+      // GlobalVector p2(muonTracks[1]->px(), muonTracks[1]->py(), muonTracks[1]->pz());
+      
+      // Distance between tracks at x = 4.4 cm
+      // double xy_boundary_x = 4.4;
+      // double xy_boundary_y = 4.4;
+      
+      double current_x_bdy1 = 0.0;
+      double current_x_bdy2 = 0.0;
+      
+      // setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
+      for (int i = 0; i < 4400; ++i){
+	if (muonTracks[0]->px() < 0){
+	  current_x_bdy1 = -(i/(1000*1.0)) + muonTracks[0]->vx();
+	}
+	if (muonTracks[0]->px() > 0){
+	  current_x_bdy1 = (i/(1000*1.0)) + muonTracks[0]->vx();
+	}
 
-//   double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyy(), fittedVertex.error().czz(), fittedVertex.error().cyx(), fittedVertex.error().czx(), fittedVertex.error().czy()};
-  double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyx(), fittedVertex.error().cyy(), fittedVertex.error().czx(), fittedVertex.error().czy(), fittedVertex.error().czz() }; // YP: FIXME! Check if this definition is correct
-  m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
-
+	//   double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyy(), fittedVertex.error().czz(), fittedVertex.error().cyx(), fittedVertex.error().czx(), fittedVertex.error().czy()};
+	// double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyx(), fittedVertex.error().cyy(), fittedVertex.error().czx(), fittedVertex.error().czy(), fittedVertex.error().czz() }; // YP: FIXME! Check if this definition is correct
+	// m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
+	
+	double xscale_1 = (current_x_bdy1 - muonTracks[0]->vx())  / muonTracks[0]->px();
+	double y_at_x_1 = muonTracks[0]->vy() + (muonTracks[0]->py()*xscale_1);
+	double z_at_x_1 = muonTracks[0]->vz() + (muonTracks[0]->pz()*xscale_1);
+	
+	double euclid1 = sqrt( pow(current_x_bdy1, 2) + pow(y_at_x_1, 2));
+	
+	if (fabs(z_at_x_1) > 34.5) break;
+	//std::cout << "Euclidian distance: " << euclid1 << std::endl;
+	if (euclid1 > 4.4) break;
+	
+	for (int j = 0; j < 4400; ++j){
+	  if (muonTracks[1]->px() < 0){
+	    current_x_bdy2 = -(j/(1000*1.0)) + muonTracks[1]->vx();
+	  }
+	  if (muonTracks[1]->px() > 0){
+	    current_x_bdy2 = (j/(1000*1.0)) + muonTracks[1]->vx();
+	  }
+	  
+	  double xscale_2 = (current_x_bdy2 - muonTracks[1]->vx()) / muonTracks[1]->px();
+	  double y_at_x_2 = muonTracks[1]->vy() + (muonTracks[1]->py()*xscale_2);
+	  double z_at_x_2 = muonTracks[1]->vz() + (muonTracks[1]->pz()*xscale_2);
+	  double euclid2 = sqrt( pow(current_x_bdy2, 2) + pow(y_at_x_2, 2));
+	  
+	  if (euclid2 > 4.4) continue;
+	  if (fabs(z_at_x_2) > 34.5) continue;
+	  
+	  float separation = sqrt( pow(current_x_bdy2 - current_x_bdy1 , 2) + pow(y_at_x_2 - y_at_x_1, 2) + pow(z_at_x_2 - z_at_x_1, 2));
+	  
+	  if (separation < minSeparation){
+	    minSeparation = separation;
+	    // std::cout << "new xyz1 " << i << ": " << current_x_bdy1 << ", " <<  y_at_x_1 << ", " << z_at_x_1 << std::endl;
+	    // std::cout << "new xyz2 " << j << ": " << current_x_bdy2 << ", " <<  y_at_x_2 << ", " << z_at_x_2 << std::endl;
+	    newx1 = current_x_bdy1;
+	    newy1 = y_at_x_1;
+	    newz1 = z_at_x_1;
+	    newx2 = current_x_bdy2;
+	    newy2 = y_at_x_2;
+	    newz2 = z_at_x_2;
+	    // std::cout << "separation: " << separation << ", min: " << minSeparation << std::endl;
+	  }
+	}
+      }
+      
+      std::cout<<"  scan  vertex 1   "<<
+	"   vx   "<<newx1<<
+	"   vy   "<<newy1<<
+	"   vz   "<<newz1<<std::endl;
+      
+      std::cout<<"  scan  vertex 2   "<<
+	"   vx   "<<newx2<<
+	"   vy   "<<newy2<<
+	"   vz   "<<newz2<<std::endl;
+      
+      std::cout << "min: " << minSeparation << std::endl;
+      
+      m_mindisttrack_scan = minSeparation;
+      
+      m_vtx_x_scan = (newx1+newx2)/2.;
+      m_vtx_y_scan = (newy1+newy2)/2.;
+      m_vtx_z_scan = (newz1+newz2)/2.;
+    }
+    
+    // for (std::vector<const reco::Track*>::const_iterator MuonIter = muonTracks.begin(); MuonIter != muonTracks.end(); ++MuonIter){
+    // }
+    
+    // Global3DPoint test_vtx(2.2,0,0);
+    
+    // double test_dxy1 = (*MuonIter)->dxy(test_vtx);
+    // MuonIter++;
+    // double test_dxy2 = (*MuonIter)->dxy(test_vtx);
+    
+    
+    // std::cout << "test_dxy1: " << test_dxy1 << std::endl;
+    // std::cout << "test_dxy2: " << test_dxy2 << std::endl;
+    
+    //     std::cout<<" minimim distance   "<<dca<<std::endl;
+    
+    
+    std::cout<<"  dca vertex   "<<
+      "   vx   "<<cxPt.x()<<
+      "   vy   "<<cxPt.y()<<
+      "   vz   "<<cxPt.z()<<std::endl;
+        
+    setVertex(Point(m_vtx_x_scan,m_vtx_y_scan,m_vtx_z_scan));
+    // setVertex(Point(cxPt.x(),cxPt.y(),cxPt.z()));
+    
+    //    GlobalError error = TSCTP.theState().cartesianError().position();    
+    //    double covarianceMatrixArray[6] = {error().cxx(), error().cyx(), error().cyy(), error().czx(), error().czy(), error().czz() }; // YP: FIXME! Check if this definition is correct
+    
+    if( m_mindisttrack_scan < 0.05 ) m_vertexValid_mindist = true;    
+  }
+  
+  
+  if(m_vertexValid_fitted || m_vertexValid_mindist) m_vertexValid = true;
+  else{ return false;}
+  
+  
   m_vertexPCA.clear();
   m_vertexPCACovarianceMatrix.clear();
   m_vertexP4.clear();
@@ -221,6 +409,37 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     GlobalVector momentum = TSCTP.momentum();
     m_vertexP4.push_back( LorentzVector( momentum.x(), momentum.y(), momentum.z(), sqrt( momentum.mag2() + daughter(i)->mass()*daughter(i)->mass() ) ) );
   }
+
+  //   if (!fittedVertex.isValid()  ||  fittedVertex.totalChiSquared() < 0.) return false;
+
+  //   m_vertexValid = true;
+  //   m_chi2 = fittedVertex.totalChiSquared();
+  //   m_ndof = fittedVertex.degreesOfFreedom();
+  
+  //    setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
+  
+  // //   double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyy(), fittedVertex.error().czz(), fittedVertex.error().cyx(), fittedVertex.error().czx(), fittedVertex.error().czy()};
+  //   double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyx(), fittedVertex.error().cyy(), fittedVertex.error().czx(), fittedVertex.error().czy(), fittedVertex.error().czz() }; // YP: FIXME! Check if this definition is correct
+  //   m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
+  
+  //   m_vertexPCA.clear();
+  //   m_vertexPCACovarianceMatrix.clear();
+  //   m_vertexP4.clear();
+  //   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
+  //     TrajectoryStateClosestToPoint TSCTP = tracksToVertex[i].trajectoryStateClosestToPoint(vertexPoint());
+  
+  //     m_vertexPCA.push_back(TSCTP.position());
+
+  //     GlobalError error = TSCTP.theState().cartesianError().position();    
+  // //    double covarianceMatrixArray2[6] = {error.cxx(), error.cyy(), error.czz(), error.cyx(), error.czx(), error.czy()};
+  //     double covarianceMatrixArray2[6] = {error.cxx(), error.cyx(), error.cyy(), error.czx(), error.czy(), error.czz()}; // YP: FIXME! Check if this definition is correct
+  //     CovarianceMatrix covarianceMatrix2 = CovarianceMatrix(covarianceMatrixArray2, 6);
+  //     m_vertexPCACovarianceMatrix.push_back(covarianceMatrix2);
+  
+  //     GlobalVector momentum = TSCTP.momentum();
+  //     m_vertexP4.push_back( LorentzVector( momentum.x(), momentum.y(), momentum.z(), sqrt( momentum.mag2() + daughter(i)->mass()*daughter(i)->mass() ) ) );
+  //}
+  
   
    return true;
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
