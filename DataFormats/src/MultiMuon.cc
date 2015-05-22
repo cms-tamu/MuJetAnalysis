@@ -260,7 +260,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     cApp.calculate(posState, negState);
     //    if( cApp.status() )     m_vertexValid_mindist = true;
     float dca = fabs( cApp.distance() );
-    GlobalPoint cxPt = cApp.crossingPoint();
+    // GlobalPoint cxPt = cApp.crossingPoint(); -- not used
     
     m_mindisttrack = dca;
     
