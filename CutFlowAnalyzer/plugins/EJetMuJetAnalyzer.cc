@@ -1,41 +1,15 @@
-// -*- C++ -*-
-//
-// Package:    CutFlowAnalyzer
-// Class:      CutFlowAnalyzer
-// 
-/**\class CutFlowAnalyzer CutFlowAnalyzer.cc MuJetAnalysis/CutFlowAnalyzer/src/CutFlowAnalyzer.cc
-
- Description: [one line class summary]
-
- Implementation:
-     [Notes on implementation]
-*/
-//
-// Original Author:  Yuriy Pakhotin
-//         Created:  Tue Feb 19 18:51:12 CST 2013
-// $Id: CutFlowAnalyzer.cc,v 1.14 2013/08/04 22:28:44 pakhotin Exp $
-//
-//
-
-
 // system include files
 #include <memory>
 
-
 // user include files
-#include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-
+#include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/Event.h"
+#include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/MakerMacros.h"
-
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-
-// user include files
-#include "TTree.h"
-#include "TRandom3.h"
-#include "TMath.h"
-
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "FWCore/Utilities/interface/InputTag.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/DetId/interface/DetId.h"
@@ -55,14 +29,6 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
-#include "FWCore/Framework/interface/EDAnalyzer.h"
-#include "FWCore/Framework/interface/ESHandle.h"
-#include "FWCore/Framework/interface/Event.h"
-#include "FWCore/Framework/interface/Frameworkfwd.h"
-#include "FWCore/Framework/interface/MakerMacros.h"
-#include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include "FWCore/ServiceRegistry/interface/Service.h"
-#include "FWCore/Utilities/interface/InputTag.h"
 #include "Geometry/CommonDetUnit/interface/GlobalTrackingGeometry.h"
 #include "Geometry/CommonTopologies/interface/PixelTopology.h"
 #include "Geometry/Records/interface/GlobalTrackingGeometryRecord.h"
@@ -82,64 +48,22 @@
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
-#include "MuJetAnalysis/AnalysisTools/src/ConsistentVertexesCalculator.cc"
+#include "MuJetAnalysis/CutFlowAnalyzer/interface/Helpers.h"
 
-//******************************************************************************
-//              Auxiliary function: Order objects by pT                         
-//******************************************************************************
-bool PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2) { return (p1->pt() > p2->pt() ); }
+// user include files
+#include "TTree.h"
+#include "TRandom3.h"
+#include "TMath.h"
 
-bool sameTrack(const reco::Track *one, const reco::Track *two) {
-  return (fabs(one->px() - two->px()) < 1e-10  &&
-	  fabs(one->py() - two->py()) < 1e-10  &&
-	  fabs(one->pz() - two->pz()) < 1e-10  &&
-	  fabs(one->vx() - two->vx()) < 1e-10  &&
-	  fabs(one->vy() - two->vy()) < 1e-10  &&
-	  fabs(one->vz() - two->vz()) < 1e-10);
-}
-
-//******************************************************************************
-// Auxiliary function: Calculate difference between two angles: -PI < phi < PI  
-//******************************************************************************
-double My_dPhi (double phi1, double phi2) {
-  double dPhi = phi1 - phi2;
-  if (dPhi >  M_PI) dPhi -= 2.*M_PI;
-  if (dPhi < -M_PI) dPhi += 2.*M_PI;
-  return dPhi;
-}
-
-// Loose ID for PF Muons
-bool isPFMuonLoose (const reco::Muon* mu) {
-  bool isMoonLoose = false;
-  if (    fabs(mu->eta()) < 2.4
-       && ( mu->isTrackerMuon() || mu->isGlobalMuon() )
-  ) {
-    isMoonLoose = true;
-  }
-  return isMoonLoose;
-}
-
-// Private ID for Muons
-bool isTrackerMuonPrivateID (const reco::Muon* mu) {
-  bool isTrackerMuonPrivateID = false;
-  if (    fabs(mu->eta()) < 2.4
-       && mu->isTrackerMuon()
-       && mu->numberOfMatches(reco::Muon::SegmentAndTrackArbitration) >= 2
-       && mu->innerTrack()->numberOfValidHits() >= 8
-       && mu->innerTrack()->normalizedChi2() < 4. ) {
-    isTrackerMuonPrivateID = true;
-  }
-  return isTrackerMuonPrivateID;
-}
 
 //******************************************************************************
 //                           Class declaration                                  
 //******************************************************************************
 
-class CutFlowAnalyzer : public edm::EDAnalyzer {
+class EJetMuJetAnalyzer : public edm::EDAnalyzer {
   public:
-    explicit CutFlowAnalyzer(const edm::ParameterSet&);
-    ~CutFlowAnalyzer();
+    explicit EJetMuJetAnalyzer(const edm::ParameterSet&);
+    ~EJetMuJetAnalyzer();
 
     static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
@@ -520,7 +444,7 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
 //
 // constructors and destructor
 //
-CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
+EJetMuJetAnalyzer::EJetMuJetAnalyzer(const edm::ParameterSet& iConfig)
 
 {
   //****************************************************************************
@@ -603,7 +527,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
 }
 
 
-CutFlowAnalyzer::~CutFlowAnalyzer()
+EJetMuJetAnalyzer::~EJetMuJetAnalyzer()
 {
  
    // do anything here that needs to be done at desctruction time
@@ -617,7 +541,7 @@ CutFlowAnalyzer::~CutFlowAnalyzer()
 
 // ------------ method called for each event  ------------
 void
-CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
@@ -744,7 +668,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   
     if ( genA_unsorted.size() >= 2 ) {
       // Sort genA by pT (leading pT first)
-      std::sort (genA_unsorted.begin(), genA_unsorted.end(), PtOrder);
+      std::sort (genA_unsorted.begin(), genA_unsorted.end(), tamu::helpers::PtOrder);
       
       // Remove duplicates from genA
       //    Float_t A_pT = genA_unsorted[0]->pt();
@@ -832,8 +756,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   
     b_isGenALxyOK = false;
     if ( genMuonGroups.size() == 2 && genMuonGroups[0].size() == 2 && genMuonGroups[1].size() == 2 ) {
-      std::sort( genMuonGroups[0].begin(), genMuonGroups[0].end(), PtOrder );
-      std::sort( genMuonGroups[1].begin(), genMuonGroups[1].end(), PtOrder );
+      std::sort( genMuonGroups[0].begin(), genMuonGroups[0].end(), tamu::helpers::PtOrder );
+      std::sort( genMuonGroups[1].begin(), genMuonGroups[1].end(), tamu::helpers::PtOrder );
     
       b_genA0Mu0_px = genMuonGroups[0][0]->px();
       b_genA0Mu1_px = genMuonGroups[0][1]->px();
@@ -914,8 +838,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     
       b_genA0Mu_dEta = genMuonGroups[0][0]->eta() - genMuonGroups[0][1]->eta();
       b_genA1Mu_dEta = genMuonGroups[1][0]->eta() - genMuonGroups[1][1]->eta();
-      b_genA0Mu_dPhi = My_dPhi( genMuonGroups[0][0]->phi(), genMuonGroups[0][1]->phi() );
-      b_genA1Mu_dPhi = My_dPhi( genMuonGroups[1][0]->phi(), genMuonGroups[1][1]->phi() );
+      b_genA0Mu_dPhi = tamu::helpers::My_dPhi( genMuonGroups[0][0]->phi(), genMuonGroups[0][1]->phi() );
+      b_genA1Mu_dPhi = tamu::helpers::My_dPhi( genMuonGroups[1][0]->phi(), genMuonGroups[1][1]->phi() );
       b_genA0Mu_dR   = sqrt(b_genA0Mu_dEta*b_genA0Mu_dEta + b_genA0Mu_dPhi*b_genA0Mu_dPhi);
       b_genA1Mu_dR   = sqrt(b_genA1Mu_dEta*b_genA1Mu_dEta + b_genA1Mu_dPhi*b_genA1Mu_dPhi);
     } else {
@@ -925,7 +849,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     if ( b_isGenALxyOK ) m_eventsGenALxyOK++;
   
     // Sort genMuons by pT (leading pT first)
-    if ( genMuons.size() > 1 ) std::sort( genMuons.begin(), genMuons.end(), PtOrder );
+    if ( genMuons.size() > 1 ) std::sort( genMuons.begin(), genMuons.end(), tamu::helpers::PtOrder );
   
     b_is4GenMu = false;
 
@@ -1049,8 +973,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   std::vector<const reco::Muon*> selMuons17;
   
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
-    if ( isPFMuonLoose( &(*iMuon) ) ) {
-//    if ( isTrackerMuonPrivateID( &(*iMuon) ) ) {
+    if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
+//    if ( tamu::helpers::isTrackerMuonPrivateID( &(*iMuon) ) ) {
       selMuons.push_back( &(*iMuon) );
       if ( iMuon->pt() > m_threshold_Mu8_pT ) {
         selMuons8.push_back( &(*iMuon) );
@@ -1427,7 +1351,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         if (    diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(0)->innerTrack()) )
              || diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(1)->innerTrack()) ) ) trackIsMuon = true;
         if ( trackIsMuon == false ) {
-          double dPhi = My_dPhi( diMuonTmp->vertexMomentum().phi(), track->phi() );
+          double dPhi = tamu::helpers::My_dPhi( diMuonTmp->vertexMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->vertexMomentum().eta() - track->eta();
           double dR   = sqrt( dPhi*dPhi + dEta*dEta ); 
           double dz   = diMuonTmp->vertexDz(beamSpot->position()) - track->dz(beamSpot->position());
@@ -1440,7 +1364,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       }
 //      for (reco::PFCandidateCollection::const_iterator pfCand = pfCandidates->begin(); pfCand != pfCandidates->end(); ++pfCand) {
 //        if ( pfCand->particleId() == reco::PFCandidate::h ) {
-//          double dPhi = My_dPhi( diMuonTmp->phi(), pfCand->phi() );
+//          double dPhi = tamu::helpers::My_dPhi( diMuonTmp->phi(), pfCand->phi() );
 //          double dEta = diMuonTmp->eta() - pfCand->eta();
 //          double dR   = sqrt( dPhi*dPhi + dEta*dEta );
 ////          if ( dR < 0.4 && pfCand->pt() > 0.5 ) {
@@ -1493,7 +1417,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         if (    diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(0)->innerTrack()) )
              || diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(1)->innerTrack()) ) ) trackIsMuon = true;
         if ( trackIsMuon == false ) {
-          double dPhi = My_dPhi( diMuonTmp->consistentVtxMomentum().phi(), track->phi() );
+          double dPhi = tamu::helpers::My_dPhi( diMuonTmp->consistentVtxMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->consistentVtxMomentum().eta() - track->eta();
           double dR   = sqrt( dPhi*dPhi + dEta*dEta ); 
           double dz   = diMuonTmp->consistentVtxDz(beamSpotPosition) - track->dz(beamSpot->position());
@@ -1506,7 +1430,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       }
 //      for (reco::PFCandidateCollection::const_iterator pfCand = pfCandidates->begin(); pfCand != pfCandidates->end(); ++pfCand) {
 //        if ( pfCand->particleId() == reco::PFCandidate::h ) {
-//          double dPhi = My_dPhi( diMuonTmp->phi(), pfCand->phi() );
+//          double dPhi = tamu::helpers::My_dPhi( diMuonTmp->phi(), pfCand->phi() );
 //          double dEta = diMuonTmp->eta() - pfCand->eta();
 //          double dR   = sqrt( dPhi*dPhi + dEta*dEta );
 ////          if ( dR < 0.4 && pfCand->pt() > 0.5 ) {
@@ -1544,14 +1468,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( b_is2DiMuonsFittedVtxOK ) {
     for(uint32_t k=0;k<2;k++){
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-	if(sameTrack(&*track,&*(diMuonC->muon(k)->innerTrack()))){
+	if(tamu::helpers::sameTrack(&*track,&*(diMuonC->muon(k)->innerTrack()))){
 	  const reco::HitPattern& p = track->hitPattern();
 	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
 	    if(k==0) b_diMuonC_m1_FittedVtx_hitpix = 1;
 	    if(k==1) b_diMuonC_m2_FittedVtx_hitpix = 1;
 	  }
 	}
-	if(sameTrack(&*track,&*(diMuonF->muon(k)->innerTrack()))){
+	if(tamu::helpers::sameTrack(&*track,&*(diMuonF->muon(k)->innerTrack()))){
 	  const reco::HitPattern& p = track->hitPattern();
 	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
 	    if(k==0) b_diMuonF_m1_FittedVtx_hitpix = 1;
@@ -1659,7 +1583,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
 // ------------ method called once each job just before starting event loop  ------------
 void 
-CutFlowAnalyzer::beginJob() {
+EJetMuJetAnalyzer::beginJob() {
   std::cout << "BEGIN JOB" << std::endl;
   
   edm::Service<TFileService> tFileService;
@@ -1928,7 +1852,7 @@ CutFlowAnalyzer::beginJob() {
 
 // ------------ method called once each job just after ending the event loop  ------------
 void 
-CutFlowAnalyzer::endJob() 
+EJetMuJetAnalyzer::endJob() 
 {
   std::cout << "END JOB" << std::endl;
   
@@ -2024,31 +1948,31 @@ CutFlowAnalyzer::endJob()
 
 // ------------ method called when starting to processes a run  ------------
 void 
-CutFlowAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
+EJetMuJetAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when ending the processing of a run  ------------
 void 
-CutFlowAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
+EJetMuJetAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when starting to processes a luminosity block  ------------
 void 
-CutFlowAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+EJetMuJetAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when ending the processing of a luminosity block  ------------
 void 
-CutFlowAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+EJetMuJetAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
-CutFlowAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+EJetMuJetAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -2057,4 +1981,4 @@ CutFlowAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) 
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(CutFlowAnalyzer);
+DEFINE_FWK_MODULE(EJetMuJetAnalyzer);
