@@ -158,26 +158,45 @@ class EJetMuJetAnalyzer : public edm::EDAnalyzer {
   Float_t b_genMu3_phi;
   
   // GEN Level Counters: number of events with ...
-  // Int_t m_events4GenMu;    // ... with 4 gen muons
-  // Int_t m_events1GenMu17;  // ... with 1 gen muon:  pT > 17 GeV, |eta| < 0.9
-  // Int_t m_events2GenMu8;   // ... with 2 gen muons: pT > 8 GeV,  |eta| < 2.4
-  // Int_t m_events3GenMu8;   // ... with 3 gen muons: pT > 8 GeV,  |eta| < 2.4
-  // Int_t m_events4GenMu8;   // ... with 4 gen muons: pT > 8 GeV,  |eta| < 2.4
-  Int_t m_eventsGenALxyOK; // ... with both A bosons decay inside Lxy < 4 cm
-  
+  Int_t m_events4GenMu;    // ... with 4 gen muons
   Int_t m_events2GenMu2GenEle;
-  Int_t m_events1GenLep17; // electron or muon
-  Int_t m_events1GenMu8;
-  Int_t m_events2GenMu8;
-  Int_t m_events1GenEle8;
-  Int_t m_events2GenEle8;
+  Int_t m_events4GenEle;
+  
+  Int_t m_events1GenMu17;  // ... with 1 gen muon:  pT > 17 GeV, |eta| < 0.9
+  Int_t m_events1GenMu8;   // ... with 1 gen muons: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events2GenMu8;   // ... with 2 gen muons: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events3GenMu8;   // ... with 3 gen muons: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events4GenMu8;   // ... with 4 gen muons: pT > 8 GeV,  |eta| < 2.4
+
+  Int_t m_events1GenEle17;  // ... with 1 gen electron:  pT > 17 GeV, |eta| < 0.9
+  Int_t m_events1GenEle8;   // ... with 1 gen electrons: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events2GenEle8;   // ... with 2 gen electrons: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events3GenEle8;   // ... with 3 gen electrons: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events4GenEle8;   // ... with 4 gen electrons: pT > 8 GeV,  |eta| < 2.4
+  
+  Int_t m_events1GenLep17;  // ... with 1 gen ele/mu:  pT > 17 GeV, |eta| < 0.9
+  Int_t m_events1GenLep8;   // ... with 1 gen ele/mu: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events2GenLep8;   // ... with 2 gen ele/mu: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events3GenLep8;   // ... with 3 gen ele/mu: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events4GenLep8;   // ... with 4 gen ele/mu: pT > 8 GeV,  |eta| < 2.4
+
+  Int_t m_eventsGenALxyOK; // ... with both A bosons decay inside Lxy < 4 cm
 
   // GEN Level Selectors
   Bool_t b_is4GenMu;
+  Bool_t b_is2GenMu2GenEle;
+  Bool_t b_is4GenEle;
+
   Bool_t b_is1GenMu17;
   Bool_t b_is2GenMu8;
   Bool_t b_is3GenMu8;
   Bool_t b_is4GenMu8;
+
+  Bool_t b_is1GenEle17;
+  Bool_t b_is2GenEle8;
+  Bool_t b_is3GenEle8;
+  Bool_t b_is4GenEle8;
+
   Bool_t b_isGenALxyOK;
   
   // Bosons
@@ -565,7 +584,7 @@ void
 EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   using namespace edm;
-  //  double eq = 0.000001; // small number used below to compare variables
+  double eq = 0.000001; // small number used below to compare variables
 
   b_diMuonC_m1_FittedVtx_hitpix=-1000;
   b_diMuonC_m2_FittedVtx_hitpix=-1000;
@@ -586,10 +605,10 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   b_event = iEvent.id().event();
   if ( m_debug > 10 ) {
     cout << " Event info: "
-              << " run "   << b_run
-              << " lumi "  << b_lumi
-              << " event " << b_event
-              << endl;
+	 << " run "   << b_run
+	 << " lumi "  << b_lumi
+	 << " event " << b_event
+	 << endl;
   }
 
   // Beam spot info
@@ -600,10 +619,10 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   b_beamSpot_z = beamSpot->position().z();
   if ( m_debug > 10 ) {
     cout << " Beam spot "
-              << " x " << b_beamSpot_x
-              << " y " << b_beamSpot_y
-              << " z " << b_beamSpot_z
-              << endl;
+	 << " x " << b_beamSpot_x
+	 << " y " << b_beamSpot_y
+	 << " z " << b_beamSpot_z
+	 << endl;
   }
   
   GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
@@ -633,7 +652,7 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     for(auto iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
       counterGenParticle++;
       if ( m_debug > 50 ) cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() 
-				    << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << endl;
+       			       << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << endl;
       // Check if gen particle is muon (pdgId = +/-13) and stable (status = 1)
       if ( fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1 ) {
 	// Mother of the muon can be muon. Find the last muon in this chain: genMuonCand
@@ -718,13 +737,13 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       b_genH_vy  = genH[0]->vy() - b_beamSpot_y;
       b_genH_vz  = genH[0]->vz() - b_beamSpot_z;
     } else {
-      //    cout << "WARNING! genH.size() != 1" << endl;
+      cout << "WARNING! genH.size() != 1" << endl;
     }
-  
+
     if ( genA_unsorted.size() >= 2 ) {
       // Sort genA by pT (leading pT first)
       sort (genA_unsorted.begin(), genA_unsorted.end(), tamu::helpers::PtOrder);
-      
+
       // Remove duplicates from genA
       //    Float_t A_pT = genA_unsorted[0]->pt();
       //    for ( unsigned int i = 1; i < genA_unsorted.size(); i++ ) {
@@ -737,6 +756,15 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   
     genA = genA_unsorted;
   
+    // // debug
+    // cout << "genH size " << genH.size() << endl;
+    // cout << "genA unsorted size " << genA_unsorted.size() << endl;
+    // cout << "genA size " << genA.size() << endl;
+    // cout << "genMuon size " << genMuons.size() << endl;
+    // cout << "genMuon mothers size " << genMuonMothers.size() << endl;
+    // cout << "genElectron size " << genElectrons.size() << endl;
+    // cout << "genElectron mothers size " << genElectronMothers.size() << endl;
+
     if ( genA.size() >= 2 ) {
       b_genA0_m   = genA[0]->mass();
       b_genA0_px  = genA[0]->px();
@@ -761,54 +789,155 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       cout << "WARNING! genA.size() < 2" << endl;
     }
   
-    // // Group muons with the same mother
-    // vector< vector<const reco::GenParticle*> > genMuonGroupsUnsorted;
-    // vector<const reco::Candidate*> genMuonGroupsUnsortedMothers;
-    // vector<const reco::GenParticle*> genMuonsTMP1       = genMuons;
-    // vector<const reco::Candidate*>   genMuonMothersTMP1 = genMuonMothers;
-    // unsigned int nMuonGroup = 0;
-    // while ( genMuonsTMP1.size() > 0 ) {
-    //   vector<const reco::GenParticle*> genMuonsTMP2;
-    //   vector<const reco::Candidate*>   genMuonMothersTMP2;
-    //   vector<const reco::GenParticle*> genMuonsSameMother;
-    //   vector<const reco::Candidate*>   genMuonMothersSame;
-    //   for ( unsigned int j = 0; j < genMuonsTMP1.size(); j++ ) {
-    // 	      // Check if mothers are the same particle
-    // 	      if ( fabs( genMuonMothersTMP1[0]->pt() - genMuonMothersTMP1[j]->pt() ) < eq ) {
-    // 	        genMuonsSameMother.push_back( genMuonsTMP1[j] );
-    // 	      } else {
-    // 	        genMuonsTMP2.push_back( genMuonsTMP1[j] );
-    // 	        genMuonMothersTMP2.push_back( genMuonMothersTMP1[j] );
-    // 	      }
+    // Group muons with the same mother
+    vector< vector<const reco::GenParticle*> > genMuonGroupsUnsorted;
+    vector<const reco::Candidate*> genMuonGroupsUnsortedMothers;
+    vector<const reco::GenParticle*> genMuonsTMP1       = genMuons;
+    vector<const reco::Candidate*>   genMuonMothersTMP1 = genMuonMothers;
+    unsigned int nMuonGroup = 0;
+    while ( genMuonsTMP1.size() > 0 ) {
+      vector<const reco::GenParticle*> genMuonsTMP2;
+      vector<const reco::Candidate*>   genMuonMothersTMP2;
+      vector<const reco::GenParticle*> genMuonsSameMother;
+      vector<const reco::Candidate*>   genMuonMothersSame;
+      for ( unsigned int j = 0; j < genMuonsTMP1.size(); j++ ) {
+	//Check if mothers are the same particle
+	if ( fabs( genMuonMothersTMP1[0]->pt() - genMuonMothersTMP1[j]->pt() ) < eq ) {
+	  genMuonsSameMother.push_back( genMuonsTMP1[j] );
+	} else {
+	  genMuonsTMP2.push_back( genMuonsTMP1[j] );
+	  genMuonMothersTMP2.push_back( genMuonMothersTMP1[j] );
+	}
+      }
+      genMuonGroupsUnsorted.push_back(genMuonsSameMother);
+      genMuonGroupsUnsortedMothers.push_back(genMuonMothersTMP1[0]);
+      genMuonsTMP1       = genMuonsTMP2;
+      genMuonMothersTMP1 = genMuonMothersTMP2;
+      nMuonGroup++;
+    }
+
+    // Group electrons with the same mother
+    vector< vector<const reco::GenParticle*> > genElectronGroupsUnsorted;
+    vector<const reco::Candidate*> genElectronGroupsUnsortedMothers;
+    vector<const reco::GenParticle*> genElectronsTMP1       = genElectrons;
+    vector<const reco::Candidate*>   genElectronMothersTMP1 = genElectronMothers;
+    unsigned int nElectronGroup = 0;
+    while ( genElectronsTMP1.size() > 0 ) {
+      vector<const reco::GenParticle*> genElectronsTMP2;
+      vector<const reco::Candidate*>   genElectronMothersTMP2;
+      vector<const reco::GenParticle*> genElectronsSameMother;
+      vector<const reco::Candidate*>   genElectronMothersSame;
+      for ( unsigned int j = 0; j < genElectronsTMP1.size(); j++ ) {
+	//Check if mothers are the same particle
+	if ( fabs( genElectronMothersTMP1[0]->pt() - genElectronMothersTMP1[j]->pt() ) < eq ) {
+	  genElectronsSameMother.push_back( genElectronsTMP1[j] );
+	} else {
+	  genElectronsTMP2.push_back( genElectronsTMP1[j] );
+	  genElectronMothersTMP2.push_back( genElectronMothersTMP1[j] );
+	}
+      }
+      genElectronGroupsUnsorted.push_back(genElectronsSameMother);
+      genElectronGroupsUnsortedMothers.push_back(genElectronMothersTMP1[0]);
+      genElectronsTMP1       = genElectronsTMP2;
+      genElectronMothersTMP1 = genElectronMothersTMP2;
+      nElectronGroup++;
+    }
+
+    // // debug
+    // cout << "nMuonGroup " << nMuonGroup << endl;
+    // cout << "genMuonGroupsUnsorted size " << genMuonGroupsUnsorted.size() << endl;
+    // cout << "genMuonGroupsUnsortedMothers size " << genMuonGroupsUnsortedMothers.size() << endl;
+    // cout << "nElectronGroup " << nElectronGroup << endl;
+    // cout << "genElectronGroupsUnsorted size " << genElectronGroupsUnsorted.size() << endl;
+    // cout << "genElectronGroupsUnsortedMothers size " << genElectronGroupsUnsortedMothers.size() << endl;
+    
+    if (nMuonGroup + nElectronGroup != genA.size())
+      cout << "Error! Total number of lepton groups does not match number of light bosons" << endl;
+      
+    // Sort muon/electron groups to match order of genA vector
+    vector< vector<const reco::GenParticle*> > genMuonGroups;
+    vector<const reco::Candidate*> genMuonGroupsMothers;
+    vector< vector<const reco::GenParticle*> > genElectronGroups;
+    vector<const reco::Candidate*> genElectronGroupsMothers;
+    for (unsigned int iA = 0; iA < genA.size(); iA++ ) {
+      bool isMuGroupMatchedToA = false;
+      int  nMuGroup = -1;
+      bool isEleGroupMatchedToA = false;
+      int  nEleGroup = -1;
+      // cout << "iA " << iA << endl;
+      // cout << "debug nMuGroup " << nMuGroup << endl;
+      // cout << "debug isMuGroupMatchedToA " << isMuGroupMatchedToA << endl;
+      for ( unsigned int iMuGroup = 0; iMuGroup < genMuonGroupsUnsortedMothers.size(); iMuGroup++ ) {
+	// cout << "iMuGroup " << iMuGroup << endl;
+	if ( fabs ( genA[iA]->pt() - genMuonGroupsUnsortedMothers[iMuGroup]->pt() ) < eq ) {
+	  // cout << "muon group is matched to boson " << endl;
+	  isMuGroupMatchedToA = true;
+	  nMuGroup = iMuGroup;
+	  break;
+	}
+      }
+      for ( unsigned int iEleGroup = 0; iEleGroup < genElectronGroupsUnsortedMothers.size(); iEleGroup++ ) {
+	// cout << "iEleGroup " << iEleGroup << endl;
+	if ( fabs ( genA[iA]->pt() - genElectronGroupsUnsortedMothers[iEleGroup]->pt() ) < eq ) {
+	  // cout << "electron group is matched to boson " << endl;
+	  isEleGroupMatchedToA = true;
+	  nEleGroup = iEleGroup;
+	  break;
+	}
+      }
+
+      // cout << "debug nMuGroup " << nMuGroup << endl;
+      // cout << "debug isMuGroupMatchedToA " << isMuGroupMatchedToA << endl;
+      if (isMuGroupMatchedToA and isEleGroupMatchedToA)
+	cout << "Error! Light boson was matched to muon group and electron group" << endl;
+
+      if ( isMuGroupMatchedToA && nMuGroup >= 0 ) {
+	genMuonGroups.push_back( genMuonGroupsUnsorted[nMuGroup] );
+	genMuonGroupsMothers.push_back( genMuonGroupsUnsortedMothers[nMuGroup] );
+      } else if ( isEleGroupMatchedToA && nEleGroup >= 0 ) {
+	genElectronGroups.push_back( genElectronGroupsUnsorted[nEleGroup] );
+	genElectronGroupsMothers.push_back( genElectronGroupsUnsortedMothers[nEleGroup] );
+      } else {
+	cout << "Error! Light boson was not matched" << endl;
+      }
+    }
+    
+    // // Sort electron groups to match order of genA vector
+    // vector< vector<const reco::GenParticle*> > genElectronGroups;
+    // vector<const reco::Candidate*> genElectronGroupsMothers;
+    // if (nElectronGroup!=0) for (unsigned int iA = 0; iA < genA.size(); iA++ ) {
+    //   bool isEleGroupMatchedToA = false;
+    //   int  nEleGroup = -1;
+    //   cout << "iA " << iA << endl;
+    //   cout << "debug nEleGroup " << nEleGroup << endl;
+    //   cout << "debug isEleGroupMatchedToA " << isEleGroupMatchedToA << endl;
+    //   for ( unsigned int iEleGroup = 0; iEleGroup < genElectronGroupsUnsortedMothers.size(); iEleGroup++ ) {
+    // 	cout << "iEleGroup " << iEleGroup << endl;
+    // 	if ( fabs ( genA[iA]->pt() - genElectronGroupsUnsortedMothers[iEleGroup]->pt() ) < eq ) {
+    // 	  cout << "electron group is matched to boson " << endl;
+    // 	  isEleGroupMatchedToA = true;
+    // 	  nEleGroup = iEleGroup;
+    // 	  break;
+    // 	}
     //   }
-    //   genMuonGroupsUnsorted.push_back(genMuonsSameMother);
-    //   genMuonGroupsUnsortedMothers.push_back(genMuonMothersTMP1[0]);
-    //   genMuonsTMP1       = genMuonsTMP2;
-    //   genMuonMothersTMP1 = genMuonMothersTMP2;
-    //   nMuonGroup++;
-    // }
-  
-    // // Sort muon groups to match order of genA vector
-    // vector< vector<const reco::GenParticle*> > genMuonGroups;
-    // vector<const reco::Candidate*> genMuonGroupsMothers;
-    // for (unsigned int iA = 0; iA < genA.size(); iA++ ) {
-    //   bool isMuGroupMatchedToA = false;
-    //   int  nMuGroup = -1;
-    //   for ( unsigned int iMuGroup = 0; iMuGroup < genMuonGroupsUnsortedMothers.size(); iMuGroup++ ) {
-    // 	      if ( fabs ( genA[iA]->pt() - genMuonGroupsUnsortedMothers[iMuGroup]->pt() ) < eq ) {
-    // 	        isMuGroupMatchedToA = true;
-    // 	        nMuGroup = iMuGroup;
-    // 	        break;
-    // 	      }
-    //   }
-    //   if ( isMuGroupMatchedToA && nMuGroup >= 0 ) {
-    // 	      genMuonGroups.push_back( genMuonGroupsUnsorted[nMuGroup] );
-    // 	      genMuonGroupsMothers.push_back( genMuonGroupsUnsortedMothers[nMuGroup] );
+    //   cout << "debug nEleGroup " << nEleGroup << endl;
+    //   cout << "debug isEleGroupMatchedToA " << isEleGroupMatchedToA << endl;
+    //   if ( isEleGroupMatchedToA && nEleGroup >= 0 ) {
+    // 	genElectronGroups.push_back( genElectronGroupsUnsorted[nEleGroup] );
+    // 	genElectronGroupsMothers.push_back( genElectronGroupsUnsortedMothers[nEleGroup] );
     //   } else {
-    //   	cout << "Error! Muon group has no matched boson A" << endl;
-    //   }
+    //    	cout << "Info! Electron group has no matched boson A" << endl;
+    //   }    
     // }
-  
+
+    // debug
+    cout << "genMuonGroups size " << genMuonGroups.size() << endl;
+    cout << "genMuonGroupsMothers size " << genMuonGroupsMothers.size() << endl;
+    cout << "genElectronGroups size " << genElectronGroups.size() << endl;
+    cout << "genElectronGroupsMothers size " << genElectronGroupsMothers.size() << endl;
+
+    return;
+
     // b_isGenALxyOK = false;
     // if ( genMuonGroups.size() == 2 && genMuonGroups[0].size() == 2 && genMuonGroups[1].size() == 2 ) {
     //   sort( genMuonGroups[0].begin(), genMuonGroups[0].end(), tamu::helpers::PtOrder );

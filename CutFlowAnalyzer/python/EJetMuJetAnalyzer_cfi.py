@@ -4,7 +4,7 @@ import FWCore.ParameterSet.Config as cms
 #    muJets = cms.InputTag("TrackerMuJetProducer05"),
 
 EJetMuJetAnalyzer = cms.EDAnalyzer('EJetMuJetAnalyzer',
-    analyzerDebug = cms.int32(20),
+    analyzerDebug = cms.int32(21),
     fillGenLevel = cms.bool(True),
     muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
     muJets = cms.InputTag("PFMuJetProducer05"),
