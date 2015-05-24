@@ -12,6 +12,9 @@ def customizePatOutput(process):
         "keep *_cleanPatTrackerMuonsTriggerMatch_*_*",
         "keep *_cleanPatPFMuonsTriggerMatch_*_*",
 
+        "keep *_PFMuJetProducer05_*_*",
+        "keep *_TrackerMuJetProducer05_*_*",
+
         "keep *_muons_*_*",
         "keep recoTracks_generalTracks_*_*",
         "keep recoTrackExtras_generalTracks_*_*",
