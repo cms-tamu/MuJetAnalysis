@@ -16,11 +16,16 @@ process.patMuons.embedGenMatch = cms.bool(True)
 process.patTrigger.processName = cms.string( "*" )
 process.patTriggerEvent.processName = cms.string( "*" )
 
+process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
+
 process.source = cms.Source("PoolSource",
   fileNames = cms.untracked.vstring(
-        'file:out_hlt.root'
+		'file:out_reco.root'
   )
 )
 
-process.maxEvents.input = -1
+process.maxEvents.input = 100
 
+process.p = cms.Path(
+	process.MuJetProducers
+)

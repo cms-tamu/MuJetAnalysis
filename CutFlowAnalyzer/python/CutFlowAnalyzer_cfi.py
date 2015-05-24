@@ -11,5 +11,6 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
     nThrowsConsistentVertexesCalculator = cms.int32(100000),
     hltPaths = cms.vstring(
         'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1',
+        'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2',
     )
 )

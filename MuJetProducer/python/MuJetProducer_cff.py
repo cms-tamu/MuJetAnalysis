@@ -26,3 +26,8 @@ PFMuJetProducer05 = MuJetProducer.clone(
     minTrackerHits = cms.int32(-1),
     maxTrackerNormChi2 = cms.double(-1.0)
 )
+
+MuJetProducers = cms.Sequence(
+	TrackerMuJetProducer05 * 
+	PFMuJetProducer05	
+)
