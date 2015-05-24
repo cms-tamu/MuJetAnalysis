@@ -1,5 +1,50 @@
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
 
+//
+// constructors and destructor
+//
+ConsistentVertexesCalculator::ConsistentVertexesCalculator(const TransientTrackBuilder *transientTrackBuilder, GlobalPoint beamSpotPosition)
+{
+  
+  _debug   = 0;
+  _resultIsValid = false;
+  
+  if ( _debug > 10 ) std::cout << "ConsistentVertexesCalculator::ConsistentVertexesCalculator" << std::endl;
+  
+  _transientTrackBuilder = transientTrackBuilder;
+  _beamSpotPosition = GlobalPoint( beamSpotPosition.x(), beamSpotPosition.y(), beamSpotPosition.z());
+  
+  _randomSeed = 0;
+  _nThrows = 100000;
+  
+  _chi2_threshold = 10000.0;
+    
+  _chi2_sum   = 1000.0;
+  _chi2_dz    = 1000.0;
+  _chi2_dxy_0 = 1000.0;
+  _chi2_dxy_1 = 1000.0;
+    
+  _dz_0 =  1000.0;
+  _dz_1 = -1000.0;
+  _dz   =  2000.0;
+  
+  _dxy_0 = 1000.0;
+  _dxy_1 = 1000.0;
+  
+  _vtx3D_0 = GlobalPoint(1000., 1000., 1000.);
+  _vtx3D_1 = GlobalPoint(1000., 1000., 1000.);
+  
+  _vtxP4_0 = math::XYZTLorentzVector(0,0,0,10000.);
+  _vtxP4_1 = math::XYZTLorentzVector(0,0,0,10000.);
+  
+}  
+
+ConsistentVertexesCalculator::~ConsistentVertexesCalculator()
+{
+   // do anything here that needs to be done at desctruction time
+   // (e.g. close files, deallocate resources etc.)
+}
+
 //******************************************************************************
 // Returns Cholesky decomposition of input matrix A
 //******************************************************************************
@@ -324,3 +369,4 @@ bool ConsistentVertexesCalculator::Calculate( const pat::MultiMuon *&mm_0, const
   
   return _resultIsValid;
 }
+

@@ -193,15 +193,15 @@ class ConsistentVertexesCalculator {
         
     GlobalPoint             vertexPoint(int i)     { if (i == 0) return _vtx3D_0; else return _vtx3D_1; }
     math::XYZTLorentzVector vertexP4(int i)        { if (i == 0) return _vtxP4_0; else return _vtxP4_1; }
-	  GlobalVector            vertexMomentum(int i)  { math::XYZTLorentzVector v = vertexP4(i);  return GlobalVector(v.x(), v.y(), v.z()); }
-	  double                 vertexMass(int i)      { return vertexP4(i).mass(); }
-	  double                 dm()                   { return vertexMass(0) - vertexMass(1); }
-	  double                 dz(int i)              { if (i == 0) return _dz_0; else return _dz_1; }
-	  double                 dz()                   { return _dz; }
-	  double                 dxy(int i)             { if (i == 0) return _dxy_0; else return _dxy_1; }
-	  double                 chi2_sum()             { return _chi2_sum; }
-	  double                 chi2_dz()              { return _chi2_dz; }
-	  double                 chi2_dxy(int i)        { if (i == 0) return _chi2_dxy_0; else return _chi2_dxy_1; }
+    GlobalVector            vertexMomentum(int i)  { math::XYZTLorentzVector v = vertexP4(i);  return GlobalVector(v.x(), v.y(), v.z()); }
+    double                 vertexMass(int i)      { return vertexP4(i).mass(); }
+    double                 dm()                   { return vertexMass(0) - vertexMass(1); }
+    double                 dz(int i)              { if (i == 0) return _dz_0; else return _dz_1; }
+    double                 dz()                   { return _dz; }
+    double                 dxy(int i)             { if (i == 0) return _dxy_0; else return _dxy_1; }
+    double                 chi2_sum()             { return _chi2_sum; }
+    double                 chi2_dz()              { return _chi2_dz; }
+    double                 chi2_dxy(int i)        { if (i == 0) return _chi2_dxy_0; else return _chi2_dxy_1; }
     
     std::vector< std::vector<double> > cholesky(std::vector<std::vector<double> > A);
     
@@ -242,52 +242,5 @@ class ConsistentVertexesCalculator {
     std::vector<math::XYZTLorentzVector> _vVtxP4_1;
     
 };
-
-//
-// constructors and destructor
-//
-ConsistentVertexesCalculator::ConsistentVertexesCalculator(const TransientTrackBuilder *transientTrackBuilder, GlobalPoint beamSpotPosition)
-{
-  
-  _debug   = 0;
-  _resultIsValid = false;
-  
-  if ( _debug > 10 ) std::cout << "ConsistentVertexesCalculator::ConsistentVertexesCalculator" << std::endl;
-  
-  _transientTrackBuilder = transientTrackBuilder;
-  _beamSpotPosition = GlobalPoint( beamSpotPosition.x(), beamSpotPosition.y(), beamSpotPosition.z());
-  
-  _randomSeed = 0;
-  _nThrows = 100000;
-  
-  _chi2_threshold = 10000.0;
-    
-  _chi2_sum   = 1000.0;
-  _chi2_dz    = 1000.0;
-  _chi2_dxy_0 = 1000.0;
-  _chi2_dxy_1 = 1000.0;
-    
-  _dz_0 =  1000.0;
-  _dz_1 = -1000.0;
-  _dz   =  2000.0;
-  
-  _dxy_0 = 1000.0;
-  _dxy_1 = 1000.0;
-  
-  _vtx3D_0 = GlobalPoint(1000., 1000., 1000.);
-  _vtx3D_1 = GlobalPoint(1000., 1000., 1000.);
-  
-  _vtxP4_0 = math::XYZTLorentzVector(0,0,0,10000.);
-  _vtxP4_1 = math::XYZTLorentzVector(0,0,0,10000.);
-  
-}  
-
-ConsistentVertexesCalculator::~ConsistentVertexesCalculator()
-{
- 
-   // do anything here that needs to be done at desctruction time
-   // (e.g. close files, deallocate resources etc.)
-
-}
 
 #endif // ConsistentVertexesCalculator_H
