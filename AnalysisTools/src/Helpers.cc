@@ -1,22 +1,10 @@
-#ifndef MuJetAnalysis_CutFlowAnalyzer_Helpers
-#define MuJetAnalysis_CutFlowAnalyzer_Helpers
+#include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
-#include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
-#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-#include "DataFormats/TrackReco/interface/TrackFwd.h"
-#include "DataFormats/TrackReco/interface/Track.h"
-#include "DataFormats/MuonReco/interface/Muon.h"
+bool tamu::helpers::PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2) { 
+  return (p1->pt() > p2->pt() ); 
+}
 
-//******************************************************************************
-//              Auxiliary function: Order objects by pT                         
-//******************************************************************************
-namespace tamu{
-
-namespace helpers{
-
-inline bool PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2) { return (p1->pt() > p2->pt() ); }
-
-inline bool sameTrack(const reco::Track *one, const reco::Track *two) {
+bool tamu::helpers::sameTrack(const reco::Track *one, const reco::Track *two) {
   return (fabs(one->px() - two->px()) < 1e-10  &&
 	  fabs(one->py() - two->py()) < 1e-10  &&
 	  fabs(one->pz() - two->pz()) < 1e-10  &&
@@ -28,7 +16,7 @@ inline bool sameTrack(const reco::Track *one, const reco::Track *two) {
 //******************************************************************************
 // Auxiliary function: Calculate difference between two angles: -PI < phi < PI  
 //******************************************************************************
-double My_dPhi (double phi1, double phi2) {
+double tamu::helpers::My_dPhi (double phi1, double phi2) {
   double dPhi = phi1 - phi2;
   if (dPhi >  M_PI) dPhi -= 2.*M_PI;
   if (dPhi < -M_PI) dPhi += 2.*M_PI;
@@ -36,7 +24,7 @@ double My_dPhi (double phi1, double phi2) {
 }
 
 // Loose ID for PF Muons
-bool isPFMuonLoose (const reco::Muon* mu) {
+bool tamu::helpers::isPFMuonLoose (const reco::Muon* mu) {
   bool isMoonLoose = false;
   if (    fabs(mu->eta()) < 2.4
        && ( mu->isTrackerMuon() || mu->isGlobalMuon() )
@@ -47,7 +35,7 @@ bool isPFMuonLoose (const reco::Muon* mu) {
 }
 
 // Private ID for Muons
-bool isTrackerMuonPrivateID (const reco::Muon* mu) {
+bool tamu::helpers::isTrackerMuonPrivateID (const reco::Muon* mu) {
   bool isTrackerMuonPrivateID = false;
   if (    fabs(mu->eta()) < 2.4
        && mu->isTrackerMuon()
@@ -58,9 +46,3 @@ bool isTrackerMuonPrivateID (const reco::Muon* mu) {
   }
   return isTrackerMuonPrivateID;
 }
-
-}
-
-}
-
-#endif

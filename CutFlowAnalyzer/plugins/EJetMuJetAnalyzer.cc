@@ -48,7 +48,7 @@
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
-#include "MuJetAnalysis/CutFlowAnalyzer/interface/Helpers.h"
+#include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
 // user include files
 #include "TTree.h"
