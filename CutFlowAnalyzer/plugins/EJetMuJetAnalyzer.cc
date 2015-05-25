@@ -902,47 +902,20 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       }
     }
     
-    // // Sort electron groups to match order of genA vector
-    // vector< vector<const reco::GenParticle*> > genElectronGroups;
-    // vector<const reco::Candidate*> genElectronGroupsMothers;
-    // if (nElectronGroup!=0) for (unsigned int iA = 0; iA < genA.size(); iA++ ) {
-    //   bool isEleGroupMatchedToA = false;
-    //   int  nEleGroup = -1;
-    //   cout << "iA " << iA << endl;
-    //   cout << "debug nEleGroup " << nEleGroup << endl;
-    //   cout << "debug isEleGroupMatchedToA " << isEleGroupMatchedToA << endl;
-    //   for ( unsigned int iEleGroup = 0; iEleGroup < genElectronGroupsUnsortedMothers.size(); iEleGroup++ ) {
-    // 	cout << "iEleGroup " << iEleGroup << endl;
-    // 	if ( fabs ( genA[iA]->pt() - genElectronGroupsUnsortedMothers[iEleGroup]->pt() ) < eq ) {
-    // 	  cout << "electron group is matched to boson " << endl;
-    // 	  isEleGroupMatchedToA = true;
-    // 	  nEleGroup = iEleGroup;
-    // 	  break;
-    // 	}
-    //   }
-    //   cout << "debug nEleGroup " << nEleGroup << endl;
-    //   cout << "debug isEleGroupMatchedToA " << isEleGroupMatchedToA << endl;
-    //   if ( isEleGroupMatchedToA && nEleGroup >= 0 ) {
-    // 	genElectronGroups.push_back( genElectronGroupsUnsorted[nEleGroup] );
-    // 	genElectronGroupsMothers.push_back( genElectronGroupsUnsortedMothers[nEleGroup] );
-    //   } else {
-    //    	cout << "Info! Electron group has no matched boson A" << endl;
-    //   }    
-    // }
+    // // debug
+    // cout << "genMuonGroups size " << genMuonGroups.size() << endl;
+    // cout << "genMuonGroupsMothers size " << genMuonGroupsMothers.size() << endl;
+    // cout << "genElectronGroups size " << genElectronGroups.size() << endl;
+    // cout << "genElectronGroupsMothers size " << genElectronGroupsMothers.size() << endl;
 
-    // debug
-    cout << "genMuonGroups size " << genMuonGroups.size() << endl;
-    cout << "genMuonGroupsMothers size " << genMuonGroupsMothers.size() << endl;
-    cout << "genElectronGroups size " << genElectronGroups.size() << endl;
-    cout << "genElectronGroupsMothers size " << genElectronGroupsMothers.size() << endl;
-
-    return;
-
-    // b_isGenALxyOK = false;
-    // if ( genMuonGroups.size() == 2 && genMuonGroups[0].size() == 2 && genMuonGroups[1].size() == 2 ) {
-    //   sort( genMuonGroups[0].begin(), genMuonGroups[0].end(), tamu::helpers::PtOrder );
-    //   sort( genMuonGroups[1].begin(), genMuonGroups[1].end(), tamu::helpers::PtOrder );
-    
+    b_isGenALxyOK = false;
+    if ( (genMuonGroups.size() == 2 && genMuonGroups[0].size() == 2 && genMuonGroups[1].size() == 2 ) ||
+	 (genElectronGroups.size() == 2 && genElectronGroups[0].size() == 2 && genElectronGroups[1].size() == 2 ) || 
+	 (genMuonGroups.size() == 1 && genElectronGroups.size() == 1 && genElectronGroups[0].size() == 2 && genMuonGroups[0].size() == 2 ) ) {
+      sort( genMuonGroups[0].begin(), genMuonGroups[0].end(), tamu::helpers::PtOrder );
+      sort( genMuonGroups[1].begin(), genMuonGroups[1].end(), tamu::helpers::PtOrder );
+    }
+      
     //   b_genA0Mu0_px = genMuonGroups[0][0]->px();
     //   b_genA0Mu1_px = genMuonGroups[0][1]->px();
     //   b_genA1Mu0_px = genMuonGroups[1][0]->px();
