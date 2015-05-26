@@ -1,8 +1,8 @@
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process("EJetMuJetAnalyzer")
+process = cms.Process("LeptonJetAnalyzer")
 
-process.load("MuJetAnalysis.CutFlowAnalyzer.EJetMuJetAnalyzer_cfi")
+process.load("MuJetAnalysis.CutFlowAnalyzer.LeptonJetAnalyzer_cfi")
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 process.load('Configuration/StandardSequences/FrontierConditions_GlobalTag_cff')
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -30,6 +30,6 @@ process.TFileService = cms.Service("TFileService",
 )
 
 process.p = cms.Path(
-    process.EJetMuJetAnalyzer
+    process.LeptonJetAnalyzer
 )
 

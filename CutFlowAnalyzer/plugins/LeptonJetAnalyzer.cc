@@ -63,10 +63,10 @@
 
 using namespace std;
 
-class EJetMuJetAnalyzer : public edm::EDAnalyzer {
+class LeptonJetAnalyzer : public edm::EDAnalyzer {
   public:
-    explicit EJetMuJetAnalyzer(const edm::ParameterSet&);
-    ~EJetMuJetAnalyzer();
+    explicit LeptonJetAnalyzer(const edm::ParameterSet&);
+    ~LeptonJetAnalyzer();
 
     static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
@@ -170,8 +170,8 @@ class EJetMuJetAnalyzer : public edm::EDAnalyzer {
   // GEN Level Counters: number of events with ...
   Int_t m_events4GenLep;    // ... with 4 gen muons
   Int_t m_events4GenMu;
-  Int_t m_events2GenMu2GenEle;
   Int_t m_events4GenEle;
+  Int_t m_events2GenMu2GenEle;
   
   Int_t m_events1GenMu17;  // ... with 1 gen muon:  pT > 17 GeV, |eta| < 0.9
   Int_t m_events1GenMu8;   // ... with 1 gen muons: pT > 8 GeV,  |eta| < 2.4
@@ -495,7 +495,7 @@ class EJetMuJetAnalyzer : public edm::EDAnalyzer {
 //
 // constructors and destructor
 //
-EJetMuJetAnalyzer::EJetMuJetAnalyzer(const edm::ParameterSet& iConfig)
+LeptonJetAnalyzer::LeptonJetAnalyzer(const edm::ParameterSet& iConfig)
 
 {
   //****************************************************************************
@@ -589,7 +589,7 @@ EJetMuJetAnalyzer::EJetMuJetAnalyzer(const edm::ParameterSet& iConfig)
 }
 
 
-EJetMuJetAnalyzer::~EJetMuJetAnalyzer()
+LeptonJetAnalyzer::~LeptonJetAnalyzer()
 {
  
    // do anything here that needs to be done at desctruction time
@@ -603,7 +603,7 @@ EJetMuJetAnalyzer::~EJetMuJetAnalyzer()
 
 // ------------ method called for each event  ------------
 void
-EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
@@ -747,13 +747,14 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   
     genA = genA_unsorted;
   
-    // // debug
-    // cout << "genH size " << genH.size() << endl;
-    // cout << "genA unsorted size " << genA_unsorted.size() << endl;
-    // cout << "genA size " << genA.size() << endl;
-    // cout << "genLepton size " << genLeptons.size() << endl;
-    // cout << "genLepton mothers size " << genLeptonMothers.size() << endl;
-
+    if ( m_debug > 20 ) {
+      cout << "genH size " << genH.size() << endl;
+      cout << "genA unsorted size " << genA_unsorted.size() << endl;
+      cout << "genA size " << genA.size() << endl;
+      cout << "genLepton size " << genLeptons.size() << endl;
+      cout << "genLepton mothers size " << genLeptonMothers.size() << endl;
+    }
+    
     if ( genA.size() >= 2 ) {
       b_genA0_m   = genA[0]->mass();
       b_genA0_px  = genA[0]->px();
@@ -805,10 +806,11 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       nLeptonGroup++;
     }
 
-    // // debug
-    // cout << "nLeptonGroup " << nLeptonGroup << endl;
-    // cout << "genLeptonGroupsUnsorted size " << genLeptonGroupsUnsorted.size() << endl;
-    // cout << "genLeptonGroupsUnsortedMothers size " << genLeptonGroupsUnsortedMothers.size() << endl;
+    if ( m_debug > 20 ) {
+      cout << "nLeptonGroup " << nLeptonGroup << endl;
+      cout << "genLeptonGroupsUnsorted size " << genLeptonGroupsUnsorted.size() << endl;
+      cout << "genLeptonGroupsUnsortedMothers size " << genLeptonGroupsUnsortedMothers.size() << endl;
+    }
     
     if (nLeptonGroup != genA.size())
       cout << "Error! Total number of lepton groups does not match number of light bosons" << endl;
@@ -834,8 +836,11 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 	}
       }
 
-      // cout << "debug nLepGroup " << nLepGroup << endl;
-      // cout << "debug isLepGroupMatchedToA " << isLepGroupMatchedToA << endl;
+      if ( m_debug > 20 ) {
+	cout << "debug nLepGroup " << nLepGroup << endl;
+	cout << "debug isLepGroupMatchedToA " << isLepGroupMatchedToA << endl;
+      }
+
       if ( isLepGroupMatchedToA && nLepGroup >= 0 ) {
 	genLeptonGroups.push_back( genLeptonGroupsUnsorted[nLepGroup] );
 	genLeptonGroupsMothers.push_back( genLeptonGroupsUnsortedMothers[nLepGroup] );
@@ -844,10 +849,11 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       }
     }
     
-    // // debug
-    // cout << "genLeptonGroups size " << genLeptonGroups.size() << endl;
-    // cout << "genLeptonGroupsMothers size " << genLeptonGroupsMothers.size() << endl;
-
+    if ( m_debug > 20 ) {
+      cout << "genLeptonGroups size " << genLeptonGroups.size() << endl;
+      cout << "genLeptonGroupsMothers size " << genLeptonGroupsMothers.size() << endl;
+    }
+    
     b_isGenALxyOK = false;
 
     if (genLeptonGroups.size() == 2 && genLeptonGroups[0].size() == 2 && genLeptonGroups[1].size() == 2){
@@ -1716,7 +1722,7 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 
 // ------------ method called once each job just before starting event loop  ------------
 void 
-EJetMuJetAnalyzer::beginJob() {
+LeptonJetAnalyzer::beginJob() {
   cout << "BEGIN JOB" << endl;
   
   edm::Service<TFileService> tFileService;
@@ -1992,7 +1998,7 @@ EJetMuJetAnalyzer::beginJob() {
 
 // ------------ method called once each job just after ending the event loop  ------------
 void 
-EJetMuJetAnalyzer::endJob() 
+LeptonJetAnalyzer::endJob() 
 {
   cout << "END JOB" << endl;
   
@@ -2099,31 +2105,31 @@ EJetMuJetAnalyzer::endJob()
 
 // ------------ method called when starting to processes a run  ------------
 void 
-EJetMuJetAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
+LeptonJetAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when ending the processing of a run  ------------
 void 
-EJetMuJetAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
+LeptonJetAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when starting to processes a luminosity block  ------------
 void 
-EJetMuJetAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+LeptonJetAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when ending the processing of a luminosity block  ------------
 void 
-EJetMuJetAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+LeptonJetAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
-EJetMuJetAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+LeptonJetAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -2132,4 +2138,4 @@ EJetMuJetAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions
 }
 
 //define this as a plug-in
-DEFINE_FWK_MODULE(EJetMuJetAnalyzer);
+DEFINE_FWK_MODULE(LeptonJetAnalyzer);
