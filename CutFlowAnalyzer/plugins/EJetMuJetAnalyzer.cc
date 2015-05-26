@@ -94,6 +94,11 @@ class EJetMuJetAnalyzer : public edm::EDAnalyzer {
   Float_t m_threshold_Ele8_pT;
   Float_t m_threshold_Ele8_eta;
 
+  Float_t m_threshold_Lep17_pT;
+  Float_t m_threshold_Lep17_eta;
+  Float_t m_threshold_Lep8_pT;
+  Float_t m_threshold_Lep8_eta;
+
   Float_t m_threshold_GenA_Lxy;
   
   Float_t m_threshold_DiMuons_dz;
@@ -126,39 +131,45 @@ class EJetMuJetAnalyzer : public edm::EDAnalyzer {
   
   bool m_fillGenLevel; // TRUE for simulation, FALSE for data
   
-  // GEN Level Muon Branches: with this analyzer we search for events with 4 muons!
-  Float_t b_genMu0_px;
-  Float_t b_genMu1_px;
-  Float_t b_genMu2_px;
-  Float_t b_genMu3_px;
+  // GEN Level Lepon Branches: with this analyzer we search for events with 4 muons!
+  Float_t b_genLep0_pdgId;
+  Float_t b_genLep1_pdgId;
+  Float_t b_genLep2_pdgId;
+  Float_t b_genLep3_pdgId;
+
+  Float_t b_genLep0_px;
+  Float_t b_genLep1_px;
+  Float_t b_genLep2_px;
+  Float_t b_genLep3_px;
   
-  Float_t b_genMu0_py;
-  Float_t b_genMu1_py;
-  Float_t b_genMu2_py;
-  Float_t b_genMu3_py;
+  Float_t b_genLep0_py;
+  Float_t b_genLep1_py;
+  Float_t b_genLep2_py;
+  Float_t b_genLep3_py;
   
-  Float_t b_genMu0_pz;
-  Float_t b_genMu1_pz;
-  Float_t b_genMu2_pz;
-  Float_t b_genMu3_pz;
+  Float_t b_genLep0_pz;
+  Float_t b_genLep1_pz;
+  Float_t b_genLep2_pz;
+  Float_t b_genLep3_pz;
   
-  Float_t b_genMu0_pT;
-  Float_t b_genMu1_pT;
-  Float_t b_genMu2_pT;
-  Float_t b_genMu3_pT;
+  Float_t b_genLep0_pT;
+  Float_t b_genLep1_pT;
+  Float_t b_genLep2_pT;
+  Float_t b_genLep3_pT;
   
-  Float_t b_genMu0_eta;
-  Float_t b_genMu1_eta;
-  Float_t b_genMu2_eta;
-  Float_t b_genMu3_eta;
+  Float_t b_genLep0_eta;
+  Float_t b_genLep1_eta;
+  Float_t b_genLep2_eta;
+  Float_t b_genLep3_eta;
   
-  Float_t b_genMu0_phi;
-  Float_t b_genMu1_phi;
-  Float_t b_genMu2_phi;
-  Float_t b_genMu3_phi;
+  Float_t b_genLep0_phi;
+  Float_t b_genLep1_phi;
+  Float_t b_genLep2_phi;
+  Float_t b_genLep3_phi;
   
   // GEN Level Counters: number of events with ...
-  Int_t m_events4GenMu;    // ... with 4 gen muons
+  Int_t m_events4GenLep;    // ... with 4 gen muons
+  Int_t m_events4GenMu;
   Int_t m_events2GenMu2GenEle;
   Int_t m_events4GenEle;
   
@@ -183,14 +194,16 @@ class EJetMuJetAnalyzer : public edm::EDAnalyzer {
   Int_t m_eventsGenALxyOK; // ... with both A bosons decay inside Lxy < 4 cm
 
   // GEN Level Selectors
+  Bool_t b_is4GenLep;
+
   Bool_t b_is4GenMu;
   Bool_t b_is2GenMu2GenEle;
   Bool_t b_is4GenEle;
 
-  Bool_t b_is1GenMu17;
-  Bool_t b_is2GenMu8;
-  Bool_t b_is3GenMu8;
-  Bool_t b_is4GenMu8;
+  Bool_t b_is1GenLep17;
+  Bool_t b_is2GenLep8;
+  Bool_t b_is3GenLep8;
+  Bool_t b_is4GenLep8;
 
   Bool_t b_is1GenEle17;
   Bool_t b_is2GenEle8;
@@ -242,53 +255,58 @@ class EJetMuJetAnalyzer : public edm::EDAnalyzer {
   Float_t b_genA1_Lxy;
   Float_t b_genA1_L;
   
-  // Muons accossiated with A-bosons
-  Float_t b_genA0Mu0_px;
-  Float_t b_genA0Mu1_px;
-  Float_t b_genA1Mu0_px;
-  Float_t b_genA1Mu1_px;
+  // Leptons accossiated with A-bosons
+  Float_t b_genA0Lep0_pdgId;
+  Float_t b_genA0Lep1_pdgId;
+  Float_t b_genA1Lep0_pdgId;
+  Float_t b_genA1Lep1_pdgId;
+
+  Float_t b_genA0Lep0_px;
+  Float_t b_genA0Lep1_px;
+  Float_t b_genA1Lep0_px;
+  Float_t b_genA1Lep1_px;
   
-  Float_t b_genA0Mu0_py;
-  Float_t b_genA0Mu1_py;
-  Float_t b_genA1Mu0_py;
-  Float_t b_genA1Mu1_py;
+  Float_t b_genA0Lep0_py;
+  Float_t b_genA0Lep1_py;
+  Float_t b_genA1Lep0_py;
+  Float_t b_genA1Lep1_py;
   
-  Float_t b_genA0Mu0_pz;
-  Float_t b_genA0Mu1_pz;
-  Float_t b_genA1Mu0_pz;
-  Float_t b_genA1Mu1_pz;
+  Float_t b_genA0Lep0_pz;
+  Float_t b_genA0Lep1_pz;
+  Float_t b_genA1Lep0_pz;
+  Float_t b_genA1Lep1_pz;
   
-  Float_t b_genA0Mu0_eta;
-  Float_t b_genA0Mu1_eta;
-  Float_t b_genA1Mu0_eta;
-  Float_t b_genA1Mu1_eta;
+  Float_t b_genA0Lep0_eta;
+  Float_t b_genA0Lep1_eta;
+  Float_t b_genA1Lep0_eta;
+  Float_t b_genA1Lep1_eta;
   
-  Float_t b_genA0Mu0_phi;
-  Float_t b_genA0Mu1_phi;
-  Float_t b_genA1Mu0_phi;
-  Float_t b_genA1Mu1_phi;
+  Float_t b_genA0Lep0_phi;
+  Float_t b_genA0Lep1_phi;
+  Float_t b_genA1Lep0_phi;
+  Float_t b_genA1Lep1_phi;
   
-  Float_t b_genA0Mu0_vx;
-  Float_t b_genA0Mu1_vx;
-  Float_t b_genA1Mu0_vx;
-  Float_t b_genA1Mu1_vx;
+  Float_t b_genA0Lep0_vx;
+  Float_t b_genA0Lep1_vx;
+  Float_t b_genA1Lep0_vx;
+  Float_t b_genA1Lep1_vx;
   
-  Float_t b_genA0Mu0_vy;
-  Float_t b_genA0Mu1_vy;
-  Float_t b_genA1Mu0_vy;
-  Float_t b_genA1Mu1_vy;
+  Float_t b_genA0Lep0_vy;
+  Float_t b_genA0Lep1_vy;
+  Float_t b_genA1Lep0_vy;
+  Float_t b_genA1Lep1_vy;
   
-  Float_t b_genA0Mu0_vz;
-  Float_t b_genA0Mu1_vz;
-  Float_t b_genA1Mu0_vz;
-  Float_t b_genA1Mu1_vz;
+  Float_t b_genA0Lep0_vz;
+  Float_t b_genA0Lep1_vz;
+  Float_t b_genA1Lep0_vz;
+  Float_t b_genA1Lep1_vz;
   
-  Float_t b_genA0Mu_dEta;
-  Float_t b_genA1Mu_dEta;
-  Float_t b_genA0Mu_dPhi;
-  Float_t b_genA1Mu_dPhi;
-  Float_t b_genA0Mu_dR;
-  Float_t b_genA1Mu_dR;
+  Float_t b_genA0Lep_dEta;
+  Float_t b_genA1Lep_dEta;
+  Float_t b_genA0Lep_dPhi;
+  Float_t b_genA1Lep_dPhi;
+  Float_t b_genA0Lep_dR;
+  Float_t b_genA1Lep_dR;
   
   //****************************************************************************
   //          HLT LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
@@ -400,7 +418,6 @@ class EJetMuJetAnalyzer : public edm::EDAnalyzer {
   Float_t b_diMuonC_FittedVtx_vy;
   Float_t b_diMuonC_FittedVtx_vz;
   
-
   Int_t b_diMuonC_m1_FittedVtx_hitpix;
   Int_t b_diMuonC_m2_FittedVtx_hitpix;
   Int_t b_diMuonF_m1_FittedVtx_hitpix;
@@ -494,6 +511,11 @@ EJetMuJetAnalyzer::EJetMuJetAnalyzer(const edm::ParameterSet& iConfig)
   m_threshold_Ele17_eta =  0.9; // max eta in Barrel
   m_threshold_Ele8_pT   =  8.0; // min pT in GeV
   m_threshold_Ele8_eta  =  2.4; // max eta in Endcaps
+
+  m_threshold_Lep17_pT  = 17.0; // min pT in GeV
+  m_threshold_Lep17_eta =  0.9; // max eta in Barrel
+  m_threshold_Lep8_pT   =  8.0; // min pT in GeV
+  m_threshold_Lep8_eta  =  2.4; // max eta in Endcaps
 
   m_threshold_GenA_Lxy = 4.0; //
   
@@ -642,10 +664,8 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     vector<const reco::GenParticle*> genH;
     vector<const reco::GenParticle*> genA_unsorted;
     vector<const reco::GenParticle*> genA;
-    vector<const reco::GenParticle*> genMuons;
-    vector<const reco::Candidate*>   genMuonMothers;
-    vector<const reco::GenParticle*> genElectrons;
-    vector<const reco::Candidate*>   genElectronMothers;
+    vector<const reco::GenParticle*> genLeptons;
+    vector<const reco::Candidate*>   genLeptonMothers;
 
     // Loop over all gen particles
     int counterGenParticle = 0;
@@ -654,59 +674,30 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       if ( m_debug > 50 ) cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() 
        			       << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << endl;
       // Check if gen particle is muon (pdgId = +/-13) and stable (status = 1)
-      if ( fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1 ) {
-	// Mother of the muon can be muon. Find the last muon in this chain: genMuonCand
+      if ( (fabs( iGenParticle->pdgId() ) == 13 or fabs( iGenParticle->pdgId() ) == 11) and iGenParticle->status() == 1 ) {
+	// Mother of the lepton can be lepton. Find the last lepton in this chain: genLeptonCand
 	// Example: a1 -> mu+ (status = 3) mu- (status = 3)
 	//          mu- (status = 3) -> mu- (status = 2) -> mu- (status = 1)
-	const reco::Candidate *genMuonCand = &(*iGenParticle);
-	bool isMuonMother = true;
-	while(isMuonMother) {
-	  isMuonMother = false;
-	  for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
-	    if ( fabs( genMuonCand->mother(iMother)->pdgId() ) == 13 ) {
-	      isMuonMother = true;
-	      genMuonCand = genMuonCand->mother(iMother);
+	const reco::Candidate *genLeptonCand = &(*iGenParticle);
+	bool isLeptonMother = true;
+	while(isLeptonMother) {
+	  isLeptonMother = false;
+	  for ( size_t iMother = 0; iMother < genLeptonCand->numberOfMothers(); iMother++ ) {
+	    if ( fabs( genLeptonCand->mother(iMother)->pdgId() ) == 13 ) {
+	      isLeptonMother = true;
+	      genLeptonCand = genLeptonCand->mother(iMother);
 	    }
 	  }
 	}
-	// Loop over all real (non-muon) mothers of the muon (here we use genMuonCand)
-	for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
+	// Loop over all real (non-lepton) mothers of the lepton (here we use genLeptonCand)
+	for ( size_t iMother = 0; iMother < genLeptonCand->numberOfMothers(); iMother++ ) {
 	  // Check if mother is CP-odd Higgs (PdgId = 36) or gamma_Dark (PdgId = 3000022)
-	  //        if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 || genMuonCand->mother(iMother)->pdgId() == 443 ) {
-	  if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 ) {
-	    // Store the muon (stable, first in chain) into vector
-	    genMuons.push_back(&(*iGenParticle));
-	    // Store mother of the muon into vector. We need this to group muons into dimuons later
-	    genMuonMothers.push_back(genMuonCand->mother(iMother));
-	  }
-	}
-      }
-
-      // Check if gen particle is electron (pdgId = +/-11) and stable (status = 1)
-      if ( fabs( iGenParticle->pdgId() ) == 11 && iGenParticle->status() == 1 ) {
-	// Mother of the electron can be electron. Find the last electron in this chain: genElectronCand
-	// Example: a1 -> ele+ (status = 3) ele- (status = 3)
-	//          ele- (status = 3) -> ele- (status = 2) -> ele- (status = 1)
-	const reco::Candidate *genElectronCand = &(*iGenParticle);
-	bool isElectronMother = true;
-	while(isElectronMother) {
-	  isElectronMother = false;
-	  for ( size_t iMother = 0; iMother < genElectronCand->numberOfMothers(); iMother++ ) {
-	    if ( fabs( genElectronCand->mother(iMother)->pdgId() ) == 11 ) {
-	      isElectronMother = true;
-	      genElectronCand = genElectronCand->mother(iMother);
-	    }
-	  }
-	}
-	// Loop over all real (non-electron) mothers of the electron (here we use genElectronCand)
-	for ( size_t iMother = 0; iMother < genElectronCand->numberOfMothers(); iMother++ ) {
-	  // Check if mother is CP-odd Higgs (PdgId = 36) or gamma_Dark (PdgId = 3000022)
-	  //        if ( genElectronCand->mother(iMother)->pdgId() == 36 || genElectronCand->mother(iMother)->pdgId() == 3000022 || genElectronCand->mother(iMother)->pdgId() == 443 ) {
-	  if ( genElectronCand->mother(iMother)->pdgId() == 36 || genElectronCand->mother(iMother)->pdgId() == 3000022 ) {
-	    // Store the electron (stable, first in chain) into vector
-	    genElectrons.push_back(&(*iGenParticle));
-	    // Store mother of the electron into vector. We need this to group electrons into dielectrons later
-	    genElectronMothers.push_back(genElectronCand->mother(iMother));
+	  //        if ( genLeptonCand->mother(iMother)->pdgId() == 36 || genLeptonCand->mother(iMother)->pdgId() == 3000022 || genLeptonCand->mother(iMother)->pdgId() == 443 ) {
+	  if ( genLeptonCand->mother(iMother)->pdgId() == 36 || genLeptonCand->mother(iMother)->pdgId() == 3000022 ) {
+	    // Store the lepton (stable, first in chain) into vector
+	    genLeptons.push_back(&(*iGenParticle));
+	    // Store mother of the lepton into vector. We need this to group leptons into dileptons later
+	    genLeptonMothers.push_back(genLeptonCand->mother(iMother));
 	  }
 	}
       }
@@ -760,10 +751,8 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     // cout << "genH size " << genH.size() << endl;
     // cout << "genA unsorted size " << genA_unsorted.size() << endl;
     // cout << "genA size " << genA.size() << endl;
-    // cout << "genMuon size " << genMuons.size() << endl;
-    // cout << "genMuon mothers size " << genMuonMothers.size() << endl;
-    // cout << "genElectron size " << genElectrons.size() << endl;
-    // cout << "genElectron mothers size " << genElectronMothers.size() << endl;
+    // cout << "genLepton size " << genLeptons.size() << endl;
+    // cout << "genLepton mothers size " << genLeptonMothers.size() << endl;
 
     if ( genA.size() >= 2 ) {
       b_genA0_m   = genA[0]->mass();
@@ -789,326 +778,313 @@ EJetMuJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       cout << "WARNING! genA.size() < 2" << endl;
     }
   
-    // Group muons with the same mother
-    vector< vector<const reco::GenParticle*> > genMuonGroupsUnsorted;
-    vector<const reco::Candidate*> genMuonGroupsUnsortedMothers;
-    vector<const reco::GenParticle*> genMuonsTMP1       = genMuons;
-    vector<const reco::Candidate*>   genMuonMothersTMP1 = genMuonMothers;
-    unsigned int nMuonGroup = 0;
-    while ( genMuonsTMP1.size() > 0 ) {
-      vector<const reco::GenParticle*> genMuonsTMP2;
-      vector<const reco::Candidate*>   genMuonMothersTMP2;
-      vector<const reco::GenParticle*> genMuonsSameMother;
-      vector<const reco::Candidate*>   genMuonMothersSame;
-      for ( unsigned int j = 0; j < genMuonsTMP1.size(); j++ ) {
+    // Group leptons with the same mother
+    vector< vector<const reco::GenParticle*> > genLeptonGroupsUnsorted;
+    vector<const reco::Candidate*> genLeptonGroupsUnsortedMothers;
+    vector<const reco::GenParticle*> genLeptonsTMP1       = genLeptons;
+    vector<const reco::Candidate*>   genLeptonMothersTMP1 = genLeptonMothers;
+    unsigned int nLeptonGroup = 0;
+    while ( genLeptonsTMP1.size() > 0 ) {
+      vector<const reco::GenParticle*> genLeptonsTMP2;
+      vector<const reco::Candidate*>   genLeptonMothersTMP2;
+      vector<const reco::GenParticle*> genLeptonsSameMother;
+      vector<const reco::Candidate*>   genLeptonMothersSame;
+      for ( unsigned int j = 0; j < genLeptonsTMP1.size(); j++ ) {
 	//Check if mothers are the same particle
-	if ( fabs( genMuonMothersTMP1[0]->pt() - genMuonMothersTMP1[j]->pt() ) < eq ) {
-	  genMuonsSameMother.push_back( genMuonsTMP1[j] );
+	if ( fabs( genLeptonMothersTMP1[0]->pt() - genLeptonMothersTMP1[j]->pt() ) < eq ) {
+	  genLeptonsSameMother.push_back( genLeptonsTMP1[j] );
 	} else {
-	  genMuonsTMP2.push_back( genMuonsTMP1[j] );
-	  genMuonMothersTMP2.push_back( genMuonMothersTMP1[j] );
+	  genLeptonsTMP2.push_back( genLeptonsTMP1[j] );
+	  genLeptonMothersTMP2.push_back( genLeptonMothersTMP1[j] );
 	}
       }
-      genMuonGroupsUnsorted.push_back(genMuonsSameMother);
-      genMuonGroupsUnsortedMothers.push_back(genMuonMothersTMP1[0]);
-      genMuonsTMP1       = genMuonsTMP2;
-      genMuonMothersTMP1 = genMuonMothersTMP2;
-      nMuonGroup++;
-    }
-
-    // Group electrons with the same mother
-    vector< vector<const reco::GenParticle*> > genElectronGroupsUnsorted;
-    vector<const reco::Candidate*> genElectronGroupsUnsortedMothers;
-    vector<const reco::GenParticle*> genElectronsTMP1       = genElectrons;
-    vector<const reco::Candidate*>   genElectronMothersTMP1 = genElectronMothers;
-    unsigned int nElectronGroup = 0;
-    while ( genElectronsTMP1.size() > 0 ) {
-      vector<const reco::GenParticle*> genElectronsTMP2;
-      vector<const reco::Candidate*>   genElectronMothersTMP2;
-      vector<const reco::GenParticle*> genElectronsSameMother;
-      vector<const reco::Candidate*>   genElectronMothersSame;
-      for ( unsigned int j = 0; j < genElectronsTMP1.size(); j++ ) {
-	//Check if mothers are the same particle
-	if ( fabs( genElectronMothersTMP1[0]->pt() - genElectronMothersTMP1[j]->pt() ) < eq ) {
-	  genElectronsSameMother.push_back( genElectronsTMP1[j] );
-	} else {
-	  genElectronsTMP2.push_back( genElectronsTMP1[j] );
-	  genElectronMothersTMP2.push_back( genElectronMothersTMP1[j] );
-	}
-      }
-      genElectronGroupsUnsorted.push_back(genElectronsSameMother);
-      genElectronGroupsUnsortedMothers.push_back(genElectronMothersTMP1[0]);
-      genElectronsTMP1       = genElectronsTMP2;
-      genElectronMothersTMP1 = genElectronMothersTMP2;
-      nElectronGroup++;
+      genLeptonGroupsUnsorted.push_back(genLeptonsSameMother);
+      genLeptonGroupsUnsortedMothers.push_back(genLeptonMothersTMP1[0]);
+      genLeptonsTMP1       = genLeptonsTMP2;
+      genLeptonMothersTMP1 = genLeptonMothersTMP2;
+      nLeptonGroup++;
     }
 
     // // debug
-    // cout << "nMuonGroup " << nMuonGroup << endl;
-    // cout << "genMuonGroupsUnsorted size " << genMuonGroupsUnsorted.size() << endl;
-    // cout << "genMuonGroupsUnsortedMothers size " << genMuonGroupsUnsortedMothers.size() << endl;
-    // cout << "nElectronGroup " << nElectronGroup << endl;
-    // cout << "genElectronGroupsUnsorted size " << genElectronGroupsUnsorted.size() << endl;
-    // cout << "genElectronGroupsUnsortedMothers size " << genElectronGroupsUnsortedMothers.size() << endl;
+    // cout << "nLeptonGroup " << nLeptonGroup << endl;
+    // cout << "genLeptonGroupsUnsorted size " << genLeptonGroupsUnsorted.size() << endl;
+    // cout << "genLeptonGroupsUnsortedMothers size " << genLeptonGroupsUnsortedMothers.size() << endl;
     
-    if (nMuonGroup + nElectronGroup != genA.size())
+    if (nLeptonGroup != genA.size())
       cout << "Error! Total number of lepton groups does not match number of light bosons" << endl;
       
-    // Sort muon/electron groups to match order of genA vector
-    vector< vector<const reco::GenParticle*> > genMuonGroups;
-    vector<const reco::Candidate*> genMuonGroupsMothers;
+    // Sort lepton/electron groups to match order of genA vector
+    vector< vector<const reco::GenParticle*> > genLeptonGroups;
+    vector<const reco::Candidate*> genLeptonGroupsMothers;
     vector< vector<const reco::GenParticle*> > genElectronGroups;
     vector<const reco::Candidate*> genElectronGroupsMothers;
     for (unsigned int iA = 0; iA < genA.size(); iA++ ) {
-      bool isMuGroupMatchedToA = false;
-      int  nMuGroup = -1;
-      bool isEleGroupMatchedToA = false;
-      int  nEleGroup = -1;
+      bool isLepGroupMatchedToA = false;
+      int  nLepGroup = -1;
       // cout << "iA " << iA << endl;
-      // cout << "debug nMuGroup " << nMuGroup << endl;
-      // cout << "debug isMuGroupMatchedToA " << isMuGroupMatchedToA << endl;
-      for ( unsigned int iMuGroup = 0; iMuGroup < genMuonGroupsUnsortedMothers.size(); iMuGroup++ ) {
-	// cout << "iMuGroup " << iMuGroup << endl;
-	if ( fabs ( genA[iA]->pt() - genMuonGroupsUnsortedMothers[iMuGroup]->pt() ) < eq ) {
-	  // cout << "muon group is matched to boson " << endl;
-	  isMuGroupMatchedToA = true;
-	  nMuGroup = iMuGroup;
-	  break;
-	}
-      }
-      for ( unsigned int iEleGroup = 0; iEleGroup < genElectronGroupsUnsortedMothers.size(); iEleGroup++ ) {
-	// cout << "iEleGroup " << iEleGroup << endl;
-	if ( fabs ( genA[iA]->pt() - genElectronGroupsUnsortedMothers[iEleGroup]->pt() ) < eq ) {
-	  // cout << "electron group is matched to boson " << endl;
-	  isEleGroupMatchedToA = true;
-	  nEleGroup = iEleGroup;
+      // cout << "debug nLepGroup " << nLepGroup << endl;
+      // cout << "debug isLepGroupMatchedToA " << isLepGroupMatchedToA << endl;
+      for ( unsigned int iLepGroup = 0; iLepGroup < genLeptonGroupsUnsortedMothers.size(); iLepGroup++ ) {
+	// cout << "iLepGroup " << iLepGroup << endl;
+	if ( fabs ( genA[iA]->pt() - genLeptonGroupsUnsortedMothers[iLepGroup]->pt() ) < eq ) {
+	  // cout << "lepton group is matched to boson " << endl;
+	  isLepGroupMatchedToA = true;
+	  nLepGroup = iLepGroup;
 	  break;
 	}
       }
 
-      // cout << "debug nMuGroup " << nMuGroup << endl;
-      // cout << "debug isMuGroupMatchedToA " << isMuGroupMatchedToA << endl;
-      if (isMuGroupMatchedToA and isEleGroupMatchedToA)
-	cout << "Error! Light boson was matched to muon group and electron group" << endl;
-
-      if ( isMuGroupMatchedToA && nMuGroup >= 0 ) {
-	genMuonGroups.push_back( genMuonGroupsUnsorted[nMuGroup] );
-	genMuonGroupsMothers.push_back( genMuonGroupsUnsortedMothers[nMuGroup] );
-      } else if ( isEleGroupMatchedToA && nEleGroup >= 0 ) {
-	genElectronGroups.push_back( genElectronGroupsUnsorted[nEleGroup] );
-	genElectronGroupsMothers.push_back( genElectronGroupsUnsortedMothers[nEleGroup] );
+      // cout << "debug nLepGroup " << nLepGroup << endl;
+      // cout << "debug isLepGroupMatchedToA " << isLepGroupMatchedToA << endl;
+      if ( isLepGroupMatchedToA && nLepGroup >= 0 ) {
+	genLeptonGroups.push_back( genLeptonGroupsUnsorted[nLepGroup] );
+	genLeptonGroupsMothers.push_back( genLeptonGroupsUnsortedMothers[nLepGroup] );
       } else {
 	cout << "Error! Light boson was not matched" << endl;
       }
     }
     
     // // debug
-    // cout << "genMuonGroups size " << genMuonGroups.size() << endl;
-    // cout << "genMuonGroupsMothers size " << genMuonGroupsMothers.size() << endl;
-    // cout << "genElectronGroups size " << genElectronGroups.size() << endl;
-    // cout << "genElectronGroupsMothers size " << genElectronGroupsMothers.size() << endl;
+    // cout << "genLeptonGroups size " << genLeptonGroups.size() << endl;
+    // cout << "genLeptonGroupsMothers size " << genLeptonGroupsMothers.size() << endl;
 
     b_isGenALxyOK = false;
-    if ( (genMuonGroups.size() == 2 && genMuonGroups[0].size() == 2 && genMuonGroups[1].size() == 2 ) ||
-	 (genElectronGroups.size() == 2 && genElectronGroups[0].size() == 2 && genElectronGroups[1].size() == 2 ) || 
-	 (genMuonGroups.size() == 1 && genElectronGroups.size() == 1 && genElectronGroups[0].size() == 2 && genMuonGroups[0].size() == 2 ) ) {
-      sort( genMuonGroups[0].begin(), genMuonGroups[0].end(), tamu::helpers::PtOrder );
-      sort( genMuonGroups[1].begin(), genMuonGroups[1].end(), tamu::helpers::PtOrder );
+
+    if (genLeptonGroups.size() == 2 && genLeptonGroups[0].size() == 2 && genLeptonGroups[1].size() == 2){
+
+      // sort all available lepton groups according to pT
+      for (auto& p: genLeptonGroups) sort(p.begin(), p.end(), tamu::helpers::PtOrder);
+      
+      b_genA0Lep0_pdgId = genLeptonGroups[0][0]->pdgId();
+      b_genA0Lep1_pdgId = genLeptonGroups[0][1]->pdgId();
+      b_genA1Lep0_pdgId = genLeptonGroups[1][0]->pdgId();
+      b_genA1Lep1_pdgId = genLeptonGroups[1][1]->pdgId();
+      
+      b_genA0Lep0_px = genLeptonGroups[0][0]->px();
+      b_genA0Lep1_px = genLeptonGroups[0][1]->px();
+      b_genA1Lep0_px = genLeptonGroups[1][0]->px();
+      b_genA1Lep1_px = genLeptonGroups[1][1]->px();
+      
+      b_genA0Lep0_py = genLeptonGroups[0][0]->py();
+      b_genA0Lep1_py = genLeptonGroups[0][1]->py();
+      b_genA1Lep0_py = genLeptonGroups[1][0]->py();
+      b_genA1Lep1_py = genLeptonGroups[1][1]->py();
+      
+      b_genA0Lep0_pz = genLeptonGroups[0][0]->pz();
+      b_genA0Lep1_pz = genLeptonGroups[0][1]->pz();
+      b_genA1Lep0_pz = genLeptonGroups[1][0]->pz();
+      b_genA1Lep1_pz = genLeptonGroups[1][1]->pz();
+      
+      b_genA0Lep0_eta = genLeptonGroups[0][0]->eta();
+      b_genA0Lep1_eta = genLeptonGroups[0][1]->eta();
+      b_genA1Lep0_eta = genLeptonGroups[1][0]->eta();
+      b_genA1Lep1_eta = genLeptonGroups[1][1]->eta();
+      
+      b_genA0Lep0_phi = genLeptonGroups[0][0]->phi();
+      b_genA0Lep1_phi = genLeptonGroups[0][1]->phi();
+      b_genA1Lep0_phi = genLeptonGroups[1][0]->phi();
+      b_genA1Lep1_phi = genLeptonGroups[1][1]->phi();
+       
+      b_genA0Lep0_vx = genLeptonGroups[0][0]->vx() - b_beamSpot_x;
+      b_genA0Lep1_vx = genLeptonGroups[0][1]->vx() - b_beamSpot_x;
+      b_genA1Lep0_vx = genLeptonGroups[1][0]->vx() - b_beamSpot_x;
+      b_genA1Lep1_vx = genLeptonGroups[1][1]->vx() - b_beamSpot_x;
+      
+      b_genA0Lep0_vy = genLeptonGroups[0][0]->vy() - b_beamSpot_y;
+      b_genA0Lep1_vy = genLeptonGroups[0][1]->vy() - b_beamSpot_y;
+      b_genA1Lep0_vy = genLeptonGroups[1][0]->vy() - b_beamSpot_y;
+      b_genA1Lep1_vy = genLeptonGroups[1][1]->vy() - b_beamSpot_y;
+      
+      b_genA0Lep0_vz = genLeptonGroups[0][0]->vz() - b_beamSpot_z;
+      b_genA0Lep1_vz = genLeptonGroups[0][1]->vz() - b_beamSpot_z;
+      b_genA1Lep0_vz = genLeptonGroups[1][0]->vz() - b_beamSpot_z;
+      b_genA1Lep1_vz = genLeptonGroups[1][1]->vz() - b_beamSpot_z;      
+
+      if (fabs(b_genA0Lep0_vx - b_genA0Lep1_vx) < eq && 
+	  fabs(b_genA1Lep0_vx - b_genA1Lep1_vx) < eq && 
+	  fabs(b_genA0Lep0_vy - b_genA0Lep1_vy) < eq && 
+	  fabs(b_genA1Lep0_vy - b_genA1Lep1_vy) < eq && 
+	  fabs(b_genA0Lep0_vz - b_genA0Lep1_vz) < eq && 
+	  fabs(b_genA1Lep0_vz - b_genA1Lep1_vz) < eq) 
+	{
+	b_genA0_Lx = b_genA0Lep0_vx - b_genA0_vx;
+	b_genA1_Lx = b_genA1Lep0_vx - b_genA1_vx;
+	
+	b_genA0_Ly = b_genA0Lep0_vy - b_genA0_vy;
+	b_genA1_Ly = b_genA1Lep0_vy - b_genA1_vy;
+        
+	b_genA0_Lz = b_genA0Lep0_vz - b_genA0_vz;
+	b_genA1_Lz = b_genA1Lep0_vz - b_genA1_vz;
+            
+	b_genA0_Lxy = sqrt( b_genA0_Lx * b_genA0_Lx + b_genA0_Ly * b_genA0_Ly );
+	b_genA1_Lxy = sqrt( b_genA1_Lx * b_genA1_Lx + b_genA1_Ly * b_genA1_Ly );
+	
+	b_genA0_L = sqrt( b_genA0_Lx * b_genA0_Lx + b_genA0_Ly * b_genA0_Ly + b_genA0_Lz * b_genA0_Lz );
+	b_genA1_L = sqrt( b_genA1_Lx * b_genA1_Lx + b_genA1_Ly * b_genA1_Ly + b_genA1_Lz * b_genA1_Lz );
+	
+	if ( b_genA0_Lxy < m_threshold_GenA_Lxy && b_genA1_Lxy < m_threshold_GenA_Lxy ) b_isGenALxyOK = true;
+
+	} else {
+	cout << "WARNING! Lepton vertices are different. No Lxy's are calculated." << endl;
+	b_genA0_Lx  = -1000.0;
+	b_genA1_Lx  = -1000.0;
+	b_genA0_Ly  = -1000.0;
+	b_genA1_Ly  = -1000.0;
+	b_genA0_Lz  = -1000.0;
+	b_genA1_Lz  = -1000.0;
+	b_genA0_Lxy = -1000.0;
+	b_genA1_Lxy = -1000.0;
+	b_genA0_L   = -1000.0;
+	b_genA1_L   = -1000.0;
+      }      
+
+      b_genA0Lep_dEta = genLeptonGroups[0][0]->eta() - genLeptonGroups[0][1]->eta();
+      b_genA1Lep_dEta = genLeptonGroups[1][0]->eta() - genLeptonGroups[1][1]->eta();
+      b_genA0Lep_dPhi = tamu::helpers::My_dPhi( genLeptonGroups[0][0]->phi(), genLeptonGroups[0][1]->phi() );
+      b_genA1Lep_dPhi = tamu::helpers::My_dPhi( genLeptonGroups[1][0]->phi(), genLeptonGroups[1][1]->phi() );
+      b_genA0Lep_dR   = sqrt(b_genA0Lep_dEta*b_genA0Lep_dEta + b_genA0Lep_dPhi*b_genA0Lep_dPhi);
+      b_genA1Lep_dR   = sqrt(b_genA1Lep_dEta*b_genA1Lep_dEta + b_genA1Lep_dPhi*b_genA1Lep_dPhi);
+      
+    } else {
+      cout << "Error! Number of light bosons does not match number of lepton groups" << endl; 
+    }
+    
+    if ( b_isGenALxyOK ) m_eventsGenALxyOK++;
+    
+    // Sort genLeptons by pT (leading pT first)
+    if ( genLeptons.size() > 1 ) sort( genLeptons.begin(), genLeptons.end(), tamu::helpers::PtOrder );
+    
+    b_is4GenLep = false;
+
+    int nMu = 0;
+    int nEle = 0;
+    for (auto& lep: genLeptons){
+      if (fabs(lep->pdgId())==11) ++nEle;
+      if (fabs(lep->pdgId())==12) ++nMu;
+    }
+    
+    if ( genLeptons.size() == 4 ){
+      m_events4GenLep++;
+      b_is4GenLep = true;
+    } else {
+      cout << "Error! Number of leptons in event is not equal to 4!" << endl; 
+    }
+
+    if (nMu==4) {
+      m_events4GenLep++;
+      b_is4GenLep = true;
+    } else if (nEle==4)  {
+      m_events4GenEle++;
+      b_is4GenEle = true;
+    } else if (nMu==2 and nEle==2) {
+      m_events2GenMu2GenEle++;
+      b_is2GenMu2GenEle = true;
+    } else {
+      cout << "Error! Not a valid event type" << endl; 
     }
       
-    //   b_genA0Mu0_px = genMuonGroups[0][0]->px();
-    //   b_genA0Mu1_px = genMuonGroups[0][1]->px();
-    //   b_genA1Mu0_px = genMuonGroups[1][0]->px();
-    //   b_genA1Mu1_px = genMuonGroups[1][1]->px();
-      
-    //   b_genA0Mu0_py = genMuonGroups[0][0]->py();
-    //   b_genA0Mu1_py = genMuonGroups[0][1]->py();
-    //   b_genA1Mu0_py = genMuonGroups[1][0]->py();
-    //   b_genA1Mu1_py = genMuonGroups[1][1]->py();
-      
-    //   b_genA0Mu0_pz = genMuonGroups[0][0]->pz();
-    //   b_genA0Mu1_pz = genMuonGroups[0][1]->pz();
-    //   b_genA1Mu0_pz = genMuonGroups[1][0]->pz();
-    //   b_genA1Mu1_pz = genMuonGroups[1][1]->pz();
     
-    //   b_genA0Mu0_eta = genMuonGroups[0][0]->eta();
-    //   b_genA0Mu1_eta = genMuonGroups[0][1]->eta();
-    //   b_genA1Mu0_eta = genMuonGroups[1][0]->eta();
-    //   b_genA1Mu1_eta = genMuonGroups[1][1]->eta();
+    if ( genLeptons.size() > 0 ) {
+      b_genLep0_pdgId  = genLeptons[0]->pdgId();
+      b_genLep0_px  = genLeptons[0]->px();
+      b_genLep0_py  = genLeptons[0]->py();
+      b_genLep0_pz  = genLeptons[0]->pz();
+      b_genLep0_pT  = genLeptons[0]->pt();
+      b_genLep0_eta = genLeptons[0]->eta();
+      b_genLep0_phi = genLeptons[0]->phi();
+    } else {
+      b_genLep0_pdgId  = -100.0;
+      b_genLep0_px  = -100.0;
+      b_genLep0_py  = -100.0;
+      b_genLep0_pz  = -100.0;
+      b_genLep0_pT  = -100.0;
+      b_genLep0_eta = -100.0;
+      b_genLep0_phi = -100.0;
+    }
+    if ( genLeptons.size() > 1 ) {
+      b_genLep1_pdgId  = genLeptons[1]->pdgId();
+      b_genLep1_px  = genLeptons[1]->px();
+      b_genLep1_py  = genLeptons[1]->py();
+      b_genLep1_pz  = genLeptons[1]->pz();
+      b_genLep1_pT  = genLeptons[1]->pt();
+      b_genLep1_eta = genLeptons[1]->eta();
+      b_genLep1_phi = genLeptons[1]->phi();
+    } else {
+      b_genLep1_pdgId  = -100.0;
+      b_genLep1_px  = -100.0;
+      b_genLep1_py  = -100.0;
+      b_genLep1_pz  = -100.0;
+      b_genLep1_pT  = -100.0;
+      b_genLep1_eta = -100.0;
+      b_genLep1_phi = -100.0;
+    }
+    if ( genLeptons.size() > 2 ) {
+      b_genLep2_pdgId  = genLeptons[2]->pdgId();
+      b_genLep2_px  = genLeptons[2]->px();
+      b_genLep2_py  = genLeptons[2]->py();
+      b_genLep2_pz  = genLeptons[2]->pz();
+      b_genLep2_pT  = genLeptons[2]->pt();
+      b_genLep2_eta = genLeptons[2]->eta();
+      b_genLep2_phi = genLeptons[2]->phi();
+    } else {
+      b_genLep2_pdgId  = -100.0;
+      b_genLep2_px  = -100.0;
+      b_genLep2_py  = -100.0;
+      b_genLep2_pz  = -100.0;
+      b_genLep2_pT  = -100.0;
+      b_genLep2_eta = -100.0;
+      b_genLep2_phi = -100.0;
+    }
+    if ( genLeptons.size() > 3 ) {
+      b_genLep3_pdgId  = genLeptons[3]->pdgId();
+      b_genLep3_px  = genLeptons[3]->px();
+      b_genLep3_py  = genLeptons[3]->py();
+      b_genLep3_pz  = genLeptons[3]->pz();
+      b_genLep3_pT  = genLeptons[3]->pt();
+      b_genLep3_eta = genLeptons[3]->eta();
+      b_genLep3_phi = genLeptons[3]->phi();
+    } else {
+      b_genLep3_pdgId  = -100.0;
+      b_genLep3_px  = -100.0;
+      b_genLep3_py  = -100.0;
+      b_genLep3_pz  = -100.0;
+      b_genLep3_pT  = -100.0;
+      b_genLep3_eta = -100.0;
+      b_genLep3_phi = -100.0;
+    }
     
-    //   b_genA0Mu0_phi = genMuonGroups[0][0]->phi();
-    //   b_genA0Mu1_phi = genMuonGroups[0][1]->phi();
-    //   b_genA1Mu0_phi = genMuonGroups[1][0]->phi();
-    //   b_genA1Mu1_phi = genMuonGroups[1][1]->phi();
+    vector<const reco::GenParticle*> genLeptons17;
+    vector<const reco::GenParticle*> genLeptons8;
     
-    //   b_genA0Mu0_vx = genMuonGroups[0][0]->vx() - b_beamSpot_x;
-    //   b_genA0Mu1_vx = genMuonGroups[0][1]->vx() - b_beamSpot_x;
-    //   b_genA1Mu0_vx = genMuonGroups[1][0]->vx() - b_beamSpot_x;
-    //   b_genA1Mu1_vx = genMuonGroups[1][1]->vx() - b_beamSpot_x;
+    for ( unsigned int i = 0; i < genLeptons.size(); i++ ) {
+      if ( genLeptons[i]->pt() > m_threshold_Lep17_pT && fabs( genLeptons[i]->eta() ) < m_threshold_Lep17_eta ) {
+	genLeptons17.push_back(genLeptons[i]);
+      }
+      if ( genLeptons[i]->pt() > m_threshold_Lep8_pT && fabs( genLeptons[i]->eta() ) < m_threshold_Lep8_eta ) {
+	genLeptons8.push_back(genLeptons[i]);
+      }
+    }
+    b_is1GenLep17 = false; 
+    b_is2GenLep8  = false;
+    b_is3GenLep8  = false;
+    b_is4GenLep8  = false;
     
-    //   b_genA0Mu0_vy = genMuonGroups[0][0]->vy() - b_beamSpot_y;
-    //   b_genA0Mu1_vy = genMuonGroups[0][1]->vy() - b_beamSpot_y;
-    //   b_genA1Mu0_vy = genMuonGroups[1][0]->vy() - b_beamSpot_y;
-    //   b_genA1Mu1_vy = genMuonGroups[1][1]->vy() - b_beamSpot_y;
-    
-    //   b_genA0Mu0_vz = genMuonGroups[0][0]->vz() - b_beamSpot_z;
-    //   b_genA0Mu1_vz = genMuonGroups[0][1]->vz() - b_beamSpot_z;
-    //   b_genA1Mu0_vz = genMuonGroups[1][0]->vz() - b_beamSpot_z;
-    //   b_genA1Mu1_vz = genMuonGroups[1][1]->vz() - b_beamSpot_z;
-    
-    //   if (    fabs(b_genA0Mu0_vx - b_genA0Mu1_vx) < eq
-    // 	      && fabs(b_genA1Mu0_vx - b_genA1Mu1_vx) < eq
-    // 	      && fabs(b_genA0Mu0_vy - b_genA0Mu1_vy) < eq
-    // 	      && fabs(b_genA1Mu0_vy - b_genA1Mu1_vy) < eq
-    // 	      && fabs(b_genA0Mu0_vz - b_genA0Mu1_vz) < eq
-    // 	      && fabs(b_genA1Mu0_vz - b_genA1Mu1_vz) < eq
-    // 	      ) {
-    // 	        b_genA0_Lx = b_genA0Mu0_vx - b_genA0_vx;
-    // 	        b_genA1_Lx = b_genA1Mu0_vx - b_genA1_vx;
-            
-    // 	        b_genA0_Ly = b_genA0Mu0_vy - b_genA0_vy;
-    // 	        b_genA1_Ly = b_genA1Mu0_vy - b_genA1_vy;
-            
-    // 	        b_genA0_Lz = b_genA0Mu0_vz - b_genA0_vz;
-    // 	        b_genA1_Lz = b_genA1Mu0_vz - b_genA1_vz;
-            
-    // 	        b_genA0_Lxy = sqrt( b_genA0_Lx * b_genA0_Lx + b_genA0_Ly * b_genA0_Ly );
-    // 	        b_genA1_Lxy = sqrt( b_genA1_Lx * b_genA1_Lx + b_genA1_Ly * b_genA1_Ly );
-
-    // 	        b_genA0_L = sqrt( b_genA0_Lx * b_genA0_Lx + b_genA0_Ly * b_genA0_Ly + b_genA0_Lz * b_genA0_Lz );
-    // 	        b_genA1_L = sqrt( b_genA1_Lx * b_genA1_Lx + b_genA1_Ly * b_genA1_Ly + b_genA1_Lz * b_genA1_Lz );
-	        
-    // 	        if ( b_genA0_Lxy < m_threshold_GenA_Lxy && b_genA1_Lxy < m_threshold_GenA_Lxy ) b_isGenALxyOK = true;
-    //   } else {
-    // 	      cout << "WARNING! Muon vertexes are different. No Lxy's are calculated." << endl;
-    // 	      b_genA0_Lx  = -1000.0;
-    // 	      b_genA1_Lx  = -1000.0;
-    // 	      b_genA0_Ly  = -1000.0;
-    // 	      b_genA1_Ly  = -1000.0;
-    // 	      b_genA0_Lz  = -1000.0;
-    // 	      b_genA1_Lz  = -1000.0;
-    // 	      b_genA0_Lxy = -1000.0;
-    // 	      b_genA1_Lxy = -1000.0;
-    // 	      b_genA0_L   = -1000.0;
-    // 	      b_genA1_L   = -1000.0;
-    //   }
-    
-    //   b_genA0Mu_dEta = genMuonGroups[0][0]->eta() - genMuonGroups[0][1]->eta();
-    //   b_genA1Mu_dEta = genMuonGroups[1][0]->eta() - genMuonGroups[1][1]->eta();
-    //   b_genA0Mu_dPhi = tamu::helpers::My_dPhi( genMuonGroups[0][0]->phi(), genMuonGroups[0][1]->phi() );
-    //   b_genA1Mu_dPhi = tamu::helpers::My_dPhi( genMuonGroups[1][0]->phi(), genMuonGroups[1][1]->phi() );
-    //   b_genA0Mu_dR   = sqrt(b_genA0Mu_dEta*b_genA0Mu_dEta + b_genA0Mu_dPhi*b_genA0Mu_dPhi);
-    //   b_genA1Mu_dR   = sqrt(b_genA1Mu_dEta*b_genA1Mu_dEta + b_genA1Mu_dPhi*b_genA1Mu_dPhi);
-    // } else {
-      
-    // }
-    
-    // if ( b_isGenALxyOK ) m_eventsGenALxyOK++;
-  
-    // // Sort genMuons by pT (leading pT first)
-    // if ( genMuons.size() > 1 ) sort( genMuons.begin(), genMuons.end(), tamu::helpers::PtOrder );
-  
-    // b_is4GenMu = false;
-
-    // if ( genMuons.size() == 4 ){
-    //   m_events4GenMu++;
-    //   b_is4GenMu = true;
-    // }
-  
-    // if ( genMuons.size() > 0 ) {
-    //   b_genMu0_px  = genMuons[0]->px();
-    //   b_genMu0_py  = genMuons[0]->py();
-    //   b_genMu0_pz  = genMuons[0]->pz();
-    //   b_genMu0_pT  = genMuons[0]->pt();
-    //   b_genMu0_eta = genMuons[0]->eta();
-    //   b_genMu0_phi = genMuons[0]->phi();
-    // } else {
-    //   b_genMu0_px  = -100.0;
-    //   b_genMu0_py  = -100.0;
-    //   b_genMu0_pz  = -100.0;
-    //   b_genMu0_pT  = -100.0;
-    //   b_genMu0_eta = -100.0;
-    //   b_genMu0_phi = -100.0;
-    // }
-    // if ( genMuons.size() > 1 ) {
-    //   b_genMu1_px  = genMuons[1]->px();
-    //   b_genMu1_py  = genMuons[1]->py();
-    //   b_genMu1_pz  = genMuons[1]->pz();
-    //   b_genMu1_pT  = genMuons[1]->pt();
-    //   b_genMu1_eta = genMuons[1]->eta();
-    //   b_genMu1_phi = genMuons[1]->phi();
-    // } else {
-    //   b_genMu1_px  = -100.0;
-    //   b_genMu1_py  = -100.0;
-    //   b_genMu1_pz  = -100.0;
-    //   b_genMu1_pT  = -100.0;
-    //   b_genMu1_eta = -100.0;
-    //   b_genMu1_phi = -100.0;
-    // }
-    // if ( genMuons.size() > 2 ) {
-    //   b_genMu2_px  = genMuons[2]->px();
-    //   b_genMu2_py  = genMuons[2]->py();
-    //   b_genMu2_pz  = genMuons[2]->pz();
-    //   b_genMu2_pT  = genMuons[2]->pt();
-    //   b_genMu2_eta = genMuons[2]->eta();
-    //   b_genMu2_phi = genMuons[2]->phi();
-    // } else {
-    //   b_genMu2_px  = -100.0;
-    //   b_genMu2_py  = -100.0;
-    //   b_genMu2_pz  = -100.0;
-    //   b_genMu2_pT  = -100.0;
-    //   b_genMu2_eta = -100.0;
-    //   b_genMu2_phi = -100.0;
-    // }
-    // if ( genMuons.size() > 3 ) {
-    //   b_genMu3_px  = genMuons[3]->px();
-    //   b_genMu3_py  = genMuons[3]->py();
-    //   b_genMu3_pz  = genMuons[3]->pz();
-    //   b_genMu3_pT  = genMuons[3]->pt();
-    //   b_genMu3_eta = genMuons[3]->eta();
-    //   b_genMu3_phi = genMuons[3]->phi();
-    // } else {
-    //   b_genMu3_px  = -100.0;
-    //   b_genMu3_py  = -100.0;
-    //   b_genMu3_pz  = -100.0;
-    //   b_genMu3_pT  = -100.0;
-    //   b_genMu3_eta = -100.0;
-    //   b_genMu3_phi = -100.0;
-    // }
-
-    // vector<const reco::GenParticle*> genMuons17;
-    // vector<const reco::GenParticle*> genMuons8;
-  
-    // for ( unsigned int i = 0; i < genMuons.size(); i++ ) {
-    //   if ( genMuons[i]->pt() > m_threshold_Mu17_pT && fabs( genMuons[i]->eta() ) < m_threshold_Mu17_eta ) {
-    //     genMuons17.push_back(genMuons[i]);
-    //   }
-    //   if ( genMuons[i]->pt() > m_threshold_Mu8_pT && fabs( genMuons[i]->eta() ) < m_threshold_Mu8_eta ) {
-    //     genMuons8.push_back(genMuons[i]);
-    //   }
-    // }
-    // b_is1GenMu17 = false; 
-    // b_is2GenMu8  = false;
-    // b_is3GenMu8  = false;
-    // b_is4GenMu8  = false;
-
-    // if ( genMuons17.size() >=1) {
-    //   m_events1GenMu17++;
-    //   b_is1GenMu17 = true;
-    //   if ( genMuons8.size() >=2 ) {
-    //     m_events2GenMu8++;
-    //     b_is2GenMu8 = true;
-    //   }
-    //   if ( genMuons8.size() >=3 ) {
-    //     m_events3GenMu8++;
-    //     b_is3GenMu8 = true;
-    //   }
-    //   if ( genMuons8.size() >=4 ) {
-    //     m_events4GenMu8++;
-    //     b_is4GenMu8 = true;
-    //   }
-    // }
-  
+    if ( genLeptons17.size() >=1) {
+      m_events1GenLep17++;
+      b_is1GenLep17 = true;
+      if ( genLeptons8.size() >=2 ) {
+	m_events2GenLep8++;
+	b_is2GenLep8 = true;
+      }
+      if ( genLeptons8.size() >=3 ) {
+	m_events3GenLep8++;
+	b_is3GenLep8 = true;
+      }
+      if ( genLeptons8.size() >=4 ) {
+	m_events4GenLep8++;
+	b_is4GenLep8 = true;
+      }
+    }    
     if ( m_debug > 10 ) cout << m_events << " Stop GEN Level" << endl;
   }
   
@@ -1808,74 +1784,81 @@ EJetMuJetAnalyzer::beginJob() {
   m_ttree->Branch("genA1_L",   &b_genA1_L,   "genA1_L/F");
   
   // Muons from bosons
-  m_ttree->Branch("genA0Mu0_px", &b_genA0Mu0_px, "genA0Mu0_px/F");
-  m_ttree->Branch("genA0Mu1_px", &b_genA0Mu1_px, "genA0Mu1_px/F");
-  m_ttree->Branch("genA1Mu0_px", &b_genA1Mu0_px, "genA1Mu0_px/F");
-  m_ttree->Branch("genA1Mu1_px", &b_genA1Mu1_px, "genA1Mu1_px/F");
+  m_ttree->Branch("genA0Lep0_px", &b_genA0Lep0_px, "genA0Lep0_px/F");
+  m_ttree->Branch("genA0Lep1_px", &b_genA0Lep1_px, "genA0Lep1_px/F");
+  m_ttree->Branch("genA1Lep0_px", &b_genA1Lep0_px, "genA1Lep0_px/F");
+  m_ttree->Branch("genA1Lep1_px", &b_genA1Lep1_px, "genA1Lep1_px/F");
   
-  m_ttree->Branch("genA0Mu0_py", &b_genA0Mu0_py, "genA0Mu0_py/F");
-  m_ttree->Branch("genA0Mu1_py", &b_genA0Mu1_py, "genA0Mu1_py/F");
-  m_ttree->Branch("genA1Mu0_py", &b_genA1Mu0_py, "genA1Mu0_py/F");
-  m_ttree->Branch("genA1Mu1_py", &b_genA1Mu1_py, "genA1Mu1_py/F");
+  m_ttree->Branch("genA0Lep0_py", &b_genA0Lep0_py, "genA0Lep0_py/F");
+  m_ttree->Branch("genA0Lep1_py", &b_genA0Lep1_py, "genA0Lep1_py/F");
+  m_ttree->Branch("genA1Lep0_py", &b_genA1Lep0_py, "genA1Lep0_py/F");
+  m_ttree->Branch("genA1Lep1_py", &b_genA1Lep1_py, "genA1Lep1_py/F");
   
-  m_ttree->Branch("genA0Mu0_pz", &b_genA0Mu0_pz, "genA0Mu0_pz/F");
-  m_ttree->Branch("genA0Mu1_pz", &b_genA0Mu1_pz, "genA0Mu1_pz/F");
-  m_ttree->Branch("genA1Mu0_pz", &b_genA1Mu0_pz, "genA1Mu0_pz/F");
-  m_ttree->Branch("genA1Mu1_pz", &b_genA1Mu1_pz, "genA1Mu1_pz/F");
+  m_ttree->Branch("genA0Lep0_pz", &b_genA0Lep0_pz, "genA0Lep0_pz/F");
+  m_ttree->Branch("genA0Lep1_pz", &b_genA0Lep1_pz, "genA0Lep1_pz/F");
+  m_ttree->Branch("genA1Lep0_pz", &b_genA1Lep0_pz, "genA1Lep0_pz/F");
+  m_ttree->Branch("genA1Lep1_pz", &b_genA1Lep1_pz, "genA1Lep1_pz/F");
   
-  m_ttree->Branch("genA0Mu0_eta", &b_genA0Mu0_eta, "genA0Mu0_eta/F");
-  m_ttree->Branch("genA0Mu1_eta", &b_genA0Mu1_eta, "genA0Mu1_eta/F");
-  m_ttree->Branch("genA1Mu0_eta", &b_genA1Mu0_eta, "genA1Mu0_eta/F");
-  m_ttree->Branch("genA1Mu1_eta", &b_genA1Mu1_eta, "genA1Mu1_eta/F");
+  m_ttree->Branch("genA0Lep0_eta", &b_genA0Lep0_eta, "genA0Lep0_eta/F");
+  m_ttree->Branch("genA0Lep1_eta", &b_genA0Lep1_eta, "genA0Lep1_eta/F");
+  m_ttree->Branch("genA1Lep0_eta", &b_genA1Lep0_eta, "genA1Lep0_eta/F");
+  m_ttree->Branch("genA1Lep1_eta", &b_genA1Lep1_eta, "genA1Lep1_eta/F");
   
-  m_ttree->Branch("genA0Mu0_phi", &b_genA0Mu0_phi, "genA0Mu0_phi/F");
-  m_ttree->Branch("genA0Mu1_phi", &b_genA0Mu1_phi, "genA0Mu1_phi/F");
-  m_ttree->Branch("genA1Mu0_phi", &b_genA1Mu0_phi, "genA1Mu0_phi/F");
-  m_ttree->Branch("genA1Mu1_phi", &b_genA1Mu1_phi, "genA1Mu1_phi/F");
+  m_ttree->Branch("genA0Lep0_phi", &b_genA0Lep0_phi, "genA0Lep0_phi/F");
+  m_ttree->Branch("genA0Lep1_phi", &b_genA0Lep1_phi, "genA0Lep1_phi/F");
+  m_ttree->Branch("genA1Lep0_phi", &b_genA1Lep0_phi, "genA1Lep0_phi/F");
+  m_ttree->Branch("genA1Lep1_phi", &b_genA1Lep1_phi, "genA1Lep1_phi/F");
   
-  m_ttree->Branch("genA0Mu0_vx", &b_genA0Mu0_vx, "genA0Mu0_vx/F");
-  m_ttree->Branch("genA0Mu1_vx", &b_genA0Mu1_vx, "genA0Mu1_vx/F");
-  m_ttree->Branch("genA1Mu0_vx", &b_genA1Mu0_vx, "genA1Mu0_vx/F");
-  m_ttree->Branch("genA1Mu1_vx", &b_genA1Mu1_vx, "genA1Mu1_vx/F");
+  m_ttree->Branch("genA0Lep0_vx", &b_genA0Lep0_vx, "genA0Lep0_vx/F");
+  m_ttree->Branch("genA0Lep1_vx", &b_genA0Lep1_vx, "genA0Lep1_vx/F");
+  m_ttree->Branch("genA1Lep0_vx", &b_genA1Lep0_vx, "genA1Lep0_vx/F");
+  m_ttree->Branch("genA1Lep1_vx", &b_genA1Lep1_vx, "genA1Lep1_vx/F");
   
-  m_ttree->Branch("genA0Mu0_vy", &b_genA0Mu0_vy, "genA0Mu0_vy/F");
-  m_ttree->Branch("genA0Mu1_vy", &b_genA0Mu1_vy, "genA0Mu1_vy/F");
-  m_ttree->Branch("genA1Mu0_vy", &b_genA1Mu0_vy, "genA1Mu0_vy/F");
-  m_ttree->Branch("genA1Mu1_vy", &b_genA1Mu1_vy, "genA1Mu1_vy/F");
+  m_ttree->Branch("genA0Lep0_vy", &b_genA0Lep0_vy, "genA0Lep0_vy/F");
+  m_ttree->Branch("genA0Lep1_vy", &b_genA0Lep1_vy, "genA0Lep1_vy/F");
+  m_ttree->Branch("genA1Lep0_vy", &b_genA1Lep0_vy, "genA1Lep0_vy/F");
+  m_ttree->Branch("genA1Lep1_vy", &b_genA1Lep1_vy, "genA1Lep1_vy/F");
   
-  m_ttree->Branch("genA0Mu0_vz", &b_genA0Mu0_vz, "genA0Mu0_vz/F");
-  m_ttree->Branch("genA0Mu1_vz", &b_genA0Mu1_vz, "genA0Mu1_vz/F");
-  m_ttree->Branch("genA1Mu0_vz", &b_genA1Mu0_vz, "genA1Mu0_vz/F");
-  m_ttree->Branch("genA1Mu1_vz", &b_genA1Mu1_vz, "genA1Mu1_vz/F");
+  m_ttree->Branch("genA0Lep0_vz", &b_genA0Lep0_vz, "genA0Lep0_vz/F");
+  m_ttree->Branch("genA0Lep1_vz", &b_genA0Lep1_vz, "genA0Lep1_vz/F");
+  m_ttree->Branch("genA1Lep0_vz", &b_genA1Lep0_vz, "genA1Lep0_vz/F");
+  m_ttree->Branch("genA1Lep1_vz", &b_genA1Lep1_vz, "genA1Lep1_vz/F");
   
-  m_ttree->Branch("genA0Mu_dEta", &b_genA0Mu_dEta, "genA0Mu_dEta/F");
-  m_ttree->Branch("genA1Mu_dEta", &b_genA1Mu_dEta, "genA1Mu_dEta/F");
-  m_ttree->Branch("genA0Mu_dPhi", &b_genA0Mu_dPhi, "genA0Mu_dPhi/F");
-  m_ttree->Branch("genA1Mu_dPhi", &b_genA1Mu_dPhi, "genA1Mu_dPhi/F");
-  m_ttree->Branch("genA0Mu_dR",   &b_genA0Mu_dR,   "genA0Mu_dR/F");
-  m_ttree->Branch("genA1Mu_dR",   &b_genA1Mu_dR,   "genA1Mu_dR/F");
+  m_ttree->Branch("genA0Lep_dEta", &b_genA0Lep_dEta, "genA0Lep_dEta/F");
+  m_ttree->Branch("genA1Lep_dEta", &b_genA1Lep_dEta, "genA1Lep_dEta/F");
+  m_ttree->Branch("genA0Lep_dPhi", &b_genA0Lep_dPhi, "genA0Lep_dPhi/F");
+  m_ttree->Branch("genA1Lep_dPhi", &b_genA1Lep_dPhi, "genA1Lep_dPhi/F");
+  m_ttree->Branch("genA0Lep_dR",   &b_genA0Lep_dR,   "genA0Lep_dR/F");
+  m_ttree->Branch("genA1Lep_dR",   &b_genA1Lep_dR,   "genA1Lep_dR/F");
   
-  // GEN Level Muons
-  m_ttree->Branch("genMu0_pT",  &b_genMu0_pT,  "genMu0_pT/F");
-  m_ttree->Branch("genMu1_pT",  &b_genMu1_pT,  "genMu1_pT/F");
-  m_ttree->Branch("genMu2_pT",  &b_genMu2_pT,  "genMu2_pT/F");
-  m_ttree->Branch("genMu3_pT",  &b_genMu3_pT,  "genMu3_pT/F");
-  m_ttree->Branch("genMu0_eta", &b_genMu0_eta, "genMu0_eta/F");
-  m_ttree->Branch("genMu1_eta", &b_genMu1_eta, "genMu1_eta/F");
-  m_ttree->Branch("genMu2_eta", &b_genMu2_eta, "genMu2_eta/F");
-  m_ttree->Branch("genMu3_eta", &b_genMu3_eta, "genMu3_eta/F");
-  m_ttree->Branch("genMu0_phi", &b_genMu0_phi, "genMu0_phi/F");
-  m_ttree->Branch("genMu1_phi", &b_genMu1_phi, "genMu1_phi/F");
-  m_ttree->Branch("genMu2_phi", &b_genMu2_phi, "genMu2_phi/F");
-  m_ttree->Branch("genMu3_phi", &b_genMu3_phi, "genMu3_phi/F");
+  // GEN Level Lepons
+  m_ttree->Branch("genLep0_pT",  &b_genLep0_pT,  "genLep0_pT/F");
+  m_ttree->Branch("genLep1_pT",  &b_genLep1_pT,  "genLep1_pT/F");
+  m_ttree->Branch("genLep2_pT",  &b_genLep2_pT,  "genLep2_pT/F");
+  m_ttree->Branch("genLep3_pT",  &b_genLep3_pT,  "genLep3_pT/F");
+  m_ttree->Branch("genLep0_eta", &b_genLep0_eta, "genLep0_eta/F");
+  m_ttree->Branch("genLep1_eta", &b_genLep1_eta, "genLep1_eta/F");
+  m_ttree->Branch("genLep2_eta", &b_genLep2_eta, "genLep2_eta/F");
+  m_ttree->Branch("genLep3_eta", &b_genLep3_eta, "genLep3_eta/F");
+  m_ttree->Branch("genLep0_phi", &b_genLep0_phi, "genLep0_phi/F");
+  m_ttree->Branch("genLep1_phi", &b_genLep1_phi, "genLep1_phi/F");
+  m_ttree->Branch("genLep2_phi", &b_genLep2_phi, "genLep2_phi/F");
+  m_ttree->Branch("genLep3_phi", &b_genLep3_phi, "genLep3_phi/F");
+  m_ttree->Branch("genLep0_pdgId", &b_genLep0_pdgId, "genLep0_pdgId/F");
+  m_ttree->Branch("genLep1_pdgId", &b_genLep1_pdgId, "genLep1_pdgId/F");
+  m_ttree->Branch("genLep2_pdgId", &b_genLep2_pdgId, "genLep2_pdgId/F");
+  m_ttree->Branch("genLep3_pdgId", &b_genLep3_pdgId, "genLep3_pdgId/F");
   
   // GEN Level Selectors
-  m_ttree->Branch("is4GenMu",    &b_is4GenMu,       "is4GenMu/O");
+  m_ttree->Branch("is4GenLep",       &b_is4GenLep,       "is4GenLep/O");
+  m_ttree->Branch("is4GenMu",        &b_is4GenMu,        "is4GenMu/O");
+  m_ttree->Branch("is4GenEle",       &b_is4GenEle,       "is4GenEle/O");
+  m_ttree->Branch("is2GenMu2GenEle", &b_is2GenMu2GenEle, "is2GenMu2GenEle/O");
   
-  m_ttree->Branch("is1GenMu17",  &b_is1GenMu17,     "is1GenMu17/O");
-  m_ttree->Branch("is2GenMu8",   &b_is2GenMu8,      "is2GenMu8/O");
-  m_ttree->Branch("is3GenMu8",   &b_is3GenMu8,      "is3GenMu8/O");
-  m_ttree->Branch("is4GenMu8",   &b_is4GenMu8,      "is4GenMu8/O");
+  m_ttree->Branch("is1GenLep17",  &b_is1GenLep17,     "is1GenLep17/O");
+  m_ttree->Branch("is2GenLep8",   &b_is2GenLep8,      "is2GenLep8/O");
+  m_ttree->Branch("is3GenLep8",   &b_is3GenLep8,      "is3GenLep8/O");
+  m_ttree->Branch("is4GenLep8",   &b_is4GenLep8,      "is4GenLep8/O");
   
   m_ttree->Branch("isGenALxyOK", &b_isGenALxyOK, "isGenALxyOK/O");
   
