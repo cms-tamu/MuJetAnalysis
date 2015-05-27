@@ -356,7 +356,6 @@ class LeptonJetAnalyzer : public edm::EDAnalyzer {
   Bool_t b_is2DiMuonsDzOK_ConsistentVtx;
   Int_t  m_events2DiMuonsDzOK_ConsistentVtx;   // ... with dz between dimuons less than 0.1
   
-  Bool_t b_isDiMuonHLTFired;
   Int_t  m_eventsDiMuonHLTFired_FittedVtx;// ... with dimuon HLT fired
   Int_t  m_eventsDiMuonHLTFired_ConsistentVtx;// ... with dimuon HLT fired
   
@@ -625,13 +624,7 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   b_run   = iEvent.id().run();
   b_lumi  = iEvent.id().luminosityBlock();
   b_event = iEvent.id().event();
-  if ( m_debug > 10 ) {
-    cout << " Event info: "
-	 << " run "   << b_run
-	 << " lumi "  << b_lumi
-	 << " event " << b_event
-	 << endl;
-  }
+  if ( m_debug > 10 ) cout<<" Event info: "<<" run "<<b_run<<" lumi "<<b_lumi<<" event "<<b_event<<endl;
 
   // Beam spot info
   edm::Handle<reco::BeamSpot> beamSpot;
@@ -639,13 +632,7 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   b_beamSpot_x = beamSpot->position().x();
   b_beamSpot_y = beamSpot->position().y();
   b_beamSpot_z = beamSpot->position().z();
-  if ( m_debug > 10 ) {
-    cout << " Beam spot "
-	 << " x " << b_beamSpot_x
-	 << " y " << b_beamSpot_y
-	 << " z " << b_beamSpot_z
-	 << endl;
-  }
+  if ( m_debug > 10 ) cout<<" Beam spot "<<" x "<<b_beamSpot_x<<" y "<<b_beamSpot_y<<" z "<<b_beamSpot_z<<endl;
   
   GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
   
@@ -674,7 +661,7 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       if ( m_debug > 50 ) cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() 
        			       << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << endl;
       // Check if gen particle is muon (pdgId = +/-13) and stable (status = 1)
-      if ( (fabs( iGenParticle->pdgId() ) == 13 or fabs( iGenParticle->pdgId() ) == 11) and iGenParticle->status() == 1 ) {
+      if ( (fabs( iGenParticle->pdgId() ) == 13) and iGenParticle->status() == 1 ) {
 	// Mother of the lepton can be lepton. Find the last lepton in this chain: genLeptonCand
 	// Example: a1 -> mu+ (status = 3) mu- (status = 3)
 	//          mu- (status = 3) -> mu- (status = 2) -> mu- (status = 1)
@@ -684,6 +671,35 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 	  isLeptonMother = false;
 	  for ( size_t iMother = 0; iMother < genLeptonCand->numberOfMothers(); iMother++ ) {
 	    if ( fabs( genLeptonCand->mother(iMother)->pdgId() ) == 13 ) {
+	      isLeptonMother = true;
+	      genLeptonCand = genLeptonCand->mother(iMother);
+	    }
+	  }
+	}
+	// Loop over all real (non-lepton) mothers of the lepton (here we use genLeptonCand)
+	for ( size_t iMother = 0; iMother < genLeptonCand->numberOfMothers(); iMother++ ) {
+	  // Check if mother is CP-odd Higgs (PdgId = 36) or gamma_Dark (PdgId = 3000022)
+	  //        if ( genLeptonCand->mother(iMother)->pdgId() == 36 || genLeptonCand->mother(iMother)->pdgId() == 3000022 || genLeptonCand->mother(iMother)->pdgId() == 443 ) {
+	  if ( genLeptonCand->mother(iMother)->pdgId() == 36 || genLeptonCand->mother(iMother)->pdgId() == 3000022 ) {
+	    // Store the lepton (stable, first in chain) into vector
+	    genLeptons.push_back(&(*iGenParticle));
+	    // Store mother of the lepton into vector. We need this to group leptons into dileptons later
+	    genLeptonMothers.push_back(genLeptonCand->mother(iMother));
+	  }
+	}
+      }
+
+      // Check if gen particle is electron (pdgId = +/-13) and stable (status = 1)
+      if ( (fabs( iGenParticle->pdgId() ) == 11) and iGenParticle->status() == 1 ) {
+	// Mother of the lepton can be lepton. Find the last lepton in this chain: genLeptonCand
+	// Example: a1 -> mu+ (status = 3) mu- (status = 3)
+	//          mu- (status = 3) -> mu- (status = 2) -> mu- (status = 1)
+	const reco::Candidate *genLeptonCand = &(*iGenParticle);
+	bool isLeptonMother = true;
+	while(isLeptonMother) {
+	  isLeptonMother = false;
+	  for ( size_t iMother = 0; iMother < genLeptonCand->numberOfMothers(); iMother++ ) {
+	    if ( fabs( genLeptonCand->mother(iMother)->pdgId() ) == 11 ) {
 	      isLeptonMother = true;
 	      genLeptonCand = genLeptonCand->mother(iMother);
 	    }
@@ -837,8 +853,8 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       }
 
       if ( m_debug > 20 ) {
-	cout << "debug nLepGroup " << nLepGroup << endl;
-	cout << "debug isLepGroupMatchedToA " << isLepGroupMatchedToA << endl;
+	cout << "nLepGroup " << nLepGroup << endl;
+	cout << "isLepGroupMatchedToA " << isLepGroupMatchedToA << endl;
       }
 
       if ( isLepGroupMatchedToA && nLepGroup >= 0 ) {
@@ -966,7 +982,12 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     int nEle = 0;
     for (auto& lep: genLeptons){
       if (fabs(lep->pdgId())==11) ++nEle;
-      if (fabs(lep->pdgId())==12) ++nMu;
+      if (fabs(lep->pdgId())==13) ++nMu;
+    }
+    if ( m_debug > 20 ) {
+      cout << "Lepton count: " << nMu + nEle << endl;
+      cout << "\tNumber of muons: " << nMu << endl;
+      cout << "\tNumber of electrons: " << nEle << endl;
     }
     
     if ( genLeptons.size() == 4 ){
@@ -977,8 +998,8 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     }
 
     if (nMu==4) {
-      m_events4GenLep++;
-      b_is4GenLep = true;
+      m_events4GenMu++;
+      b_is4GenMu = true;
     } else if (nEle==4)  {
       m_events4GenEle++;
       b_is4GenEle = true;
@@ -988,8 +1009,7 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     } else {
       cout << "Error! Not a valid event type" << endl; 
     }
-      
-    
+          
     if ( genLeptons.size() > 0 ) {
       b_genLep0_pdgId  = genLeptons[0]->pdgId();
       b_genLep0_px  = genLeptons[0]->px();
@@ -1098,11 +1118,11 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   //                          GEN LEVEL ANALYSIS FINISH                         
   //****************************************************************************
   
-//   //****************************************************************************
-//   //                          RECO LEVEL ANALYSIS START                         
-//   //****************************************************************************
+  //****************************************************************************
+  //                          RECO LEVEL ANALYSIS START                         
+  //****************************************************************************
   
-//   if ( m_debug > 10 ) cout << m_events << " Start RECO Level" << endl;
+  if ( m_debug > 10 ) cout << m_events << " Start RECO Level" << endl;
   
 //   edm::Handle<pat::MuonCollection> muons;
 //   iEvent.getByLabel(m_muons, muons);
@@ -1417,23 +1437,22 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 //   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsDzOK_FittedVtx     ) m_events2DiMuonsDzOK_FittedVtx++;
 //   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsDzOK_ConsistentVtx ) m_events2DiMuonsDzOK_ConsistentVtx++;
 
-//   // HLT cut
-//   edm::Handle<pat::TriggerEvent> triggerEvent;
-//   iEvent.getByLabel("patTriggerEvent", triggerEvent);
+  // HLT cut
+  edm::Handle<pat::TriggerEvent> triggerEvent;
+  iEvent.getByLabel("patTriggerEvent", triggerEvent);
   
-//   b_isDiMuonHLTFired = false;
-//   b_hltPaths.clear();
-//   for (auto p : hltPaths_){
-//     if ( !triggerEvent->path(p) ) {
-//       if ( m_debug > 10 ) cout << p << " is not present in patTriggerEvent!" << endl;
-//     }
-//     else{
-//       if ( triggerEvent->path(p)->wasAccept() ) {
-// 	b_isDiMuonHLTFired = true;	
-// 	b_hltPaths.push_back(p);
-//       }
-//     }
-//   } 
+  b_hltPaths.clear();
+  for (auto p : hltPaths_){
+    if ( !triggerEvent->path(p) ) {
+      if ( m_debug > 10 ) cout << p << " is not present in patTriggerEvent!" << endl;
+    }
+    else{
+      if ( triggerEvent->path(p)->wasAccept() ) {
+	if ( m_debug > 20 ) cout << p << " is present in patTriggerEvent!" << endl;
+ 	b_hltPaths.push_back(p);
+      }
+    }
+  } 
   
 //   if ( m_debug > 10 ) cout << m_events << " Apply cut on HLT" << endl;
 //   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsDzOK_FittedVtx     && b_isDiMuonHLTFired ) m_eventsDiMuonHLTFired_FittedVtx++;
@@ -1983,7 +2002,6 @@ LeptonJetAnalyzer::beginJob() {
   m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
   m_ttree->Branch("is2DiMuonsDzOK_FittedVtx",       &b_is2DiMuonsDzOK_FittedVtx,       "is2DiMuonsDzOK_FittedVtx/O");
   m_ttree->Branch("is2DiMuonsDzOK_ConsistentVtx",   &b_is2DiMuonsDzOK_ConsistentVtx,   "is2DiMuonsDzOK_ConsistentVtx/O");
-  m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
   m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
   m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
   m_ttree->Branch("is2DiMuonsIsoTkOK_FittedVtx",    &b_is2DiMuonsIsoTkOK_FittedVtx,    "is2DiMuonsIsoTkOK_FittedVtx/O");
