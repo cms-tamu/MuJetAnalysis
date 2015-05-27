@@ -540,7 +540,11 @@ LeptonJetAnalyzer::LeptonJetAnalyzer(const edm::ParameterSet& iConfig)
   
   m_fillGenLevel = iConfig.getParameter<bool>("fillGenLevel");
 
+  m_events4GenLep = 0;
+  m_events4GenMu = 0;
+  m_events4GenEle = 0;
   m_events2GenMu2GenEle = 0;
+
   m_events1GenLep17 = 0; // electron or muon
   m_events1GenMu8  = 0;
   m_events2GenMu8  = 0;
@@ -549,6 +553,7 @@ LeptonJetAnalyzer::LeptonJetAnalyzer(const edm::ParameterSet& iConfig)
   
   m_eventsGenALxyOK = 0;
   
+
   //****************************************************************************
   //                 SET HLT LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
@@ -962,8 +967,8 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 
       b_genA0Lep_dEta = genLeptonGroups[0][0]->eta() - genLeptonGroups[0][1]->eta();
       b_genA1Lep_dEta = genLeptonGroups[1][0]->eta() - genLeptonGroups[1][1]->eta();
-      b_genA0Lep_dPhi = tamu::helpers::My_dPhi( genLeptonGroups[0][0]->phi(), genLeptonGroups[0][1]->phi() );
-      b_genA1Lep_dPhi = tamu::helpers::My_dPhi( genLeptonGroups[1][0]->phi(), genLeptonGroups[1][1]->phi() );
+      b_genA0Lep_dPhi = tamu::helpers::My_dPhi(genLeptonGroups[0][0]->phi(), genLeptonGroups[0][1]->phi());
+      b_genA1Lep_dPhi = tamu::helpers::My_dPhi(genLeptonGroups[1][0]->phi(), genLeptonGroups[1][1]->phi());
       b_genA0Lep_dR   = sqrt(b_genA0Lep_dEta*b_genA0Lep_dEta + b_genA0Lep_dPhi*b_genA0Lep_dPhi);
       b_genA1Lep_dR   = sqrt(b_genA1Lep_dEta*b_genA1Lep_dEta + b_genA1Lep_dPhi*b_genA1Lep_dPhi);
       
@@ -984,7 +989,7 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       if (fabs(lep->pdgId())==11) ++nEle;
       if (fabs(lep->pdgId())==13) ++nMu;
     }
-    if ( m_debug > 20 ) {
+    if ( m_debug > 10 ) {
       cout << "Lepton count: " << nMu + nEle << endl;
       cout << "\tNumber of muons: " << nMu << endl;
       cout << "\tNumber of electrons: " << nEle << endl;
@@ -1000,12 +1005,15 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     if (nMu==4) {
       m_events4GenMu++;
       b_is4GenMu = true;
+      if ( m_debug > 10 ) cout << "Info! 4mu event" << endl;       
     } else if (nEle==4)  {
       m_events4GenEle++;
       b_is4GenEle = true;
+      if ( m_debug > 10 ) cout << "Info! 4e event" << endl; 
     } else if (nMu==2 and nEle==2) {
       m_events2GenMu2GenEle++;
       b_is2GenMu2GenEle = true;
+      if ( m_debug > 10 ) cout << "Info! 2mu2e event" << endl; 
     } else {
       cout << "Error! Not a valid event type" << endl; 
     }
@@ -2021,7 +2029,10 @@ LeptonJetAnalyzer::endJob()
   cout << "END JOB" << endl;
   
    cout << "Total number of events:          " << m_events << endl;
-   cout << "Total number of events with 2mu and 2ele: " << m_events2GenMu2GenEle << " fraction: " << m_events2GenMu2GenEle/m_events << endl;
+   cout << "Total number of events (4lep) " << m_events4GenLep << " fraction: " << (float)m_events4GenLep/(float)m_events << endl;
+   cout << "Total number of events (4mu) " << m_events4GenMu << " fraction: " << (float)m_events4GenMu/(float)m_events << endl;
+   cout << "Total number of events (4e) " << m_events4GenEle << " fraction: " << (float)m_events4GenEle/(float)m_events << endl;
+   cout << "Total number of events (2mu2e) " << m_events2GenMu2GenEle << " fraction: " << (float)m_events2GenMu2GenEle/(float)m_events << endl;
 
   if (m_fillGenLevel){  
      cout << "********** GEN **********" << endl;

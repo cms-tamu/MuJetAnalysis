@@ -17,16 +17,16 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
 process.source = cms.Source("PoolSource",
     secondaryFileNames = cms.untracked.vstring(),
     fileNames = cms.untracked.vstring(
-        'file:/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0400_13TeV_cT_000_2e2mu_madgraph452_bridge224_LHE_pythia8_SIM/DarkSUSY_mH_125_mGammaD_0400_13TeV_cT_000_2e2mu_madgraph452_bridge224_LHE_pythia8_ANA/bf44a13ded20097547ccf9dac2bcef37/out_pat_1_1_bsE.root'
+        'file:/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0400_13TeV_cT_000_2e2mu_madgraph452_bridge224_LHE_pythia8_SIM/DarkSUSY_mH_125_mGammaD_0400_13TeV_cT_000_2e2mu_madgraph452_bridge224_LHE_pythia8_ANA/bf44a13ded20097547ccf9dac2bcef37/out_pat_1_1_bsE.root',
     )
 )
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000) 
+    input = cms.untracked.int32(10000)
 )
 
 process.TFileService = cms.Service("TFileService",
-    fileName = cms.string("out_ejetmujet_ana.root")
+    fileName = cms.string("out_leptonjet_ana.root")
 )
 
 process.p = cms.Path(
