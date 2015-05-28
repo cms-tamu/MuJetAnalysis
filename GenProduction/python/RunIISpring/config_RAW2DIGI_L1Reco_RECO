@@ -1,0 +1,1 @@
+cmsDriver.py DarkSUSY_mH_125_mGammaD_XXX_13TeV_cT_YYY_madgraph452_bridge224_LHE_pythia8_cfi --mc --conditions MCRUN2_74_V9 -s RAW2DIGI,L1Reco,RECO --datatier RECOSIM --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RECOSIM --magField 38T_PostLS1 --no_exec
