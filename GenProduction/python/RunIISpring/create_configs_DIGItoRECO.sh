@@ -21,6 +21,8 @@ EOF
 
 cmsDriver.py DarkSUSY_mH_125_mGammaD_$1_13TeV_cT_$2_madgraph452_bridge224_LHE_pythia8_cfi --mc --conditions MCRUN2_74_V9 -s RAW2DIGI,L1Reco,RECO --datatier RECOSIM --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RECOSIM --magField 38T_PostLS1 --fileout file:output.root -n 10 --no_exec
 
+#========================    CRAB submission scripts ====================================================//
+
 
 cat > DIGI.cfg <<EOF
 [SLURM]
