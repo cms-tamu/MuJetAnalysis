@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: MuJetAnalysis/GenProduction/Pythia8HadronizerFilter_13TeV_cfi --step GEN,SIM --mc --eventcontent RAWSIM --datatier GEN_SIM --conditions MCRUN2_71_V1::All --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --beamspot NominalCollision2015 --magField 38T_PostLS1 --python_filename DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_cfi_GEN_SIM.py --filetype LHE --filein file:DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_000_madgraph452_bridge224_events80k.lhe --fileout file:output.root -n 10 --no_exec
+# with command line options: MuJetAnalysis/GenProduction/Pythia8HadronizerFilter_13TeV_cfi --step GEN,SIM --mc --eventcontent RAWSIM --datatier GEN-SIM --conditions MCRUN2_71_V1::All --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --beamspot NominalCollision2015 --magField 38T_PostLS1 --python_filename DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_cfi_GEN_SIM.py --filetype LHE --filein file:DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_000_madgraph452_bridge224_events80k.lhe --fileout file:output.root -n 10 --no_exec
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('SIM')
@@ -50,7 +50,7 @@ process.RAWSIMoutput = cms.OutputModule("PoolOutputModule",
         SelectEvents = cms.vstring('generation_step')
     ),
     dataset = cms.untracked.PSet(
-        dataTier = cms.untracked.string('GEN_SIM'),
+        dataTier = cms.untracked.string('GEN-SIM'),
         filterName = cms.untracked.string('')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
