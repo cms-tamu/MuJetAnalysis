@@ -9,9 +9,9 @@ cd Submit_mass_${1}_ctau_${2}
 
 #=========================      cmsDriver configurations ===========================================//
 
-cmsDriver.py DarkSUSY_mH_125_mGammaD_$1_13TeV_cT_$2_madgraph452_bridge224_LHE_pythia8_cfi --mc --conditions MCRUN2_74_V9 --pileup 2015_25ns_Startup_PoissonOOTPU -s DIGI,L1,DIGI2RAW,HLT:@frozen25ns --datatier RAW-HLT --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RAWSIM --magField 38T_PostLS1 --fileout file:output.root -n 10 --no_exec
+cmsDriver.py DarkSUSY_cfi --mc --conditions MCRUN2_74_V9 --pileup 2015_25ns_Startup_PoissonOOTPU -s DIGI,L1,DIGI2RAW,HLT:@frozen25ns --datatier GEN-SIM-RAW --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RAWSIM --magField 38T_PostLS1 --fileout file:output.root -n 10 --no_exec
 
-cat >> DarkSUSY_mH_125_mGammaD_$1_13TeV_cT_$2_madgraph452_bridge224_LHE_pythia8_cfi_DIGI_L1_DIGI2RAW_HLT_PU.py <<EOF
+cat >> DarkSUSY_cfi_DIGI_L1_DIGI2RAW_HLT_PU.py <<EOF
 # Automatic addition of the customisation function from MuJetAnalysis.GenProduction.addPileup                                                                                              
 from MuJetAnalysis.GenProduction.addPileup import addPileup
 
@@ -19,7 +19,7 @@ from MuJetAnalysis.GenProduction.addPileup import addPileup
 process = addPileup(process)
 EOF
 
-cmsDriver.py DarkSUSY_mH_125_mGammaD_$1_13TeV_cT_$2_madgraph452_bridge224_LHE_pythia8_cfi --mc --conditions MCRUN2_74_V9 -s RAW2DIGI,L1Reco,RECO --datatier RECOSIM --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RECOSIM --magField 38T_PostLS1 --fileout file:output.root -n 10 --no_exec
+cmsDriver.py DarkSUSY_cfi --mc --conditions MCRUN2_74_V9 -s RAW2DIGI,L1Reco,RECO --datatier RECOSIM --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RECOSIM --magField 38T_PostLS1 --fileout file:output.root -n 10 --no_exec
 
 #========================    CRAB submission scripts ====================================================//
 
@@ -33,7 +33,7 @@ workernodebase          = /tmp
 [CMSSW]
 total_number_of_events   = -1
 number_of_jobs           = 100
-pset                     = DarkSUSY_mH_125_mGammaD_$1_13TeV_cT_$2_madgraph452_bridge224_LHE_pythia8_cfi_DIGI_L1_DIGI2RAW_HLT_PU.py
+pset                     = DarkSUSY_cfi_DIGI_L1_DIGI2RAW_HLT_PU.py
 use_dbs3                 = 1
 dbs_url                  = phys03
 datasetpath              = 
@@ -78,7 +78,7 @@ workernodebase          = /tmp
 [CMSSW]
 total_number_of_events   = -1
 number_of_jobs           = 100
-pset                     = DarkSUSY_mH_125_mGammaD_$1_13TeV_cT_$2_madgraph452_bridge224_LHE_pythia8_cfi_RAW2DIGI_L1Reco_RECO.py
+pset                     = DarkSUSY_cfi_RAW2DIGI_L1Reco_RECO.py
 use_dbs3                 = 1
 dbs_url                  = phys03
 datasetpath              = 
