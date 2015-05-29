@@ -205,6 +205,11 @@ class LeptonJetAnalyzer : public edm::EDAnalyzer {
   Bool_t b_is3GenLep8;
   Bool_t b_is4GenLep8;
 
+  Bool_t b_is1GenMu17;
+  Bool_t b_is2GenMu8;
+  Bool_t b_is3GenMu8;
+  Bool_t b_is4GenMu8;
+
   Bool_t b_is1GenEle17;
   Bool_t b_is2GenEle8;
   Bool_t b_is3GenEle8;
@@ -933,7 +938,7 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 	  fabs(b_genA1Lep0_vy - b_genA1Lep1_vy) < eq && 
 	  fabs(b_genA0Lep0_vz - b_genA0Lep1_vz) < eq && 
 	  fabs(b_genA1Lep0_vz - b_genA1Lep1_vz) < eq) 
-	{
+      {
 	b_genA0_Lx = b_genA0Lep0_vx - b_genA0_vx;
 	b_genA1_Lx = b_genA1Lep0_vx - b_genA1_vx;
 	
@@ -949,9 +954,10 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 	b_genA0_L = sqrt( b_genA0_Lx * b_genA0_Lx + b_genA0_Ly * b_genA0_Ly + b_genA0_Lz * b_genA0_Lz );
 	b_genA1_L = sqrt( b_genA1_Lx * b_genA1_Lx + b_genA1_Ly * b_genA1_Ly + b_genA1_Lz * b_genA1_Lz );
 	
-	if ( b_genA0_Lxy < m_threshold_GenA_Lxy && b_genA1_Lxy < m_threshold_GenA_Lxy ) b_isGenALxyOK = true;
-
-	} else {
+	if ( b_genA0_Lxy < m_threshold_GenA_Lxy && b_genA1_Lxy < m_threshold_GenA_Lxy ) 
+	  b_isGenALxyOK = true;	
+      } 
+      else {
 	cout << "WARNING! Lepton vertices are different. No Lxy's are calculated." << endl;
 	b_genA0_Lx  = -1000.0;
 	b_genA1_Lx  = -1000.0;
@@ -983,23 +989,40 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     
     b_is4GenLep = false;
 
+    vector<const reco::GenParticle*> genLeptons17;
+    vector<const reco::GenParticle*> genLeptons8;
+    vector<const reco::GenParticle*> genMuons17;
+    vector<const reco::GenParticle*> genMuons8;
+    vector<const reco::GenParticle*> genElectrons17;
+    vector<const reco::GenParticle*> genElectrons8;
+
     int nMu = 0;
     int nEle = 0;
     for (auto& lep: genLeptons){
       if (fabs(lep->pdgId())==11) ++nEle;
       if (fabs(lep->pdgId())==13) ++nMu;
+      if (lep->pt() > m_threshold_Lep17_pT && fabs(lep->eta()) < m_threshold_Lep17_eta) {
+	genLeptons17.push_back(lep);
+	if (fabs(lep->pdgId())==11) genMuons17.push_back(lep);
+	if (fabs(lep->pdgId())==13) genElectrons17.push_back(lep);
+      }
+      if (lep->pt() > m_threshold_Lep8_pT && fabs(lep->eta()) < m_threshold_Lep8_eta) {
+	genLeptons8.push_back(lep);
+	if (fabs(lep->pdgId())==11) genMuons8.push_back(lep);
+	if (fabs(lep->pdgId())==13) genElectrons8.push_back(lep);
+      }
     }
-    if ( m_debug > 10 ) {
-      cout << "Lepton count: " << nMu + nEle << endl;
-      cout << "\tNumber of muons: " << nMu << endl;
-      cout << "\tNumber of electrons: " << nEle << endl;
-    }
-    
     if ( genLeptons.size() == 4 ){
       m_events4GenLep++;
       b_is4GenLep = true;
     } else {
       cout << "Error! Number of leptons in event is not equal to 4!" << endl; 
+    }
+
+    if ( m_debug > 10 ) {
+      cout << "Lepton count: " << nMu + nEle << endl;
+      cout << "\tNumber of muons: " << nMu << endl;
+      cout << "\tNumber of electrons: " << nEle << endl;
     }
 
     if (nMu==4) {
@@ -1087,22 +1110,11 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       b_genLep3_phi = -100.0;
     }
     
-    vector<const reco::GenParticle*> genLeptons17;
-    vector<const reco::GenParticle*> genLeptons8;
-    
-    for ( unsigned int i = 0; i < genLeptons.size(); i++ ) {
-      if ( genLeptons[i]->pt() > m_threshold_Lep17_pT && fabs( genLeptons[i]->eta() ) < m_threshold_Lep17_eta ) {
-	genLeptons17.push_back(genLeptons[i]);
-      }
-      if ( genLeptons[i]->pt() > m_threshold_Lep8_pT && fabs( genLeptons[i]->eta() ) < m_threshold_Lep8_eta ) {
-	genLeptons8.push_back(genLeptons[i]);
-      }
-    }
     b_is1GenLep17 = false; 
     b_is2GenLep8  = false;
     b_is3GenLep8  = false;
     b_is4GenLep8  = false;
-    
+
     if ( genLeptons17.size() >=1) {
       m_events1GenLep17++;
       b_is1GenLep17 = true;
@@ -1118,7 +1130,52 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 	m_events4GenLep8++;
 	b_is4GenLep8 = true;
       }
-    }    
+    }
+
+    b_is1GenMu17 = false; 
+    b_is2GenMu8  = false;
+    b_is3GenMu8  = false;
+    b_is4GenMu8  = false;
+
+    if ( genMuons17.size() >=1) {
+      m_events1GenMu17++;
+      b_is1GenMu17 = true;
+      if ( genMuons8.size() >=2 ) {
+	m_events2GenMu8++;
+	b_is2GenMu8 = true;
+      }
+      if ( genMuons8.size() >=3 ) {
+	m_events3GenMu8++;
+	b_is3GenMu8 = true;
+      }
+      if ( genMuons8.size() >=4 ) {
+	m_events4GenMu8++;
+	b_is4GenMu8 = true;
+      }
+    }
+
+    b_is1GenEle17 = false; 
+    b_is2GenEle8  = false;
+    b_is3GenEle8  = false;
+    b_is4GenEle8  = false;
+    
+    if ( genElectrons17.size() >=1) {
+      m_events1GenEle17++;
+      b_is1GenEle17 = true;
+      if ( genElectrons8.size() >=2 ) {
+	m_events2GenEle8++;
+	b_is2GenEle8 = true;
+      }
+      if ( genElectrons8.size() >=3 ) {
+	m_events3GenEle8++;
+	b_is3GenEle8 = true;
+      }
+      if ( genElectrons8.size() >=4 ) {
+	m_events4GenEle8++;
+	b_is4GenEle8 = true;
+      }
+    }
+
     if ( m_debug > 10 ) cout << m_events << " Stop GEN Level" << endl;
   }
   
@@ -1126,6 +1183,30 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   //                          GEN LEVEL ANALYSIS FINISH                         
   //****************************************************************************
   
+  //****************************************************************************
+  //                          TRIGGER LEVEL ANALYSIS FINISH                         
+  //****************************************************************************
+
+  edm::Handle<pat::TriggerEvent> triggerEvent;
+  iEvent.getByLabel("patTriggerEvent", triggerEvent);
+  
+  b_hltPaths.clear();
+  for (auto p : hltPaths_){
+    if ( !triggerEvent->path(p) ) {
+      if ( m_debug > 10 ) cout << p << " is not present in patTriggerEvent!" << endl;
+    }
+    else{
+      if ( triggerEvent->path(p)->wasAccept() ) {
+	if ( m_debug > 20 ) cout << p << " is present in patTriggerEvent!" << endl;
+ 	b_hltPaths.push_back(p);
+      }
+    }
+  } 
+  
+  //****************************************************************************
+  //                          TRIGGER LEVEL ANALYSIS FINISH                         
+  //****************************************************************************
+
   //****************************************************************************
   //                          RECO LEVEL ANALYSIS START                         
   //****************************************************************************
@@ -1445,23 +1526,6 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 //   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsDzOK_FittedVtx     ) m_events2DiMuonsDzOK_FittedVtx++;
 //   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsDzOK_ConsistentVtx ) m_events2DiMuonsDzOK_ConsistentVtx++;
 
-  // HLT cut
-  edm::Handle<pat::TriggerEvent> triggerEvent;
-  iEvent.getByLabel("patTriggerEvent", triggerEvent);
-  
-  b_hltPaths.clear();
-  for (auto p : hltPaths_){
-    if ( !triggerEvent->path(p) ) {
-      if ( m_debug > 10 ) cout << p << " is not present in patTriggerEvent!" << endl;
-    }
-    else{
-      if ( triggerEvent->path(p)->wasAccept() ) {
-	if ( m_debug > 20 ) cout << p << " is present in patTriggerEvent!" << endl;
- 	b_hltPaths.push_back(p);
-      }
-    }
-  } 
-  
 //   if ( m_debug > 10 ) cout << m_events << " Apply cut on HLT" << endl;
 //   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsDzOK_FittedVtx     && b_isDiMuonHLTFired ) m_eventsDiMuonHLTFired_FittedVtx++;
 //   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsDzOK_ConsistentVtx && b_isDiMuonHLTFired ) m_eventsDiMuonHLTFired_ConsistentVtx++;
