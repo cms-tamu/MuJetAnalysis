@@ -2,7 +2,7 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: DarkSUSY_cfi --mc --conditions MCRUN2_74_V9 --pileup 2015_25ns_Startup_PoissonOOTPU -s DIGI,L1,DIGI2RAW,HLT:@frozen25ns --datatier RAW-HLT --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RAWSIM --magField 38T_PostLS1 --fileout file:output.root -n 10 --no_exec
+# with command line options: DarkSUSY_cfi --mc --conditions MCRUN2_74_V9 --pileup 2015_25ns_Startup_PoissonOOTPU -s DIGI,L1,DIGI2RAW,HLT:@frozen25ns --datatier GEN-SIM-RAW --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RAWSIM --magField 38T_PostLS1 --fileout file:output.root -n 10 --no_exec
 import FWCore.ParameterSet.Config as cms
 
 process = cms.Process('HLT')
@@ -65,7 +65,7 @@ process.configurationMetadata = cms.untracked.PSet(
 
 process.RAWSIMoutput = cms.OutputModule("PoolOutputModule",
     dataset = cms.untracked.PSet(
-        dataTier = cms.untracked.string('RAW-HLT'),
+        dataTier = cms.untracked.string('GEN-SIM-RAW'),
         filterName = cms.untracked.string('')
     ),
     eventAutoFlushCompressedSize = cms.untracked.int32(5242880),
