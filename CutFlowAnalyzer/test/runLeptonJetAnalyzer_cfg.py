@@ -21,6 +21,11 @@ process.source = cms.Source("PoolSource",
     )
 )
 
+from MuJetAnalysis.AnalysisTools.InputFileHelpers import *
+dir = "/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0400_13TeV_cT_000_2e2mu_madgraph452_bridge224_LHE_pythia8_SIM/DarkSUSY_mH_125_mGammaD_0400_13TeV_cT_000_2e2mu_madgraph452_br\
+idge224_LHE_pythia8_ANA/bf44a13ded20097547ccf9dac2bcef37/"
+process = useInputDir(process, dir)
+
 process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(10000)
 )
