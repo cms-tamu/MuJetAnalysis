@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cmsDriver.py DarkSUSY_mH_125_mGammaD_XXX_13TeV_cT_YYY_madgraph452_bridge224_LHE_pythia8_cfi --mc --conditions MCRUN2_74_V9 --pileup 2015_25ns_Startup_PoissonOOTPU -s DIGI,L1,DIGI2RAW,HLT:@frozen25ns --datatier RAW-HLT --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RAWSIM --magField 38T_PostLS1 --no_exec
+
+cat >> DarkSUSY_mH_125_mGammaD_XXX_13TeV_cT_YYY_madgraph452_bridge224_LHE_pythia8_cfi_DIGI_L1_DIGI2RAW_HLT_PU.py <<EOF
+# Automatic addition of the customisation function from MuJetAnalysis.GenProduction.addPileup                                                                                              
+from MuJetAnalysis.GenProduction.addPileup import addPileup
+
+#call to customisation function addPileup imported from MuJetAnalysis.GenProduction.addPileup                                                                                              
+process = addPileup(process)

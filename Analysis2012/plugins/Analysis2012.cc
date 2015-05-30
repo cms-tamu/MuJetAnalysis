@@ -244,6 +244,12 @@ private:
   Float_t b_genA0_pt;
   Float_t b_genA1_pt;
 
+  Float_t b_genA0_eta;
+  Float_t b_genA1_eta;
+
+  Float_t b_genA0_phi;
+  Float_t b_genA1_phi;
+
 
   Float_t b_genA0_vx_rorig;
   Float_t b_genA0_vy_rorig;
@@ -285,6 +291,17 @@ private:
   Int_t b_is3SelMu8;
   Int_t b_is4SelMu8;
 
+  Float_t b_selMu0_phi;
+  Float_t b_selMu1_phi;
+  Float_t b_selMu2_phi;
+  Float_t b_selMu3_phi;
+
+  Float_t b_selMu0_eta;
+  Float_t b_selMu1_eta;
+  Float_t b_selMu2_eta;
+  Float_t b_selMu3_eta;
+
+  
   Int_t b_4recm;
   Int_t b_2mjets;
   Int_t b_2dimuon;
@@ -1094,7 +1111,13 @@ Analysis2012::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
     if ( genA.size() >= 2 ) {
       
       b_genA0_pt = genA[0]->pt();
-      b_genA1_pt = genA[0]->pt();
+      b_genA1_pt = genA[1]->pt();
+
+      b_genA0_eta = genA[0]->eta();
+      b_genA1_eta = genA[1]->eta();
+
+      b_genA0_phi = genA[0]->phi();
+      b_genA1_phi = genA[1]->phi();
 
 
       b_genA0_vx_rorig  = genA[0]->vx();
@@ -1319,10 +1342,10 @@ Analysis2012::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   if(countrm_hpt>0 && countrm>=4) is4recm=true;
  
-  if(countrm_hpt>0 && countrm>=1) b_is1SelMu17 = true;
-  if(countrm_hpt>0 && countrm>=2) b_is2SelMu8 = true;
-  if(countrm_hpt>0 && countrm>=3) b_is3SelMu8 = true;
-  if(countrm_hpt>0 && countrm>=4) b_is4SelMu8 = true;
+  if(countrm_hpt>0 && countrm>=1){ b_is1SelMu17 = true; b_selMu0_phi = selpatMuons[0]->phi(); b_selMu0_eta = selpatMuons[0]->eta();}
+  if(countrm_hpt>0 && countrm>=2){ b_is2SelMu8 = true;  b_selMu1_phi = selpatMuons[1]->phi(); b_selMu1_eta = selpatMuons[1]->eta();}
+  if(countrm_hpt>0 && countrm>=3){ b_is3SelMu8 = true;  b_selMu2_phi = selpatMuons[2]->phi(); b_selMu2_eta = selpatMuons[2]->eta();}
+  if(countrm_hpt>0 && countrm>=4){ b_is4SelMu8 = true;  b_selMu3_phi = selpatMuons[3]->phi(); b_selMu3_eta = selpatMuons[3]->eta();}
 
 
   
@@ -3411,7 +3434,10 @@ Analysis2012::beginJob() {
   m_ttree->Branch("run",   &b_run,   "run/I");
   m_ttree->Branch("lumi",  &b_lumi,  "lumi/I");
 
-
+  m_ttree->Branch("beamSpot_x", &b_beamSpot_x,"beamSpot_x/F");
+  m_ttree->Branch("beamSpot_y", &b_beamSpot_y,"beamSpot_y/F");
+  m_ttree->Branch("beamSpot_z", &b_beamSpot_z,"beamSpot_z/F");
+  
   m_ttree->Branch("is1GenMu17", &b_is1GenMu17, "is1GenMu17/I");
   m_ttree->Branch("is2GenMu8", &b_is2GenMu8, "is2GenMu8/I");
   m_ttree->Branch("is3GenMu8", &b_is3GenMu8, "is3GenMu8/I");
@@ -3422,8 +3448,24 @@ Analysis2012::beginJob() {
   m_ttree->Branch("is3SelMu8", &b_is3SelMu8, "is3SelMu8/I");
   m_ttree->Branch("is4SelMu8",  &b_is4SelMu8, "is4SelMu8/I");
 
+  m_ttree->Branch("selMu0_phi",  &b_selMu0_phi, "selMu0_phi/F");
+  m_ttree->Branch("selMu1_phi",  &b_selMu1_phi, "selMu1_phi/F");
+  m_ttree->Branch("selMu2_phi",  &b_selMu2_phi, "selMu2_phi/F");
+  m_ttree->Branch("selMu3_phi",  &b_selMu3_phi, "selMu3_phi/F");
+
+  m_ttree->Branch("selMu0_eta",  &b_selMu0_eta, "selMu0_eta/F");
+  m_ttree->Branch("selMu1_eta",  &b_selMu1_eta, "selMu1_eta/F");
+  m_ttree->Branch("selMu2_eta",  &b_selMu2_eta, "selMu2_eta/F");
+  m_ttree->Branch("selMu3_eta",  &b_selMu3_eta, "selMu3_eta/F");
+
   m_ttree->Branch("genA0_pt",&b_genA0_pt, "genA0_pt/F");
   m_ttree->Branch("genA1_pt",&b_genA1_pt, "genA1_pt/F");
+
+  m_ttree->Branch("genA0_eta",&b_genA0_eta, "genA0_eta/F");
+  m_ttree->Branch("genA1_eta",&b_genA1_eta, "genA1_eta/F");
+
+  m_ttree->Branch("genA0_phi",&b_genA0_phi, "genA0_phi/F");
+  m_ttree->Branch("genA1_phi",&b_genA1_phi, "genA1_phi/F");
 
 
   m_ttree->Branch("genA0_vx_rorig", &b_genA0_vx_rorig, "genA0_vx_rorig/F");

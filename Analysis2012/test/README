@@ -1,0 +1,28 @@
+1.- List of files for each sample in python directory:
+
+    i.e. CMSSW_7_4_1_patch1/src/MuJetAnalysis/CutFlowAnalyzer/python/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_000_RAW2DIGI_L1Reco_RECO_v1_cff.py
+
+2.- Put the list of MC samples in a text file  (i.e.  mc.txt)
+
+
+3.- Create the SBATCH jobs 
+    ./create_sbatch_mcreco.sh  mc.txt
+
+4.- Go to SBATCH_JOBS directory and submit the the jobs
+
+    sbatch DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_000_RAW2DIGI_L1Reco_RECO_v1.slrm
+
+5.- Check the status of the jobs:
+
+    squeue -u username
+
+6.- Once the jobs finish merge the output file for each sample.
+    
+    ./tar.sh mc.txt
+    
+
+    
+
+
+
+
