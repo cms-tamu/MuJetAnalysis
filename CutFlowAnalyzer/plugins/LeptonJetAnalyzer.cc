@@ -74,11 +74,7 @@ class LeptonJetAnalyzer : public edm::EDAnalyzer {
     virtual void beginJob() ;
     virtual void analyze(const edm::Event&, const edm::EventSetup&);
     virtual void endJob() ;
-
-    virtual void beginRun(edm::Run const&, edm::EventSetup const&);
-    virtual void endRun(edm::Run const&, edm::EventSetup const&);
-    virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
-    virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
+    void init();
   
   //****************************************************************************
   //                          THRESHOLDS                                        
@@ -190,6 +186,8 @@ class LeptonJetAnalyzer : public edm::EDAnalyzer {
   Int_t m_events2GenLep8;   // ... with 2 gen ele/mu: pT > 8 GeV,  |eta| < 2.4
   Int_t m_events3GenLep8;   // ... with 3 gen ele/mu: pT > 8 GeV,  |eta| < 2.4
   Int_t m_events4GenLep8;   // ... with 4 gen ele/mu: pT > 8 GeV,  |eta| < 2.4
+  
+  Int_t m_events2GenMu82GenEle8;
 
   Int_t m_eventsGenALxyOK; // ... with both A bosons decay inside Lxy < 4 cm
 
@@ -201,16 +199,19 @@ class LeptonJetAnalyzer : public edm::EDAnalyzer {
   Bool_t b_is4GenEle;
 
   Bool_t b_is1GenLep17;
+  Bool_t b_is1GenLep8;
   Bool_t b_is2GenLep8;
   Bool_t b_is3GenLep8;
   Bool_t b_is4GenLep8;
 
   Bool_t b_is1GenMu17;
+  Bool_t b_is1GenMu8;
   Bool_t b_is2GenMu8;
   Bool_t b_is3GenMu8;
   Bool_t b_is4GenMu8;
 
   Bool_t b_is1GenEle17;
+  Bool_t b_is1GenEle8;
   Bool_t b_is2GenEle8;
   Bool_t b_is3GenEle8;
   Bool_t b_is4GenEle8;
@@ -334,6 +335,8 @@ class LeptonJetAnalyzer : public edm::EDAnalyzer {
   TRandom3       m_trandom3;
   
   // Selectors and counters of events with ...
+  Int_t m_events1SelLep17;
+
   Bool_t b_is1SelMu17;
   Int_t  m_events1SelMu17; // ... with 1 selected reco muon: pT > 17 GeV, |eta| < 0.9
   
@@ -488,17 +491,6 @@ class LeptonJetAnalyzer : public edm::EDAnalyzer {
 
 };
 
-//
-// constants, enums and typedefs
-//
-
-//
-// static data member definitions
-//
-
-//
-// constructors and destructor
-//
 LeptonJetAnalyzer::LeptonJetAnalyzer(const edm::ParameterSet& iConfig)
 
 {
@@ -550,78 +542,114 @@ LeptonJetAnalyzer::LeptonJetAnalyzer(const edm::ParameterSet& iConfig)
   m_events4GenEle = 0;
   m_events2GenMu2GenEle = 0;
 
-  m_events1GenLep17 = 0; // electron or muon
-  m_events1GenMu8  = 0;
-  m_events2GenMu8  = 0;
-  m_events1GenEle8  = 0;
-  m_events2GenEle8  = 0;
+  m_events1GenLep17 = 0;
+  m_events1GenLep8 = 0;  
+  m_events2GenLep8 = 0;  
+  m_events3GenLep8 = 0;  
+  m_events4GenLep8 = 0;  
+
+  m_events1GenMu17 = 0;
+  m_events1GenMu8 = 0;  
+  m_events2GenMu8 = 0;  
+  m_events3GenMu8 = 0;  
+  m_events4GenMu8 = 0;  
+
+  m_events1GenEle17 = 0;
+  m_events1GenEle8 = 0;  
+  m_events2GenEle8 = 0;  
+  m_events3GenEle8 = 0;  
+  m_events4GenEle8 = 0;  
+
+  m_events2GenMu82GenEle8 = 0;
   
   m_eventsGenALxyOK = 0;
-  
 
+  b_genA0_Lx  = -1000.0;
+  b_genA1_Lx  = -1000.0;
+  b_genA0_Ly  = -1000.0;
+  b_genA1_Ly  = -1000.0;
+  b_genA0_Lz  = -1000.0;
+  b_genA1_Lz  = -1000.0;
+  b_genA0_Lxy = -1000.0;
+  b_genA1_Lxy = -1000.0;
+  b_genA0_L   = -1000.0;
+  b_genA1_L   = -1000.0;
+
+  b_genLep0_pdgId  = -100.0;
+  b_genLep0_px  = -100.0;
+  b_genLep0_py  = -100.0;
+  b_genLep0_pz  = -100.0;
+  b_genLep0_pT  = -100.0;
+  b_genLep0_eta = -100.0;
+  b_genLep0_phi = -100.0;
+
+  b_is1GenLep17 = false; 
+  b_is2GenLep8  = false;
+  b_is3GenLep8  = false;
+  b_is4GenLep8  = false;
+  
+  b_is1GenMu17 = false; 
+  b_is2GenMu8  = false;
+  b_is3GenMu8  = false;
+  b_is4GenMu8  = false;
+  
+  b_is1GenEle17 = false; 
+  b_is2GenEle8  = false;
+  b_is3GenEle8  = false;
+  b_is4GenEle8  = false;
+  
   //****************************************************************************
   //                 SET HLT LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
-
+  
   hltPaths_ = iConfig.getParameter<vector<string> >("hltPaths");
-
-  // //****************************************************************************
-  // //                 SET RECO LEVEL VARIABLES AND COUNTERS                       
-  // //****************************************************************************
   
-  // m_muons = iConfig.getParameter<edm::InputTag>("muons");
-  // m_muJets = iConfig.getParameter<edm::InputTag>("muJets");
-  // m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
+  //****************************************************************************
+  //                 SET RECO LEVEL VARIABLES AND COUNTERS                       
+  //****************************************************************************
   
-  // m_randomSeed = 1234;
-  // m_trandom3   = TRandom3(m_randomSeed); // Random generator 
+  m_muons = iConfig.getParameter<edm::InputTag>("muons");
+  m_muJets = iConfig.getParameter<edm::InputTag>("muJets");
+  m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   
-  // m_events1SelLep17                    = 0;
-  // m_events2SelMu8                      = 0;
-  // m_events3SelMu8                      = 0;
-  // m_events4SelMu8                      = 0;
-  // m_events2MuJets                      = 0;
-  // m_events2DiMuons                     = 0;
-  // m_events2DiMuonsDzOK_FittedVtx       = 0;
-  // m_events2DiMuonsDzOK_ConsistentVtx   = 0;
-  // m_eventsDiMuonHLTFired_FittedVtx     = 0;
-  // m_eventsDiMuonHLTFired_ConsistentVtx = 0;
-  // m_events2DiMuonsMassOK_FittedVtx     = 0;
-  // m_events2DiMuonsMassOK_ConsistentVtx = 0;
-  // m_events2DiMuonsIsoTkOK_FittedVtx    = 0;
-  // m_events2DiMuonsIsoTkOK_ConsistentVtx= 0;
-  // m_eventsVertexOK_FittedVtx           = 0;
-  // m_eventsVertexOK_ConsistentVtx       = 0;
-  // m_events2DiMuonsLxyOK_FittedVtx      = 0;
-  // m_events2DiMuonsLxyOK_ConsistentVtx  = 0;
+  m_randomSeed = 1234;
+  m_trandom3   = TRandom3(m_randomSeed); // Random generator 
+  
+  m_events1SelLep17                    = 0;
+  m_events2SelMu8                      = 0;
+  m_events3SelMu8                      = 0;
+  m_events4SelMu8                      = 0;
+  m_events2MuJets                      = 0;
+  m_events2DiMuons                     = 0;
+  m_events2DiMuonsDzOK_FittedVtx       = 0;
+  m_events2DiMuonsDzOK_ConsistentVtx   = 0;
+  m_eventsDiMuonHLTFired_FittedVtx     = 0;
+  m_eventsDiMuonHLTFired_ConsistentVtx = 0;
+  m_events2DiMuonsMassOK_FittedVtx     = 0;
+  m_events2DiMuonsMassOK_ConsistentVtx = 0;
+  m_events2DiMuonsIsoTkOK_FittedVtx    = 0;
+  m_events2DiMuonsIsoTkOK_ConsistentVtx= 0;
+  m_eventsVertexOK_FittedVtx           = 0;
+  m_eventsVertexOK_ConsistentVtx       = 0;
+  m_events2DiMuonsLxyOK_FittedVtx      = 0;
+  m_events2DiMuonsLxyOK_ConsistentVtx  = 0;
   
 }
 
 
 LeptonJetAnalyzer::~LeptonJetAnalyzer()
 {
- 
-   // do anything here that needs to be done at desctruction time
-   // (e.g. close files, deallocate resources etc.)
-
 }
 
-//
-// member functions
-//
-
-// ------------ method called for each event  ------------
 void
 LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+  // set default branch entries
+  init();
+  
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
 
-  b_diMuonC_m1_FittedVtx_hitpix=-1000;
-  b_diMuonC_m2_FittedVtx_hitpix=-1000;
-  b_diMuonF_m1_FittedVtx_hitpix=-1000;
-  b_diMuonF_m2_FittedVtx_hitpix=-1000;
-  
   //****************************************************************************
   //                          EVENT LEVEL                                       
   //****************************************************************************
@@ -959,16 +987,6 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       } 
       else {
 	cout << "WARNING! Lepton vertices are different. No Lxy's are calculated." << endl;
-	b_genA0_Lx  = -1000.0;
-	b_genA1_Lx  = -1000.0;
-	b_genA0_Ly  = -1000.0;
-	b_genA1_Ly  = -1000.0;
-	b_genA0_Lz  = -1000.0;
-	b_genA1_Lz  = -1000.0;
-	b_genA0_Lxy = -1000.0;
-	b_genA1_Lxy = -1000.0;
-	b_genA0_L   = -1000.0;
-	b_genA1_L   = -1000.0;
       }      
 
       b_genA0Lep_dEta = genLeptonGroups[0][0]->eta() - genLeptonGroups[0][1]->eta();
@@ -1049,14 +1067,6 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       b_genLep0_pT  = genLeptons[0]->pt();
       b_genLep0_eta = genLeptons[0]->eta();
       b_genLep0_phi = genLeptons[0]->phi();
-    } else {
-      b_genLep0_pdgId  = -100.0;
-      b_genLep0_px  = -100.0;
-      b_genLep0_py  = -100.0;
-      b_genLep0_pz  = -100.0;
-      b_genLep0_pT  = -100.0;
-      b_genLep0_eta = -100.0;
-      b_genLep0_phi = -100.0;
     }
     if ( genLeptons.size() > 1 ) {
       b_genLep1_pdgId  = genLeptons[1]->pdgId();
@@ -1066,14 +1076,6 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       b_genLep1_pT  = genLeptons[1]->pt();
       b_genLep1_eta = genLeptons[1]->eta();
       b_genLep1_phi = genLeptons[1]->phi();
-    } else {
-      b_genLep1_pdgId  = -100.0;
-      b_genLep1_px  = -100.0;
-      b_genLep1_py  = -100.0;
-      b_genLep1_pz  = -100.0;
-      b_genLep1_pT  = -100.0;
-      b_genLep1_eta = -100.0;
-      b_genLep1_phi = -100.0;
     }
     if ( genLeptons.size() > 2 ) {
       b_genLep2_pdgId  = genLeptons[2]->pdgId();
@@ -1083,14 +1085,6 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       b_genLep2_pT  = genLeptons[2]->pt();
       b_genLep2_eta = genLeptons[2]->eta();
       b_genLep2_phi = genLeptons[2]->phi();
-    } else {
-      b_genLep2_pdgId  = -100.0;
-      b_genLep2_px  = -100.0;
-      b_genLep2_py  = -100.0;
-      b_genLep2_pz  = -100.0;
-      b_genLep2_pT  = -100.0;
-      b_genLep2_eta = -100.0;
-      b_genLep2_phi = -100.0;
     }
     if ( genLeptons.size() > 3 ) {
       b_genLep3_pdgId  = genLeptons[3]->pdgId();
@@ -1100,24 +1094,15 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       b_genLep3_pT  = genLeptons[3]->pt();
       b_genLep3_eta = genLeptons[3]->eta();
       b_genLep3_phi = genLeptons[3]->phi();
-    } else {
-      b_genLep3_pdgId  = -100.0;
-      b_genLep3_px  = -100.0;
-      b_genLep3_py  = -100.0;
-      b_genLep3_pz  = -100.0;
-      b_genLep3_pT  = -100.0;
-      b_genLep3_eta = -100.0;
-      b_genLep3_phi = -100.0;
     }
     
-    b_is1GenLep17 = false; 
-    b_is2GenLep8  = false;
-    b_is3GenLep8  = false;
-    b_is4GenLep8  = false;
-
     if ( genLeptons17.size() >=1) {
       m_events1GenLep17++;
       b_is1GenLep17 = true;
+      if ( genLeptons8.size() >=1 ) {
+	m_events1GenLep8++;
+	b_is1GenLep8 = true;
+      }
       if ( genLeptons8.size() >=2 ) {
 	m_events2GenLep8++;
 	b_is2GenLep8 = true;
@@ -1132,14 +1117,13 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
       }
     }
 
-    b_is1GenMu17 = false; 
-    b_is2GenMu8  = false;
-    b_is3GenMu8  = false;
-    b_is4GenMu8  = false;
-
     if ( genMuons17.size() >=1) {
       m_events1GenMu17++;
       b_is1GenMu17 = true;
+      if ( genMuons8.size() >=1 ) {
+	m_events1GenMu8++;
+	b_is1GenMu8 = true;
+      }
       if ( genMuons8.size() >=2 ) {
 	m_events2GenMu8++;
 	b_is2GenMu8 = true;
@@ -1153,15 +1137,17 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 	b_is4GenMu8 = true;
       }
     }
+    if ( genMuons8.size() ==2 and genElectrons8.size() ==2 ) {
+      m_events2GenMu82GenEle8++;
+    }
 
-    b_is1GenEle17 = false; 
-    b_is2GenEle8  = false;
-    b_is3GenEle8  = false;
-    b_is4GenEle8  = false;
-    
     if ( genElectrons17.size() >=1) {
       m_events1GenEle17++;
       b_is1GenEle17 = true;
+      if ( genElectrons8.size() >=1 ) {
+	m_events1GenEle8++;
+	b_is1GenEle8 = true;
+      }
       if ( genElectrons8.size() >=2 ) {
 	m_events2GenEle8++;
 	b_is2GenEle8 = true;
@@ -1213,103 +1199,75 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
   
   if ( m_debug > 10 ) cout << m_events << " Start RECO Level" << endl;
   
-//   edm::Handle<pat::MuonCollection> muons;
-//   iEvent.getByLabel(m_muons, muons);
+  edm::Handle<pat::MuonCollection> muons;
+  iEvent.getByLabel(m_muons, muons);
   
-//   vector<const reco::Muon*> selMuons;
-//   vector<const reco::Muon*> selMuons8;
-//   vector<const reco::Muon*> selMuons17;
+  vector<const reco::Muon*> selMuons;
+  vector<const reco::Muon*> selMuons8;
+  vector<const reco::Muon*> selMuons17;
   
-//   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
-//     if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
-// //    if ( tamu::helpers::isTrackerMuonPrivateID( &(*iMuon) ) ) {
-//       selMuons.push_back( &(*iMuon) );
-//       if ( iMuon->pt() > m_threshold_Mu8_pT ) {
-//         selMuons8.push_back( &(*iMuon) );
-//       }
-//       if ( iMuon->pt() > m_threshold_Mu17_pT && fabs(iMuon->eta()) < m_threshold_Mu17_eta ) {
-//         selMuons17.push_back( &(*iMuon) );
-//       }
-//     }
-//   }
+  for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
+    if (tamu::helpers::isPFMuonLoose(&(*iMuon))) {
+      //    if ( tamu::helpers::isTrackerMuonPrivateID( &(*iMuon) ) ) {
+      selMuons.push_back(&(*iMuon));
+      if (iMuon->pt() > m_threshold_Mu8_pT) {
+	selMuons8.push_back(&(*iMuon));
+      }
+      if (iMuon->pt() > m_threshold_Mu17_pT && fabs(iMuon->eta()) < m_threshold_Mu17_eta) {
+	selMuons17.push_back(&(*iMuon));
+      }
+    }
+  }
   
-//   if ( selMuons.size() > 0 ) {
-//     b_selMu0_px  = selMuons[0]->px();
-//     b_selMu0_py  = selMuons[0]->py();
-//     b_selMu0_pz  = selMuons[0]->pz();
-//     b_selMu0_eta = selMuons[0]->eta();
-//     b_selMu0_phi = selMuons[0]->phi();
-//   } else {
-//     b_selMu0_px  = -100.0;
-//     b_selMu0_py  = -100.0;
-//     b_selMu0_pz  = -100.0;
-//     b_selMu0_eta = -100.0;
-//     b_selMu0_phi = -100.0;
-//   }
-//   if ( selMuons.size() > 1 ) {
-//     b_selMu1_px  = selMuons[1]->px();
-//     b_selMu1_py  = selMuons[1]->py();
-//     b_selMu1_pz  = selMuons[1]->pz();
-//     b_selMu1_eta = selMuons[1]->eta();
-//     b_selMu1_phi = selMuons[1]->phi();
-//   } else {
-//     b_selMu1_px  = -100.0;
-//     b_selMu1_py  = -100.0;
-//     b_selMu1_pz  = -100.0;
-//     b_selMu1_eta = -100.0;
-//     b_selMu1_phi = -100.0;
-//   }
-//   if ( selMuons.size() > 2 ) {
-//     b_selMu2_px  = selMuons[2]->px();
-//     b_selMu2_py  = selMuons[2]->py();
-//     b_selMu2_pz  = selMuons[2]->pz();
-//     b_selMu2_eta = selMuons[2]->eta();
-//     b_selMu2_phi = selMuons[2]->phi();
-//   } else {
-//     b_selMu2_px  = -100.0;
-//     b_selMu2_py  = -100.0;
-//     b_selMu2_pz  = -100.0;
-//     b_selMu2_eta = -100.0;
-//     b_selMu2_phi = -100.0;
-//   }
-//   if ( selMuons.size() > 3 ) {
-//     b_selMu3_px  = selMuons[3]->px();
-//     b_selMu3_py  = selMuons[3]->py();
-//     b_selMu3_pz  = selMuons[3]->pz();
-//     b_selMu3_eta = selMuons[3]->eta();
-//     b_selMu3_phi = selMuons[3]->phi();
-//   } else {
-//     b_selMu3_px  = -100.0;
-//     b_selMu3_py  = -100.0;
-//     b_selMu3_pz  = -100.0;
-//     b_selMu3_eta = -100.0;
-//     b_selMu3_phi = -100.0;
-//   }
+  if ( selMuons.size() > 0 ) {
+    b_selMu0_px  = selMuons[0]->px();
+    b_selMu0_py  = selMuons[0]->py();
+    b_selMu0_pz  = selMuons[0]->pz();
+    b_selMu0_eta = selMuons[0]->eta();
+    b_selMu0_phi = selMuons[0]->phi();
+  }
+  if ( selMuons.size() > 1 ) {
+    b_selMu1_px  = selMuons[1]->px();
+    b_selMu1_py  = selMuons[1]->py();
+    b_selMu1_pz  = selMuons[1]->pz();
+    b_selMu1_eta = selMuons[1]->eta();
+    b_selMu1_phi = selMuons[1]->phi();
+  }
+  if ( selMuons.size() > 2 ) {
+    b_selMu2_px  = selMuons[2]->px();
+    b_selMu2_py  = selMuons[2]->py();
+    b_selMu2_pz  = selMuons[2]->pz();
+    b_selMu2_eta = selMuons[2]->eta();
+    b_selMu2_phi = selMuons[2]->phi();
+  }
+  if ( selMuons.size() > 3 ) {
+    b_selMu3_px  = selMuons[3]->px();
+    b_selMu3_py  = selMuons[3]->py();
+    b_selMu3_pz  = selMuons[3]->pz();
+    b_selMu3_eta = selMuons[3]->eta();
+    b_selMu3_phi = selMuons[3]->phi();
+  }
   
-//   if ( m_debug > 10 ) cout << m_events << " Count selected RECO muons" << endl;
+  if ( m_debug > 10 ) cout << m_events << " Count selected RECO muons" << endl;
   
-//   b_is1SelMu17 = false;
-//   b_is2SelMu8  = false;
-//   b_is3SelMu8  = false;
-//   b_is4SelMu8  = false;
-//   if ( selMuons17.size() >=1 ) {
-//     m_events1SelMu17++;
-//     b_is1SelMu17 = true;
-//     if ( selMuons8.size() >=2 ) {
-//       m_events2SelMu8++;
-//       b_is2SelMu8 = true;
-//     }
-//     if ( selMuons8.size() >=3 ) {
-//       m_events3SelMu8++;
-//       b_is3SelMu8 = true;
-//     }
-//     if ( selMuons8.size() >=4 ) {
-//       m_events4SelMu8++;
-//       b_is4SelMu8 = true;
-//     }
-//   }
+  if ( selMuons17.size() >=1 ) {
+    m_events1SelMu17++;
+    b_is1SelMu17 = true;
+    if ( selMuons8.size() >=2 ) {
+      m_events2SelMu8++;
+      b_is2SelMu8 = true;
+    }
+    if ( selMuons8.size() >=3 ) {
+      m_events3SelMu8++;
+      b_is3SelMu8 = true;
+    }
+    if ( selMuons8.size() >=4 ) {
+      m_events4SelMu8++;
+      b_is4SelMu8 = true;
+    }
+  }
   
-//   if ( m_debug > 10 ) cout << m_events << " Build RECO muon jets" << endl;
+  if ( m_debug > 10 ) cout << m_events << " Build RECO muon jets" << endl;
   
 //   edm::Handle<pat::MultiMuonCollection> muJets;
 //   iEvent.getByLabel(m_muJets, muJets);
@@ -1400,33 +1358,6 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 //     b_diMuonF_FittedVtx_L   = diMuonF->vertexL(beamSpotPosition);
 //     b_diMuonF_FittedVtx_dz  = diMuonF->vertexDz(beamSpot->position());
 //   } else {
-//     b_diMuonC_FittedVtx_m   = -1000.0;
-//     b_diMuonC_FittedVtx_px  = -1000.0;
-//     b_diMuonC_FittedVtx_py  = -1000.0;
-//     b_diMuonC_FittedVtx_pz  = -1000.0;
-//     b_diMuonC_FittedVtx_eta = -1000.0;
-//     b_diMuonC_FittedVtx_phi = -1000.0;
-//     b_diMuonC_FittedVtx_vx  = -1000.0;
-//     b_diMuonC_FittedVtx_vy  = -1000.0;
-//     b_diMuonC_FittedVtx_vz  = -1000.0;
-
-//     b_diMuonC_FittedVtx_Lxy = -1000.0;
-//     b_diMuonC_FittedVtx_L   = -1000.0;
-//     b_diMuonC_FittedVtx_dz  = -1000.0;
-    
-//     b_diMuonF_FittedVtx_m   = -1000.0;
-//     b_diMuonF_FittedVtx_px  = -1000.0;
-//     b_diMuonF_FittedVtx_py  = -1000.0;
-//     b_diMuonF_FittedVtx_pz  = -1000.0;
-//     b_diMuonF_FittedVtx_eta = -1000.0;
-//     b_diMuonF_FittedVtx_phi = -1000.0;
-//     b_diMuonF_FittedVtx_vx  = -1000.0;
-//     b_diMuonF_FittedVtx_vy  = -1000.0;
-//     b_diMuonF_FittedVtx_vz  = -1000.0;
-
-//     b_diMuonF_FittedVtx_Lxy = -1000.0;
-//     b_diMuonF_FittedVtx_L   = -1000.0;
-//     b_diMuonF_FittedVtx_dz  = -1000.0;
 //   }
   
 //   // "New" consistent vertexes
@@ -1473,34 +1404,6 @@ LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 //     b_diMuonF_ConsistentVtx_Lxy = diMuonF->consistentVtxLxy(beamSpotPosition);
 //     b_diMuonF_ConsistentVtx_L   = diMuonF->consistentVtxL(beamSpotPosition);
 //     b_diMuonF_ConsistentVtx_dz  = diMuonF->consistentVtxDz(beamSpotPosition);
-//   } else {
-//     b_diMuonC_ConsistentVtx_m   = -1000.0;
-//     b_diMuonC_ConsistentVtx_px  = -1000.0;
-//     b_diMuonC_ConsistentVtx_py  = -1000.0;
-//     b_diMuonC_ConsistentVtx_pz  = -1000.0;
-//     b_diMuonC_ConsistentVtx_eta = -1000.0;
-//     b_diMuonC_ConsistentVtx_phi = -1000.0;
-//     b_diMuonC_ConsistentVtx_vx  = -1000.0;
-//     b_diMuonC_ConsistentVtx_vy  = -1000.0;
-//     b_diMuonC_ConsistentVtx_vz  = -1000.0;
-
-//     b_diMuonC_ConsistentVtx_Lxy = -1000.0;
-//     b_diMuonC_ConsistentVtx_L   = -1000.0;
-//     b_diMuonC_ConsistentVtx_dz  = -1000.0;
-    
-//     b_diMuonF_ConsistentVtx_m   = -1000.0;
-//     b_diMuonF_ConsistentVtx_px  = -1000.0;
-//     b_diMuonF_ConsistentVtx_py  = -1000.0;
-//     b_diMuonF_ConsistentVtx_pz  = -1000.0;
-//     b_diMuonF_ConsistentVtx_eta = -1000.0;
-//     b_diMuonF_ConsistentVtx_phi = -1000.0;
-//     b_diMuonF_ConsistentVtx_vx  = -1000.0;
-//     b_diMuonF_ConsistentVtx_vy  = -1000.0;
-//     b_diMuonF_ConsistentVtx_vz  = -1000.0;
-
-//     b_diMuonF_ConsistentVtx_Lxy = -1000.0;
-//     b_diMuonF_ConsistentVtx_L   = -1000.0;
-//     b_diMuonF_ConsistentVtx_dz  = -1000.0;
 //   }
   
   
@@ -2090,30 +1993,43 @@ LeptonJetAnalyzer::beginJob() {
 void 
 LeptonJetAnalyzer::endJob() 
 {
-  cout << "END JOB" << endl;
+  cout << "END JOB REPORT" << endl;
   
-   cout << "Total number of events:          " << m_events << endl;
-   cout << "Total number of events (4lep) " << m_events4GenLep << " fraction: " << (float)m_events4GenLep/(float)m_events << endl;
-   cout << "Total number of events (4mu) " << m_events4GenMu << " fraction: " << (float)m_events4GenMu/(float)m_events << endl;
-   cout << "Total number of events (4e) " << m_events4GenEle << " fraction: " << (float)m_events4GenEle/(float)m_events << endl;
-   cout << "Total number of events (2mu2e) " << m_events2GenMu2GenEle << " fraction: " << (float)m_events2GenMu2GenEle/(float)m_events << endl;
+   cout << "Total number of events: " << m_events << endl;
+   cout << "   - 4lep  " << m_events4GenLep << " fraction: " << (float)m_events4GenLep/(float)m_events << endl;
+   cout << "   - 4mu   " << m_events4GenMu << " fraction: " << (float)m_events4GenMu/(float)m_events << endl;
+   cout << "   - 4e    " << m_events4GenEle << " fraction: " << (float)m_events4GenEle/(float)m_events << endl;
+   cout << "   - 2mu2e " << m_events2GenMu2GenEle << " fraction: " << (float)m_events2GenMu2GenEle/(float)m_events << endl;
 
   if (m_fillGenLevel){  
      cout << "********** GEN **********" << endl;
      cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << endl;
-     cout << "m_events2GenMu2GenEle " << m_events2GenMu2GenEle << endl;
      cout << "m_events1GenLep17 " << m_events1GenLep17 << endl;
+     cout << "m_events1GenLep8 " << m_events1GenLep8 << endl;
+     cout << "m_events2GenLep8 " << m_events2GenLep8 << endl;
+     cout << "m_events3GenLep8 " << m_events3GenLep8 << endl;
+     cout << "m_events4GenLep8 " << m_events4GenLep8 << endl;
+
+     cout << "m_events1GenMu17 " << m_events1GenMu17 << endl;
      cout << "m_events1GenMu8 " << m_events1GenMu8 << endl;
      cout << "m_events2GenMu8 " << m_events2GenMu8 << endl;
+     cout << "m_events3GenMu8 " << m_events3GenMu8 << endl;
+     cout << "m_events4GenMu8 " << m_events4GenMu8 << endl;
+
+     cout << "m_events1GenEle17 " << m_events1GenEle17 << endl;
      cout << "m_events1GenEle8 " << m_events1GenEle8 << endl;
      cout << "m_events2GenEle8 " << m_events2GenEle8 << endl;
+     cout << "m_events3GenEle8 " << m_events3GenEle8 << endl;
+     cout << "m_events4GenEle8 " << m_events4GenEle8 << endl;
 
 
     //  Cout << "Ele/Mu pT1>17 |eta1|<0.9:       " << m_events1GenLep17 << " \t" << (float)m_events1GenLep17/(float)m_events << " \t" << (float)m_events1GenLep17/(float)m_events << endl;
     //  cout << "pT2>8  |eta2|<2.4:       " << m_events2GenMu8  << " \t" << (float)m_events2GenMu8/(float)m_events1GenMu17  << " \t" << (float)m_events2GenMu8/(float)m_events << endl;
     //  cout << "pT3>8  |eta2|<2.4:       " << m_events3GenMu8  << " \t" << (float)m_events3GenMu8/(float)m_events2GenMu8   << " \t" << (float)m_events3GenMu8/(float)m_events << endl;
     //  cout << "pT4>8  |eta2|<2.4:       " << m_events4GenMu8  << " \t" << (float)m_events4GenMu8/(float)m_events3GenMu8   << " \t" << (float)m_events4GenMu8/(float)m_events << endl;
-    //  cout << "Basic MC Acceptance:     " << (float)m_events4GenMu8/(float)m_events << endl;
+     cout << "Basic 4mu MC Acceptance:   " << (float)m_events4GenMu8/(float)m_events << endl;
+     cout << "Basic 2mu2e MC Acceptance: " << (float)m_events2GenMu82GenEle8/(float)m_events << endl;
+     cout << "Basic 4e MC Acceptance:    " << (float)m_events4GenEle8/(float)m_events << endl;
   }
 
 
@@ -2196,28 +2112,92 @@ LeptonJetAnalyzer::endJob()
   
 }
 
-// ------------ method called when starting to processes a run  ------------
-void 
-LeptonJetAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
+void LeptonJetAnalyzer::init()
 {
-}
+  b_selMu0_px  = -100.0;
+  b_selMu0_py  = -100.0;
+  b_selMu0_pz  = -100.0;
+  b_selMu0_eta = -100.0;
+  b_selMu0_phi = -100.0;
+  
+  b_selMu1_px  = -100.0;
+  b_selMu1_py  = -100.0;
+  b_selMu1_pz  = -100.0;
+  b_selMu1_eta = -100.0;
+  b_selMu1_phi = -100.0;
 
-// ------------ method called when ending the processing of a run  ------------
-void 
-LeptonJetAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
-{
-}
+  b_selMu2_px  = -100.0;
+  b_selMu2_py  = -100.0;
+  b_selMu2_pz  = -100.0;
+  b_selMu2_eta = -100.0;
+  b_selMu2_phi = -100.0;
 
-// ------------ method called when starting to processes a luminosity block  ------------
-void 
-LeptonJetAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
-{
-}
+  b_selMu3_px  = -100.0;
+  b_selMu3_py  = -100.0;
+  b_selMu3_pz  = -100.0;
+  b_selMu3_eta = -100.0;
+  b_selMu3_phi = -100.0;
+  
+  b_diMuonC_FittedVtx_m   = -1000.0;
+  b_diMuonC_FittedVtx_px  = -1000.0;
+  b_diMuonC_FittedVtx_py  = -1000.0;
+  b_diMuonC_FittedVtx_pz  = -1000.0;
+  b_diMuonC_FittedVtx_eta = -1000.0;
+  b_diMuonC_FittedVtx_phi = -1000.0;
+  b_diMuonC_FittedVtx_vx  = -1000.0;
+  b_diMuonC_FittedVtx_vy  = -1000.0;
+  b_diMuonC_FittedVtx_vz  = -1000.0;
+  
+  b_diMuonC_FittedVtx_Lxy = -1000.0;
+  b_diMuonC_FittedVtx_L   = -1000.0;
+  b_diMuonC_FittedVtx_dz  = -1000.0;
+  
+  b_diMuonF_FittedVtx_m   = -1000.0;
+  b_diMuonF_FittedVtx_px  = -1000.0;
+  b_diMuonF_FittedVtx_py  = -1000.0;
+  b_diMuonF_FittedVtx_pz  = -1000.0;
+  b_diMuonF_FittedVtx_eta = -1000.0;
+  b_diMuonF_FittedVtx_phi = -1000.0;
+  b_diMuonF_FittedVtx_vx  = -1000.0;
+  b_diMuonF_FittedVtx_vy  = -1000.0;
+  b_diMuonF_FittedVtx_vz  = -1000.0;
+  
+  b_diMuonF_FittedVtx_Lxy = -1000.0;
+  b_diMuonF_FittedVtx_L   = -1000.0;
+  b_diMuonF_FittedVtx_dz  = -1000.0;
 
-// ------------ method called when ending the processing of a luminosity block  ------------
-void 
-LeptonJetAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
-{
+  b_diMuonC_m1_FittedVtx_hitpix=-1000;
+  b_diMuonC_m2_FittedVtx_hitpix=-1000;
+  b_diMuonF_m1_FittedVtx_hitpix=-1000;
+  b_diMuonF_m2_FittedVtx_hitpix=-1000;
+
+  b_diMuonC_ConsistentVtx_m   = -1000.0;
+  b_diMuonC_ConsistentVtx_px  = -1000.0;
+  b_diMuonC_ConsistentVtx_py  = -1000.0;
+  b_diMuonC_ConsistentVtx_pz  = -1000.0;
+  b_diMuonC_ConsistentVtx_eta = -1000.0;
+  b_diMuonC_ConsistentVtx_phi = -1000.0;
+  b_diMuonC_ConsistentVtx_vx  = -1000.0;
+  b_diMuonC_ConsistentVtx_vy  = -1000.0;
+  b_diMuonC_ConsistentVtx_vz  = -1000.0;
+
+  b_diMuonC_ConsistentVtx_Lxy = -1000.0;
+  b_diMuonC_ConsistentVtx_L   = -1000.0;
+  b_diMuonC_ConsistentVtx_dz  = -1000.0;
+    
+  b_diMuonF_ConsistentVtx_m   = -1000.0;
+  b_diMuonF_ConsistentVtx_px  = -1000.0;
+  b_diMuonF_ConsistentVtx_py  = -1000.0;
+  b_diMuonF_ConsistentVtx_pz  = -1000.0;
+  b_diMuonF_ConsistentVtx_eta = -1000.0;
+  b_diMuonF_ConsistentVtx_phi = -1000.0;
+  b_diMuonF_ConsistentVtx_vx  = -1000.0;
+  b_diMuonF_ConsistentVtx_vy  = -1000.0;
+  b_diMuonF_ConsistentVtx_vz  = -1000.0;
+
+  b_diMuonF_ConsistentVtx_Lxy = -1000.0;
+  b_diMuonF_ConsistentVtx_L   = -1000.0;
+  b_diMuonF_ConsistentVtx_dz  = -1000.0;
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
