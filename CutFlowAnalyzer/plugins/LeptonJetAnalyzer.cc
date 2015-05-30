@@ -349,6 +349,9 @@ class LeptonJetAnalyzer : public edm::EDAnalyzer {
   Bool_t b_is4SelMu8;
   Int_t  m_events4SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
   
+  Bool_t b_is1MuJets;
+  Int_t  m_events1MuJets;  // ... with 2 muon jets
+
   Bool_t b_is2MuJets;
   Int_t  m_events2MuJets;  // ... with 2 muon jets
   
@@ -585,6 +588,7 @@ LeptonJetAnalyzer::LeptonJetAnalyzer(const edm::ParameterSet& iConfig)
   m_events2SelMu8                      = 0;
   m_events3SelMu8                      = 0;
   m_events4SelMu8                      = 0;
+  m_events1MuJets                      = 0;
   m_events2MuJets                      = 0;
   m_events2DiMuons                     = 0;
   m_events2DiMuonsDzOK_FittedVtx       = 0;
@@ -1228,8 +1232,24 @@ void LeptonJetAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup&
   const pat::MultiMuon *muJetC = NULL;
   const pat::MultiMuon *muJetF = NULL;
   int   nMuJetsContainMu17     = 0;
-  unsigned int nMuJets = muJets->size();
-  if ( nMuJets == 2) {
+  const unsigned int nMuJets = muJets->size();
+  // 2e-2mu analysis
+  if (nMuJets == 1) {
+    bool isMuJetContainMu17 = false;
+    for ( unsigned int m = 0; m < (*muJets)[0].numberOfDaughters(); m++ ) {
+      if ( (*muJets)[0].muon(m)->pt() > m_threshold_Mu17_pT && fabs( (*muJets)[0].muon(m)->eta() ) < m_threshold_Mu17_eta ) {
+	isMuJetContainMu17 = true;
+	nMuJetsContainMu17++;
+	break;
+      }
+      if ( isMuJetContainMu17 ) {
+	muJetC = &((*muJets)[0]);
+      } 
+    }
+    if ( nMuJetsContainMu17 > 0 ) b_is1MuJets = true;
+  }
+  // 4mu analysis
+  if (nMuJets == 2) {
     for ( unsigned int j = 0; j < nMuJets; j++ ) {
       bool isMuJetContainMu17 = false;
       for ( unsigned int m = 0; m < (*muJets)[j].numberOfDaughters(); m++ ) {
@@ -1753,6 +1773,7 @@ LeptonJetAnalyzer::endJob()
   cout << m_events2SelMu8                       << endl;
   cout << m_events3SelMu8                       << endl;
   cout << m_events4SelMu8                       << endl;
+  cout << m_events1MuJets                       << endl;
   cout << m_events2MuJets                       << endl;
   cout << m_events2DiMuons                      << endl;
   cout << m_events2DiMuonsDzOK_ConsistentVtx    << endl;
@@ -2156,6 +2177,7 @@ void LeptonJetAnalyzer::init()
   b_diMuonF_ConsistentVtx_L   = -1000.0;
   b_diMuonF_ConsistentVtx_dz  = -1000.0;
 
+  b_is1MuJets = false;
   b_is2MuJets = false;
   b_is2DiMuons = false;
   b_is2DiMuonsFittedVtxOK = false;
