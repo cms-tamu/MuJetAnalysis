@@ -13,8 +13,6 @@ process.options.allowUnscheduled = cms.untracked.bool(True)
 from MuJetAnalysis.DataFormats.EventContent_version10_cff import *
 process = customizePatOutput(process)
 
-
-
 ################## RECO Input #############################
 
 process.source = cms.Source("PoolSource",
