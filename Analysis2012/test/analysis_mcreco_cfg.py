@@ -97,8 +97,7 @@ process.ana2012 = cms.EDAnalyzer("Analysis2012",
                                  )
 
 
-#process.Path = cms.Path(process.patifyData * process.PFMuJetProducer05 * process.cutFlowAnalyzer)
-process.Path = cms.Path(process.patifyData * process.PFMuJetProducer05 * process.ana2012)
+process.Path = cms.Path(process.patifyMC * process.PFMuJetProducer05 * process.ana2012)
 
 process.TFileService = cms.Service("TFileService", fileName = cms.string(sys.argv[2]+"/Ntup_%03d.root" % PROCESS) )
 
