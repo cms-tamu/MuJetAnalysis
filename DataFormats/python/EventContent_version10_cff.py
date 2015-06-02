@@ -61,5 +61,5 @@ def customizePatOutput(process):
         "keep *_ak7PFJets_*_*",
         "keep *_ak7TrackJets_*_*",
     )
-    process.out.fileName = cms.untracked.string("out_pat.root")
+    process.out.fileName = cms.untracked.string("output.root")
     return process
