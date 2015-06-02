@@ -21,6 +21,7 @@ EOF
 
 cmsDriver.py DarkSUSY_cfi --mc --conditions MCRUN2_74_V9 -s RAW2DIGI,L1Reco,RECO --datatier RECOSIM --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --eventcontent RECOSIM --magField 38T_PostLS1 --fileout file:output.root -n 10 --no_exec
 
+
 #========================    CRAB submission scripts ====================================================//
 
 
@@ -113,6 +114,5 @@ proxy_server            = fg-myproxy.fnal.gov
 virtual_organization    = cms
 se_white_list           = T3_US_TAMU
 EOF
-
 
 
