@@ -3863,14 +3863,6 @@ Analysis2012::beginRun(edm::Run & run, const edm::EventSetup&)
 void 
 Analysis2012::endJob() {
 
-  // std::cout<<"  Number of events with 4 muons      "<<ev_w4m<<std::endl;
-  // std::cout<<"  Number of events with two dimuons  "<<ev_w2dim<<std::endl;
-  // std::cout<<"  Number of events with two dimuons + 1st layer hit "<<ev_w2dim_hit<<std::endl;
-  // std::cout<<"  Number of events with two dimuons + 1st layer hit+recover r=0.0005cm "<<ev_w2dim_hit_recover[0]<<std::endl;
-  // std::cout<<"  Number of events with two dimuons + 1st layer hit+recover r=0.005cm  "<<ev_w2dim_hit_recover[1]<<std::endl;
-  // std::cout<<"  Number of events with two dimuons + 1st layer hit+recover r=0.05cm   "<<ev_w2dim_hit_recover[2]<<std::endl;
-  // std::cout<<"  Number of events with two dimuons + 1st layer hit+recover r=0.5cm   "<<ev_w2dim_hit_recover[3]<<std::endl;
-
 }
 
 //define this as a plug-in
