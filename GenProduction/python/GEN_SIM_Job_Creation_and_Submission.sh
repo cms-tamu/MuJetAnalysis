@@ -5,7 +5,8 @@
 #2. Rename MuJetAnalysis_DarkSusySamples_LHE_13TeV_XX to MuJetAnalysis_DarkSusySamples_LHE_13TeV (merge directories if necessary)
 #3. May need to change number of events in file name (if different than 80k).  Easiest way is with a search and replace. 
 #4. May need to replace path to working directory if different from /home/bmichlin/CMSSW_7_1_15/src/ .  Easiest way is with a search and replace.
-#5. May also need to change lifetimes (as desired) on line 30
+#5. May also need to change lifetimes (as desired) on line 31
+#6. Be careful with line 72.  It is pre-configured to copy my own CRAB .cfg file.  Full path: /home/bmichlin/CMSSW_7_1_15/src/MuJetAnalysis/GEN_SIM_TEST/DarkSUSY_mH_125_mGammaD_0850_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg
 
 set timeout 86400
 
