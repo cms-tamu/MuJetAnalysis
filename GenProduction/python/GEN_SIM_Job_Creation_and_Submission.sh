@@ -17,7 +17,7 @@ stty -echo
 send_user "Brazos Password: "
 expect_user -re "(.*)\n" {set PASSWORD $expect_out(1,string)}
 
-tty -echo
+stty -echo
 send_user "GRID Password: "
 expect_user -re "(.*)\n" {set GRIDPASSWORD $expect_out(1,string)}
 
