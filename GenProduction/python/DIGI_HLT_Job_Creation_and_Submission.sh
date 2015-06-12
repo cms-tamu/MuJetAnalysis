@@ -53,7 +53,7 @@ foreach CT $lifetimes {
 	expect "$ ";
 	send "crab -status -c DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1 \r";
         expect {
-                "Enter GRID pass phrase:" {send "#PASSWORD\r"}
+                "Enter GRID pass phrase:" {send "$PASSWORD\r"}
         }
         expect "$ ";
 	send "crab -getoutput -c DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1 \r";
