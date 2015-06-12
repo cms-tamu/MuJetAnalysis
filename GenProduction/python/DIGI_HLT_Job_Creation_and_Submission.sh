@@ -51,10 +51,15 @@ foreach CT $lifetimes {
 	expect "$ ";
 	send "cd /home/$USER/CMSSW_7_1_15/src/MuJetAnalysis/GEN_SIM \r";
 	expect "$ ";
+	send "crab -status -c DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1 \r";
+        expect {
+                "Enter GRID pass phrase:" {send "EP1D3M1C\r"}
+        }
+        expect "$ ";
 	send "crab -getoutput -c DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1 \r";
-	expect {
-		"Enter GRID pass phrase:" {send "$PASSWORD\r"}
-	} 
+	#expect {
+	#	"Enter GRID pass phrase:" {send "$PASSWORD\r"}
+	#} 
 	expect "$ ";
 	send "crab -publish -c DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1 > DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.txt \r";
 	expect "$ ";
