@@ -4,8 +4,8 @@
 
 #1. Make sure that DIGI_PU exists inside of CMSSW_7_4_1_patch1/src/MuJetAnalysis
 #2. Make sure that the directory paths make sense for you.
-#3. Make sure that line points to a valid CRAB script.
-#4. May need to change lifetimes as desired on line.
+#3. Make sure that line 92 points to a valid CRAB script.
+#4. May need to change lifetimes as desired on line 27.
 
 set timeout 86400
 
