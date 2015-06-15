@@ -77,7 +77,7 @@ foreach CT $lifetimes {
 	expect "$ ";
 	send "sed -i '/DarkSUSY/!d' DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_DIGI_L1_DIGI2RAW_HLT_PU_MCRUN2_74_V9_v1.txt \r";
 	expect "$ ";
-#At this point, I have the GEN-SIM datapath inside of the file above located in  cd /home/$USER/CMSSW_7_1_15/src/MuJetAnalysis/GEN_SIM.
+#At this point, I have the GEN-SIM datapath inside of the file above located in  cd /home/$USER/CMSSW_7_1_15_patch1/src/MuJetAnalysis/GEN_SIM.
 #Now, I need to go in to the CMSSW 741p1 directory, reset cmsenv, and create the necessary python script.
 	send "cd ..\r";
 	expect "$ ";
