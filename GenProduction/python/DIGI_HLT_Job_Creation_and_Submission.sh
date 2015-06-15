@@ -32,9 +32,9 @@ send "$BRAZOS_PASSWORD\r"
 
 foreach CT $lifetimes {
 	expect "$ ";
-	send "cd /home/$USER/CMSSW_7_1_15/src\r";
+	send "cd /home/$USER/CMSSW_7_1_15_patch1/src\r";
 	expect "$ ";
-	send "cd /home/$USER/CMSSW_7_1_15/src\r";
+	send "cd /home/$USER/CMSSW_7_1_15_patch1/src\r";
 	expect "$ ";
 	send "cmsenv \r";
 	expect "$ ";
@@ -49,7 +49,7 @@ foreach CT $lifetimes {
 	expect "$ ";
 	send "cmsenv\r";
 	expect "$ ";
-	send "cd /home/$USER/CMSSW_7_1_15/src/MuJetAnalysis/GEN_SIM \r";
+	send "cd /home/$USER/CMSSW_7_1_15_patch1/src/MuJetAnalysis/GEN_SIM \r";
 	expect "$ ";
 	send "crab -status -c DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1 \r";
         expect {
@@ -108,7 +108,7 @@ foreach CT $lifetimes {
 	expect "$ ";
 	send "sed -i '/publish_data_name/c\publish_data_name       = DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_DIGI_L1_DIGI2RAW_HLT_PU_MCRUN2_74_V9_v1' DIGI_L1_DIGI2RAW_HLT_25ns_mGammaD_$mGammaD\_cT_$CT\_PoissonOOTPU_MCRUN2_74_V9.CRAB.cfg \r";
 	expect "$ ";
-	send "sed -i \"s/asdfasdf_to_be_replaced_by_datasetpath/\$(sed 's:\/:\\\\\/:g' /home/$USER/CMSSW_7_1_15/src/MuJetAnalysis/GEN_SIM/DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.txt)/\" DIGI_L1_DIGI2RAW_HLT_25ns_mGammaD_$mGammaD\_cT_$CT\_PoissonOOTPU_MCRUN2_74_V9.CRAB.cfg \r";
+	send "sed -i \"s/asdfasdf_to_be_replaced_by_datasetpath/\$(sed 's:\/:\\\\\/:g' /home/$USER/CMSSW_7_1_15_patch1/src/MuJetAnalysis/GEN_SIM/DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.txt)/\" DIGI_L1_DIGI2RAW_HLT_25ns_mGammaD_$mGammaD\_cT_$CT\_PoissonOOTPU_MCRUN2_74_V9.CRAB.cfg \r";
 	sleep 5;
 	expect "$ ";
 	send "crab -create -cfg DIGI_L1_DIGI2RAW_HLT_25ns_mGammaD_$mGammaD\_cT_$CT\_PoissonOOTPU_MCRUN2_74_V9.CRAB.cfg \r";	
