@@ -1,12 +1,12 @@
 #!/usr/bin/expect -f
 
 #To run this script you must:
-#1. Download desired DarkSusySamples (lhe files) from github and place them in your equivalent of /home/bmichlin/CMSSW_7_1_15_patch1/src 
+#1. Download desired DarkSusySamples (lhe files) from github and place them in your equivalent of /home/bmichlin/CMSSW_7_1_1_patch1/src 
 #2. Rename MuJetAnalysis_DarkSusySamples_LHE_13TeV_XX to MuJetAnalysis_DarkSusySamples_LHE_13TeV (merge directories if necessary)
 #3. May need to change number of events in file name (if different than 80k).  Easiest way is with a search and replace. 
-#4. May need to replace path to working directory if different from /home/bmichlin/CMSSW_7_1_15_patch1/src/ .  Easiest way is with a search and replace.
+#4. May need to replace path to working directory if different from /home/bmichlin/CMSSW_7_1_1_patch1/src/ .  Easiest way is with a search and replace.
 #5. May also need to change lifetimes (as desired) on line 31
-#6. Be careful with line 72.  It is pre-configured to copy my own CRAB .cfg file.  Full path: /home/bmichlin/CMSSW_7_1_15_patch1/src/MuJetAnalysis/GEN_SIM_TEST/DarkSUSY_mH_125_mGammaD_0850_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg
+#6. Be careful with line 72.  It is pre-configured to copy my own CRAB .cfg file.  Full path: /home/bmichlin/CMSSW_7_1_1_patch1/src/MuJetAnalysis/GEN_SIM_TEST/DarkSUSY_mH_125_mGammaD_0850_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg
 
 set timeout 86400
 
@@ -35,7 +35,7 @@ spawn ssh -X -Y $USER@login02.brazos.tamu.edu
 expect "$USER@login02.brazos.tamu.edu's password: "
 send "$PASSWORD\r"
 expect "$ "
-send "cd /home/bmichlin/CMSSW_7_1_15/src\r"
+send "cd /home/bmichlin/CMSSW_7_1_15_patch1/src\r"
 expect "$ "
 send "cd MuJetAnalysis_DarkSusySamples_LHE_13TeV/DarkSUSY_mH_125/mGammaD_$mGammaD \r"
 
@@ -47,7 +47,7 @@ foreach CT $lifetimes {
 	expect "$ ";
 	send "mv *.lhe DarkSUSY_mH_125_mGammaD_$mGammaD\_13TeV_cT_$CT\_madgraph452_bridge224_events80k.lhe \r";
 	expect "$ ";
-	send "cd /home/bmichlin/CMSSW_7_1_15/src\r";	
+	send "cd /home/bmichlin/CMSSW_7_1_15_patch1/src\r";	
 	expect "$ ";
 	send "cmsenv \r";
 	expect "$ ";
@@ -64,9 +64,9 @@ foreach CT $lifetimes {
 	expect "$ ";
 	send "cmsenv\r";
 	expect "$ ";
-	send "cd /home/bmichlin/CMSSW_7_1_15/src/MuJetAnalysis/GEN_SIM \r";	
+	send "cd /home/bmichlin/CMSSW_7_1_15_patch1/src/MuJetAnalysis/GEN_SIM \r";	
 	expect "$ ";
-	send "cmsDriver.py MuJetAnalysis/GenProduction/Pythia8HadronizerFilter_13TeV_cfi -s GEN,SIM --mc --datatier GEN-SIM --beamspot NominalCollision2015 --conditions MCRUN2_71_V1::All --magField 38T_PostLS1 --eventcontent RAWSIM --customise=SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --python_filename DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_LHE_pythia8_cfi_GEN_SIM.py --filetype LHE --filein file:/home/bmichlin/CMSSW_7_1_15/src/MuJetAnalysis_DarkSusySamples_LHE_13TeV/DarkSUSY_mH_125/mGammaD_$mGammaD/cT_$CT/DarkSUSY_mH_125_mGammaD_$mGammaD\_13TeV_cT_$CT\_madgraph452_bridge224_events80k.lhe --fileout out_sim.root -n 10 --no_exec \r";
+	send "cmsDriver.py MuJetAnalysis/GenProduction/Pythia8HadronizerFilter_13TeV_cfi -s GEN,SIM --mc --datatier GEN-SIM --beamspot NominalCollision2015 --conditions MCRUN2_71_V1::All --magField 38T_PostLS1 --eventcontent RAWSIM --customise=SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --python_filename DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_LHE_pythia8_cfi_GEN_SIM.py --filetype LHE --filein file:/home/bmichlin/CMSSW_7_1_15_patch1/src/MuJetAnalysis_DarkSusySamples_LHE_13TeV/DarkSUSY_mH_125/mGammaD_$mGammaD/cT_$CT/DarkSUSY_mH_125_mGammaD_$mGammaD\_13TeV_cT_$CT\_madgraph452_bridge224_events80k.lhe --fileout out_sim.root -n 10 --no_exec \r";
 	sleep 10;
 	expect "$ ";
 	send "cp ../GEN_SIM_TEST/DarkSUSY_mH_125_mGammaD_0850_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg . \r";
@@ -75,7 +75,7 @@ foreach CT $lifetimes {
 	expect "$ ";
 	send "sed -i '/pset/c\pset        = DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_LHE_pythia8_cfi_GEN_SIM.py' DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg \r";	
 	expect "$ ";
-	send "sed -i '/additional_input_files/c\additional_input_files  = /home/bmichlin/CMSSW_7_1_15/src/MuJetAnalysis_DarkSusySamples_LHE_13TeV/DarkSUSY_mH_125/mGammaD_$mGammaD/cT_$CT/DarkSUSY_mH_125_mGammaD_$mGammaD\_13TeV_cT_$CT\_madgraph452_bridge224_events80k.lhe' DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg \r";	
+	send "sed -i '/additional_input_files/c\additional_input_files  = /home/bmichlin/CMSSW_7_1_15_patch1/src/MuJetAnalysis_DarkSusySamples_LHE_13TeV/DarkSUSY_mH_125/mGammaD_$mGammaD/cT_$CT/DarkSUSY_mH_125_mGammaD_$mGammaD\_13TeV_cT_$CT\_madgraph452_bridge224_events80k.lhe' DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg \r";	
 	expect "$ ";
 	send "sed -i '/user_remote_dir/c\user_remote_dir         = DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1' DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg \r";
 	expect "$ ";
@@ -95,9 +95,9 @@ foreach CT $lifetimes {
 	sleep 2;
 	send "crab -submit -c DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1 \r";	
 	expect "$ ";
-	send "cd /home/bmichlin/CMSSW_7_1_15/src/MuJetAnalysis_DarkSusySamples_LHE_13TeV/DarkSUSY_mH_125/mGammaD_$mGammaD \r";
+	send "cd /home/bmichlin/CMSSW_7_1_15_patch1/src/MuJetAnalysis_DarkSusySamples_LHE_13TeV/DarkSUSY_mH_125/mGammaD_$mGammaD \r";
 	expect "$ ";
-	send "cd /home/bmichlin/CMSSW_7_1_15/src/MuJetAnalysis_DarkSusySamples_LHE_13TeV/DarkSUSY_mH_125/mGammaD_$mGammaD \r";
+	send "cd /home/bmichlin/CMSSW_7_1_15_patch1/src/MuJetAnalysis_DarkSusySamples_LHE_13TeV/DarkSUSY_mH_125/mGammaD_$mGammaD \r";
 	sleep 1;
 }
 
