@@ -26,6 +26,9 @@ send_user "mGammaD GeV (XXXX): "
 #ie: 2000 for 2.000 GeV, 0275 for 0.275 GeV
 expect_user -re "(.*)\n" {set mGammaD $expect_out(1,string)}
 
+send_user "Number of jobs: "
+expect_user -re "(.*)\n" {set JOBS $expect_out(1,string)}
+
 
 
 set lifetimes [list 000 005 010 020 050 100 200 300 500]
@@ -82,6 +85,8 @@ foreach CT $lifetimes {
 	send "sed -i '/ui_working_dir/c\ui_working_dir          = DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1' DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg \r";
 	expect "$ ";
 	send "sed -i '/publish_data_name/c\publish_data_name       = DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1' DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg \r";
+	expect "$ ";
+	send "sed -i '/number_of_jobs         = 400/c\\number_of_jobs         = $JOBS' DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg \r";
 	expect "$ ";
 	send "crab -create -cfg DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_madgraph452_bridge224_events80k_LHE_pythia8_cfi_GEN_SIM_v1.CRAB.cfg \r";
 	sleep 10;
