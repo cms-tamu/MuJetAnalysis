@@ -23,6 +23,9 @@ send_user "mGammaD GeV (XXXX): "
 #ie: 2000 for 2.000 GeV, 0275 for 0.275 GeV
 expect_user -re "(.*)\n" {set mGammaD $expect_out(1,string)}
 
+send_user "Number of jobs: "
+expect_user -re "(.*)\n" {set JOBS $expect_out(1,string)}
+
 set lifetimes [list 000 005 010 020 050 100 200 300 500] 
 #005 010 020 050 100] 
 #200 300 500] 
@@ -106,6 +109,8 @@ foreach CT $lifetimes {
 	#############
 	send "sed -i \"s/asdfasdf_to_be_replaced_by_datasetpath/\$(sed 's:\/:\\\\\/:g' /home/$USER/CMSSW_7_4_1_patch1/src/MuJetAnalysis/DIGI_PU/DarkSUSY_mH_125_mGammaD_$mGammaD\_cT_$CT\_13TeV_DIGI_L1_DIGI2RAW_HLT_PU_MCRUN2_74_V9_v1.txt)/\" DarkSUSY_mH_125_mGammaD_$mGammaD\_13TeV_cT_$CT\_DIGI_L1_DIGI2RAW_HLT_PU_MCRUN2_74_V9_v1.CRAB.cfg \r";
 	sleep 5;
+	expect "$ ";
+	send "sed -i '/number_of_jobs         = 400/c\\number_of_jobs         = $JOBS' DarkSUSY_mH_125_mGammaD_$mGammaD\_13TeV_cT_$CT\_DIGI_L1_DIGI2RAW_HLT_PU_MCRUN2_74_V9_v1.CRAB.cfg \r";
 	expect "$ ";
 	send "crab -create -cfg DarkSUSY_mH_125_mGammaD_$mGammaD\_13TeV_cT_$CT\_DIGI_L1_DIGI2RAW_HLT_PU_MCRUN2_74_V9_v1.CRAB.cfg \r";	
 	sleep 5;
