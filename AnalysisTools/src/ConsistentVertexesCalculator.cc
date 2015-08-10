@@ -6,7 +6,7 @@
 ConsistentVertexesCalculator::ConsistentVertexesCalculator(const TransientTrackBuilder *transientTrackBuilder, GlobalPoint beamSpotPosition)
 {
   
-  _debug   = 0;
+  _debug   = 99;
   _resultIsValid = false;
   
   if ( _debug > 10 ) std::cout << "ConsistentVertexesCalculator::ConsistentVertexesCalculator" << std::endl;
@@ -48,7 +48,9 @@ ConsistentVertexesCalculator::~ConsistentVertexesCalculator()
 //******************************************************************************
 // Returns Cholesky decomposition of input matrix A
 //******************************************************************************
-std::vector< std::vector<double> > ConsistentVertexesCalculator::cholesky(std::vector<std::vector<double> > A) {
+std::vector< std::vector<double> > ConsistentVertexesCalculator::cholesky(std::vector<std::vector<double> > A) 
+{
+  if ( _debug > 10 ) std::cout << "ConsistentVertexesCalculator::cholesky :: Begin decomposition" << std::endl;
   int an = A.size();
   double sum1 = 0.0;
   double sum2 = 0.0;
@@ -95,12 +97,16 @@ bool ConsistentVertexesCalculator::Calculate( const pat::MultiMuon *&mm_0, const
 //------------------------------------------------------------------------------
 // Step 1: Build vecor of transient tracks from muons for each muon jet
 //------------------------------------------------------------------------------
-  
+   
+  if ( _debug > 10 ) std::cout << "Step 1: Build vecor of transient tracks from muons for each muon jet" << std::endl;
+  // check for valid vertices 
   if ( mm_0 != NULL && mm_0->vertexValid() && mm_1 != NULL && mm_1->vertexValid() && _transientTrackBuilder != NULL) {     
-    
+    if ( _debug > 10 ) std::cout << "Both dimuons have valid vertices!" << std::endl;
     std::vector<reco::TransientTrack> mm_0_tracksToVertex;
     std::vector<reco::TransientTrack> mm_1_tracksToVertex;
     
+    
+    if ( _debug > 10 ) std::cout << "Collecting inner and outer tracks!" << std::endl;
     for (unsigned int i = 0;  i < mm_0->numberOfDaughters();  i++) {
       if ( mm_0->muon(i)->innerTrack().isAvailable() ) {
        mm_0_tracksToVertex.push_back( _transientTrackBuilder->build( mm_0->muon(i)->innerTrack() ) );
@@ -118,11 +124,14 @@ bool ConsistentVertexesCalculator::Calculate( const pat::MultiMuon *&mm_0, const
         mm_1_tracksToVertex.push_back( _transientTrackBuilder->build( mm_1->muon(i)->outerTrack() ) );
       }
     }
+    if ( _debug > 10 ) std::cout << "Dimuon 0 has " << mm_0_tracksToVertex.size() << " associated tracks." << std::endl;
+    if ( _debug > 10 ) std::cout << "Dimuon 1 has " << mm_1_tracksToVertex.size() << " associated tracks." << std::endl;
 
 //------------------------------------------------------------------------------
 // Step 2.1: Extract fitted "regular" vertexes from muon jets
 //           This is starting point calculated without any optimization!
 //------------------------------------------------------------------------------
+    if ( _debug > 10 ) std::cout << "Step 2.1: Extract fitted \"regular\" vertexes from muon jets"  << std::endl;
     Global3DPoint mm_0_vtx = mm_0->vertexPoint();
     Global3DPoint mm_1_vtx = mm_1->vertexPoint();
 
@@ -131,6 +140,7 @@ bool ConsistentVertexesCalculator::Calculate( const pat::MultiMuon *&mm_0, const
 //           Perform Cholesky decomposition!
 //------------------------------------------------------------------------------
     
+    if ( _debug > 10 ) std::cout << "Step 2.2: Extract covariance matrixes from muon jets"  << std::endl;
     // Vectors to hold vertex covariance matrices:
     std::vector<std::vector<double> > mm_0_covMatrix(3,std::vector<double>(3));
     std::vector<std::vector<double> > mm_1_covMatrix(3,std::vector<double>(3));
@@ -152,6 +162,7 @@ bool ConsistentVertexesCalculator::Calculate( const pat::MultiMuon *&mm_0, const
 //         consistent pair of vertexes                                   
 //------------------------------------------------------------------------------
     
+    if ( _debug > 10 ) std::cout << "Step 3: Throw vertexes inside ellipse defined in Step 2 and find consistent pair of vertexes"  << std::endl;
     TRandom3 *rnd = new TRandom3(_randomSeed);
     // This loop implements iterative vertex approach
     for (int dice = 0; dice < _nThrows; dice++) {
