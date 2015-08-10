@@ -2,17 +2,43 @@
 using namespace std;
 #include <algorithm>    // std::max
 
-void Analysis_cutflow(){
-  
+void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
+{
+  int added = 0;
+  TSystemDirectory dir(dirname, dirname);
+  TList *files = dir.GetListOfFiles();
+  if (files) {
+    //std::cout << "Found files" << std::endl;
+    TSystemFile *file;
+    TString fname;
+    TIter next(files);
+    while ((file=(TSystemFile*)next())) {
+      fname = file->GetName();
+      // std::cout << "found fname " << fname << std::endl;
+      if (!file->IsDirectory() && fname.BeginsWith(ext)) {
+        // std::cout << "adding fname " << fname << std::endl;
+        ch->Add(fname); // or call your function on this one file
+        ++added;
+      }
+    }
+  }
+  return added;
+}
 
-  TFile *f[50];
-  
-  f[0] = new TFile("~/DarkSUSY_mH_125_mGammaD_0850_13TeV_cT_000_RAW2DIGI_L1Reco_RECO_v1_cutflow.root");
+void Analysis_cutflow()
+{
+  bool verbose(false);
+  TChain* chain = new TChain("dummy");
+  TString dirname("/eos/uscms/store/user/dildick/DarkSUSY_mH_125_mGammaD_0850_cT_000_13TeV/Cutflow_Challenge_CRAB3_PAT_ANA/150803_155529/0000/");
+  TString ext("out_ana_");
+
+  // add files to the chain
+  addfiles(chain, dirname, ext);
   
   Int_t event;
   Int_t run;
   Int_t lumi;
-  
+
   Bool_t is4GenMu;
   Bool_t is1GenMu17;
   Bool_t is2GenMu8;
@@ -23,7 +49,6 @@ void Analysis_cutflow(){
   Bool_t is2SelMu8;
   Bool_t is3SelMu8;
   Bool_t is4SelMu8;
-
 
   Bool_t is2MuJets;
   Bool_t is2DiMuons;
@@ -68,15 +93,28 @@ void Analysis_cutflow(){
   Int_t c3recm[40]={0};
   Int_t c4recm[40]={0};
 
+  TObjArray *fileElements=chain->GetListOfFiles();
+  TIter next(fileElements);
+  TChainElement *chEl=0;
+  while ((chEl=(TChainElement*)next())) {
+    int p=0;
+    if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
+    TFile* myfile = new TFile(dirname + chEl->GetTitle());
+    if (!myfile) {
+      if (verbose) std::cout << "File " << chEl->GetTitle() << " does not exist" << std::endl;
+      continue;
+    }
+    
+    if (verbose) std::cout << "Loading directory cutFlowAnalyzer" << std::endl;
+    myfile->cd("cutFlowAnalyzer");
 
-  for(int p=0;p<1;p++){
+    TTree *t = (TTree*)myfile->Get("cutFlowAnalyzer/Events");
+    if (!t) {
+      if (verbose) std::cout << "Tree cutFlowAnalyzer/Events does not exist" << std::endl;
+      continue;
+    }
     
-    
-    f[p]->cd("cutFlowAnalyzer");
-    
-    TTree *t = (TTree*)f[p]->Get("cutFlowAnalyzer/Events");
-    
-    cout<<"  Events  "<<t->GetEntries()<<endl;
+    if (verbose) cout<<"  Events  "<<t->GetEntries()<<endl;
     
     // Event info
     t->SetBranchAddress("event", &event);
@@ -106,7 +144,6 @@ void Analysis_cutflow(){
     t->SetBranchAddress("isVertexOK",                     &isVertexOK);                        
     t->SetBranchAddress("isDiMuonHLTFired",              &isDiMuonHLTFired);                        
 
-
     t->SetBranchAddress("genA0_Lxy", &genA0_Lxy);
     t->SetBranchAddress("genA0_Lz",  &genA0_Lz);
     t->SetBranchAddress("genA1_Lxy", &genA1_Lxy);
@@ -117,9 +154,7 @@ void Analysis_cutflow(){
     t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix", &diMuonF_m1_FittedVtx_hitpix);
     t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix", &diMuonF_m2_FittedVtx_hitpix);
 
-    Int_t nentries = t->GetEntries();
-    
-    for(int k=0;k<nentries;k++){
+    for(int k=0;k<t->GetEntries();k++){
       t->GetEntry(k);
       
       ev_all[p]++;
@@ -134,7 +169,6 @@ void Analysis_cutflow(){
       if(is3SelMu8)  c3recm[p]++;
       if(is4SelMu8)  c4recm[p]++;
 
-
       //  ===========   GEN LEVEL information  ==============//
       if(is4GenMu8){
       	if(fabs(genA0_Lxy)<4.4 && fabs(genA1_Lxy)<4.4 && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
@@ -143,63 +177,60 @@ void Analysis_cutflow(){
       }
       
       //  =============  Reco information ====================//
-      if(is4SelMu8){
-	
-	if(isVertexOK){
-	  ev_isVtxOK[p]++;
-	  if(is2MuJets){
-	    ev_is2MuJets[p]++;
-	    if(is2DiMuons){
-	      ev_is2DiMuons[p]++;
-	      if(is2DiMuonsFittedVtxOK){
-		ev_is2DiMuonsFittedVtxOK[p]++;
-		if( (diMuonC_m1_FittedVtx_hitpix==1||diMuonC_m2_FittedVtx_hitpix==1)&&(diMuonF_m1_FittedVtx_hitpix==1||diMuonF_m2_FittedVtx_hitpix==1) ){
-		  ev_isPixelHitOK[p]++;  
-		  if(is2DiMuonsDzOK_FittedVtx){
-		    ev_is2DiMuonsDzOK_FittedVtx[p]++;
-		    if(is2DiMuonsMassOK_FittedVtx){
-		      ev_is2DiMuonsMassOK_FittedVtx[p]++;
-		      if(is2DiMuonsIsoTkOK_FittedVtx){
-		  	ev_is2DiMuonsIsoTkOK_FittedVtx[p]++;
-		  	if(isDiMuonHLTFired){ 
-		  	  ev_isDiMuonHLTFired[p]++;
-		  	}
-		      }
-		    }
-		  }
-		}
-	      }
-	    }
-	  }
-	}
+      if(is4SelMu8){        
+        if(isVertexOK){
+          ev_isVtxOK[p]++;
+          if(is2MuJets){
+            ev_is2MuJets[p]++;
+            if(is2DiMuons){
+              ev_is2DiMuons[p]++;
+              if(is2DiMuonsFittedVtxOK){
+                ev_is2DiMuonsFittedVtxOK[p]++;
+                if( (diMuonC_m1_FittedVtx_hitpix==1||diMuonC_m2_FittedVtx_hitpix==1)&&(diMuonF_m1_FittedVtx_hitpix==1||diMuonF_m2_FittedVtx_hitpix==1) ){
+                  ev_isPixelHitOK[p]++;  
+                  if(is2DiMuonsDzOK_FittedVtx){
+                    ev_is2DiMuonsDzOK_FittedVtx[p]++;
+                    if(is2DiMuonsMassOK_FittedVtx){
+                      ev_is2DiMuonsMassOK_FittedVtx[p]++;
+                      if(is2DiMuonsIsoTkOK_FittedVtx){
+                        ev_is2DiMuonsIsoTkOK_FittedVtx[p]++;
+                        if(isDiMuonHLTFired){ 
+                          ev_isDiMuonHLTFired[p]++;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
-    }
-    
-    
-    std::cout<<" Events          "<<t->GetEntries()<<std::endl;
-    std::cout<<"  ================ GEN MUONS ========================================= "<<std::endl;
-    std::cout<<" 1GenMu17                       "<<c1genm[p]<<"   reff "<<c1genm[p]/(t->GetEntries()*1.0)<<std::endl;
-    std::cout<<" 2GenMu8                        "<<c2genm[p]<<"   reff  "<<c2genm[p]/(c1genm[p]*1.0)<<std::endl;
-    std::cout<<" 3GenMu8                        "<<c3genm[p]<<"   reff  "<<c3genm[p]/(c2genm[p]*1.0)<<std::endl;
-    std::cout<<" 4GenMu8                        "<<c4genm[p]<<"   reff  "<<c4genm[p]/(c3genm[p]*1.0)<<std::endl;
-    std::cout<<" 4GenMu8 Lxy/Lz                 "<<ev_4gmlxylzcut[p]<<"   reff   "<<ev_4gmlxylzcut[p]/c4genm[p]<<std::endl;
-    std::cout<<"  ================ RECO MUONS ========================================= "<<std::endl;
-    std::cout<<" 1RecMu17                       "<<c1recm[p]<<"  reff  "<<c1recm[p]/(t->GetEntries()*1.0)<<std::endl;
-    std::cout<<" 2RecMu8                        "<<c2recm[p]<<"  reff  "<<c2recm[p]/(c1recm[p]*1.0)<<std::endl;
-    std::cout<<" 3RecMu8                        "<<c3recm[p]<<"  reff  "<<c3recm[p]/(c2recm[p]*1.0)<<std::endl;
-    std::cout<<" 4RecMu8                        "<<c4recm[p]<<"  reff  "<<c4recm[p]/(c3recm[p]*1.0)<<std::endl;
-    std::cout<<"  ================ EVENT variables ================= "<<std::endl;
-    std::cout<<"  Events with VtxOK              "<<ev_isVtxOK[p]<<"    reff  "<<ev_isVtxOK[p]/(1.0*c4recm[p])<<std::endl;
-    std::cout<<"  Events with 2 muonjets         "<<ev_is2MuJets[p]<<"     reff  "<<ev_is2MuJets[p]/(1.0*ev_isVtxOK[p])<<std::endl;
-    std::cout<<"  Events with 2 Dimuons          "<<ev_is2DiMuons[p]<<"    reff  "<<ev_is2DiMuons[p]/(1.0*ev_is2MuJets[p])<<std::endl;
-    std::cout<<"  Events with 2DimVtxOK          "<<ev_is2DiMuonsFittedVtxOK[p]<<"    reff  "<<ev_is2DiMuonsFittedVtxOK[p]/(1.0*ev_is2DiMuons[p])<<std::endl;
-    std::cout<<"  Events with 2DimHitPix         "<<ev_isPixelHitOK[p]<<"     reff  "<<ev_isPixelHitOK[p]/(1.0*ev_is2DiMuonsFittedVtxOK[p])<<std::endl;
-    std::cout<<"  Events with 2DimDzOK           "<<ev_is2DiMuonsDzOK_FittedVtx[p]<<"   reff   "<<ev_is2DiMuonsDzOK_FittedVtx[p]/(1.0*ev_isPixelHitOK[p])<<std::endl;
-    std::cout<<"  Events with 2DimMassOK         "<<ev_is2DiMuonsMassOK_FittedVtx[p]<<"  reff   "<<ev_is2DiMuonsMassOK_FittedVtx[p]/(1.0*ev_is2DiMuonsDzOK_FittedVtx[p])<<endl;
-    std::cout<<"  Events with 2DimIsoOK          "<<ev_is2DiMuonsIsoTkOK_FittedVtx[p]<<"   reff   "<<ev_is2DiMuonsIsoTkOK_FittedVtx[p]/(1.0*ev_is2DiMuonsMassOK_FittedVtx[p])<<endl;
-    std::cout<<"  Events with 2DimHLT            "<<ev_isDiMuonHLTFired[p]<<"   reff   "<<ev_isDiMuonHLTFired[p]/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx[p])<<endl;
-    std::cout<<"  ratio reco/gen                 "<<ev_isDiMuonHLTFired[p]/(1.0*ev_4gmlxylzcut[p])<<" +/-  "<<sqrt( ((ev_isDiMuonHLTFired[p]/(1.0*ev_4gmlxylzcut[p]))*(1- (ev_isDiMuonHLTFired[p]/(1.0*ev_4gmlxylzcut[p])) ))/(1.0*ev_4gmlxylzcut[p]))<<std::endl;
-    
-  }
+    } // closing for loop
+  } // closing while loop
+
+  std::cout<<" Events          "<<ev_all[0]<<std::endl;
+  std::cout<<" ================ GEN MUONS ========================================= "<<std::endl;
+  std::cout<<" 1GenMu17                       "<<c1genm[0]<<"   reff "<<c1genm[0]/(ev_all[0]*1.0)<<std::endl;
+  std::cout<<" 2GenMu8                        "<<c2genm[0]<<"   reff  "<<c2genm[0]/(c1genm[0]*1.0)<<std::endl;
+  std::cout<<" 3GenMu8                        "<<c3genm[0]<<"   reff  "<<c3genm[0]/(c2genm[0]*1.0)<<std::endl;
+  std::cout<<" 4GenMu8                        "<<c4genm[0]<<"   reff  "<<c4genm[0]/(c3genm[0]*1.0)<<std::endl;
+  std::cout<<" 4GenMu8 Lxy/Lz                 "<<ev_4gmlxylzcut[0]<<"   reff   "<<ev_4gmlxylzcut[0]/c4genm[0]<<std::endl;
+  std::cout<<" ================ RECO MUONS ========================================= "<<std::endl;
+  std::cout<<" 1RecMu17                       "<<c1recm[0]<<"  reff  "<<c1recm[0]/(ev_all[0]*1.0)<<std::endl;
+  std::cout<<" 2RecMu8                        "<<c2recm[0]<<"  reff  "<<c2recm[0]/(c1recm[0]*1.0)<<std::endl;
+  std::cout<<" 3RecMu8                        "<<c3recm[0]<<"  reff  "<<c3recm[0]/(c2recm[0]*1.0)<<std::endl;
+  std::cout<<" 4RecMu8                        "<<c4recm[0]<<"  reff  "<<c4recm[0]/(c3recm[0]*1.0)<<std::endl;
+  std::cout<<" ================ EVENT variables ================= "<<std::endl;
+  std::cout<<" Events with VtxOK              "<<ev_isVtxOK[0]<<"    reff  "<<ev_isVtxOK[0]/(1.0*c4recm[0])<<std::endl;
+  std::cout<<" Events with 2 muonjets         "<<ev_is2MuJets[0]<<"     reff  "<<ev_is2MuJets[0]/(1.0*ev_isVtxOK[0])<<std::endl;
+  std::cout<<" Events with 2 Dimuons          "<<ev_is2DiMuons[0]<<"    reff  "<<ev_is2DiMuons[0]/(1.0*ev_is2MuJets[0])<<std::endl;
+  std::cout<<" Events with 2DimVtxOK          "<<ev_is2DiMuonsFittedVtxOK[0]<<"    reff  "<<ev_is2DiMuonsFittedVtxOK[0]/(1.0*ev_is2DiMuons[0])<<std::endl;
+  std::cout<<" Events with 2DimHitPix         "<<ev_isPixelHitOK[0]<<"     reff  "<<ev_isPixelHitOK[0]/(1.0*ev_is2DiMuonsFittedVtxOK[0])<<std::endl;
+  std::cout<<" Events with 2DimDzOK           "<<ev_is2DiMuonsDzOK_FittedVtx[0]<<"   reff   "<<ev_is2DiMuonsDzOK_FittedVtx[0]/(1.0*ev_isPixelHitOK[0])<<std::endl;
+  std::cout<<" Events with 2DimMassOK         "<<ev_is2DiMuonsMassOK_FittedVtx[0]<<"  reff   "<<ev_is2DiMuonsMassOK_FittedVtx[0]/(1.0*ev_is2DiMuonsDzOK_FittedVtx[0])<<endl;
+  std::cout<<" Events with 2DimIsoOK          "<<ev_is2DiMuonsIsoTkOK_FittedVtx[0]<<"   reff   "<<ev_is2DiMuonsIsoTkOK_FittedVtx[0]/(1.0*ev_is2DiMuonsMassOK_FittedVtx[0])<<endl;
+  std::cout<<" Events with 2DimHLT            "<<ev_isDiMuonHLTFired[0]<<"   reff   "<<ev_isDiMuonHLTFired[0]/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx[0])<<endl;
+  std::cout<<" ratio reco/gen                 "<<ev_isDiMuonHLTFired[0]/(1.0*ev_4gmlxylzcut[0])<<" +/-  "<<sqrt( ((ev_isDiMuonHLTFired[0]/(1.0*ev_4gmlxylzcut[0]))*(1- (ev_isDiMuonHLTFired[0]/(1.0*ev_4gmlxylzcut[0])) ))/(1.0*ev_4gmlxylzcut[0]))<<std::endl;  
 }
      
