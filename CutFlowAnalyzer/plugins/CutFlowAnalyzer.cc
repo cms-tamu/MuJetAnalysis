@@ -1184,17 +1184,19 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   // "New" consistent vertexes
   b_is2DiMuonsConsistentVtxOK = false;
   if ( diMuonC != NULL && diMuonF != NULL ) {
+    if ( m_debug > 10 ) std::cout << "Two good dimuons" << std::endl;
     edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
     const TransientTrackBuilder *transientTrackBuilder_ptr = NULL;
-    iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
-    transientTrackBuilder_ptr = &*transientTrackBuilder;
-    
-    ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition);
-   
-    ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
-    ConsistentVtx.SetDebug(0);
-    
-    b_is2DiMuonsConsistentVtxOK = ConsistentVtx.Calculate(diMuonC, diMuonF);
+    try {
+      iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
+      transientTrackBuilder_ptr = &*transientTrackBuilder;
+      ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition);      
+      ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
+      ConsistentVtx.SetDebug(99);      
+      b_is2DiMuonsConsistentVtxOK = ConsistentVtx.Calculate(diMuonC, diMuonF);
+    } catch (...) {
+      std::cout << ">>>> WARNING!!! TransientTrackRecord is not available!!! <<<<" << std::endl;
+    }    
   }
   // Fill branches with variables calculated with "new" consistent vertexes
   if ( b_is2DiMuonsConsistentVtxOK ) {
