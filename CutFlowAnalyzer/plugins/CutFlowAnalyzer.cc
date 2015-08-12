@@ -48,6 +48,7 @@
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
+#include "MuJetAnalysis/AnalysisTools/interface/DisplacedVertexFinder.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
 // user include files
@@ -1190,10 +1191,16 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     try {
       iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
       transientTrackBuilder_ptr = &*transientTrackBuilder;
+
       ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition);      
       ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
       ConsistentVtx.SetDebug(99);      
       b_is2DiMuonsConsistentVtxOK = ConsistentVtx.Calculate(diMuonC, diMuonF);
+
+      DisplacedVertexFinder displacedVtx(transientTrackBuilder_ptr, beamSpotPosition);      
+      displacedVtx.setDebug(99);      
+      displacedVtx.findDisplacedVertex(diMuonC, diMuonF);
+
     } catch (...) {
       std::cout << ">>>> WARNING!!! TransientTrackRecord is not available!!! <<<<" << std::endl;
     }    
