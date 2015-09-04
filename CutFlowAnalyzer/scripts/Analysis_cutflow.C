@@ -4,29 +4,30 @@ using namespace std;
 
 void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 {
+  bool verbose(false);
   TSystemDirectory dir(dirname, dirname);
   TList *files = dir.GetListOfFiles();
   if (files) {
-    //std::cout << "Found files" << std::endl;
+    if (verbose) std::cout << "Found files" << std::endl;
     TSystemFile *file;
     TString fname;
     TIter next(files);
     while ((file=(TSystemFile*)next())) {
       fname = file->GetName();
-      // std::cout << "found fname " << fname << std::endl;
+      if (verbose) std::cout << "found fname " << fname << std::endl;
       if (!file->IsDirectory() && fname.BeginsWith(ext)) {
-        // std::cout << "adding fname " << fname << std::endl;
-        ch->Add(fname); // or call your function on this one file
+        if (verbose) std::cout << "adding fname " << fname << std::endl;
+        ch->Add(fname); 
       }
     }
   }
 }
 
-void Analysis_cutflow()
+void one_analysis_cutflow(TString fileName)
 {
   bool verbose(false);
+  TString dirname(fileName);
   TChain* chain = new TChain("dummy");
-  TString dirname("/eos/uscms/store/user/dildick/DarkSUSY_mH_125_mGammaD_0850_cT_000_13TeV/Cutflow_Challenge_CRAB3_PAT_ANA/150803_155529/0000/");
   TString ext("out_ana_");
 
   // add files to the chain
@@ -68,33 +69,32 @@ void Analysis_cutflow()
   
   //============= Counters ===========================//
 
-  Int_t ev_all[40]={0};
-  Int_t ev_isVtxOK[40]={0};
-  Int_t ev_is2MuJets[40]={0};
-  Int_t ev_is2DiMuons[40]={0};
-  Int_t ev_is2DiMuonsFittedVtxOK[40]={0};
-  Int_t ev_isPixelHitOK[40]={0};
-  Int_t ev_is2DiMuonsDzOK_FittedVtx[40]={0};
-  Int_t ev_is2DiMuonsMassOK_FittedVtx[40]={0};
-  Int_t ev_is2DiMuonsIsoTkOK_FittedVtx[40]={0};
-  Int_t ev_isDiMuonHLTFired[40]={0};
+  Int_t ev_all = 0;
+  Int_t ev_isVtxOK = 0;
+  Int_t ev_is2MuJets = 0;
+  Int_t ev_is2DiMuons = 0;
+  Int_t ev_is2DiMuonsFittedVtxOK = 0;
+  Int_t ev_isPixelHitOK = 0;
+  Int_t ev_is2DiMuonsDzOK_FittedVtx = 0;
+  Int_t ev_is2DiMuonsMassOK_FittedVtx = 0;
+  Int_t ev_is2DiMuonsIsoTkOK_FittedVtx = 0;
+  Int_t ev_isDiMuonHLTFired = 0;
   
-  Int_t c1genm[40]={0};
-  Int_t c2genm[40]={0};
-  Int_t c3genm[40]={0};
-  Int_t c4genm[40]={0};
-  Int_t ev_4gmlxylzcut[40]={0};
+  Int_t c1genm = 0;
+  Int_t c2genm = 0;
+  Int_t c3genm = 0;
+  Int_t c4genm = 0;
+  Int_t ev_4gmlxylzcut = 0;
   
-  Int_t c1recm[40]={0};
-  Int_t c2recm[40]={0};
-  Int_t c3recm[40]={0};
-  Int_t c4recm[40]={0};
+  Int_t c1recm = 0;
+  Int_t c2recm = 0;
+  Int_t c3recm = 0;
+  Int_t c4recm = 0;
 
   TObjArray *fileElements=chain->GetListOfFiles();
   TIter next(fileElements);
   TChainElement *chEl=0;
   while ((chEl=(TChainElement*)next())) {
-    int p=0;
     if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
     TFile* myfile = new TFile(dirname + chEl->GetTitle());
     if (!myfile) {
@@ -154,45 +154,45 @@ void Analysis_cutflow()
     for(int k=0;k<t->GetEntries();k++){
       t->GetEntry(k);
       
-      ev_all[p]++;
+      ev_all++;
       
-      if(is1GenMu17) c1genm[p]++;
-      if(is2GenMu8)  c2genm[p]++;
-      if(is3GenMu8)  c3genm[p]++;
-      if(is4GenMu8)  c4genm[p]++;
+      if(is1GenMu17) c1genm++;
+      if(is2GenMu8)  c2genm++;
+      if(is3GenMu8)  c3genm++;
+      if(is4GenMu8)  c4genm++;
       
-      if(is1SelMu17) c1recm[p]++;
-      if(is2SelMu8)  c2recm[p]++;
-      if(is3SelMu8)  c3recm[p]++;
-      if(is4SelMu8)  c4recm[p]++;
+      if(is1SelMu17) c1recm++;
+      if(is2SelMu8)  c2recm++;
+      if(is3SelMu8)  c3recm++;
+      if(is4SelMu8)  c4recm++;
 
       //  ===========   GEN LEVEL information  ==============//
       if(is4GenMu8){
       	if(fabs(genA0_Lxy)<4.4 && fabs(genA1_Lxy)<4.4 && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
-      	  ev_4gmlxylzcut[p]++;
+      	  ev_4gmlxylzcut++;
       	}
       }
       
       //  =============  Reco information ====================//
       if(is4SelMu8){        
         if(isVertexOK){
-          ev_isVtxOK[p]++;
+          ev_isVtxOK++;
           if(is2MuJets){
-            ev_is2MuJets[p]++;
+            ev_is2MuJets++;
             if(is2DiMuons){
-              ev_is2DiMuons[p]++;
+              ev_is2DiMuons++;
               if(is2DiMuonsFittedVtxOK){
-                ev_is2DiMuonsFittedVtxOK[p]++;
+                ev_is2DiMuonsFittedVtxOK++;
                 if( (diMuonC_m1_FittedVtx_hitpix==1||diMuonC_m2_FittedVtx_hitpix==1)&&(diMuonF_m1_FittedVtx_hitpix==1||diMuonF_m2_FittedVtx_hitpix==1) ){
-                  ev_isPixelHitOK[p]++;  
+                  ev_isPixelHitOK++;  
                   if(is2DiMuonsDzOK_FittedVtx){
-                    ev_is2DiMuonsDzOK_FittedVtx[p]++;
+                    ev_is2DiMuonsDzOK_FittedVtx++;
                     if(is2DiMuonsMassOK_FittedVtx){
-                      ev_is2DiMuonsMassOK_FittedVtx[p]++;
+                      ev_is2DiMuonsMassOK_FittedVtx++;
                       if(is2DiMuonsIsoTkOK_FittedVtx){
-                        ev_is2DiMuonsIsoTkOK_FittedVtx[p]++;
+                        ev_is2DiMuonsIsoTkOK_FittedVtx++;
                         if(isDiMuonHLTFired){ 
-                          ev_isDiMuonHLTFired[p]++;
+                          ev_isDiMuonHLTFired++;
                         }
                       }
                     }
@@ -206,28 +206,39 @@ void Analysis_cutflow()
     } // closing for loop
   } // closing while loop
 
-  std::cout<<" Events          "<<ev_all[0]<<std::endl;
+  std::cout<<" Events          "<<ev_all<<std::endl;
   std::cout<<" ================ GEN MUONS ========================================= "<<std::endl;
-  std::cout<<" 1GenMu17                       "<<c1genm[0]<<"   reff "<<c1genm[0]/(ev_all[0]*1.0)<<std::endl;
-  std::cout<<" 2GenMu8                        "<<c2genm[0]<<"   reff  "<<c2genm[0]/(c1genm[0]*1.0)<<std::endl;
-  std::cout<<" 3GenMu8                        "<<c3genm[0]<<"   reff  "<<c3genm[0]/(c2genm[0]*1.0)<<std::endl;
-  std::cout<<" 4GenMu8                        "<<c4genm[0]<<"   reff  "<<c4genm[0]/(c3genm[0]*1.0)<<std::endl;
-  std::cout<<" 4GenMu8 Lxy/Lz                 "<<ev_4gmlxylzcut[0]<<"   reff   "<<ev_4gmlxylzcut[0]/c4genm[0]<<std::endl;
+  std::cout<<" 1GenMu17                       "<<c1genm<<"   reff "<<c1genm/(ev_all*1.0)<<std::endl;
+  std::cout<<" 2GenMu8                        "<<c2genm<<"   reff  "<<c2genm/(c1genm*1.0)<<std::endl;
+  std::cout<<" 3GenMu8                        "<<c3genm<<"   reff  "<<c3genm/(c2genm*1.0)<<std::endl;
+  std::cout<<" 4GenMu8                        "<<c4genm<<"   reff  "<<c4genm/(c3genm*1.0)<<std::endl;
+  std::cout<<" 4GenMu8 Lxy/Lz                 "<<ev_4gmlxylzcut<<"   reff   "<<ev_4gmlxylzcut/c4genm<<std::endl;
   std::cout<<" ================ RECO MUONS ========================================= "<<std::endl;
-  std::cout<<" 1RecMu17                       "<<c1recm[0]<<"  reff  "<<c1recm[0]/(ev_all[0]*1.0)<<std::endl;
-  std::cout<<" 2RecMu8                        "<<c2recm[0]<<"  reff  "<<c2recm[0]/(c1recm[0]*1.0)<<std::endl;
-  std::cout<<" 3RecMu8                        "<<c3recm[0]<<"  reff  "<<c3recm[0]/(c2recm[0]*1.0)<<std::endl;
-  std::cout<<" 4RecMu8                        "<<c4recm[0]<<"  reff  "<<c4recm[0]/(c3recm[0]*1.0)<<std::endl;
+  std::cout<<" 1RecMu17                       "<<c1recm<<"  reff  "<<c1recm/(ev_all*1.0)<<std::endl;
+  std::cout<<" 2RecMu8                        "<<c2recm<<"  reff  "<<c2recm/(c1recm*1.0)<<std::endl;
+  std::cout<<" 3RecMu8                        "<<c3recm<<"  reff  "<<c3recm/(c2recm*1.0)<<std::endl;
+  std::cout<<" 4RecMu8                        "<<c4recm<<"  reff  "<<c4recm/(c3recm*1.0)<<std::endl;
   std::cout<<" ================ EVENT variables ================= "<<std::endl;
-  std::cout<<" Events with VtxOK              "<<ev_isVtxOK[0]<<"    reff  "<<ev_isVtxOK[0]/(1.0*c4recm[0])<<std::endl;
-  std::cout<<" Events with 2 muonjets         "<<ev_is2MuJets[0]<<"     reff  "<<ev_is2MuJets[0]/(1.0*ev_isVtxOK[0])<<std::endl;
-  std::cout<<" Events with 2 Dimuons          "<<ev_is2DiMuons[0]<<"    reff  "<<ev_is2DiMuons[0]/(1.0*ev_is2MuJets[0])<<std::endl;
-  std::cout<<" Events with 2DimVtxOK          "<<ev_is2DiMuonsFittedVtxOK[0]<<"    reff  "<<ev_is2DiMuonsFittedVtxOK[0]/(1.0*ev_is2DiMuons[0])<<std::endl;
-  std::cout<<" Events with 2DimHitPix         "<<ev_isPixelHitOK[0]<<"     reff  "<<ev_isPixelHitOK[0]/(1.0*ev_is2DiMuonsFittedVtxOK[0])<<std::endl;
-  std::cout<<" Events with 2DimDzOK           "<<ev_is2DiMuonsDzOK_FittedVtx[0]<<"   reff   "<<ev_is2DiMuonsDzOK_FittedVtx[0]/(1.0*ev_isPixelHitOK[0])<<std::endl;
-  std::cout<<" Events with 2DimMassOK         "<<ev_is2DiMuonsMassOK_FittedVtx[0]<<"  reff   "<<ev_is2DiMuonsMassOK_FittedVtx[0]/(1.0*ev_is2DiMuonsDzOK_FittedVtx[0])<<endl;
-  std::cout<<" Events with 2DimIsoOK          "<<ev_is2DiMuonsIsoTkOK_FittedVtx[0]<<"   reff   "<<ev_is2DiMuonsIsoTkOK_FittedVtx[0]/(1.0*ev_is2DiMuonsMassOK_FittedVtx[0])<<endl;
-  std::cout<<" Events with 2DimHLT            "<<ev_isDiMuonHLTFired[0]<<"   reff   "<<ev_isDiMuonHLTFired[0]/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx[0])<<endl;
-  std::cout<<" ratio reco/gen                 "<<ev_isDiMuonHLTFired[0]/(1.0*ev_4gmlxylzcut[0])<<" +/-  "<<sqrt( ((ev_isDiMuonHLTFired[0]/(1.0*ev_4gmlxylzcut[0]))*(1- (ev_isDiMuonHLTFired[0]/(1.0*ev_4gmlxylzcut[0])) ))/(1.0*ev_4gmlxylzcut[0]))<<std::endl;  
+  std::cout<<" Events with VtxOK              "<<ev_isVtxOK<<"    reff  "<<ev_isVtxOK/(1.0*c4recm)<<std::endl;
+  std::cout<<" Events with 2 muonjets         "<<ev_is2MuJets<<"     reff  "<<ev_is2MuJets/(1.0*ev_isVtxOK)<<std::endl;
+  std::cout<<" Events with 2 Dimuons          "<<ev_is2DiMuons<<"    reff  "<<ev_is2DiMuons/(1.0*ev_is2MuJets)<<std::endl;
+  std::cout<<" Events with 2DimVtxOK          "<<ev_is2DiMuonsFittedVtxOK<<"    reff  "<<ev_is2DiMuonsFittedVtxOK/(1.0*ev_is2DiMuons)<<std::endl;
+  std::cout<<" Events with 2DimHitPix         "<<ev_isPixelHitOK<<"     reff  "<<ev_isPixelHitOK/(1.0*ev_is2DiMuonsFittedVtxOK)<<std::endl;
+  std::cout<<" Events with 2DimDzOK           "<<ev_is2DiMuonsDzOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsDzOK_FittedVtx/(1.0*ev_isPixelHitOK)<<std::endl;
+  std::cout<<" Events with 2DimMassOK         "<<ev_is2DiMuonsMassOK_FittedVtx<<"  reff   "<<ev_is2DiMuonsMassOK_FittedVtx/(1.0*ev_is2DiMuonsDzOK_FittedVtx)<<endl;
+  std::cout<<" Events with 2DimIsoOK          "<<ev_is2DiMuonsIsoTkOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsIsoTkOK_FittedVtx/(1.0*ev_is2DiMuonsMassOK_FittedVtx)<<endl;
+  std::cout<<" Events with 2DimHLT            "<<ev_isDiMuonHLTFired<<"   reff   "<<ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)<<endl;
+  std::cout<<" ratio reco/gen                 "<<ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut)<<" +/-  "<<sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut))*(1- (ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut)) ))/(1.0*ev_4gmlxylzcut))<<std::endl;  
 }
      
+void Analysis_cutflow()
+{
+  //  one_analysis_cutflow("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
+  // one_analysis_cutflow("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
+  // one_analysis_cutflow("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
+  // one_analysis_cutflow("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
+  // one_analysis_cutflow("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
+  // one_analysis_cutflow("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
+  // one_analysis_cutflow("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
+  one_analysis_cutflow("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
+}
