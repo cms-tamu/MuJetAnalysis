@@ -4,7 +4,6 @@ using namespace std;
 
 void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 {
-  int added = 0;
   TSystemDirectory dir(dirname, dirname);
   TList *files = dir.GetListOfFiles();
   if (files) {
@@ -18,11 +17,9 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
       if (!file->IsDirectory() && fname.BeginsWith(ext)) {
         // std::cout << "adding fname " << fname << std::endl;
         ch->Add(fname); // or call your function on this one file
-        ++added;
       }
     }
   }
-  return added;
 }
 
 void Analysis_cutflow()
