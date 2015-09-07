@@ -87,8 +87,10 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Float_t m_threshold_Mu8_pT;
   Float_t m_threshold_Mu8_eta;
   
-  Float_t m_threshold_GenA_Lxy;  
+  Float_t m_threshold_GenA_Lxy;
+  
   Float_t m_threshold_DiMuons_dz;
+  
   Float_t m_threshold_DiMuons_Iso;
   Float_t m_threshold_DiMuons_Iso_dR;  
   Float_t m_threshold_DiMuons_Iso_dz;
@@ -455,12 +457,15 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_threshold_Mu8_pT   =  8.0; // min pT in GeV
   m_threshold_Mu8_eta  =  2.4; // max eta in Endcaps
   
-  m_threshold_GenA_Lxy = iConfig.getParameter<double>("GenA_Lxy_Max");
-  m_threshold_DiMuons_dz = iConfig.getParameter<double>("DiMuons_Iso_Max"); 
-  m_threshold_DiMuons_Iso = iConfig.getParameter<double>("DiMuons_Iso_Max");  
-  m_threshold_DiMuons_Iso_dR = iConfig.getParameter<double>("DiMuons_Iso_dR_Max");
-  m_threshold_DiMuons_Iso_dz = iConfig.getParameter<double>("DiMuons_Iso_dz_Max");
-  m_threshold_DiMuons_Iso_pT = iConfig.getParameter<double>("DiMuons_Iso_pT_Max");
+  m_threshold_GenA_Lxy = 4.0; //
+  
+  m_threshold_DiMuons_dz = 0.1; //
+  
+  m_threshold_DiMuons_Iso = iConfig.getParameter<double>("DiMuons_Iso_Max");
+  
+  m_threshold_DiMuons_Iso_dR = 0.4; // Isolation cone
+  m_threshold_DiMuons_Iso_dz = 0.1; // Track displacement [cm]
+  m_threshold_DiMuons_Iso_pT = 0.5; // Track pT [GeV]
   
   //****************************************************************************
   //               SET EVENT LEVEL VARIABLES AND COUNTERS                       
