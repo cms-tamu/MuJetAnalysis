@@ -210,8 +210,11 @@ void efficiency_hitrecovery(TString fileName){
       /*
 	Denominator: 2 dark photons with lxy<4.4 cm, lz < 34.5 + 4 muons with pt>8 GeV, |eta| < 2.4 + 1 muon with pt>17 GeV, |eta| < 0.9
        */
+      double lxy_max = 4.4; // [cm]
+      double lz_max = 34.5; // [cm]
+	
       if(is4GenMu8/* and is1GenMu17*/){
-        if(fabs(genA0_Lxy)<4.4 && fabs(genA1_Lxy)<4.4 && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
+        if(fabs(genA0_Lxy)<lxy_max && fabs(genA1_Lxy)<lxy_max && fabs(genA0_Lz)<lz_max && fabs(genA1_Lz)<lz_max){
           ev_4gmlxylzcut++;
         }
       }
@@ -373,7 +376,7 @@ int size_8500 = null_8500.size();
 
 	TGraphErrors *gr_eff_mD_8500 = new TGraphErrors(size_8500,array_mGammaD_8500_cT,array_mGammaD_8500_eff,array_null_8500,array_mGammaD_8500_eff_uncert);
 
-	TLegend *leg = new TLegend(0.6,0.2,0.9,0.25);
+	TLegend *leg = new TLegend(0.6,0.15,0.85,0.4);
 	leg->SetBorderSize(0);
 	leg->SetFillColor(0);
 	leg->SetTextSize(0.045);
