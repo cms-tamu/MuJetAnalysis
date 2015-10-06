@@ -100,9 +100,10 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   //          EVENT LEVEL VARIABLES, COUNTERS, BRANCHES AND SELECTORS           
   //****************************************************************************
   
-  Int_t   m_debug;  // Debug level
-  TTree * m_ttree;  // Store variables in branches of this tree for later access
-  Int_t   m_events; // Counter: number of analyzed events
+  Int_t   m_debug;         // Debug level
+  TTree * m_ttree;         // Store variables in branches of this tree for later access
+  TTree * m_ttree_orphan;  // Store variables in branches of this tree for later access
+  Int_t   m_events;        // Counter: number of analyzed events
   
   // Branches in ROOT tree (they all start with b_)
   Int_t b_run;   // run number   | these three numbers required to extract event
@@ -269,13 +270,19 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   //****************************************************************************
   
   // Labels to access
-  edm::InputTag m_muons;  // reconstructed muons
-  edm::InputTag m_muJets; // muon jets built from reconstructed muons
-  
+  edm::InputTag m_muons;        // reconstructed muons
+  edm::InputTag m_muJets;       // muon jets built from reconstructed muons
+  edm::InputTag m_muJetOrphans; // muon orphan, not found in any group
   Int_t         m_nThrowsConsistentVertexesCalculator;
   
   unsigned int m_randomSeed;
   TRandom3       m_trandom3;
+
+  // bb Estimation
+  Float_t b_massC;
+  Float_t b_massF;
+  Float_t b_isoC_1mm;
+  Float_t b_isoF_1mm;
   
   // Selectors and counters of events with ...
   Bool_t b_is1SelMu17;
@@ -431,7 +438,14 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
 //  Float_t b_diMuonF_IsoPF_FittedVtx;
 //  Float_t b_diMuonC_IsoPF_ConsistentVtx;
 //  Float_t b_diMuonF_IsoPF_ConsistentVtx;
-
+  //BB estimation
+  Bool_t runBBestimation_;
+  Float_t m_dimuorphan_mass;
+  Int_t m_dimuorphan_containstrig;
+  Int_t m_dimuorphan_containstrig2;
+  Float_t m_orphan_z;
+  Float_t m_orphan_isoTk;
+  Float_t m_dimuorphan_isoTk;
 };
 
 //
@@ -473,6 +487,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   
   m_debug = iConfig.getParameter<int>("analyzerDebug");
   m_ttree  = NULL;
+  m_ttree_orphan = NULL;
   m_events = 0;    
   
   //****************************************************************************
@@ -501,8 +516,10 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   
   m_muons = iConfig.getParameter<edm::InputTag>("muons");
   m_muJets = iConfig.getParameter<edm::InputTag>("muJets");
+  m_muJetOrphans = iConfig.getParameter<edm::InputTag>("muJetOrphans");
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
-  
+  runBBestimation_ = iConfig.getUntrackedParameter<bool>("runBBestimation",true);
+
   m_randomSeed = 1234;
   m_trandom3   = TRandom3(m_randomSeed); // Random generator 
   
@@ -1070,6 +1087,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   const pat::MultiMuon *muJetF = NULL;
   int   nMuJetsContainMu17     = 0;
   unsigned int nMuJets = muJets->size();
+  b_massC = -999.; b_massF = -999.;
   b_is2MuJets = false;
   if ( nMuJets == 2) {
     for ( unsigned int j = 0; j < nMuJets; j++ ) {
@@ -1114,8 +1132,11 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
   
   if ( m_debug > 10 ) std::cout << m_events << " Check if 2 muon jets are dimuons" << std::endl;
-  if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons) m_events2DiMuons++;
-  
+  if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons){
+    m_events2DiMuons++;
+    b_massC = muJetC->mass();
+    b_massF = muJetF->mass();
+  }
   // "Old" fitted vertexes
   b_is2DiMuonsFittedVtxOK = false;
   if ( diMuonC != NULL && diMuonF != NULL ) {
@@ -1299,7 +1320,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     }
     else{
       if ( triggerEvent->path(p)->wasAccept() ) {
-	b_isDiMuonHLTFired = true;	
+	b_isDiMuonHLTFired = true;
 	b_hltPaths.push_back(p);
       }
     }
@@ -1340,6 +1361,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_is2DiMuonsIsoTkOK_FittedVtx = false;
   b_diMuonC_IsoTk_FittedVtx = -1.;
   b_diMuonF_IsoTk_FittedVtx = -1.;
+  b_isoC_1mm = -1.;
+  b_isoF_1mm = -1.;
 //  b_diMuonC_IsoPF_FittedVtx = -1.;
 //  b_diMuonF_IsoPF_FittedVtx = -1.;
   if ( b_is2DiMuonsFittedVtxOK ) {
@@ -1394,6 +1417,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     }
     b_diMuonC_IsoTk_FittedVtx = diMuonC_IsoTk_FittedVtx;
     b_diMuonF_IsoTk_FittedVtx = diMuonF_IsoTk_FittedVtx;
+    b_isoC_1mm = b_diMuonC_IsoTk_FittedVtx;
+    b_isoF_1mm = b_diMuonF_IsoTk_FittedVtx;
 //    b_diMuonC_IsoPF_FittedVtx = diMuonC_IsoPF_FittedVtx;
 //    b_diMuonF_IsoPF_FittedVtx = diMuonF_IsoPF_FittedVtx;
 
@@ -1577,6 +1602,82 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   
   if ( m_debug > 10 ) std::cout << m_events << " Stop RECO Level" << std::endl;
   
+  if(runBBestimation_){
+    // Trimuons
+    double m_trigpt = 17.;
+    std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
+    for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
+      if (muon->pt() > m_trigpt  &&  fabs(muon->eta()) < 0.9) {
+        const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
+        const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
+        const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
+         if((mu01 != NULL /*&& mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx")*/ && mu01->pt() > m_trigpt)  ||
+            (mu02 != NULL /*&& mu02->collection() == std::string("hltGlbTrkMuonCandsNoVtx")*/ && mu02->pt() > m_trigpt)  ||
+            (mu03 != NULL /*&& mu03->collection() == std::string("hltGlbTrkMuonCandsNoVtx")*/ && mu03->pt() > m_trigpt))
+            hightrigmuons.push_back(muon);
+      }
+    }
+    //Orphan branches
+    m_dimuorphan_mass = -999.;
+    m_orphan_isoTk = -1;
+    m_dimuorphan_isoTk = -1;
+    m_orphan_z = -999.;
+    m_dimuorphan_containstrig = 0;
+    m_dimuorphan_containstrig2 = 0;
+    edm::Handle<pat::MuonCollection> orphans;
+    iEvent.getByLabel(m_muJetOrphans, orphans);
+    if (muJets->size() == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
+       pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
+       pat::MuonCollection::const_iterator orphan = orphans->begin();
+       m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
+       for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+         if( orphan->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() &&  tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
+            m_dimuorphan_containstrig++;
+         }
+       }
+       for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+         if( muJet->muon(0)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
+           m_dimuorphan_containstrig2++;
+         }
+         if( muJet->muon(1)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
+           m_dimuorphan_containstrig2++;
+         }
+       }
+       m_dimuorphan_mass = muJet->mass();
+       //iso orphan
+       double iso_track_pt_treshold = 0.5;
+       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+         if (!muJet->sameTrack(&*track,&*(orphan->innerTrack()))) {
+           double dphi = orphan->innerTrack()->phi() - track->phi();
+           if (dphi > M_PI) dphi -= 2.*M_PI;
+           if (dphi < -M_PI) dphi += 2.*M_PI;
+           double deta = orphan->innerTrack()->eta() - track->eta();
+           double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+           if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
+             double dz = fabs(track->dz(beamSpot->position())-orphan->innerTrack()->dz(beamSpot->position()));
+             if (dz < 0.1) m_orphan_isoTk += track->pt();
+           }
+         }
+       }
+       //iso dimuon-orphan
+       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+         bool track_is_muon = false;
+         if (muJet->sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) || muJet->sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
+         if (!track_is_muon) {
+           double dphi = muJet->phi() - track->phi();
+           if (dphi > M_PI) dphi -= 2.*M_PI;
+           if (dphi < -M_PI) dphi += 2.*M_PI;
+           double deta = muJet->eta() - track->eta();
+           double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
+           if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
+             double dz = fabs(track->dz(beamSpot->position())-muJet->vertexDz(beamSpot->position()));
+             if (dz < 0.1) m_dimuorphan_isoTk += track->pt();
+           }
+         }    
+       }
+     }
+   }
+
   //****************************************************************************
   //                          RECO LEVEL ANALYSIS FINISH                        
   //****************************************************************************
@@ -1586,6 +1687,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   //****************************************************************************
   
   m_ttree->Fill();
+  if(runBBestimation_) m_ttree_orphan->Fill();
   
 }
 
@@ -1597,7 +1699,6 @@ CutFlowAnalyzer::beginJob() {
   
   edm::Service<TFileService> tFileService;
   m_ttree = tFileService->make<TTree>("Events", "Events");
-
   //****************************************************************************
   //                          EVENT LEVEL BRANCHES                              
   //****************************************************************************
@@ -1833,6 +1934,11 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix", &b_diMuonF_m1_FittedVtx_hitpix, "diMuonF_m1_FittedVtx_hitpix/I");
   m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix", &b_diMuonF_m2_FittedVtx_hitpix, "diMuonF_m2_FittedVtx_hitpix/I");
 
+  // bb Estimation
+  m_ttree->Branch("massC",                          &b_massC,                          "massC/F");
+  m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
+  m_ttree->Branch("isoC_1mm",                       &b_isoC_1mm,                       "isoC_1mm/F");
+  m_ttree->Branch("isoF_1mm",                       &b_isoF_1mm,                       "isoF_1mm/F");
   
   // RECO Level Selectors
   m_ttree->Branch("is1SelMu17",                     &b_is1SelMu17,                     "is1SelMu17/O");
@@ -1857,6 +1963,20 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("is2DiMuonsLxyOK_ConsistentVtx",  &b_is2DiMuonsLxyOK_ConsistentVtx,  "is2DiMuonsLxyOK_ConsistentVtx/O");
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);  
+
+  // Orpahn Muon
+  if(runBBestimation_){
+    m_ttree_orphan = tFileService->make<TTree>("Events_orphan", "Events_orphan");
+    m_ttree_orphan->Branch("run", &b_run, "run/I");
+    m_ttree_orphan->Branch("lumi", &b_lumi, "lumi/I");
+    m_ttree_orphan->Branch("event", &b_event, "event/I");
+    m_ttree_orphan->Branch("mass", &m_dimuorphan_mass, "mass/F");
+    m_ttree_orphan->Branch("containstrig", &m_dimuorphan_containstrig, "containstrig/I");
+    m_ttree_orphan->Branch("containstrig2", &m_dimuorphan_containstrig2, "containstrig2/I");
+    m_ttree_orphan->Branch("orph_z", &m_orphan_z, "orph_z/I");
+    m_ttree_orphan->Branch("iso_orph_Tk", &m_orphan_isoTk, "iso_orph_Tk/F");
+    m_ttree_orphan->Branch("isoTk", &m_dimuorphan_isoTk, "isoTk/F");
+  }
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
