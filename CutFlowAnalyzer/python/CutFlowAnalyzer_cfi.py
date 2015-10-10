@@ -7,6 +7,7 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
 #    muJets = cms.InputTag("TrackerMuJetProducer05"),
     muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
     muJets = cms.InputTag("PFMuJetProducer05"),
+    muJetOrphans = cms.InputTag("PFMuJetProducer05", "Orphans"),
     DiMuons_Iso_Max = cms.double(2.0),
     nThrowsConsistentVertexesCalculator = cms.int32(100000),
     hltPaths = cms.vstring(
