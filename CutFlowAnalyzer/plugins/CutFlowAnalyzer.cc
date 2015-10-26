@@ -373,6 +373,16 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Int_t b_diMuonF_m1_FittedVtx_hitpix;
   Int_t b_diMuonF_m2_FittedVtx_hitpix;
 
+  Int_t b_diMuonC_m1_FittedVtx_hitpix_l2inc;
+  Int_t b_diMuonC_m2_FittedVtx_hitpix_l2inc;
+  Int_t b_diMuonF_m1_FittedVtx_hitpix_l2inc;
+  Int_t b_diMuonF_m2_FittedVtx_hitpix_l2inc;
+
+  Int_t b_diMuonC_m1_FittedVtx_hitpix_l3inc;
+  Int_t b_diMuonC_m2_FittedVtx_hitpix_l3inc;
+  Int_t b_diMuonF_m1_FittedVtx_hitpix_l3inc;
+  Int_t b_diMuonF_m2_FittedVtx_hitpix_l3inc;
+
   Float_t b_diMuonC_FittedVtx_Lxy;
   Float_t b_diMuonC_FittedVtx_L;
   Float_t b_diMuonC_FittedVtx_dz;
@@ -432,6 +442,7 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
 //  Float_t b_diMuonC_IsoPF_ConsistentVtx;
 //  Float_t b_diMuonF_IsoPF_ConsistentVtx;
 
+  bool runDisplacedVtxFinder_;
 };
 
 //
@@ -525,6 +536,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_events2DiMuonsLxyOK_FittedVtx      = 0;
   m_events2DiMuonsLxyOK_ConsistentVtx  = 0;
   
+  runDisplacedVtxFinder_ = iConfig.getParameter<bool>("runDisplacedVtxFinder");
 }
 
 
@@ -1199,7 +1211,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
       DisplacedVertexFinder displacedVtx(transientTrackBuilder_ptr, beamSpotPosition);      
       displacedVtx.setDebug(99);      
-      displacedVtx.findDisplacedVertex(diMuonC, diMuonF);
+      if (runDisplacedVtxFinder_)
+	displacedVtx.findDisplacedVertex(diMuonC, diMuonF);
 
     } catch (...) {
       std::cout << ">>>> WARNING!!! TransientTrackRecord is not available!!! <<<<" << std::endl;
@@ -1483,12 +1496,34 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	    if(k==0) b_diMuonC_m1_FittedVtx_hitpix = 1;
 	    if(k==1) b_diMuonC_m2_FittedVtx_hitpix = 1;
 	  }
+	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
+	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	    if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l2inc = 1;
+	    if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l2inc = 1;
+	  }
+	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
+	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel() ||
+	     p.hasValidHitInThirdPixelEndcap() || p.hasValidHitInThirdPixelBarrel()){
+	    if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l3inc = 1;
+	    if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l3inc = 1;
+	  }
 	}
 	if(tamu::helpers::sameTrack(&*track,&*(diMuonF->muon(k)->innerTrack()))){
 	  const reco::HitPattern& p = track->hitPattern();
 	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
 	    if(k==0) b_diMuonF_m1_FittedVtx_hitpix = 1;
 	    if(k==1) b_diMuonF_m2_FittedVtx_hitpix = 1;
+	  }
+	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
+	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	    if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l2inc = 1;
+	    if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l2inc = 1;
+	  }
+	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
+	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel() ||
+	     p.hasValidHitInThirdPixelEndcap() || p.hasValidHitInThirdPixelBarrel()){
+	    if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l3inc = 1;
+	    if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l3inc = 1;
 	  }
 	}
       }
@@ -1832,6 +1867,16 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix", &b_diMuonC_m2_FittedVtx_hitpix, "diMuonC_m2_FittedVtx_hitpix/I");
   m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix", &b_diMuonF_m1_FittedVtx_hitpix, "diMuonF_m1_FittedVtx_hitpix/I");
   m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix", &b_diMuonF_m2_FittedVtx_hitpix, "diMuonF_m2_FittedVtx_hitpix/I");
+
+  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l2inc", &b_diMuonC_m1_FittedVtx_hitpix_l2inc, "diMuonC_m1_FittedVtx_hitpix_l2inc/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l2inc", &b_diMuonC_m2_FittedVtx_hitpix_l2inc, "diMuonC_m2_FittedVtx_hitpix_l2inc/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l2inc", &b_diMuonF_m1_FittedVtx_hitpix_l2inc, "diMuonF_m1_FittedVtx_hitpix_l2inc/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l2inc", &b_diMuonF_m2_FittedVtx_hitpix_l2inc, "diMuonF_m2_FittedVtx_hitpix_l2inc/I");
+
+  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l3inc", &b_diMuonC_m1_FittedVtx_hitpix_l3inc, "diMuonC_m1_FittedVtx_hitpix_l3inc/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l3inc", &b_diMuonC_m2_FittedVtx_hitpix_l3inc, "diMuonC_m2_FittedVtx_hitpix_l3inc/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l3inc", &b_diMuonF_m1_FittedVtx_hitpix_l3inc, "diMuonF_m1_FittedVtx_hitpix_l3inc/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l3inc", &b_diMuonF_m2_FittedVtx_hitpix_l3inc, "diMuonF_m2_FittedVtx_hitpix_l3inc/I");
 
   
   // RECO Level Selectors

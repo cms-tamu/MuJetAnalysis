@@ -9,6 +9,7 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
     muJets = cms.InputTag("PFMuJetProducer05"),
     DiMuons_Iso_Max = cms.double(2.0),
     nThrowsConsistentVertexesCalculator = cms.int32(100000),
+    runDisplacedVtxFinder = cms.bool(False),
     hltPaths = cms.vstring(
         'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1',
         'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2',

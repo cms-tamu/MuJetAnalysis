@@ -6,7 +6,7 @@
 ConsistentVertexesCalculator::ConsistentVertexesCalculator(const TransientTrackBuilder *transientTrackBuilder, GlobalPoint beamSpotPosition)
 {
   
-  _debug   = 99;
+  _debug   = 0;
   _resultIsValid = false;
   
   if ( _debug > 10 ) std::cout << "ConsistentVertexesCalculator::ConsistentVertexesCalculator" << std::endl;
