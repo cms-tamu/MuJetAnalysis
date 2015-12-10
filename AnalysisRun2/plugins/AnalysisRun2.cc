@@ -1733,9 +1733,9 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	if(m_antraj==1){
 
       	  // //===============  Calling methods for propagation between layers====================//
-      	  // edm::ESHandle<MeasurementTracker> theMeasTk;
-      	  // std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
-      	  // iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
+	  edm::ESHandle<MeasurementTracker> theMeasTk;
+	  std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
+	  iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
       	  // //	theMeasTk->update(iEvent);
 	  
       	  // // // This is also needed to extrapolate amongst the tracker layers.
