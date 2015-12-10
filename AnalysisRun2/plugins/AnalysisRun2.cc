@@ -1732,43 +1732,43 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	if(m_antraj==1){
 
-      	  //===============  Calling methods for propagation between layers====================//
-      	  edm::ESHandle<MeasurementTracker> theMeasTk;
-      	  std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
-      	  iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
-      	  //x	theMeasTk->update(iEvent);
+      	  // //===============  Calling methods for propagation between layers====================//
+      	  // edm::ESHandle<MeasurementTracker> theMeasTk;
+      	  // std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
+      	  // iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
+      	  // //	theMeasTk->update(iEvent);
 	  
-      	  // // This is also needed to extrapolate amongst the tracker layers.
-      	  edm::ESHandle<NavigationSchool> theSchool;
-      	  //	   iSetup.get<NavigationSchoolRecord>().get("SimpleNavigationSchool",theSchool);
-      	  iSetup.get<NavigationSchoolRecord>().get("NavigationSchool",theSchool);
+      	  // // // This is also needed to extrapolate amongst the tracker layers.
+      	  // edm::ESHandle<NavigationSchool> theSchool;
+      	  // //	   iSetup.get<NavigationSchoolRecord>().get("SimpleNavigationSchool",theSchool);
+      	  // iSetup.get<NavigationSchoolRecord>().get("NavigationSchool",theSchool);
 
-      	  // NavigationSetter junk(*theSchool);
+      	  // // NavigationSetter junk(*theSchool);
 	  
-      	  edm::ESHandle<Propagator> thePropagator;
-      	  std::string propagatorName = param_.getParameter<std::string>("Propagator");
-      	  iSetup.get<TrackingComponentsRecord>().get(propagatorName,thePropagator);
+      	  // edm::ESHandle<Propagator> thePropagator;
+      	  // std::string propagatorName = param_.getParameter<std::string>("Propagator");
+      	  // iSetup.get<TrackingComponentsRecord>().get(propagatorName,thePropagator);
 	  
-      	  Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
-      	  Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
+      	  // Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
+      	  // Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
 	  
-      	  //============================================================================================//
+      	  // //============================================================================================//
 	  
-	  //============== Refitted collection of tracks
-      	  Handle<reco::TrackCollection> tracksrf;  
-      	  iEvent.getByLabel("TrackRefitter",tracksrf); 
+	  // //============== Refitted collection of tracks
+      	  // Handle<reco::TrackCollection> tracksrf;  
+      	  // iEvent.getByLabel("TrackRefitter",tracksrf); 
 	  
-      	  vector<Float_t> mincharge;
-      	  vector<Float_t> mintheta;
-      	  vector<Float_t> minqoverpt;
-      	  vector<Float_t> minphi;
-      	  vector<Float_t> mindxy;
-      	  vector<Float_t> mindz;
+      	  // vector<Float_t> mincharge;
+      	  // vector<Float_t> mintheta;
+      	  // vector<Float_t> minqoverpt;
+      	  // vector<Float_t> minphi;
+      	  // vector<Float_t> mindxy;
+      	  // vector<Float_t> mindz;
 	 
-      	  std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetC;
-      	  std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetC;
-      	  std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetF;
-      	  std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetF;
+      	  // std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetC;
+      	  // std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetC;
+      	  // std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetF;
+      	  // std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetF;
 	
 	
       	  // //====== MATCHING selected muons to refitted tracks and asking for hits in 1st layer (barrel or endcap)
