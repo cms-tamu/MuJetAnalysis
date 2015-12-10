@@ -68,9 +68,6 @@
 #include "TrackingTools/DetLayers/interface/NavigationSchool.h"
 //#include "TrackingTools/DetLayers/interface/NavigationSetter.h"
 //#include "RecoTracker/TkNavigation/interface/SimpleNavigationSchool.h"
--bash-4.1$ git remote -v
-origin	https://castaned@github.com/castaned/MuJetAnalysis.git (fetch)
-
 #include "RecoTracker/SiTrackerMRHTools/interface/SiTrackerMultiRecHitUpdator.h"
 #include <TrackingTools/KalmanUpdators/interface/Chi2MeasurementEstimator.h>
 #include <TrackingTools/DetLayers/interface/GeometricSearchDet.h> 
