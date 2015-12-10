@@ -18,6 +18,8 @@
 <use   name="TrackingTools/TransientTrack"/>
 <use   name="TrackingTools/Records"/>
 <use   name="MuJetAnalysis/DataFormats"/>
+<use   name="RecoTracker/MeasurementDet"/>
+<use   name="RecoTracker/Record"/>
 <use   name="rootrflx"/>
 <use   name="root"/>
 <export>

@@ -44,6 +44,11 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
   }
 }
 
+double error(double num, double denom) {
+  const double eff(num/(denom));
+  return sqrt( eff*(1- eff)/(denom) );
+}
+
 void efficiency_hitrecovery(TString fileName){
 
   bool verbose(false);
@@ -129,7 +134,7 @@ void efficiency_hitrecovery(TString fileName){
   TIter next(fileElements);
   TChainElement *chEl=0;
 
-while ((chEl=(TChainElement*)next())) {
+  while ((chEl=(TChainElement*)next())) {
     if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
     TFile* myfile = new TFile(dirname + chEl->GetTitle());
     if (!myfile) {
@@ -159,7 +164,7 @@ while ((chEl=(TChainElement*)next())) {
     t->SetBranchAddress("is2GenMu8",   &is2GenMu8);
     t->SetBranchAddress("is3GenMu8",   &is3GenMu8);
     t->SetBranchAddress("is4GenMu8",   &is4GenMu8);
-
+    
     // RECO Level Selectors
     t->SetBranchAddress("is1SelMu17",                     &is1SelMu17);
     t->SetBranchAddress("is2SelMu8",                      &is2SelMu8);
@@ -186,9 +191,9 @@ while ((chEl=(TChainElement*)next())) {
     t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix", &diMuonF_m1_FittedVtx_hitpix);
     t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix", &diMuonF_m2_FittedVtx_hitpix);
 
- for(int k=0;k<t->GetEntries();k++){
+    for(int k=0;k<t->GetEntries();k++){
       t->GetEntry(k);
-
+      
       ev_all++;
 
       if(is1GenMu17) c1genm++;
@@ -202,44 +207,47 @@ while ((chEl=(TChainElement*)next())) {
       if(is4SelMu8)  c4recm++;
 
       //  ===========   GEN LEVEL information  ==============//
-      if(is4GenMu8){
-        if(fabs(genA0_Lxy)<4.4 && fabs(genA1_Lxy)<4.4 && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
+      /*
+	Denominator: 2 dark photons with lxy<4.4 cm, lz < 34.5 + 4 muons with pt>8 GeV, |eta| < 2.4 + 1 muon with pt>17 GeV, |eta| < 0.9
+       */
+      double lxy_max = 4.4; // [cm]
+      double lz_max = 34.5; // [cm]
+	
+      if(is4GenMu8/* and is1GenMu17*/){
+        if(fabs(genA0_Lxy)<lxy_max && fabs(genA1_Lxy)<lxy_max && fabs(genA0_Lz)<lz_max && fabs(genA1_Lz)<lz_max){
           ev_4gmlxylzcut++;
         }
       }
-//  =============  Reco information ====================//
-      if(is4SelMu8){
-        if(isVertexOK){
+      //  =============  Reco information ====================//
+      /*
+	Numerator: 2 dimuons, each dimuon has 2 muons pt>8 GeV, |eta| < 2.4; 
+	           1 dimuon has 1 muon with pt>17 GeV, |eta| < 0.9	
+		   each dimuon must have at least 1 hit in the first pixel layer
+		   
+      */
+      if(is4SelMu8/* and b_is1SelMu17*/) {
+	if(isVertexOK){
           ev_isVtxOK++;
-          if(is2MuJets){
-            ev_is2MuJets++;
-            if(is2DiMuons){
-              ev_is2DiMuons++;
-              if(is2DiMuonsFittedVtxOK){
-                ev_is2DiMuonsFittedVtxOK++;
-                if( (diMuonC_m1_FittedVtx_hitpix==1||diMuonC_m2_FittedVtx_hitpix==1)&&(diMuonF_m1_FittedVtx_hitpix==1||diMuonF_m2_FittedVtx_hitpix==1) ){
-                  ev_isPixelHitOK++;
-                  if(is2DiMuonsDzOK_FittedVtx){
-                    ev_is2DiMuonsDzOK_FittedVtx++;
-                    if(is2DiMuonsMassOK_FittedVtx){
-                      ev_is2DiMuonsMassOK_FittedVtx++;
-                      if(is2DiMuonsIsoTkOK_FittedVtx){
-                        ev_is2DiMuonsIsoTkOK_FittedVtx++;
-                        if(isDiMuonHLTFired){
-                          ev_isDiMuonHLTFired++;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+	  if (is2MuJets) {
+	    ev_is2MuJets++;
+	    if (is2DiMuons) {
+	      ev_is2DiMuons++;
+	      if (is2DiMuonsFittedVtxOK) {
+		ev_is2DiMuonsFittedVtxOK++;		
+		if( (diMuonC_m1_FittedVtx_hitpix==1||diMuonC_m2_FittedVtx_hitpix==1)&&(diMuonF_m1_FittedVtx_hitpix==1||diMuonF_m2_FittedVtx_hitpix==1) ) {
+		  ev_isPixelHitOK++;
+		}
+	      }
+	    }
+	  }
+	}
       }
+      
     } // closing for loop
-myfile->Close();
-} // closing while loop
+    myfile->Close();
+
+  } // closing while loop
+  
   std::cout<<" Sample: " << fileName << endl;
   std::cout<<" Events          "<<ev_all<<std::endl;
   std::cout<<" ================ GEN MUONS ========================================= "<<std::endl;
@@ -254,19 +262,18 @@ myfile->Close();
   std::cout<<" 3RecMu8                        "<<c3recm<<"  reff  "<<c3recm/(c2recm*1.0)<<std::endl;
   std::cout<<" 4RecMu8                        "<<c4recm<<"  reff  "<<c4recm/(c3recm*1.0)<<std::endl;
   std::cout<<" ================ EVENT variables ================= "<<std::endl;
-  std::cout<<" Events with VtxOK              "<<ev_isVtxOK<<"    reff  "<<ev_isVtxOK/(1.0*c4recm)<<std::endl;
+  
+  std::cout<<" Events with VtxOK              "<<ev_isVtxOK<<"    reff  "   <<ev_isVtxOK/(1.0*c4recm)<<std::endl;
   std::cout<<" Events with 2 muonjets         "<<ev_is2MuJets<<"     reff  "<<ev_is2MuJets/(1.0*ev_isVtxOK)<<std::endl;
   std::cout<<" Events with 2 Dimuons          "<<ev_is2DiMuons<<"    reff  "<<ev_is2DiMuons/(1.0*ev_is2MuJets)<<std::endl;
   std::cout<<" Events with 2DimVtxOK          "<<ev_is2DiMuonsFittedVtxOK<<"    reff  "<<ev_is2DiMuonsFittedVtxOK/(1.0*ev_is2DiMuons)<<std::endl;
   std::cout<<" Events with 2DimHitPix         "<<ev_isPixelHitOK<<"     reff  "<<ev_isPixelHitOK/(1.0*ev_is2DiMuonsFittedVtxOK)<<std::endl;
-  std::cout<<" Events with 2DimDzOK           "<<ev_is2DiMuonsDzOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsDzOK_FittedVtx/(1.0*ev_isPixelHitOK)<<std::endl;
-  std::cout<<" Events with 2DimMassOK         "<<ev_is2DiMuonsMassOK_FittedVtx<<"  reff   "<<ev_is2DiMuonsMassOK_FittedVtx/(1.0*ev_is2DiMuonsDzOK_FittedVtx)<<endl;
-  std::cout<<" Events with 2DimIsoOK          "<<ev_is2DiMuonsIsoTkOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsIsoTkOK_FittedVtx/(1.0*ev_is2DiMuonsMassOK_FittedVtx)<<endl;
-  std::cout<<" Events with 2DimHLT            "<<ev_isDiMuonHLTFired<<"   reff   "<<ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)<<endl;
-  std::cout<<" ratio reco/gen                 "<<ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut)<<" +/-  "<<sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut))*(1- (ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut)) ))/(1.0*ev_4gmlxylzcut))<<std::endl;
-
+  const double efficiency(ev_isPixelHitOK/(1.0*ev_4gmlxylzcut));
+  const double uncertainty(error(ev_isPixelHitOK, ev_4gmlxylzcut));
+  std::cout<<" ratio reco/gen                 "<< efficiency <<" +/-  "<< uncertainty <<std::endl;
+  
   //Fill ratio reco/gen vectors to be plotted  
-
+  
 
   double cT_double; 
   if(cT_string == "000") cT_double = 0;
@@ -280,29 +287,29 @@ myfile->Close();
   if(cT_string == "500") cT_double = 5.0;
 
   if(mass_string == "0250"){
-	  mGammaD_0250_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut));  
-	  mGammaD_0250_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut))*(1- (ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut)) ))/(1.0*ev_4gmlxylzcut)));  
-	  mGammaD_0250_cT.push_back(cT_double);
+    mGammaD_0250_eff.push_back(efficiency);  
+    mGammaD_0250_eff_uncert.push_back(uncertainty);  
+    mGammaD_0250_cT.push_back(cT_double);
   }
   if(mass_string == "0275"){
-	  mGammaD_0275_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut));  
-	  mGammaD_0275_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut))*(1- (ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut)) ))/(1.0*ev_4gmlxylzcut)));  
-	  mGammaD_0275_cT.push_back(cT_double);  
+    mGammaD_0275_eff.push_back(efficiency);  
+    mGammaD_0275_eff_uncert.push_back(uncertainty);  
+    mGammaD_0275_cT.push_back(cT_double);  
   }
   if(mass_string == "0300"){
-	  mGammaD_0300_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut));  
-	  mGammaD_0300_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut))*(1- (ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut)) ))/(1.0*ev_4gmlxylzcut)));  
-	  mGammaD_0300_cT.push_back(cT_double);  
+    mGammaD_0300_eff.push_back(efficiency);  
+    mGammaD_0300_eff_uncert.push_back(uncertainty);  
+    mGammaD_0300_cT.push_back(cT_double);  
   }
   if(mass_string == "2000"){
-	  mGammaD_2000_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut));  
-	  mGammaD_2000_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut))*(1- (ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut)) ))/(1.0*ev_4gmlxylzcut)));  
-	  mGammaD_2000_cT.push_back(cT_double);  
+    mGammaD_2000_eff.push_back(efficiency);  
+    mGammaD_2000_eff_uncert.push_back(uncertainty);  
+    mGammaD_2000_cT.push_back(cT_double);  
   }
   if(mass_string == "8500"){
-	  mGammaD_8500_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut));  
-	  mGammaD_8500_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut))*(1- (ev_isDiMuonHLTFired/(1.0*ev_4gmlxylzcut)) ))/(1.0*ev_4gmlxylzcut)));  
-	  mGammaD_8500_cT.push_back(cT_double);  
+    mGammaD_8500_eff.push_back(efficiency);  
+    mGammaD_8500_eff_uncert.push_back(uncertainty);  
+    mGammaD_8500_cT.push_back(cT_double);  
   }
 //delete chEl;
 //delete fileElements;
@@ -369,7 +376,7 @@ int size_8500 = null_8500.size();
 
 	TGraphErrors *gr_eff_mD_8500 = new TGraphErrors(size_8500,array_mGammaD_8500_cT,array_mGammaD_8500_eff,array_null_8500,array_mGammaD_8500_eff_uncert);
 
-	TLegend *leg = new TLegend(0.5,0.3,0.85,0.6);
+	TLegend *leg = new TLegend(0.6,0.15,0.85,0.4);
 	leg->SetBorderSize(0);
 	leg->SetFillColor(0);
 	leg->SetTextSize(0.045);
@@ -380,10 +387,11 @@ int size_8500 = null_8500.size();
 	leg->AddEntry(gr_eff_mD_8500,"m_{#gamma D}=8.500 GeV","PL");
 
 
-	TH2F *dummy3 = new TH2F("","",100,-0.2,5.2,100,0.0,1.0);
-
+	TH2F *dummy3 = new TH2F("","",100,-0.2,5.2,100,0.0,1.2);
 
 	TCanvas *c = new TCanvas("c","c",700,500);
+	gPad->SetTickx(1);
+	gPad->SetTicky(1);
 	dummy3->GetXaxis()->SetTitle("c#tau [mm]");
 	dummy3->GetYaxis()->SetTitle("#epsilon_{rec}/#alpha_{gen}");
 	gStyle->SetOptStat(0);
@@ -419,16 +427,16 @@ int size_8500 = null_8500.size();
 
         gr_eff_mD_8500->SetLineWidth(1);
         gr_eff_mD_8500->SetMarkerSize(5);
-        gr_eff_mD_8500->SetLineColor(5);
-        gr_eff_mD_8500->SetMarkerColor(5);
+        gr_eff_mD_8500->SetLineColor(kOrange+1);
+        gr_eff_mD_8500->SetMarkerColor(kOrange+1);
         gr_eff_mD_8500->SetMarkerStyle(7);
         gr_eff_mD_8500->Draw("SAME PL");
 
 	leg->Draw("same");
-	c->SaveAs("e_rec_alpha_gen_vs_cT.pdf","recreate");
+	c->SaveAs("e_vertex_rec_alpha_gen_vs_cT_44mm.pdf","recreate");
 }
 
-void bam_Analysis_hitrecovery()
+void Analysis_VertexRecoEfficiency()
 {
 //These cT's should be in order.
 efficiency_hitrecovery("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
