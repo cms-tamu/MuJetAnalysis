@@ -58,6 +58,7 @@
 #include <RecoTracker/MeasurementDet/interface/MeasurementTracker.h>
 #include "RecoTracker/MeasurementDet/interface/MeasurementTrackerEvent.h"
 #include "RecoTracker/Record/interface/CkfComponentsRecord.h"
+#include "RecoTracker/Record/interface/TrackerRecoGeometryRecord.h"
 
 #include "TrackingTools/Records/interface/TrackingComponentsRecord.h" 
 #include "TrackingTools/TransientTrackingRecHit/interface/TransientTrackingRecHit.h"
