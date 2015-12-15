@@ -24,9 +24,9 @@
 <use   name="TrackingTools/TrajectoryState"/>
 <use   name="TrackingTools/KalmanUpdators"/>
 <use   name="Utilities/General"/>
-<use name="FWCore/Framework"/>
-<use name="FWCore/PluginManager"/>
-<use name="FWCore/ParameterSet"/>
+<use   name="FWCore/Framework"/>
+<use   name="FWCore/PluginManager"/>
+<use   name="FWCore/ParameterSet"/>
 <use   name="FWCore/ServiceRegistry"/>
 <use   name="FWCore/Utilities"/>
 <use   name="CommonTools/UtilAlgos"/>
