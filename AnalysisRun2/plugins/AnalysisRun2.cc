@@ -1708,24 +1708,24 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
     
-	// Int_t indxtrkmj1_validhit[2];
-	// Int_t indxtrkmj2_validhit[2];
+	Int_t indxtrkmj1_validhit[2];
+	Int_t indxtrkmj2_validhit[2];
 
-	// indxtrkmj1_validhit[0]=-100000;
-	// indxtrkmj1_validhit[1]=-100000;
+	indxtrkmj1_validhit[0]=-100000;
+	indxtrkmj1_validhit[1]=-100000;
 
-	// indxtrkmj2_validhit[0]=-100000;
-	// indxtrkmj2_validhit[1]=-100000;
+	indxtrkmj2_validhit[0]=-100000;
+	indxtrkmj2_validhit[1]=-100000;
 
 
-	// Int_t indxtrkmj1[2];
-	// Int_t indxtrkmj2[2];
+	Int_t indxtrkmj1[2];
+	Int_t indxtrkmj2[2];
 
-	// indxtrkmj1[0]=-100000;
-	// indxtrkmj1[1]=-100000;
+	indxtrkmj1[0]=-100000;
+	indxtrkmj1[1]=-100000;
 
-	// indxtrkmj2[0]=-100000;
-	// indxtrkmj2[1]=-100000;
+	indxtrkmj2[0]=-100000;
+	indxtrkmj2[1]=-100000;
 
 	// Int_t indxtrkmj1_gt[2]={-100000};
 	// Int_t indxtrkmj2_gt[2]={-100000};
@@ -1733,516 +1733,529 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	if(m_antraj==1){
 
-      	  // //===============  Calling methods for propagation between layers====================//
-	  edm::ESHandle<MeasurementTracker> theMeasTk;
-	  std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
-	  iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
-      	  // //	theMeasTk->update(iEvent);
-	  
-      	  // // // This is also needed to extrapolate amongst the tracker layers.
-      	  // edm::ESHandle<NavigationSchool> theSchool;
-      	  // //	   iSetup.get<NavigationSchoolRecord>().get("SimpleNavigationSchool",theSchool);
-      	  // iSetup.get<NavigationSchoolRecord>().get("NavigationSchool",theSchool);
 
+      	  edm::ESHandle<NavigationSchool> theSchool;
+	  edm::ESHandle<MeasurementTracker> theMeasTk;
+
+	  std::string theNavigationSchool ="";
+	  if (param_.exists("NavigationSchool")) theNavigationSchool= param_.getParameter<std::string>("NavigationSchool");
+	  else edm::LogWarning("TrackProducerBase")<<" NavigationSchool parameter not set. secondary hit pattern will not be filled.";
+	  if (theNavigationSchool!=""){
+	    iSetup.get<NavigationSchoolRecord>().get(theNavigationSchool, theSchool);
+	    LogDebug("TrackProducer") << "get also the measTk" << "\n";
+	    std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
+	    iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
+	  }
+	  else{
+	    theSchool = edm::ESHandle<NavigationSchool>(); //put an invalid handle
+	    theMeasTk = edm::ESHandle<MeasurementTracker>(); //put an invalid handle
+	  }
+
+      	  // // //===============  Calling methods for propagation between layers====================//
+	  // edm::ESHandle<MeasurementTracker> theMeasTk;
+	  // std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
+	  // iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
+      	  // // //	theMeasTk->update(iEvent);
+	  
       	  // // NavigationSetter junk(*theSchool);
 	  
-      	  // edm::ESHandle<Propagator> thePropagator;
-      	  // std::string propagatorName = param_.getParameter<std::string>("Propagator");
-      	  // iSetup.get<TrackingComponentsRecord>().get(propagatorName,thePropagator);
+      	  edm::ESHandle<Propagator> thePropagator;
+      	  std::string propagatorName = param_.getParameter<std::string>("Propagator");
+      	  iSetup.get<TrackingComponentsRecord>().get(propagatorName,thePropagator);
 	  
-      	  // Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
-      	  // Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
+      	  Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
+      	  Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
 	  
-      	  // //============================================================================================//
+      	  //============================================================================================//
 	  
-	  // //============== Refitted collection of tracks
-      	  // Handle<reco::TrackCollection> tracksrf;  
-      	  // iEvent.getByLabel("TrackRefitter",tracksrf); 
+	  //============== Refitted collection of tracks
+      	  Handle<reco::TrackCollection> tracksrf;  
+      	  iEvent.getByLabel("TrackRefitter",tracksrf); 
 	  
-      	  // vector<Float_t> mincharge;
-      	  // vector<Float_t> mintheta;
-      	  // vector<Float_t> minqoverpt;
-      	  // vector<Float_t> minphi;
-      	  // vector<Float_t> mindxy;
-      	  // vector<Float_t> mindz;
+      	  vector<Float_t> mincharge;
+      	  vector<Float_t> mintheta;
+      	  vector<Float_t> minqoverpt;
+      	  vector<Float_t> minphi;
+      	  vector<Float_t> mindxy;
+      	  vector<Float_t> mindz;
 	 
-      	  // std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetC;
-      	  // std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetC;
-      	  // std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetF;
-      	  // std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetF;
+      	  std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetC;
+      	  std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetC;
+      	  std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetF;
+      	  std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetF;
 	
 	
-      	  // //====== MATCHING selected muons to refitted tracks and asking for hits in 1st layer (barrel or endcap)
+      	  //====== MATCHING selected muons to refitted tracks and asking for hits in 1st layer (barrel or endcap)
 	
-      	  // for(uint32_t k=0;k<2;k++){
+      	  for(uint32_t k=0;k<2;k++){
 	  
-      	  //   mtrack_pt[k] = muJetC->muon(k)->innerTrack()->pt();
-      	  //   mtrack_charge[k] = muJetC->muon(k)->innerTrack()->charge();
+      	    mtrack_pt[k] = muJetC->muon(k)->innerTrack()->pt();
+      	    mtrack_charge[k] = muJetC->muon(k)->innerTrack()->charge();
 
-      	  //   mtrack_theta[k] = muJetC->muon(k)->innerTrack()->theta();
-      	  //   mtrack_phi[k] = muJetC->muon(k)->innerTrack()->phi();
-      	  //   mtrack_dxy[k] = muJetC->muon(k)->innerTrack()->dxy();
-      	  //   mtrack_dz[k] = muJetC->muon(k)->innerTrack()->dz();
+      	    mtrack_theta[k] = muJetC->muon(k)->innerTrack()->theta();
+      	    mtrack_phi[k] = muJetC->muon(k)->innerTrack()->phi();
+      	    mtrack_dxy[k] = muJetC->muon(k)->innerTrack()->dxy();
+      	    mtrack_dz[k] = muJetC->muon(k)->innerTrack()->dz();
 	  
-      	  //   mtrack_errpt[k] = muJetC->muon(k)->innerTrack()->ptError();
-      	  //   mtrack_errcharge[k] = muJetC->muon(k)->innerTrack()->charge();
-      	  //   mtrack_errqoverp[k] = muJetC->muon(k)->innerTrack()->qoverpError();
-      	  //   mtrack_errtheta[k] = muJetC->muon(k)->innerTrack()->thetaError();
-      	  //   mtrack_errphi[k] = muJetC->muon(k)->innerTrack()->phiError();
-      	  //   mtrack_errdxy[k] = muJetC->muon(k)->innerTrack()->dxyError();
-      	  //   mtrack_errdz[k] = muJetC->muon(k)->innerTrack()->dzError();
+      	    mtrack_errpt[k] = muJetC->muon(k)->innerTrack()->ptError();
+      	    mtrack_errcharge[k] = muJetC->muon(k)->innerTrack()->charge();
+      	    mtrack_errqoverp[k] = muJetC->muon(k)->innerTrack()->qoverpError();
+      	    mtrack_errtheta[k] = muJetC->muon(k)->innerTrack()->thetaError();
+      	    mtrack_errphi[k] = muJetC->muon(k)->innerTrack()->phiError();
+      	    mtrack_errdxy[k] = muJetC->muon(k)->innerTrack()->dxyError();
+      	    mtrack_errdz[k] = muJetC->muon(k)->innerTrack()->dzError();
 	  
 
-      	  //   Int_t counter_match=0;
-      	  //   Int_t counter_track=0;
+      	    Int_t counter_match=0;
+      	    Int_t counter_track=0;
 	  
-      	  //   for (reco::TrackCollection::const_iterator trackrf = tracksrf->begin(); trackrf != tracksrf->end(); ++trackrf) {
+      	    for (reco::TrackCollection::const_iterator trackrf = tracksrf->begin(); trackrf != tracksrf->end(); ++trackrf) {
 	    
-      	  //     if(trackrf->pt()>3.0 && fabs(trackrf->eta())<2.5){
+      	      if(trackrf->pt()>3.0 && fabs(trackrf->eta())<2.5){
 	      
 	      
-      	  // 	if(k==1){
-      	  // 	  std::pair<Int_t,Float_t> temp_mu2_muJetC;
-      	  // 	  std::pair<Int_t,Float_t> temp_mu2_muJetF;
+      	  	if(k==1){
+      	  	  std::pair<Int_t,Float_t> temp_mu2_muJetC;
+      	  	  std::pair<Int_t,Float_t> temp_mu2_muJetF;
 		
-      	  // 	  temp_mu2_muJetC.first = counter_match;
-      	  // 	  temp_mu2_muJetF.first = counter_match;
+      	  	  temp_mu2_muJetC.first = counter_match;
+      	  	  temp_mu2_muJetF.first = counter_match;
 		
 		
-      	  // 	  temp_mu2_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
-      	  // 	    pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
-      	  // 	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
-      	  // 	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
-      	  // 	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+      	  	  temp_mu2_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
+      	  	    pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
+      	  	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
+      	  	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
+      	  	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
 		
-      	  // 	  temp_mu2_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
-      	  // 	    pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
-      	  // 	    pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
-      	  // 	    pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
-      	  // 	    pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+      	  	  temp_mu2_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
+      	  	    pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
+      	  	    pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
+      	  	    pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
+      	  	    pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
 		
 
 
-      	  // 	  // std::cout<<" track    "<<counter_match<<"    chi2  muon2 muJetC   "<< temp_mu2_muJetC.second <<std::endl;
-      	  // 	  // std::cout<<" track    "<<counter_match<<"    chi2  muon2 muJetF   "<< temp_mu2_muJetF.second <<std::endl;
+      	  	  // std::cout<<" track    "<<counter_match<<"    chi2  muon2 muJetC   "<< temp_mu2_muJetC.second <<std::endl;
+      	  	  // std::cout<<" track    "<<counter_match<<"    chi2  muon2 muJetF   "<< temp_mu2_muJetF.second <<std::endl;
 
 
-      	  // 	  minchi2_mu2_muJetC.push_back(temp_mu2_muJetC);
-      	  // 	  minchi2_mu2_muJetF.push_back(temp_mu2_muJetF);
+      	  	  minchi2_mu2_muJetC.push_back(temp_mu2_muJetC);
+      	  	  minchi2_mu2_muJetF.push_back(temp_mu2_muJetF);
 
-      	  // 	  muJetC_muon2_track_diffcharge[counter_track] = muJetC->muon(k)->innerTrack()->charge() - trackrf->charge();
-      	  // 	  muJetC_muon2_track_diffpt[counter_track] = muJetC->muon(k)->innerTrack()->pt() - trackrf->pt();
-      	  // 	  muJetC_muon2_track_diffqoverp[counter_track] = muJetC->muon(k)->innerTrack()->qoverp() - trackrf->qoverp();
-      	  // 	  muJetC_muon2_track_difftheta[counter_track] = muJetC->muon(k)->innerTrack()->theta() - trackrf->theta();
-      	  // 	  muJetC_muon2_track_diffphi[counter_track] = muJetC->muon(k)->innerTrack()->phi() - trackrf->phi();
-      	  // 	  muJetC_muon2_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
-      	  // 	  muJetC_muon2_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
+      	  	  muJetC_muon2_track_diffcharge[counter_track] = muJetC->muon(k)->innerTrack()->charge() - trackrf->charge();
+      	  	  muJetC_muon2_track_diffpt[counter_track] = muJetC->muon(k)->innerTrack()->pt() - trackrf->pt();
+      	  	  muJetC_muon2_track_diffqoverp[counter_track] = muJetC->muon(k)->innerTrack()->qoverp() - trackrf->qoverp();
+      	  	  muJetC_muon2_track_difftheta[counter_track] = muJetC->muon(k)->innerTrack()->theta() - trackrf->theta();
+      	  	  muJetC_muon2_track_diffphi[counter_track] = muJetC->muon(k)->innerTrack()->phi() - trackrf->phi();
+      	  	  muJetC_muon2_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
+      	  	  muJetC_muon2_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
 	      
-      	  // 	}
+      	  	}
 	      
 	      
-      	  // 	if(k==0){
+      	  	if(k==0){
 		
-      	  // 	  std::pair<Int_t,Float_t> temp_mu1_muJetC;
-      	  // 	  std::pair<Int_t,Float_t> temp_mu1_muJetF;
+      	  	  std::pair<Int_t,Float_t> temp_mu1_muJetC;
+      	  	  std::pair<Int_t,Float_t> temp_mu1_muJetF;
 		
-      	  // 	  temp_mu1_muJetC.first = counter_match;
-      	  // 	  temp_mu1_muJetF.first = counter_match;
+      	  	  temp_mu1_muJetC.first = counter_match;
+      	  	  temp_mu1_muJetF.first = counter_match;
 		
 
-      	  // 	  temp_mu1_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
-      	  // 	    pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
-      	  // 	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
-      	  // 	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
-      	  // 	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+      	  	  temp_mu1_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
+      	  	    pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
+      	  	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
+      	  	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
+      	  	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
 		
-      	  // 	  temp_mu1_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
-      	  // 	    pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
-      	  // 	    pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
-      	  // 	    pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
-      	  // 	    pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+      	  	  temp_mu1_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
+      	  	    pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
+      	  	    pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
+      	  	    pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
+      	  	    pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
 
 
-      	  // 	  // std::cout<<" track    "<<counter_match<<"    chi2  muon1 muJetC   "<< temp_mu1_muJetC.second <<std::endl;
-      	  // 	  // std::cout<<" track    "<<counter_match<<"    chi2  muon1 muJetF   "<< temp_mu1_muJetF.second <<std::endl;
+      	  	  // std::cout<<" track    "<<counter_match<<"    chi2  muon1 muJetC   "<< temp_mu1_muJetC.second <<std::endl;
+      	  	  // std::cout<<" track    "<<counter_match<<"    chi2  muon1 muJetF   "<< temp_mu1_muJetF.second <<std::endl;
 
-      	  // 	  minchi2_mu1_muJetC.push_back(temp_mu1_muJetC);
-      	  // 	  minchi2_mu1_muJetF.push_back(temp_mu1_muJetF);
+      	  	  minchi2_mu1_muJetC.push_back(temp_mu1_muJetC);
+      	  	  minchi2_mu1_muJetF.push_back(temp_mu1_muJetF);
 
-      	  // 	  //======================
+      	  	  //======================
 		
-      	  // 	  mintheta.push_back( cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()) );
-      	  // 	  minqoverpt.push_back((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt())  -  (trackrf->charge()/trackrf->pt())  );
-      	  // 	  minphi.push_back(  My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()) );
-      	  // 	  mindxy.push_back(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy() );
-      	  // 	  mindz.push_back( muJetC->muon(k)->innerTrack()->dz() - trackrf->dz() );
-      	  // 	  mincharge.push_back( muJetC->muon(k)->innerTrack()->charge() - trackrf->charge());
-		
-		
-      	  // 	  muJetC_muon1_track_diffpt[counter_track] = muJetC->muon(k)->innerTrack()->pt() - trackrf->pt();
-      	  // 	  muJetC_muon1_track_diffcharge[counter_track] = muJetC->muon(k)->innerTrack()->charge() - trackrf->charge();
-      	  // 	  muJetC_muon1_track_diffqoverp[counter_track] = (muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt());
-      	  // 	  muJetC_muon1_track_difftheta[counter_track] = cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta());
-      	  // 	  muJetC_muon1_track_diffphi[counter_track] =  My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi());
-      	  // 	  muJetC_muon1_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
-      	  // 	  muJetC_muon1_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
-		
-      	  // 	  muJetC_muon1_track_diffchi2[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
-      	  // 	    pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
-      	  // 	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
-      	  // 	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
-      	  // 	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+      	  	  mintheta.push_back( cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()) );
+      	  	  minqoverpt.push_back((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt())  -  (trackrf->charge()/trackrf->pt())  );
+      	  	  minphi.push_back(  My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()) );
+      	  	  mindxy.push_back(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy() );
+      	  	  mindz.push_back( muJetC->muon(k)->innerTrack()->dz() - trackrf->dz() );
+      	  	  mincharge.push_back( muJetC->muon(k)->innerTrack()->charge() - trackrf->charge());
 		
 		
+      	  	  muJetC_muon1_track_diffpt[counter_track] = muJetC->muon(k)->innerTrack()->pt() - trackrf->pt();
+      	  	  muJetC_muon1_track_diffcharge[counter_track] = muJetC->muon(k)->innerTrack()->charge() - trackrf->charge();
+      	  	  muJetC_muon1_track_diffqoverp[counter_track] = (muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt());
+      	  	  muJetC_muon1_track_difftheta[counter_track] = cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta());
+      	  	  muJetC_muon1_track_diffphi[counter_track] =  My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi());
+      	  	  muJetC_muon1_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
+      	  	  muJetC_muon1_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
 		
-      	  // 	  muJetC_muon1_track_diffchi2theta[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2);
-      	  // 	  muJetC_muon1_track_diffchi2qoverpt[counter_track] = pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2);
-      	  // 	  muJetC_muon1_track_diffchi2phi[counter_track] = pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2); 
-      	  // 	  muJetC_muon1_track_diffchi2dxy[counter_track] = pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2);
-      	  // 	  muJetC_muon1_track_diffchi2dz[counter_track] = pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+      	  	  muJetC_muon1_track_diffchi2[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2) + 
+      	  	    pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2) +
+      	  	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2) + 
+      	  	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
+      	  	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
 		
-      	  // 	  b_track_pt[counter_track] = trackrf->pt();
-      	  // 	  b_track_charge[counter_track] = trackrf->charge();
-      	  // 	  b_track_qoverp[counter_track] = trackrf->qoverp();
-      	  // 	  b_track_theta[counter_track] = trackrf->theta();
-      	  // 	  b_track_phi[counter_track] = trackrf->phi();
-      	  // 	  b_track_dxy[counter_track] = trackrf->dxy();
-      	  // 	  b_track_dz[counter_track] = trackrf->dz();
 		
-      	  // 	  b_track_errpt[counter_track] = trackrf->ptError();
-      	  // 	  b_track_errcharge[counter_track] = trackrf->charge();
-      	  // 	  b_track_errqoverp[counter_track] = trackrf->qoverpError();
-      	  // 	  b_track_errtheta[counter_track] = trackrf->thetaError();
-      	  // 	  b_track_errphi[counter_track] = trackrf->phiError();
-      	  // 	  b_track_errdxy[counter_track] = trackrf->dxyError();
-      	  // 	  b_track_errdz[counter_track] = trackrf->dzError();
-      	  // 	}
+		
+      	  	  muJetC_muon1_track_diffchi2theta[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2);
+      	  	  muJetC_muon1_track_diffchi2qoverpt[counter_track] = pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2);
+      	  	  muJetC_muon1_track_diffchi2phi[counter_track] = pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2); 
+      	  	  muJetC_muon1_track_diffchi2dxy[counter_track] = pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2);
+      	  	  muJetC_muon1_track_diffchi2dz[counter_track] = pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+		
+      	  	  b_track_pt[counter_track] = trackrf->pt();
+      	  	  b_track_charge[counter_track] = trackrf->charge();
+      	  	  b_track_qoverp[counter_track] = trackrf->qoverp();
+      	  	  b_track_theta[counter_track] = trackrf->theta();
+      	  	  b_track_phi[counter_track] = trackrf->phi();
+      	  	  b_track_dxy[counter_track] = trackrf->dxy();
+      	  	  b_track_dz[counter_track] = trackrf->dz();
+		
+      	  	  b_track_errpt[counter_track] = trackrf->ptError();
+      	  	  b_track_errcharge[counter_track] = trackrf->charge();
+      	  	  b_track_errqoverp[counter_track] = trackrf->qoverpError();
+      	  	  b_track_errtheta[counter_track] = trackrf->thetaError();
+      	  	  b_track_errphi[counter_track] = trackrf->phiError();
+      	  	  b_track_errdxy[counter_track] = trackrf->dxyError();
+      	  	  b_track_errdz[counter_track] = trackrf->dzError();
+      	  	}
 	      
-      	  // 	// if(sameTrackRF(&*trackrf,&*(muJetC->muon(k)->innerTrack()))){
+      	  	// if(sameTrackRF(&*trackrf,&*(muJetC->muon(k)->innerTrack()))){
 	      
-      	  // 	// // std::cout<<" charge   "<<track->charge()<<std::endl;
-      	  // 	// // std::cout<<" qoverp   "<<track->qoverp()<<std::endl;
-      	  // 	// // std::cout<<" theta    "<<track->theta()<<std::endl;
-      	  // 	// // std::cout<<" phi      "<<track->phi()<<std::endl;
-      	  // 	// // std::cout<<" dxy      "<<track->dxy()<<std::endl;
+      	  	// // std::cout<<" charge   "<<track->charge()<<std::endl;
+      	  	// // std::cout<<" qoverp   "<<track->qoverp()<<std::endl;
+      	  	// // std::cout<<" theta    "<<track->theta()<<std::endl;
+      	  	// // std::cout<<" phi      "<<track->phi()<<std::endl;
+      	  	// // std::cout<<" dxy      "<<track->dxy()<<std::endl;
 
-      	  // 	// // std::cout<<" charge m   "<<muJetC->muon(k)->innerTrack()->charge()<<std::endl;
-      	  // 	// // std::cout<<" qoverp m  "<<muJetC->muon(k)->innerTrack()->qoverp()<<std::endl;
-      	  // 	// // std::cout<<" theta m   "<<muJetC->muon(k)->innerTrack()->theta()<<std::endl;
-      	  // 	// // std::cout<<" phi   m   "<<muJetC->muon(k)->innerTrack()->phi()<<std::endl;
-      	  // 	// // std::cout<<" dxy   m   "<<muJetC->muon(k)->innerTrack()->dxy()<<std::endl;
-
-
-
-      	  // 	// //	    if(sameTrack(&*track,&*(muJetC->muon(k)->innerTrack()))){
-      	  // 	//   indxtrkmj1[k] = counter_match;
-      	  // 	//   if(k==0) b_match_mu1track_muJetC=1;
-      	  // 	//   if(k==1) b_match_mu2track_muJetC=1;
-
-      	  // 	//   if(m_debug>10){
-      	  // 	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-      	  // 	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-
-      	  // 	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-      	  // 	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-
-      	  // 	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
-      	  // 	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
+      	  	// // std::cout<<" charge m   "<<muJetC->muon(k)->innerTrack()->charge()<<std::endl;
+      	  	// // std::cout<<" qoverp m  "<<muJetC->muon(k)->innerTrack()->qoverp()<<std::endl;
+      	  	// // std::cout<<" theta m   "<<muJetC->muon(k)->innerTrack()->theta()<<std::endl;
+      	  	// // std::cout<<" phi   m   "<<muJetC->muon(k)->innerTrack()->phi()<<std::endl;
+      	  	// // std::cout<<" dxy   m   "<<muJetC->muon(k)->innerTrack()->dxy()<<std::endl;
 
 
-      	  // 	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
-      	  // 	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
 
-      	  // 	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
-      	  // 	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
+      	  	// //	    if(sameTrack(&*track,&*(muJetC->muon(k)->innerTrack()))){
+      	  	//   indxtrkmj1[k] = counter_match;
+      	  	//   if(k==0) b_match_mu1track_muJetC=1;
+      	  	//   if(k==1) b_match_mu2track_muJetC=1;
 
-	  // 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
-	  // 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
+      	  	//   if(m_debug>10){
+      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
+      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
 
-      	  // 	//   }
-      	  // 	//   const reco::HitPattern& p = trackrf->hitPattern();
-      	  // 	//   if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  // 	// 	//		dim1_hit=true;
-      	  // 	// 	indxtrkmj1_validhit[k] = 1;
-      	  // 	// 	b_muJetC_hitpix[k] = 1;
-      	  // 	//   }
-      	  // 	// }
+      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
+      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
+
+      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
+      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
+
+
+      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
+      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
+
+      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
+      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
+
+	  	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
+	  	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
+
+      	  	//   }
+      	  	//   const reco::HitPattern& p = trackrf->hitPattern();
+      	  	//   if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  	// 	//		dim1_hit=true;
+      	  	// 	indxtrkmj1_validhit[k] = 1;
+      	  	// 	b_muJetC_hitpix[k] = 1;
+      	  	//   }
+      	  	// }
 
 	  
-      	  // 	// if(sameTrackRF(&*trackrf,&*(muJetF->muon(k)->innerTrack()))){
-      	  // 	// //	    if(sameTrack(&*track,&*(muJetF->muon(k)->innerTrack()))){
-      	  // 	//   indxtrkmj2[k] = counter_match;
-      	  // 	//   if(k==0) b_match_mu1track_muJetF=1;
-      	  // 	//   if(k==1) b_match_mu2track_muJetF=1;
-      	  // 	//   if(m_debug>10){
-      	  // 	// 	if(k==0) std::cout<<"  match mj2m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<std::endl;
+      	  	// if(sameTrackRF(&*trackrf,&*(muJetF->muon(k)->innerTrack()))){
+      	  	// //	    if(sameTrack(&*track,&*(muJetF->muon(k)->innerTrack()))){
+      	  	//   indxtrkmj2[k] = counter_match;
+      	  	//   if(k==0) b_match_mu1track_muJetF=1;
+      	  	//   if(k==1) b_match_mu2track_muJetF=1;
+      	  	//   if(m_debug>10){
+      	  	// 	if(k==0) std::cout<<"  match mj2m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<std::endl;
 
-      	  // 	//   }
-      	  // 	//   const reco::HitPattern& p = trackrf->hitPattern();
-      	  // 	//   if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  // 	// 	//		dim2_hit=true;
-      	  // 	// 	indxtrkmj2_validhit[k] = 1;
-      	  // 	// 	b_muJetF_hitpix[k] = 1;
-      	  // 	//   }
-      	  // 	// }
-      	  // 	counter_track++;
+      	  	//   }
+      	  	//   const reco::HitPattern& p = trackrf->hitPattern();
+      	  	//   if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  	// 	//		dim2_hit=true;
+      	  	// 	indxtrkmj2_validhit[k] = 1;
+      	  	// 	b_muJetF_hitpix[k] = 1;
+      	  	//   }
+      	  	// }
+      	  	counter_track++;
+      	      }
+      	      counter_match++;
+      	    }
+      	    if(k==0) b_ntracks = counter_track;
+      	  }
+
+      	  std::sort(mintheta.begin(),mintheta.end(),order);
+      	  std::sort(minqoverpt.begin(),minqoverpt.end(),order);
+      	  std::sort(minphi.begin(),minphi.end(),order);
+      	  std::sort(mindxy.begin(),mindxy.end(),order);
+      	  std::sort(mindz.begin(),mindz.end(),order);
+      	  std::sort(mincharge.begin(),mincharge.end(),order);
+	
+      	  muJetC_muon1_track_mincharge  = mincharge[0];
+      	  muJetC_muon1_track_minqoverpt = minqoverpt[0];
+      	  muJetC_muon1_track_mintheta   = mintheta[0];
+      	  muJetC_muon1_track_minphi     = minphi[0];
+      	  muJetC_muon1_track_mindxy     = mindxy[0];
+      	  muJetC_muon1_track_mindz      = mindz[0];
+
+
+      	  // muJetC_muon1_track_minchi2 = pow(mintheta[0],2)/pow(1.23140e-07,2) + pow(minqoverpt[0],2)/pow(1.76958e-07,2) + 
+      	  //   pow(minphi[0],2)/pow(2.98078e-08,2) + pow(mindxy[0],2)/pow(3.24229e-07,2) + pow(mindz[0],2)/pow(8.72624e-07,2);
+	
+
+      	  muJetC_muon1_track_minchi2theta   = pow(mintheta[0],2)/pow(1.23140e-07,2);
+      	  muJetC_muon1_track_minchi2qoverpt = pow(minqoverpt[0],2)/pow(1.76958e-07,2);
+      	  muJetC_muon1_track_minchi2phi     = pow(minphi[0],2)/pow(2.98078e-08,2);
+      	  muJetC_muon1_track_minchi2dxy     =  pow(mindxy[0],2)/pow(3.24229e-07,2);
+      	  muJetC_muon1_track_minchi2dz      = pow(mindz[0],2)/pow(8.72624e-07,2);
+
+      	  mintheta.clear();
+      	  minqoverpt.clear();
+      	  minphi.clear();
+      	  mindxy.clear();
+      	  mindz.clear();
+      	  mincharge.clear();
+
+      	  //==================================================================================================
+	
+      	  std::sort(minchi2_mu1_muJetC.begin(),minchi2_mu1_muJetC.end(),matchorder);
+      	  std::sort(minchi2_mu2_muJetC.begin(),minchi2_mu2_muJetC.end(),matchorder);
+      	  std::sort(minchi2_mu1_muJetF.begin(),minchi2_mu1_muJetF.end(),matchorder);
+      	  std::sort(minchi2_mu2_muJetF.begin(),minchi2_mu2_muJetF.end(),matchorder);
+
+
+      	  muJetC_muon1_track_minchi2 = minchi2_mu1_muJetC[0].second;
+      	  muJetC_muon2_track_minchi2 = minchi2_mu2_muJetC[0].second;
+      	  muJetF_muon1_track_minchi2 = minchi2_mu1_muJetF[0].second;
+      	  muJetF_muon2_track_minchi2 = minchi2_mu2_muJetF[0].second;
+
+
+      	  if(minchi2_mu1_muJetC[0].second<100000.0){
+      	    b_match_mu1track_muJetC=1;
+      	    indxtrkmj1[0] = minchi2_mu1_muJetC[0].first;
+      	  }
+      	  if(minchi2_mu2_muJetC[0].second<100000.0){
+      	    b_match_mu2track_muJetC=1;
+      	    indxtrkmj1[1] = minchi2_mu2_muJetC[0].first;
+      	  }
+      	  if(minchi2_mu1_muJetF[0].second<100000.0){
+      	    b_match_mu1track_muJetF=1;
+      	    indxtrkmj2[0] = minchi2_mu1_muJetF[0].first;
+      	  }
+      	  if(minchi2_mu2_muJetF[0].second<100000.0){
+      	    b_match_mu2track_muJetF=1;
+      	    indxtrkmj2[1] = minchi2_mu2_muJetF[0].first;
+      	  }
+
+
+      	  if(m_debug>10){
+      	    std::cout<<"  matching   chi2  mu1 muJetC  "<<minchi2_mu1_muJetC[0].first<<std::endl;
+      	    std::cout<<"  matching   chi2  mu2 muJetC  "<<minchi2_mu2_muJetC[0].first<<std::endl;
+      	    std::cout<<"  matching   chi2  mu1 muJetF  "<<minchi2_mu1_muJetF[0].first<<std::endl;
+      	    std::cout<<"  matching   chi2  mu2 muJetF  "<<minchi2_mu2_muJetF[0].first<<std::endl;
+      	  }
+
+
+      	  minchi2_mu1_muJetC.clear();
+      	  minchi2_mu2_muJetC.clear();
+      	  minchi2_mu1_muJetF.clear();
+      	  minchi2_mu2_muJetF.clear();
+
+
+
+      	  Int_t counter_track_hit=0;
+      	  for (reco::TrackCollection::const_iterator trackrf = tracksrf->begin(); trackrf != tracksrf->end(); ++trackrf) {
+	  
+      	    if(counter_track_hit == indxtrkmj1[0]){
+
+      	      // if(m_debug>10){
+      	      //   if(k==0) std::cout<< "p.hasValidHitInFirstPixelEndcap(): " << p.hasValidHitInFirstPixelEndcap() <<counter_gt<<std::endl;
+      	      //   if(k==1) std::cout<< "  matching   gt  mu2 muJetC  "<<counter_gt<<std::endl;
+      	      // }
+
+      	      const reco::HitPattern& p = trackrf->hitPattern();
+      	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  	//		dim1_hit=true;
+      	  	indxtrkmj1_validhit[0] = 1;
+      	  	b_muJetC_hitpix[0] = 1;
+      	      }
+      	    }
+
+      	    if(counter_track_hit == indxtrkmj1[1]){
+
+      	      const reco::HitPattern& p = trackrf->hitPattern();
+      	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  	//		dim1_hit=true;
+      	  	indxtrkmj1_validhit[1] = 1;
+      	  	b_muJetC_hitpix[1] = 1;
+      	      }
+      	    }
+
+      	    if(counter_track_hit == indxtrkmj2[0]){
+
+      	      const reco::HitPattern& p = trackrf->hitPattern();
+      	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  	//		dim1_hit=true;
+      	  	indxtrkmj2_validhit[0] = 1;
+      	  	b_muJetF_hitpix[0] = 1;
+      	      }
+      	    }
+
+      	    if(counter_track_hit == indxtrkmj2[1]){
+
+      	      const reco::HitPattern& p = trackrf->hitPattern();
+      	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  	//		dim1_hit=true;
+      	  	indxtrkmj2_validhit[1] = 1;
+      	  	b_muJetF_hitpix[1] = 1;
+      	      }
+      	    }
+
+      	    counter_track_hit++;
+	  }
+	  
+
+
+      	  // //====== matching selected muons to generalTracks
+      	  // for(uint32_t k=0;k<2;k++){
+      	  //   Int_t counter_match=0;
+      	  //   for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+      	  //     //	  for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+      	  //     if(sameTrack(&*track,&*(muJetC->muon(k)->innerTrack()))){
+      	  //       indxtrkmj1_gt[k] = counter_match;
+      	  //       if(m_debug>10){
+      	  // 	if(k==0) std::cout<<"  match mj1m0 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
+      	  // 	if(k==1) std::cout<<"  match mj1m1 muon track with indx gentrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
+      	  //       }
+      	  //       const reco::HitPattern& p = track->hitPattern();
+      	  //       if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  // 	//		dim1_hit=true;
+      	  // 	indxtrkmj1_validhit_gt[k] = 1;
+      	  // 	b_muJetC_hitpix_gt[k] = 1;
+      	  //       }
+      	  //       else{
+      	  // 	indxtrkmj1_validhit_gt[k] = 0;
+      	  // 	b_muJetC_hitpix_gt[k] = 0;
+      	  //       }
+      	  //     }
+	  
+      	  //     if(sameTrack(&*track,&*(muJetF->muon(k)->innerTrack()))){
+      	  //       indxtrkmj2_gt[k] = counter_match;
+      	  //       if(m_debug>10){
+      	  // 	if(k==0) std::cout<<"  match mj2m0 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
+      	  // 	if(k==1) std::cout<<"  match mj2m1 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
+      	  //       }
+      	  //       const reco::HitPattern& p = track->hitPattern();
+      	  //       if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  // 	//		dim2_hit_gt=true;
+      	  // 	indxtrkmj2_validhit_gt[k] = 1;
+      	  // 	b_muJetF_hitpix_gt[k] = 1;
+      	  //       }
+      	  //       else{
+      	  // 	indxtrkmj2_validhit_gt[k] = 0;
+      	  // 	b_muJetF_hitpix_gt[k] = 0;
+      	  //       }
       	  //     }
       	  //     counter_match++;
       	  //   }
-      	  //   if(k==0) b_ntracks = counter_track;
       	  // }
-
-      	  // std::sort(mintheta.begin(),mintheta.end(),order);
-      	  // std::sort(minqoverpt.begin(),minqoverpt.end(),order);
-      	  // std::sort(minphi.begin(),minphi.end(),order);
-      	  // std::sort(mindxy.begin(),mindxy.end(),order);
-      	  // std::sort(mindz.begin(),mindz.end(),order);
-      	  // std::sort(mincharge.begin(),mincharge.end(),order);
-	
-      	  // muJetC_muon1_track_mincharge  = mincharge[0];
-      	  // muJetC_muon1_track_minqoverpt = minqoverpt[0];
-      	  // muJetC_muon1_track_mintheta   = mintheta[0];
-      	  // muJetC_muon1_track_minphi     = minphi[0];
-      	  // muJetC_muon1_track_mindxy     = mindxy[0];
-      	  // muJetC_muon1_track_mindz      = mindz[0];
-
-
-      	  // // muJetC_muon1_track_minchi2 = pow(mintheta[0],2)/pow(1.23140e-07,2) + pow(minqoverpt[0],2)/pow(1.76958e-07,2) + 
-      	  // //   pow(minphi[0],2)/pow(2.98078e-08,2) + pow(mindxy[0],2)/pow(3.24229e-07,2) + pow(mindz[0],2)/pow(8.72624e-07,2);
-	
-
-      	  // muJetC_muon1_track_minchi2theta   = pow(mintheta[0],2)/pow(1.23140e-07,2);
-      	  // muJetC_muon1_track_minchi2qoverpt = pow(minqoverpt[0],2)/pow(1.76958e-07,2);
-      	  // muJetC_muon1_track_minchi2phi     = pow(minphi[0],2)/pow(2.98078e-08,2);
-      	  // muJetC_muon1_track_minchi2dxy     =  pow(mindxy[0],2)/pow(3.24229e-07,2);
-      	  // muJetC_muon1_track_minchi2dz      = pow(mindz[0],2)/pow(8.72624e-07,2);
-
-      	  // mintheta.clear();
-      	  // minqoverpt.clear();
-      	  // minphi.clear();
-      	  // mindxy.clear();
-      	  // mindz.clear();
-      	  // mincharge.clear();
-
-      	  // //==================================================================================================
-	
-      	  // std::sort(minchi2_mu1_muJetC.begin(),minchi2_mu1_muJetC.end(),matchorder);
-      	  // std::sort(minchi2_mu2_muJetC.begin(),minchi2_mu2_muJetC.end(),matchorder);
-      	  // std::sort(minchi2_mu1_muJetF.begin(),minchi2_mu1_muJetF.end(),matchorder);
-      	  // std::sort(minchi2_mu2_muJetF.begin(),minchi2_mu2_muJetF.end(),matchorder);
-
-
-      	  // muJetC_muon1_track_minchi2 = minchi2_mu1_muJetC[0].second;
-      	  // muJetC_muon2_track_minchi2 = minchi2_mu2_muJetC[0].second;
-      	  // muJetF_muon1_track_minchi2 = minchi2_mu1_muJetF[0].second;
-      	  // muJetF_muon2_track_minchi2 = minchi2_mu2_muJetF[0].second;
-
-
-      	  // if(minchi2_mu1_muJetC[0].second<100000.0){
-      	  //   b_match_mu1track_muJetC=1;
-      	  //   indxtrkmj1[0] = minchi2_mu1_muJetC[0].first;
-      	  // }
-      	  // if(minchi2_mu2_muJetC[0].second<100000.0){
-      	  //   b_match_mu2track_muJetC=1;
-      	  //   indxtrkmj1[1] = minchi2_mu2_muJetC[0].first;
-      	  // }
-      	  // if(minchi2_mu1_muJetF[0].second<100000.0){
-      	  //   b_match_mu1track_muJetF=1;
-      	  //   indxtrkmj2[0] = minchi2_mu1_muJetF[0].first;
-      	  // }
-      	  // if(minchi2_mu2_muJetF[0].second<100000.0){
-      	  //   b_match_mu2track_muJetF=1;
-      	  //   indxtrkmj2[1] = minchi2_mu2_muJetF[0].first;
-      	  // }
-
-
-      	  // if(m_debug>10){
-      	  //   std::cout<<"  matching   chi2  mu1 muJetC  "<<minchi2_mu1_muJetC[0].first<<std::endl;
-      	  //   std::cout<<"  matching   chi2  mu2 muJetC  "<<minchi2_mu2_muJetC[0].first<<std::endl;
-      	  //   std::cout<<"  matching   chi2  mu1 muJetF  "<<minchi2_mu1_muJetF[0].first<<std::endl;
-      	  //   std::cout<<"  matching   chi2  mu2 muJetF  "<<minchi2_mu2_muJetF[0].first<<std::endl;
-      	  // }
-
-
-      	  // minchi2_mu1_muJetC.clear();
-      	  // minchi2_mu2_muJetC.clear();
-      	  // minchi2_mu1_muJetF.clear();
-      	  // minchi2_mu2_muJetF.clear();
-
-
-
-      	  // Int_t counter_track_hit=0;
-      	  // for (reco::TrackCollection::const_iterator trackrf = tracksrf->begin(); trackrf != tracksrf->end(); ++trackrf) {
-	  
-      	  //   if(counter_track_hit == indxtrkmj1[0]){
-
-      	  //     // if(m_debug>10){
-      	  //     //   if(k==0) std::cout<< "p.hasValidHitInFirstPixelEndcap(): " << p.hasValidHitInFirstPixelEndcap() <<counter_gt<<std::endl;
-      	  //     //   if(k==1) std::cout<< "  matching   gt  mu2 muJetC  "<<counter_gt<<std::endl;
-      	  //     // }
-
-      	  //     const reco::HitPattern& p = trackrf->hitPattern();
-      	  //     if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  // 	//		dim1_hit=true;
-      	  // 	indxtrkmj1_validhit[0] = 1;
-      	  // 	b_muJetC_hitpix[0] = 1;
-      	  //     }
-      	  //   }
-
-      	  //   if(counter_track_hit == indxtrkmj1[1]){
-
-      	  //     const reco::HitPattern& p = trackrf->hitPattern();
-      	  //     if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  // 	//		dim1_hit=true;
-      	  // 	indxtrkmj1_validhit[1] = 1;
-      	  // 	b_muJetC_hitpix[1] = 1;
-      	  //     }
-      	  //   }
-
-      	  //   if(counter_track_hit == indxtrkmj2[0]){
-
-      	  //     const reco::HitPattern& p = trackrf->hitPattern();
-      	  //     if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  // 	//		dim1_hit=true;
-      	  // 	indxtrkmj2_validhit[0] = 1;
-      	  // 	b_muJetF_hitpix[0] = 1;
-      	  //     }
-      	  //   }
-
-      	  //   if(counter_track_hit == indxtrkmj2[1]){
-
-      	  //     const reco::HitPattern& p = trackrf->hitPattern();
-      	  //     if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  // 	//		dim1_hit=true;
-      	  // 	indxtrkmj2_validhit[1] = 1;
-      	  // 	b_muJetF_hitpix[1] = 1;
-      	  //     }
-      	  //   }
-
-      	  //   counter_track_hit++;
-	  // }
-	  
-
-
-      	  // // //====== matching selected muons to generalTracks
-      	  // // for(uint32_t k=0;k<2;k++){
-      	  // //   Int_t counter_match=0;
-      	  // //   for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-      	  // //     //	  for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-      	  // //     if(sameTrack(&*track,&*(muJetC->muon(k)->innerTrack()))){
-      	  // //       indxtrkmj1_gt[k] = counter_match;
-      	  // //       if(m_debug>10){
-      	  // // 	if(k==0) std::cout<<"  match mj1m0 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
-      	  // // 	if(k==1) std::cout<<"  match mj1m1 muon track with indx gentrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
-      	  // //       }
-      	  // //       const reco::HitPattern& p = track->hitPattern();
-      	  // //       if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  // // 	//		dim1_hit=true;
-      	  // // 	indxtrkmj1_validhit_gt[k] = 1;
-      	  // // 	b_muJetC_hitpix_gt[k] = 1;
-      	  // //       }
-      	  // //       else{
-      	  // // 	indxtrkmj1_validhit_gt[k] = 0;
-      	  // // 	b_muJetC_hitpix_gt[k] = 0;
-      	  // //       }
-      	  // //     }
-	  
-      	  // //     if(sameTrack(&*track,&*(muJetF->muon(k)->innerTrack()))){
-      	  // //       indxtrkmj2_gt[k] = counter_match;
-      	  // //       if(m_debug>10){
-      	  // // 	if(k==0) std::cout<<"  match mj2m0 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
-      	  // // 	if(k==1) std::cout<<"  match mj2m1 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
-      	  // //       }
-      	  // //       const reco::HitPattern& p = track->hitPattern();
-      	  // //       if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  // // 	//		dim2_hit_gt=true;
-      	  // // 	indxtrkmj2_validhit_gt[k] = 1;
-      	  // // 	b_muJetF_hitpix_gt[k] = 1;
-      	  // //       }
-      	  // //       else{
-      	  // // 	indxtrkmj2_validhit_gt[k] = 0;
-      	  // // 	b_muJetF_hitpix_gt[k] = 0;
-      	  // //       }
-      	  // //     }
-      	  // //     counter_match++;
-      	  // //   }
-      	  // // }
     
 
-	  //   if(m_debug>10){
-	  //     std::cout<<"  MuJetC  mu0 valid hit  "<<indxtrkmj1_validhit[0]<<std::endl;
-	  //     std::cout<<"  MuJetC  mu1 valid hit  "<<indxtrkmj1_validhit[1]<<std::endl;
-	  //     std::cout<<"  MuJetF  mu0 valid hit  "<<indxtrkmj2_validhit[0]<<std::endl;
-	  //     std::cout<<"  MuJetF  mu1 valid hit  "<<indxtrkmj2_validhit[1]<<std::endl;
+	    if(m_debug>10){
+	      std::cout<<"  MuJetC  mu0 valid hit  "<<indxtrkmj1_validhit[0]<<std::endl;
+	      std::cout<<"  MuJetC  mu1 valid hit  "<<indxtrkmj1_validhit[1]<<std::endl;
+	      std::cout<<"  MuJetF  mu0 valid hit  "<<indxtrkmj2_validhit[0]<<std::endl;
+	      std::cout<<"  MuJetF  mu1 valid hit  "<<indxtrkmj2_validhit[1]<<std::endl;
 
-	  //     // std::cout<<"  MuJet1  mu0 valid hit genTrk  "<<indxtrkmj1_validhit_gt[0]<<std::endl;
-	  //     // std::cout<<"  MuJet1  mu1 valid hit genTrk "<<indxtrkmj1_validhit_gt[1]<<std::endl;
-	  //     // std::cout<<"  MuJet2  mu0 valid hit genTrk "<<indxtrkmj2_validhit_gt[0]<<std::endl;
-	  //     // std::cout<<"  MuJet2  mu1 valid hit genTrk "<<indxtrkmj2_validhit_gt[1]<<std::endl;
-	  //   }
+	      // std::cout<<"  MuJet1  mu0 valid hit genTrk  "<<indxtrkmj1_validhit_gt[0]<<std::endl;
+	      // std::cout<<"  MuJet1  mu1 valid hit genTrk "<<indxtrkmj1_validhit_gt[1]<<std::endl;
+	      // std::cout<<"  MuJet2  mu0 valid hit genTrk "<<indxtrkmj2_validhit_gt[0]<<std::endl;
+	      // std::cout<<"  MuJet2  mu1 valid hit genTrk "<<indxtrkmj2_validhit_gt[1]<<std::endl;
+	    }
 	
-	  //   Local2DPoint mj1m0pos[200];
-	  //   Local2DPoint mj1m1pos[200];
-	  //   Local2DPoint mj2m0pos[200];
-	  //   Local2DPoint mj2m1pos[200];
+	    Local2DPoint mj1m0pos[200];
+	    Local2DPoint mj1m1pos[200];
+	    Local2DPoint mj2m0pos[200];
+	    Local2DPoint mj2m1pos[200];
 
-	  //   for(int in=0;in<200;in++){
-	  //     mj1m0pos[in] = Local2DPoint(-10000,-10000);
-	  //     mj1m1pos[in] = Local2DPoint(-10000,-10000);
-	  //     mj2m0pos[in] = Local2DPoint(-10000,-10000);
-	  //     mj2m1pos[in] = Local2DPoint(-10000,-10000);
-	  //   }
-
-
-	  //   Local2DPoint mj1m0poserr[200];
-	  //   Local2DPoint mj1m1poserr[200];
-	  //   Local2DPoint mj2m0poserr[200];
-	  //   Local2DPoint mj2m1poserr[200];
-
-	  //   for(int in=0;in<200;in++){
-	  //     mj1m0poserr[in] = Local2DPoint(-10000,-10000);
-	  //     mj1m1poserr[in] = Local2DPoint(-10000,-10000);
-	  //     mj2m0poserr[in] = Local2DPoint(-10000,-10000);
-	  //     mj2m1poserr[in] = Local2DPoint(-10000,-10000);
-	  //   }
+	    for(int in=0;in<200;in++){
+	      mj1m0pos[in] = Local2DPoint(-10000,-10000);
+	      mj1m1pos[in] = Local2DPoint(-10000,-10000);
+	      mj2m0pos[in] = Local2DPoint(-10000,-10000);
+	      mj2m1pos[in] = Local2DPoint(-10000,-10000);
+	    }
 
 
-	  //   Local2DPoint mj1m0pos_lastmeas[200];
-	  //   Local2DPoint mj1m1pos_lastmeas[200];
-	  //   Local2DPoint mj2m0pos_lastmeas[200];
-	  //   Local2DPoint mj2m1pos_lastmeas[200];
+	    Local2DPoint mj1m0poserr[200];
+	    Local2DPoint mj1m1poserr[200];
+	    Local2DPoint mj2m0poserr[200];
+	    Local2DPoint mj2m1poserr[200];
 
-	  //   for(int in=0;in<200;in++){
-	  //     mj1m0pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-	  //     mj1m1pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-	  //     mj2m0pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-	  //     mj2m1pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-	  //   }
+	    for(int in=0;in<200;in++){
+	      mj1m0poserr[in] = Local2DPoint(-10000,-10000);
+	      mj1m1poserr[in] = Local2DPoint(-10000,-10000);
+	      mj2m0poserr[in] = Local2DPoint(-10000,-10000);
+	      mj2m1poserr[in] = Local2DPoint(-10000,-10000);
+	    }
+
+
+	    Local2DPoint mj1m0pos_lastmeas[200];
+	    Local2DPoint mj1m1pos_lastmeas[200];
+	    Local2DPoint mj2m0pos_lastmeas[200];
+	    Local2DPoint mj2m1pos_lastmeas[200];
+
+	    for(int in=0;in<200;in++){
+	      mj1m0pos_lastmeas[in] = Local2DPoint(-10000,-10000);
+	      mj1m1pos_lastmeas[in] = Local2DPoint(-10000,-10000);
+	      mj2m0pos_lastmeas[in] = Local2DPoint(-10000,-10000);
+	      mj2m1pos_lastmeas[in] = Local2DPoint(-10000,-10000);
+	    }
     
 
 
 
-	  //   // 	std::vector<Local2DPoint> rechit_muon1_muJetC;
-	  //   // 	std::vector<Local2DPoint> rechit_muon2_muJetC;
+	    // 	std::vector<Local2DPoint> rechit_muon1_muJetC;
+	    // 	std::vector<Local2DPoint> rechit_muon2_muJetC;
 
-	  //   // 	std::vector<Local2DPoint> rechit_muon1_muJetF;
-	  //   // 	std::vector<Local2DPoint> rechit_muon2_muJetF;
+	    // 	std::vector<Local2DPoint> rechit_muon1_muJetF;
+	    // 	std::vector<Local2DPoint> rechit_muon2_muJetF;
       
 	
-	  //   // Collection of Trajectories from Refitted Tracks
-	  //   Handle<vector<Trajectory> > trajCollectionHandle;
-	  //   iEvent.getByLabel(param_.getParameter<string>("trajectoryInput"),trajCollectionHandle);
+	    // Collection of Trajectories from Refitted Tracks
+	    Handle<vector<Trajectory> > trajCollectionHandle;
+	    iEvent.getByLabel(param_.getParameter<string>("trajectoryInput"),trajCollectionHandle);
       
-	  //   if(m_debug>10){
-	  //     std::cout<<"   genTrack collection: " <<tracks->size()<<std::endl;
-	  //     std::cout<<"   Refitted trajectoryColl->size(): " << trajCollectionHandle->size()<<std::endl;
-	  //   }
+	    if(m_debug>10){
+	      std::cout<<"   genTrack collection: " <<tracks->size()<<std::endl;
+	      std::cout<<"   Refitted trajectoryColl->size(): " << trajCollectionHandle->size()<<std::endl;
+	    }
 
-	  // }
-	}
+	  }
       }
     }
   }
+
 
   m_ttree->Fill();
 
