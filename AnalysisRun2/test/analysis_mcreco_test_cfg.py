@@ -3,16 +3,24 @@ import sys
 import os
 
 
+
 ## import skeleton process
 from PhysicsTools.PatAlgos.patTemplate_cfg import *
 
 # verbose flags for the PF2PAT modules
 process.options.allowUnscheduled = cms.untracked.bool(True)
 
+#from RecoTracker.MeasurementDet.UpdaterService_cfi import *
+from RecoTracker.MeasurementDet.MeasurementTrackerESProducer_cfi import *
+
 ### Add MuJet Dataformats
 from MuJetAnalysis.DataFormats.EventContent_version10_cff import *
 process = customizePatOutput(process)
 
+### Conditions
+#process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+#process.GlobalTag.globaltag = "IDEAL_V5::All"
+#process.GlobalTag.globaltag = 'GR09_P_V6::All'
 
 
 ################## RECO Input #############################
@@ -83,6 +91,9 @@ process.PFMuJetProducer05 = process.MuJetProducer.clone(
 #         'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1',
 #   )
 # )
+
+process.load("RecoTracker.TrackProducer.TrackRefitters_cff")
+
 
 process.ana2012 = cms.EDAnalyzer("AnalysisRun2",
                                  trajectoryInput = cms.string("TrackRefitter"),
