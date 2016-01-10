@@ -1450,27 +1450,27 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	muJetF_validVtx_fitted = muJetF->vertexValid_fitted();
 	muJetF_validVtx_mindist = muJetF->vertexValid_mindist();
 
-	// if(muJetC_validVtx){
-	//   muJetC_vtx_x = muJetC->vertexPoint().x();
-	//   muJetC_vtx_y = muJetC->vertexPoint().y();
-	//   muJetC_vtx_z = muJetC->vertexPoint().z();
+	 if(muJetC_validVtx){
+	   muJetC_vtx_x = muJetC->vertexPoint().x();
+	   muJetC_vtx_y = muJetC->vertexPoint().y();
+	   muJetC_vtx_z = muJetC->vertexPoint().z();
 	//   muJetC_mindisttracks = muJetC->mindist_track();
 	//   muJetC_mindisttracks_scan = muJetC->mindist_trackscan();
 	//   muJetC_vtx_x_scan = muJetC->get_vtx_x_scan();
 	//   muJetC_vtx_y_scan = muJetC->get_vtx_y_scan();
 	//   muJetC_vtx_z_scan = muJetC->get_vtx_z_scan();
-	// }
+	 }
 	
-	// if(muJetF_validVtx){
-	//   muJetF_vtx_x = muJetF->vertexPoint().x();
-	//   muJetF_vtx_y = muJetF->vertexPoint().y();
-	//   muJetF_vtx_z = muJetF->vertexPoint().z();
+	 if(muJetF_validVtx){
+	   muJetF_vtx_x = muJetF->vertexPoint().x();
+	   muJetF_vtx_y = muJetF->vertexPoint().y();
+	   muJetF_vtx_z = muJetF->vertexPoint().z();
 	//   muJetF_mindisttracks = muJetF->mindist_track();
 	//   muJetF_mindisttracks_scan = muJetF->mindist_trackscan();
 	//   muJetF_vtx_x_scan = muJetF->get_vtx_x_scan();
 	//   muJetF_vtx_y_scan = muJetF->get_vtx_y_scan();
 	//   muJetF_vtx_z_scan = muJetF->get_vtx_z_scan();
-	// }
+	 }
 	
 	// muJetC_cpx = muJetC->cpx_tracks();
 	// muJetC_cpy = muJetC->cpy_tracks();
