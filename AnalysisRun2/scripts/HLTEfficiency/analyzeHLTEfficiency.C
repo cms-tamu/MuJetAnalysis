@@ -2,8 +2,9 @@
 using namespace std;
 #include <algorithm>    // std::max
 #include <stdlib.h>
- //============= Global Variables ===========================//
+#include "../Helpers.h"
 
+//============= Global Variables ===========================//
 vector<double> mGammaD_0250_eff;
 vector<double> mGammaD_0275_eff;
 vector<double> mGammaD_0300_eff;
@@ -22,58 +23,23 @@ vector<double> mGammaD_0300_cT;
 vector<double> mGammaD_2000_cT;
 vector<double> mGammaD_8500_cT;
 
-void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
-{
-  bool verbose(false);
-  TSystemDirectory dir(dirname, dirname);
-  TList *files = dir.GetListOfFiles();
-  if (files) {
-    if (verbose) std::cout << "Found files" << std::endl;
-    TSystemFile *file;
-    TString fname;
-    TIter next(files);
-    while ((file=(TSystemFile*)next())) {
-      fname = file->GetName();
-      if (verbose) std::cout << "found fname " << fname << std::endl;
-      if (!file->IsDirectory() && fname.BeginsWith(ext)) {
-        if (verbose) std::cout << "adding fname " << fname << std::endl;
-        ch->Add(fname);
-      }
-    }
-  }
-}
-
-
 void efficiency_trigger(TString fileName)
 {
   bool verbose(false);
   TString dirname(fileName);
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
-
-  ///Get the sample mass
-  TString str = fileName;
-  TString str2 = "DarkSUSY_mH_125_mGammaD_";
-  Ssiz_t first = str.Index(str2);
-  Ssiz_t last = str.Index("_cT_");
-  TSubString mass_string = (str(first+str2.Length(),4));
-  ///Get the sample cT
-  TString str3 = "_cT_";
-  TSubString cT_string = (str(last+str3.Length(),4));
+  
+  TString mass_string;
+  TString cT_string;
+  decodeFileName(fileName, mass_string, cT_string);
 
   // add files to the chain
   addfiles(chain, dirname, ext);
 
-  
   Int_t event;
   Int_t run;
   Int_t lumi;
-
-  Bool_t is4GenMu;
-  Bool_t is1GenMu17;
-  Bool_t is2GenMu8;
-  Bool_t is3GenMu8;
-  Bool_t is4GenMu8;
 
   Bool_t is1SelMu17;
   Bool_t is2SelMu8;
@@ -456,6 +422,7 @@ void makePlot()
 
 void analyzeHLTEfficiency()
 {
+
 efficiency_trigger("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112552/0000/");
 efficiency_trigger("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112613/0000/");
 efficiency_trigger("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112633/0000/");
