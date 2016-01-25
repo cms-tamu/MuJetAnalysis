@@ -19,7 +19,7 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
   }
 }
 
-void decodeFileName(const TString& fileName, TString mass_string, TString cT_string)
+void decodeFileName(const TString& fileName, TString& mass_string, TString& cT_string)
 {  
   ///Get the sample mass
   TString str = fileName;
