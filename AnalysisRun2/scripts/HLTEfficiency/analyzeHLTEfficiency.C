@@ -5,50 +5,56 @@ using namespace std;
 #include "../Helpers.h"
 
 //============= Global Variables ===========================//
-vector<double> mGammaD_0250_eff;
-vector<double> mGammaD_0275_eff;
-vector<double> mGammaD_0300_eff;
-vector<double> mGammaD_0400_eff;
-vector<double> mGammaD_0700_eff;
-vector<double> mGammaD_1000_eff;
-vector<double> mGammaD_1500_eff;
-vector<double> mGammaD_2000_eff;
-vector<double> mGammaD_8500_eff;
+std::vector<double> mGammaD_0250_eff(11);
+std::vector<double> mGammaD_0275_eff(11);
+std::vector<double> mGammaD_0300_eff(11);
+std::vector<double> mGammaD_0400_eff(11);
+std::vector<double> mGammaD_0700_eff(11);
+std::vector<double> mGammaD_1000_eff(11);
+std::vector<double> mGammaD_1500_eff(11);
+std::vector<double> mGammaD_2000_eff(11);
+std::vector<double> mGammaD_8500_eff(11);
 
-vector<double> mGammaD_0250_eff_uncert;
-vector<double> mGammaD_0275_eff_uncert;
-vector<double> mGammaD_0300_eff_uncert;
-vector<double> mGammaD_0400_eff_uncert;
-vector<double> mGammaD_0700_eff_uncert;
-vector<double> mGammaD_1000_eff_uncert;
-vector<double> mGammaD_1500_eff_uncert;
-vector<double> mGammaD_2000_eff_uncert;
-vector<double> mGammaD_8500_eff_uncert;
+std::vector<double> mGammaD_0250_eff_uncert(11);
+std::vector<double> mGammaD_0275_eff_uncert(11);
+std::vector<double> mGammaD_0300_eff_uncert(11);
+std::vector<double> mGammaD_0400_eff_uncert(11);
+std::vector<double> mGammaD_0700_eff_uncert(11);
+std::vector<double> mGammaD_1000_eff_uncert(11);
+std::vector<double> mGammaD_1500_eff_uncert(11);
+std::vector<double> mGammaD_2000_eff_uncert(11);
+std::vector<double> mGammaD_8500_eff_uncert(11);
 
-vector<double> mGammaD_0250_cT;
-vector<double> mGammaD_0275_cT;
-vector<double> mGammaD_0300_cT;
-vector<double> mGammaD_0400_cT;
-vector<double> mGammaD_0700_cT;
-vector<double> mGammaD_1000_cT;
-vector<double> mGammaD_1500_cT;
-vector<double> mGammaD_2000_cT;
-vector<double> mGammaD_8500_cT;
+std::vector<double> mGammaD_0250_cT(11);
+std::vector<double> mGammaD_0275_cT(11);
+std::vector<double> mGammaD_0300_cT(11);
+std::vector<double> mGammaD_0400_cT(11);
+std::vector<double> mGammaD_0700_cT(11);
+std::vector<double> mGammaD_1000_cT(11);
+std::vector<double> mGammaD_1500_cT(11);
+std::vector<double> mGammaD_2000_cT(11);
+std::vector<double> mGammaD_8500_cT(11);
 
-void efficiency_trigger(TString fileName)
+std::vector<std::string> cT_strings = {"000_", "005_", "010_", "020_", "050_", "100_", "200_", "300_", "500_", "1000", "2000"};
+std::vector<double> cT_doubles = {0, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0, 3.0, 5.0, 10.0, 20.0};
+
+void efficiency_trigger(const std::vector<std::string> dirNames)
 {
   bool verbose(false);
-  TString dirname(fileName);
-  cout << "Tag name " << fileName << endl;
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
-  
+
   TString mass_string;
   TString cT_string;
-  decodeFileName(fileName, mass_string, cT_string);
+  decodeFileNameMany(dirNames, mass_string, cT_string);
+  TString fileName = "DarkSUSY_mH_125_mGammaD_" + mass_string + "_cT_" + cT_string;
+  cout << "Tag name " << fileName << endl;
+
+  // TString dirname(fileName);
+  
 
   // add files to the chain
-  addfilesMany(chain, fileName, ext);
+  addfilesMany(chain, dirNames, ext);
 
   Int_t event;
   Int_t run;
@@ -193,7 +199,7 @@ void efficiency_trigger(TString fileName)
       
       bool pixelLayer;
       double pixelLayerRadius;
-      int layers = 1;
+      int layers = 2;
 
       if (layers==1) {
 	pixelLayer = firstPixelLayer;
@@ -272,68 +278,60 @@ void efficiency_trigger(TString fileName)
   const double eff(ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx));
   const double eff_uncert(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx))*(1- (ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)) ))/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)));
 
-  double cT_double; 
-  if(cT_string == "000_") cT_double = 0;
-  if(cT_string == "005_") cT_double = 0.05;
-  if(cT_string == "010_") cT_double = 0.1;
-  if(cT_string == "020_") cT_double = 0.2;
-  if(cT_string == "050_") cT_double = 0.5;
-  if(cT_string == "100_") cT_double = 1.0;
-  if(cT_string == "200_") cT_double = 2.0;
-  if(cT_string == "300_") cT_double = 3.0;
-  if(cT_string == "500_") cT_double = 5.0;
-  if(cT_string == "1000") cT_double = 10.0;
-  if(cT_string == "2000") cT_double = 20.0;
+  int index = std::find(cT_strings.begin(), cT_strings.end(), cT_string) - cT_strings.begin();
+  std::cout << "index "<< index <<endl;
+  double cT_double = cT_doubles[index];
+  std::cout << "cT_double "<< cT_double <<endl;
 
   // check if the efficiency makes sense    
   if (not (eff != eff)) {
   
   if(mass_string == "0250"){
-	  mGammaD_0250_eff.push_back(eff);  
-	  mGammaD_0250_eff_uncert.push_back(eff_uncert);  
-	  mGammaD_0250_cT.push_back(cT_double);
+    mGammaD_0250_eff.push_back(eff);  
+    mGammaD_0250_eff_uncert.push_back(eff_uncert);  
+    mGammaD_0250_cT.push_back(cT_double);
   }
   if(mass_string == "0275"){
-	  mGammaD_0275_eff.push_back(eff);  
-	  mGammaD_0275_eff_uncert.push_back(eff_uncert);  
-	  mGammaD_0275_cT.push_back(cT_double);  
+    mGammaD_0275_eff.push_back(eff);  
+    mGammaD_0275_eff_uncert.push_back(eff_uncert);  
+    mGammaD_0275_cT.push_back(cT_double);  
   }
   if(mass_string == "0300"){
-	  mGammaD_0300_eff.push_back(eff);  
-	  mGammaD_0300_eff_uncert.push_back(eff_uncert);  
-	  mGammaD_0300_cT.push_back(cT_double);  
+    mGammaD_0300_eff.push_back(eff);  
+    mGammaD_0300_eff_uncert.push_back(eff_uncert);  
+    mGammaD_0300_cT.push_back(cT_double);  
   }
   if(mass_string == "0400"){
-	  mGammaD_0400_eff.push_back(eff);  
-	  mGammaD_0400_eff_uncert.push_back(eff_uncert);  
-	  mGammaD_0400_cT.push_back(cT_double);  
+    mGammaD_0400_eff.push_back(eff);  
+    mGammaD_0400_eff_uncert.push_back(eff_uncert);  
+    mGammaD_0400_cT.push_back(cT_double);  
   }
   if(mass_string == "0700"){
-	  mGammaD_0700_eff.push_back(eff);  
-	  mGammaD_0700_eff_uncert.push_back(eff_uncert);  
-	  mGammaD_0700_cT.push_back(cT_double);  
+    mGammaD_0700_eff.push_back(eff);  
+    mGammaD_0700_eff_uncert.push_back(eff_uncert);  
+    mGammaD_0700_cT.push_back(cT_double);  
   }
   if(mass_string == "1000"){
-	  mGammaD_1000_eff.push_back(eff);  
-	  mGammaD_1000_eff_uncert.push_back(eff_uncert);  
-	  mGammaD_1000_cT.push_back(cT_double);  
+    mGammaD_1000_eff.push_back(eff);  
+    mGammaD_1000_eff_uncert.push_back(eff_uncert);  
+    mGammaD_1000_cT.push_back(cT_double);  
   }
   if(mass_string == "1500"){
-	  mGammaD_1500_eff.push_back(eff);  
-	  mGammaD_1500_eff_uncert.push_back(eff_uncert);  
-	  mGammaD_1500_cT.push_back(cT_double);  
+    mGammaD_1500_eff.push_back(eff);  
+    mGammaD_1500_eff_uncert.push_back(eff_uncert);  
+    mGammaD_1500_cT.push_back(cT_double);  
   }
   if(mass_string == "2000"){
-	  mGammaD_2000_eff.push_back(eff);  
-	  mGammaD_2000_eff_uncert.push_back(eff_uncert);  
-	  mGammaD_2000_cT.push_back(cT_double);  
+    mGammaD_2000_eff.push_back(eff);  
+    mGammaD_2000_eff_uncert.push_back(eff_uncert);  
+    mGammaD_2000_cT.push_back(cT_double);  
   }
   if(mass_string == "8500"){
-	  mGammaD_8500_eff.push_back(eff);  
-	  mGammaD_8500_eff_uncert.push_back(eff_uncert);  
-	  mGammaD_8500_cT.push_back(cT_double);  
+    mGammaD_8500_eff.push_back(eff);  
+    mGammaD_8500_eff_uncert.push_back(eff_uncert);  
+    mGammaD_8500_cT.push_back(cT_double);  
   }
-
+  
   }
 //delete chEl;
 //delete fileElements;
@@ -537,17 +535,16 @@ void makePlot()
   gr_eff_mD_8500->Draw("SAME PL");
   
   leg->Draw("same");
-  c->SaveAs("e_hlt_vs_cT.test.pdf","recreate");
-  c->SaveAs("e_hlt_vs_cT.test.C","recreate");
+  c->SaveAs("e_hlt_vs_cT.L2.pdf","recreate");
+  c->SaveAs("e_hlt_vs_cT.L2.C","recreate");
 }
 
 void analyzeHLTEfficiency()
 {
   //  efficiency_trigger("DarkSUSY_mH_125_mGammaD_0250_cT_000");
-  for(auto fileName: DarkSUSY_mH_125_mGammaD_map){
-    efficiency_trigger(fileName.first);
-  }
-  
-  // makePlot();
+  for(auto v: DarkSUSY_mH_125_mGammaD_map){
+    efficiency_trigger(v);
+  }  
+  //  makePlot();
 }
 
