@@ -8,18 +8,30 @@ using namespace std;
 vector<double> mGammaD_0250_eff;
 vector<double> mGammaD_0275_eff;
 vector<double> mGammaD_0300_eff;
+vector<double> mGammaD_0400_eff;
+vector<double> mGammaD_0700_eff;
+vector<double> mGammaD_1000_eff;
+vector<double> mGammaD_1500_eff;
 vector<double> mGammaD_2000_eff;
 vector<double> mGammaD_8500_eff;
 
 vector<double> mGammaD_0250_eff_uncert;
 vector<double> mGammaD_0275_eff_uncert;
 vector<double> mGammaD_0300_eff_uncert;
+vector<double> mGammaD_0400_eff_uncert;
+vector<double> mGammaD_0700_eff_uncert;
+vector<double> mGammaD_1000_eff_uncert;
+vector<double> mGammaD_1500_eff_uncert;
 vector<double> mGammaD_2000_eff_uncert;
 vector<double> mGammaD_8500_eff_uncert;
 
 vector<double> mGammaD_0250_cT;
 vector<double> mGammaD_0275_cT;
 vector<double> mGammaD_0300_cT;
+vector<double> mGammaD_0400_cT;
+vector<double> mGammaD_0700_cT;
+vector<double> mGammaD_1000_cT;
+vector<double> mGammaD_1500_cT;
 vector<double> mGammaD_2000_cT;
 vector<double> mGammaD_8500_cT;
 
@@ -27,6 +39,7 @@ void efficiency_trigger(TString fileName)
 {
   bool verbose(false);
   TString dirname(fileName);
+  cout << "Tag name " << fileName << endl;
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
   
@@ -35,7 +48,7 @@ void efficiency_trigger(TString fileName)
   decodeFileName(fileName, mass_string, cT_string);
 
   // add files to the chain
-  addfiles(chain, dirname, ext);
+  addfilesMany(chain, fileName, ext);
 
   Int_t event;
   Int_t run;
@@ -100,7 +113,7 @@ void efficiency_trigger(TString fileName)
 
   while ((chEl=(TChainElement*)next())) {
     if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
-    TFile* myfile = new TFile(dirname + chEl->GetTitle());
+    TFile* myfile = new TFile(chEl->GetTitle()); //dirname  +
     if (!myfile) {
       if (verbose) std::cout << "File " << chEl->GetTitle() << " does not exist" << std::endl;
       continue;
@@ -152,7 +165,7 @@ void efficiency_trigger(TString fileName)
     t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l2inc", &diMuonC_m2_FittedVtx_hitpix_l2inc);
     t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l2inc", &diMuonF_m1_FittedVtx_hitpix_l2inc);
     t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l2inc", &diMuonF_m2_FittedVtx_hitpix_l2inc);
-
+    
     t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_l3inc", &diMuonC_m1_FittedVtx_hitpix_l3inc);
     t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l3inc", &diMuonC_m2_FittedVtx_hitpix_l3inc);
     t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l3inc", &diMuonF_m1_FittedVtx_hitpix_l3inc);
@@ -166,18 +179,18 @@ void efficiency_trigger(TString fileName)
 				 (diMuonF_m1_FittedVtx_hitpix==1 || 
 				  diMuonF_m2_FittedVtx_hitpix==1));
       const bool secondPixelLayer((diMuonC_m1_FittedVtx_hitpix_l2inc==1 || 
-				   diMuonC_m2_FittedVtx_hitpix_l2inc==1) && 
-				  (diMuonF_m1_FittedVtx_hitpix_l2inc==1 || 
-				   diMuonF_m2_FittedVtx_hitpix_l2inc==1));
+       				   diMuonC_m2_FittedVtx_hitpix_l2inc==1) && 
+       				  (diMuonF_m1_FittedVtx_hitpix_l2inc==1 || 
+       				   diMuonF_m2_FittedVtx_hitpix_l2inc==1));
       const bool thirdPixelLayer((diMuonC_m1_FittedVtx_hitpix_l3inc==1 || 
-				  diMuonC_m2_FittedVtx_hitpix_l3inc==1) && 
-				 (diMuonF_m1_FittedVtx_hitpix_l3inc==1 || 
-				  diMuonF_m2_FittedVtx_hitpix_l3inc==1));
-
+       				  diMuonC_m2_FittedVtx_hitpix_l3inc==1) && 
+       				 (diMuonF_m1_FittedVtx_hitpix_l3inc==1 || 
+       				  diMuonF_m2_FittedVtx_hitpix_l3inc==1));
+      
       const double firstPixelLayerRadius(4.4);
       const double secondPixelLayerRadius(7.3);
       const double thirdPixelLayerRadius(10.2);
-
+      
       bool pixelLayer;
       double pixelLayerRadius;
       int layers = 1;
@@ -187,14 +200,14 @@ void efficiency_trigger(TString fileName)
 	pixelLayerRadius = firstPixelLayerRadius;
       }
       else if (layers==2) {
-	pixelLayer = secondPixelLayer;
-	pixelLayerRadius = secondPixelLayerRadius;
+       	pixelLayer = secondPixelLayer;
+       	pixelLayerRadius = secondPixelLayerRadius;
       }
       else if (layers==3) {
-	pixelLayer = thirdPixelLayer;
-	pixelLayerRadius = thirdPixelLayerRadius;
+       	pixelLayer = thirdPixelLayer;
+       	pixelLayerRadius = thirdPixelLayerRadius;
       }
-
+      
       ev_all++;
 
       if(is1SelMu17) c1recm++;
@@ -235,6 +248,7 @@ void efficiency_trigger(TString fileName)
     } // closing for loop
     myfile->Close();
   } // closing while loop
+
   std::cout<<" Sample: " << fileName << endl;
   std::cout<<" Events          "<<ev_all<<std::endl;
   std::cout<<" ================ RECO MUONS ========================================= "<<std::endl;
@@ -254,7 +268,9 @@ void efficiency_trigger(TString fileName)
   std::cout<<" Events with 2DimHLT            "<<ev_isDiMuonHLTFired<<"   reff   "<<ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)<<endl;
 
   //Fill ratio reco/gen vectors to be plotted  
-
+  
+  const double eff(ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx));
+  const double eff_uncert(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx))*(1- (ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)) ))/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)));
 
   double cT_double; 
   if(cT_string == "000_") cT_double = 0;
@@ -269,30 +285,55 @@ void efficiency_trigger(TString fileName)
   if(cT_string == "1000") cT_double = 10.0;
   if(cT_string == "2000") cT_double = 20.0;
 
+  // check if the efficiency makes sense    
+  if (not (eff != eff)) {
+  
   if(mass_string == "0250"){
-	  mGammaD_0250_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx));  
-	  mGammaD_0250_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx))*(1- (ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)) ))/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)));  
+	  mGammaD_0250_eff.push_back(eff);  
+	  mGammaD_0250_eff_uncert.push_back(eff_uncert);  
 	  mGammaD_0250_cT.push_back(cT_double);
   }
   if(mass_string == "0275"){
-	  mGammaD_0275_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx));  
-	  mGammaD_0275_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx))*(1- (ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)) ))/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)));  
+	  mGammaD_0275_eff.push_back(eff);  
+	  mGammaD_0275_eff_uncert.push_back(eff_uncert);  
 	  mGammaD_0275_cT.push_back(cT_double);  
   }
   if(mass_string == "0300"){
-	  mGammaD_0300_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx));  
-	  mGammaD_0300_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx))*(1- (ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)) ))/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)));  
+	  mGammaD_0300_eff.push_back(eff);  
+	  mGammaD_0300_eff_uncert.push_back(eff_uncert);  
 	  mGammaD_0300_cT.push_back(cT_double);  
   }
+  if(mass_string == "0400"){
+	  mGammaD_0400_eff.push_back(eff);  
+	  mGammaD_0400_eff_uncert.push_back(eff_uncert);  
+	  mGammaD_0400_cT.push_back(cT_double);  
+  }
+  if(mass_string == "0700"){
+	  mGammaD_0700_eff.push_back(eff);  
+	  mGammaD_0700_eff_uncert.push_back(eff_uncert);  
+	  mGammaD_0700_cT.push_back(cT_double);  
+  }
+  if(mass_string == "1000"){
+	  mGammaD_1000_eff.push_back(eff);  
+	  mGammaD_1000_eff_uncert.push_back(eff_uncert);  
+	  mGammaD_1000_cT.push_back(cT_double);  
+  }
+  if(mass_string == "1500"){
+	  mGammaD_1500_eff.push_back(eff);  
+	  mGammaD_1500_eff_uncert.push_back(eff_uncert);  
+	  mGammaD_1500_cT.push_back(cT_double);  
+  }
   if(mass_string == "2000"){
-	  mGammaD_2000_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx));  
-	  mGammaD_2000_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx))*(1- (ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)) ))/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)));  
+	  mGammaD_2000_eff.push_back(eff);  
+	  mGammaD_2000_eff_uncert.push_back(eff_uncert);  
 	  mGammaD_2000_cT.push_back(cT_double);  
   }
   if(mass_string == "8500"){
-	  mGammaD_8500_eff.push_back(ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx));  
-	  mGammaD_8500_eff_uncert.push_back(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx))*(1- (ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)) ))/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)));  
+	  mGammaD_8500_eff.push_back(eff);  
+	  mGammaD_8500_eff_uncert.push_back(eff_uncert);  
 	  mGammaD_8500_cT.push_back(cT_double);  
+  }
+
   }
 //delete chEl;
 //delete fileElements;
@@ -337,6 +378,54 @@ void makePlot()
 
   TGraphErrors *gr_eff_mD_0300 = new TGraphErrors(size_0300,array_mGammaD_0300_cT,array_mGammaD_0300_eff,array_null_0300,array_mGammaD_0300_eff_uncert);
   
+  vector<double> null_0400;
+  for(int i=0; i < mGammaD_0400_cT.size(); i++){
+    null_0400.push_back(0);
+  }
+  double* array_null_0400               = &null_0400[0];
+  double* array_mGammaD_0400_eff        = &mGammaD_0400_eff[0];
+  double* array_mGammaD_0400_eff_uncert = &mGammaD_0400_eff_uncert[0];
+  double* array_mGammaD_0400_cT         = &mGammaD_0400_cT[0];
+  int size_0400 = null_0400.size();
+
+  TGraphErrors *gr_eff_mD_0400 = new TGraphErrors(size_0400,array_mGammaD_0400_cT,array_mGammaD_0400_eff,array_null_0400,array_mGammaD_0400_eff_uncert);
+
+  vector<double> null_0700;
+  for(int i=0; i < mGammaD_0700_cT.size(); i++){
+    null_0700.push_back(0);
+  }
+  double* array_null_0700               = &null_0700[0];
+  double* array_mGammaD_0700_eff        = &mGammaD_0700_eff[0];
+  double* array_mGammaD_0700_eff_uncert = &mGammaD_0700_eff_uncert[0];
+  double* array_mGammaD_0700_cT         = &mGammaD_0700_cT[0];
+  int size_0700 = null_0700.size();
+
+  TGraphErrors *gr_eff_mD_0700 = new TGraphErrors(size_0700,array_mGammaD_0700_cT,array_mGammaD_0700_eff,array_null_0700,array_mGammaD_0700_eff_uncert);
+
+  vector<double> null_1000;
+  for(int i=0; i < mGammaD_1000_cT.size(); i++){
+    null_1000.push_back(0);
+  }
+  double* array_null_1000               = &null_1000[0];
+  double* array_mGammaD_1000_eff        = &mGammaD_1000_eff[0];
+  double* array_mGammaD_1000_eff_uncert = &mGammaD_1000_eff_uncert[0];
+  double* array_mGammaD_1000_cT         = &mGammaD_1000_cT[0];
+  int size_1000 = null_1000.size();
+
+  TGraphErrors *gr_eff_mD_1000 = new TGraphErrors(size_1000,array_mGammaD_1000_cT,array_mGammaD_1000_eff,array_null_1000,array_mGammaD_1000_eff_uncert);
+
+  vector<double> null_1500;
+  for(int i=0; i < mGammaD_1500_cT.size(); i++){
+    null_1500.push_back(0);
+  }
+  double* array_null_1500               = &null_1500[0];
+  double* array_mGammaD_1500_eff        = &mGammaD_1500_eff[0];
+  double* array_mGammaD_1500_eff_uncert = &mGammaD_1500_eff_uncert[0];
+  double* array_mGammaD_1500_cT         = &mGammaD_1500_cT[0];
+  int size_1500 = null_1500.size();
+
+  TGraphErrors *gr_eff_mD_1500 = new TGraphErrors(size_1500,array_mGammaD_1500_cT,array_mGammaD_1500_eff,array_null_1500,array_mGammaD_1500_eff_uncert);
+
   vector<double> null_2000;
   for(int i=0; i < mGammaD_2000_cT.size(); i++){
     null_2000.push_back(0);
@@ -367,6 +456,10 @@ void makePlot()
   leg->AddEntry(gr_eff_mD_0250,"m_{#gamma D}=0.250 GeV","PL");
   leg->AddEntry(gr_eff_mD_0275,"m_{#gamma D}=0.275 GeV","PL");
   leg->AddEntry(gr_eff_mD_0300,"m_{#gamma D}=0.300 GeV","PL");
+  leg->AddEntry(gr_eff_mD_0400,"m_{#gamma D}=0.400 GeV","PL");
+  leg->AddEntry(gr_eff_mD_0700,"m_{#gamma D}=0.700 GeV","PL");
+  leg->AddEntry(gr_eff_mD_1000,"m_{#gamma D}=1.000 GeV","PL");
+  leg->AddEntry(gr_eff_mD_1500,"m_{#gamma D}=1.500 GeV","PL");
   leg->AddEntry(gr_eff_mD_2000,"m_{#gamma D}=2.000 GeV","PL");
   leg->AddEntry(gr_eff_mD_8500,"m_{#gamma D}=8.500 GeV","PL");
   
@@ -401,6 +494,34 @@ void makePlot()
   gr_eff_mD_0300->SetMarkerStyle(7);
   gr_eff_mD_0300->Draw("SAME PL");
   
+  gr_eff_mD_0400->SetLineWidth(1);
+  gr_eff_mD_0400->SetMarkerSize(5);
+  gr_eff_mD_0400->SetLineColor(7);
+  gr_eff_mD_0400->SetMarkerColor(7);
+  gr_eff_mD_0400->SetMarkerStyle(7);
+  gr_eff_mD_0400->Draw("SAME PL");
+
+  gr_eff_mD_0700->SetLineWidth(1);
+  gr_eff_mD_0700->SetMarkerSize(5);
+  gr_eff_mD_0700->SetLineColor(8);
+  gr_eff_mD_0700->SetMarkerColor(8);
+  gr_eff_mD_0700->SetMarkerStyle(7);
+  gr_eff_mD_0700->Draw("SAME PL");
+
+  gr_eff_mD_1000->SetLineWidth(1);
+  gr_eff_mD_1000->SetMarkerSize(5);
+  gr_eff_mD_1000->SetLineColor(kOrange+1);
+  gr_eff_mD_1000->SetMarkerColor(kOrange+1);
+  gr_eff_mD_1000->SetMarkerStyle(7);
+  gr_eff_mD_1000->Draw("SAME PL");
+
+  gr_eff_mD_1500->SetLineWidth(1);
+  gr_eff_mD_1500->SetMarkerSize(5);
+  gr_eff_mD_1500->SetLineColor(kOrange);
+  gr_eff_mD_1500->SetMarkerColor(kOrange);
+  gr_eff_mD_1500->SetMarkerStyle(7);
+  gr_eff_mD_1500->Draw("SAME PL");
+
   gr_eff_mD_2000->SetLineWidth(1);
   gr_eff_mD_2000->SetMarkerSize(5);
   gr_eff_mD_2000->SetLineColor(4);
@@ -416,16 +537,17 @@ void makePlot()
   gr_eff_mD_8500->Draw("SAME PL");
   
   leg->Draw("same");
-  c->SaveAs("e_hlt_vs_cT.pdf","recreate");
-  c->SaveAs("e_hlt_vs_cT.C","recreate");
+  c->SaveAs("e_hlt_vs_cT.test.pdf","recreate");
+  c->SaveAs("e_hlt_vs_cT.test.C","recreate");
 }
 
 void analyzeHLTEfficiency()
 {
-  for(auto fileName: fileNames){
-    efficiency_trigger(fileName);
+  //  efficiency_trigger("DarkSUSY_mH_125_mGammaD_0250_cT_000");
+  for(auto fileName: DarkSUSY_mH_125_mGammaD_map){
+    efficiency_trigger(fileName.first);
   }
   
- makePlot();
+  // makePlot();
 }
 
