@@ -24,11 +24,8 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root")
 {
   bool verbose(false);
-  //  std::vector<std::string> directories = DarkSUSY_mH_125_mGammaD_map[tag];  
-  for(const std::string& dirname : v) {
-    TString dirname2(dirname);
-    cout << "dirname " << dirname2 << std::endl;    
-    TSystemDirectory dir(dirname2, dirname2);
+  for(std::string dirname : v) {
+    TSystemDirectory dir(dirname.c_str(), dirname.c_str());
     TList *files = dir.GetListOfFiles();
     if (files) {
       if (verbose) std::cout << "Found files" << std::endl;
@@ -75,4 +72,24 @@ void decodeFileNameMany(const std::vector<string>& v, TString& mass_string, TStr
   cT_string = (str(last+str3.Length(),4));
   bool verbose(false);
   if (verbose) cout << "mass_string " << mass_string << " cT_string " << cT_string << endl;
+}
+
+void readTextFileWithSamples(const std::string fileName, std::vector< std::vector<string> >& v)
+{
+  ifstream infile(fileName);
+  string line;
+  std::vector<string> vv;
+  while (std::getline(infile, line)) {
+    if (line.empty()) {
+      v.push_back(vv);
+      vv.clear();
+    }
+    else {
+      if (line.back() != '/') 
+	line += '/';
+	vv.push_back(line);
+    }
+  }
+  v.push_back(vv);
+  infile.close();
 }

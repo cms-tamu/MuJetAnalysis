@@ -5,40 +5,46 @@ using namespace std;
 #include "../Helpers.h"
 
 //============= Global Variables ===========================//
-std::vector<double> mGammaD_0250_eff(11);
-std::vector<double> mGammaD_0275_eff(11);
-std::vector<double> mGammaD_0300_eff(11);
-std::vector<double> mGammaD_0400_eff(11);
-std::vector<double> mGammaD_0700_eff(11);
-std::vector<double> mGammaD_1000_eff(11);
-std::vector<double> mGammaD_1500_eff(11);
-std::vector<double> mGammaD_2000_eff(11);
-std::vector<double> mGammaD_8500_eff(11);
+std::vector<double> mGammaD_0250_eff;
+std::vector<double> mGammaD_0275_eff;
+std::vector<double> mGammaD_0300_eff;
+std::vector<double> mGammaD_0400_eff;
+std::vector<double> mGammaD_0700_eff;
+std::vector<double> mGammaD_1000_eff;
+std::vector<double> mGammaD_1500_eff;
+std::vector<double> mGammaD_2000_eff;
+std::vector<double> mGammaD_8500_eff;
 
-std::vector<double> mGammaD_0250_eff_uncert(11);
-std::vector<double> mGammaD_0275_eff_uncert(11);
-std::vector<double> mGammaD_0300_eff_uncert(11);
-std::vector<double> mGammaD_0400_eff_uncert(11);
-std::vector<double> mGammaD_0700_eff_uncert(11);
-std::vector<double> mGammaD_1000_eff_uncert(11);
-std::vector<double> mGammaD_1500_eff_uncert(11);
-std::vector<double> mGammaD_2000_eff_uncert(11);
-std::vector<double> mGammaD_8500_eff_uncert(11);
+std::vector<double> mGammaD_0250_eff_uncert;
+std::vector<double> mGammaD_0275_eff_uncert;
+std::vector<double> mGammaD_0300_eff_uncert;
+std::vector<double> mGammaD_0400_eff_uncert;
+std::vector<double> mGammaD_0700_eff_uncert;
+std::vector<double> mGammaD_1000_eff_uncert;
+std::vector<double> mGammaD_1500_eff_uncert;
+std::vector<double> mGammaD_2000_eff_uncert;
+std::vector<double> mGammaD_8500_eff_uncert;
 
-std::vector<double> mGammaD_0250_cT(11);
-std::vector<double> mGammaD_0275_cT(11);
-std::vector<double> mGammaD_0300_cT(11);
-std::vector<double> mGammaD_0400_cT(11);
-std::vector<double> mGammaD_0700_cT(11);
-std::vector<double> mGammaD_1000_cT(11);
-std::vector<double> mGammaD_1500_cT(11);
-std::vector<double> mGammaD_2000_cT(11);
-std::vector<double> mGammaD_8500_cT(11);
+std::vector<double> mGammaD_0250_cT;
+std::vector<double> mGammaD_0275_cT;
+std::vector<double> mGammaD_0300_cT;
+std::vector<double> mGammaD_0400_cT;
+std::vector<double> mGammaD_0700_cT;
+std::vector<double> mGammaD_1000_cT;
+std::vector<double> mGammaD_1500_cT;
+std::vector<double> mGammaD_2000_cT;
+std::vector<double> mGammaD_8500_cT;
 
-std::vector<std::string> cT_strings = {"000_", "005_", "010_", "020_", "050_", "100_", "200_", "300_", "500_", "1000", "2000"};
-std::vector<double> cT_doubles = {0, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0, 3.0, 5.0, 10.0, 20.0};
+std::map<TString, double > cT_strings = {
+  {"000_",0.0}, {"005_", 0.05}, {"010_", 0.10}, {"020_", 0.20}, {"050_", 0.50}, {"100_", 1.00}, 
+  {"200_", 2.00}, {"300_", 3.00}, {"500_", 5.00}, {"1000", 10.0}, {"2000", 20.0}
+};
+std::map<TString, int > mass_colors = {
+  {"0250", kRed}, {"0275", kOrange}, {"0300", kSpring}, {"0400", kGreen+2}, {"0700", kAzure+9}, 
+  {"1000", kBlue}, {"1500", kViolet+6}, {"2000", kMagenta}, {"8500", kBlack}
+};
 
-void efficiency_trigger(const std::vector<std::string> dirNames)
+void efficiency_trigger(const std::vector<std::string>& dirNames)
 {
   bool verbose(false);
   TChain* chain = new TChain("dummy");
@@ -49,9 +55,6 @@ void efficiency_trigger(const std::vector<std::string> dirNames)
   decodeFileNameMany(dirNames, mass_string, cT_string);
   TString fileName = "DarkSUSY_mH_125_mGammaD_" + mass_string + "_cT_" + cT_string;
   cout << "Tag name " << fileName << endl;
-
-  // TString dirname(fileName);
-  
 
   // add files to the chain
   addfilesMany(chain, dirNames, ext);
@@ -177,9 +180,9 @@ void efficiency_trigger(const std::vector<std::string> dirNames)
     t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l3inc", &diMuonF_m1_FittedVtx_hitpix_l3inc);
     t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l3inc", &diMuonF_m2_FittedVtx_hitpix_l3inc);
     
-    for(int k=0;k<t->GetEntries();k++){
+    for(int k=0; k<t->GetEntries(); k++) {
       t->GetEntry(k);
-
+      
       const bool firstPixelLayer((diMuonC_m1_FittedVtx_hitpix==1 || 
 				  diMuonC_m2_FittedVtx_hitpix==1) && 
 				 (diMuonF_m1_FittedVtx_hitpix==1 || 
@@ -199,8 +202,7 @@ void efficiency_trigger(const std::vector<std::string> dirNames)
       
       bool pixelLayer;
       double pixelLayerRadius;
-      int layers = 2;
-
+      int layers = 1;
       if (layers==1) {
 	pixelLayer = firstPixelLayer;
 	pixelLayerRadius = firstPixelLayerRadius;
@@ -231,6 +233,13 @@ void efficiency_trigger(const std::vector<std::string> dirNames)
 	      ev_is2DiMuons++;
 	      if(is2DiMuonsFittedVtxOK){
 		ev_is2DiMuonsFittedVtxOK++;
+		// if (not PixelLayer and firstPixelLayer) {
+		if (mass_string=="8500" and (not thirdPixelLayer) and secondPixelLayer){
+		  cout << "event " << k << endl;
+		  cout << "layers: " << firstPixelLayer << " " << secondPixelLayer << " " << thirdPixelLayer << endl;
+		}
+		//   cout << "ALARM!!!" << endl;
+		// }
 		if( pixelLayer ){
 		  ev_isPixelHitOK++;
 		  if(is2DiMuonsDzOK_FittedVtx){
@@ -278,10 +287,7 @@ void efficiency_trigger(const std::vector<std::string> dirNames)
   const double eff(ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx));
   const double eff_uncert(sqrt( ((ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx))*(1- (ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)) ))/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)));
 
-  int index = std::find(cT_strings.begin(), cT_strings.end(), cT_string) - cT_strings.begin();
-  std::cout << "index "<< index <<endl;
-  double cT_double = cT_doubles[index];
-  std::cout << "cT_double "<< cT_double <<endl;
+  double cT_double = cT_strings[cT_string];
 
   // check if the efficiency makes sense    
   if (not (eff != eff)) {
@@ -292,17 +298,17 @@ void efficiency_trigger(const std::vector<std::string> dirNames)
     mGammaD_0250_cT.push_back(cT_double);
   }
   if(mass_string == "0275"){
-    mGammaD_0275_eff.push_back(eff);  
+    mGammaD_0275_eff.push_back(eff);
     mGammaD_0275_eff_uncert.push_back(eff_uncert);  
     mGammaD_0275_cT.push_back(cT_double);  
   }
   if(mass_string == "0300"){
-    mGammaD_0300_eff.push_back(eff);  
+    mGammaD_0300_eff.push_back(eff);
     mGammaD_0300_eff_uncert.push_back(eff_uncert);  
     mGammaD_0300_cT.push_back(cT_double);  
   }
   if(mass_string == "0400"){
-    mGammaD_0400_eff.push_back(eff);  
+    mGammaD_0400_eff.push_back(eff);
     mGammaD_0400_eff_uncert.push_back(eff_uncert);  
     mGammaD_0400_cT.push_back(cT_double);  
   }
@@ -330,8 +336,8 @@ void efficiency_trigger(const std::vector<std::string> dirNames)
     mGammaD_8500_eff.push_back(eff);  
     mGammaD_8500_eff_uncert.push_back(eff_uncert);  
     mGammaD_8500_cT.push_back(cT_double);  
-  }
-  
+  }  
+
   }
 //delete chEl;
 //delete fileElements;
@@ -428,7 +434,7 @@ void makePlot()
   for(int i=0; i < mGammaD_2000_cT.size(); i++){
     null_2000.push_back(0);
   }
-  double* array_null_2000		      = &null_2000[0];
+  double* array_null_2000		= &null_2000[0];
   double* array_mGammaD_2000_eff        = &mGammaD_2000_eff[0];
   double* array_mGammaD_2000_eff_uncert = &mGammaD_2000_eff_uncert[0];
   double* array_mGammaD_2000_cT	      = &mGammaD_2000_cT[0];
@@ -460,91 +466,89 @@ void makePlot()
   leg->AddEntry(gr_eff_mD_1500,"m_{#gamma D}=1.500 GeV","PL");
   leg->AddEntry(gr_eff_mD_2000,"m_{#gamma D}=2.000 GeV","PL");
   leg->AddEntry(gr_eff_mD_8500,"m_{#gamma D}=8.500 GeV","PL");
-  
-  
-  TH2F *dummy3 = new TH2F("","",400,-0.2,20.2,100,0.0,1.0);
-
-  
+    
   TCanvas *c = new TCanvas("c","c",700,500);
+  gStyle->SetOptStat(0);
+
+  TH2F *dummy3 = new TH2F("","",400,-0.2,20.2,100,0.8,1.0);
   dummy3->GetXaxis()->SetTitle("c#tau [mm]");
   dummy3->GetYaxis()->SetTitle("HLT efficiency");
-  gStyle->SetOptStat(0);
   dummy3->Draw();
   
   gr_eff_mD_0250->SetLineWidth(1);
   gr_eff_mD_0250->SetMarkerSize(5);
-  gr_eff_mD_0250->SetLineColor(1);
-  gr_eff_mD_0250->SetMarkerColor(1);
+  gr_eff_mD_0250->SetLineColor(mass_colors["0250"]);
+  gr_eff_mD_0250->SetMarkerColor(mass_colors["0250"]);
   gr_eff_mD_0250->SetMarkerStyle(7);
   gr_eff_mD_0250->Draw("SAME PL");
   
   gr_eff_mD_0275->SetLineWidth(1);
   gr_eff_mD_0275->SetMarkerSize(5);
-  gr_eff_mD_0275->SetLineColor(2);
-  gr_eff_mD_0275->SetMarkerColor(2);
+  gr_eff_mD_0275->SetLineColor(mass_colors["0275"]);
+  gr_eff_mD_0275->SetMarkerColor(mass_colors["0275"]);
   gr_eff_mD_0275->SetMarkerStyle(7);
   gr_eff_mD_0275->Draw("SAME PL");
   
   gr_eff_mD_0300->SetLineWidth(1);
   gr_eff_mD_0300->SetMarkerSize(5);
-  gr_eff_mD_0300->SetLineColor(3);
-  gr_eff_mD_0300->SetMarkerColor(3);
+  gr_eff_mD_0300->SetLineColor(mass_colors["0300"]);
+  gr_eff_mD_0300->SetMarkerColor(mass_colors["0300"]);
   gr_eff_mD_0300->SetMarkerStyle(7);
   gr_eff_mD_0300->Draw("SAME PL");
   
   gr_eff_mD_0400->SetLineWidth(1);
   gr_eff_mD_0400->SetMarkerSize(5);
-  gr_eff_mD_0400->SetLineColor(7);
-  gr_eff_mD_0400->SetMarkerColor(7);
+  gr_eff_mD_0400->SetLineColor(mass_colors["0400"]);
+  gr_eff_mD_0400->SetMarkerColor(mass_colors["0400"]);
   gr_eff_mD_0400->SetMarkerStyle(7);
   gr_eff_mD_0400->Draw("SAME PL");
 
   gr_eff_mD_0700->SetLineWidth(1);
   gr_eff_mD_0700->SetMarkerSize(5);
-  gr_eff_mD_0700->SetLineColor(8);
-  gr_eff_mD_0700->SetMarkerColor(8);
+  gr_eff_mD_0700->SetLineColor(mass_colors["0700"]);
+  gr_eff_mD_0700->SetMarkerColor(mass_colors["0700"]);
   gr_eff_mD_0700->SetMarkerStyle(7);
   gr_eff_mD_0700->Draw("SAME PL");
 
   gr_eff_mD_1000->SetLineWidth(1);
   gr_eff_mD_1000->SetMarkerSize(5);
-  gr_eff_mD_1000->SetLineColor(kOrange+1);
-  gr_eff_mD_1000->SetMarkerColor(kOrange+1);
+  gr_eff_mD_1000->SetLineColor(mass_colors["1000"]);
+  gr_eff_mD_1000->SetMarkerColor(mass_colors["1000"]);
   gr_eff_mD_1000->SetMarkerStyle(7);
   gr_eff_mD_1000->Draw("SAME PL");
 
   gr_eff_mD_1500->SetLineWidth(1);
   gr_eff_mD_1500->SetMarkerSize(5);
-  gr_eff_mD_1500->SetLineColor(kOrange);
-  gr_eff_mD_1500->SetMarkerColor(kOrange);
+  gr_eff_mD_1500->SetLineColor(mass_colors["1500"]);
+  gr_eff_mD_1500->SetMarkerColor(mass_colors["1500"]);
   gr_eff_mD_1500->SetMarkerStyle(7);
   gr_eff_mD_1500->Draw("SAME PL");
 
   gr_eff_mD_2000->SetLineWidth(1);
   gr_eff_mD_2000->SetMarkerSize(5);
-  gr_eff_mD_2000->SetLineColor(4);
-  gr_eff_mD_2000->SetMarkerColor(4);
-  gr_eff_mD_2000->SetMarkerStyle(7);
+  gr_eff_mD_2000->SetLineColor(mass_colors["2000"]);
+  gr_eff_mD_2000->SetMarkerColor(mass_colors["2000"]);
+  gr_eff_mD_2000->SetMarkerStyle();
   gr_eff_mD_2000->Draw("SAME PL");
   
   gr_eff_mD_8500->SetLineWidth(1);
   gr_eff_mD_8500->SetMarkerSize(5);
-  gr_eff_mD_8500->SetLineColor(6);
-  gr_eff_mD_8500->SetMarkerColor(6);
+  gr_eff_mD_8500->SetLineColor(mass_colors["8500"]);
+  gr_eff_mD_8500->SetMarkerColor(mass_colors["8500"]);
   gr_eff_mD_8500->SetMarkerStyle(7);
   gr_eff_mD_8500->Draw("SAME PL");
   
   leg->Draw("same");
-  c->SaveAs("e_hlt_vs_cT.L2.pdf","recreate");
-  c->SaveAs("e_hlt_vs_cT.L2.C","recreate");
+  c->SaveAs("e_hlt_vs_cT_L3.pdf","recreate");
+  c->SaveAs("e_hlt_vs_cT_L3.C");
 }
 
 void analyzeHLTEfficiency()
 {
-  //  efficiency_trigger("DarkSUSY_mH_125_mGammaD_0250_cT_000");
-  for(auto v: DarkSUSY_mH_125_mGammaD_map){
-    efficiency_trigger(v);
-  }  
-  //  makePlot();
+  std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
+  readTextFileWithSamples("ANASamplesSven.txt", DarkSUSY_mH_125_mGammaD_v);
+
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v);
+  //makePlot();
 }
 
