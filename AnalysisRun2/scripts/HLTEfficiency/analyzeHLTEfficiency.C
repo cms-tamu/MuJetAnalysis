@@ -44,6 +44,13 @@ std::map<TString, int > mass_colors = {
   {"1000", kBlue}, {"1500", kViolet+6}, {"2000", kMagenta}, {"8500", kBlack}
 };
 
+double calc_eff(double num, double denom)
+{
+  //eff = num/denom;
+  double eff_uncert = sqrt( ((num/(1.0*denom))*(1-(num/(1.0*denom)) ))/(1.0*denom) );
+  return eff_uncert;
+}
+
 void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1)
 {
   bool verbose(false);
@@ -233,13 +240,6 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1
 	      ev_is2DiMuons++;
 	      if(is2DiMuonsFittedVtxOK){
 		ev_is2DiMuonsFittedVtxOK++;
-		// if (not PixelLayer and firstPixelLayer) {
-		if (mass_string=="8500" and (not thirdPixelLayer) and secondPixelLayer){
-		  cout << "event " << k << endl;
-		  cout << "layers: " << firstPixelLayer << " " << secondPixelLayer << " " << thirdPixelLayer << endl;
-		}
-		//   cout << "ALARM!!!" << endl;
-		// }
 		if( pixelLayer ){
 		  ev_isPixelHitOK++;
 		  if(is2DiMuonsDzOK_FittedVtx){
@@ -272,15 +272,15 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1
   std::cout<<" 3RecMu8                        "<<c3recm<<"  reff  "<<c3recm/(c2recm*1.0)<<std::endl;
   std::cout<<" 4RecMu8                        "<<c4recm<<"  reff  "<<c4recm/(c3recm*1.0)<<std::endl;
   std::cout<<" ================ EVENT variables ================= "<<std::endl;
-  std::cout<<" Events with VtxOK              "<<ev_isVtxOK<<"    reff  "<<ev_isVtxOK/(1.0*c4recm)<<std::endl;
-  std::cout<<" Events with 2 muonjets         "<<ev_is2MuJets<<"     reff  "<<ev_is2MuJets/(1.0*ev_isVtxOK)<<std::endl;
-  std::cout<<" Events with 2 Dimuons          "<<ev_is2DiMuons<<"    reff  "<<ev_is2DiMuons/(1.0*ev_is2MuJets)<<std::endl;
-  std::cout<<" Events with 2DimVtxOK          "<<ev_is2DiMuonsFittedVtxOK<<"    reff  "<<ev_is2DiMuonsFittedVtxOK/(1.0*ev_is2DiMuons)<<std::endl;
-  std::cout<<" Events with 2DimHitPix         "<<ev_isPixelHitOK<<"     reff  "<<ev_isPixelHitOK/(1.0*ev_is2DiMuonsFittedVtxOK)<<std::endl;
-  std::cout<<" Events with 2DimDzOK           "<<ev_is2DiMuonsDzOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsDzOK_FittedVtx/(1.0*ev_isPixelHitOK)<<std::endl;
-  std::cout<<" Events with 2DimMassOK         "<<ev_is2DiMuonsMassOK_FittedVtx<<"  reff   "<<ev_is2DiMuonsMassOK_FittedVtx/(1.0*ev_is2DiMuonsDzOK_FittedVtx)<<endl;
-  std::cout<<" Events with 2DimIsoOK          "<<ev_is2DiMuonsIsoTkOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsIsoTkOK_FittedVtx/(1.0*ev_is2DiMuonsMassOK_FittedVtx)<<endl;
-  std::cout<<" Events with 2DimHLT            "<<ev_isDiMuonHLTFired<<"   reff   "<<ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)<<endl;
+  std::cout<<" Events with VtxOK              "<<ev_isVtxOK<<"    reff  "<<ev_isVtxOK/(1.0*c4recm)<<" +- "<<calc_eff(ev_isVtxOK, c4recm)<<std::endl;
+  std::cout<<" Events with 2 muonjets         "<<ev_is2MuJets<<"     reff  "<<ev_is2MuJets/(1.0*ev_isVtxOK)<<" +- "<<calc_eff(ev_is2MuJets, ev_isVtxOK)<<std::endl;
+  std::cout<<" Events with 2 Dimuons          "<<ev_is2DiMuons<<"    reff  "<<ev_is2DiMuons/(1.0*ev_is2MuJets)<<" +- "<<calc_eff(ev_is2DiMuons, ev_is2MuJets)<<std::endl;
+  std::cout<<" Events with 2DimVtxOK          "<<ev_is2DiMuonsFittedVtxOK<<"    reff  "<<ev_is2DiMuonsFittedVtxOK/(1.0*ev_is2DiMuons)<<" +- "<<calc_eff(ev_is2DiMuonsFittedVtxOK, ev_is2DiMuons)<<std::endl;
+  std::cout<<" Events with 2DimHitPix         "<<ev_isPixelHitOK<<"     reff  "<<ev_isPixelHitOK/(1.0*ev_is2DiMuonsFittedVtxOK)<<" +- "<<calc_eff(ev_isPixelHitOK, ev_is2DiMuonsFittedVtxOK)<<std::endl;
+  std::cout<<" Events with 2DimDzOK           "<<ev_is2DiMuonsDzOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsDzOK_FittedVtx/(1.0*ev_isPixelHitOK)<<" +- "<<calc_eff(ev_is2DiMuonsDzOK_FittedVtx, ev_isPixelHitOK)<<std::endl;
+  std::cout<<" Events with 2DimMassOK         "<<ev_is2DiMuonsMassOK_FittedVtx<<"  reff   "<<ev_is2DiMuonsMassOK_FittedVtx/(1.0*ev_is2DiMuonsDzOK_FittedVtx)<<" +- "<<calc_eff(ev_is2DiMuonsMassOK_FittedVtx, ev_is2DiMuonsDzOK_FittedVtx)<<endl;
+  std::cout<<" Events with 2DimIsoOK          "<<ev_is2DiMuonsIsoTkOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsIsoTkOK_FittedVtx/(1.0*ev_is2DiMuonsMassOK_FittedVtx)<<" +- "<<calc_eff(ev_is2DiMuonsIsoTkOK_FittedVtx, ev_is2DiMuonsMassOK_FittedVtx)<<endl;
+  std::cout<<" Events with 2DimHLT            "<<ev_isDiMuonHLTFired<<"   reff   "<<ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)<<" +- "<<calc_eff(ev_isDiMuonHLTFired, ev_is2DiMuonsMassOK_FittedVtx)<<endl;
 
   //Fill ratio reco/gen vectors to be plotted  
   
