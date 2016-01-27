@@ -1,5 +1,3 @@
-#include "ANASamplesSven.h"
-
 void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 {
   bool verbose(false);

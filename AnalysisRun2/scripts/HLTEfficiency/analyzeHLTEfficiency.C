@@ -44,7 +44,7 @@ std::map<TString, int > mass_colors = {
   {"1000", kBlue}, {"1500", kViolet+6}, {"2000", kMagenta}, {"8500", kBlack}
 };
 
-void efficiency_trigger(const std::vector<std::string>& dirNames)
+void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1)
 {
   bool verbose(false);
   TChain* chain = new TChain("dummy");
@@ -202,7 +202,7 @@ void efficiency_trigger(const std::vector<std::string>& dirNames)
       
       bool pixelLayer;
       double pixelLayerRadius;
-      int layers = 1;
+      
       if (layers==1) {
 	pixelLayer = firstPixelLayer;
 	pixelLayerRadius = firstPixelLayerRadius;
@@ -343,7 +343,7 @@ void efficiency_trigger(const std::vector<std::string>& dirNames)
 //delete fileElements;
 }
 
-void makePlot()
+void makePlot(int layers = 1)
 {
   //Turn vectors in to arrays of data
   vector<double> null_0250;
@@ -539,16 +539,51 @@ void makePlot()
   gr_eff_mD_8500->Draw("SAME PL");
   
   leg->Draw("same");
-  c->SaveAs("e_hlt_vs_cT_L3.pdf","recreate");
-  c->SaveAs("e_hlt_vs_cT_L3.C");
+  c->SaveAs(TString("e_hlt_vs_cT_L" + std::to_string(layers) + ".pdf"),"recreate");
+  //c->SaveAs(TString("e_hlt_vs_cT_L" + std::to_string(layers) + ".C"));
+  c->Clear();
+
+  mGammaD_0250_eff.clear();
+  mGammaD_0275_eff.clear();
+  mGammaD_0300_eff.clear();
+  mGammaD_0400_eff.clear();
+  mGammaD_0700_eff.clear();
+  mGammaD_1000_eff.clear();
+  mGammaD_1500_eff.clear();
+  mGammaD_2000_eff.clear();
+  mGammaD_8500_eff.clear();
+
+  mGammaD_0250_eff_uncert.clear();
+  mGammaD_0275_eff_uncert.clear();
+  mGammaD_0300_eff_uncert.clear();
+  mGammaD_0400_eff_uncert.clear();
+  mGammaD_0700_eff_uncert.clear();
+  mGammaD_1000_eff_uncert.clear();
+  mGammaD_1500_eff_uncert.clear();
+  mGammaD_2000_eff_uncert.clear();
+  mGammaD_8500_eff_uncert.clear();
+
+  mGammaD_0250_cT.clear();
+  mGammaD_0275_cT.clear();
+  mGammaD_0300_cT.clear();
+  mGammaD_0400_cT.clear();
+  mGammaD_0700_cT.clear();
+  mGammaD_1000_cT.clear();
+  mGammaD_1500_cT.clear();
+  mGammaD_2000_cT.clear();
+  mGammaD_8500_cT.clear();
 }
 
 void analyzeHLTEfficiency()
 {
   std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
-  readTextFileWithSamples("ANASamplesSven.txt", DarkSUSY_mH_125_mGammaD_v);
-
-  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v);
-  //makePlot();
+  readTextFileWithSamples("ANASamplesSven2.txt", DarkSUSY_mH_125_mGammaD_v);
+ 
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 1);
+  makePlot(1);
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 2);
+  makePlot(2);
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 3);
+  makePlot(3);
 }
 
