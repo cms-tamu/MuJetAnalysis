@@ -593,10 +593,10 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_diMuonF_m1_FittedVtx_hitpix=-1000;
   b_diMuonF_m2_FittedVtx_hitpix=-1000;
 
-  b_diMuonC_m1_FittedVtx_hitpix_l3inc=-1000;
-  b_diMuonC_m2_FittedVtx_hitpix_l3inc=-1000;
-  b_diMuonF_m1_FittedVtx_hitpix_l3inc=-1000;
-  b_diMuonF_m2_FittedVtx_hitpix_l3inc=-1000;
+  b_diMuonC_m1_FittedVtx_hitpix_l2inc=-1000;
+  b_diMuonC_m2_FittedVtx_hitpix_l2inc=-1000;
+  b_diMuonF_m1_FittedVtx_hitpix_l2inc=-1000;
+  b_diMuonF_m2_FittedVtx_hitpix_l2inc=-1000;
 
   b_diMuonC_m1_FittedVtx_hitpix_l3inc=-1000;
   b_diMuonC_m2_FittedVtx_hitpix_l3inc=-1000;
