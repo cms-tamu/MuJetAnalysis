@@ -528,7 +528,7 @@ void makePlot(int layers = 1)
   gr_eff_mD_2000->SetMarkerSize(5);
   gr_eff_mD_2000->SetLineColor(mass_colors["2000"]);
   gr_eff_mD_2000->SetMarkerColor(mass_colors["2000"]);
-  gr_eff_mD_2000->SetMarkerStyle();
+  gr_eff_mD_2000->SetMarkerStyle(7);
   gr_eff_mD_2000->Draw("SAME PL");
   
   gr_eff_mD_8500->SetLineWidth(1);
