@@ -37,7 +37,7 @@ Implementation:
 
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
-
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 //
 // class decleration
 //
@@ -71,7 +71,8 @@ class MuJetProducer : public edm::EDProducer {
   };
 
   // ----------member data ---------------------------
-  edm::InputTag m_muons;
+  edm::EDGetTokenT<pat::MuonCollection> m_muons;
+  edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
   edm::InputTag m_tracks;
   edm::InputTag m_caloTowers;
   double m_minPt;
@@ -139,7 +140,8 @@ class MuJetProducer : public edm::EDProducer {
 // constructors and destructor
 //
 MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
-   : m_muons(                           iConfig.getParameter<edm::InputTag>("muons"))
+   : m_muons(                           consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons")))
+   , m_primaryVertices(                 consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices")))
    , m_tracks(                          iConfig.getParameter<edm::InputTag>("tracks"))
    , m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
    , m_minPt(                           iConfig.getParameter<double>("minPt"))
@@ -350,7 +352,7 @@ bool MuJetProducer::muonOkay(const pat::Muon &muon) {
 // ------------ method called to produce the data  ------------
 void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   edm::Handle<pat::MuonCollection> muons;
-  iEvent.getByLabel(m_muons, muons);
+  iEvent.getByToken(m_muons, muons);
   const pat::MuonCollection *muons_ptr = &*muons;
 
   edm::Handle<reco::TrackCollection> tracks;
@@ -380,7 +382,7 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   std::vector<bool> active;
 
   edm::Handle<reco::VertexCollection> primaryVertices;
-  iEvent.getByLabel("offlinePrimaryVertices", primaryVertices);
+  iEvent.getByToken(m_primaryVertices, primaryVertices);
 
   //  const reco::Vertex* vtx = &((*primaryVertices)[0]);
 

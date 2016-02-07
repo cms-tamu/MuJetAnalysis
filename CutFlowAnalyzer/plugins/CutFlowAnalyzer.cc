@@ -51,6 +51,7 @@
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
 #include "MuJetAnalysis/AnalysisTools/interface/DisplacedVertexFinder.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 // user include files
 #include "TTree.h"
@@ -271,9 +272,14 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   //****************************************************************************
   
   // Labels to access
-  edm::InputTag m_muons;        // reconstructed muons
-  edm::InputTag m_muJets;       // muon jets built from reconstructed muons
-  edm::InputTag m_muJetOrphans; // muon orphan, not found in any group
+  edm::EDGetTokenT<pat::MuonCollection> m_muons;        // reconstructed muons
+  edm::EDGetTokenT<pat::MultiMuonCollection> m_muJets;       // muon jets built from reconstructed muons
+  edm::EDGetTokenT<reco::BeamSpot> m_beamSpot;
+  edm::EDGetTokenT<pat::MuonCollection> m_muJetOrphans; // muon orphan, not found in any group
+  edm::EDGetTokenT<pat::TriggerEvent> m_triggerEvent;
+  edm::EDGetTokenT<reco::TrackCollection> m_tracks;
+  edm::EDGetTokenT<reco::GenParticleCollection> m_genParticles;
+  edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
   Int_t         m_nThrowsConsistentVertexesCalculator;
   
   unsigned int m_randomSeed;
@@ -465,9 +471,18 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Float_t m_orphan_dimu_isoTk;
   Bool_t  m_orphan_passOffLineSel;
   Bool_t  m_orphan_passOffLineSelPt;
+  Bool_t  m_orphan_passOffLineSelPtEta;
+  Bool_t  m_orphan_passOffLineSelPt1788;
+  Bool_t  m_orphan_AllTrackerMu;
   Bool_t  m_orphan_FiredTrig;
+  Bool_t  m_orphan_FiredTrigPt;
+  Bool_t  m_orphan_FiredTrigPtEta;
   Bool_t  m_orphan_FiredTrig_pt;
+  Bool_t  m_orphan_FiredTrigPt_pt;
+  Bool_t  m_orphan_FiredTrigPtEta_pt;
   Bool_t  m_orphan_FiredTrig_ptColl;
+  Bool_t  m_orphan_FiredTrigPt_ptColl;
+  Bool_t  m_orphan_FiredTrigPtEta_ptColl;
 };
 
 //
@@ -536,9 +551,14 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //                 SET RECO LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
   
-  m_muons = iConfig.getParameter<edm::InputTag>("muons");
-  m_muJets = iConfig.getParameter<edm::InputTag>("muJets");
-  m_muJetOrphans = iConfig.getParameter<edm::InputTag>("muJetOrphans");
+  m_muons           = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"));
+  m_muJets          = consumes<pat::MultiMuonCollection>(iConfig.getParameter<edm::InputTag>("muJets"));
+  m_beamSpot        = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
+  m_muJetOrphans    = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muJetOrphans"));
+  m_triggerEvent    = consumes<pat::TriggerEvent>(iConfig.getParameter<edm::InputTag>("triggerEvent"));
+  m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
+  m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genParticles"));
+  m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   runBBestimation_ = iConfig.getUntrackedParameter<bool>("runBBestimation",true);
 
@@ -625,7 +645,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
   // Beam spot info
   edm::Handle<reco::BeamSpot> beamSpot;
-  iEvent.getByLabel("offlineBeamSpot", beamSpot);
+  iEvent.getByToken(m_beamSpot, beamSpot);
   b_beamSpot_x = beamSpot->position().x();
   b_beamSpot_y = beamSpot->position().y();
   b_beamSpot_z = beamSpot->position().z();
@@ -648,7 +668,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     if ( m_debug > 10 ) std::cout << m_events << " Start GEN Level" << std::endl;
 
     edm::Handle<reco::GenParticleCollection> genParticles;
-    iEvent.getByLabel("genParticles", genParticles);
+    iEvent.getByToken(m_genParticles, genParticles);
   
     // Loop over all genParticles and save prompt muons from particles with codes 36 (a1) or 3000022 (gammaD) in vector genMuons
     std::vector<const reco::GenParticle*> genH;
@@ -1018,7 +1038,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( m_debug > 10 ) std::cout << m_events << " Start RECO Level" << std::endl;
   
   edm::Handle<pat::MuonCollection> muons;
-  iEvent.getByLabel(m_muons, muons);
+  iEvent.getByToken(m_muons, muons);
   
   std::vector<const reco::Muon*> selMuons;
   std::vector<const reco::Muon*> selMuons8;
@@ -1116,7 +1136,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( m_debug > 10 ) std::cout << m_events << " Build RECO muon jets" << std::endl;
   
   edm::Handle<pat::MultiMuonCollection> muJets;
-  iEvent.getByLabel(m_muJets, muJets);
+  iEvent.getByToken(m_muJets, muJets);
   const pat::MultiMuon *muJetC = NULL;
   const pat::MultiMuon *muJetF = NULL;
   int   nMuJetsContainMu17     = 0;
@@ -1345,7 +1365,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
   // HLT cut
   edm::Handle<pat::TriggerEvent> triggerEvent;
-  iEvent.getByLabel("patTriggerEvent", triggerEvent);
+  iEvent.getByToken(m_triggerEvent, triggerEvent);
   
   b_isDiMuonHLTFired = false;
   b_hltPaths.clear();
@@ -1387,7 +1407,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   
   // Cut on isolation
   edm::Handle<reco::TrackCollection> tracks;
-  iEvent.getByLabel("generalTracks", tracks);
+  iEvent.getByToken(m_tracks, tracks);
   
 //  edm::Handle<reco::PFCandidateCollection> pfCandidates;
 //  iEvent.getByLabel("particleFlow", pfCandidates);
@@ -1579,7 +1599,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
   // Cut on primary vertex in event
   edm::Handle<reco::VertexCollection> primaryVertices;
-  iEvent.getByLabel("offlinePrimaryVertices", primaryVertices);
+  iEvent.getByToken(m_primaryVertices, primaryVertices);
   
   b_isVertexOK = false;
   for (reco::VertexCollection::const_iterator vertex = primaryVertices->begin();  vertex != primaryVertices->end();  ++vertex) {
@@ -1666,9 +1686,18 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if(runBBestimation_){
     m_orphan_passOffLineSel = false;
     m_orphan_passOffLineSelPt = false;
+    m_orphan_passOffLineSelPtEta = false;
+    m_orphan_passOffLineSelPt1788 = false;
+    m_orphan_AllTrackerMu = false;
     m_orphan_FiredTrig = false;
+    m_orphan_FiredTrigPt = false;
+    m_orphan_FiredTrigPtEta = false;
     m_orphan_FiredTrig_pt = false;
+    m_orphan_FiredTrigPt_pt = false;
+    m_orphan_FiredTrigPtEta_pt = false;
     m_orphan_FiredTrig_ptColl = false;
+    m_orphan_FiredTrigPt_ptColl = false;
+    m_orphan_FiredTrigPtEta_ptColl = false;
     // Trimuons
     double m_trigpt = 17.;
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
@@ -1677,32 +1706,67 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
         const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
         const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
-         if( mu01 != NULL || mu02 != NULL || mu03 != NULL ) m_orphan_FiredTrig = true;
-         if((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt ) ) m_orphan_FiredTrig_pt = true;
          if((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt)  ||
             (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
             (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)){
             hightrigmuons.push_back(muon);
-            m_orphan_FiredTrig_ptColl = true;
          }
+      }
+      const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
+      const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
+      const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
+      if(  mu01 != NULL || mu02 != NULL || mu03 != NULL)                                                       m_orphan_FiredTrig      = true;
+      if( (mu01 != NULL || mu02 != NULL || mu03 != NULL) && muon->pt() > m_trigpt   )                          m_orphan_FiredTrigPt    = true;
+      if( (mu01 != NULL || mu02 != NULL || mu03 != NULL) && muon->pt() > m_trigpt && fabs(muon->eta()) < 0.9 ) m_orphan_FiredTrigPtEta = true;
+      if(  (mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt ) )                                                      m_orphan_FiredTrig_pt = true;
+      if( ((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt )) && muon->pt() > m_trigpt )                            m_orphan_FiredTrigPt_pt = true;
+      if( ((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt )) && muon->pt() > m_trigpt && fabs(muon->eta()) < 0.9 ) m_orphan_FiredTrigPtEta_pt = true;
+      if((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt)  ||
+         (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
+         (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)){
+         m_orphan_FiredTrig_ptColl = true;
+      }
+      if(((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt) ||
+         (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
+         (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)) && muon->pt() > m_trigpt ){
+         m_orphan_FiredTrigPt_ptColl = true;
+      }
+      if(((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt) ||
+         (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
+         (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)) && muon->pt() > m_trigpt && fabs(muon->eta()) < 0.9){
+         m_orphan_FiredTrigPtEta_ptColl = true;
       }
     }
     //Orphan branches
     m_orphan_dimu_mass = -999.;
     m_orphan_mass = -999.;
-    m_orphan_isoTk = -1;
-    m_orphan_dimu_isoTk = -1;
+    m_orphan_isoTk = -999.;
+    m_orphan_dimu_isoTk = -999.;
     m_orphan_z = -999.;
     m_orphan_dimu_z = -999.;
     m_dimuorphan_containstrig = 0;
     m_dimuorphan_containstrig2 = 0;
     edm::Handle<pat::MuonCollection> orphans;
-    iEvent.getByLabel(m_muJetOrphans, orphans);
+    iEvent.getByToken(m_muJetOrphans, orphans);
+    float mu1788 = 0;
     if (muJets->size() == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
        m_orphan_passOffLineSel = true;
        pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
        pat::MuonCollection::const_iterator orphan = orphans->begin();
        if( muJet->muon(0)->pt() > m_trigpt || muJet->muon(1)->pt() > m_trigpt || orphan->pt() > m_trigpt ) m_orphan_passOffLineSelPt = true;
+       if((muJet->muon(0)->pt() > m_trigpt && fabs(muJet->muon(0)->eta())<0.9) || (muJet->muon(1)->pt() > m_trigpt && fabs(muJet->muon(1)->eta())<0.9) || (orphan->pt() > m_trigpt && fabs(orphan->eta())<0.9)) m_orphan_passOffLineSelPtEta = true;
+       double triPt[3]  = {muJet->muon(0)->pt(), muJet->muon(1)->pt(), orphan->pt()};
+       double triEta[3] = {fabs(muJet->muon(0)->eta()), fabs(muJet->muon(1)->eta()), fabs(orphan->eta())};
+       int Index17=-1;
+       for(int i=0; i<3; i++){
+         if(triPt[i]>m_trigpt && triEta[i]<0.9) Index17 = i;
+       }
+       if(Index17>-1){
+          for(int i=0; i<3; i++){ if(i!=Index17 && triPt[i]>8) mu1788+=0.5; }
+       }
+       if( mu1788==1 ) m_orphan_passOffLineSelPt1788 = true;
+       if ( muJet->muon(0)->isTrackerMuon() && muJet->muon(0)->innerTrack().isNonnull() && muJet->muon(1)->isTrackerMuon() && muJet->muon(1)->innerTrack().isNonnull() && orphan->isTrackerMuon() && orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true; 
+
        m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
        m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
        for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
@@ -1722,6 +1786,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
        m_orphan_mass = orphan->mass();
        //iso orphan
        double iso_track_pt_treshold = 0.5;
+       m_orphan_isoTk = 0.;
+       m_orphan_dimu_isoTk = 0.;
        for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
          if (!muJet->sameTrack(&*track,&*(orphan->innerTrack()))) {
            double dphi = orphan->innerTrack()->phi() - track->phi();
@@ -1731,7 +1797,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
            double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
            if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
              double dz = fabs(track->dz(beamSpot->position())-orphan->innerTrack()->dz(beamSpot->position()));
-             if (dz < 0.1) m_orphan_isoTk += track->pt();
+             if (dz < 0.1){ m_orphan_isoTk += track->pt(); }
            }
          }
        }
@@ -1747,7 +1813,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
            double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
            if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
              double dz = fabs(track->dz(beamSpot->position())-muJet->vertexDz(beamSpot->position()));
-             if (dz < 0.1) m_orphan_dimu_isoTk += track->pt();
+             if (dz < 0.1){ m_orphan_dimu_isoTk += track->pt(); }
            }
          }    
        }
@@ -1762,8 +1828,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   //                            FILL BRANCHES TO TREE                           
   //****************************************************************************
   
-  m_ttree->Fill();
-  if(runBBestimation_) m_ttree_orphan->Fill();
+  if(b_massC>-1. && b_massF>-1. ) m_ttree->Fill();
+  if(runBBestimation_ && m_orphan_passOffLineSel) m_ttree_orphan->Fill();
   
 }
 
@@ -2066,9 +2132,18 @@ CutFlowAnalyzer::beginJob() {
     m_ttree_orphan->Branch("orph_dimu_isoTk", &m_orphan_dimu_isoTk, "orph_dimu_isoTk/F");
     m_ttree_orphan->Branch("orph_passOffLineSel", &m_orphan_passOffLineSel, "orph_passOffLineSel/O");
     m_ttree_orphan->Branch("orph_passOffLineSelPt", &m_orphan_passOffLineSelPt, "orph_passOffLineSelPt/O");
+    m_ttree_orphan->Branch("orph_passOffLineSelPtEta", &m_orphan_passOffLineSelPtEta, "orph_passOffLineSelPtEta/O");
+    m_ttree_orphan->Branch("orph_passOffLineSelPt1788", &m_orphan_passOffLineSelPt1788, "orph_passOffLineSelPt1788/O");
+    m_ttree_orphan->Branch("orph_AllTrackerMu", &m_orphan_AllTrackerMu, "orph_AllTrackerMu/O");
     m_ttree_orphan->Branch("orph_FiredTrig", &m_orphan_FiredTrig, "orph_FiredTrig/O");
+    m_ttree_orphan->Branch("orph_FiredTrigPt", &m_orphan_FiredTrigPt, "orph_FiredTrigPt/O");
+    m_ttree_orphan->Branch("orph_FiredTrigPtEta", &m_orphan_FiredTrigPtEta, "orph_FiredTrigPtEta/O");
     m_ttree_orphan->Branch("orph_FiredTrig_pt", &m_orphan_FiredTrig_pt, "orph_FiredTrig_pt/O");
+    m_ttree_orphan->Branch("orph_FiredTrigPt_pt", &m_orphan_FiredTrigPt_pt, "orph_FiredTrigPt_pt/O");
+    m_ttree_orphan->Branch("orph_FiredTrigPtEta_pt", &m_orphan_FiredTrigPtEta_pt, "orph_FiredTrigPtEta_pt/O");
     m_ttree_orphan->Branch("orph_FiredTrig_ptColl", &m_orphan_FiredTrig_ptColl, "orph_FiredTrig_ptColl/O");
+    m_ttree_orphan->Branch("orph_FiredTrigPt_ptColl", &m_orphan_FiredTrigPt_ptColl, "orph_FiredTrigPt_ptColl/O");
+    m_ttree_orphan->Branch("orph_FiredTrigPtEta_ptColl", &m_orphan_FiredTrigPtEta_ptColl, "orph_FiredTrigPtEta_ptColl/O");
   }
 }
 
