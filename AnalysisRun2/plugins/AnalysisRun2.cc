@@ -23,6 +23,8 @@
 //#include "RecoTracker/SiTrackerMRHTools/interface/SimpleDAFHitCollector.h"
 //#include "RecoTracker/SiTrackerMRHTools/interface/SiTrackerMultiRecHitUpdator.h"
 
+
+
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
@@ -1733,13 +1735,13 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	if(m_antraj==1){
 
-
       	  edm::ESHandle<NavigationSchool> theSchool;
 	  edm::ESHandle<MeasurementTracker> theMeasTk;
 
 	  std::string theNavigationSchool ="";
 	  if (param_.exists("NavigationSchool")) theNavigationSchool= param_.getParameter<std::string>("NavigationSchool");
 	  else edm::LogWarning("TrackProducerBase")<<" NavigationSchool parameter not set. secondary hit pattern will not be filled.";
+
 	  if (theNavigationSchool!=""){
 	    iSetup.get<NavigationSchoolRecord>().get(theNavigationSchool, theSchool);
 	    LogDebug("TrackProducer") << "get also the measTk" << "\n";
@@ -1751,13 +1753,13 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	    theMeasTk = edm::ESHandle<MeasurementTracker>(); //put an invalid handle
 	  }
 
-      	  // // //===============  Calling methods for propagation between layers====================//
-	  // edm::ESHandle<MeasurementTracker> theMeasTk;
-	  // std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
-	  // iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
-      	  // // //	theMeasTk->update(iEvent);
+      	  // //===============  Calling methods for propagation between layers====================//
+	  //	  edm::ESHandle<MeasurementTracker> theMeasTk;
+	  //	  std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
+	  //	  iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
+      	  // //	theMeasTk->update(iEvent);
 	  
-      	  // // NavigationSetter junk(*theSchool);
+	  //	  NavigationSetter junk(*theSchool);
 	  
       	  edm::ESHandle<Propagator> thePropagator;
       	  std::string propagatorName = param_.getParameter<std::string>("Propagator");
@@ -1770,8 +1772,11 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	  
 	  //============== Refitted collection of tracks
       	  Handle<reco::TrackCollection> tracksrf;  
-      	  iEvent.getByLabel("TrackRefitter",tracksrf); 
+	  iEvent.getByLabel("TrackRefitter",tracksrf); 
+	  //      	  iEvent.getByLabel("RefittedTracks",tracksrf); 
 	  
+	  cout<<" number of refitted traks  "<<tracksrf->size()<<endl;
+
       	  vector<Float_t> mincharge;
       	  vector<Float_t> mintheta;
       	  vector<Float_t> minqoverpt;
@@ -1947,63 +1952,63 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 
-      	  	// //	    if(sameTrack(&*track,&*(muJetC->muon(k)->innerTrack()))){
-      	  	//   indxtrkmj1[k] = counter_match;
-      	  	//   if(k==0) b_match_mu1track_muJetC=1;
-      	  	//   if(k==1) b_match_mu2track_muJetC=1;
+      	  	//	    if(sameTrack(&*track,&*(muJetC->muon(k)->innerTrack()))){
+      	  	  indxtrkmj1[k] = counter_match;
+      	  	  if(k==0) b_match_mu1track_muJetC=1;
+      	  	  if(k==1) b_match_mu2track_muJetC=1;
 
-      	  	//   if(m_debug>10){
-      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
+      	  	  if(m_debug>10){
+		    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
+		    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
+		    
+		    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
+		    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
+		    
+		    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
+		    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
+		    
+		    
+		    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
+		    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
+		    
+		    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
+		    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
+		    
+		    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
+		    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
 
-      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
+      	  	  }
+      	  	  const reco::HitPattern& p = trackrf->hitPattern();
+      	  	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  		//		dim1_hit=true;
+      	  		indxtrkmj1_validhit[k] = 1;
+      	  		b_muJetC_hitpix[k] = 1;
+      	  	  }
 
-      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
-      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
-
-
-      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
-      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
-
-      	  	// 	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
-      	  	// 	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
-
-	  	if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
-	  	if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
-
-      	  	//   }
-      	  	//   const reco::HitPattern& p = trackrf->hitPattern();
-      	  	//   if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  	// 	//		dim1_hit=true;
-      	  	// 	indxtrkmj1_validhit[k] = 1;
-      	  	// 	b_muJetC_hitpix[k] = 1;
-      	  	//   }
-      	  	// }
 
 	  
-      	  	// if(sameTrackRF(&*trackrf,&*(muJetF->muon(k)->innerTrack()))){
-      	  	// //	    if(sameTrack(&*track,&*(muJetF->muon(k)->innerTrack()))){
-      	  	//   indxtrkmj2[k] = counter_match;
-      	  	//   if(k==0) b_match_mu1track_muJetF=1;
-      	  	//   if(k==1) b_match_mu2track_muJetF=1;
-      	  	//   if(m_debug>10){
-      	  	// 	if(k==0) std::cout<<"  match mj2m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<std::endl;
-
-      	  	//   }
-      	  	//   const reco::HitPattern& p = trackrf->hitPattern();
-      	  	//   if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  	// 	//		dim2_hit=true;
-      	  	// 	indxtrkmj2_validhit[k] = 1;
-      	  	// 	b_muJetF_hitpix[k] = 1;
-      	  	//   }
-      	  	// }
-      	  	counter_track++;
+		  if(sameTrackRF(&*trackrf,&*(muJetF->muon(k)->innerTrack()))){
+		    //	    if(sameTrack(&*track,&*(muJetF->muon(k)->innerTrack()))){
+		    indxtrkmj2[k] = counter_match;
+		    if(k==0) b_match_mu1track_muJetF=1;
+		    if(k==1) b_match_mu2track_muJetF=1;
+		    if(m_debug>10){
+      	  		if(k==0) std::cout<<"  match mj2m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<std::endl;
+			
+		    }
+		    const reco::HitPattern& p = trackrf->hitPattern();
+		    if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+		      //		dim2_hit=true;
+		      indxtrkmj2_validhit[k] = 1;
+		      b_muJetF_hitpix[k] = 1;
+		    }
+		  }
+		  counter_track++;
       	      }
       	      counter_match++;
       	    }
       	    if(k==0) b_ntracks = counter_track;
-      	  }
+	  }
 
       	  std::sort(mintheta.begin(),mintheta.end(),order);
       	  std::sort(minqoverpt.begin(),minqoverpt.end(),order);
@@ -2011,7 +2016,7 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  std::sort(mindxy.begin(),mindxy.end(),order);
       	  std::sort(mindz.begin(),mindz.end(),order);
       	  std::sort(mincharge.begin(),mincharge.end(),order);
-	
+	  
       	  muJetC_muon1_track_mincharge  = mincharge[0];
       	  muJetC_muon1_track_minqoverpt = minqoverpt[0];
       	  muJetC_muon1_track_mintheta   = mintheta[0];
@@ -2251,1211 +2256,1236 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	      std::cout<<"   Refitted trajectoryColl->size(): " << trajCollectionHandle->size()<<std::endl;
 	    }
 
-	  }
+
+    for(uint32_t km=0;km<2;km++){  // loop for muJetC muon trajectories
+	  
+      if(m_debug>10){
+        std::cout<<"  muon-track indx   "<<indxtrkmj1[km]<<"  muon pT   "<<muJetC->muon(km)->pt()<<"  muon eta  "
+  	       <<muJetC->muon(km)->eta()<<std::endl;
+      }
+      
+
+      //===================   Information for the muon-tracks ===================================//
+      if(km==0)  b_mutrack_pT_mu1JetC = muJetC->muon(km)->pt();
+      if(km==1)  b_mutrack_pT_mu2JetC = muJetC->muon(km)->pt();
+
+      if(km==0)  b_mutrack_phi_mu1JetC = muJetC->muon(km)->phi();
+      if(km==1)  b_mutrack_phi_mu2JetC = muJetC->muon(km)->phi();
+
+      if(km==0)  b_mutrack_charge_mu1JetC = muJetC->muon(km)->charge();
+      if(km==1)  b_mutrack_charge_mu2JetC = muJetC->muon(km)->charge();
+
+      if(km==0)  b_mutrack_eta_mu1JetC = muJetC->muon(km)->eta();
+      if(km==1)  b_mutrack_eta_mu2JetC = muJetC->muon(km)->eta();
+
+
+
+
+  	    //====================== Loop for Trajectories from TrackRefitter  =================================//
+  	    Int_t counter_traj=0;
+  	    for(vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
+	    
+  	      if(counter_traj==indxtrkmj1[km]){
+	
+  		if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
+  					<< "isValid: " << it->isValid()<<std::endl;
+  		}
+	      
+  		//	    if(it->firstMeasurement().updatedState().isValid() && it->lastMeasurement().updatedState().isValid()){
+
+  		if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentum
+	      
+  		  const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
+  		  const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
+  		  TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
+  		  TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
+		
+  		  if(innerTSOS.hasError()){
+  		    if(m_debug>10) std::cout<<" innerTSOS muJetC has errors and they are:   "<<std::endl;
+  		    if(m_debug>10) std::cout<<" innerTrajectory local error xx  "<<sqrt(innerTSOS.localError().positionError().xx())<<std::endl;
+  		    if(m_debug>10) std::cout<<" innerTrajectory local error yy  "<<sqrt(innerTSOS.localError().positionError().yy())<<std::endl;
+		    //  		    if(m_debug>10) std::cout<<" innerTrajectory local error xy "<<sqrt(innerTSOS.localError().positionError().xy())<<std::endl;
+
+
+  		    if(km==0) {
+  		      b_errposx_inlay_mu1_muJetC = sqrt(innerTSOS.localError().positionError().xx());
+  		      b_errposy_inlay_mu1_muJetC = sqrt(innerTSOS.localError().positionError().yy());
+  		    }
+
+  		    if(km==1) {
+  		      b_errposx_inlay_mu2_muJetC = sqrt(innerTSOS.localError().positionError().xx());
+  		      b_errposy_inlay_mu2_muJetC = sqrt(innerTSOS.localError().positionError().yy());
+  		    }
+  		  }
+
+
+		  cout<<" before crashing   "<<endl;
+  		  const DetLayer* outerLayer = it->firstMeasurement().layer();
+  		  const DetLayer* innerLayer = it->lastMeasurement().layer();
+		
+		  cout<<" before crashing   "<<endl;
+
+  		  if (!outerLayer || !innerLayer){
+  		    //means  that the trajectory was fit/smoothed in a special case: not setting those pointers
+		  
+  		    if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
+  					    <<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
+  		  }
+		  
+		  cout<<" before crashing   "<<endl;
+
+  		  //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
+  		  PropagationDirection dirForInnerLayers = oppositeToMomentum;
+  		  PropagationDirection dirForOuterLayers = alongMomentum;
+  		  if(it->direction() != oppositeToMomentum){
+  		    dirForInnerLayers = alongMomentum;
+  		    dirForOuterLayers = oppositeToMomentum;
+  		    //throw cms::Exception("TrackProducer") 
+  		  }
+		  cout<<" before crashing   "<<endl;
+		  
+		  // std::vector< const DetLayer * > innerCompLayers = innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
+		  // std::vector< const DetLayer * > outerCompLayers = outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
+		  
+		  //get the list of compatible layers
+
+		  // std::vector<const DetLayer*> innerCompLayers =  innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
+		  // std::vector<const DetLayer*> outerCompLayers =  outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
+
+		  std::vector<const DetLayer*> innerCompLayers =  NavigableLayer::compatibleLayers(*innerState,dirForInnerLayers);
+		  std::vector<const DetLayer*> outerCompLayers =  NavigableLayer::compatibleLayers(*outerState,dirForOuterLayers);
+
+		  // std::vector<const DetLayer*> innerCompLayers;
+		  // std::vector<const DetLayer*> outerCompLayers;
+		  
+
+
+		  //		  std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
+		  //		  std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
+		  
+		  //		  auto innerCompLayers  = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
+		  //		  auto outerCompLayers  = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
+
+		  std::cout<< "innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
+		  std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
+
+
+		  cout<<" before crashing   "<<endl;
+		
+  		  if(m_debug>10){
+  		    std::cout<<"========================================================"<<std::endl;
+  		    std::cout<< "inner DetLayer  sub: " 
+  			     << innerLayer->subDetector() <<"\n"
+  			     << "outer DetLayer  sub: " 
+  			     << outerLayer->subDetector() << "\n"
+  			     <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
+  			     <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
+  			     <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
+  			     <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
+		    //  			     << "innercompatlbleLayers: " << innerCompLayers.size() << "\n"
+		    //  			     << "outercompatibleLayers: " << outerCompLayers.size() << std::endl;
+  		    std::cout<<"========================================================"<<std::endl;
+  		  }
+
+		  cout<<" before crashing   "<<endl;
+		
+  		  if(km==0) b_innerlayers_mu1_muJetC = innerCompLayers.size();
+  		  if(km==1) b_innerlayers_mu2_muJetC = innerCompLayers.size();
+
+  		  if(innerCompLayers.size()==0) {
+		  
+  		    if(m_debug>10) std::cout<<"  already in 1st pixel layer   "<<std::endl;
+		  
+  		    if(km==0) mj1m0pos[0] = Local2DPoint(it->firstMeasurement().updatedState().localPosition().x(),
+  							 it->firstMeasurement().updatedState().localPosition().y());
+  		    if(km==1) mj1m1pos[0] = Local2DPoint(it->firstMeasurement().updatedState().localPosition().x(),
+  							 it->firstMeasurement().updatedState().localPosition().y());
+		  
+		  
+  		    if(km==0) mj1m0pos_lastmeas[0] = Local2DPoint(it->lastMeasurement().updatedState().localPosition().x(),
+  								  it->lastMeasurement().updatedState().localPosition().y());
+  		    if(km==1) mj1m1pos_lastmeas[0] = Local2DPoint(it->lastMeasurement().updatedState().localPosition().x(),
+  								  it->lastMeasurement().updatedState().localPosition().y());
+		  
+  		  }
+	    
+
+
+  		  Int_t det1stpix=0;
+  		  Int_t counter_hit=0;
+
+		
+  		  for(vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
+	      
+  		    if ((*dd)->basicComponents().empty()) {
+  		      //		this should never happen. but better protect for it
+  		      if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
+  		      continue;
+  		    }
+ 
+  		    Propagator* localProp = thePropagator->clone();
+  		    localProp->setPropagationDirection(oppositeToMomentum);
+	      
+  		    if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
+  		    vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
+	      
+  		    if(!detWithState.size()) continue;
+	  
+  		    if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
+  				     detWithState.size()<<std::endl;
+	      
+  		    if(m_debug>10) std::cout<<"========================================================"<<std::endl;
+		  
+		  
+
+  		    for(uint32_t k=0;k<detWithState.size();k++){
+		    
+  		      //		    DetId id = detWithState[k].first->geographicalId();
+  		      //		    MeasurementDetWithData measDet = theMeasTk->idToDet(id);
+
+  		      MeasurementTrackerEvent measTk;
+  		      DetId id = detWithState[k].first->geographicalId();
+  		      MeasurementDetWithData measDet = measTk.idToDet(id);
+
+  		      if( ( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) || 
+  			    ( (*dd)->subDetector() == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive() ){
+
+  			if(m_debug>10){
+  			  std::cout<<"  compatible Det  number  "<<k<<std::endl;
+  			  std::cout<<" local position rho  Det   "<<detWithState[k].second.localPosition().perp()<<std::endl;
+  			  std::cout<<" local position x  Det   "<<detWithState[k].second.localPosition().x()<<std::endl;
+  			  std::cout<<" local position y  Det   "<<detWithState[k].second.localPosition().y()<<std::endl;
+  			}
+
+  			if(km==0) mj1m0pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
+  			if(km==1) mj1m1pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
+
+  			if(km==0) mj1m0poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
+  									sqrt(detWithState[k].second.localError().positionError().yy()));
+  			if(km==1) mj1m1poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
+  									sqrt(detWithState[k].second.localError().positionError().yy()));
+
+
+  			LocalError localErr2 = detWithState[k].second.localError().positionError();
+  			localErr2.scale(2); // get the 2 sigma ellipse;
+  			Float_t xx2 = sqrt(localErr2.xx());
+  			Float_t xy2 = sqrt(localErr2.xy());
+  			Float_t yy2 = sqrt(localErr2.yy());
+		      
+		      
+  			if(m_debug>10){
+  			  std::cout<<" local error extp innerlayer xx   "<<xx2<<endl;
+  			  std::cout<<" local error extp innerlayer xy   "<<xy2<<endl;
+  			  std::cout<<" local error extp innerlayer yy   "<<yy2<<endl;
+  			}
+		      
+  			std::cout<<"========================================================"<<std::endl;
+			
+			
+  			TrajectoryStateOnSurface ts; //dummy
+		
+  			std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
+			
+			
+  			// 		      vector<TrajectoryMeasurement> tmpVec;
+			
+  			// 		      if(!tmp.empty()){
+  			// 			if(m_debug>10) std::cout<<"  Number of nearby rechits using chi2estimator   "<<tmp.size()<<std::endl;
+			  
+  			// 			//collecting only valid rechits
+  			// 			if(tmp.back().recHit()->getType() == TrackingRecHit::missing) tmp.pop_back();
+  			// #if defined( __GXX_EXPERIMENTAL_CXX0X__)
+  			// 			tmpVec.insert( tmpVec.end(), std::make_move_iterator(tmp.begin()), std::make_move_iterator(tmp.end()));
+  			// #else
+  			// 			tmpVec.insert( tmpVec.end(), tmp.begin(), tmp.end());
+  			// #endif
+			  
+  			// 		      }
+	      
+			
+  			if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
+			
+
+  			for(vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
+			  
+  			  if(tmpIt->recHit()->getType()==0){ // valid hit
+			    
+  			    if(m_debug>10){
+  			      std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
+  			      std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
+  			      std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
+  			      std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
+  			    }
+
+  			    if(km==0){
+  			      b_pixelhit_mu1_muJetC_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+  			      b_pixelhit_mu1_muJetC_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+
+  			      b_pixelhit_mu1_muJetC_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+  			      b_pixelhit_mu1_muJetC_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+  			    }
+
+  			    if(km==1){
+  			      b_pixelhit_mu2_muJetC_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+  			      b_pixelhit_mu2_muJetC_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+
+  			      b_pixelhit_mu2_muJetC_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+  			      b_pixelhit_mu2_muJetC_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+  			    }
+
+
+  			    Local2DPoint tmphitpos(tmpIt->recHit()->localPosition().x(),tmpIt->recHit()->localPosition().y());
+  			    counter_hit++;
+  			  }
+  			}
+  			tmp.clear();
+  			det1stpix++;
+  		      }
+  		    }
+  		    delete localProp;
+  		  }
+		
+  		  if(km==0) b_Det_mu1_muJetC = det1stpix;
+  		  if(km==1) b_Det_mu2_muJetC = det1stpix;
+		
+  		  if(km==0)  b_comphits_mu1_muJetC = counter_hit;
+  		  if(km==1)  b_comphits_mu2_muJetC = counter_hit;
+		
+  		}
+  	      }
+  	      counter_traj++;
+  	    }
+  	  }
+
+  	  if(m_debug>10) std::cout<<" second muonJet  muJetF  "<<std::endl;
+      
+  	  for(uint32_t km=0;km<2;km++){
+	
+  	    //	std::cout<<" indx track   "<<indxtrkmj2[km]<<std::endl;
+
+  	    if(m_debug>10) std::cout<<"  muon-track indx   "<<indxtrkmj2[km]<<"  muon pT   "<<muJetF->muon(km)->pt()<<"  muon eta  "<<muJetF->muon(km)->eta()<<std::endl;
+	
+
+	  
+  	    //===================   Information for the muon-tracks ===================================//
+  	    if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
+  	    if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
+
+  	    if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
+  	    if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
+
+  	    if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
+  	    if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
+
+  	    if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
+  	    if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
+
+
+  	    //====================== Loop for Trajectories from TrackRefitter  =================================//
+  	    Int_t counter_traj=0;
+  	    for(vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
+	  
+  	      if(counter_traj==indxtrkmj2[km]){
+
+  		if(m_debug>10) std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
+  					<< "isValid: " << it->isValid()<<std::endl;
+	    
+  		//	    if(it->firstMeasurement().updatedState().isValid() && it->lastMeasurement().updatedState().isValid()){
+  		if(it->lastMeasurement().updatedState().isValid()){
+	      
+  		  const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
+  		  const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
+  		  TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
+  		  TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
+	      
+  		  if(innerTSOS.hasError()){
+  		    if(m_debug>10) std::cout<<" innerTSOS muJetF has errors and they are:   "<<std::endl;
+  		    if(m_debug>10) std::cout<<" innerTrajectory local error xx  "<<sqrt(innerTSOS.localError().positionError().xx())<<std::endl;
+  		    if(m_debug>10) std::cout<<" innerTrajectory local error yy  "<<sqrt(innerTSOS.localError().positionError().yy())<<std::endl;
+  		    if(m_debug>10) std::cout<<" innerTrajectory local error xy "<<sqrt(innerTSOS.localError().positionError().xy())<<std::endl;
+
+
+  		    if(km==0) {
+  		      b_errposx_inlay_mu1_muJetF = sqrt(innerTSOS.localError().positionError().xx());
+  		      b_errposy_inlay_mu1_muJetF = sqrt(innerTSOS.localError().positionError().yy());
+  		    }
+		  
+  		    if(km==1) {
+  		      b_errposx_inlay_mu2_muJetF = sqrt(innerTSOS.localError().positionError().xx());
+  		      b_errposy_inlay_mu2_muJetF = sqrt(innerTSOS.localError().positionError().yy());
+  		    }
+
+
+  		  }
+	      
+  		  const DetLayer* outerLayer = it->firstMeasurement().layer();
+  		  const DetLayer* innerLayer = it->lastMeasurement().layer();
+	      
+  		  if (!outerLayer || !innerLayer){
+  		    //means  that the trajectory was fit/smoothed in a special case: not setting those pointers
+	    
+  		    if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
+  					    <<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
+  		  }
+	      
+  		  //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
+  		  PropagationDirection dirForInnerLayers = oppositeToMomentum;
+  		  PropagationDirection dirForOuterLayers = alongMomentum;
+  		  if(it->direction() != oppositeToMomentum){
+  		    dirForInnerLayers = alongMomentum;
+  		    dirForOuterLayers = oppositeToMomentum;
+  		    //throw cms::Exception("TrackProducer") 
+  		  }
+	      
+  		  auto  innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
+  		  auto  outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
+
+  		  // std::vector< const DetLayer * > innerCompLayers = innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
+  		  // std::vector< const DetLayer * > outerCompLayers = outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
+	    
+  		  if(m_debug>10){
+  		    std::cout<<"========================================================"<<std::endl;
+  		    std::cout<< "inner DetLayer  sub: " 
+  			     << innerLayer->subDetector() <<"\n"
+  			     << "outer DetLayer  sub: " 
+  			     << outerLayer->subDetector() << "\n"
+  			     <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<<"\n"
+  			     <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<<"\n"
+  			     <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
+  			     <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<"\n"
+  			     << "innercompatlbleLayers: " << innerCompLayers.size() << "\n"
+  			     << "outercompatibleLayers: " << outerCompLayers.size() << std::endl;
+  		    std::cout<<"========================================================"<<std::endl;
+  		  }
+
+
+  		  if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
+  		  if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
+		
+  		  if(innerCompLayers.size()==0) {
+
+  		    if(m_debug>10) std::cout<<"  already in 1st pixel layer   "<<std::endl;
+
+  		    if(km==0) mj2m0pos[0] = Local2DPoint(it->firstMeasurement().updatedState().localPosition().x(),
+  							 it->firstMeasurement().updatedState().localPosition().y());
+  		    if(km==1) mj2m1pos[0] = Local2DPoint(it->firstMeasurement().updatedState().localPosition().x(),
+  							 it->firstMeasurement().updatedState().localPosition().y());
+
+
+  		    if(km==0) mj2m0pos_lastmeas[0] = Local2DPoint(it->lastMeasurement().updatedState().localPosition().x(),
+  								  it->lastMeasurement().updatedState().localPosition().y());
+  		    if(km==1) mj2m1pos_lastmeas[0] = Local2DPoint(it->lastMeasurement().updatedState().localPosition().x(),
+  								  it->lastMeasurement().updatedState().localPosition().y());
+
+
+  		  }
+
+  		  Int_t counter_hit=0;
+  		  Int_t det1stpix=0;
+  		  for(vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
+
+  		    if ((*dd)->basicComponents().empty()) {
+  		      //this should never happen. but better protect for it
+  		      if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
+  		      continue;
+  		    }
+	  
+  		    Propagator* localProp = thePropagator->clone();
+  		    localProp->setPropagationDirection(oppositeToMomentum);
+
+  		    vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
+
+  		    if(!detWithState.size()) continue;
+	  
+  		    if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
+  				     detWithState.size()<<std::endl;
+
+  		    if(m_debug>10) std::cout<<"========================================================"<<std::endl;
+		  
+
+  		    for(uint32_t k=0;k<detWithState.size();k++){
+
+  		      MeasurementTrackerEvent measTk;
+  		      DetId id = detWithState[k].first->geographicalId();
+  		      MeasurementDetWithData measDet = measTk.idToDet(id);
+
+  		      // DetId id = detWithState[k].first->geographicalId();
+  		      // const MeasurementDet* measDet = theMeasTk->idToDet(id;)
+
+  		      if( ( ((*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) 
+  			    || ((*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive()  ){
+		      
+  			if(m_debug>10){
+  			  std::cout<<"  compatible Det  number  "<<k<<std::endl;
+  			  std::cout<<" local position rho  Det   "<<detWithState[k].second.localPosition().perp()<<std::endl;
+  			  std::cout<<" local position x  Det   "<<detWithState[k].second.localPosition().x()<<std::endl;
+  			  std::cout<<" local position y  Det   "<<detWithState[k].second.localPosition().y()<<std::endl;
+  			}
+		      
+  			if(km==0) mj2m0pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
+  			if(km==1) mj2m1pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
+		      
+  			if(km==0) mj2m0poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
+  									sqrt(detWithState[k].second.localError().positionError().yy()));
+  			if(km==1) mj2m1poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
+  									sqrt(detWithState[k].second.localError().positionError().yy()));
+
+  			LocalError localErr2 = detWithState[k].second.localError().positionError();
+  			localErr2.scale(2); // get the 2 sigma ellipse;
+  			Float_t xx2 = sqrt(localErr2.xx());
+  			Float_t xy2 = sqrt(localErr2.xy());
+  			Float_t yy2 = sqrt(localErr2.yy());
+		      
+		      
+  			if(m_debug>10){
+  			  std::cout<<" local error extp innerlayer xx   "<<xx2<<endl;
+  			  std::cout<<" local error extp innerlayer xy   "<<xy2<<endl;
+  			  std::cout<<" local error extp innerlayer yy   "<<yy2<<endl;
+  			}
+
+  			std::cout<<"========================================================"<<std::endl;
+		      
+		      
+  			TrajectoryStateOnSurface ts; //dummy
+		      
+  			std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
+
+  			if(m_debug>10) std::cout<<" number of hits      "<<tmp.size()<<std::endl;
+		      
+  			for(vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
+			
+  			  if(tmpIt->recHit()->getType()==0){ // valid hit
+			  
+  			    if(m_debug>10){
+  			      std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
+  			      std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
+  			      std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
+  			      std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
+  			      std::cout<<"   local position z:     "<<tmpIt->recHit()->localPosition().z()<<std::endl;
+  			    }
+			  
+			  
+  			    if(km==0){
+  			      b_pixelhit_mu1_muJetF_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+  			      b_pixelhit_mu1_muJetF_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+
+  			      b_pixelhit_mu1_muJetF_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+  			      b_pixelhit_mu1_muJetF_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+
+
+  			    }
+			  
+  			    if(km==1){
+  			      b_pixelhit_mu2_muJetF_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+  			      b_pixelhit_mu2_muJetF_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+
+  			      b_pixelhit_mu2_muJetF_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+  			      b_pixelhit_mu2_muJetF_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+  			    }
+			  
+  			    Local2DPoint tmphitpos(tmpIt->recHit()->localPosition().x(),tmpIt->recHit()->localPosition().y());
+  			    counter_hit++;
+  			  }
+  			}
+  			tmp.clear();
+  			det1stpix++;
+  		      }
+  		    }
+  		    delete localProp;
+	      
+  		    // 	  tracking::TempMeasurements tmps;
+  		    // 	  std::vector<const TrackingRecHit*> hits;
+		  
+  		    // 	  TrajectoryStateOnSurface current =  (*dd)->updateState();
+
+  		    // 	  //if(measDet->isActive() && !measDet->hasBadComponents(detWithState.front().second)){
+  		    // 	  if(measDet->isActive()){  
+  		    // 	    //	    InvalidTrackingRecHit  tmpHit(id,TrackingRecHit::missing);
+  		    // 	    //	    tmpTrack.setTrackerExpectedHitsInner(tmpHit,counter); counter_h++;
+  		    // 	    std::cout << "WARNING: this hit is marked as lost because the detector was marked as active" << std::endl;
+  		    // 	  }else{
+  		    // 	    std::cout << "WARNING: this hit is NOT marked as lost because the detector was marked as inactive" << std::endl;
+  		    // 	  }
+  		  }
+  		  if(km==0) b_Det_mu1_muJetF = det1stpix;
+  		  if(km==1) b_Det_mu2_muJetF = det1stpix;
+
+  		  if(km==0)  b_comphits_mu1_muJetF = counter_hit;
+  		  if(km==1)  b_comphits_mu2_muJetF = counter_hit;
+  		}
+  	      }
+  	      counter_traj++;
+  	    }
+  	  }
+
+
+  	  if(b_Det_mu1_muJetC>0 && b_Det_mu2_muJetC>0){
+  	    b_muJetC_trackdist_1stpixel = sqrt(pow(mj1m0pos[0].x()-mj1m1pos[0].x(),2)+pow(mj1m0pos[0].y() - mj1m1pos[0].y(),2));
+  	  }
+
+  	  if(b_Det_mu1_muJetF>0 && b_Det_mu2_muJetF>0){
+  	    b_muJetF_trackdist_1stpixel = sqrt(pow(mj2m0pos[0].x()-mj2m1pos[0].x(),2)+pow(mj2m0pos[0].y() - mj2m1pos[0].y(),2));
+  	  }
+
+
+  	  for(int ndet = 0; ndet<b_Det_mu1_muJetC;ndet++){
+  	    b_muJetC_muon1_posx1stpix[ndet] = mj1m0pos[ndet].x();
+  	    b_muJetC_muon1_posy1stpix[ndet] = mj1m0pos[ndet].y();
+  	  }
+
+  	  for(int ndet = 0; ndet<b_Det_mu2_muJetC;ndet++){
+  	    b_muJetC_muon2_posx1stpix[ndet] = mj1m1pos[ndet].x();
+  	    b_muJetC_muon2_posy1stpix[ndet] = mj1m1pos[ndet].y();
+  	  }
+
+  	  for(int ndet = 0; ndet<b_Det_mu1_muJetF;ndet++){
+  	    b_muJetF_muon1_posx1stpix[ndet] = mj2m0pos[ndet].x();
+  	    b_muJetF_muon1_posy1stpix[ndet] = mj2m0pos[ndet].y();
+  	  }
+
+  	  for(int ndet = 0; ndet<b_Det_mu2_muJetF;ndet++){
+  	    b_muJetF_muon2_posx1stpix[ndet] = mj2m1pos[ndet].x();
+  	    b_muJetF_muon2_posy1stpix[ndet] = mj2m1pos[ndet].y();
+  	  }
+
+  	  //============ Error =========================//
+
+
+  	  for(int ndet = 0; ndet<b_Det_mu1_muJetC;ndet++){
+  	    b_muJetC_muon1_errposx1stpix[ndet] = mj1m0poserr[ndet].x();
+  	    b_muJetC_muon1_errposy1stpix[ndet] = mj1m0poserr[ndet].y();
+  	  }
+
+  	  for(int ndet = 0; ndet<b_Det_mu2_muJetC;ndet++){
+  	    b_muJetC_muon2_errposx1stpix[ndet] = mj1m1poserr[ndet].x();
+  	    b_muJetC_muon2_errposy1stpix[ndet] = mj1m1poserr[ndet].y();
+  	  }
+
+  	  for(int ndet = 0; ndet<b_Det_mu1_muJetF;ndet++){
+  	    b_muJetF_muon1_errposx1stpix[ndet] = mj2m0poserr[ndet].x();
+  	    b_muJetF_muon1_errposy1stpix[ndet] = mj2m0poserr[ndet].y();
+  	  }
+
+  	  for(int ndet = 0; ndet<b_Det_mu2_muJetF;ndet++){
+  	    b_muJetF_muon2_errposx1stpix[ndet] = mj2m1poserr[ndet].x();
+  	    b_muJetF_muon2_errposy1stpix[ndet] = mj2m1poserr[ndet].y();
+  	  }
+
+
+	
+
+  	  for(int ndet = 0; ndet<b_Det_mu1_muJetC;ndet++){
+  	    b_muJetC_muon1_posx1stpix_lastmeas[ndet] = mj1m0pos_lastmeas[ndet].x();
+  	    b_muJetC_muon1_posy1stpix_lastmeas[ndet] = mj1m0pos_lastmeas[ndet].y();
+  	  }
+
+  	  for(int ndet = 0; ndet<b_Det_mu2_muJetC;ndet++){
+  	    b_muJetC_muon2_posx1stpix_lastmeas[ndet] = mj1m1pos_lastmeas[ndet].x();
+  	    b_muJetC_muon2_posy1stpix_lastmeas[ndet] = mj1m1pos_lastmeas[ndet].y();
+  	  }
+
+  	  for(int ndet = 0; ndet<b_Det_mu1_muJetF;ndet++){
+  	    b_muJetF_muon1_posx1stpix_lastmeas[ndet] = mj2m0pos_lastmeas[ndet].x();
+  	    b_muJetF_muon1_posy1stpix_lastmeas[ndet] = mj2m0pos_lastmeas[ndet].y();
+  	  }
+
+  	  for(int ndet = 0; ndet<b_Det_mu2_muJetF;ndet++){
+  	    b_muJetF_muon2_posx1stpix_lastmeas[ndet] = mj2m1pos_lastmeas[ndet].x();
+  	    b_muJetF_muon2_posy1stpix_lastmeas[ndet] = mj2m1pos_lastmeas[ndet].y();
+  	  }
+
+
+  	  std::vector<std::pair<Int_t,Float_t> > d_mu1_muJetC_hit;
+  	  std::vector<std::pair<Int_t,Float_t> > d_mu2_muJetC_hit;
+  	  std::vector<std::pair<Int_t,Float_t> > d_mu1_muJetF_hit;
+  	  std::vector<std::pair<Int_t,Float_t> > d_mu2_muJetF_hit;
+	
+  	  for(int ndet = 0; ndet<b_Det_mu1_muJetC;ndet++){
+  	    if(m_debug>10) std::cout<<"   ndet    "<<ndet<<std::endl;
+  	    std::pair<Int_t,Float_t> temp;
+  	    Float_t temp_d=-10000.0;
+  	    for(int nhit=0;nhit<b_comphits_mu1_muJetC;nhit++){
+  	      if(m_debug>10) std::cout<<"  nhit    "<<nhit<<std::endl;
+  	      temp_d  = sqrt(pow(mj1m0pos[ndet].x()-b_pixelhit_mu1_muJetC_posx[nhit],2)+pow(mj1m0pos[ndet].y() - b_pixelhit_mu1_muJetC_posy[nhit],2));
+  	      temp.first = nhit;
+  	      temp.second = temp_d;
+  	      d_mu1_muJetC_hit.push_back(temp);
+  	    }
+  	    if(d_mu1_muJetC_hit.size()>0){
+  	      sort(d_mu1_muJetC_hit.begin(),d_mu1_muJetC_hit.end(),dRorder);
+  	      b_mindist_hit_mu1_muJetC[ndet] = d_mu1_muJetC_hit[0].second;
+  	    }
+
+  	    d_mu1_muJetC_hit.clear();
+  	  }
+	
+
+  	  for(int ndet = 0; ndet<b_Det_mu2_muJetC;ndet++){
+  	    std::pair<Int_t,Float_t> temp;
+  	    Float_t temp_d;
+  	    for(int nhit=0;nhit<b_comphits_mu2_muJetC;nhit++){
+  	      temp_d  = sqrt(pow(mj1m1pos[ndet].x()-b_pixelhit_mu2_muJetC_posx[nhit],2)+pow(mj1m1pos[ndet].y() - b_pixelhit_mu2_muJetC_posy[nhit],2));
+  	      temp.first = nhit;
+  	      temp.second = temp_d;
+  	      d_mu2_muJetC_hit.push_back(temp);
+  	    }
+  	    if(d_mu2_muJetC_hit.size()>0){
+  	      sort(d_mu2_muJetC_hit.begin(),d_mu2_muJetC_hit.end(),dRorder);
+  	      b_mindist_hit_mu2_muJetC[ndet] = d_mu2_muJetC_hit[0].second;
+  	    }
+  	    d_mu2_muJetC_hit.clear();
+  	  }
+
+
+
+  	  for(int ndet = 0; ndet<b_Det_mu1_muJetF;ndet++){
+  	    std::pair<Int_t,Float_t> temp;
+  	    Float_t temp_d;
+  	    for(int nhit=0;nhit<b_comphits_mu1_muJetF;nhit++){
+  	      temp_d  = sqrt(pow(mj2m0pos[ndet].x()-b_pixelhit_mu1_muJetF_posx[nhit],2)+pow(mj2m0pos[ndet].y() - b_pixelhit_mu1_muJetF_posy[nhit],2));
+  	      temp.first = nhit;
+  	      temp.second = temp_d;
+  	      d_mu1_muJetF_hit.push_back(temp);
+  	    }
+  	    if(d_mu1_muJetF_hit.size()>0){
+  	      sort(d_mu1_muJetF_hit.begin(),d_mu1_muJetF_hit.end(),dRorder);
+  	      b_mindist_hit_mu1_muJetF[ndet] = d_mu1_muJetF_hit[0].second;
+  	    }
+  	    d_mu1_muJetF_hit.clear();
+  	  }
+
+
+  	  for(int ndet = 0; ndet<b_Det_mu2_muJetF;ndet++){
+  	    std::pair<Int_t,Float_t> temp;
+  	    Float_t temp_d;
+  	    for(int nhit=0;nhit<b_comphits_mu2_muJetF;nhit++){
+  	      temp_d  = sqrt(pow(mj2m1pos[ndet].x()-b_pixelhit_mu2_muJetF_posx[nhit],2)+pow(mj2m1pos[ndet].y() - b_pixelhit_mu2_muJetF_posy[nhit],2));
+  	      temp.first = nhit;
+  	      temp.second = temp_d;
+  	      d_mu2_muJetF_hit.push_back(temp);
+  	    }
+  	    if(d_mu2_muJetF_hit.size()>0){
+  	      sort(d_mu2_muJetF_hit.begin(),d_mu2_muJetF_hit.end(),dRorder);
+  	      b_mindist_hit_mu2_muJetF[ndet] = d_mu2_muJetF_hit[0].second;
+  	    }
+  	    d_mu2_muJetF_hit.clear();
+  	  }
+
+  	  //===============  HIT RECOVERY IMPLEMENTATION (BIKE CHAIN)  =======================//
+
+  	  Bool_t recovermj1[6];
+  	  Bool_t recovermj2[6];
+  	  Bool_t tmprecovermj1[6];
+  	  Bool_t tmprecovermj2[6];
+  	  Bool_t recovermj12[6];
+	
+
+  	  Float_t d_m1hit;
+  	  Float_t d_m2hit;
+
+  	  Float_t radius[6] ={0.1,0.05,0.03,0.01,0.005,0.001};  // Different radius around the muon position used to define the bike chain
+	
+	
+  	  for(int m=0;m<6;m++){
+
+  	    if( (b_muJetC_hitpix[0]!=1&&b_muJetC_hitpix[1]!=1)&&(b_muJetF_hitpix[0]==1||b_muJetF_hitpix[1]==1) ){    // First case muJetC fails but muJetF pass
+  	      recovermj1[m]=false;
+	    
+  	      if(b_Det_mu1_muJetC>0 && b_Det_mu2_muJetC>0){ // need to have both muons extrapolated positions
+	      
+  		Float_t d_m1m2;  // distance between muons
+  		d_m1m2 = sqrt(pow(mj1m0pos[0].x() - mj1m1pos[0].x(),2) + pow(mj1m0pos[0].y() - mj1m1pos[0].y(),2));
+	    
+	      
+  		for(int l=0;l<b_comphits_mu1_muJetC;l++){  // loop for all compatible hits
+	    
+  		  d_m1hit = sqrt(pow(mj1m0pos[0].x() - b_pixelhit_mu1_muJetC_posx[l],2)+pow(mj1m0pos[0].y() - b_pixelhit_mu1_muJetC_posy[l],2));  // distance between muon1 and hits
+  		  d_m2hit = sqrt(pow(mj1m1pos[0].x() - b_pixelhit_mu1_muJetC_posx[l],2)+pow(mj1m1pos[0].y() - b_pixelhit_mu1_muJetC_posy[l],2));  // distance between muon2 and hits
+		
+  		  Float_t alpha;   
+  		  alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));   // by law of cosines find relations to get perpendicular distance between hit and the line between the two muons
+		
+  		  Float_t alpha2;
+  		  alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
+	    
+  		  if(m_debug>10){
+  		    std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
+  		    std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
+  		    std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
+  		  }
+		 
+		 
+  		  Float_t h;
+  		  h = d_m1hit*sin(alpha);   // perpendicular distance between the hit and the line defined by the two muons 
+  		  Float_t h2;
+  		  h2 = d_m2hit*sin(alpha2);   // perpendicular distance between the hit and the line defined by the two muons 
+		 
+  		  if(m_debug>10){
+  		    std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
+  		    std::cout<<"   h value   "<<h<<std::endl;
+  		    std::cout<<"   h2 value   "<<h2<<std::endl;
+  		  }
+		 
+  		  if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){  // h<radius and constrain on the angles < pi/2   or the hit inside the radious around the muon position
+  		    recovermj1[m] = true;
+  		    if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
+  		  }
+  		}
+  	      }
+  	    }
+
+
+  	    if( (b_muJetF_hitpix[0]!=1&&b_muJetF_hitpix[1]!=1)&&(b_muJetC_hitpix[0]==1||b_muJetC_hitpix[1]==1) ){ //second case the muJetF fails and MuJetC pass
+  	      recovermj2[m]=false;
+	    
+  	      if(b_Det_mu1_muJetF>0 && b_Det_mu2_muJetF>0){
+
+  		Float_t d_m1m2;  // distance between muons
+  		d_m1m2 = sqrt(pow(mj2m0pos[0].x() - mj2m1pos[0].x(),2) + pow(mj2m0pos[0].y() - mj2m1pos[0].y(),2));
+	    
+	      
+  		for(int l=0;l<b_comphits_mu1_muJetF;l++){
+	    
+  		  d_m1hit = sqrt(pow(mj2m0pos[0].x() -  b_pixelhit_mu1_muJetF_posx[l],2)+pow(mj2m0pos[0].y() -  b_pixelhit_mu1_muJetF_posy[l],2));
+  		  d_m2hit = sqrt(pow(mj2m1pos[0].x() -  b_pixelhit_mu1_muJetF_posx[l],2)+pow(mj2m1pos[0].y() -  b_pixelhit_mu1_muJetF_posy[l],2));
+	    
+  		  Float_t alpha;
+  		  alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
+	    
+  		  Float_t alpha2;
+  		  alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
+	    
+  		  if(m_debug>10){
+  		    std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
+  		    std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
+  		    std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
+  		  }
+		 
+		 
+  		  Float_t h;
+  		  h = d_m1hit*sin(alpha);
+		 
+  		  if(m_debug>10){
+  		    std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
+  		    std::cout<<"   h value   "<<h<<std::endl;
+  		  }
+		 
+  		  if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
+  		    recovermj2[m] = true;
+  		    if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
+  		  }
+  		}
+  	      }
+  	    }
+
+
+
+  	    if( (b_muJetF_hitpix[0]!=1&&b_muJetF_hitpix[1]!=1)&&(b_muJetC_hitpix[0]!=1&&b_muJetC_hitpix[1]!=1) ){  // third case both dimuons fail
+  	      recovermj12[m]=false;
+  	      tmprecovermj1[m] = false;
+  	      tmprecovermj2[m] = false;
+	    
+  	      if(b_Det_mu1_muJetF>0 && b_Det_mu2_muJetF>0){
+
+  		Float_t d_m1m2;  // distance between muons
+  		d_m1m2 = sqrt(pow(mj2m0pos[0].x() - mj2m1pos[0].x(),2) + pow(mj2m0pos[0].y() - mj2m1pos[0].y(),2));
+	    
+	      
+  		for(int l=0;l<b_comphits_mu1_muJetF;l++){
+	    
+  		  d_m1hit = sqrt(pow(mj2m0pos[0].x() - b_pixelhit_mu1_muJetF_posx[l],2)+pow(mj2m0pos[0].y() - b_pixelhit_mu1_muJetF_posy[l],2));
+  		  d_m2hit = sqrt(pow(mj2m1pos[0].x() - b_pixelhit_mu1_muJetF_posx[l],2)+pow(mj2m1pos[0].y() - b_pixelhit_mu1_muJetF_posy[l],2));
+	    
+  		  Float_t alpha;
+  		  alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
+	    
+  		  Float_t alpha2;
+  		  alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
+	    
+  		  if(m_debug>10){
+  		    std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
+  		    std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
+  		    std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
+  		  }
+		 
+		 
+  		  Float_t h;
+  		  h = d_m1hit*sin(alpha);
+		 
+  		  if(m_debug>10){
+  		    std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
+  		    std::cout<<"   h value   "<<h<<std::endl;
+  		  }
+		 
+  		  if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
+  		    tmprecovermj2[m] = true;
+  		    if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
+  		  }
+  		}
+  	      }
+
+
+  	      if(b_Det_mu1_muJetC>0 && b_Det_mu2_muJetC>0){
+
+  		Float_t d_m1m2;  // distance between muons
+  		d_m1m2 = sqrt(pow(mj1m0pos[0].x() - mj1m1pos[0].x(),2) + pow(mj1m0pos[0].y() - mj1m1pos[0].y(),2));
+	    
+	      
+  		for(int l=0;l<b_comphits_mu1_muJetC;l++){
+	    
+  		  d_m1hit = sqrt(pow(mj1m0pos[0].x() - b_pixelhit_mu1_muJetC_posx[l],2)+pow(mj1m0pos[0].y() - b_pixelhit_mu1_muJetC_posy[l],2));
+  		  d_m2hit = sqrt(pow(mj1m1pos[0].x() - b_pixelhit_mu1_muJetC_posx[l],2)+pow(mj1m1pos[0].y() - b_pixelhit_mu1_muJetC_posy[l],2));
+	    
+  		  Float_t alpha;
+  		  alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
+	    
+  		  Float_t alpha2;
+  		  alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
+	    
+  		  if(m_debug>10){
+  		    std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
+  		    std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
+  		    std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
+  		  }
+		 
+		 
+  		  Float_t h;
+  		  h = d_m1hit*sin(alpha);
+		 
+  		  if(m_debug>10){
+  		    std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
+  		    std::cout<<"   h value   "<<h<<std::endl;
+  		  }
+		 
+  		  if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
+  		    tmprecovermj1[m] = true;
+  		    if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
+  		  }
+  		}
+  	      }
+
+
+  	      if(tmprecovermj1[m] && tmprecovermj2[m]) recovermj12[m] = true;
+  	    }
+
+
+  	  }
+
+
+
+
+  	  // recovery flags for different radius
+  	  if(recovermj1[0]) b_hitrecover_mj1_r1=1;
+  	  if(recovermj1[1]) b_hitrecover_mj1_r05=1;
+  	  if(recovermj1[2]) b_hitrecover_mj1_r03=1;
+  	  if(recovermj1[3]) b_hitrecover_mj1_r01=1;
+  	  if(recovermj1[4]) b_hitrecover_mj1_r005=1;
+  	  if(recovermj1[5]) b_hitrecover_mj1_r001=1;
+
+  	  if(recovermj2[0]) b_hitrecover_mj2_r1=1;
+  	  if(recovermj2[1]) b_hitrecover_mj2_r05=1;
+  	  if(recovermj2[2]) b_hitrecover_mj2_r03=1;
+  	  if(recovermj2[3]) b_hitrecover_mj2_r01=1;
+  	  if(recovermj2[4]) b_hitrecover_mj2_r005=1;
+  	  if(recovermj2[5]) b_hitrecover_mj2_r001=1;
+
+  	  if(recovermj12[0]) b_hitrecover_mj12_r1=1;
+  	  if(recovermj12[1]) b_hitrecover_mj12_r05=1;
+  	  if(recovermj12[2]) b_hitrecover_mj12_r03=1;
+  	  if(recovermj12[3]) b_hitrecover_mj12_r01=1;
+  	  if(recovermj12[4]) b_hitrecover_mj12_r005=1;
+  	  if(recovermj12[5]) b_hitrecover_mj12_r001=1;
+	
+
+  	  // if(b_muJetF_hitpix[0]!=1&&b_muJetF_hitpix[1]!=1){
+	    
+
+  	  // }
+
+
+
+  	  // if(dim1_hit && !dim2_hit){
+	    
+  	  //      if(m_debug>10) std::cout<<" number of nearby hits  "<<rechitposmj2.size()<<std::endl;
+	  
+  	  //      Float_t d_m1m2;  // distance between muons
+  	  //      d_m1m2 = sqrt(pow(mj2m0pos.x() - mj2m1pos.x(),2) + pow(mj2m0pos.y() - mj2m1pos.y(),2));
+	  
+  	  //      Float_t d_m1hit;
+  	  //      Float_t d_m2hit;
+	  
+  	  //      for(uint32_t l=0;l<rechitposmj2.size();l++){
+	    
+  	  //        d_m1hit = sqrt(pow(mj2m0pos.x() - rechitposmj2[l].x(),2)+pow(mj2m0pos.y() - rechitposmj2[l].y(),2));
+  	  //        d_m2hit = sqrt(pow(mj2m1pos.x() - rechitposmj2[l].x(),2)+pow(mj2m1pos.y() - rechitposmj2[l].y(),2));
+	    
+  	  //        Float_t alpha;
+  	  //        alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
+	    
+  	  //        Float_t alpha2;
+  	  //        alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
+	    
+  	  //        if(m_debug>10){
+  	  // 	 std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
+  	  // 	 std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
+  	  // 	 std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
+  	  //        }
+
+
+  	  //        Float_t h;
+  	  //        h = d_m1hit*sin(alpha);
+	       
+  	  //        if(m_debug>10){
+  	  // 	 std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
+  	  // 	 std::cout<<"   h value   "<<h<<std::endl;
+  	  //        }
+	       
+  	  //        if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
+  	  // 	 recovermj2[m] = true;
+  	  // 	 if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
+  	  //        }
+  	  //      }
+  	  //    }
+
+
+  	  //    if(!dim1_hit && dim2_hit){
+
+  	  //      if(m_debug>10) std::cout<<" number of nearby hits  "<<rechitposmj1.size()<<std::endl;
+	    
+  	  //      Float_t d_m1m2;  // distance between muons
+  	  //      d_m1m2 = sqrt(pow(mj1m0pos.x() - mj1m1pos.x(),2) + pow(mj1m0pos.y() - mj1m1pos.y(),2));
+	
+  	  //      Float_t d_m1hit;
+  	  //      Float_t d_m2hit;
+
+  	  //      for(uint32_t l=0;l<rechitposmj1.size();l++){
+	       
+  	  //        d_m1hit = sqrt(pow(mj1m0pos.x() - rechitposmj1[l].x(),2)+pow(mj1m0pos.y() - rechitposmj1[l].y(),2));
+  	  //        d_m2hit = sqrt(pow(mj1m1pos.x() - rechitposmj1[l].x(),2)+pow(mj1m1pos.y() - rechitposmj1[l].y(),2));
+	       
+  	  //        Float_t alpha;
+  	  //        alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
+	      
+  	  //        Float_t alpha2;
+  	  //        alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
+	       
+  	  //        if(m_debug>10){
+  	  // 	 std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
+  	  // 	 std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
+  	  // 	 std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
+  	  //        }
+  	  //        Float_t h;
+  	  //        h = d_m1hit*sin(alpha);
+	       
+  	  //        if(m_debug>10){
+  	  // 	 std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
+  	  // 	 std::cout<<"   h value   "<<h<<std::endl;
+  	  //        }
+	      
+  	  //        if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m])  || d_m1hit<radius[m] || d_m2hit<radius[m]){
+  	  // 	 recovermj1[m] = true;
+  	  // 	 if(m_debug>10) std::cout<<" recovery of muJetC   "<<std::endl;
+  	  //        }
+  	  //      }
+  	  //    }
+  	  //  }
+
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[0])  b_hitrecover_mj2_r0005=1;
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[1])  b_hitrecover_mj2_r005=1;
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[2])  b_hitrecover_mj2_r05=1;
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[3])  b_hitrecover_mj2_r01=1;
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[4])  b_hitrecover_mj2_r5=1;
+
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[0])  b_hitrecover_mj1_r0005=1;
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[1])  b_hitrecover_mj1_r005=1;
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[2])  b_hitrecover_mj1_r05=1;
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[3])  b_hitrecover_mj1_r01=1;
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[4])  b_hitrecover_mj1_r5=1;
+
+
+
+
+
+
+  	  // if(m_debug>10){
+  	  //   std::cout<<" MuJetC   "<<std::endl;
+  	  //   std::cout<<" muon1 position in x   "<<mj1m0pos.x()<<std::endl;
+  	  //   std::cout<<" muon1 position in y   "<<mj1m0pos.y()<<std::endl;
+  	  //   //	  std::cout<<" muon1 position in z   "<<mj1m0pos.z()<<std::endl;
+    
+  	  //   std::cout<<" muon2 position in x   "<<mj1m1pos.x()<<std::endl;
+  	  //   std::cout<<" muon2 position in y   "<<mj1m1pos.y()<<std::endl;
+  	  //   //	  std::cout<<" muon2 position in z   "<<mj1m1pos.z()<<std::endl;
+    
+    
+  	  //   std::cout<<" MuJetF   "<<std::endl;
+  	  //   std::cout<<" muon1 position in x   "<<mj2m0pos.x()<<std::endl;
+  	  //   std::cout<<" muon1 position in y   "<<mj2m0pos.y()<<std::endl;
+  	  //   //	  std::cout<<" muon1 position in z   "<<mj2m0pos.z()<<std::endl;
+    
+  	  //   std::cout<<" muon2 position in x   "<<mj2m1pos.x()<<std::endl;
+  	  //   std::cout<<" muon2 position in y   "<<mj2m1pos.y()<<std::endl;
+  	  //   //	  std::cout<<" muon2 position in z   "<<mj2m1pos.z()<<std::endl;
+  	  // }
+	
+  	  // Float_t mj1_dm1m2 = sqrt(pow(mj1m0pos.x()-mj1m1pos.x(),2)+pow(mj1m0pos.y()-mj1m1pos.y(),2));
+  	  // Float_t mj2_dm1m2 = sqrt(pow(mj2m0pos.x()-mj2m1pos.x(),2)+pow(mj2m0pos.y()-mj2m1pos.y(),2));
+	
+	
+  	  // b_dist_muon_muJetC = mj1_dm1m2;
+  	  // b_dist_muon_muJetF = mj2_dm1m2;
+
+	
+  	  // if(m_debug>10){
+  	  //   std::cout<<" distance between muons in MuJet1 xz "<<mj1_dm1m2<<std::endl;
+  	  //   std::cout<<" distance between muons in MuJet2 xz "<<mj2_dm1m2<<std::endl;
+  	  // }
+
+  	  // if(m_debug>10){
+  	  //   if(dim1_hit) std::cout<<" MuJet1 with at least one muon in the 1st pixel layer  "<<std::endl;
+  	  //   if(dim2_hit) std::cout<<" MuJet2 with at least one muon in the 1st pixel layer  "<<std::endl;
+  	  // }
+	
+      
+  	  // if(dim1_hit && dim2_hit){
+  	  //   if(m_debug>10) std::cout<<"  No need for hit recovery   "<<std::endl; 
+  	  // }
+  	  // if(!dim1_hit && !dim2_hit) {
+  	  //   if(m_debug>10) std::cout<<"  Both dimuons need the hit recovery (very unlikely case) not considering for the moment "<<std::endl;
+  	  // }
+
+
+  	  // Bool_t recovermj2[5]={false,false,false,false};
+  	  // Bool_t recovermj1[5]={false,false,false,false};
+
+
+  	  // Float_t radius[5] ={0.0005,0.005,0.01,0.05,0.5};  // radius to look around the trajectory for compatible hits.
+
+
+  	  //  for(int m=0;m<5;m++){
+
+  	  //    if(dim1_hit && !dim2_hit){
+	    
+  	  //      if(m_debug>10) std::cout<<" number of nearby hits  "<<rechitposmj2.size()<<std::endl;
+	  
+  	  //      Float_t d_m1m2;  // distance between muons
+  	  //      d_m1m2 = sqrt(pow(mj2m0pos.x() - mj2m1pos.x(),2) + pow(mj2m0pos.y() - mj2m1pos.y(),2));
+	  
+  	  //      Float_t d_m1hit;
+  	  //      Float_t d_m2hit;
+	  
+  	  //      for(uint32_t l=0;l<rechitposmj2.size();l++){
+	    
+  	  //        d_m1hit = sqrt(pow(mj2m0pos.x() - rechitposmj2[l].x(),2)+pow(mj2m0pos.y() - rechitposmj2[l].y(),2));
+  	  //        d_m2hit = sqrt(pow(mj2m1pos.x() - rechitposmj2[l].x(),2)+pow(mj2m1pos.y() - rechitposmj2[l].y(),2));
+	    
+  	  //        Float_t alpha;
+  	  //        alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
+	    
+  	  //        Float_t alpha2;
+  	  //        alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
+	    
+  	  //        if(m_debug>10){
+  	  // 	 std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
+  	  // 	 std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
+  	  // 	 std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
+  	  //        }
+
+
+  	  //        Float_t h;
+  	  //        h = d_m1hit*sin(alpha);
+	       
+  	  //        if(m_debug>10){
+  	  // 	 std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
+  	  // 	 std::cout<<"   h value   "<<h<<std::endl;
+  	  //        }
+	       
+  	  //        if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
+  	  // 	 recovermj2[m] = true;
+  	  // 	 if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
+  	  //        }
+  	  //      }
+  	  //    }
+
+
+  	  //    if(!dim1_hit && dim2_hit){
+
+  	  //      if(m_debug>10) std::cout<<" number of nearby hits  "<<rechitposmj1.size()<<std::endl;
+	    
+  	  //      Float_t d_m1m2;  // distance between muons
+  	  //      d_m1m2 = sqrt(pow(mj1m0pos.x() - mj1m1pos.x(),2) + pow(mj1m0pos.y() - mj1m1pos.y(),2));
+	
+  	  //      Float_t d_m1hit;
+  	  //      Float_t d_m2hit;
+
+  	  //      for(uint32_t l=0;l<rechitposmj1.size();l++){
+	       
+  	  //        d_m1hit = sqrt(pow(mj1m0pos.x() - rechitposmj1[l].x(),2)+pow(mj1m0pos.y() - rechitposmj1[l].y(),2));
+  	  //        d_m2hit = sqrt(pow(mj1m1pos.x() - rechitposmj1[l].x(),2)+pow(mj1m1pos.y() - rechitposmj1[l].y(),2));
+	       
+  	  //        Float_t alpha;
+  	  //        alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
+	      
+  	  //        Float_t alpha2;
+  	  //        alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
+	       
+  	  //        if(m_debug>10){
+  	  // 	 std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
+  	  // 	 std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
+  	  // 	 std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
+  	  //        }
+  	  //        Float_t h;
+  	  //        h = d_m1hit*sin(alpha);
+	       
+  	  //        if(m_debug>10){
+  	  // 	 std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
+  	  // 	 std::cout<<"   h value   "<<h<<std::endl;
+  	  //        }
+	      
+  	  //        if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m])  || d_m1hit<radius[m] || d_m2hit<radius[m]){
+  	  // 	 recovermj1[m] = true;
+  	  // 	 if(m_debug>10) std::cout<<" recovery of muJetC   "<<std::endl;
+  	  //        }
+  	  //      }
+  	  //    }
+  	  //  }
+
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[0])  b_hitrecover_mj2_r0005=1;
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[1])  b_hitrecover_mj2_r005=1;
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[2])  b_hitrecover_mj2_r05=1;
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[3])  b_hitrecover_mj2_r01=1;
+  	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[4])  b_hitrecover_mj2_r5=1;
+
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[0])  b_hitrecover_mj1_r0005=1;
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[1])  b_hitrecover_mj1_r005=1;
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[2])  b_hitrecover_mj1_r05=1;
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[3])  b_hitrecover_mj1_r01=1;
+  	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[4])  b_hitrecover_mj1_r5=1;
+
+
+  	  //  if(m_debug>10){
+  	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[0])  cout<<" hit recover for mujet2 and 0.0005cm  "<<endl;
+  	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[1])  cout<<" hit recover for mujet2 and 0.005cm  "<<endl;
+  	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[2])  cout<<" hit recover for mujet2 and 0.01cm  "<<endl;
+  	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[3])  cout<<" hit recover for mujet2 and 0.05cm  "<<endl;
+  	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[4])  cout<<" hit recover for mujet2 and 0.5cm  "<<endl;
+	   
+  	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[0])  cout<<" hit recover for mujet1 and 0.0005cm  "<<endl;   
+  	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[1])  cout<<" hit recover for mujet1 and 0.005cm  "<<endl;  
+  	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[2])  cout<<" hit recover for mujet1 and 0.01cm  "<<endl; 
+  	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[3])  cout<<" hit recover for mujet1 and 0.05cm  "<<endl; 
+  	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[4])  cout<<" hit recover for mujet1 and 0.5cm  "<<endl;
+  	  //  }
+
+
+	}
       }
     }
   }
 
+    m_ttree->Fill();
 
-  m_ttree->Fill();
 
-
-  //   for(uint32_t km=0;km<2;km++){  // loop for muJetC muon trajectories
-	  
-  //     if(m_debug>10){
-  //       std::cout<<"  muon-track indx   "<<indxtrkmj1[km]<<"  muon pT   "<<muJetC->muon(km)->pt()<<"  muon eta  "
-  // 	       <<muJetC->muon(km)->eta()<<std::endl;
-  //     }
-      
-
-  //     //===================   Information for the muon-tracks ===================================//
-  //     if(km==0)  b_mutrack_pT_mu1JetC = muJetC->muon(km)->pt();
-  //     if(km==1)  b_mutrack_pT_mu2JetC = muJetC->muon(km)->pt();
-
-  //     if(km==0)  b_mutrack_phi_mu1JetC = muJetC->muon(km)->phi();
-  //     if(km==1)  b_mutrack_phi_mu2JetC = muJetC->muon(km)->phi();
-
-  //     if(km==0)  b_mutrack_charge_mu1JetC = muJetC->muon(km)->charge();
-  //     if(km==1)  b_mutrack_charge_mu2JetC = muJetC->muon(km)->charge();
-
-  //     if(km==0)  b_mutrack_eta_mu1JetC = muJetC->muon(km)->eta();
-  //     if(km==1)  b_mutrack_eta_mu2JetC = muJetC->muon(km)->eta();
-
-
-
-
-  // 	    //====================== Loop for Trajectories from TrackRefitter  =================================//
-  // 	    Int_t counter_traj=0;
-  // 	    for(vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
-	    
-  // 	      if(counter_traj==indxtrkmj1[km]){
-	
-  // 		if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
-  // 					<< "isValid: " << it->isValid()<<std::endl;
-  // 		}
-	      
-  // 		//	    if(it->firstMeasurement().updatedState().isValid() && it->lastMeasurement().updatedState().isValid()){
-
-  // 		if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentum
-	      
-  // 		  const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
-  // 		  const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
-  // 		  TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
-  // 		  TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
-		
-  // 		  if(innerTSOS.hasError()){
-  // 		    if(m_debug>10) std::cout<<" innerTSOS muJetC has errors and they are:   "<<std::endl;
-  // 		    if(m_debug>10) std::cout<<" innerTrajectory local error xx  "<<sqrt(innerTSOS.localError().positionError().xx())<<std::endl;
-  // 		    if(m_debug>10) std::cout<<" innerTrajectory local error yy  "<<sqrt(innerTSOS.localError().positionError().yy())<<std::endl;
-  // 		    if(m_debug>10) std::cout<<" innerTrajectory local error xy "<<sqrt(innerTSOS.localError().positionError().xy())<<std::endl;
-
-
-  // 		    if(km==0) {
-  // 		      b_errposx_inlay_mu1_muJetC = sqrt(innerTSOS.localError().positionError().xx());
-  // 		      b_errposy_inlay_mu1_muJetC = sqrt(innerTSOS.localError().positionError().yy());
-  // 		    }
-
-  // 		    if(km==1) {
-  // 		      b_errposx_inlay_mu2_muJetC = sqrt(innerTSOS.localError().positionError().xx());
-  // 		      b_errposy_inlay_mu2_muJetC = sqrt(innerTSOS.localError().positionError().yy());
-  // 		    }
-  // 		  }
-
-  // 		  const DetLayer* outerLayer = it->firstMeasurement().layer();
-  // 		  const DetLayer* innerLayer = it->lastMeasurement().layer();
-		
-  // 		  if (!outerLayer || !innerLayer){
-  // 		    //means  that the trajectory was fit/smoothed in a special case: not setting those pointers
-		  
-  // 		    if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
-  // 					    <<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
-  // 		  }
-		
-  // 		  //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
-  // 		  PropagationDirection dirForInnerLayers = oppositeToMomentum;
-  // 		  PropagationDirection dirForOuterLayers = alongMomentum;
-  // 		  if(it->direction() != oppositeToMomentum){
-  // 		    dirForInnerLayers = alongMomentum;
-  // 		    dirForOuterLayers = oppositeToMomentum;
-  // 		    //throw cms::Exception("TrackProducer") 
-  // 		  }
-	    
-  // 		  // std::vector< const DetLayer * > innerCompLayers = innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
-  // 		  // std::vector< const DetLayer * > outerCompLayers = outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
-		
-  // 		  auto innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-  // 		  auto outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
-
-		
-  // 		  if(m_debug>10){
-  // 		    std::cout<<"========================================================"<<std::endl;
-  // 		    std::cout<< "inner DetLayer  sub: " 
-  // 			     << innerLayer->subDetector() <<"\n"
-  // 			     << "outer DetLayer  sub: " 
-  // 			     << outerLayer->subDetector() << "\n"
-  // 			     <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
-  // 			     <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
-  // 			     <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
-  // 			     <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<"\n"
-  // 			     << "innercompatlbleLayers: " << innerCompLayers.size() << "\n"
-  // 			     << "outercompatibleLayers: " << outerCompLayers.size() << std::endl;
-  // 		    std::cout<<"========================================================"<<std::endl;
-  // 		  }
-
-		
-  // 		  if(km==0) b_innerlayers_mu1_muJetC = innerCompLayers.size();
-  // 		  if(km==1) b_innerlayers_mu2_muJetC = innerCompLayers.size();
-
-  // 		  if(innerCompLayers.size()==0) {
-		  
-  // 		    if(m_debug>10) std::cout<<"  already in 1st pixel layer   "<<std::endl;
-		  
-  // 		    if(km==0) mj1m0pos[0] = Local2DPoint(it->firstMeasurement().updatedState().localPosition().x(),
-  // 							 it->firstMeasurement().updatedState().localPosition().y());
-  // 		    if(km==1) mj1m1pos[0] = Local2DPoint(it->firstMeasurement().updatedState().localPosition().x(),
-  // 							 it->firstMeasurement().updatedState().localPosition().y());
-		  
-		  
-  // 		    if(km==0) mj1m0pos_lastmeas[0] = Local2DPoint(it->lastMeasurement().updatedState().localPosition().x(),
-  // 								  it->lastMeasurement().updatedState().localPosition().y());
-  // 		    if(km==1) mj1m1pos_lastmeas[0] = Local2DPoint(it->lastMeasurement().updatedState().localPosition().x(),
-  // 								  it->lastMeasurement().updatedState().localPosition().y());
-		  
-  // 		  }
-	    
-
-
-  // 		  Int_t det1stpix=0;
-  // 		  Int_t counter_hit=0;
-
-		
-  // 		  for(vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
-	      
-  // 		    if ((*dd)->basicComponents().empty()) {
-  // 		      //		this should never happen. but better protect for it
-  // 		      if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
-  // 		      continue;
-  // 		    }
- 
-  // 		    Propagator* localProp = thePropagator->clone();
-  // 		    localProp->setPropagationDirection(oppositeToMomentum);
-	      
-  // 		    if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
-  // 		    vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
-	      
-  // 		    if(!detWithState.size()) continue;
-	  
-  // 		    if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
-  // 				     detWithState.size()<<std::endl;
-	      
-  // 		    if(m_debug>10) std::cout<<"========================================================"<<std::endl;
-		  
-		  
-
-  // 		    for(uint32_t k=0;k<detWithState.size();k++){
-		    
-  // 		      //		    DetId id = detWithState[k].first->geographicalId();
-  // 		      //		    MeasurementDetWithData measDet = theMeasTk->idToDet(id);
-
-  // 		      MeasurementTrackerEvent measTk;
-  // 		      DetId id = detWithState[k].first->geographicalId();
-  // 		      MeasurementDetWithData measDet = measTk.idToDet(id);
-
-  // 		      if( ( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) || 
-  // 			    ( (*dd)->subDetector() == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive() ){
-
-  // 			if(m_debug>10){
-  // 			  std::cout<<"  compatible Det  number  "<<k<<std::endl;
-  // 			  std::cout<<" local position rho  Det   "<<detWithState[k].second.localPosition().perp()<<std::endl;
-  // 			  std::cout<<" local position x  Det   "<<detWithState[k].second.localPosition().x()<<std::endl;
-  // 			  std::cout<<" local position y  Det   "<<detWithState[k].second.localPosition().y()<<std::endl;
-  // 			}
-
-  // 			if(km==0) mj1m0pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
-  // 			if(km==1) mj1m1pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
-
-  // 			if(km==0) mj1m0poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
-  // 									sqrt(detWithState[k].second.localError().positionError().yy()));
-  // 			if(km==1) mj1m1poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
-  // 									sqrt(detWithState[k].second.localError().positionError().yy()));
-
-
-  // 			LocalError localErr2 = detWithState[k].second.localError().positionError();
-  // 			localErr2.scale(2); // get the 2 sigma ellipse;
-  // 			Float_t xx2 = sqrt(localErr2.xx());
-  // 			Float_t xy2 = sqrt(localErr2.xy());
-  // 			Float_t yy2 = sqrt(localErr2.yy());
-		      
-		      
-  // 			if(m_debug>10){
-  // 			  std::cout<<" local error extp innerlayer xx   "<<xx2<<endl;
-  // 			  std::cout<<" local error extp innerlayer xy   "<<xy2<<endl;
-  // 			  std::cout<<" local error extp innerlayer yy   "<<yy2<<endl;
-  // 			}
-		      
-  // 			std::cout<<"========================================================"<<std::endl;
-			
-			
-  // 			TrajectoryStateOnSurface ts; //dummy
-		
-  // 			std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
-			
-			
-  // 			// 		      vector<TrajectoryMeasurement> tmpVec;
-			
-  // 			// 		      if(!tmp.empty()){
-  // 			// 			if(m_debug>10) std::cout<<"  Number of nearby rechits using chi2estimator   "<<tmp.size()<<std::endl;
-			  
-  // 			// 			//collecting only valid rechits
-  // 			// 			if(tmp.back().recHit()->getType() == TrackingRecHit::missing) tmp.pop_back();
-  // 			// #if defined( __GXX_EXPERIMENTAL_CXX0X__)
-  // 			// 			tmpVec.insert( tmpVec.end(), std::make_move_iterator(tmp.begin()), std::make_move_iterator(tmp.end()));
-  // 			// #else
-  // 			// 			tmpVec.insert( tmpVec.end(), tmp.begin(), tmp.end());
-  // 			// #endif
-			  
-  // 			// 		      }
-	      
-			
-  // 			if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
-			
-
-  // 			for(vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
-			  
-  // 			  if(tmpIt->recHit()->getType()==0){ // valid hit
-			    
-  // 			    if(m_debug>10){
-  // 			      std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-  // 			      std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-  // 			      std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-  // 			      std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-  // 			    }
-
-  // 			    if(km==0){
-  // 			      b_pixelhit_mu1_muJetC_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-  // 			      b_pixelhit_mu1_muJetC_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-
-  // 			      b_pixelhit_mu1_muJetC_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-  // 			      b_pixelhit_mu1_muJetC_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-  // 			    }
-
-  // 			    if(km==1){
-  // 			      b_pixelhit_mu2_muJetC_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-  // 			      b_pixelhit_mu2_muJetC_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-
-  // 			      b_pixelhit_mu2_muJetC_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-  // 			      b_pixelhit_mu2_muJetC_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-  // 			    }
-
-
-  // 			    Local2DPoint tmphitpos(tmpIt->recHit()->localPosition().x(),tmpIt->recHit()->localPosition().y());
-  // 			    counter_hit++;
-  // 			  }
-  // 			}
-  // 			tmp.clear();
-  // 			det1stpix++;
-  // 		      }
-  // 		    }
-  // 		    delete localProp;
-  // 		  }
-		
-  // 		  if(km==0) b_Det_mu1_muJetC = det1stpix;
-  // 		  if(km==1) b_Det_mu2_muJetC = det1stpix;
-		
-  // 		  if(km==0)  b_comphits_mu1_muJetC = counter_hit;
-  // 		  if(km==1)  b_comphits_mu2_muJetC = counter_hit;
-		
-  // 		}
-  // 	      }
-  // 	      counter_traj++;
-  // 	    }
-  // 	  }
-
-  // 	  if(m_debug>10) std::cout<<" second muonJet  muJetF  "<<std::endl;
-      
-  // 	  for(uint32_t km=0;km<2;km++){
-	
-  // 	    //	std::cout<<" indx track   "<<indxtrkmj2[km]<<std::endl;
-
-  // 	    if(m_debug>10) std::cout<<"  muon-track indx   "<<indxtrkmj2[km]<<"  muon pT   "<<muJetF->muon(km)->pt()<<"  muon eta  "<<muJetF->muon(km)->eta()<<std::endl;
-	
-
-	  
-  // 	    //===================   Information for the muon-tracks ===================================//
-  // 	    if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
-  // 	    if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
-
-  // 	    if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
-  // 	    if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
-
-  // 	    if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
-  // 	    if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
-
-  // 	    if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
-  // 	    if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
-
-
-  // 	    //====================== Loop for Trajectories from TrackRefitter  =================================//
-  // 	    Int_t counter_traj=0;
-  // 	    for(vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
-	  
-  // 	      if(counter_traj==indxtrkmj2[km]){
-
-  // 		if(m_debug>10) std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
-  // 					<< "isValid: " << it->isValid()<<std::endl;
-	    
-  // 		//	    if(it->firstMeasurement().updatedState().isValid() && it->lastMeasurement().updatedState().isValid()){
-  // 		if(it->lastMeasurement().updatedState().isValid()){
-	      
-  // 		  const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
-  // 		  const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
-  // 		  TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
-  // 		  TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
-	      
-  // 		  if(innerTSOS.hasError()){
-  // 		    if(m_debug>10) std::cout<<" innerTSOS muJetF has errors and they are:   "<<std::endl;
-  // 		    if(m_debug>10) std::cout<<" innerTrajectory local error xx  "<<sqrt(innerTSOS.localError().positionError().xx())<<std::endl;
-  // 		    if(m_debug>10) std::cout<<" innerTrajectory local error yy  "<<sqrt(innerTSOS.localError().positionError().yy())<<std::endl;
-  // 		    if(m_debug>10) std::cout<<" innerTrajectory local error xy "<<sqrt(innerTSOS.localError().positionError().xy())<<std::endl;
-
-
-  // 		    if(km==0) {
-  // 		      b_errposx_inlay_mu1_muJetF = sqrt(innerTSOS.localError().positionError().xx());
-  // 		      b_errposy_inlay_mu1_muJetF = sqrt(innerTSOS.localError().positionError().yy());
-  // 		    }
-		  
-  // 		    if(km==1) {
-  // 		      b_errposx_inlay_mu2_muJetF = sqrt(innerTSOS.localError().positionError().xx());
-  // 		      b_errposy_inlay_mu2_muJetF = sqrt(innerTSOS.localError().positionError().yy());
-  // 		    }
-
-
-  // 		  }
-	      
-  // 		  const DetLayer* outerLayer = it->firstMeasurement().layer();
-  // 		  const DetLayer* innerLayer = it->lastMeasurement().layer();
-	      
-  // 		  if (!outerLayer || !innerLayer){
-  // 		    //means  that the trajectory was fit/smoothed in a special case: not setting those pointers
-	    
-  // 		    if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
-  // 					    <<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
-  // 		  }
-	      
-  // 		  //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
-  // 		  PropagationDirection dirForInnerLayers = oppositeToMomentum;
-  // 		  PropagationDirection dirForOuterLayers = alongMomentum;
-  // 		  if(it->direction() != oppositeToMomentum){
-  // 		    dirForInnerLayers = alongMomentum;
-  // 		    dirForOuterLayers = oppositeToMomentum;
-  // 		    //throw cms::Exception("TrackProducer") 
-  // 		  }
-	      
-  // 		  auto  innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-  // 		  auto  outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
-
-  // 		  // std::vector< const DetLayer * > innerCompLayers = innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
-  // 		  // std::vector< const DetLayer * > outerCompLayers = outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
-	    
-  // 		  if(m_debug>10){
-  // 		    std::cout<<"========================================================"<<std::endl;
-  // 		    std::cout<< "inner DetLayer  sub: " 
-  // 			     << innerLayer->subDetector() <<"\n"
-  // 			     << "outer DetLayer  sub: " 
-  // 			     << outerLayer->subDetector() << "\n"
-  // 			     <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<<"\n"
-  // 			     <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<<"\n"
-  // 			     <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
-  // 			     <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<"\n"
-  // 			     << "innercompatlbleLayers: " << innerCompLayers.size() << "\n"
-  // 			     << "outercompatibleLayers: " << outerCompLayers.size() << std::endl;
-  // 		    std::cout<<"========================================================"<<std::endl;
-  // 		  }
-
-
-  // 		  if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
-  // 		  if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
-		
-  // 		  if(innerCompLayers.size()==0) {
-
-  // 		    if(m_debug>10) std::cout<<"  already in 1st pixel layer   "<<std::endl;
-
-  // 		    if(km==0) mj2m0pos[0] = Local2DPoint(it->firstMeasurement().updatedState().localPosition().x(),
-  // 							 it->firstMeasurement().updatedState().localPosition().y());
-  // 		    if(km==1) mj2m1pos[0] = Local2DPoint(it->firstMeasurement().updatedState().localPosition().x(),
-  // 							 it->firstMeasurement().updatedState().localPosition().y());
-
-
-  // 		    if(km==0) mj2m0pos_lastmeas[0] = Local2DPoint(it->lastMeasurement().updatedState().localPosition().x(),
-  // 								  it->lastMeasurement().updatedState().localPosition().y());
-  // 		    if(km==1) mj2m1pos_lastmeas[0] = Local2DPoint(it->lastMeasurement().updatedState().localPosition().x(),
-  // 								  it->lastMeasurement().updatedState().localPosition().y());
-
-
-  // 		  }
-
-  // 		  Int_t counter_hit=0;
-  // 		  Int_t det1stpix=0;
-  // 		  for(vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
-
-  // 		    if ((*dd)->basicComponents().empty()) {
-  // 		      //this should never happen. but better protect for it
-  // 		      if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
-  // 		      continue;
-  // 		    }
-	  
-  // 		    Propagator* localProp = thePropagator->clone();
-  // 		    localProp->setPropagationDirection(oppositeToMomentum);
-
-  // 		    vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
-
-  // 		    if(!detWithState.size()) continue;
-	  
-  // 		    if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
-  // 				     detWithState.size()<<std::endl;
-
-  // 		    if(m_debug>10) std::cout<<"========================================================"<<std::endl;
-		  
-
-  // 		    for(uint32_t k=0;k<detWithState.size();k++){
-
-  // 		      MeasurementTrackerEvent measTk;
-  // 		      DetId id = detWithState[k].first->geographicalId();
-  // 		      MeasurementDetWithData measDet = measTk.idToDet(id);
-
-  // 		      // DetId id = detWithState[k].first->geographicalId();
-  // 		      // const MeasurementDet* measDet = theMeasTk->idToDet(id;)
-
-  // 		      if( ( ((*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) 
-  // 			    || ((*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive()  ){
-		      
-  // 			if(m_debug>10){
-  // 			  std::cout<<"  compatible Det  number  "<<k<<std::endl;
-  // 			  std::cout<<" local position rho  Det   "<<detWithState[k].second.localPosition().perp()<<std::endl;
-  // 			  std::cout<<" local position x  Det   "<<detWithState[k].second.localPosition().x()<<std::endl;
-  // 			  std::cout<<" local position y  Det   "<<detWithState[k].second.localPosition().y()<<std::endl;
-  // 			}
-		      
-  // 			if(km==0) mj2m0pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
-  // 			if(km==1) mj2m1pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
-		      
-  // 			if(km==0) mj2m0poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
-  // 									sqrt(detWithState[k].second.localError().positionError().yy()));
-  // 			if(km==1) mj2m1poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
-  // 									sqrt(detWithState[k].second.localError().positionError().yy()));
-
-  // 			LocalError localErr2 = detWithState[k].second.localError().positionError();
-  // 			localErr2.scale(2); // get the 2 sigma ellipse;
-  // 			Float_t xx2 = sqrt(localErr2.xx());
-  // 			Float_t xy2 = sqrt(localErr2.xy());
-  // 			Float_t yy2 = sqrt(localErr2.yy());
-		      
-		      
-  // 			if(m_debug>10){
-  // 			  std::cout<<" local error extp innerlayer xx   "<<xx2<<endl;
-  // 			  std::cout<<" local error extp innerlayer xy   "<<xy2<<endl;
-  // 			  std::cout<<" local error extp innerlayer yy   "<<yy2<<endl;
-  // 			}
-
-  // 			std::cout<<"========================================================"<<std::endl;
-		      
-		      
-  // 			TrajectoryStateOnSurface ts; //dummy
-		      
-  // 			std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
-
-  // 			if(m_debug>10) std::cout<<" number of hits      "<<tmp.size()<<std::endl;
-		      
-  // 			for(vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
-			
-  // 			  if(tmpIt->recHit()->getType()==0){ // valid hit
-			  
-  // 			    if(m_debug>10){
-  // 			      std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-  // 			      std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-  // 			      std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-  // 			      std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-  // 			      std::cout<<"   local position z:     "<<tmpIt->recHit()->localPosition().z()<<std::endl;
-  // 			    }
-			  
-			  
-  // 			    if(km==0){
-  // 			      b_pixelhit_mu1_muJetF_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-  // 			      b_pixelhit_mu1_muJetF_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-
-  // 			      b_pixelhit_mu1_muJetF_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-  // 			      b_pixelhit_mu1_muJetF_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-
-
-  // 			    }
-			  
-  // 			    if(km==1){
-  // 			      b_pixelhit_mu2_muJetF_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-  // 			      b_pixelhit_mu2_muJetF_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-
-  // 			      b_pixelhit_mu2_muJetF_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-  // 			      b_pixelhit_mu2_muJetF_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-  // 			    }
-			  
-  // 			    Local2DPoint tmphitpos(tmpIt->recHit()->localPosition().x(),tmpIt->recHit()->localPosition().y());
-  // 			    counter_hit++;
-  // 			  }
-  // 			}
-  // 			tmp.clear();
-  // 			det1stpix++;
-  // 		      }
-  // 		    }
-  // 		    delete localProp;
-	      
-  // 		    // 	  tracking::TempMeasurements tmps;
-  // 		    // 	  std::vector<const TrackingRecHit*> hits;
-		  
-  // 		    // 	  TrajectoryStateOnSurface current =  (*dd)->updateState();
-
-  // 		    // 	  //if(measDet->isActive() && !measDet->hasBadComponents(detWithState.front().second)){
-  // 		    // 	  if(measDet->isActive()){  
-  // 		    // 	    //	    InvalidTrackingRecHit  tmpHit(id,TrackingRecHit::missing);
-  // 		    // 	    //	    tmpTrack.setTrackerExpectedHitsInner(tmpHit,counter); counter_h++;
-  // 		    // 	    std::cout << "WARNING: this hit is marked as lost because the detector was marked as active" << std::endl;
-  // 		    // 	  }else{
-  // 		    // 	    std::cout << "WARNING: this hit is NOT marked as lost because the detector was marked as inactive" << std::endl;
-  // 		    // 	  }
-  // 		  }
-  // 		  if(km==0) b_Det_mu1_muJetF = det1stpix;
-  // 		  if(km==1) b_Det_mu2_muJetF = det1stpix;
-
-  // 		  if(km==0)  b_comphits_mu1_muJetF = counter_hit;
-  // 		  if(km==1)  b_comphits_mu2_muJetF = counter_hit;
-  // 		}
-  // 	      }
-  // 	      counter_traj++;
-  // 	    }
-  // 	  }
-
-
-  // 	  if(b_Det_mu1_muJetC>0 && b_Det_mu2_muJetC>0){
-  // 	    b_muJetC_trackdist_1stpixel = sqrt(pow(mj1m0pos[0].x()-mj1m1pos[0].x(),2)+pow(mj1m0pos[0].y() - mj1m1pos[0].y(),2));
-  // 	  }
-
-  // 	  if(b_Det_mu1_muJetF>0 && b_Det_mu2_muJetF>0){
-  // 	    b_muJetF_trackdist_1stpixel = sqrt(pow(mj2m0pos[0].x()-mj2m1pos[0].x(),2)+pow(mj2m0pos[0].y() - mj2m1pos[0].y(),2));
-  // 	  }
-
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu1_muJetC;ndet++){
-  // 	    b_muJetC_muon1_posx1stpix[ndet] = mj1m0pos[ndet].x();
-  // 	    b_muJetC_muon1_posy1stpix[ndet] = mj1m0pos[ndet].y();
-  // 	  }
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu2_muJetC;ndet++){
-  // 	    b_muJetC_muon2_posx1stpix[ndet] = mj1m1pos[ndet].x();
-  // 	    b_muJetC_muon2_posy1stpix[ndet] = mj1m1pos[ndet].y();
-  // 	  }
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu1_muJetF;ndet++){
-  // 	    b_muJetF_muon1_posx1stpix[ndet] = mj2m0pos[ndet].x();
-  // 	    b_muJetF_muon1_posy1stpix[ndet] = mj2m0pos[ndet].y();
-  // 	  }
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu2_muJetF;ndet++){
-  // 	    b_muJetF_muon2_posx1stpix[ndet] = mj2m1pos[ndet].x();
-  // 	    b_muJetF_muon2_posy1stpix[ndet] = mj2m1pos[ndet].y();
-  // 	  }
-
-  // 	  //============ Error =========================//
-
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu1_muJetC;ndet++){
-  // 	    b_muJetC_muon1_errposx1stpix[ndet] = mj1m0poserr[ndet].x();
-  // 	    b_muJetC_muon1_errposy1stpix[ndet] = mj1m0poserr[ndet].y();
-  // 	  }
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu2_muJetC;ndet++){
-  // 	    b_muJetC_muon2_errposx1stpix[ndet] = mj1m1poserr[ndet].x();
-  // 	    b_muJetC_muon2_errposy1stpix[ndet] = mj1m1poserr[ndet].y();
-  // 	  }
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu1_muJetF;ndet++){
-  // 	    b_muJetF_muon1_errposx1stpix[ndet] = mj2m0poserr[ndet].x();
-  // 	    b_muJetF_muon1_errposy1stpix[ndet] = mj2m0poserr[ndet].y();
-  // 	  }
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu2_muJetF;ndet++){
-  // 	    b_muJetF_muon2_errposx1stpix[ndet] = mj2m1poserr[ndet].x();
-  // 	    b_muJetF_muon2_errposy1stpix[ndet] = mj2m1poserr[ndet].y();
-  // 	  }
-
-
-	
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu1_muJetC;ndet++){
-  // 	    b_muJetC_muon1_posx1stpix_lastmeas[ndet] = mj1m0pos_lastmeas[ndet].x();
-  // 	    b_muJetC_muon1_posy1stpix_lastmeas[ndet] = mj1m0pos_lastmeas[ndet].y();
-  // 	  }
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu2_muJetC;ndet++){
-  // 	    b_muJetC_muon2_posx1stpix_lastmeas[ndet] = mj1m1pos_lastmeas[ndet].x();
-  // 	    b_muJetC_muon2_posy1stpix_lastmeas[ndet] = mj1m1pos_lastmeas[ndet].y();
-  // 	  }
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu1_muJetF;ndet++){
-  // 	    b_muJetF_muon1_posx1stpix_lastmeas[ndet] = mj2m0pos_lastmeas[ndet].x();
-  // 	    b_muJetF_muon1_posy1stpix_lastmeas[ndet] = mj2m0pos_lastmeas[ndet].y();
-  // 	  }
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu2_muJetF;ndet++){
-  // 	    b_muJetF_muon2_posx1stpix_lastmeas[ndet] = mj2m1pos_lastmeas[ndet].x();
-  // 	    b_muJetF_muon2_posy1stpix_lastmeas[ndet] = mj2m1pos_lastmeas[ndet].y();
-  // 	  }
-
-
-  // 	  std::vector<std::pair<Int_t,Float_t> > d_mu1_muJetC_hit;
-  // 	  std::vector<std::pair<Int_t,Float_t> > d_mu2_muJetC_hit;
-  // 	  std::vector<std::pair<Int_t,Float_t> > d_mu1_muJetF_hit;
-  // 	  std::vector<std::pair<Int_t,Float_t> > d_mu2_muJetF_hit;
-	
-  // 	  for(int ndet = 0; ndet<b_Det_mu1_muJetC;ndet++){
-  // 	    if(m_debug>10) std::cout<<"   ndet    "<<ndet<<std::endl;
-  // 	    std::pair<Int_t,Float_t> temp;
-  // 	    Float_t temp_d=-10000.0;
-  // 	    for(int nhit=0;nhit<b_comphits_mu1_muJetC;nhit++){
-  // 	      if(m_debug>10) std::cout<<"  nhit    "<<nhit<<std::endl;
-  // 	      temp_d  = sqrt(pow(mj1m0pos[ndet].x()-b_pixelhit_mu1_muJetC_posx[nhit],2)+pow(mj1m0pos[ndet].y() - b_pixelhit_mu1_muJetC_posy[nhit],2));
-  // 	      temp.first = nhit;
-  // 	      temp.second = temp_d;
-  // 	      d_mu1_muJetC_hit.push_back(temp);
-  // 	    }
-  // 	    if(d_mu1_muJetC_hit.size()>0){
-  // 	      sort(d_mu1_muJetC_hit.begin(),d_mu1_muJetC_hit.end(),dRorder);
-  // 	      b_mindist_hit_mu1_muJetC[ndet] = d_mu1_muJetC_hit[0].second;
-  // 	    }
-
-  // 	    d_mu1_muJetC_hit.clear();
-  // 	  }
-	
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu2_muJetC;ndet++){
-  // 	    std::pair<Int_t,Float_t> temp;
-  // 	    Float_t temp_d;
-  // 	    for(int nhit=0;nhit<b_comphits_mu2_muJetC;nhit++){
-  // 	      temp_d  = sqrt(pow(mj1m1pos[ndet].x()-b_pixelhit_mu2_muJetC_posx[nhit],2)+pow(mj1m1pos[ndet].y() - b_pixelhit_mu2_muJetC_posy[nhit],2));
-  // 	      temp.first = nhit;
-  // 	      temp.second = temp_d;
-  // 	      d_mu2_muJetC_hit.push_back(temp);
-  // 	    }
-  // 	    if(d_mu2_muJetC_hit.size()>0){
-  // 	      sort(d_mu2_muJetC_hit.begin(),d_mu2_muJetC_hit.end(),dRorder);
-  // 	      b_mindist_hit_mu2_muJetC[ndet] = d_mu2_muJetC_hit[0].second;
-  // 	    }
-  // 	    d_mu2_muJetC_hit.clear();
-  // 	  }
-
-
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu1_muJetF;ndet++){
-  // 	    std::pair<Int_t,Float_t> temp;
-  // 	    Float_t temp_d;
-  // 	    for(int nhit=0;nhit<b_comphits_mu1_muJetF;nhit++){
-  // 	      temp_d  = sqrt(pow(mj2m0pos[ndet].x()-b_pixelhit_mu1_muJetF_posx[nhit],2)+pow(mj2m0pos[ndet].y() - b_pixelhit_mu1_muJetF_posy[nhit],2));
-  // 	      temp.first = nhit;
-  // 	      temp.second = temp_d;
-  // 	      d_mu1_muJetF_hit.push_back(temp);
-  // 	    }
-  // 	    if(d_mu1_muJetF_hit.size()>0){
-  // 	      sort(d_mu1_muJetF_hit.begin(),d_mu1_muJetF_hit.end(),dRorder);
-  // 	      b_mindist_hit_mu1_muJetF[ndet] = d_mu1_muJetF_hit[0].second;
-  // 	    }
-  // 	    d_mu1_muJetF_hit.clear();
-  // 	  }
-
-
-  // 	  for(int ndet = 0; ndet<b_Det_mu2_muJetF;ndet++){
-  // 	    std::pair<Int_t,Float_t> temp;
-  // 	    Float_t temp_d;
-  // 	    for(int nhit=0;nhit<b_comphits_mu2_muJetF;nhit++){
-  // 	      temp_d  = sqrt(pow(mj2m1pos[ndet].x()-b_pixelhit_mu2_muJetF_posx[nhit],2)+pow(mj2m1pos[ndet].y() - b_pixelhit_mu2_muJetF_posy[nhit],2));
-  // 	      temp.first = nhit;
-  // 	      temp.second = temp_d;
-  // 	      d_mu2_muJetF_hit.push_back(temp);
-  // 	    }
-  // 	    if(d_mu2_muJetF_hit.size()>0){
-  // 	      sort(d_mu2_muJetF_hit.begin(),d_mu2_muJetF_hit.end(),dRorder);
-  // 	      b_mindist_hit_mu2_muJetF[ndet] = d_mu2_muJetF_hit[0].second;
-  // 	    }
-  // 	    d_mu2_muJetF_hit.clear();
-  // 	  }
-
-  // 	  //===============  HIT RECOVERY IMPLEMENTATION (BIKE CHAIN)  =======================//
-
-  // 	  Bool_t recovermj1[6];
-  // 	  Bool_t recovermj2[6];
-  // 	  Bool_t tmprecovermj1[6];
-  // 	  Bool_t tmprecovermj2[6];
-  // 	  Bool_t recovermj12[6];
-	
-
-  // 	  Float_t d_m1hit;
-  // 	  Float_t d_m2hit;
-
-  // 	  Float_t radius[6] ={0.1,0.05,0.03,0.01,0.005,0.001};  // Different radius around the muon position used to define the bike chain
-	
-	
-  // 	  for(int m=0;m<6;m++){
-
-  // 	    if( (b_muJetC_hitpix[0]!=1&&b_muJetC_hitpix[1]!=1)&&(b_muJetF_hitpix[0]==1||b_muJetF_hitpix[1]==1) ){    // First case muJetC fails but muJetF pass
-  // 	      recovermj1[m]=false;
-	    
-  // 	      if(b_Det_mu1_muJetC>0 && b_Det_mu2_muJetC>0){ // need to have both muons extrapolated positions
-	      
-  // 		Float_t d_m1m2;  // distance between muons
-  // 		d_m1m2 = sqrt(pow(mj1m0pos[0].x() - mj1m1pos[0].x(),2) + pow(mj1m0pos[0].y() - mj1m1pos[0].y(),2));
-	    
-	      
-  // 		for(int l=0;l<b_comphits_mu1_muJetC;l++){  // loop for all compatible hits
-	    
-  // 		  d_m1hit = sqrt(pow(mj1m0pos[0].x() - b_pixelhit_mu1_muJetC_posx[l],2)+pow(mj1m0pos[0].y() - b_pixelhit_mu1_muJetC_posy[l],2));  // distance between muon1 and hits
-  // 		  d_m2hit = sqrt(pow(mj1m1pos[0].x() - b_pixelhit_mu1_muJetC_posx[l],2)+pow(mj1m1pos[0].y() - b_pixelhit_mu1_muJetC_posy[l],2));  // distance between muon2 and hits
-		
-  // 		  Float_t alpha;   
-  // 		  alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));   // by law of cosines find relations to get perpendicular distance between hit and the line between the two muons
-		
-  // 		  Float_t alpha2;
-  // 		  alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
-	    
-  // 		  if(m_debug>10){
-  // 		    std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
-  // 		    std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
-  // 		    std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
-  // 		  }
-		 
-		 
-  // 		  Float_t h;
-  // 		  h = d_m1hit*sin(alpha);   // perpendicular distance between the hit and the line defined by the two muons 
-  // 		  Float_t h2;
-  // 		  h2 = d_m2hit*sin(alpha2);   // perpendicular distance between the hit and the line defined by the two muons 
-		 
-  // 		  if(m_debug>10){
-  // 		    std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
-  // 		    std::cout<<"   h value   "<<h<<std::endl;
-  // 		    std::cout<<"   h2 value   "<<h2<<std::endl;
-  // 		  }
-		 
-  // 		  if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){  // h<radius and constrain on the angles < pi/2   or the hit inside the radious around the muon position
-  // 		    recovermj1[m] = true;
-  // 		    if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
-  // 		  }
-  // 		}
-  // 	      }
-  // 	    }
-
-
-  // 	    if( (b_muJetF_hitpix[0]!=1&&b_muJetF_hitpix[1]!=1)&&(b_muJetC_hitpix[0]==1||b_muJetC_hitpix[1]==1) ){ //second case the muJetF fails and MuJetC pass
-  // 	      recovermj2[m]=false;
-	    
-  // 	      if(b_Det_mu1_muJetF>0 && b_Det_mu2_muJetF>0){
-
-  // 		Float_t d_m1m2;  // distance between muons
-  // 		d_m1m2 = sqrt(pow(mj2m0pos[0].x() - mj2m1pos[0].x(),2) + pow(mj2m0pos[0].y() - mj2m1pos[0].y(),2));
-	    
-	      
-  // 		for(int l=0;l<b_comphits_mu1_muJetF;l++){
-	    
-  // 		  d_m1hit = sqrt(pow(mj2m0pos[0].x() -  b_pixelhit_mu1_muJetF_posx[l],2)+pow(mj2m0pos[0].y() -  b_pixelhit_mu1_muJetF_posy[l],2));
-  // 		  d_m2hit = sqrt(pow(mj2m1pos[0].x() -  b_pixelhit_mu1_muJetF_posx[l],2)+pow(mj2m1pos[0].y() -  b_pixelhit_mu1_muJetF_posy[l],2));
-	    
-  // 		  Float_t alpha;
-  // 		  alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
-	    
-  // 		  Float_t alpha2;
-  // 		  alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
-	    
-  // 		  if(m_debug>10){
-  // 		    std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
-  // 		    std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
-  // 		    std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
-  // 		  }
-		 
-		 
-  // 		  Float_t h;
-  // 		  h = d_m1hit*sin(alpha);
-		 
-  // 		  if(m_debug>10){
-  // 		    std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
-  // 		    std::cout<<"   h value   "<<h<<std::endl;
-  // 		  }
-		 
-  // 		  if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
-  // 		    recovermj2[m] = true;
-  // 		    if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
-  // 		  }
-  // 		}
-  // 	      }
-  // 	    }
-
-
-
-  // 	    if( (b_muJetF_hitpix[0]!=1&&b_muJetF_hitpix[1]!=1)&&(b_muJetC_hitpix[0]!=1&&b_muJetC_hitpix[1]!=1) ){  // third case both dimuons fail
-  // 	      recovermj12[m]=false;
-  // 	      tmprecovermj1[m] = false;
-  // 	      tmprecovermj2[m] = false;
-	    
-  // 	      if(b_Det_mu1_muJetF>0 && b_Det_mu2_muJetF>0){
-
-  // 		Float_t d_m1m2;  // distance between muons
-  // 		d_m1m2 = sqrt(pow(mj2m0pos[0].x() - mj2m1pos[0].x(),2) + pow(mj2m0pos[0].y() - mj2m1pos[0].y(),2));
-	    
-	      
-  // 		for(int l=0;l<b_comphits_mu1_muJetF;l++){
-	    
-  // 		  d_m1hit = sqrt(pow(mj2m0pos[0].x() - b_pixelhit_mu1_muJetF_posx[l],2)+pow(mj2m0pos[0].y() - b_pixelhit_mu1_muJetF_posy[l],2));
-  // 		  d_m2hit = sqrt(pow(mj2m1pos[0].x() - b_pixelhit_mu1_muJetF_posx[l],2)+pow(mj2m1pos[0].y() - b_pixelhit_mu1_muJetF_posy[l],2));
-	    
-  // 		  Float_t alpha;
-  // 		  alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
-	    
-  // 		  Float_t alpha2;
-  // 		  alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
-	    
-  // 		  if(m_debug>10){
-  // 		    std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
-  // 		    std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
-  // 		    std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
-  // 		  }
-		 
-		 
-  // 		  Float_t h;
-  // 		  h = d_m1hit*sin(alpha);
-		 
-  // 		  if(m_debug>10){
-  // 		    std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
-  // 		    std::cout<<"   h value   "<<h<<std::endl;
-  // 		  }
-		 
-  // 		  if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
-  // 		    tmprecovermj2[m] = true;
-  // 		    if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
-  // 		  }
-  // 		}
-  // 	      }
-
-
-  // 	      if(b_Det_mu1_muJetC>0 && b_Det_mu2_muJetC>0){
-
-  // 		Float_t d_m1m2;  // distance between muons
-  // 		d_m1m2 = sqrt(pow(mj1m0pos[0].x() - mj1m1pos[0].x(),2) + pow(mj1m0pos[0].y() - mj1m1pos[0].y(),2));
-	    
-	      
-  // 		for(int l=0;l<b_comphits_mu1_muJetC;l++){
-	    
-  // 		  d_m1hit = sqrt(pow(mj1m0pos[0].x() - b_pixelhit_mu1_muJetC_posx[l],2)+pow(mj1m0pos[0].y() - b_pixelhit_mu1_muJetC_posy[l],2));
-  // 		  d_m2hit = sqrt(pow(mj1m1pos[0].x() - b_pixelhit_mu1_muJetC_posx[l],2)+pow(mj1m1pos[0].y() - b_pixelhit_mu1_muJetC_posy[l],2));
-	    
-  // 		  Float_t alpha;
-  // 		  alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
-	    
-  // 		  Float_t alpha2;
-  // 		  alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
-	    
-  // 		  if(m_debug>10){
-  // 		    std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
-  // 		    std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
-  // 		    std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
-  // 		  }
-		 
-		 
-  // 		  Float_t h;
-  // 		  h = d_m1hit*sin(alpha);
-		 
-  // 		  if(m_debug>10){
-  // 		    std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
-  // 		    std::cout<<"   h value   "<<h<<std::endl;
-  // 		  }
-		 
-  // 		  if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
-  // 		    tmprecovermj1[m] = true;
-  // 		    if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
-  // 		  }
-  // 		}
-  // 	      }
-
-
-  // 	      if(tmprecovermj1[m] && tmprecovermj2[m]) recovermj12[m] = true;
-  // 	    }
-
-
-  // 	  }
-
-
-
-
-  // 	  // recovery flags for different radius
-  // 	  if(recovermj1[0]) b_hitrecover_mj1_r1=1;
-  // 	  if(recovermj1[1]) b_hitrecover_mj1_r05=1;
-  // 	  if(recovermj1[2]) b_hitrecover_mj1_r03=1;
-  // 	  if(recovermj1[3]) b_hitrecover_mj1_r01=1;
-  // 	  if(recovermj1[4]) b_hitrecover_mj1_r005=1;
-  // 	  if(recovermj1[5]) b_hitrecover_mj1_r001=1;
-
-  // 	  if(recovermj2[0]) b_hitrecover_mj2_r1=1;
-  // 	  if(recovermj2[1]) b_hitrecover_mj2_r05=1;
-  // 	  if(recovermj2[2]) b_hitrecover_mj2_r03=1;
-  // 	  if(recovermj2[3]) b_hitrecover_mj2_r01=1;
-  // 	  if(recovermj2[4]) b_hitrecover_mj2_r005=1;
-  // 	  if(recovermj2[5]) b_hitrecover_mj2_r001=1;
-
-  // 	  if(recovermj12[0]) b_hitrecover_mj12_r1=1;
-  // 	  if(recovermj12[1]) b_hitrecover_mj12_r05=1;
-  // 	  if(recovermj12[2]) b_hitrecover_mj12_r03=1;
-  // 	  if(recovermj12[3]) b_hitrecover_mj12_r01=1;
-  // 	  if(recovermj12[4]) b_hitrecover_mj12_r005=1;
-  // 	  if(recovermj12[5]) b_hitrecover_mj12_r001=1;
-	
-
-  // 	  // if(b_muJetF_hitpix[0]!=1&&b_muJetF_hitpix[1]!=1){
-	    
-
-  // 	  // }
-
-
-
-  // 	  // if(dim1_hit && !dim2_hit){
-	    
-  // 	  //      if(m_debug>10) std::cout<<" number of nearby hits  "<<rechitposmj2.size()<<std::endl;
-	  
-  // 	  //      Float_t d_m1m2;  // distance between muons
-  // 	  //      d_m1m2 = sqrt(pow(mj2m0pos.x() - mj2m1pos.x(),2) + pow(mj2m0pos.y() - mj2m1pos.y(),2));
-	  
-  // 	  //      Float_t d_m1hit;
-  // 	  //      Float_t d_m2hit;
-	  
-  // 	  //      for(uint32_t l=0;l<rechitposmj2.size();l++){
-	    
-  // 	  //        d_m1hit = sqrt(pow(mj2m0pos.x() - rechitposmj2[l].x(),2)+pow(mj2m0pos.y() - rechitposmj2[l].y(),2));
-  // 	  //        d_m2hit = sqrt(pow(mj2m1pos.x() - rechitposmj2[l].x(),2)+pow(mj2m1pos.y() - rechitposmj2[l].y(),2));
-	    
-  // 	  //        Float_t alpha;
-  // 	  //        alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
-	    
-  // 	  //        Float_t alpha2;
-  // 	  //        alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
-	    
-  // 	  //        if(m_debug>10){
-  // 	  // 	 std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
-  // 	  // 	 std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
-  // 	  // 	 std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
-  // 	  //        }
-
-
-  // 	  //        Float_t h;
-  // 	  //        h = d_m1hit*sin(alpha);
-	       
-  // 	  //        if(m_debug>10){
-  // 	  // 	 std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
-  // 	  // 	 std::cout<<"   h value   "<<h<<std::endl;
-  // 	  //        }
-	       
-  // 	  //        if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
-  // 	  // 	 recovermj2[m] = true;
-  // 	  // 	 if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
-  // 	  //        }
-  // 	  //      }
-  // 	  //    }
-
-
-  // 	  //    if(!dim1_hit && dim2_hit){
-
-  // 	  //      if(m_debug>10) std::cout<<" number of nearby hits  "<<rechitposmj1.size()<<std::endl;
-	    
-  // 	  //      Float_t d_m1m2;  // distance between muons
-  // 	  //      d_m1m2 = sqrt(pow(mj1m0pos.x() - mj1m1pos.x(),2) + pow(mj1m0pos.y() - mj1m1pos.y(),2));
-	
-  // 	  //      Float_t d_m1hit;
-  // 	  //      Float_t d_m2hit;
-
-  // 	  //      for(uint32_t l=0;l<rechitposmj1.size();l++){
-	       
-  // 	  //        d_m1hit = sqrt(pow(mj1m0pos.x() - rechitposmj1[l].x(),2)+pow(mj1m0pos.y() - rechitposmj1[l].y(),2));
-  // 	  //        d_m2hit = sqrt(pow(mj1m1pos.x() - rechitposmj1[l].x(),2)+pow(mj1m1pos.y() - rechitposmj1[l].y(),2));
-	       
-  // 	  //        Float_t alpha;
-  // 	  //        alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
-	      
-  // 	  //        Float_t alpha2;
-  // 	  //        alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
-	       
-  // 	  //        if(m_debug>10){
-  // 	  // 	 std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
-  // 	  // 	 std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
-  // 	  // 	 std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
-  // 	  //        }
-  // 	  //        Float_t h;
-  // 	  //        h = d_m1hit*sin(alpha);
-	       
-  // 	  //        if(m_debug>10){
-  // 	  // 	 std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
-  // 	  // 	 std::cout<<"   h value   "<<h<<std::endl;
-  // 	  //        }
-	      
-  // 	  //        if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m])  || d_m1hit<radius[m] || d_m2hit<radius[m]){
-  // 	  // 	 recovermj1[m] = true;
-  // 	  // 	 if(m_debug>10) std::cout<<" recovery of muJetC   "<<std::endl;
-  // 	  //        }
-  // 	  //      }
-  // 	  //    }
-  // 	  //  }
-
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[0])  b_hitrecover_mj2_r0005=1;
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[1])  b_hitrecover_mj2_r005=1;
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[2])  b_hitrecover_mj2_r05=1;
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[3])  b_hitrecover_mj2_r01=1;
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[4])  b_hitrecover_mj2_r5=1;
-
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[0])  b_hitrecover_mj1_r0005=1;
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[1])  b_hitrecover_mj1_r005=1;
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[2])  b_hitrecover_mj1_r05=1;
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[3])  b_hitrecover_mj1_r01=1;
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[4])  b_hitrecover_mj1_r5=1;
-
-
-
-
-
-
-  // 	  // if(m_debug>10){
-  // 	  //   std::cout<<" MuJetC   "<<std::endl;
-  // 	  //   std::cout<<" muon1 position in x   "<<mj1m0pos.x()<<std::endl;
-  // 	  //   std::cout<<" muon1 position in y   "<<mj1m0pos.y()<<std::endl;
-  // 	  //   //	  std::cout<<" muon1 position in z   "<<mj1m0pos.z()<<std::endl;
-    
-  // 	  //   std::cout<<" muon2 position in x   "<<mj1m1pos.x()<<std::endl;
-  // 	  //   std::cout<<" muon2 position in y   "<<mj1m1pos.y()<<std::endl;
-  // 	  //   //	  std::cout<<" muon2 position in z   "<<mj1m1pos.z()<<std::endl;
-    
-    
-  // 	  //   std::cout<<" MuJetF   "<<std::endl;
-  // 	  //   std::cout<<" muon1 position in x   "<<mj2m0pos.x()<<std::endl;
-  // 	  //   std::cout<<" muon1 position in y   "<<mj2m0pos.y()<<std::endl;
-  // 	  //   //	  std::cout<<" muon1 position in z   "<<mj2m0pos.z()<<std::endl;
-    
-  // 	  //   std::cout<<" muon2 position in x   "<<mj2m1pos.x()<<std::endl;
-  // 	  //   std::cout<<" muon2 position in y   "<<mj2m1pos.y()<<std::endl;
-  // 	  //   //	  std::cout<<" muon2 position in z   "<<mj2m1pos.z()<<std::endl;
-  // 	  // }
-	
-  // 	  // Float_t mj1_dm1m2 = sqrt(pow(mj1m0pos.x()-mj1m1pos.x(),2)+pow(mj1m0pos.y()-mj1m1pos.y(),2));
-  // 	  // Float_t mj2_dm1m2 = sqrt(pow(mj2m0pos.x()-mj2m1pos.x(),2)+pow(mj2m0pos.y()-mj2m1pos.y(),2));
-	
-	
-  // 	  // b_dist_muon_muJetC = mj1_dm1m2;
-  // 	  // b_dist_muon_muJetF = mj2_dm1m2;
-
-	
-  // 	  // if(m_debug>10){
-  // 	  //   std::cout<<" distance between muons in MuJet1 xz "<<mj1_dm1m2<<std::endl;
-  // 	  //   std::cout<<" distance between muons in MuJet2 xz "<<mj2_dm1m2<<std::endl;
-  // 	  // }
-
-  // 	  // if(m_debug>10){
-  // 	  //   if(dim1_hit) std::cout<<" MuJet1 with at least one muon in the 1st pixel layer  "<<std::endl;
-  // 	  //   if(dim2_hit) std::cout<<" MuJet2 with at least one muon in the 1st pixel layer  "<<std::endl;
-  // 	  // }
-	
-      
-  // 	  // if(dim1_hit && dim2_hit){
-  // 	  //   if(m_debug>10) std::cout<<"  No need for hit recovery   "<<std::endl; 
-  // 	  // }
-  // 	  // if(!dim1_hit && !dim2_hit) {
-  // 	  //   if(m_debug>10) std::cout<<"  Both dimuons need the hit recovery (very unlikely case) not considering for the moment "<<std::endl;
-  // 	  // }
-
-
-  // 	  // Bool_t recovermj2[5]={false,false,false,false};
-  // 	  // Bool_t recovermj1[5]={false,false,false,false};
-
-
-  // 	  // Float_t radius[5] ={0.0005,0.005,0.01,0.05,0.5};  // radius to look around the trajectory for compatible hits.
-
-
-  // 	  //  for(int m=0;m<5;m++){
-
-  // 	  //    if(dim1_hit && !dim2_hit){
-	    
-  // 	  //      if(m_debug>10) std::cout<<" number of nearby hits  "<<rechitposmj2.size()<<std::endl;
-	  
-  // 	  //      Float_t d_m1m2;  // distance between muons
-  // 	  //      d_m1m2 = sqrt(pow(mj2m0pos.x() - mj2m1pos.x(),2) + pow(mj2m0pos.y() - mj2m1pos.y(),2));
-	  
-  // 	  //      Float_t d_m1hit;
-  // 	  //      Float_t d_m2hit;
-	  
-  // 	  //      for(uint32_t l=0;l<rechitposmj2.size();l++){
-	    
-  // 	  //        d_m1hit = sqrt(pow(mj2m0pos.x() - rechitposmj2[l].x(),2)+pow(mj2m0pos.y() - rechitposmj2[l].y(),2));
-  // 	  //        d_m2hit = sqrt(pow(mj2m1pos.x() - rechitposmj2[l].x(),2)+pow(mj2m1pos.y() - rechitposmj2[l].y(),2));
-	    
-  // 	  //        Float_t alpha;
-  // 	  //        alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
-	    
-  // 	  //        Float_t alpha2;
-  // 	  //        alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
-	    
-  // 	  //        if(m_debug>10){
-  // 	  // 	 std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
-  // 	  // 	 std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
-  // 	  // 	 std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
-  // 	  //        }
-
-
-  // 	  //        Float_t h;
-  // 	  //        h = d_m1hit*sin(alpha);
-	       
-  // 	  //        if(m_debug>10){
-  // 	  // 	 std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
-  // 	  // 	 std::cout<<"   h value   "<<h<<std::endl;
-  // 	  //        }
-	       
-  // 	  //        if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m]) || d_m1hit<radius[m] || d_m2hit<radius[m]){
-  // 	  // 	 recovermj2[m] = true;
-  // 	  // 	 if(m_debug>10) std::cout<<" recovery of muJetF   "<<std::endl;
-  // 	  //        }
-  // 	  //      }
-  // 	  //    }
-
-
-  // 	  //    if(!dim1_hit && dim2_hit){
-
-  // 	  //      if(m_debug>10) std::cout<<" number of nearby hits  "<<rechitposmj1.size()<<std::endl;
-	    
-  // 	  //      Float_t d_m1m2;  // distance between muons
-  // 	  //      d_m1m2 = sqrt(pow(mj1m0pos.x() - mj1m1pos.x(),2) + pow(mj1m0pos.y() - mj1m1pos.y(),2));
-	
-  // 	  //      Float_t d_m1hit;
-  // 	  //      Float_t d_m2hit;
-
-  // 	  //      for(uint32_t l=0;l<rechitposmj1.size();l++){
-	       
-  // 	  //        d_m1hit = sqrt(pow(mj1m0pos.x() - rechitposmj1[l].x(),2)+pow(mj1m0pos.y() - rechitposmj1[l].y(),2));
-  // 	  //        d_m2hit = sqrt(pow(mj1m1pos.x() - rechitposmj1[l].x(),2)+pow(mj1m1pos.y() - rechitposmj1[l].y(),2));
-	       
-  // 	  //        Float_t alpha;
-  // 	  //        alpha = acos( ( pow(d_m1hit,2) + pow(d_m1m2,2) - pow(d_m2hit,2) )/ (2*d_m1hit*d_m1m2));
-	      
-  // 	  //        Float_t alpha2;
-  // 	  //        alpha2 = acos( ( pow(d_m2hit,2) + pow(d_m1m2,2) - pow(d_m1hit,2) )/ (2*d_m2hit*d_m1m2));
-	       
-  // 	  //        if(m_debug>10){
-  // 	  // 	 std::cout<<" distance between muons  "<<d_m1m2<<std::endl;
-  // 	  // 	 std::cout<<" distance between m1 and hit  "<<d_m1hit<<std::endl;
-  // 	  // 	 std::cout<<" distance between m2 and hit  "<<d_m2hit<<std::endl;
-  // 	  //        }
-  // 	  //        Float_t h;
-  // 	  //        h = d_m1hit*sin(alpha);
-	       
-  // 	  //        if(m_debug>10){
-  // 	  // 	 std::cout<<"    alpha1    "<<alpha<<"  alpha2   "<<alpha2<<std::endl;
-  // 	  // 	 std::cout<<"   h value   "<<h<<std::endl;
-  // 	  //        }
-	      
-  // 	  //        if( ( (alpha<1.57 && alpha2<1.57) && h<radius[m])  || d_m1hit<radius[m] || d_m2hit<radius[m]){
-  // 	  // 	 recovermj1[m] = true;
-  // 	  // 	 if(m_debug>10) std::cout<<" recovery of muJetC   "<<std::endl;
-  // 	  //        }
-  // 	  //      }
-  // 	  //    }
-  // 	  //  }
-
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[0])  b_hitrecover_mj2_r0005=1;
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[1])  b_hitrecover_mj2_r005=1;
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[2])  b_hitrecover_mj2_r05=1;
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[3])  b_hitrecover_mj2_r01=1;
-  // 	  //  if( (dim1_hit&&!dim2_hit) && recovermj2[4])  b_hitrecover_mj2_r5=1;
-
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[0])  b_hitrecover_mj1_r0005=1;
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[1])  b_hitrecover_mj1_r005=1;
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[2])  b_hitrecover_mj1_r05=1;
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[3])  b_hitrecover_mj1_r01=1;
-  // 	  //  if( (!dim1_hit&&dim2_hit) && recovermj1[4])  b_hitrecover_mj1_r5=1;
-
-
-  // 	  //  if(m_debug>10){
-  // 	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[0])  cout<<" hit recover for mujet2 and 0.0005cm  "<<endl;
-  // 	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[1])  cout<<" hit recover for mujet2 and 0.005cm  "<<endl;
-  // 	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[2])  cout<<" hit recover for mujet2 and 0.01cm  "<<endl;
-  // 	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[3])  cout<<" hit recover for mujet2 and 0.05cm  "<<endl;
-  // 	  //    if( (dim1_hit&&!dim2_hit) && recovermj2[4])  cout<<" hit recover for mujet2 and 0.5cm  "<<endl;
-	   
-  // 	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[0])  cout<<" hit recover for mujet1 and 0.0005cm  "<<endl;   
-  // 	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[1])  cout<<" hit recover for mujet1 and 0.005cm  "<<endl;  
-  // 	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[2])  cout<<" hit recover for mujet1 and 0.01cm  "<<endl; 
-  // 	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[3])  cout<<" hit recover for mujet1 and 0.05cm  "<<endl; 
-  // 	  //    if( (!dim1_hit&&dim2_hit) && recovermj1[4])  cout<<" hit recover for mujet1 and 0.5cm  "<<endl;
-  // 	  //  }
-
-  // 	  }
-
-  // 	}
-  //     }
-  //   }
   
 #ifdef THIS_IS_AN_EVENT_EXAMPLE
   Handle<ExampleData> pIn;

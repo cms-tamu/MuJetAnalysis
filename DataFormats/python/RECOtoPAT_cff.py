@@ -5,6 +5,9 @@ from TrackingTools.MaterialEffects.OppositeMaterialPropagator_cfi import *
 from PhysicsTools.PatAlgos.patSequences_cff import *
 from PhysicsTools.PatAlgos.triggerLayer1.triggerProducer_cfi import *
 from PhysicsTools.PatAlgos.triggerLayer1.triggerEventProducer_cfi import *
+from PhysicsTools.PatAlgos.producersLayer1.muonProducer_cff import *
+from PhysicsTools.PatAlgos.producersLayer1.muonProducer_cff import *
+from PhysicsTools.PatAlgos.recoLayer0.muonPFIsolationValuesPAT_cff import *
 #from PhysicsTools.PatAlgos.triggerLayer1.triggerMatcher_cfi import * -- deprecated in 73
 
 muonMatch = muonMatch.clone(
@@ -127,25 +130,25 @@ cleanPatPFMuonsTriggerMatch = cms.EDProducer("PATTriggerMatchMuonEmbedder",
 patifyTrackerMuon = cms.Sequence(
     selectedPatTrackerMuons * 
     cleanPatTrackerMuons * 
-    countPatTrackerMuons * 
-    cleanTrackerMuonTriggerMatchHLTMu * 
-    cleanTrackerMuonTriggerMatchHLTIsoMu * 
-    cleanTrackerMuonTriggerMatchHLTDoubleMu * 
-    cleanPatTrackerMuonsTriggerMatch
+    countPatTrackerMuons 
+#    cleanTrackerMuonTriggerMatchHLTMu * 
+#    cleanTrackerMuonTriggerMatchHLTIsoMu * 
+#    cleanTrackerMuonTriggerMatchHLTDoubleMu * 
+#    cleanPatTrackerMuonsTriggerMatch
 )
 patifyPFMuon = cms.Sequence(
     selectedPatPFMuons * 
     cleanPatPFMuons * 
-    countPatPFMuons * 
-    cleanPFMuonTriggerMatchHLTMu * 
-    cleanPFMuonTriggerMatchHLTIsoMu * 
-    cleanPFMuonTriggerMatchHLTDoubleMu * 
-    cleanPatPFMuonsTriggerMatch
+    countPatPFMuons 
+#    cleanPFMuonTriggerMatchHLTMu * 
+#    cleanPFMuonTriggerMatchHLTIsoMu * 
+#    cleanPFMuonTriggerMatchHLTDoubleMu * 
+#    cleanPatPFMuonsTriggerMatch
 )
 patifyData = cms.Sequence(
     patMuons * 
-    patTrigger * 
-    patTriggerEvent * 
+#    patTrigger * 
+#    patTriggerEvent * 
     patifyTrackerMuon * 
     patifyPFMuon
 )
