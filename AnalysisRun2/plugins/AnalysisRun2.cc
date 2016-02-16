@@ -2344,24 +2344,24 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   		  }
 		  cout<<" before crashing   "<<endl;
 		  
-		  // std::vector< const DetLayer * > innerCompLayers = innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
-		  // std::vector< const DetLayer * > outerCompLayers = outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
+		   // std::vector< const DetLayer * > innerCompLayers = innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
+		   // std::vector< const DetLayer * > outerCompLayers = outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
 		  
 		  //get the list of compatible layers
 
 		  // std::vector<const DetLayer*> innerCompLayers =  innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
 		  // std::vector<const DetLayer*> outerCompLayers =  outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
-
-		  std::vector<const DetLayer*> innerCompLayers =  NavigableLayer::compatibleLayers(*innerState,dirForInnerLayers);
-		  std::vector<const DetLayer*> outerCompLayers =  NavigableLayer::compatibleLayers(*outerState,dirForOuterLayers);
+		  
+		  //		  std::vector<const DetLayer*> innerCompLayers =  theSchool.compatibleLayers(*innerState,dirForInnerLayers);
+		  //		  std::vector<const DetLayer*> outerCompLayers =  theSchool.compatibleLayers(*outerState,dirForOuterLayers);
 
 		  // std::vector<const DetLayer*> innerCompLayers;
 		  // std::vector<const DetLayer*> outerCompLayers;
 		  
 
 
-		  //		  std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-		  //		  std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
+		  std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
+		  std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
 		  
 		  //		  auto innerCompLayers  = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
 		  //		  auto outerCompLayers  = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
