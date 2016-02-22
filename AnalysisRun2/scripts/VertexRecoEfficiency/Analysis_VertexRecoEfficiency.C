@@ -116,6 +116,7 @@ void efficiency_vertex(const std::vector<std::string>& dirNames, int layers = 1)
   //============= Counters ===========================//
 
   Double_t ev_all = 0.;
+  Double_t ev_isSelMu8 = 0.;
   Double_t ev_isVtxOK = 0.;
   Double_t ev_is2MuJets = 0.;
   Double_t ev_is2DiMuons = 0.;
@@ -226,14 +227,15 @@ void efficiency_vertex(const std::vector<std::string>& dirNames, int layers = 1)
        				 (diMuonF_m1_FittedVtx_hitpix_l3inc==1 || 
        				  diMuonF_m2_FittedVtx_hitpix_l3inc==1));
       
-      const double firstPixelLayerRadius(4.4);
+      const double firstPixelLayerRadius(5.0);
       const double secondPixelLayerRadius(7.3);
       const double thirdPixelLayerRadius(10.2);
       
-      bool pixelLayer;
-      double pixelLayerRadius;
+      bool pixelLayer = false;;
+      double pixelLayerRadius = 0.;
       
       if (layers==1) {
+	//std::cout << "init layers 1" << std::endl;
 	pixelLayer = firstPixelLayer;
 	pixelLayerRadius = firstPixelLayerRadius;
       }
@@ -248,19 +250,73 @@ void efficiency_vertex(const std::vector<std::string>& dirNames, int layers = 1)
 
       ev_all++;
 
+      if(is1GenMu17) c1genm++;
+      if(is2GenMu8)  c2genm++;
+      if(is3GenMu8)  c3genm++;
+      if(is4GenMu8)  c4genm++;
+
       if(is1SelMu17) c1recm++;
       if(is2SelMu8)  c2recm++;
       if(is3SelMu8)  c3recm++;
       if(is4SelMu8)  c4recm++;
+      /*
+      //  ===========   GEN LEVEL information  ==============//
+      if(is4GenMu8){
+        if(fabs(genA0_Lxy)< pixelLayerRadius && fabs(genA1_Lxy)< pixelLayerRadius && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
+          ev_4gmlxylzcut++;
+        }
+      }
+      if(is4SelMu8){
+	if(isVertexOK){
+	  ev_isVtxOK++;
+	  if(is2MuJets){
+	    ev_is2MuJets++;
+	    if(is2DiMuons){
+	      ev_is2DiMuons++;
+	      if(is2DiMuonsFittedVtxOK){
+		ev_is2DiMuonsFittedVtxOK++;
+		if(pixelLayer and fabs(genA0_Lxy)< pixelLayerRadius && fabs(genA1_Lxy)< pixelLayerRadius && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
+		  ev_isPixelHitOK++;
+		  if(is2DiMuonsDzOK_FittedVtx){
+		    ev_is2DiMuonsDzOK_FittedVtx++;
+		    if(is2DiMuonsMassOK_FittedVtx){
+		      ev_is2DiMuonsMassOK_FittedVtx++;
+		      if(is2DiMuonsIsoTkOK_FittedVtx){
+			ev_is2DiMuonsIsoTkOK_FittedVtx++;
+			if(isDiMuonHLTFired){
+			  ev_isDiMuonHLTFired++;
+			}
+		      }
+		    }
+		  }
+		}
+	      }
+	    }
+	  }
+	}
+      }
+      */
 
       //  ===========   GEN LEVEL information  ==============//
       if(is4GenMu8){
         if(fabs(genA0_Lxy)< pixelLayerRadius && fabs(genA1_Lxy)< pixelLayerRadius && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
           ev_4gmlxylzcut++;
-	  if(is4SelMu8) {
-	    ev_4SelMu++;
-	    if(isVertexOK){	      
+	  if(is4SelMu8){
+	    ev_isSelMu8++;
+	    if(isVertexOK){
 	      ev_isVtxOK++;
+	      if(is2MuJets){
+		ev_is2MuJets++;
+		if(is2DiMuons){
+		  ev_is2DiMuons++;
+		  if(pixelLayer){
+		    ev_isPixelHitOK++;
+		    if(is2DiMuonsFittedVtxOK){
+		      ev_is2DiMuonsFittedVtxOK++;
+		    }
+		  }
+		}
+	      }
 	    }
 	  }
 	}
@@ -278,19 +334,28 @@ void efficiency_vertex(const std::vector<std::string>& dirNames, int layers = 1)
   std::cout<<" 4GenMu8                        "<<c4genm<<"   reff  "<<c4genm/(c3genm*1.0)<<std::endl;
   std::cout<<" 4GenMu8 Lxy/Lz                 "<<ev_4gmlxylzcut<<"   reff   "<<ev_4gmlxylzcut/(c4genm*1.0)<<std::endl;
   std::cout<<" ================ RECO MUONS ========================================= "<<std::endl;
-  std::cout<<" 1RecMu17                       "<<c1recm<<"  reff  "<<c1recm/(ev_all*1.0)<<std::endl;
+  std::cout<<" 1RecMu17                       "<<c1recm<<"  reff  "<<c1recm/(ev_4gmlxylzcut*1.0)<<std::endl;
   std::cout<<" 2RecMu8                        "<<c2recm<<"  reff  "<<c2recm/(c1recm*1.0)<<std::endl;
   std::cout<<" 3RecMu8                        "<<c3recm<<"  reff  "<<c3recm/(c2recm*1.0)<<std::endl;
   std::cout<<" 4RecMu8                        "<<c4recm<<"  reff  "<<c4recm/(c3recm*1.0)<<std::endl;
   std::cout<<" ================ EVENT variables ================= "<<std::endl;  
-  std::cout<<" Events with VtxOK              "<<ev_isVtxOK<<"    reff  "   <<ev_isVtxOK/(1.0*c4recm)<<std::endl;
+  std::cout<<" Events with VtxOK              "<<ev_isVtxOK<<"    reff  "<<ev_isVtxOK/(1.0*c4recm)<<std::endl;
+  std::cout<<" Events with 2 muonjets         "<<ev_is2MuJets<<"     reff  "<<ev_is2MuJets/(1.0*ev_isVtxOK)<<std::endl;
+  std::cout<<" Events with 2 Dimuons          "<<ev_is2DiMuons<<"    reff  "<<ev_is2DiMuons/(1.0*ev_is2MuJets)<<std::endl;
+  std::cout<<" Events with 2DimVtxOK          "<<ev_is2DiMuonsFittedVtxOK<<"    reff  "<<ev_is2DiMuonsFittedVtxOK/(1.0*ev_is2DiMuons)<<std::endl;
+  std::cout<<" Events with 2DimHitPix         "<<ev_isPixelHitOK<<"     reff  "<<ev_isPixelHitOK/(1.0*ev_is2DiMuonsFittedVtxOK)<<std::endl;
+  std::cout<<" Events with 2DimDzOK           "<<ev_is2DiMuonsDzOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsDzOK_FittedVtx/(1.0*ev_isPixelHitOK)<<std::endl;
+  std::cout<<" Events with 2DimMassOK         "<<ev_is2DiMuonsMassOK_FittedVtx<<"  reff   "<<ev_is2DiMuonsMassOK_FittedVtx/(1.0*ev_is2DiMuonsDzOK_FittedVtx)<<endl;
+  std::cout<<" Events with 2DimIsoOK          "<<ev_is2DiMuonsIsoTkOK_FittedVtx<<"   reff   "<<ev_is2DiMuonsIsoTkOK_FittedVtx/(1.0*ev_is2DiMuonsMassOK_FittedVtx)<<endl;
+  std::cout<<" Events with 2DimHLT            "<<ev_isDiMuonHLTFired<<"   reff   "<<ev_isDiMuonHLTFired/(1.0*ev_is2DiMuonsIsoTkOK_FittedVtx)<<endl;
+  std::cout<<" ratio reco/gen                 "<<ev_isPixelHitOK<<"    reff  "   <<ev_isPixelHitOK/(1.0*ev_4gmlxylzcut)<<std::endl;
   // std::cout<<" Events with 2 muonjets         "<<ev_is2MuJets<<"     reff  "<<ev_is2MuJets/(1.0*ev_isVtxOK)<<std::endl;
   // std::cout<<" Events with 2 Dimuons          "<<ev_is2DiMuons<<"    reff  "<<ev_is2DiMuons/(1.0*ev_is2MuJets)<<std::endl;
   // std::cout<<" Events with 2DimVtxOK          "<<ev_is2DiMuonsFittedVtxOK<<"    reff  "<<ev_is2DiMuonsFittedVtxOK/(1.0*ev_is2DiMuons)<<std::endl;
   // std::cout<<" Events with 2DimHitPix         "<<ev_isPixelHitOK<<"     reff  "<<ev_isPixelHitOK/(1.0*ev_is2DiMuonsFittedVtxOK)<<std::endl;
-  const double eff(ev_isVtxOK/(1.0*ev_4SelMu));
+  const double eff(ev_is2DiMuonsFittedVtxOK/(1.0*ev_isPixelHitOK));
   cout << eff << endl;
-  const double eff_uncert(sqrt( ((ev_isVtxOK/(1.0*ev_4SelMu))*(1- (ev_isVtxOK/(1.0*ev_4SelMu)) ))/(1.0*ev_4SelMu)));
+  const double eff_uncert(calc_eff(ev_is2DiMuonsFittedVtxOK, ev_isPixelHitOK));
   
   //Fill ratio reco/gen vectors to be plotted  
 
@@ -477,9 +542,9 @@ void makePlot(int layers = 1)
   TCanvas *c = new TCanvas("c","c",700,500);
   gStyle->SetOptStat(0);
 
-  TH2F *dummy3 = new TH2F("","",400,-0.2,20.2,100,0.8,1.0);
+  TH2F *dummy3 = new TH2F("","",400,-0.2,20.2,100,0.7,1.1);
   dummy3->GetXaxis()->SetTitle("c#tau [mm]");
-  dummy3->GetYaxis()->SetTitle("HLT efficiency");
+  dummy3->GetYaxis()->SetTitle("Vertex reconstruction efficiency/acceptance");
   dummy3->Draw();
   
   gr_eff_mD_0250->SetLineWidth(1);
@@ -588,4 +653,8 @@ void Analysis_VertexRecoEfficiency()
  
   for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_vertex(v, 1);
   makePlot(1);
+  // for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_vertex(v, 2);
+  // makePlot(2);
+  // for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_vertex(v, 3);
+  // makePlot(3);
 }     

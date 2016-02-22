@@ -305,6 +305,8 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Int_t  m_events2DiMuons; // ... with 2 dimuons (dimuon = muon jet with 2 muons)
   
   Bool_t b_is2DiMuonsFittedVtxOK;
+  Bool_t b_is2DiMuonsFittedVtxOK_KF;
+  Bool_t b_is2DiMuonsFittedVtxOK_VS;
   Bool_t b_is2DiMuonsConsistentVtxOK;
   
   Bool_t b_is2DiMuonsDzOK_FittedVtx;
@@ -1178,6 +1180,18 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_is2DiMuonsFittedVtxOK = true;
     }
   }
+  b_is2DiMuonsFittedVtxOK_KF = false;
+  if ( diMuonC != NULL && diMuonF != NULL ) {
+    if ( diMuonC->vertexValid_fitted() && diMuonF->vertexValid_fitted() ) {
+      b_is2DiMuonsFittedVtxOK_KF = true;
+    }
+  }
+  b_is2DiMuonsFittedVtxOK_VS = false;
+  if ( diMuonC != NULL && diMuonF != NULL ) {
+    if ( diMuonC->vertexValid_mindist() && diMuonF->vertexValid_mindist() ) {
+      b_is2DiMuonsFittedVtxOK_VS = true;
+    }
+  }
   // Fill branches with variables calculated with "old" fitted vertexes
   if ( b_is2DiMuonsFittedVtxOK ) {
     b_diMuonC_FittedVtx_m   = diMuonC->vertexMass();
@@ -2035,6 +2049,10 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("is2MuJets",                      &b_is2MuJets,                      "is2MuJets/O");
   m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
   m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
+  m_ttree->Branch("is2DiMuonsFittedVtxOK_KF",       &b_is2DiMuonsFittedVtxOK_KF,       "is2DiMuonsFittedVtxOK_KF/O");
+  m_ttree->Branch("is2DiMuonsFittedVtxOK_VS",       &b_is2DiMuonsFittedVtxOK_VS,       "is2DiMuonsFittedVtxOK_VS/O");
+
+
   m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
   m_ttree->Branch("is2DiMuonsDzOK_FittedVtx",       &b_is2DiMuonsDzOK_FittedVtx,       "is2DiMuonsDzOK_FittedVtx/O");
   m_ttree->Branch("is2DiMuonsDzOK_ConsistentVtx",   &b_is2DiMuonsDzOK_ConsistentVtx,   "is2DiMuonsDzOK_ConsistentVtx/O");
