@@ -1,0 +1,115 @@
+# Auto generated configuration file
+# using: 
+# Revision: 1.19 
+# Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
+# with command line options: step3 --conditions auto:run2_mc -n 10 --eventcontent RECOSIM,MINIAODSIM --runUnscheduled -s RAW2DIGI,L1Reco,RECO,PAT --datatier GEN-SIM-RECO,MINIAODSIM --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --magField 38T_PostLS1 --no_exec
+import FWCore.ParameterSet.Config as cms
+
+process = cms.Process('RECO')
+
+# import of standard configurations
+process.load('Configuration.StandardSequences.Services_cff')
+process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
+process.load('FWCore.MessageService.MessageLogger_cfi')
+process.load('Configuration.EventContent.EventContent_cff')
+process.load('SimGeneral.MixingModule.mixNoPU_cfi')
+process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
+process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
+process.load('Configuration.StandardSequences.RawToDigi_cff')
+process.load('Configuration.StandardSequences.L1Reco_cff')
+process.load('Configuration.StandardSequences.Reconstruction_cff')
+process.load('Configuration.StandardSequences.EndOfProcess_cff')
+process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
+
+process.options = cms.untracked.PSet(
+    allowUnscheduled = cms.untracked.bool(True)
+)
+
+# Other statements
+from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
+
+# Automatic addition of the customisation function from SLHCUpgradeSimulations.Configuration.postLS1Customs
+#from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1 
+
+### Track refitter specific stuff
+from RecoTracker.TkNavigation.NavigationSchoolESProducer_cff import *
+process.load("RecoTracker.TrackProducer.TrackRefitter_cfi")
+process.TrackRefitter.NavigationSchool = ''
+
+process.source = cms.Source ("PoolSource",
+                             fileNames=cms.untracked.vstring('file:out_reco_106.root'),
+                             skipEvents=cms.untracked.uint32(0)
+                             )
+
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(30))
+
+
+process.Path = cms.Path(process.TrackRefitter)
+
+# End of customisation functions
+#do not add changes to your config after this point (unless you know what you are doing)
+from FWCore.ParameterSet.Utilities import convertToUnscheduled
+process=convertToUnscheduled(process)
+
+################# RECOtoPAT  ==========================================
+process.load("MuJetAnalysis.DataFormats.RECOtoPAT_cff")
+process.patMuons.addGenMatch = cms.bool(True)
+process.patMuons.embedGenMatch = cms.bool(True)
+
+## pick latest HLT process
+process.patTrigger.processName = cms.string( "*" )
+process.patTriggerEvent.processName = cms.string( "*" )
+
+
+
+############## Analysis Modules ###################################
+process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cfi")
+
+process.PFMuJetProducer05 = process.MuJetProducer.clone(
+    maxMass = cms.double(5.),
+    minPt = cms.double(8.0),
+    maxAbsEta = cms.double(2.4),
+    muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
+#    selectTrackerMuons = cms.bool(True),
+#    selectGlobalMuons = cms.bool(True),
+    groupingMode = cms.string("GroupByMassAndVertexProbOrDeltaR"),
+    maxDeltaR = cms.double(0.01),
+    #  minSegmentMatches = cms.int32(2),
+    minSegmentMatches = cms.int32(-1),
+    minTrackerHits = cms.int32(-1),
+    maxTrackerNormChi2 = cms.double(-1.0)
+)
+
+#process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cfi")
+
+
+process.ana2012 = cms.EDAnalyzer("AnalysisRun2",
+                                 trajectoryInput = cms.string("TrackRefitter"),
+                                 navigationSchool   = cms.string('SimpleNavigationSchool'),
+#                                 navigationSchool   = cms.string(''),
+                                 MeasurementTracker = cms.string(''),
+                                 Propagator = cms.string("RungeKuttaTrackerPropagator"),
+                                 muJets = cms.InputTag("PFMuJetProducer05"),
+                                 muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
+                                 analyzerDebug = cms.int32(100),
+                                 analyzerTraj = cms.int32(1),
+                                 highpT_muon_pT = cms.double(17.0),
+                                 highpT_muon_eta = cms.double(0.9),
+                                 muon_pT = cms.double(8.0),
+                                 muon_eta = cms.double(2.4),
+                                 hltPaths = cms.vstring('HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1'),
+                                 fillGenLevel = cms.bool(True)
+                                   )
+
+
+#process.Path = cms.Path(process.patifyMC * process.PFMuJetProducer05 * process.cutFlowAnalyzer)
+#process.Path = cms.Path(process.patifyMC * process.PFMuJetProducer05 * process.TrackRefitter * process.cutFlowAnalyzer)
+process.Path = cms.Path(process.patifyMC * process.PFMuJetProducer05 * process.TrackRefitter * process.ana2012)
+# customisation of the process.
+
+process.TFileService = cms.Service("TFileService", fileName = cms.string("test.root") )
+
+# End of customisation functions
+
+
