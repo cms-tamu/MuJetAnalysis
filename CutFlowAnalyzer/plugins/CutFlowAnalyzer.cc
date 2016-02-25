@@ -1564,7 +1564,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	  }
 	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
 	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel() ||
-	     p.hasValidHitInThirdPixelEndcap() || p.hasValidHitInThirdPixelBarrel()){
+	     p.hasValidHitInThirdPixelBarrel()){
 	    if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l3inc = 1;
 	    if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l3inc = 1;
 	  }
@@ -1582,7 +1582,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	  }
 	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
 	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel() ||
-	     p.hasValidHitInThirdPixelEndcap() || p.hasValidHitInThirdPixelBarrel()){
+	     p.hasValidHitInThirdPixelBarrel()){
 	    if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l3inc = 1;
 	    if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l3inc = 1;
 	  }
