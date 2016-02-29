@@ -70,6 +70,12 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1
   Int_t run;
   Int_t lumi;
 
+  Bool_t is4GenMu;
+  Bool_t is1GenMu17;
+  Bool_t is2GenMu8;
+  Bool_t is3GenMu8;
+  Bool_t is4GenMu8;
+
   Bool_t is1SelMu17;
   Bool_t is2SelMu8;
   Bool_t is3SelMu8;
@@ -150,6 +156,13 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1
     t->SetBranchAddress("event", &event);
     t->SetBranchAddress("run",   &run);
     t->SetBranchAddress("lumi",  &lumi);
+
+    // GEN Level Selectors
+    t->SetBranchAddress("is4GenMu",    &is4GenMu);
+    t->SetBranchAddress("is1GenMu17",  &is1GenMu17);
+    t->SetBranchAddress("is2GenMu8",   &is2GenMu8);
+    t->SetBranchAddress("is3GenMu8",   &is3GenMu8);
+    t->SetBranchAddress("is4GenMu8",   &is4GenMu8);
 
     // RECO Level Selectors
     t->SetBranchAddress("is1SelMu17",                     &is1SelMu17);
@@ -539,7 +552,7 @@ void makePlot(int layers = 1)
   gr_eff_mD_8500->Draw("SAME PL");
   
   leg->Draw("same");
-  c->SaveAs(TString("e_hlt_vs_cT_L" + std::to_string(layers) + ".pdf"),"recreate");
+  c->SaveAs(TString("e_hlt_vs_cT_L" + std::to_string(layers) + ".png"),"recreate");
   //c->SaveAs(TString("e_hlt_vs_cT_L" + std::to_string(layers) + ".C"));
   c->Clear();
 
