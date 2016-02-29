@@ -44,6 +44,32 @@ vector < vector<double> > mGammaD_0300_MassCompatability;
 vector < vector<double> > mGammaD_2000_MassCompatability;
 vector < vector<double> > mGammaD_8500_MassCompatability;
 
+vector<double> mGammaD_0400_Fitted_dz;
+vector<double> mGammaD_0700_Fitted_dz;
+vector<double> mGammaD_1000_Fitted_dz;
+vector<double> mGammaD_1500_Fitted_dz;
+
+vector<double> mGammaD_0400_Consistent_dz;
+vector<double> mGammaD_0700_Consistent_dz;
+vector<double> mGammaD_1000_Consistent_dz;
+vector<double> mGammaD_1500_Consistent_dz;
+
+vector<double> mGammaD_0400_Fitted_iso;
+vector<double> mGammaD_0700_Fitted_iso;
+vector<double> mGammaD_1000_Fitted_iso;
+vector<double> mGammaD_1500_Fitted_iso;
+
+vector<double> mGammaD_0400_Consistent_iso;
+vector<double> mGammaD_0700_Consistent_iso;
+vector<double> mGammaD_1000_Consistent_iso;
+vector<double> mGammaD_1500_Consistent_iso;
+
+vector < vector<double> > mGammaD_0400_MassCompatability;
+vector < vector<double> > mGammaD_0700_MassCompatability;
+vector < vector<double> > mGammaD_1000_MassCompatability;
+vector < vector<double> > mGammaD_1500_MassCompatability;
+
+
 vector<double> bbar_Fitted_dz;
 vector<double> bbar_Fitted_iso;
 
@@ -81,7 +107,7 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 ///---- Main Method  ----//
 
 void offline_vs_signal(TString fileName, int SigOrBack){
-	bool verbose(false);
+	bool verbose(true);
 	//cout << SigOrBack << endl;
 	TString dirname(fileName);
 	TChain* chain = new TChain("dummy");
@@ -227,9 +253,9 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 		//TTree *t = (TTree*)myfile->Get("cutFlowAnalyzer/Events");
 		TTree *b;
 		if(SigOrBack == 0 ) {
-		if (verbose) std::cout << "Getting cutFlowAnalyzer/Events_orphan" << std::endl;
-		b = (TTree*)myfile->Get("cutFlowAnalyzer/Events_orphan");
-		if (verbose) std::cout << "Successfully retrieved cutFlowAnalyzer/Events_orphan" << std::endl;
+			if (verbose) std::cout << "Getting cutFlowAnalyzer/Events_orphan" << std::endl;
+			b = (TTree*)myfile->Get("cutFlowAnalyzer/Events_orphan");
+			if (verbose) std::cout << "Successfully retrieved cutFlowAnalyzer/Events_orphan" << std::endl;
 		}
 		// b = (TTree*)myfile->Get("cutFlowAnalyzer/Events_orphan");
 		if (!t) {
@@ -323,13 +349,13 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 		Int_t nentries_b;
 
 		if(SigOrBack == 0){
-		cout << "Load orphan branch variables" << endl;
-		b->SetBranchAddress("orph_mass", 		&bbar_orphan_mass);
+			cout << "Load orphan branch variables" << endl;
+			b->SetBranchAddress("orph_mass", 		&bbar_orphan_mass);
 			b->SetBranchAddress("orph_dimu_mass", 		&bbar_dimuon_mass);
-			
+
 			b->SetBranchAddress("orph_isoTk",		&bbar_orphan_isoTk);
 			b->SetBranchAddress("orph_dimu_isoTk",		&bbar_dimuon_isoTk);
-			
+
 			b->SetBranchAddress("orph_z",          		&bbar_orphan_z);
 			b->SetBranchAddress("orph_dimu_z",        	&bbar_dimuon_z);
 		}
@@ -349,6 +375,10 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 					if(mass_string == "0300") mGammaD_0300_Consistent_dz.push_back(consistent_dz);
 					if(mass_string == "2000") mGammaD_2000_Consistent_dz.push_back(consistent_dz);
 					if(mass_string == "8500") mGammaD_8500_Consistent_dz.push_back(consistent_dz);
+					if(mass_string == "0400") mGammaD_0400_Consistent_dz.push_back(consistent_dz);
+					if(mass_string == "0700") mGammaD_0700_Consistent_dz.push_back(consistent_dz);
+					if(mass_string == "1000") mGammaD_1000_Consistent_dz.push_back(consistent_dz);
+					if(mass_string == "1500") mGammaD_1500_Consistent_dz.push_back(consistent_dz);
 				}
 				if(diMuonF_FittedVtx_dz > -1000 && diMuonC_FittedVtx_dz > -1000){
 					double fitted_dz = diMuonC_FittedVtx_dz - diMuonF_FittedVtx_dz;
@@ -358,7 +388,12 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 					if(mass_string == "0300") mGammaD_0300_Fitted_dz.push_back(fitted_dz); 
 					if(mass_string == "2000") mGammaD_2000_Fitted_dz.push_back(fitted_dz); 
 					if(mass_string == "8500") mGammaD_8500_Fitted_dz.push_back(fitted_dz); 
+					if(mass_string == "0400") mGammaD_0400_Fitted_dz.push_back(fitted_dz);
+					if(mass_string == "0700") mGammaD_0700_Fitted_dz.push_back(fitted_dz);
+					if(mass_string == "1000") mGammaD_1000_Fitted_dz.push_back(fitted_dz);
+					if(mass_string == "1500") mGammaD_1500_Fitted_dz.push_back(fitted_dz);
 				}
+
 
 				if(diMuonF_IsoTk_FittedVtx != -1){
 					mGammaD_all_Fitted_iso.push_back(diMuonF_IsoTk_FittedVtx);
@@ -367,6 +402,10 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 					if(mass_string == "0300") mGammaD_0300_Fitted_iso.push_back(diMuonF_IsoTk_FittedVtx);
 					if(mass_string == "2000") mGammaD_2000_Fitted_iso.push_back(diMuonF_IsoTk_FittedVtx);
 					if(mass_string == "8500") mGammaD_8500_Fitted_iso.push_back(diMuonF_IsoTk_FittedVtx);
+					if(mass_string == "0400") mGammaD_0400_Fitted_iso.push_back(diMuonF_IsoTk_FittedVtx);
+					if(mass_string == "0700") mGammaD_0700_Fitted_iso.push_back(diMuonF_IsoTk_FittedVtx);
+					if(mass_string == "1000") mGammaD_1000_Fitted_iso.push_back(diMuonF_IsoTk_FittedVtx);
+					if(mass_string == "1500") mGammaD_1500_Fitted_iso.push_back(diMuonF_IsoTk_FittedVtx);
 				}
 				if(diMuonC_IsoTk_FittedVtx != -1){
 					mGammaD_all_Fitted_iso.push_back(diMuonC_IsoTk_FittedVtx);
@@ -375,6 +414,10 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 					if(mass_string == "0300") mGammaD_0300_Fitted_iso.push_back(diMuonC_IsoTk_FittedVtx);
 					if(mass_string == "2000") mGammaD_2000_Fitted_iso.push_back(diMuonC_IsoTk_FittedVtx);
 					if(mass_string == "8500") mGammaD_8500_Fitted_iso.push_back(diMuonC_IsoTk_FittedVtx);
+					if(mass_string == "0400") mGammaD_0400_Fitted_iso.push_back(diMuonC_IsoTk_FittedVtx);
+					if(mass_string == "0700") mGammaD_0700_Fitted_iso.push_back(diMuonC_IsoTk_FittedVtx);
+					if(mass_string == "1000") mGammaD_1000_Fitted_iso.push_back(diMuonC_IsoTk_FittedVtx);
+					if(mass_string == "1500") mGammaD_1500_Fitted_iso.push_back(diMuonC_IsoTk_FittedVtx);
 				}
 				if(diMuonF_IsoTk_ConsistentVtx != -1){
 					mGammaD_all_Consistent_iso.push_back(diMuonF_IsoTk_ConsistentVtx);
@@ -383,6 +426,10 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 					if(mass_string == "0300") mGammaD_0300_Consistent_iso.push_back(diMuonF_IsoTk_ConsistentVtx);
 					if(mass_string == "2000") mGammaD_2000_Consistent_iso.push_back(diMuonF_IsoTk_ConsistentVtx);
 					if(mass_string == "8500") mGammaD_8500_Consistent_iso.push_back(diMuonF_IsoTk_ConsistentVtx);
+					if(mass_string == "0400") mGammaD_0400_Consistent_iso.push_back(diMuonF_IsoTk_ConsistentVtx);
+					if(mass_string == "0700") mGammaD_0700_Consistent_iso.push_back(diMuonF_IsoTk_ConsistentVtx);
+					if(mass_string == "1000") mGammaD_1000_Consistent_iso.push_back(diMuonF_IsoTk_ConsistentVtx);
+					if(mass_string == "1500") mGammaD_1500_Consistent_iso.push_back(diMuonF_IsoTk_ConsistentVtx);
 				}
 				if(diMuonC_IsoTk_ConsistentVtx != -1){
 					mGammaD_all_Consistent_iso.push_back(diMuonC_IsoTk_ConsistentVtx);
@@ -391,6 +438,10 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 					if(mass_string == "0300") mGammaD_0300_Consistent_iso.push_back(diMuonC_IsoTk_ConsistentVtx);
 					if(mass_string == "2000") mGammaD_2000_Consistent_iso.push_back(diMuonC_IsoTk_ConsistentVtx);
 					if(mass_string == "8500") mGammaD_8500_Consistent_iso.push_back(diMuonC_IsoTk_ConsistentVtx);
+					if(mass_string == "0400") mGammaD_0400_Consistent_iso.push_back(diMuonC_IsoTk_ConsistentVtx);
+					if(mass_string == "0700") mGammaD_0700_Consistent_iso.push_back(diMuonC_IsoTk_ConsistentVtx);
+					if(mass_string == "1000") mGammaD_1000_Consistent_iso.push_back(diMuonC_IsoTk_ConsistentVtx);
+					if(mass_string == "1500") mGammaD_1500_Consistent_iso.push_back(diMuonC_IsoTk_ConsistentVtx);
 				}
 				//Mass compatibility |massC-massF| < (0.13 + 0.065(massC+massF)/2)
 				if(diMuonC_FittedVtx_m > -800 && diMuonF_FittedVtx_m > -800){
@@ -438,6 +489,41 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 						mGammaD_8500_MassCompatability.push_back(temp_vector);
 						temp_vector.clear();
 					}
+					if(mass_string == "0400"){
+						vector<double> temp_vector;
+						temp_vector.push_back(diMuonC_FittedVtx_m);
+						temp_vector.push_back(diMuonF_FittedVtx_m);
+						mGammaD_0400_MassCompatability.push_back(temp_vector);
+						temp_vector.clear();
+					}
+
+					if(mass_string == "0700"){
+						vector<double> temp_vector;
+						temp_vector.push_back(diMuonC_FittedVtx_m);
+						temp_vector.push_back(diMuonF_FittedVtx_m);
+						mGammaD_0700_MassCompatability.push_back(temp_vector);
+						temp_vector.clear();
+					}
+					if(mass_string == "1000"){
+						vector<double> temp_vector;
+						temp_vector.push_back(diMuonC_FittedVtx_m);
+						temp_vector.push_back(diMuonF_FittedVtx_m);
+						mGammaD_1000_MassCompatability.push_back(temp_vector);
+						temp_vector.clear();
+					}
+
+					if(mass_string == "1500"){
+						vector<double> temp_vector;
+						temp_vector.push_back(diMuonC_FittedVtx_m);
+						temp_vector.push_back(diMuonF_FittedVtx_m);
+						if(diMuonC_FittedVtx_m < 2 && diMuonF_FittedVtx_m < 2){
+							cout << "low mass peak" << endl;
+						}
+
+						mGammaD_1500_MassCompatability.push_back(temp_vector);
+						temp_vector.clear();
+					}
+
 					vector<double> temp_vector;
 					temp_vector.push_back(diMuonC_FittedVtx_m);
 					temp_vector.push_back(diMuonF_FittedVtx_m);
@@ -447,7 +533,7 @@ void offline_vs_signal(TString fileName, int SigOrBack){
 			} // closing for loop
 		}
 		if(SigOrBack == 0){
-		//cout << "Entering background loop" << endl;
+			//cout << "Entering background loop" << endl;
 			for(int k=0;k<nentries_b;k++){ 
 				b->GetEntry(k);
 				//cout << "Getting background entry" << endl;
@@ -470,6 +556,10 @@ void makePlots(){
 	TH2D * mGammaD_0300_MassCompatability_plot = new TH2D("mGammaD_0300_MassCompatability_plot", "mGammaD_0300_MassCompatability_plot", 1000, 0, 10, 1000, 0, 10);
 	TH2D * mGammaD_2000_MassCompatability_plot = new TH2D("mGammaD_2000_MassCompatability_plot", "mGammaD_2000_MassCompatability_plot", 1000, 0, 10, 1000, 0, 10);
 	TH2D * mGammaD_8500_MassCompatability_plot = new TH2D("mGammaD_8500_MassCompatability_plot", "mGammaD_8500_MassCompatability_plot", 1000, 0, 10, 1000, 0, 10);
+	TH2D * mGammaD_0400_MassCompatability_plot = new TH2D("mGammaD_0400_MassCompatability_plot", "mGammaD_0400_MassCompatability_plot", 1000, 0, 10, 1000, 0, 10);
+	TH2D * mGammaD_0700_MassCompatability_plot = new TH2D("mGammaD_0700_MassCompatability_plot", "mGammaD_0700_MassCompatability_plot", 1000, 0, 10, 1000, 0, 10);
+	TH2D * mGammaD_1000_MassCompatability_plot = new TH2D("mGammaD_1000_MassCompatability_plot", "mGammaD_1000_MassCompatability_plot", 1000, 0, 10, 1000, 0, 10);
+	TH2D * mGammaD_1500_MassCompatability_plot = new TH2D("mGammaD_1500_MassCompatability_plot", "mGammaD_1500_MassCompatability_plot", 1000, 0, 10, 1000, 0, 10);
 	TH2D * mGammaD_all_MassCompatability_plot = new TH2D("mGammaD_all_MassCompatability_plot", "mGammaD_all_MassCompatability_plot", 1000, 0, 10, 1000, 0, 10);
 	TF1 *func1 = new TF1("func1", "(1/387)*(413*x+52)",0,10);
 	TF1 *func2 = new TF1("func2", "(1/413)*(387*x-52)",0,10);
@@ -545,6 +635,65 @@ void makePlots(){
 	func2->Draw("same");
 	m4->SaveAs("mGammaD_8500_MassCompatability.pdf","recreate");
 
+	TCanvas *ma = new TCanvas("ma", "ma", 700, 500);
+	ma->SetLogz();
+	mGammaD_0400_MassCompatability_plot->GetXaxis()->SetTitle("#mu#mu_{1}");
+	mGammaD_0400_MassCompatability_plot->GetYaxis()->SetTitle("#mu#mu_{2}");
+	mGammaD_0400_MassCompatability_plot->SetTitle("Mass Compatability for #gamma_{D} = 0.275 GeV");
+	gStyle->SetOptStat(0);
+	for(int i = 0; i < mGammaD_0400_MassCompatability.size(); i ++){
+		mGammaD_0400_MassCompatability_plot->Fill(mGammaD_0400_MassCompatability[i][0], mGammaD_0400_MassCompatability[i][1]);
+	}
+	mGammaD_0400_MassCompatability_plot->Draw("colz");
+	func1->Draw("same");
+	func2->Draw("same");
+	ma->SaveAs("mGammaD_0400_MassCompatability.pdf","recreate");
+
+	TCanvas *mb = new TCanvas("mb", "mb", 700, 500);
+	mb->SetLogz();
+	mGammaD_0700_MassCompatability_plot->GetXaxis()->SetTitle("#mu#mu_{1}");
+	mGammaD_0700_MassCompatability_plot->GetYaxis()->SetTitle("#mu#mu_{2}");
+	mGammaD_0700_MassCompatability_plot->SetTitle("Mass Compatability for #gamma_{D} = 0.300 GeV");
+	gStyle->SetOptStat(0);
+	for(int i = 0; i < mGammaD_0700_MassCompatability.size(); i ++){
+		mGammaD_0700_MassCompatability_plot->Fill(mGammaD_0700_MassCompatability[i][0], mGammaD_0700_MassCompatability[i][1]);
+	}
+	mGammaD_0700_MassCompatability_plot->Draw("colz");
+	func1->Draw("same");
+	func2->Draw("same");
+	mb->SaveAs("mGammaD_0700_MassCompatability.pdf","recreate");
+
+	TCanvas *mc = new TCanvas("mc", "mc", 700, 500);
+	mc->SetLogz();
+	mGammaD_1000_MassCompatability_plot->GetXaxis()->SetTitle("#mu#mu_{1}");
+	mGammaD_1000_MassCompatability_plot->GetYaxis()->SetTitle("#mu#mu_{2}");
+	mGammaD_1000_MassCompatability_plot->SetTitle("Mass Compatability for #gamma_{D} = 2.0 GeV");
+	gStyle->SetOptStat(0);
+	for(int i = 0; i < mGammaD_1000_MassCompatability.size(); i ++){
+		mGammaD_1000_MassCompatability_plot->Fill(mGammaD_1000_MassCompatability[i][0], mGammaD_1000_MassCompatability[i][1]);
+	}
+	mGammaD_1000_MassCompatability_plot->Draw("colz");
+	func1->Draw("same");
+	func2->Draw("same");
+	mc->SaveAs("mGammaD_1000_MassCompatability.pdf","recreate");
+
+	TCanvas *md = new TCanvas("md", "md", 700, 500);
+	md->SetLogz();
+	mGammaD_1500_MassCompatability_plot->GetXaxis()->SetTitle("#mu#mu_{1}");
+	mGammaD_1500_MassCompatability_plot->GetYaxis()->SetTitle("#mu#mu_{2}");
+	mGammaD_1500_MassCompatability_plot->SetTitle("Mass Compatability for #gamma_{D} = 8.5 GeV");
+	gStyle->SetOptStat(0);
+	for(int i = 0; i < mGammaD_1500_MassCompatability.size(); i ++){
+		mGammaD_1500_MassCompatability_plot->Fill(mGammaD_1500_MassCompatability[i][0], mGammaD_1500_MassCompatability[i][1]);
+	}
+	mGammaD_1500_MassCompatability_plot->Draw("colz");
+	func1->Draw("same");
+	func2->Draw("same");
+	md->SaveAs("mGammaD_1500_MassCompatability.pdf","recreate");
+
+
+
+
 	TCanvas *m5 = new TCanvas("m5", "m5", 700, 500);
 	m5->SetLogz();
 	mGammaD_all_MassCompatability_plot->GetXaxis()->SetTitle("#mu#mu_{1}");
@@ -567,6 +716,10 @@ void makePlots(){
 	//TH1D *mGammaD_all_Fitted_dz_plot = new TH1D("mGammaD_all_Fitted_dz_plot", "mGammaD_all_Fitted_dz_plot", 150, -0.15, 0.15);
 	TH1D *mGammaD_all_Fitted_dz_plot = new TH1D("mGammaD_all_Fitted_dz_plot", "mGammaD_all_Fitted_dz_plot", 150, -0.15, 0.15);
 	TH1D *bbar_Fitted_dz_plot = new TH1D("bbar_Fitted_dz_plot", "bbar_Fitted_dz_plot", 150, -0.15, 0.15);
+	TH1D *mGammaD_0400_Fitted_dz_plot = new TH1D("mGammaD_0400_Fitted_dz_plot", "mGammaD_0400_Fitted_dz_plot", 150, -.15, .15);
+	TH1D *mGammaD_0700_Fitted_dz_plot = new TH1D("mGammaD_0700_Fitted_dz_plot", "mGammaD_0700_Fitted_dz_plot", 150, -.15, .15);
+	TH1D *mGammaD_1000_Fitted_dz_plot = new TH1D("mGammaD_1000_Fitted_dz_plot", "mGammaD_1000_Fitted_dz_plot", 150, -.15, .15);
+	TH1D *mGammaD_1500_Fitted_dz_plot = new TH1D("mGammaD_1500_Fitted_dz_plot", "mGammaD_1500_Fitted_dz_plot", 150, -0.15, 0.15);
 
 	TCanvas *c0 = new TCanvas("c0", "c0", 700, 500);
 	bbar_Fitted_dz_plot->GetXaxis()->SetTitle("#Delta z [cm]");
@@ -587,7 +740,7 @@ void makePlots(){
 	mGammaD_0250_Fitted_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 0.250 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_0250_Fitted_dz.size(); i++){
-	mGammaD_0250_Fitted_dz_plot->Fill(mGammaD_0250_Fitted_dz[i]);
+		mGammaD_0250_Fitted_dz_plot->Fill(mGammaD_0250_Fitted_dz[i]);
 	}
 	mGammaD_0250_Fitted_dz_plot->SetFillColor(kRed);
 	mGammaD_0250_Fitted_dz_plot->DrawNormalized();
@@ -601,7 +754,7 @@ void makePlots(){
 	mGammaD_0275_Fitted_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 0.275 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_0275_Fitted_dz.size(); i++){
-	mGammaD_0275_Fitted_dz_plot->Fill(mGammaD_0275_Fitted_dz[i]);
+		mGammaD_0275_Fitted_dz_plot->Fill(mGammaD_0275_Fitted_dz[i]);
 	}
 	mGammaD_0275_Fitted_dz_plot->SetFillColor(kRed);
 	mGammaD_0275_Fitted_dz_plot->DrawNormalized();
@@ -614,7 +767,7 @@ void makePlots(){
 	mGammaD_0300_Fitted_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 0.300 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_0300_Fitted_dz.size(); i++){
-	mGammaD_0300_Fitted_dz_plot->Fill(mGammaD_0300_Fitted_dz[i]);
+		mGammaD_0300_Fitted_dz_plot->Fill(mGammaD_0300_Fitted_dz[i]);
 	}
 	mGammaD_0300_Fitted_dz_plot->SetFillColor(kRed);
 	mGammaD_0300_Fitted_dz_plot->DrawNormalized();
@@ -628,7 +781,7 @@ void makePlots(){
 	mGammaD_2000_Fitted_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 2.0 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_2000_Fitted_dz.size(); i++){
-	mGammaD_2000_Fitted_dz_plot->Fill(mGammaD_2000_Fitted_dz[i]);
+		mGammaD_2000_Fitted_dz_plot->Fill(mGammaD_2000_Fitted_dz[i]);
 	}
 	mGammaD_2000_Fitted_dz_plot->SetFillColor(kRed);
 	mGammaD_2000_Fitted_dz_plot->DrawNormalized();
@@ -641,12 +794,63 @@ void makePlots(){
 	mGammaD_8500_Fitted_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 8.5 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_8500_Fitted_dz.size(); i++){
-	mGammaD_8500_Fitted_dz_plot->Fill(mGammaD_8500_Fitted_dz[i]);
+		mGammaD_8500_Fitted_dz_plot->Fill(mGammaD_8500_Fitted_dz[i]);
 	}
 	mGammaD_8500_Fitted_dz_plot->SetFillColor(kRed);
 	mGammaD_8500_Fitted_dz_plot->DrawNormalized();
 	bbar_Fitted_dz_plot->DrawNormalized("same");
 	c4->SaveAs("mGammaD_8500_Fitted_dz_plot.pdf", "recreate");
+	TCanvas *ca = new TCanvas("ca","ca",700,500);
+	mGammaD_0400_Fitted_dz_plot->GetXaxis()->SetTitle("#Delta z [cm]");
+	mGammaD_0400_Fitted_dz_plot->GetYaxis()->SetTitle("Fraction of events");
+	mGammaD_0400_Fitted_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 0.275 GeV");
+	gStyle->SetOptStat("Merou");
+	for(int i =0; i < mGammaD_0400_Fitted_dz.size(); i++){
+		mGammaD_0400_Fitted_dz_plot->Fill(mGammaD_0400_Fitted_dz[i]);
+	}
+	mGammaD_0400_Fitted_dz_plot->SetFillColor(kRed);
+	mGammaD_0400_Fitted_dz_plot->DrawNormalized();
+	ca->SaveAs("mGammaD_0400_Fitted_dz_plot.pdf", "recreate");
+
+
+	TCanvas *cb = new TCanvas("cb","cb",700,500);
+	mGammaD_0700_Fitted_dz_plot->GetXaxis()->SetTitle("#Delta z [cm]");
+	mGammaD_0700_Fitted_dz_plot->GetYaxis()->SetTitle("Fraction of events");
+	mGammaD_0700_Fitted_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 0.300 GeV");
+	gStyle->SetOptStat("Merou");
+	for(int i =0; i < mGammaD_0700_Fitted_dz.size(); i++){
+		mGammaD_0700_Fitted_dz_plot->Fill(mGammaD_0700_Fitted_dz[i]);
+	}
+	mGammaD_0700_Fitted_dz_plot->SetFillColor(kRed);
+	mGammaD_0700_Fitted_dz_plot->DrawNormalized();
+	cb->SaveAs("mGammaD_0700_Fitted_dz_plot.pdf", "recreate");
+
+
+
+	TCanvas *cc = new TCanvas("cc","cc",700,500);
+	mGammaD_1000_Fitted_dz_plot->GetXaxis()->SetTitle("#Delta z [cm]");
+	mGammaD_1000_Fitted_dz_plot->GetYaxis()->SetTitle("Fraction of events");
+	mGammaD_1000_Fitted_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 2.0 GeV");
+	gStyle->SetOptStat("Merou");
+	for(int i =0; i < mGammaD_1000_Fitted_dz.size(); i++){
+		mGammaD_1000_Fitted_dz_plot->Fill(mGammaD_1000_Fitted_dz[i]);
+	}
+	mGammaD_1000_Fitted_dz_plot->SetFillColor(kRed);
+	mGammaD_1000_Fitted_dz_plot->DrawNormalized();
+	cc->SaveAs("mGammaD_1000_Fitted_dz_plot.pdf", "recreate");
+
+	TCanvas *cd = new TCanvas("cd","cd",700,500);
+	mGammaD_1500_Fitted_dz_plot->GetXaxis()->SetTitle("#Delta z [cm]");
+	mGammaD_1500_Fitted_dz_plot->GetYaxis()->SetTitle("Fraction of events/0.002 cm");
+	mGammaD_1500_Fitted_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 8.5 GeV");
+	gStyle->SetOptStat("Merou");
+	for(int i =0; i < mGammaD_1500_Fitted_dz.size(); i++){
+		mGammaD_1500_Fitted_dz_plot->Fill(mGammaD_1500_Fitted_dz[i]);
+	}
+	mGammaD_1500_Fitted_dz_plot->SetFillColor(kRed);
+	mGammaD_1500_Fitted_dz_plot->DrawNormalized();
+	bbar_Fitted_dz_plot->DrawNormalized("same");
+	cd->SaveAs("mGammaD_1500_Fitted_dz_plot.pdf", "recreate");
 
 
 	TCanvas *c5 = new TCanvas("c5","c5",700,500);
@@ -662,12 +866,12 @@ void makePlots(){
 	bbar_Fitted_dz_plot->DrawNormalized("same");
 	c5->SaveAs("mGammaD_all_Fitted_dz_plot.pdf", "recreate");
 
-/*
-	TH1D *mGammaD_0250_Consistent_dz_plot = new TH1D("mGammaD_0250_Consistent_dz_plot", "mGammaD_0250_Consistent_dz_plot", 300, -1.5, 1.5);
-	TH1D *mGammaD_0275_Consistent_dz_plot = new TH1D("mGammaD_0275_Consistent_dz_plot", "mGammaD_0275_Consistent_dz_plot", 300, -1.5, 1.5);
-	TH1D *mGammaD_0300_Consistent_dz_plot = new TH1D("mGammaD_0300_Consistent_dz_plot", "mGammaD_0300_Consistent_dz_plot", 300, -1.5, 1.5);
-	TH1D *mGammaD_2000_Consistent_dz_plot = new TH1D("mGammaD_2000_Consistent_dz_plot", "mGammaD_2000_Consistent_dz_plot", 300, -1.5, 1.5);
-	TH1D *mGammaD_8500_Consistent_dz_plot = new TH1D("mGammaD_8500_Consistent_dz_plot", "mGammaD_8500_Consistent_dz_plot", 300, -1.5, 1.5);
+	/*
+	   TH1D *mGammaD_0250_Consistent_dz_plot = new TH1D("mGammaD_0250_Consistent_dz_plot", "mGammaD_0250_Consistent_dz_plot", 300, -1.5, 1.5);
+	   TH1D *mGammaD_0275_Consistent_dz_plot = new TH1D("mGammaD_0275_Consistent_dz_plot", "mGammaD_0275_Consistent_dz_plot", 300, -1.5, 1.5);
+	   TH1D *mGammaD_0300_Consistent_dz_plot = new TH1D("mGammaD_0300_Consistent_dz_plot", "mGammaD_0300_Consistent_dz_plot", 300, -1.5, 1.5);
+	   TH1D *mGammaD_2000_Consistent_dz_plot = new TH1D("mGammaD_2000_Consistent_dz_plot", "mGammaD_2000_Consistent_dz_plot", 300, -1.5, 1.5);
+	   TH1D *mGammaD_8500_Consistent_dz_plot = new TH1D("mGammaD_8500_Consistent_dz_plot", "mGammaD_8500_Consistent_dz_plot", 300, -1.5, 1.5);
 	//TH1D *mGammaD_all_Consistent_dz_plot = new TH1D("mGammaD_all_Consistent_dz_plot", "mGammaD_all_Consistent_dz_plot", 300, -1.5, 1.5);
 	TH1D *mGammaD_all_Consistent_dz_plot = new TH1D("mGammaD_all_Consistent_dz_plot", "mGammaD_all_Consistent_dz_plot", 500, -0.5, 0.5);
 
@@ -677,7 +881,7 @@ void makePlots(){
 	mGammaD_0250_Consistent_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 0.250 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_0250_Consistent_dz.size(); i++){
-		mGammaD_0250_Consistent_dz_plot->Fill(mGammaD_0250_Consistent_dz[i]);
+	mGammaD_0250_Consistent_dz_plot->Fill(mGammaD_0250_Consistent_dz[i]);
 	}
 	mGammaD_0250_Consistent_dz_plot->SetFillColor(kRed);
 	mGammaD_0250_Consistent_dz_plot->DrawNormalized();
@@ -690,7 +894,7 @@ void makePlots(){
 	mGammaD_0275_Consistent_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 0.275 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_0275_Consistent_dz.size(); i++){
-		mGammaD_0275_Consistent_dz_plot->Fill(mGammaD_0275_Consistent_dz[i]);
+	mGammaD_0275_Consistent_dz_plot->Fill(mGammaD_0275_Consistent_dz[i]);
 	}
 	mGammaD_0275_Consistent_dz_plot->SetFillColor(kRed);
 	mGammaD_0275_Consistent_dz_plot->DrawNormalized();
@@ -703,7 +907,7 @@ void makePlots(){
 	mGammaD_0300_Consistent_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 0.300 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_0300_Consistent_dz.size(); i++){
-		mGammaD_0300_Consistent_dz_plot->Fill(mGammaD_0300_Consistent_dz[i]);
+	mGammaD_0300_Consistent_dz_plot->Fill(mGammaD_0300_Consistent_dz[i]);
 	}
 	mGammaD_0300_Consistent_dz_plot->SetFillColor(kRed);
 	mGammaD_0300_Consistent_dz_plot->DrawNormalized();
@@ -717,7 +921,7 @@ void makePlots(){
 	mGammaD_2000_Consistent_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 2.0 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_2000_Consistent_dz.size(); i++){
-		mGammaD_2000_Consistent_dz_plot->Fill(mGammaD_2000_Consistent_dz[i]);
+	mGammaD_2000_Consistent_dz_plot->Fill(mGammaD_2000_Consistent_dz[i]);
 	}
 	mGammaD_2000_Consistent_dz_plot->SetFillColor(kRed);
 	mGammaD_2000_Consistent_dz_plot->DrawNormalized();
@@ -730,7 +934,7 @@ void makePlots(){
 	mGammaD_8500_Consistent_dz_plot->SetTitle("Distance Between Vertices for #gamma_{D} = 8.5 GeV");
 	gStyle->SetOptStat("Merou");
 	for(int i =0; i < mGammaD_8500_Consistent_dz.size(); i++){
-		mGammaD_8500_Consistent_dz_plot->Fill(mGammaD_8500_Consistent_dz[i]);
+	mGammaD_8500_Consistent_dz_plot->Fill(mGammaD_8500_Consistent_dz[i]);
 	}
 	mGammaD_8500_Consistent_dz_plot->SetFillColor(kRed);
 	mGammaD_8500_Consistent_dz_plot->DrawNormalized();
@@ -748,10 +952,10 @@ void makePlots(){
 	mGammaD_all_Consistent_dz_plot->SetFillColor(kRed);
 	mGammaD_all_Consistent_dz_plot->DrawNormalized();
 	c11->SaveAs("mGammaD_all_Consistent_dz_plot.pdf", "recreate");
-*/
-	//Now plot isolation
+	*/
+		//Now plot isolation
 
-	TH1D *mGammaD_0250_Fitted_Iso_plot = new TH1D("mGammaD_0250_Fitted_Iso_plot", "mGammaD_0250_Fitted_Iso_plot", 100, 0, 100);
+		TH1D *mGammaD_0250_Fitted_Iso_plot = new TH1D("mGammaD_0250_Fitted_Iso_plot", "mGammaD_0250_Fitted_Iso_plot", 100, 0, 100);
 	TH1D *mGammaD_0275_Fitted_Iso_plot = new TH1D("mGammaD_0275_Fitted_Iso_plot", "mGammaD_0275_Fitted_Iso_plot", 100, 0, 100);
 	TH1D *mGammaD_0300_Fitted_Iso_plot = new TH1D("mGammaD_0300_Fitted_Iso_plot", "mGammaD_0300_Fitted_Iso_plot", 100, 0, 100);
 	TH1D *mGammaD_2000_Fitted_Iso_plot = new TH1D("mGammaD_2000_Fitted_Iso_plot", "mGammaD_2000_Fitted_Iso_plot", 100, 0, 100);
@@ -764,6 +968,16 @@ void makePlots(){
 	TH1D *mGammaD_2000_Fitted_Iso_zoom_plot = new TH1D("mGammaD_2000_Fitted_Iso_zoom_plot", "mGammaD_2000_Fitted_Iso_zoom_plot", 100, 0, 10);
 	TH1D *mGammaD_8500_Fitted_Iso_zoom_plot = new TH1D("mGammaD_8500_Fitted_Iso_zoom_plot", "mGammaD_8500_Fitted_Iso_zoom_plot", 100, 0, 10);
 	TH1D *mGammaD_all_Fitted_Iso_zoom_plot = new TH1D("mGammaD_all_Fitted_Iso_zoom_plot", "mGammaD_all_Fitted_Iso_zoom_plot", 100, 0, 10);
+
+	TH1D *mGammaD_0400_Fitted_Iso_plot = new TH1D("mGammaD_0400_Fitted_Iso_plot", "mGammaD_0400_Fitted_Iso_plot", 100, 0, 100);
+	TH1D *mGammaD_0700_Fitted_Iso_plot = new TH1D("mGammaD_0700_Fitted_Iso_plot", "mGammaD_0700_Fitted_Iso_plot", 100, 0, 100);
+	TH1D *mGammaD_1000_Fitted_Iso_plot = new TH1D("mGammaD_1000_Fitted_Iso_plot", "mGammaD_1000_Fitted_Iso_plot", 100, 0, 100);
+	TH1D *mGammaD_1500_Fitted_Iso_plot = new TH1D("mGammaD_1500_Fitted_Iso_plot", "mGammaD_1500_Fitted_Iso_plot", 100, 0, 100);
+
+	TH1D *mGammaD_0400_Fitted_Iso_zoom_plot = new TH1D("mGammaD_0400_Fitted_Iso_zoom_plot", "mGammaD_0400_Fitted_Iso_zoom_plot", 100, 0, 10);
+	TH1D *mGammaD_0700_Fitted_Iso_zoom_plot = new TH1D("mGammaD_0700_Fitted_Iso_zoom_plot", "mGammaD_0700_Fitted_Iso_zoom_plot", 100, 0, 10);
+	TH1D *mGammaD_1000_Fitted_Iso_zoom_plot = new TH1D("mGammaD_1000_Fitted_Iso_zoom_plot", "mGammaD_1000_Fitted_Iso_zoom_plot", 100, 0, 10);
+	TH1D *mGammaD_1500_Fitted_Iso_zoom_plot = new TH1D("mGammaD_1500_Fitted_Iso_zoom_plot", "mGammaD_1500_Fitted_Iso_zoom_plot", 100, 0, 10);
 
 	TH1D *bbar_Iso_plot = new TH1D("bbar_Iso_plot", "bbar_Iso_plot", 100, 0, 100);
 	TH1D *bbar_Iso_zoom_plot = new TH1D("bbar_Iso_zoom_plot", "bbar_Iso_zoom_plot", 100, 0, 10);
@@ -808,7 +1022,7 @@ void makePlots(){
 	mGammaD_0250_Fitted_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.250 GeV");
 	mGammaD_0250_Fitted_Iso_zoom_plot->SetFillColor(kRed);
 	mGammaD_0250_Fitted_Iso_zoom_plot->DrawNormalized();
-	 bbar_Iso_zoom_plot->DrawNormalized("same");
+	bbar_Iso_zoom_plot->DrawNormalized("same");
 	c12->SaveAs("mGammaD_0250_Fitted_Iso_zoom_plot.pdf", "recreate");
 
 	TCanvas *c13 = new TCanvas("c13","c13",700,500);
@@ -893,6 +1107,90 @@ void makePlots(){
 	bbar_Iso_zoom_plot->DrawNormalized("same");
 	c16->SaveAs("mGammaD_8500_Fitted_Iso_zoom_plot.pdf", "recreate");
 
+	TCanvas *caa = new TCanvas("caa","caa",700,500);
+	mGammaD_0400_Fitted_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	mGammaD_0400_Fitted_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
+	mGammaD_0400_Fitted_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.275 GeV");
+	gStyle->SetOptStat("Mero");
+	for(int i =0; i < mGammaD_0400_Fitted_iso.size(); i++){
+		mGammaD_0400_Fitted_Iso_plot->Fill(mGammaD_0400_Fitted_iso[i]);
+		mGammaD_0400_Fitted_Iso_zoom_plot->Fill(mGammaD_0400_Fitted_iso[i]);
+	}
+	mGammaD_0400_Fitted_Iso_plot->SetFillColor(kRed);
+	mGammaD_0400_Fitted_Iso_plot->DrawNormalized();
+	caa->SaveAs("mGammaD_0400_Fitted_Iso_plot.pdf", "recreate");
+	caa->Clear();
+	mGammaD_0400_Fitted_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	mGammaD_0400_Fitted_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
+	mGammaD_0400_Fitted_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.275 GeV");
+	mGammaD_0400_Fitted_Iso_zoom_plot->SetFillColor(kRed);
+	mGammaD_0400_Fitted_Iso_zoom_plot->DrawNormalized();
+	caa->SaveAs("mGammaD_0400_Fitted_Iso_zoom_plot.pdf", "recreate");
+
+	TCanvas *cbb = new TCanvas("cbb","cbb",700,500);
+	mGammaD_0700_Fitted_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	mGammaD_0700_Fitted_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
+	mGammaD_0700_Fitted_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.300 GeV");
+	gStyle->SetOptStat("Mero");
+	for(int i =0; i < mGammaD_0700_Fitted_iso.size(); i++){
+		mGammaD_0700_Fitted_Iso_plot->Fill(mGammaD_0700_Fitted_iso[i]);
+		mGammaD_0700_Fitted_Iso_zoom_plot->Fill(mGammaD_0700_Fitted_iso[i]);
+	}
+	mGammaD_0700_Fitted_Iso_plot->SetFillColor(kRed);
+	mGammaD_0700_Fitted_Iso_plot->DrawNormalized();
+	cbb->SaveAs("mGammaD_0700_Fitted_Iso_plot.pdf", "recreate");
+	cbb->Clear();
+	mGammaD_0700_Fitted_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	mGammaD_0700_Fitted_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
+	mGammaD_0700_Fitted_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.300 GeV");
+	mGammaD_0700_Fitted_Iso_zoom_plot->SetFillColor(kRed);
+	mGammaD_0700_Fitted_Iso_zoom_plot->DrawNormalized();
+	cbb->SaveAs("mGammaD_0700_Fitted_Iso_zoom_plot.pdf", "recreate");
+
+	TCanvas *ccc = new TCanvas("ccc","ccc",700,500);
+	mGammaD_1000_Fitted_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	mGammaD_1000_Fitted_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
+	mGammaD_1000_Fitted_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 2.0 GeV");
+	gStyle->SetOptStat("Mero");
+	for(int i =0; i < mGammaD_1000_Fitted_iso.size(); i++){
+		mGammaD_1000_Fitted_Iso_plot->Fill(mGammaD_1000_Fitted_iso[i]);
+		mGammaD_1000_Fitted_Iso_zoom_plot->Fill(mGammaD_1000_Fitted_iso[i]);
+	}
+	mGammaD_1000_Fitted_Iso_plot->SetFillColor(kRed);
+	mGammaD_1000_Fitted_Iso_plot->DrawNormalized();
+	ccc->SaveAs("mGammaD_1000_Fitted_Iso_plot.pdf", "recreate");
+	ccc->Clear();
+	mGammaD_1000_Fitted_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	mGammaD_1000_Fitted_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
+	mGammaD_1000_Fitted_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 2.0 GeV");
+	mGammaD_1000_Fitted_Iso_zoom_plot->SetFillColor(kRed);
+	mGammaD_1000_Fitted_Iso_zoom_plot->DrawNormalized();
+	ccc->SaveAs("mGammaD_1000_Fitted_Iso_zoom_plot.pdf", "recreate");
+
+	TCanvas *cdd = new TCanvas("cdd","cdd",700,500);
+	mGammaD_1500_Fitted_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	mGammaD_1500_Fitted_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
+	mGammaD_1500_Fitted_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 8.5 GeV");
+	gStyle->SetOptStat("Mero");
+	for(int i =0; i < mGammaD_1500_Fitted_iso.size(); i++){
+		mGammaD_1500_Fitted_Iso_plot->Fill(mGammaD_1500_Fitted_iso[i]);
+		mGammaD_1500_Fitted_Iso_zoom_plot->Fill(mGammaD_1500_Fitted_iso[i]);
+	}
+	mGammaD_1500_Fitted_Iso_plot->SetFillColor(kRed);
+	mGammaD_1500_Fitted_Iso_plot->DrawNormalized();
+	bbar_Iso_plot->DrawNormalized("same");
+	cdd->SaveAs("mGammaD_1500_Fitted_Iso_plot.pdf", "recreate");
+	cdd->Clear();
+	mGammaD_1500_Fitted_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	mGammaD_1500_Fitted_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
+	mGammaD_1500_Fitted_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 8.5 GeV");
+	mGammaD_1500_Fitted_Iso_zoom_plot->SetFillColor(kRed);
+
+
+	mGammaD_1500_Fitted_Iso_zoom_plot->DrawNormalized();
+	bbar_Iso_zoom_plot->DrawNormalized("same");
+	cdd->SaveAs("mGammaD_1500_Fitted_Iso_zoom_plot.pdf", "recreate");
+
 
 	TCanvas *c17 = new TCanvas("c17","c17",700,500);
 	mGammaD_all_Fitted_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
@@ -916,77 +1214,77 @@ void makePlots(){
 	bbar_Iso_zoom_plot->DrawNormalized("same");
 	c17->SaveAs("mGammaD_all_Fitted_Iso_zoom_plot.pdf", "recreate");
 
-/*
-	TH1D *mGammaD_0250_Consistent_Iso_plot = new TH1D("mGammaD_0250_Consistent_Iso_plot", "mGammaD_0250_Consistent_Iso_plot", 100, 0, 100);
-	TH1D *mGammaD_0275_Consistent_Iso_plot = new TH1D("mGammaD_0275_Consistent_Iso_plot", "mGammaD_0275_Consistent_Iso_plot", 100, 0, 100);
-	TH1D *mGammaD_0300_Consistent_Iso_plot = new TH1D("mGammaD_0300_Consistent_Iso_plot", "mGammaD_0300_Consistent_Iso_plot", 100, 0, 100);
-	TH1D *mGammaD_2000_Consistent_Iso_plot = new TH1D("mGammaD_2000_Consistent_Iso_plot", "mGammaD_2000_Consistent_Iso_plot", 100, 0, 100);
-	TH1D *mGammaD_8500_Consistent_Iso_plot = new TH1D("mGammaD_8500_Consistent_Iso_plot", "mGammaD_8500_Consistent_Iso_plot", 100, 0, 100);
-	TH1D *mGammaD_all_Consistent_Iso_plot = new TH1D("mGammaD_all_Consistent_Iso_plot", "mGammaD_all_Consistent_Iso_plot", 100, 0, 100);
+	/*
+	   TH1D *mGammaD_0250_Consistent_Iso_plot = new TH1D("mGammaD_0250_Consistent_Iso_plot", "mGammaD_0250_Consistent_Iso_plot", 100, 0, 100);
+	   TH1D *mGammaD_0275_Consistent_Iso_plot = new TH1D("mGammaD_0275_Consistent_Iso_plot", "mGammaD_0275_Consistent_Iso_plot", 100, 0, 100);
+	   TH1D *mGammaD_0300_Consistent_Iso_plot = new TH1D("mGammaD_0300_Consistent_Iso_plot", "mGammaD_0300_Consistent_Iso_plot", 100, 0, 100);
+	   TH1D *mGammaD_2000_Consistent_Iso_plot = new TH1D("mGammaD_2000_Consistent_Iso_plot", "mGammaD_2000_Consistent_Iso_plot", 100, 0, 100);
+	   TH1D *mGammaD_8500_Consistent_Iso_plot = new TH1D("mGammaD_8500_Consistent_Iso_plot", "mGammaD_8500_Consistent_Iso_plot", 100, 0, 100);
+	   TH1D *mGammaD_all_Consistent_Iso_plot = new TH1D("mGammaD_all_Consistent_Iso_plot", "mGammaD_all_Consistent_Iso_plot", 100, 0, 100);
 
-	TH1D *mGammaD_0250_Consistent_Iso_zoom_plot = new TH1D("mGammaD_0250_Consistent_Iso_zoom_plot", "mGammaD_0250_Consistent_Iso_zoom_plot", 100, 0, 10);
-	TH1D *mGammaD_0275_Consistent_Iso_zoom_plot = new TH1D("mGammaD_0275_Consistent_Iso_zoom_plot", "mGammaD_0275_Consistent_Iso_zoom_plot", 100, 0, 10);
-	TH1D *mGammaD_0300_Consistent_Iso_zoom_plot = new TH1D("mGammaD_0300_Consistent_Iso_zoom_plot", "mGammaD_0300_Consistent_Iso_zoom_plot", 100, 0, 10);
-	TH1D *mGammaD_2000_Consistent_Iso_zoom_plot = new TH1D("mGammaD_2000_Consistent_Iso_zoom_plot", "mGammaD_2000_Consistent_Iso_zoom_plot", 100, 0, 10);
-	TH1D *mGammaD_8500_Consistent_Iso_zoom_plot = new TH1D("mGammaD_8500_Consistent_Iso_zoom_plot", "mGammaD_8500_Consistent_Iso_zoom_plot", 100, 0, 10);
-	TH1D *mGammaD_all_Consistent_Iso_zoom_plot = new TH1D("mGammaD_all_Consistent_Iso_zoom_plot", "mGammaD_all_Consistent_Iso_zoom_plot", 100, 0, 10);
+	   TH1D *mGammaD_0250_Consistent_Iso_zoom_plot = new TH1D("mGammaD_0250_Consistent_Iso_zoom_plot", "mGammaD_0250_Consistent_Iso_zoom_plot", 100, 0, 10);
+	   TH1D *mGammaD_0275_Consistent_Iso_zoom_plot = new TH1D("mGammaD_0275_Consistent_Iso_zoom_plot", "mGammaD_0275_Consistent_Iso_zoom_plot", 100, 0, 10);
+	   TH1D *mGammaD_0300_Consistent_Iso_zoom_plot = new TH1D("mGammaD_0300_Consistent_Iso_zoom_plot", "mGammaD_0300_Consistent_Iso_zoom_plot", 100, 0, 10);
+	   TH1D *mGammaD_2000_Consistent_Iso_zoom_plot = new TH1D("mGammaD_2000_Consistent_Iso_zoom_plot", "mGammaD_2000_Consistent_Iso_zoom_plot", 100, 0, 10);
+	   TH1D *mGammaD_8500_Consistent_Iso_zoom_plot = new TH1D("mGammaD_8500_Consistent_Iso_zoom_plot", "mGammaD_8500_Consistent_Iso_zoom_plot", 100, 0, 10);
+	   TH1D *mGammaD_all_Consistent_Iso_zoom_plot = new TH1D("mGammaD_all_Consistent_Iso_zoom_plot", "mGammaD_all_Consistent_Iso_zoom_plot", 100, 0, 10);
 
-	TCanvas *c18 = new TCanvas("c18","c18",700,500);
-	mGammaD_0250_Consistent_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
-	mGammaD_0250_Consistent_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
-	mGammaD_0250_Consistent_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.250 GeV");
-	gStyle->SetOptStat("Mero");
-	for(int i =0; i < mGammaD_0250_Consistent_iso.size(); i++){
-		mGammaD_0250_Consistent_Iso_plot->Fill(mGammaD_0250_Consistent_iso[i]);
-		mGammaD_0250_Consistent_Iso_zoom_plot->Fill(mGammaD_0250_Consistent_iso[i]);
-	}
-	mGammaD_0250_Consistent_Iso_plot->SetFillColor(kRed);
-	mGammaD_0250_Consistent_Iso_plot->DrawNormalized();
-	c18->SaveAs("mGammaD_0250_Consistent_Iso_plot.pdf", "recreate");
-	c18->Clear();
-	mGammaD_0250_Consistent_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
-	mGammaD_0250_Consistent_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
-	mGammaD_0250_Consistent_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.250 GeV");
-	mGammaD_0250_Consistent_Iso_zoom_plot->SetFillColor(kRed);
-	mGammaD_0250_Consistent_Iso_zoom_plot->DrawNormalized();
-	c18->SaveAs("mGammaD_0250_Consistent_Iso_zoom_plot.pdf", "recreate");
+	   TCanvas *c18 = new TCanvas("c18","c18",700,500);
+	   mGammaD_0250_Consistent_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	   mGammaD_0250_Consistent_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
+	   mGammaD_0250_Consistent_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.250 GeV");
+	   gStyle->SetOptStat("Mero");
+	   for(int i =0; i < mGammaD_0250_Consistent_iso.size(); i++){
+	   mGammaD_0250_Consistent_Iso_plot->Fill(mGammaD_0250_Consistent_iso[i]);
+	   mGammaD_0250_Consistent_Iso_zoom_plot->Fill(mGammaD_0250_Consistent_iso[i]);
+	   }
+	   mGammaD_0250_Consistent_Iso_plot->SetFillColor(kRed);
+	   mGammaD_0250_Consistent_Iso_plot->DrawNormalized();
+	   c18->SaveAs("mGammaD_0250_Consistent_Iso_plot.pdf", "recreate");
+	   c18->Clear();
+	   mGammaD_0250_Consistent_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	   mGammaD_0250_Consistent_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
+	   mGammaD_0250_Consistent_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.250 GeV");
+	   mGammaD_0250_Consistent_Iso_zoom_plot->SetFillColor(kRed);
+	   mGammaD_0250_Consistent_Iso_zoom_plot->DrawNormalized();
+	   c18->SaveAs("mGammaD_0250_Consistent_Iso_zoom_plot.pdf", "recreate");
 
-	TCanvas *c19 = new TCanvas("c19","c19",700,500);
-	mGammaD_0275_Consistent_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
-	mGammaD_0275_Consistent_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
-	mGammaD_0275_Consistent_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.275 GeV");
-	gStyle->SetOptStat("Mero");
-	for(int i =0; i < mGammaD_0275_Consistent_iso.size(); i++){
-		mGammaD_0275_Consistent_Iso_plot->Fill(mGammaD_0275_Consistent_iso[i]);
-		mGammaD_0275_Consistent_Iso_zoom_plot->Fill(mGammaD_0275_Consistent_iso[i]);
-	}
-	mGammaD_0275_Consistent_Iso_plot->SetFillColor(kRed);
-	mGammaD_0275_Consistent_Iso_plot->DrawNormalized();
-	c19->SaveAs("mGammaD_0275_Consistent_Iso_plot.pdf", "recreate");
-	c19->Clear();
-	mGammaD_0275_Consistent_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
-	mGammaD_0275_Consistent_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
-	mGammaD_0275_Consistent_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.275 GeV");
-	mGammaD_0275_Consistent_Iso_zoom_plot->SetFillColor(kRed);
-	mGammaD_0275_Consistent_Iso_zoom_plot->DrawNormalized();
-	c19->SaveAs("mGammaD_0275_Consistent_Iso_zoom_plot.pdf", "recreate");
+	   TCanvas *c19 = new TCanvas("c19","c19",700,500);
+	   mGammaD_0275_Consistent_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	   mGammaD_0275_Consistent_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
+	   mGammaD_0275_Consistent_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.275 GeV");
+	   gStyle->SetOptStat("Mero");
+	   for(int i =0; i < mGammaD_0275_Consistent_iso.size(); i++){
+	   mGammaD_0275_Consistent_Iso_plot->Fill(mGammaD_0275_Consistent_iso[i]);
+	   mGammaD_0275_Consistent_Iso_zoom_plot->Fill(mGammaD_0275_Consistent_iso[i]);
+	   }
+	   mGammaD_0275_Consistent_Iso_plot->SetFillColor(kRed);
+	   mGammaD_0275_Consistent_Iso_plot->DrawNormalized();
+	   c19->SaveAs("mGammaD_0275_Consistent_Iso_plot.pdf", "recreate");
+	   c19->Clear();
+	   mGammaD_0275_Consistent_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	   mGammaD_0275_Consistent_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
+	   mGammaD_0275_Consistent_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.275 GeV");
+	   mGammaD_0275_Consistent_Iso_zoom_plot->SetFillColor(kRed);
+	   mGammaD_0275_Consistent_Iso_zoom_plot->DrawNormalized();
+	   c19->SaveAs("mGammaD_0275_Consistent_Iso_zoom_plot.pdf", "recreate");
 
-	TCanvas *c20 = new TCanvas("c20","c20",700,500);
-	mGammaD_0300_Consistent_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
-	mGammaD_0300_Consistent_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
-	mGammaD_0300_Consistent_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.300 GeV");
-	gStyle->SetOptStat("Mero");
-	for(int i =0; i < mGammaD_0300_Consistent_iso.size(); i++){
-		mGammaD_0300_Consistent_Iso_plot->Fill(mGammaD_0300_Consistent_iso[i]);
-		mGammaD_0300_Consistent_Iso_zoom_plot->Fill(mGammaD_0300_Consistent_iso[i]);
-	}
-	mGammaD_0300_Consistent_Iso_plot->SetFillColor(kRed);
-	mGammaD_0300_Consistent_Iso_plot->DrawNormalized();
-	c20->SaveAs("mGammaD_0300_Consistent_Iso_plot.pdf", "recreate");
-	c20->Clear();
-	mGammaD_0300_Consistent_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
-	mGammaD_0300_Consistent_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
-	mGammaD_0300_Consistent_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.300 GeV");
+	   TCanvas *c20 = new TCanvas("c20","c20",700,500);
+	   mGammaD_0300_Consistent_Iso_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	   mGammaD_0300_Consistent_Iso_plot->GetYaxis()->SetTitle("Fraction of events/1.0 GeV/c");
+	   mGammaD_0300_Consistent_Iso_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.300 GeV");
+	   gStyle->SetOptStat("Mero");
+	   for(int i =0; i < mGammaD_0300_Consistent_iso.size(); i++){
+	   mGammaD_0300_Consistent_Iso_plot->Fill(mGammaD_0300_Consistent_iso[i]);
+	   mGammaD_0300_Consistent_Iso_zoom_plot->Fill(mGammaD_0300_Consistent_iso[i]);
+	   }
+	   mGammaD_0300_Consistent_Iso_plot->SetFillColor(kRed);
+	   mGammaD_0300_Consistent_Iso_plot->DrawNormalized();
+	   c20->SaveAs("mGammaD_0300_Consistent_Iso_plot.pdf", "recreate");
+	   c20->Clear();
+	   mGammaD_0300_Consistent_Iso_zoom_plot->GetXaxis()->SetTitle("Iso_{#mu#mu} [GeV/c]");
+	   mGammaD_0300_Consistent_Iso_zoom_plot->GetYaxis()->SetTitle("Fraction of events/0.1 GeV/c");
+	   mGammaD_0300_Consistent_Iso_zoom_plot->SetTitle("Dimuon Tracker Isolation for #gamma_{D} = 0.300 GeV");
 	mGammaD_0300_Consistent_Iso_zoom_plot->SetFillColor(kRed);
 	mGammaD_0300_Consistent_Iso_zoom_plot->DrawNormalized();
 	c20->SaveAs("mGammaD_0300_Consistent_Iso_zoom_plot.pdf", "recreate");
@@ -1051,7 +1349,7 @@ void makePlots(){
 	mGammaD_all_Consistent_Iso_zoom_plot->SetFillColor(kRed);
 	mGammaD_all_Consistent_Iso_zoom_plot->DrawNormalized();
 	c23->SaveAs("mGammaD_all_Consistent_Iso_zoom_plot.pdf", "recreate");
-*/	
+	*/	
 
 		BAM->Write();
 }
@@ -1059,8 +1357,12 @@ void makePlots(){
 void offline_selection_review(){
 	//flag == 1 for signal and 0 for background
 
-
+	//only run over samples that have individual files (to make it easier to find them with Fireworks)
+	//These cT's should be in order.
+//2.0 GeV
+	//{{{
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
+
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
@@ -1069,10 +1371,13 @@ void offline_selection_review(){
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
-//offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-//offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
 
-/*
+	//}}}
+	//Sven's 0.25 GeV sample
+	/*
+	//{{{
 	offline_vs_signal("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//", 1);
 	offline_vs_signal("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
@@ -1080,26 +1385,37 @@ void offline_selection_review(){
 	offline_vs_signal("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
-	offline_vs_signal("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);  
+	offline_vs_signal("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
-	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	//}}}
 	*/
 
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	// Ben's 0.25 GeV sample
+
+	//{{{
+
+	//offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	//offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
 
 
-offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
+
+	//}}}
+
+
+	//8.5 GeV sample
+	//{{{
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/", 1);
@@ -1108,7 +1424,10 @@ offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/", 1);
-
+	//}}}
+	//Jamal's 0.275 GeV sample
+	/*
+	//{{{
 	offline_vs_signal("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
@@ -1118,17 +1437,116 @@ offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_
 	offline_vs_signal("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/", 1);
+	//}}}
+	*/
 
-
+	//Alfredo's 0.3 GeV sample
+	/*
+	//{{{
 	offline_vs_signal("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3/", 1);
 	offline_vs_signal("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3/", 1);
+	//}}}
+	*/
+
+	//Ben's 0.275 GeV sample
+	//{{{
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_000_Evt_80k_PATANA_v4/151117_123308/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_005_Evt_80k_PATANA_v4/151117_151528/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_010_Evt_80k_PATANA_v4/151117_151628/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_020_Evt_80k_PATANA_v4/151117_151724/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_050_Evt_80k_PATANA_v4/151117_151824/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_100_Evt_80k_PATANA_v4/151117_151935/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_200_Evt_80k_PATANA_v4/151117_152115/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_300_Evt_80k_PATANA_v4/151117_152230/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_500_Evt_80k_PATANA_v4/151117_152335/asdf/", 1); 
+	//}}}
+	//Ben's 0.3 GeV sample
+	//{{{
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_000_Evt_80k_PATANA_v4/151117_152519/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_005_Evt_80k_PATANA_v4/151117_152556/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_010_Evt_80k_PATANA_v4/151117_152703/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_020_Evt_80k_PATANA_v4/151117_152813/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_050_Evt_80k_PATANA_v4/151117_153006/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_100_Evt_80k_PATANA_v4/151117_153036/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_200_Evt_80k_PATANA_v4/151117_153141/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_300_Evt_80k_PATANA_v4/151117_153244/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_500_Evt_80k_PATANA_v4/151117_153321/asdf/", 1); 
+	//}}}
+
+	//0.4 GeV sample
+	//{{{
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_000_Evt_80k_PATANA_v4/151117_153421/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_005_Evt_80k_PATANA_v4/151117_153513/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_010_Evt_80k_PATANA_v4/151117_153558/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_020_Evt_80k_PATANA_v4/151117_153657/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_050_Evt_80k_PATANA_v4/151117_153812/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_100_Evt_80k_PATANA_v4/151117_153904/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_200_Evt_80k_PATANA_v4/151117_153951/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_300_Evt_80k_PATANA_v4/151117_154045/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_500_Evt_80k_PATANA_v4/151117_154251/asdf/", 1); 
+	//}}}
+
+	//0.7 GeV sample
+	//{{{
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_000_Evt_80k_PATANA_v4/151117_154344/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_005_Evt_80k_PATANA_v4/151117_154442/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_010_Evt_80k_PATANA_v4/151117_154535/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_020_Evt_80k_PATANA_v4/151117_154632/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_050_Evt_80k_PATANA_v4/151117_154716/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_100_Evt_80k_PATANA_v4/151117_154749/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_200_Evt_80k_PATANA_v4/151117_154834/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_300_Evt_80k_PATANA_v4/151117_154929/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_500_Evt_80k_PATANA_v4/151117_155023/asdf/", 1); 
+	//}}}
+
+	//1.0 GeV sample
+	//{{{
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_000_Evt_80k_PATANA_v4/151117_155128/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_005_Evt_80k_PATANA_v4/151117_155253/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_010_Evt_80k_PATANA_v4/151117_155348/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_020_Evt_80k_PATANA_v4/151117_155445/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_050_Evt_80k_PATANA_v4/151117_155539/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_100_Evt_80k_PATANA_v4/151117_155629/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_200_Evt_80k_PATANA_v4/151117_155726/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_300_Evt_80k_PATANA_v4/151117_155825/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_500_Evt_80k_PATANA_v4/151117_155914/asdf/", 1); 
+	//}}}
+	// 1.5 GeV sample
+	//{{{
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_000_Evt_80k_PATANA_v4/151117_160012/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_005_Evt_80k_PATANA_v4/151117_160122/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_010_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_010_Evt_79k_PATANA_v4/151117_160146/asdf/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_020_Evt_80k_PATANA_v4/151117_160315/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_100_Evt_80k_PATANA_v4/151117_160426/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_200_Evt_80k_PATANA_v4/151117_160522/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_300_Evt_80k_PATANA_v4/151117_160613/asdf/", 1); 
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_500_Evt_80k_PATANA_v4/151117_160729/asdf/", 1);
+	//}}}
+
+//8 TeV samples
+	/*
+	//{{{
+
+	//8 Tev
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_80k_8TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_80k_PATANA_v4/151117_151201/0000/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_005_Evt_80k_8TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0250_cT_005_Evt_80k_PATANA_v4/151117_151250/0000/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_010_Evt_80k_8TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0250_cT_010_Evt_80k_PATANA_v4/151117_151325/0000/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_Evt_80k_8TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0250_cT_020_Evt_80k_PATANA_v4/151117_151402/0000/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_Evt_80k_8TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0250_cT_050_Evt_80k_PATANA_v4/151117_151430/0000/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_Evt_80k_8TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0250_cT_100_Evt_80k_PATANA_v4/151117_151508/0000/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_Evt_80k_8TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0250_cT_200_Evt_80k_PATANA_v4/151117_151538/0000/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_300_Evt_80k_8TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0250_cT_300_Evt_80k_PATANA_v4/151117_151622/0000/", 1);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_500_Evt_80k_8TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0250_cT_500_Evt_80k_PATANA_v4/151117_151650/0000/", 1);
+	//}}}
+	*/
 
 
-	offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_bbar/2015D/",0);
+	offline_vs_signal("/fdata/hepx/store/user/bmichlin/bbar/asdf/",0);
+	//offline_vs_signal("/fdata/hepx/store/user/bmichlin/DarkSUSY_bbar/2015D/",0); //old, first run of bbar
 
 	makePlots();
 
