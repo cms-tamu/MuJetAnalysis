@@ -86,7 +86,7 @@ process.PFMuJetProducer05 = process.MuJetProducer.clone(
 
 process.ana2012 = cms.EDAnalyzer("AnalysisRun2",
                                  trajectoryInput = cms.string("TrackRefitter"),
-                                 navigationSchool   = cms.string('SimpleNavigationSchool'),
+                                 NavigationSchool   = cms.string('SimpleNavigationSchool'),
 #                                 navigationSchool   = cms.string(''),
                                  MeasurementTracker = cms.string(''),
                                  Propagator = cms.string("RungeKuttaTrackerPropagator"),
