@@ -32,9 +32,9 @@ void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".
       TIter next(files);
       while ((file=(TSystemFile*)next())) {
 	fname = file->GetName();
-	if (verbose) std::cout << "found fname " << fname << std::endl;
+	if (verbose) std::cout << "found fname " << dirname + fname << std::endl;
 	if (!file->IsDirectory() && fname.BeginsWith(ext)) {
-	  if (verbose) std::cout << "adding fname " << fname << std::endl;
+	  if (verbose) std::cout << "adding fname " << dirname + fname << std::endl;
 	  ch->Add(dirname + fname);
 	}
       }
