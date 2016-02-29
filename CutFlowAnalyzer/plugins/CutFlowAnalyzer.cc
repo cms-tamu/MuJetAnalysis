@@ -1282,16 +1282,16 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
       transientTrackBuilder_ptr = &*transientTrackBuilder;
 
-      ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition);      
+      ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition); 
       ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
       ConsistentVtx.SetDebug(99);      
       b_is2DiMuonsConsistentVtxOK = ConsistentVtx.Calculate(diMuonC, diMuonF);
 
-      DisplacedVertexFinder displacedVtx(transientTrackBuilder_ptr, beamSpotPosition);      
-      displacedVtx.setDebug(99);      
-      if (runDisplacedVtxFinder_)
+      if (runDisplacedVtxFinder_) { 
+	DisplacedVertexFinder displacedVtx(transientTrackBuilder_ptr, beamSpotPosition);      
+	displacedVtx.setDebug(99);      
 	displacedVtx.findDisplacedVertex(diMuonC, diMuonF);
-
+      }      
     } catch (...) {
       std::cout << ">>>> WARNING!!! TransientTrackRecord is not available!!! <<<<" << std::endl;
     }    
