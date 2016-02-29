@@ -46,6 +46,7 @@
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
 #include "TrackPropagation/SteppingHelixPropagator/interface/SteppingHelixPropagator.h"
+#include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
@@ -393,6 +394,16 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Int_t b_diMuonF_m1_FittedVtx_hitpix_l3inc;
   Int_t b_diMuonF_m2_FittedVtx_hitpix_l3inc;
 
+  Int_t b_diMuonC_m1_FittedVtx_HBV;
+  Int_t b_diMuonC_m2_FittedVtx_HBV;
+  Int_t b_diMuonF_m1_FittedVtx_HBV;
+  Int_t b_diMuonF_m2_FittedVtx_HBV;
+
+  Int_t b_diMuonC_m1_FittedVtx_MHAF;
+  Int_t b_diMuonC_m2_FittedVtx_MHAF;
+  Int_t b_diMuonF_m1_FittedVtx_MHAF;
+  Int_t b_diMuonF_m2_FittedVtx_MHAF;
+
   Float_t b_diMuonC_FittedVtx_Lxy;
   Float_t b_diMuonC_FittedVtx_L;
   Float_t b_diMuonC_FittedVtx_dz;
@@ -605,6 +616,16 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_diMuonF_m1_FittedVtx_hitpix_l3inc=-1000;
   b_diMuonF_m2_FittedVtx_hitpix_l3inc=-1000;
   
+  b_diMuonC_m1_FittedVtx_HBV = -1000;
+  b_diMuonC_m2_FittedVtx_HBV = -1000;
+  b_diMuonF_m1_FittedVtx_HBV = -1000;
+  b_diMuonF_m2_FittedVtx_HBV = -1000;
+
+  b_diMuonC_m1_FittedVtx_MHAF = -1000;
+  b_diMuonC_m2_FittedVtx_MHAF = -1000;
+  b_diMuonF_m1_FittedVtx_MHAF = -1000;
+  b_diMuonF_m2_FittedVtx_MHAF = -1000;
+
   //****************************************************************************
   //                          EVENT LEVEL                                       
   //****************************************************************************
@@ -1553,6 +1574,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
 	if(tamu::helpers::sameTrack(&*track,&*(diMuonC->muon(k)->innerTrack()))){
 	  const reco::HitPattern& p = track->hitPattern();
+
+	  static CheckHitPattern checkHitPattern;
+	  GlobalPoint pos(diMuonC->vertexPoint().x(), diMuonC->vertexPoint().y(), diMuonC->vertexPoint().z());
+	  VertexState trueDecVert(pos, GlobalError());
+	  CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
+
+	  if(k==0) b_diMuonC_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
+	  if(k==0) b_diMuonC_m1_FittedVtx_MHAF = hitInfo.missHitsAfterVert;
+	  if(k==1) b_diMuonC_m2_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
+	  if(k==1) b_diMuonC_m2_FittedVtx_MHAF = hitInfo.missHitsAfterVert;
+
 	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
 	    if(k==0) b_diMuonC_m1_FittedVtx_hitpix = 1;
 	    if(k==1) b_diMuonC_m2_FittedVtx_hitpix = 1;
@@ -1571,6 +1603,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	}
 	if(tamu::helpers::sameTrack(&*track,&*(diMuonF->muon(k)->innerTrack()))){
 	  const reco::HitPattern& p = track->hitPattern();
+
+	  static CheckHitPattern checkHitPattern;
+	  GlobalPoint pos(diMuonF->vertexPoint().x(), diMuonF->vertexPoint().y(), diMuonF->vertexPoint().z());
+	  VertexState trueDecVert(pos, GlobalError());
+	  CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
+
+	  if(k==0) b_diMuonF_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
+	  if(k==0) b_diMuonF_m1_FittedVtx_MHAF = hitInfo.missHitsAfterVert;
+	  if(k==1) b_diMuonF_m2_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
+	  if(k==1) b_diMuonF_m2_FittedVtx_MHAF = hitInfo.missHitsAfterVert;
+
 	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
 	    if(k==0) b_diMuonF_m1_FittedVtx_hitpix = 1;
 	    if(k==1) b_diMuonF_m2_FittedVtx_hitpix = 1;
@@ -2033,6 +2076,15 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l3inc", &b_diMuonC_m2_FittedVtx_hitpix_l3inc, "diMuonC_m2_FittedVtx_hitpix_l3inc/I");
   m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l3inc", &b_diMuonF_m1_FittedVtx_hitpix_l3inc, "diMuonF_m1_FittedVtx_hitpix_l3inc/I");
   m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l3inc", &b_diMuonF_m2_FittedVtx_hitpix_l3inc, "diMuonF_m2_FittedVtx_hitpix_l3inc/I");
+
+  m_ttree->Branch("b_diMuonC_m1_FittedVtx_HBV", &b_diMuonC_m1_FittedVtx_HBV, "diMuonC_m1_FittedVtx_HBV/I");
+  m_ttree->Branch("b_diMuonC_m2_FittedVtx_HBV", &b_diMuonC_m2_FittedVtx_HBV, "diMuonC_m2_FittedVtx_HBV/I");
+  m_ttree->Branch("b_diMuonF_m1_FittedVtx_HBV", &b_diMuonF_m1_FittedVtx_HBV, "diMuonF_m1_FittedVtx_HBV/I");
+  m_ttree->Branch("b_diMuonF_m2_FittedVtx_HBV", &b_diMuonF_m2_FittedVtx_HBV, "diMuonF_m2_FittedVtx_HBV/I");
+  m_ttree->Branch("b_diMuonC_m1_FittedVtx_MHAF", &b_diMuonC_m1_FittedVtx_MHAF, "diMuonC_m1_FittedVtx_MHAF/I");
+  m_ttree->Branch("b_diMuonC_m2_FittedVtx_MHAF", &b_diMuonC_m2_FittedVtx_MHAF, "diMuonC_m2_FittedVtx_MHAF/I");
+  m_ttree->Branch("b_diMuonF_m1_FittedVtx_MHAF", &b_diMuonF_m1_FittedVtx_MHAF, "diMuonF_m1_FittedVtx_MHAF/I");
+  m_ttree->Branch("b_diMuonF_m2_FittedVtx_MHAF", &b_diMuonF_m2_FittedVtx_MHAF, "diMuonF_m2_FittedVtx_MHAF/I");
 
   // bb Estimation
   m_ttree->Branch("massC",                          &b_massC,                          "massC/F");
