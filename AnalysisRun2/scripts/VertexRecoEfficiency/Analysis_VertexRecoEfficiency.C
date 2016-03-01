@@ -227,11 +227,11 @@ void efficiency_vertex(const std::vector<std::string>& dirNames, int layers = 1)
        				 (diMuonF_m1_FittedVtx_hitpix_l3inc==1 || 
        				  diMuonF_m2_FittedVtx_hitpix_l3inc==1));
       
-      const double firstPixelLayerRadius(5.0);
+      const double firstPixelLayerRadius(4.4);
       const double secondPixelLayerRadius(7.3);
       const double thirdPixelLayerRadius(10.2);
       
-      bool pixelLayer = false;;
+      bool pixelLayer = false;
       double pixelLayerRadius = 0.;
       
       if (layers==1) {
@@ -611,7 +611,7 @@ void makePlot(int layers = 1)
   gr_eff_mD_8500->Draw("SAME PL");
   
   leg->Draw("same");
-  c->SaveAs(TString("e_vertex_vs_cT_L" + std::to_string(layers) + ".pdf"),"recreate");
+  c->SaveAs(TString("e_vertex_vs_cT_L" + std::to_string(layers) + "_20160229.pdf"),"recreate");
   //c->SaveAs(TString("e_hlt_vs_cT_L" + std::to_string(layers) + ".C"));
   c->Clear();
 
@@ -649,12 +649,13 @@ void makePlot(int layers = 1)
 void Analysis_VertexRecoEfficiency()
 {
   std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
-  readTextFileWithSamples("ANASamplesSven2.txt", DarkSUSY_mH_125_mGammaD_v);
+  //  readTextFileWithSamples("ANASamplesSven2.txt", DarkSUSY_mH_125_mGammaD_v);
+  readTextFileWithSamples("ANASamplesSven_NoVtxRequirementMuJet.txt", DarkSUSY_mH_125_mGammaD_v);
  
   for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_vertex(v, 1);
   makePlot(1);
-  // for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_vertex(v, 2);
-  // makePlot(2);
-  // for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_vertex(v, 3);
-  // makePlot(3);
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_vertex(v, 2);
+  makePlot(2);
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_vertex(v, 3);
+  makePlot(3);
 }     

@@ -27,7 +27,16 @@ PFMuJetProducer05 = MuJetProducer.clone(
     maxTrackerNormChi2 = cms.double(-1.0)
 )
 
+TrackerMuJetProducer05GroupByDeltaROrMass = TrackerMuJetProducer05.clone(
+    groupingMode = cms.string("GroupByDeltaROrMass"),
+)
+PFMuJetProducer05GroupByDeltaROrMass = PFMuJetProducer05.clone(
+    groupingMode = cms.string("GroupByDeltaROrMass"),
+)
+
 MuJetProducers = cms.Sequence(
-	TrackerMuJetProducer05 * 
-	PFMuJetProducer05	
+    TrackerMuJetProducer05 * 
+    PFMuJetProducer05 *
+    TrackerMuJetProducer05GroupByDeltaROrMass *
+    PFMuJetProducer05GroupByDeltaROrMass
 )
