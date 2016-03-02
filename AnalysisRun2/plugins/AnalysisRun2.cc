@@ -43,7 +43,8 @@
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
-#include <FWCore/Utilities/interface/ESInputTag.h>
+#include "FWCore/Utilities/interface/ESInputTag.h"
+#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 #include <DataFormats/TrackingRecHit/interface/InvalidTrackingRecHit.h>
 #include "DataFormats/Common/interface/AssociationMap.h"
@@ -191,6 +192,8 @@ private:
 
   edm::InputTag m_muJets; // muon jets built from reconstructed muons
   edm::InputTag m_muons;  // reconstructed PAT muons
+
+  edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
 
   Float_t m_threshold_DiMuons_dz;
 
@@ -663,6 +666,8 @@ AnalysisRun2::AnalysisRun2(const edm::ParameterSet& iConfig)
   m_muJets = iConfig.getParameter<edm::InputTag>("muJets");
   m_muons = iConfig.getParameter<edm::InputTag>("muons");
   
+  measurementTrkToken_ = consumes<MeasurementTrackerEvent>(iConfig.getParameter<edm::InputTag>("MeasurementTrackerEvent"));
+
   // edm::Service<TFileService> tFileService;
   // h_mj1_dm1m2 = tFileService->make<TH1F>( "h_mj1_dm1m2"  , "h_mj1_dm1m2", 100,  0., 0.4);
 
@@ -1737,21 +1742,29 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       	  edm::ESHandle<NavigationSchool> theSchool;
 	  edm::ESHandle<MeasurementTracker> theMeasTk;
+	  edm::Handle<MeasurementTrackerEvent> theMeasTkEventHandle;
+	  iEvent.getByToken(measurementTrkToken_, theMeasTkEventHandle);
+	  const MeasurementTrackerEvent *theMeasTkEvent = theMeasTkEventHandle.product();
 
 	  std::string theNavigationSchool ="";
 	  if (param_.exists("NavigationSchool")) theNavigationSchool= param_.getParameter<std::string>("NavigationSchool");
-	  else edm::LogWarning("TrackProducerBase")<<" NavigationSchool parameter not set. secondary hit pattern will not be filled.";
+	  else edm::LogWarning("TrackProducerBase")<<"NavigationSchool parameter not set. secondary hit pattern will not be filled.";
 
 	  if (theNavigationSchool!=""){
 	    iSetup.get<NavigationSchoolRecord>().get(theNavigationSchool, theSchool);
 	    LogDebug("TrackProducer") << "get also the measTk" << "\n";
 	    std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
 	    iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
+	    
 	  }
 	  else{
 	    theSchool = edm::ESHandle<NavigationSchool>(); //put an invalid handle
 	    theMeasTk = edm::ESHandle<MeasurementTracker>(); //put an invalid handle
 	  }
+
+	  if (!theSchool.isValid()) 
+	    edm::LogWarning("NavigationSchool")<<"NavigationSchool is invalid!";
+
 
       	  // //===============  Calling methods for propagation between layers====================//
 	  //	  edm::ESHandle<MeasurementTracker> theMeasTk;
@@ -2300,6 +2313,10 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   		  TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
   		  TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
 		
+		  if (!outerState || !innerState){
+		    std::cout << "No outer layer or no inner layer!" << std::endl;
+		  }
+
   		  if(innerTSOS.hasError()){
   		    if(m_debug>10) std::cout<<" innerTSOS muJetC has errors and they are:   "<<std::endl;
   		    if(m_debug>10) std::cout<<" innerTrajectory local error xx  "<<sqrt(innerTSOS.localError().positionError().xx())<<std::endl;
@@ -2318,21 +2335,14 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   		    }
   		  }
 
-
-		  cout<<" before crashing   "<<endl;
   		  const DetLayer* outerLayer = it->firstMeasurement().layer();
   		  const DetLayer* innerLayer = it->lastMeasurement().layer();
-		
-		  cout<<" before crashing   "<<endl;
 
   		  if (!outerLayer || !innerLayer){
   		    //means  that the trajectory was fit/smoothed in a special case: not setting those pointers
-		  
   		    if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
-  					    <<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
+					    <<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
   		  }
-		  
-		  cout<<" before crashing   "<<endl;
 
   		  //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
   		  PropagationDirection dirForInnerLayers = oppositeToMomentum;
@@ -2342,7 +2352,6 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   		    dirForOuterLayers = oppositeToMomentum;
   		    //throw cms::Exception("TrackProducer") 
   		  }
-		  cout<<" before crashing   "<<endl;
 		  
 		   // std::vector< const DetLayer * > innerCompLayers = innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
 		   // std::vector< const DetLayer * > outerCompLayers = outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
@@ -2359,7 +2368,6 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		  // std::vector<const DetLayer*> outerCompLayers;
 		  
 
-
 		  std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
 		  std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
 		  
@@ -2369,8 +2377,6 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		  std::cout<< "innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
 		  std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
 
-
-		  cout<<" before crashing   "<<endl;
 		
   		  if(m_debug>10){
   		    std::cout<<"========================================================"<<std::endl;
@@ -2387,8 +2393,6 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   		    std::cout<<"========================================================"<<std::endl;
   		  }
 
-		  cout<<" before crashing   "<<endl;
-		
   		  if(km==0) b_innerlayers_mu1_muJetC = innerCompLayers.size();
   		  if(km==1) b_innerlayers_mu2_muJetC = innerCompLayers.size();
 
@@ -2437,19 +2441,12 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   		    if(m_debug>10) std::cout<<"========================================================"<<std::endl;
 		  
 		  
-
   		    for(uint32_t k=0;k<detWithState.size();k++){
 		    
-  		      //		    DetId id = detWithState[k].first->geographicalId();
-  		      //		    MeasurementDetWithData measDet = theMeasTk->idToDet(id);
-
-  		      MeasurementTrackerEvent measTk;
-  		      DetId id = detWithState[k].first->geographicalId();
-  		      MeasurementDetWithData measDet = measTk.idToDet(id);
-
+		      DetId id = detWithState[k].first->geographicalId();
+  		      MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
   		      if( ( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) || 
   			    ( (*dd)->subDetector() == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive() ){
-
   			if(m_debug>10){
   			  std::cout<<"  compatible Det  number  "<<k<<std::endl;
   			  std::cout<<" local position rho  Det   "<<detWithState[k].second.localPosition().perp()<<std::endl;
@@ -2459,12 +2456,10 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   			if(km==0) mj1m0pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
   			if(km==1) mj1m1pos[det1stpix] = Local2DPoint(detWithState[k].second.localPosition().x(),detWithState[k].second.localPosition().y());
-
   			if(km==0) mj1m0poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
   									sqrt(detWithState[k].second.localError().positionError().yy()));
   			if(km==1) mj1m1poserr[det1stpix] = Local2DPoint(sqrt(detWithState[k].second.localError().positionError().xx()),
   									sqrt(detWithState[k].second.localError().positionError().yy()));
-
 
   			LocalError localErr2 = detWithState[k].second.localError().positionError();
   			localErr2.scale(2); // get the 2 sigma ellipse;
@@ -2702,15 +2697,9 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   		    if(m_debug>10) std::cout<<"========================================================"<<std::endl;
 		  
-
   		    for(uint32_t k=0;k<detWithState.size();k++){
-
-  		      MeasurementTrackerEvent measTk;
-  		      DetId id = detWithState[k].first->geographicalId();
-  		      MeasurementDetWithData measDet = measTk.idToDet(id);
-
-  		      // DetId id = detWithState[k].first->geographicalId();
-  		      // const MeasurementDet* measDet = theMeasTk->idToDet(id;)
+		      DetId id = detWithState[k].first->geographicalId();
+		      MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
 
   		      if( ( ((*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) 
   			    || ((*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive()  ){

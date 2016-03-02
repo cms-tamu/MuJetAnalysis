@@ -5,7 +5,7 @@
 # with command line options: step3 --conditions auto:run2_mc -n 10 --eventcontent RECOSIM,MINIAODSIM --runUnscheduled -s RAW2DIGI,L1Reco,RECO,PAT --datatier GEN-SIM-RECO,MINIAODSIM --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --magField 38T_PostLS1 --no_exec
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process('RECO')
+process = cms.Process('TEST')
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -15,8 +15,6 @@ process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
 process.load('Configuration.StandardSequences.GeometryRecoDB_cff')
 process.load('Configuration.StandardSequences.MagneticField_38T_PostLS1_cff')
-process.load('Configuration.StandardSequences.RawToDigi_cff')
-process.load('Configuration.StandardSequences.L1Reco_cff')
 process.load('Configuration.StandardSequences.Reconstruction_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_condDBv2_cff')
@@ -27,7 +25,7 @@ process.options = cms.untracked.PSet(
 
 # Other statements
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'MCRUN2_74_V9', '')
 
 # Automatic addition of the customisation function from SLHCUpgradeSimulations.Configuration.postLS1Customs
 #from SLHCUpgradeSimulations.Configuration.postLS1Customs import customisePostLS1 
@@ -38,14 +36,14 @@ process.load("RecoTracker.TrackProducer.TrackRefitter_cfi")
 process.TrackRefitter.NavigationSchool = ''
 
 process.source = cms.Source ("PoolSource",
-                             fileNames=cms.untracked.vstring('file:out_reco_106.root'),
+                             fileNames=cms.untracked.vstring('file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_1.root'),
                              skipEvents=cms.untracked.uint32(0)
                              )
 
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(30))
 
 
-process.Path = cms.Path(process.TrackRefitter)
+process.Path = cms.Path(process.TrackRefitter*process.MeasurementTrackerEvent)
 
 # End of customisation functions
 #do not add changes to your config after this point (unless you know what you are doing)
@@ -89,6 +87,7 @@ process.ana2012 = cms.EDAnalyzer("AnalysisRun2",
                                  NavigationSchool   = cms.string('SimpleNavigationSchool'),
 #                                 navigationSchool   = cms.string(''),
                                  MeasurementTracker = cms.string(''),
+                                 MeasurementTrackerEvent = cms.InputTag('MeasurementTrackerEvent'),
                                  Propagator = cms.string("RungeKuttaTrackerPropagator"),
                                  muJets = cms.InputTag("PFMuJetProducer05"),
                                  muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
