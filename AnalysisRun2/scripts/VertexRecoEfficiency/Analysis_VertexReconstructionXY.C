@@ -151,6 +151,17 @@ void efficiency_vertex(const std::vector<std::string>& dirNames, int layers = 1)
   Double_t ev_is2MuJets = 0.;
   Double_t ev_is2DiMuons = 0.;
   Double_t ev_is2DiMuonsFittedVtxOK = 0.;
+  Double_t ev_is2DiMuonsFittedVtxOK_C_F_Fid = 0.;
+  Double_t ev_is2DiMuonsFittedVtxOK_C_Fid = 0.;
+  Double_t ev_is2DiMuonsFittedVtxOK_F_Fid = 0.;
+  Double_t ev_is2DiMuonsFittedVtxOK_C_F_Non_Fid = 0.;
+
+  Double_t ev_is2DiMuonsConsistentVtxOK = 0.;
+  Double_t ev_is2DiMuonsConsistentVtxOK_C_F_Fid = 0.;
+  Double_t ev_is2DiMuonsConsistentVtxOK_C_Fid = 0.;
+  Double_t ev_is2DiMuonsConsistentVtxOK_F_Fid = 0.;
+  Double_t ev_is2DiMuonsConsistentVtxOK_C_F_Non_Fid = 0.;
+
   Double_t ev_isPixelHitOK = 0.;
   Double_t ev_is2DiMuonsDzOK_FittedVtx = 0.;
   Double_t ev_is2DiMuonsMassOK_FittedVtx = 0.;
@@ -384,37 +395,36 @@ void efficiency_vertex(const std::vector<std::string>& dirNames, int layers = 1)
 		    ev_isPixelHitOK++;
 		    if(is2DiMuonsFittedVtxOK){
 		      ev_is2DiMuonsFittedVtxOK++;
-		      //      if (fileName == "DarkSUSY_mH_125_mGammaD_0250_cT_500_" and diMuonF_FittedVtx_vx != -1000) { 
-		      cout << "Processing event " << k << endl;
-		      cout << "FVX " << diMuonF_FittedVtx_vx << " FVY " << diMuonF_FittedVtx_vy << " FVZ " << diMuonF_FittedVtx_vz << endl;
-		      cout << "CVX " << diMuonC_FittedVtx_vx << " CVY " << diMuonC_FittedVtx_vy << " CVZ " << diMuonC_FittedVtx_vz << endl;
-		      cout << "BX " << beamSpot_x << " BY " << beamSpot_y << " BZ " << beamSpot_z << endl;
-		      // check the orientation of the vector BV compared to the vector pT
-		      double FBVx = diMuonF_FittedVtx_vx - beamSpot_x;
-		      double FBVy = diMuonF_FittedVtx_vy - beamSpot_y;
-		      double FBVz = diMuonF_FittedVtx_vz - beamSpot_z;
+		      bool diMuonF_FittedVtx_fiducial = TMath::Sqrt(diMuonF_FittedVtx_vx*diMuonF_FittedVtx_vx + 
+								    diMuonF_FittedVtx_vy*diMuonF_FittedVtx_vy)<pixelLayerRadius and TMath::Abs(diMuonF_FittedVtx_vz < 34.5);
+		      bool diMuonC_FittedVtx_fiducial = TMath::Sqrt(diMuonC_FittedVtx_vx*diMuonC_FittedVtx_vx + 
+								    diMuonC_FittedVtx_vy*diMuonC_FittedVtx_vy)<pixelLayerRadius and TMath::Abs(diMuonC_FittedVtx_vz < 34.5);
 
-		      double CBVx = diMuonC_FittedVtx_vx - beamSpot_x;
-		      double CBVy = diMuonC_FittedVtx_vy - beamSpot_y;
-		      double CBVz = diMuonC_FittedVtx_vz - beamSpot_z;
+		      bool diMuonF_ConsistentVtx_fiducial = TMath::Sqrt(diMuonF_ConsistentVtx_vx*diMuonF_ConsistentVtx_vx + 
+									diMuonF_ConsistentVtx_vy*diMuonF_ConsistentVtx_vy)<pixelLayerRadius and TMath::Abs(diMuonF_ConsistentVtx_vz < 34.5);
+		      bool diMuonC_ConsistentVtx_fiducial = TMath::Sqrt(diMuonC_ConsistentVtx_vx*diMuonC_ConsistentVtx_vx + 
+									diMuonC_ConsistentVtx_vy*diMuonC_ConsistentVtx_vy)<pixelLayerRadius and TMath::Abs(diMuonC_ConsistentVtx_vz < 34.5);
+		      if (diMuonF_FittedVtx_fiducial and diMuonC_FittedVtx_fiducial) ev_is2DiMuonsFittedVtxOK_C_F_Fid++;
+		      if (diMuonF_FittedVtx_fiducial and not diMuonC_FittedVtx_fiducial) ev_is2DiMuonsFittedVtxOK_F_Fid++; 
+		      if (not diMuonF_FittedVtx_fiducial and diMuonC_FittedVtx_fiducial) ev_is2DiMuonsFittedVtxOK_C_Fid++;
+		      if (not diMuonF_FittedVtx_fiducial and not diMuonC_FittedVtx_fiducial) ev_is2DiMuonsFittedVtxOK_C_F_Non_Fid++;
+  		    }
+		    if(is2DiMuonsConsistentVtxOK){
+		      ev_is2DiMuonsConsistentVtxOK++;
+		      bool diMuonF_ConsistentVtx_fiducial = TMath::Sqrt(diMuonF_ConsistentVtx_vx*diMuonF_ConsistentVtx_vx + 
+								    diMuonF_ConsistentVtx_vy*diMuonF_ConsistentVtx_vy)<pixelLayerRadius and TMath::Abs(diMuonF_ConsistentVtx_vz < 34.5);
+		      bool diMuonC_ConsistentVtx_fiducial = TMath::Sqrt(diMuonC_ConsistentVtx_vx*diMuonC_ConsistentVtx_vx + 
+								    diMuonC_ConsistentVtx_vy*diMuonC_ConsistentVtx_vy)<pixelLayerRadius and TMath::Abs(diMuonC_ConsistentVtx_vz < 34.5);
 
-		      // calaculate the inner product
-		      double FIP = diMuonF_FittedVtx_px * FBVx + diMuonF_FittedVtx_py * FBVy + diMuonF_FittedVtx_pz * FBVz;
-		      cout << "FIP " << FIP << endl;
-		      if (FIP<0.)
-			cout << ">>>ALARM<<< displaced vertex poorly reconstructed" << endl;
-
-		      double CIP = diMuonC_FittedVtx_px * CBVx + diMuonC_FittedVtx_py * CBVy + diMuonC_FittedVtx_pz * CBVz;
-		      cout << "CIP " << CIP << endl;
-		      if (CIP<0.)
-			cout << ">>>ALARM<<< displaced vertex poorly reconstructed" << endl;
-		      
-		      if (FIP<0 and CIP<0)   hist->Fill(0);
-		      if (FIP>=0 and CIP<0)  hist->Fill(1);
-		      if (FIP<0 and CIP>=0)  hist->Fill(2);
-		      if (FIP>=0 and CIP>=0) hist->Fill(3);
-		      //      }		      
-		    }
+		      bool diMuonF_ConsistentVtx_fiducial = TMath::Sqrt(diMuonF_ConsistentVtx_vx*diMuonF_ConsistentVtx_vx + 
+									diMuonF_ConsistentVtx_vy*diMuonF_ConsistentVtx_vy)<pixelLayerRadius and TMath::Abs(diMuonF_ConsistentVtx_vz < 34.5);
+		      bool diMuonC_ConsistentVtx_fiducial = TMath::Sqrt(diMuonC_ConsistentVtx_vx*diMuonC_ConsistentVtx_vx + 
+									diMuonC_ConsistentVtx_vy*diMuonC_ConsistentVtx_vy)<pixelLayerRadius and TMath::Abs(diMuonC_ConsistentVtx_vz < 34.5);
+		      if (diMuonF_ConsistentVtx_fiducial and diMuonC_ConsistentVtx_fiducial) ev_is2DiMuonsConsistentVtxOK_C_F_Fid++;
+		      if (diMuonF_ConsistentVtx_fiducial and not diMuonC_ConsistentVtx_fiducial) ev_is2DiMuonsConsistentVtxOK_F_Fid++; 
+		      if (not diMuonF_ConsistentVtx_fiducial and diMuonC_ConsistentVtx_fiducial) ev_is2DiMuonsConsistentVtxOK_C_Fid++;
+		      if (not diMuonF_ConsistentVtx_fiducial and not diMuonC_ConsistentVtx_fiducial) ev_is2DiMuonsConsistentVtxOK_C_F_Non_Fid++;
+  		    }
 		  }
 		}
 	      }
