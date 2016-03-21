@@ -10,7 +10,9 @@ cd CMSSW_7_4_1_patch1/src
 
 cmsenv
 
-git clone -b for-CMSSW_74X https://github.com/castaned/MuJetAnalysis.git
+git clone -b for-CMSSW-74X https://github.com/castaned/MuJetAnalysis.git
+cd MuJetAnalysis/
+scram b -j 12
 
 cd AnalysisRun2/test
 
