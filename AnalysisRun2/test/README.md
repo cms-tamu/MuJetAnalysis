@@ -35,3 +35,10 @@ cd SBATCH_JOBS
 -submit jobs
 
 i.e.  sbatch DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1.slrm
+
+- Monitor jobs
+
+squeue -u <userame>
+
+output files in AnalysisRun2/test/<sample_name>
+
