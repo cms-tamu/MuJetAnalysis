@@ -4,6 +4,10 @@
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
 # with command line options: step3 --conditions auto:run2_mc -n 10 --eventcontent RECOSIM,MINIAODSIM --runUnscheduled -s RAW2DIGI,L1Reco,RECO,PAT --datatier GEN-SIM-RECO,MINIAODSIM --customise SLHCUpgradeSimulations/Configuration/postLS1Customs.customisePostLS1 --magField 38T_PostLS1 --no_exec
 import FWCore.ParameterSet.Config as cms
+import FWCore.ParameterSet.Config as cms
+import sys
+import os
+
 
 process = cms.Process('TEST')
 
@@ -35,12 +39,27 @@ from RecoTracker.TkNavigation.NavigationSchoolESProducer_cff import *
 process.load("RecoTracker.TrackProducer.TrackRefitter_cfi")
 process.TrackRefitter.NavigationSchool = ''
 
-process.source = cms.Source ("PoolSource",
-                             fileNames=cms.untracked.vstring('file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_1.root'),
-                             skipEvents=cms.untracked.uint32(0)
-                             )
+################## RECO Input #############################
 
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(30))
+PROCESS = str(os.getenv("PROCESS"))
+if ( PROCESS == None or PROCESS == "" ): PROCESS = int(0)
+else : PROCESS = int(PROCESS)
+JOBS = int(sys.argv[3])
+
+sample_name = sys.argv[2]
+
+file_list = "MuJetAnalysis.AnalysisRun2."+sys.argv[2]+"_cff"
+process.load(file_list)
+
+lenFileNames   = len(process.source.fileNames)
+process.source.fileNames = process.source.fileNames[lenFileNames*PROCESS/JOBS:lenFileNames*(PROCESS+1)/JOBS]
+
+# process.source = cms.Source ("PoolSource",
+# #                            fileNames=cms.untracked.vstring('file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_1.root'),
+#                              fileNames=cms.untracked.vstring('file:out_reco_106.root'),
+#                              skipEvents=cms.untracked.uint32(0)
+#                             )
+# process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(30))
 
 
 process.Path = cms.Path(process.TrackRefitter*process.MeasurementTrackerEvent)
@@ -107,7 +126,8 @@ process.ana2012 = cms.EDAnalyzer("AnalysisRun2",
 process.Path = cms.Path(process.patifyMC * process.PFMuJetProducer05 * process.TrackRefitter * process.ana2012)
 # customisation of the process.
 
-process.TFileService = cms.Service("TFileService", fileName = cms.string("test.root") )
+process.TFileService = cms.Service("TFileService", fileName = cms.string(sys.argv[2]+"/Ntup_%03d.root" % PROCESS) )
+#process.TFileService = cms.Service("TFileService", fileName = cms.string("test.root") )
 
 # End of customisation functions
 

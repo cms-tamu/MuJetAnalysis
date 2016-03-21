@@ -1312,6 +1312,7 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   //  if (b_event == 159896605) m_debug = 100;
   if(m_debug>10) std::cout<<"  Event :    "<<iEvent.id().event()<<std::endl;
+  if(m_debug>10) std::cout<<"  Lumi  :    "<<iEvent.id().luminosityBlock()<<std::endl;
   
   edm::Handle<reco::MuonCollection> muons;
   iEvent.getByLabel("muons",muons);
@@ -1734,8 +1735,8 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	indxtrkmj2[0]=-100000;
 	indxtrkmj2[1]=-100000;
 
-	// Int_t indxtrkmj1_gt[2]={-100000};
-	// Int_t indxtrkmj2_gt[2]={-100000};
+	//	Int_t indxtrkmj1_gt[2]={-100000};
+	//	Int_t indxtrkmj2_gt[2]={-100000};
 
 
 	if(m_antraj==1){
@@ -1991,12 +1992,13 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
 
       	  	  }
-      	  	  const reco::HitPattern& p = trackrf->hitPattern();
-      	  	  if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-      	  		//		dim1_hit=true;
-      	  		indxtrkmj1_validhit[k] = 1;
-      	  		b_muJetC_hitpix[k] = 1;
-      	  	  }
+
+      	  	  // const reco::HitPattern& p = trackrf->hitPattern();
+      	  	  // if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  	  // 	//		dim1_hit=true;
+      	  	  // 	indxtrkmj1_validhit[k] = 1;
+      	  	  // 	b_muJetC_hitpix[k] = 1;
+      	  	  // }
 
 
 	  
@@ -2009,12 +2011,13 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  		if(k==0) std::cout<<"  match mj2m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<std::endl;
 			
 		    }
-		    const reco::HitPattern& p = trackrf->hitPattern();
-		    if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
-		      //		dim2_hit=true;
-		      indxtrkmj2_validhit[k] = 1;
-		      b_muJetF_hitpix[k] = 1;
-		    }
+
+		    // const reco::HitPattern& p = trackrf->hitPattern();
+		    // if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+		    //   //		dim2_hit=true;
+		    //   indxtrkmj2_validhit[k] = 1;
+		    //   b_muJetF_hitpix[k] = 1;
+		    // }
 		  }
 		  counter_track++;
       	      }
@@ -2107,13 +2110,10 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 	  
       	    if(counter_track_hit == indxtrkmj1[0]){
 
-      	      // if(m_debug>10){
-      	      //   if(k==0) std::cout<< "p.hasValidHitInFirstPixelEndcap(): " << p.hasValidHitInFirstPixelEndcap() <<counter_gt<<std::endl;
-      	      //   if(k==1) std::cout<< "  matching   gt  mu2 muJetC  "<<counter_gt<<std::endl;
-      	      // }
-
+	      if(m_debug>10) std::cout<<" match refitted  id mj1_0  "<<counter_track_hit<<std::endl;
       	      const reco::HitPattern& p = trackrf->hitPattern();
       	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+		if(m_debug>10) std::cout<<" match refitted  hit "<<std::endl;
       	  	//		dim1_hit=true;
       	  	indxtrkmj1_validhit[0] = 1;
       	  	b_muJetC_hitpix[0] = 1;
@@ -2122,8 +2122,10 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       	    if(counter_track_hit == indxtrkmj1[1]){
 
+	      if(m_debug>10) std::cout<<" match refitted  id mj1_1 "<<counter_track_hit<<std::endl;
       	      const reco::HitPattern& p = trackrf->hitPattern();
       	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+		if(m_debug>10) std::cout<<" match refitted  hit      "<<std::endl;
       	  	//		dim1_hit=true;
       	  	indxtrkmj1_validhit[1] = 1;
       	  	b_muJetC_hitpix[1] = 1;
@@ -2132,8 +2134,11 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       	    if(counter_track_hit == indxtrkmj2[0]){
 
+
+	      if(m_debug>10) std::cout<<" match refitted  id mj2_0 "<<counter_track_hit<<std::endl;
       	      const reco::HitPattern& p = trackrf->hitPattern();
       	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+		if(m_debug>10) std::cout<<" match refitted  hit      "<<std::endl;
       	  	//		dim1_hit=true;
       	  	indxtrkmj2_validhit[0] = 1;
       	  	b_muJetF_hitpix[0] = 1;
@@ -2142,8 +2147,10 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
       	    if(counter_track_hit == indxtrkmj2[1]){
 
+	      if(m_debug>10) std::cout<<" match refitted  id mj2_1 "<<counter_track_hit<<std::endl;
       	      const reco::HitPattern& p = trackrf->hitPattern();
       	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+		if(m_debug>10) std::cout<<" match refitted  hit      "<<std::endl;
       	  	//		dim1_hit=true;
       	  	indxtrkmj2_validhit[1] = 1;
       	  	b_muJetF_hitpix[1] = 1;
@@ -2161,7 +2168,7 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  //   for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
       	  //     //	  for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
       	  //     if(sameTrack(&*track,&*(muJetC->muon(k)->innerTrack()))){
-      	  //       indxtrkmj1_gt[k] = counter_match;
+	  // 	//      	        indxtrkmj1_gt[k] = counter_match;
       	  //       if(m_debug>10){
       	  // 	if(k==0) std::cout<<"  match mj1m0 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
       	  // 	if(k==1) std::cout<<"  match mj1m1 muon track with indx gentrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
@@ -2169,17 +2176,17 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  //       const reco::HitPattern& p = track->hitPattern();
       	  //       if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
       	  // 	//		dim1_hit=true;
-      	  // 	indxtrkmj1_validhit_gt[k] = 1;
+	  // 	  //      	  	indxtrkmj1_validhit_gt[k] = 1;
       	  // 	b_muJetC_hitpix_gt[k] = 1;
       	  //       }
       	  //       else{
-      	  // 	indxtrkmj1_validhit_gt[k] = 0;
+	  // 	  //      	  	indxtrkmj1_validhit_gt[k] = 0;
       	  // 	b_muJetC_hitpix_gt[k] = 0;
       	  //       }
       	  //     }
 	  
       	  //     if(sameTrack(&*track,&*(muJetF->muon(k)->innerTrack()))){
-      	  //       indxtrkmj2_gt[k] = counter_match;
+	  // 	//      	        indxtrkmj2_gt[k] = counter_match;
       	  //       if(m_debug>10){
       	  // 	if(k==0) std::cout<<"  match mj2m0 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
       	  // 	if(k==1) std::cout<<"  match mj2m1 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
@@ -2187,11 +2194,11 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  //       const reco::HitPattern& p = track->hitPattern();
       	  //       if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
       	  // 	//		dim2_hit_gt=true;
-      	  // 	indxtrkmj2_validhit_gt[k] = 1;
+	  // 	  //      	  	indxtrkmj2_validhit_gt[k] = 1;
       	  // 	b_muJetF_hitpix_gt[k] = 1;
       	  //       }
       	  //       else{
-      	  // 	indxtrkmj2_validhit_gt[k] = 0;
+	  // 	  //      	  	indxtrkmj2_validhit_gt[k] = 0;
       	  // 	b_muJetF_hitpix_gt[k] = 0;
       	  //       }
       	  //     }
@@ -2294,7 +2301,7 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 
-  	    //====================== Loop for Trajectories from TrackRefitter  =================================//
+      //====================== Loop for Trajectories from TrackRefitter  =================================//
   	    Int_t counter_traj=0;
   	    for(vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
 	    
@@ -2353,26 +2360,8 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   		    //throw cms::Exception("TrackProducer") 
   		  }
 		  
-		   // std::vector< const DetLayer * > innerCompLayers = innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
-		   // std::vector< const DetLayer * > outerCompLayers = outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
-		  
-		  //get the list of compatible layers
-
-		  // std::vector<const DetLayer*> innerCompLayers =  innerLayer->compatibleLayers(*innerState,dirForInnerLayers);
-		  // std::vector<const DetLayer*> outerCompLayers =  outerLayer->compatibleLayers(*outerState,dirForOuterLayers);
-		  
-		  //		  std::vector<const DetLayer*> innerCompLayers =  theSchool.compatibleLayers(*innerState,dirForInnerLayers);
-		  //		  std::vector<const DetLayer*> outerCompLayers =  theSchool.compatibleLayers(*outerState,dirForOuterLayers);
-
-		  // std::vector<const DetLayer*> innerCompLayers;
-		  // std::vector<const DetLayer*> outerCompLayers;
-		  
-
 		  std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
 		  std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
-		  
-		  //		  auto innerCompLayers  = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-		  //		  auto outerCompLayers  = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
 
 		  std::cout<< "innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
 		  std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;

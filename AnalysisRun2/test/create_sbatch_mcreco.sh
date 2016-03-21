@@ -29,7 +29,7 @@ cat  >  SBATCH_JOBS/${name}.slrm <<EOF
 #SBATCH -n1
 #SBATCH --time=08:30:00
 #SBATCH --mem-per-cpu=8000mb
-#SBATCH -p background
+#SBATCH -p stakeholder-4g
 #SBATCH --array=1-$nJobs
 #SBATCH -o $PWD/SBATCHLOG/SBATCH_%a.stdout
 #SBATCH -e $PWD/SBATCHLOG/SBATCH_%a.stderr
@@ -41,7 +41,7 @@ source $VO_CMS_SW_DIR/cmsset_default.sh
 export SCRAM_ARCH=slc6_amd64_gcc491
 eval \`scramv1 runtime -sh\`
 cd /fdata/scratch/castaned/Analysis2015data/SL6/AnalysisRun2/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/test
-cmsRun analysis_mcreco_cfg.py $name $nJobs
+cmsRun step3_RAW2DIGI_L1Reco_RECO_PAT.py $name $nJobs
       
 exit 0
 

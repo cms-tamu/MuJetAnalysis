@@ -16,7 +16,7 @@ echo "Sample - $name"
 
 echo " name folder   "  $name
      
-mkdir $name_cutflow
+mkdir $name
       
 #nJobs=$(wc -l python/$name.txt | cut -f1 -d' ')
 nJobs=100
