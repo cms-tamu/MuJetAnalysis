@@ -20,39 +20,51 @@ void hitpos(){
   
   cout<<"  Events  "<<t->GetEntries()<<endl;
 
+  //  TCut  sel = "2dimuon&&2mjets&&is2DiMuonsDzOK&&is2DiMuonsMassOK&&is2DiMuonsIsoTkOK&&is2DiMuonHLTFired";
+  TCut  sel = "2dimuon";
+  
   Float_t ev_2dim;
   
-  ev_2dim = t->GetEntries("2dimuon==1");
+  ev_2dim = t->GetEntries(sel);
   
   cout<<" Events with 2 dimuons  "<<ev_2dim<<endl;
   
   Float_t ev_2dimhit;
-  ev_2dimhit = t->GetEntries("2dimuon==1&&( (muJetC_hitpix[0]==1||muJetC_hitpix[1]==1)&&(muJetF_hitpix[0]==1||muJetF_hitpix[1]==1) )");
+  ev_2dimhit = t->GetEntries(sel&&"( (muJetC_hitpix[0]==1||muJetC_hitpix[1]==1)&&(muJetF_hitpix[0]==1||muJetF_hitpix[1]==1) )");
   cout<<" Events with 2 dimuons + pixel hit "<<ev_2dimhit<<endl;
 
 
   Float_t ev_2dimhitfail;
-  ev_2dimhitfail = t->GetEntries("2dimuon==1&&( (muJetC_hitpix[0]!=1&&muJetC_hitpix[1]!=1)||(muJetF_hitpix[0]!=1&&muJetF_hitpix[1]!=1) )");
+  ev_2dimhitfail = t->GetEntries(sel&&"( (muJetC_hitpix[0]!=1&&muJetC_hitpix[1]!=1)||(muJetF_hitpix[0]!=1&&muJetF_hitpix[1]!=1) )");
   cout<<" Events with 2 dimuons + pixel hit fail "<<ev_2dimhitfail<<endl;
 
   Float_t ev_2dimhitfail_muJets;
-  ev_2dimhitfail_muJets = t->GetEntries("2dimuon==1&&( (muJetC_hitpix[0]!=1&&muJetC_hitpix[1]!=1)&&(muJetF_hitpix[0]!=1&&muJetF_hitpix[1]!=1) )");
+  ev_2dimhitfail_muJets = t->GetEntries(sel&&"( (muJetC_hitpix[0]!=1&&muJetC_hitpix[1]!=1)&&(muJetF_hitpix[0]!=1&&muJetF_hitpix[1]!=1) )");
   cout<<" Events with 2 dimuons + pixel hit fail both dimuons   "<<ev_2dimhitfail_muJets<<endl;
 
   Float_t ev_2dimhitfail_muJetC;
-  ev_2dimhitfail_muJetC = t->GetEntries("2dimuon==1&&( (muJetC_hitpix[0]!=1&&muJetC_hitpix[1]!=1)&&(muJetF_hitpix[0]==1||muJetF_hitpix[1]==1 ) )");
+  ev_2dimhitfail_muJetC = t->GetEntries(sel&&"( (muJetC_hitpix[0]!=1&&muJetC_hitpix[1]!=1)&&(muJetF_hitpix[0]==1||muJetF_hitpix[1]==1 ) )");
   cout<<" Events with 2 dimuons + pixel hit fail muJetC   "<<ev_2dimhitfail_muJetC<<endl;
 
   Float_t ev_2dimhitfail_muJetF;
-  ev_2dimhitfail_muJetF = t->GetEntries("2dimuon==1&&( (muJetF_hitpix[0]!=1&&muJetF_hitpix[1]!=1)&&(muJetC_hitpix[0]==1||muJetC_hitpix[1]==1 ) )");
+  ev_2dimhitfail_muJetF = t->GetEntries(sel&&"( (muJetF_hitpix[0]!=1&&muJetF_hitpix[1]!=1)&&(muJetC_hitpix[0]==1||muJetC_hitpix[1]==1 ) )");
   cout<<" Events with 2 dimuons + pixel hit fail muJetF   "<<ev_2dimhitfail_muJetF<<endl;
 
-
+ 
 
   //===================================================================
 
   Int_t event;
+  Int_t lumi;
   Int_t ev2dim;
+  Int_t ev2mj;
+  Bool_t isVtxOK;
+  Bool_t is2DimDzOK;
+  Bool_t is2DimVtxOK;
+  Bool_t is2DimHLTFired;
+  Bool_t is2DimIsoTkOK;
+  Bool_t is2DimMassOK;
+
   Int_t muJetChit[2];
   Int_t muJetFhit[2];
   Int_t comphitmu1JetC;
@@ -119,7 +131,17 @@ void hitpos(){
 
 
   t->SetBranchAddress("event",&event);
+  t->SetBranchAddress("lumi",&lumi);
   t->SetBranchAddress("2dimuon",&ev2dim);
+  t->SetBranchAddress("2mjets",&ev2mj);
+
+  t->SetBranchAddress("isVertexOK",&isVtxOK);
+  t->SetBranchAddress("is2DiMuonsDzOK",&is2DimDzOK);
+  t->SetBranchAddress("is2DiMuonsVtxOK",&is2DimVtxOK);
+  t->SetBranchAddress("is2DiMuonsMassOK",&is2DimMassOK);
+  t->SetBranchAddress("is2DiMuonsIsoTkOK",&is2DimIsoTkOK);
+  t->SetBranchAddress("is2DiMuonHLTFired",&is2DimHLTFired);
+    
   t->SetBranchAddress("muJetC_hitpix",&muJetChit);
   t->SetBranchAddress("muJetF_hitpix",&muJetFhit);
 
@@ -196,72 +218,78 @@ void hitpos(){
 
   Int_t nentries = t->GetEntries();
 
+  Int_t count_dmCfail=0;
+  Int_t count_dmFfail=0;
+  
   for(int k=0;k<nentries;k++){
     t->GetEntry(k);
     
-
-    bool skip_event=true;
-
+    
+    //    bool skip_event=true;
+    
     //    for(int ne=0;ne<500;ne++){
     //      if(event==event_list[ne]) skip_event=false;
     //    }
     
     //    if(event==6494) skip_event=false;
-
+    
     //    if(skip_event) continue;
-
+    
     //    if(event!=14662) continue;
-
+    
     //    if(event>55000) continue;
+    
 
-
-
-    if(ev2dim &&(genA0_Lxy_rdet<4.4 && genA1_Lxy_rdet<4.4 && abs(genA0_Lz_rdet)<34.5 && abs(genA1_Lz_rdet)<34.5) ){
+    //    if(ev2dim  &&(genA0_Lxy_rdet<4.4 && genA1_Lxy_rdet<4.4 && abs(genA0_Lz_rdet)<34.5 && abs(genA1_Lz_rdet)<34.5) ){
+    if(ev2dim&&isVtxOK&&is2DimDzOK&&is2DimVtxOK&&is2DimMassOK&&is2DimIsoTkOK&&is2DimHLTFired){
       
-      if( (muJetChit[0]!=1&&muJetChit[1]!=1) && (muJetFhit[0]==1||muJetFhit[1]==1)){
+       if( (muJetChit[0]!=1&&muJetChit[1]!=1) && (muJetFhit[0]==1||muJetFhit[1]==1)){
+	 count_dmCfail++;
+
+	 cout<<"  Event number   "<<event<<endl;
+	 
+      	Float_t ymin2=-4.0;
+      	Float_t ymax2=4.0;
+      	Float_t xmin2=-1.5;
+      	Float_t xmax2=1.5;
 	
-	Float_t ymin2=-4.0;
-	Float_t ymax2=4.0;
-	Float_t xmin2=-1.5;
-	Float_t xmax2=1.5;
-	
-	// Float_t ymin=mu1JetCposy[0]-0.1;
-	// Float_t ymax=mu1JetCposy[0]+0.1;
-	// Float_t xmin=mu1JetCposx[0]-0.005;
-	// Float_t xmax=mu1JetCposx[0]+0.005;
-
-	Float_t ymin=2.64;
-	Float_t ymax=2.72;
-	Float_t xmin=0.690;
-	Float_t xmax=0.696;
+      	 Float_t ymin=mu1JetCposy[0]-0.5;
+      	 Float_t ymax=mu1JetCposy[0]+0.5;
+      	 Float_t xmin=mu1JetCposx[0]-0.05;
+      	 Float_t xmax=mu1JetCposx[0]+0.05;
+	 
+      	// Float_t ymin=2.64;
+      	// Float_t ymax=2.72;
+      	// Float_t xmin=0.690;
+      	// Float_t xmax=0.696;
 
 
-	for(int j=0;j<Detmu1jetC;j++){
-	  char nameh[80];
-	  sprintf(nameh,"muJetC_pos_muon1_det%d_%d",j,event);
-	  muJetC_pos_muon1[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
-	  muJetC_pos_muon1[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
+      	for(int j=0;j<Detmu1jetC;j++){
+      	  char nameh[80];
+      	  sprintf(nameh,"muJetC_pos_muon1_det%d_%d",j,event);
+      	  muJetC_pos_muon1[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
+      	  muJetC_pos_muon1[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
 	  
 	  
-	  char nameh2[80];
-	  sprintf(nameh2,"muJetC_pos_muon1_det%d_%d_zoomin",j,event);
-	  muJetC_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
-	  muJetC_pos_muon1_zoomin[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
-	}
+      	  char nameh2[80];
+      	  sprintf(nameh2,"muJetC_pos_muon1_det%d_%d_zoomin",j,event);
+      	  muJetC_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
+      	  muJetC_pos_muon1_zoomin[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
+      	}
 
 
 
-	for(int j=0;j<Detmu2jetC;j++){
-	  char nameh[80];
-	  sprintf(nameh,"muJetC_pos_muon2_det%d_%d",j,event);
-	  muJetC_pos_muon2[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
-	  muJetC_pos_muon2[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
+      	for(int j=0;j<Detmu2jetC;j++){
+      	  char nameh[80];
+      	  sprintf(nameh,"muJetC_pos_muon2_det%d_%d",j,event);
+      	  muJetC_pos_muon2[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
+      	  muJetC_pos_muon2[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
 	  
-	  char nameh2[80];
-	  sprintf(nameh2,"muJetC_pos_muon2_det%d_%d_zoomin",j,event);
-	  muJetC_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
-	  muJetC_pos_muon2_zoomin[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
-	}
+      	  char nameh2[80];
+      	  sprintf(nameh2,"muJetC_pos_muon2_det%d_%d_zoomin",j,event);
+      	  muJetC_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
+      	  muJetC_pos_muon2_zoomin[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
+      	}
 
 
        	TEllipse el1(mu2JetCposx[0],mu2JetCposy[0],0.001,0.001);
@@ -273,10 +301,10 @@ void hitpos(){
       	char nameh5[80];
       	char nameh6[80];
 	
-	sprintf(nameh3,"muJetC_pos_muon1_rechit_%d_%d",k,event);
-	sprintf(nameh4,"muJetC_pos_muon1_rechit_zoomin_%d_%d",k,event);
-	muJetC_pos_muon1_rechit = new TH2F(nameh3,"",100,xmin2,xmax2,100,ymin2,ymax2);
-	muJetC_pos_muon1_rechit_zoomin = new TH2F(nameh4,"",100,xmin,xmax,100,ymin,ymax);
+      	sprintf(nameh3,"muJetC_pos_muon1_rechit_%d_%d",k,event);
+      	sprintf(nameh4,"muJetC_pos_muon1_rechit_zoomin_%d_%d",k,event);
+      	muJetC_pos_muon1_rechit = new TH2F(nameh3,"",100,xmin2,xmax2,100,ymin2,ymax2);
+      	muJetC_pos_muon1_rechit_zoomin = new TH2F(nameh4,"",100,xmin,xmax,100,ymin,ymax);
 	
       	for(int j=0;j<comphitmu1JetC;j++){
       	  muJetC_pos_muon1_rechit->Fill(pixelhitmu1JetCx[j],pixelhitmu1JetCy[j]);
@@ -286,7 +314,7 @@ void hitpos(){
 	
 	
       	sprintf(nameh5,"muJetC_pos_muon2_rechit_%d_%d",k,event);
-	sprintf(nameh6,"muJetC_pos_muon2_rechit_zoomin_%d_%d",k,event);
+      	sprintf(nameh6,"muJetC_pos_muon2_rechit_zoomin_%d_%d",k,event);
       	muJetC_pos_muon2_rechit = new TH2F(nameh5,"",100,xmin2,xmax2,100,ymin2,ymax2);
       	muJetC_pos_muon2_rechit_zoomin = new TH2F(nameh6,"",100,xmin,xmax,100,ymin,ymax);
       	for(int j=0;j<comphitmu2JetC;j++){
@@ -321,10 +349,10 @@ void hitpos(){
 
 	
       	char namec[50];
-      	sprintf(namec,"muon_recover_pos/muJetC/muJetC_hits_%d.pdf",event);
+      	sprintf(namec,"muon_recover_pos/muJetC/muJetC_hits_%d_%d.pdf",event,lumi);
       	c->SaveAs(namec,"recreate");
 
-	char legname1[50];
+      	char legname1[50];
       	TCanvas *c1 = new TCanvas("c1","c1",700,500);
       	for(int l=0;l<Detmu1jetC;l++){
       	  muJetC_pos_muon1_zoomin[l]->SetFillColor(4+l);
@@ -346,442 +374,444 @@ void hitpos(){
       	muJetC_pos_muon2_rechit_zoomin->Draw("BOXsame");
 	  
       	char namec2[50];
-      	sprintf(namec2,"muon_recover_pos/muJetC/muJetC_hits_%d_zoomin.pdf",event);
+      	sprintf(namec2,"muon_recover_pos/muJetC/muJetC_hits_%d_%d_zoomin.pdf",event,lumi);
       	c1->SaveAs(namec2,"recreate");
-      }
+       }
 
 
-      if((muJetFhit[0]!=1&&muJetFhit[1]!=1) && (muJetChit[0]==1||muJetChit[1]==1)){
+      // if( (muJetFhit[0]!=1&&muJetFhit[1]!=1) && (muJetChit[0]==1||muJetChit[1]==1)){
 
 	
-      	Float_t ymin2=-4.0;
-      	Float_t ymax2=4.0;
-      	Float_t xmin2=-1.5;
-      	Float_t xmax2=1.5;
+      // 	Float_t ymin2=-4.0;
+      // 	Float_t ymax2=4.0;
+      // 	Float_t xmin2=-1.5;
+      // 	Float_t xmax2=1.5;
 	
-      	Float_t ymin=mu1JetFposy[0]-0.1;
-      	Float_t ymax=mu1JetFposy[0]+0.1;
-      	Float_t xmin=mu1JetFposx[0]-0.05;
-      	Float_t xmax=mu1JetFposx[0]+0.05;
+      // 	Float_t ymin=mu1JetFposy[0]-0.1;
+      // 	Float_t ymax=mu1JetFposy[0]+0.1;
+      // 	Float_t xmin=mu1JetFposx[0]-0.05;
+      // 	Float_t xmax=mu1JetFposx[0]+0.05;
 
-      	for(int j=0;j<Detmu1jetF;j++){
-      	  char nameh[30];
-      	  sprintf(nameh,"muJetF_pos_muon1_det%d_%d",j,event);
-      	  muJetF_pos_muon1[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
-      	  muJetF_pos_muon1[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
+      // 	for(int j=0;j<Detmu1jetF;j++){
+      // 	  char nameh[30];
+      // 	  sprintf(nameh,"muJetF_pos_muon1_det%d_%d",j,event);
+      // 	  muJetF_pos_muon1[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
+      // 	  muJetF_pos_muon1[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
 	  
-      	  char nameh2[30];
-      	  sprintf(nameh2,"muJetF_pos_muon1_det%d_%d_zoomin",j,event);
-      	  muJetF_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
-      	  muJetF_pos_muon1_zoomin[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
-      	}
+      // 	  char nameh2[30];
+      // 	  sprintf(nameh2,"muJetF_pos_muon1_det%d_%d_zoomin",j,event);
+      // 	  muJetF_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
+      // 	  muJetF_pos_muon1_zoomin[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
+      // 	}
 	
-      	for(int j=0;j<Detmu2jetF;j++){
-      	  char nameh[30];
-      	  sprintf(nameh,"muJetF_pos_muon2_det%d_%d",j,event);
-      	  muJetF_pos_muon2[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
-      	  muJetF_pos_muon2[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
+      // 	for(int j=0;j<Detmu2jetF;j++){
+      // 	  char nameh[30];
+      // 	  sprintf(nameh,"muJetF_pos_muon2_det%d_%d",j,event);
+      // 	  muJetF_pos_muon2[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
+      // 	  muJetF_pos_muon2[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
 	  
-      	  char nameh2[30];
-      	  sprintf(nameh2,"muJetF_pos_muon2_det%d_%d_zoomin",j,event);
-      	  muJetF_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
-      	  muJetF_pos_muon2_zoomin[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
-      	}
+      // 	  char nameh2[30];
+      // 	  sprintf(nameh2,"muJetF_pos_muon2_det%d_%d_zoomin",j,event);
+      // 	  muJetF_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
+      // 	  muJetF_pos_muon2_zoomin[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
+      // 	}
 
-      	muJetF_pos_muon1_rechit = new TH2F("muJetF_pos_muon1_rechit","",100,xmin2,xmax2,100,ymin2,ymax2);
-      	muJetF_pos_muon1_rechit_zoomin = new TH2F("muJetF_pos_muon1_rechit_zoomin","",100,xmin,xmax,100,ymin,ymax);
+      // 	muJetF_pos_muon1_rechit = new TH2F("muJetF_pos_muon1_rechit","",100,xmin2,xmax2,100,ymin2,ymax2);
+      // 	muJetF_pos_muon1_rechit_zoomin = new TH2F("muJetF_pos_muon1_rechit_zoomin","",100,xmin,xmax,100,ymin,ymax);
 
-      	for(int j=0;j<comphitmu1JetF;j++){
-      	  muJetF_pos_muon1_rechit->Fill(pixelhitmu1JetFx[j],pixelhitmu1JetFy[j]);
-      	  muJetF_pos_muon1_rechit_zoomin->Fill(pixelhitmu1JetFx[j],pixelhitmu1JetFy[j]);
-      	  //	    cout<<" hit position x  "<<pixelhitmu1JetCx[j]<<" hit position y  "<<pixelhitmu1JetCy[j]<<endl;
-      	}
+      // 	for(int j=0;j<comphitmu1JetF;j++){
+      // 	  muJetF_pos_muon1_rechit->Fill(pixelhitmu1JetFx[j],pixelhitmu1JetFy[j]);
+      // 	  muJetF_pos_muon1_rechit_zoomin->Fill(pixelhitmu1JetFx[j],pixelhitmu1JetFy[j]);
+      // 	  //	    cout<<" hit position x  "<<pixelhitmu1JetCx[j]<<" hit position y  "<<pixelhitmu1JetCy[j]<<endl;
+      // 	}
 
-      	muJetF_pos_muon2_rechit = new TH2F("muJetF_pos_muon2_rechit","",100,xmin2,xmax2,100,ymin2,ymax2);
-      	muJetF_pos_muon2_rechit_zoomin = new TH2F("muJetF_pos_muon2_rechit_zoomin","",100,xmin,xmax,100,ymin,ymax);
-      	for(int j=0;j<comphitmu2JetF;j++){
-      	  muJetF_pos_muon2_rechit->Fill(pixelhitmu2JetFx[j],pixelhitmu2JetFy[j]);
-      	  muJetF_pos_muon2_rechit_zoomin->Fill(pixelhitmu2JetFx[j],pixelhitmu2JetFy[j]);
-      	}
+      // 	muJetF_pos_muon2_rechit = new TH2F("muJetF_pos_muon2_rechit","",100,xmin2,xmax2,100,ymin2,ymax2);
+      // 	muJetF_pos_muon2_rechit_zoomin = new TH2F("muJetF_pos_muon2_rechit_zoomin","",100,xmin,xmax,100,ymin,ymax);
+      // 	for(int j=0;j<comphitmu2JetF;j++){
+      // 	  muJetF_pos_muon2_rechit->Fill(pixelhitmu2JetFx[j],pixelhitmu2JetFy[j]);
+      // 	  muJetF_pos_muon2_rechit_zoomin->Fill(pixelhitmu2JetFx[j],pixelhitmu2JetFy[j]);
+      // 	}
 
 	  
-      	char legname2[50];
-      	TCanvas *c = new TCanvas("c","c",700,500);
-      	for(int l=0;l<Detmu1jetF;l++){
-      	  muJetF_pos_muon1[l]->SetFillColor(4+l);
-      	  if(l==0) muJetF_pos_muon1[l]->Draw("BOX");
-      	  if(l==0) muJetF_pos_muon1[l]->GetXaxis()->SetTitle("local x position [cm]");
-      	  if(l==0) muJetF_pos_muon1[l]->GetYaxis()->SetTitle("local y position [cm]");
-      	  else muJetF_pos_muon1[l]->Draw("BOXsame");
-      	}
+      // 	char legname2[50];
+      // 	TCanvas *c = new TCanvas("c","c",700,500);
+      // 	for(int l=0;l<Detmu1jetF;l++){
+      // 	  muJetF_pos_muon1[l]->SetFillColor(4+l);
+      // 	  if(l==0) muJetF_pos_muon1[l]->Draw("BOX");
+      // 	  if(l==0) muJetF_pos_muon1[l]->GetXaxis()->SetTitle("local x position [cm]");
+      // 	  if(l==0) muJetF_pos_muon1[l]->GetYaxis()->SetTitle("local y position [cm]");
+      // 	  else muJetF_pos_muon1[l]->Draw("BOXsame");
+      // 	}
 	  
-      	for(int l=0;l<Detmu2jetF;l++){
-      	  muJetF_pos_muon2[l]->SetLineColor(4+l);
-      	  if(l==0) muJetF_pos_muon2[l]->Draw("BOXsame");
-      	  else muJetF_pos_muon2[l]->Draw("BOXsame");
-      	}
+      // 	for(int l=0;l<Detmu2jetF;l++){
+      // 	  muJetF_pos_muon2[l]->SetLineColor(4+l);
+      // 	  if(l==0) muJetF_pos_muon2[l]->Draw("BOXsame");
+      // 	  else muJetF_pos_muon2[l]->Draw("BOXsame");
+      // 	}
 	  
-      	muJetF_pos_muon1_rechit->SetFillColor(2);
-      	muJetF_pos_muon1_rechit->Draw("BOXsame");
+      // 	muJetF_pos_muon1_rechit->SetFillColor(2);
+      // 	muJetF_pos_muon1_rechit->Draw("BOXsame");
 
-      	muJetF_pos_muon2_rechit->SetFillColor(2);
-      	muJetF_pos_muon2_rechit->Draw("BOXsame");
+      // 	muJetF_pos_muon2_rechit->SetFillColor(2);
+      // 	muJetF_pos_muon2_rechit->Draw("BOXsame");
 	  
-      	char namec3[50];
-      	sprintf(namec3,"muon_recover_pos/muJetF/muJetF_hits_%d.pdf",event);
-      	c->SaveAs(namec3,"recreate");
+      // 	char namec3[50];
+      // 	sprintf(namec3,"muon_recover_pos/muJetF/muJetF_hits_%d.pdf",event);
+      // 	c->SaveAs(namec3,"recreate");
 
-      	char legname3[50];
-      	TCanvas *c2 = new TCanvas("c1","c1",700,500);
-      	for(int l=0;l<Detmu1jetF;l++){
-      	  muJetF_pos_muon1_zoomin[l]->SetFillColor(4+l);
-      	  if(l==0) muJetF_pos_muon1_zoomin[l]->Draw("BOX");
-      	  if(l==0) muJetF_pos_muon1_zoomin[l]->GetXaxis()->SetTitle("local x position [cm]");
-      	  if(l==0) muJetF_pos_muon1_zoomin[l]->GetYaxis()->SetTitle("local y position [cm]");
-      	  else muJetF_pos_muon1_zoomin[l]->Draw("BOXsame");
-      	}
+      // 	char legname3[50];
+      // 	TCanvas *c2 = new TCanvas("c1","c1",700,500);
+      // 	for(int l=0;l<Detmu1jetF;l++){
+      // 	  muJetF_pos_muon1_zoomin[l]->SetFillColor(4+l);
+      // 	  if(l==0) muJetF_pos_muon1_zoomin[l]->Draw("BOX");
+      // 	  if(l==0) muJetF_pos_muon1_zoomin[l]->GetXaxis()->SetTitle("local x position [cm]");
+      // 	  if(l==0) muJetF_pos_muon1_zoomin[l]->GetYaxis()->SetTitle("local y position [cm]");
+      // 	  else muJetF_pos_muon1_zoomin[l]->Draw("BOXsame");
+      // 	}
 	  
-      	for(int l=0;l<Detmu2jetF;l++){
-      	  muJetF_pos_muon2_zoomin[l]->SetLineColor(4+l);
-      	  if(l==0) muJetF_pos_muon2_zoomin[l]->Draw("BOXsame");
-      	  else muJetF_pos_muon2_zoomin[l]->Draw("BOXsame");
-      	}
+      // 	for(int l=0;l<Detmu2jetF;l++){
+      // 	  muJetF_pos_muon2_zoomin[l]->SetLineColor(4+l);
+      // 	  if(l==0) muJetF_pos_muon2_zoomin[l]->Draw("BOXsame");
+      // 	  else muJetF_pos_muon2_zoomin[l]->Draw("BOXsame");
+      // 	}
 	  
-      	muJetF_pos_muon1_rechit_zoomin->SetFillColor(2);
-      	muJetF_pos_muon1_rechit_zoomin->Draw("BOXsame");
-      	muJetF_pos_muon2_rechit_zoomin->SetFillColor(2);
-      	muJetF_pos_muon2_rechit_zoomin->Draw("BOXsame");
+      // 	muJetF_pos_muon1_rechit_zoomin->SetFillColor(2);
+      // 	muJetF_pos_muon1_rechit_zoomin->Draw("BOXsame");
+      // 	muJetF_pos_muon2_rechit_zoomin->SetFillColor(2);
+      // 	muJetF_pos_muon2_rechit_zoomin->Draw("BOXsame");
 	  
-      	char namec4[50];
-      	sprintf(namec4,"muon_recover_pos/muJetF/muJetF_hits_%d_zoomin.pdf",event);
-      	c2->SaveAs(namec4,"recreate");
-      }
+      // 	char namec4[50];
+      // 	sprintf(namec4,"muon_recover_pos/muJetF/muJetF_hits_%d_zoomin.pdf",event);
+      // 	c2->SaveAs(namec4,"recreate");
+	 //      }
 
-      if((muJetFhit[0]==0&&muJetFhit[1]==0) && (muJetChit[0]==0&&muJetChit[1]==0)){
+      // if((muJetFhit[0]==0&&muJetFhit[1]==0) && (muJetChit[0]==0&&muJetChit[1]==0)){
 	
-     	// cout<<" Det mu1jetC  "<<Detmu1jetC<<endl;
-     	// cout<<" Det mu2jetC  "<<Detmu2jetC<<endl;
+      // 	// cout<<" Det mu1jetC  "<<Detmu1jetC<<endl;
+      // 	// cout<<" Det mu2jetC  "<<Detmu2jetC<<endl;
 	
-    	Float_t ymin2=mu1JetFposy[0]-8.0;
-    	Float_t ymax2=mu1JetFposy[0]+8.0;
-    	Float_t xmin2=mu1JetFposx[0]-2.0;
-    	Float_t xmax2=mu1JetFposx[0]+2.0;
+      // 	Float_t ymin2=mu1JetFposy[0]-8.0;
+      // 	Float_t ymax2=mu1JetFposy[0]+8.0;
+      // 	Float_t xmin2=mu1JetFposx[0]-2.0;
+      // 	Float_t xmax2=mu1JetFposx[0]+2.0;
 	
-    	Float_t ymin=mu1JetFposy[0]-0.5;
-    	Float_t ymax=mu1JetFposy[0]+0.5;
-    	Float_t xmin=mu1JetFposx[0]-0.4;
-    	Float_t xmax=mu1JetFposx[0]+0.4;
+      // 	Float_t ymin=mu1JetFposy[0]-0.5;
+      // 	Float_t ymax=mu1JetFposy[0]+0.5;
+      // 	Float_t xmin=mu1JetFposx[0]-0.4;
+      // 	Float_t xmax=mu1JetFposx[0]+0.4;
 
-    	Float_t ymin2e=mu1JetCposy[0]-8.0;
-    	Float_t ymax2e=mu1JetCposy[0]+8.0;
-    	Float_t xmin2e=mu1JetCposx[0]-2.0;
-    	Float_t xmax2e=mu1JetCposx[0]+2.0;
+      // 	Float_t ymin2e=mu1JetCposy[0]-8.0;
+      // 	Float_t ymax2e=mu1JetCposy[0]+8.0;
+      // 	Float_t xmin2e=mu1JetCposx[0]-2.0;
+      // 	Float_t xmax2e=mu1JetCposx[0]+2.0;
 	
-    	Float_t ymine=mu1JetCposy[0]-0.5;
-    	Float_t ymaxe=mu1JetCposy[0]+0.5;
-    	Float_t xmine=mu1JetCposx[0]-0.4;
-    	Float_t xmaxe=mu1JetCposx[0]+0.4;
+      // 	Float_t ymine=mu1JetCposy[0]-0.5;
+      // 	Float_t ymaxe=mu1JetCposy[0]+0.5;
+      // 	Float_t xmine=mu1JetCposx[0]-0.4;
+      // 	Float_t xmaxe=mu1JetCposx[0]+0.4;
 
 
-    	for(int j=0;j<Detmu1jetF;j++){
-    	  char nameh[30];
-    	  sprintf(nameh,"muJetF_pos_muon1_det%d",j);
-    	  muJetF_pos_muon1[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
-    	  muJetF_pos_muon1[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
+      // 	for(int j=0;j<Detmu1jetF;j++){
+      // 	  char nameh[30];
+      // 	  sprintf(nameh,"muJetF_pos_muon1_det%d",j);
+      // 	  muJetF_pos_muon1[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
+      // 	  muJetF_pos_muon1[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
 
 
-    	  char nameh2[30];
-    	  sprintf(nameh2,"muJetF_pos_muon1_det%d_zoomin",j);
-    	  muJetF_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
-    	  muJetF_pos_muon1_zoomin[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
-    	}
+      // 	  char nameh2[30];
+      // 	  sprintf(nameh2,"muJetF_pos_muon1_det%d_zoomin",j);
+      // 	  muJetF_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
+      // 	  muJetF_pos_muon1_zoomin[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
+      // 	}
 
-    	for(int j=0;j<Detmu2jetF;j++){
-    	  char nameh[30];
-    	  sprintf(nameh,"muJetF_pos_muon2_det%d",j);
-    	  muJetF_pos_muon2[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
-    	  muJetF_pos_muon2[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
+      // 	for(int j=0;j<Detmu2jetF;j++){
+      // 	  char nameh[30];
+      // 	  sprintf(nameh,"muJetF_pos_muon2_det%d",j);
+      // 	  muJetF_pos_muon2[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
+      // 	  muJetF_pos_muon2[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
 
-    	  char nameh2[30];
-    	  sprintf(nameh2,"muJetF_pos_muon2_det%d_zoomin",j);
-    	  muJetF_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
-    	  muJetF_pos_muon2_zoomin[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
-    	}
+      // 	  char nameh2[30];
+      // 	  sprintf(nameh2,"muJetF_pos_muon2_det%d_zoomin",j);
+      // 	  muJetF_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
+      // 	  muJetF_pos_muon2_zoomin[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
+      // 	}
 
-    	muJetF_pos_muon1_rechit = new TH2F("muJetF_pos_muon1_rechit","",100,xmin2,xmax2,100,ymin2,ymax2);
-    	muJetF_pos_muon1_rechit_zoomin = new TH2F("muJetF_pos_muon1_rechit_zoomin","",100,xmin,xmax,100,ymin,ymax);
+      // 	muJetF_pos_muon1_rechit = new TH2F("muJetF_pos_muon1_rechit","",100,xmin2,xmax2,100,ymin2,ymax2);
+      // 	muJetF_pos_muon1_rechit_zoomin = new TH2F("muJetF_pos_muon1_rechit_zoomin","",100,xmin,xmax,100,ymin,ymax);
 
-    	for(int j=0;j<comphitmu1JetF;j++){
-    	  muJetF_pos_muon1_rechit->Fill(pixelhitmu1JetFx[j],pixelhitmu1JetFy[j]);
-    	  muJetF_pos_muon1_rechit_zoomin->Fill(pixelhitmu1JetFx[j],pixelhitmu1JetFy[j]);
-    	  //	    cout<<" hit position x  "<<pixelhitmu1JetCx[j]<<" hit position y  "<<pixelhitmu1JetCy[j]<<endl;
-    	}
+      // 	for(int j=0;j<comphitmu1JetF;j++){
+      // 	  muJetF_pos_muon1_rechit->Fill(pixelhitmu1JetFx[j],pixelhitmu1JetFy[j]);
+      // 	  muJetF_pos_muon1_rechit_zoomin->Fill(pixelhitmu1JetFx[j],pixelhitmu1JetFy[j]);
+      // 	  //	    cout<<" hit position x  "<<pixelhitmu1JetCx[j]<<" hit position y  "<<pixelhitmu1JetCy[j]<<endl;
+      // 	}
 
-    	muJetF_pos_muon2_rechit = new TH2F("muJetF_pos_muon2_rechit","",100,xmin2,xmax2,100,ymin2,ymax2);
-    	muJetF_pos_muon2_rechit_zoomin = new TH2F("muJetF_pos_muon2_rechit_zoomin","",100,xmin,xmax,100,ymin,ymax);
-    	for(int j=0;j<comphitmu2JetF;j++){
-    	  muJetF_pos_muon2_rechit->Fill(pixelhitmu2JetFx[j],pixelhitmu2JetFy[j]);
-    	  muJetF_pos_muon2_rechit_zoomin->Fill(pixelhitmu2JetFx[j],pixelhitmu2JetFy[j]);
-    	}
-
-
-    	for(int j=0;j<Detmu1jetC;j++){
-    	  char nameh[30];
-    	  sprintf(nameh,"muJetC_pos_muon1_det%d",j);
-    	  muJetC_pos_muon1[j] = new TH2F(nameh,"",100,xmin2e,xmax2e,100,ymin2e,ymax2e);
-    	  muJetC_pos_muon1[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
+      // 	muJetF_pos_muon2_rechit = new TH2F("muJetF_pos_muon2_rechit","",100,xmin2,xmax2,100,ymin2,ymax2);
+      // 	muJetF_pos_muon2_rechit_zoomin = new TH2F("muJetF_pos_muon2_rechit_zoomin","",100,xmin,xmax,100,ymin,ymax);
+      // 	for(int j=0;j<comphitmu2JetF;j++){
+      // 	  muJetF_pos_muon2_rechit->Fill(pixelhitmu2JetFx[j],pixelhitmu2JetFy[j]);
+      // 	  muJetF_pos_muon2_rechit_zoomin->Fill(pixelhitmu2JetFx[j],pixelhitmu2JetFy[j]);
+      // 	}
 
 
-    	  char nameh2[30];
-    	  sprintf(nameh2,"muJetC_pos_muon1_det%d_zoomin",j);
-    	  muJetC_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmine,xmaxe,100,ymine,ymaxe);
-    	  muJetC_pos_muon1_zoomin[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
-    	}
+      // 	for(int j=0;j<Detmu1jetC;j++){
+      // 	  char nameh[30];
+      // 	  sprintf(nameh,"muJetC_pos_muon1_det%d",j);
+      // 	  muJetC_pos_muon1[j] = new TH2F(nameh,"",100,xmin2e,xmax2e,100,ymin2e,ymax2e);
+      // 	  muJetC_pos_muon1[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
 
-    	for(int j=0;j<Detmu2jetC;j++){
-    	  char nameh[30];
-    	  sprintf(nameh,"muJetC_pos_muon2_det%d",j);
-    	  muJetC_pos_muon2[j] = new TH2F(nameh,"",100,xmin2e,xmax2e,100,ymin2e,ymax2e);
-    	  muJetC_pos_muon2[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
 
-    	  char nameh2[30];
-    	  sprintf(nameh2,"muJetC_pos_muon2_det%d_zoomin",j);
-    	  muJetC_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmine,xmaxe,100,ymine,ymaxe);
-    	  muJetC_pos_muon2_zoomin[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
-    	}
+      // 	  char nameh2[30];
+      // 	  sprintf(nameh2,"muJetC_pos_muon1_det%d_zoomin",j);
+      // 	  muJetC_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmine,xmaxe,100,ymine,ymaxe);
+      // 	  muJetC_pos_muon1_zoomin[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
+      // 	}
 
-    	muJetC_pos_muon1_rechit = new TH2F("muJetC_pos_muon1_rechit","",100,xmin2e,xmax2e,100,ymin2e,ymax2e);
-    	muJetC_pos_muon1_rechit_zoomin = new TH2F("muJetC_pos_muon1_rechit_zoomin","",100,xmine,xmaxe,100,ymine,ymaxe);
+      // 	for(int j=0;j<Detmu2jetC;j++){
+      // 	  char nameh[30];
+      // 	  sprintf(nameh,"muJetC_pos_muon2_det%d",j);
+      // 	  muJetC_pos_muon2[j] = new TH2F(nameh,"",100,xmin2e,xmax2e,100,ymin2e,ymax2e);
+      // 	  muJetC_pos_muon2[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
 
-    	for(int j=0;j<comphitmu1JetC;j++){
-    	  muJetC_pos_muon1_rechit->Fill(pixelhitmu1JetCx[j],pixelhitmu1JetCy[j]);
-    	  muJetC_pos_muon1_rechit_zoomin->Fill(pixelhitmu1JetCx[j],pixelhitmu1JetCy[j]);
-    	  //	    cout<<" hit position x  "<<pixelhitmu1JetCx[j]<<" hit position y  "<<pixelhitmu1JetCy[j]<<endl;
-    	}
+      // 	  char nameh2[30];
+      // 	  sprintf(nameh2,"muJetC_pos_muon2_det%d_zoomin",j);
+      // 	  muJetC_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmine,xmaxe,100,ymine,ymaxe);
+      // 	  muJetC_pos_muon2_zoomin[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
+      // 	}
 
-    	muJetC_pos_muon2_rechit = new TH2F("muJetC_pos_muon2_rechit","",100,xmin2e,xmax2e,100,ymin2e,ymax2e);
-    	muJetC_pos_muon2_rechit_zoomin = new TH2F("muJetC_pos_muon2_rechit_zoomin","",100,xmine,xmaxe,100,ymine,ymaxe);
-    	for(int j=0;j<comphitmu2JetC;j++){
-    	  muJetC_pos_muon2_rechit->Fill(pixelhitmu2JetCx[j],pixelhitmu2JetCy[j]);
-    	  muJetC_pos_muon2_rechit_zoomin->Fill(pixelhitmu2JetCx[j],pixelhitmu2JetCy[j]);
-    	}
+      // 	muJetC_pos_muon1_rechit = new TH2F("muJetC_pos_muon1_rechit","",100,xmin2e,xmax2e,100,ymin2e,ymax2e);
+      // 	muJetC_pos_muon1_rechit_zoomin = new TH2F("muJetC_pos_muon1_rechit_zoomin","",100,xmine,xmaxe,100,ymine,ymaxe);
 
-    	 TLegend *leg = new TLegend(0.6,0.5,0.8,0.9);
-    	 leg->SetBorderSize(0);
-    	 leg->SetFillColor(0);
-    	 leg->SetTextSize(0.036);	  
+      // 	for(int j=0;j<comphitmu1JetC;j++){
+      // 	  muJetC_pos_muon1_rechit->Fill(pixelhitmu1JetCx[j],pixelhitmu1JetCy[j]);
+      // 	  muJetC_pos_muon1_rechit_zoomin->Fill(pixelhitmu1JetCx[j],pixelhitmu1JetCy[j]);
+      // 	  //	    cout<<" hit position x  "<<pixelhitmu1JetCx[j]<<" hit position y  "<<pixelhitmu1JetCy[j]<<endl;
+      // 	}
+
+      // 	muJetC_pos_muon2_rechit = new TH2F("muJetC_pos_muon2_rechit","",100,xmin2e,xmax2e,100,ymin2e,ymax2e);
+      // 	muJetC_pos_muon2_rechit_zoomin = new TH2F("muJetC_pos_muon2_rechit_zoomin","",100,xmine,xmaxe,100,ymine,ymaxe);
+      // 	for(int j=0;j<comphitmu2JetC;j++){
+      // 	  muJetC_pos_muon2_rechit->Fill(pixelhitmu2JetCx[j],pixelhitmu2JetCy[j]);
+      // 	  muJetC_pos_muon2_rechit_zoomin->Fill(pixelhitmu2JetCx[j],pixelhitmu2JetCy[j]);
+      // 	}
+
+      // 	 TLegend *leg = new TLegend(0.6,0.5,0.8,0.9);
+      // 	 leg->SetBorderSize(0);
+      // 	 leg->SetFillColor(0);
+      // 	 leg->SetTextSize(0.036);	  
 	  
-    	char legname4[50];
-    	TCanvas *c3 = new TCanvas("c3","c3",700,500);
-    	for(int l=0;l<Detmu1jetF;l++){
-    	  muJetF_pos_muon1[l]->SetFillColor(4+l);
-    	  if(l==0) muJetF_pos_muon1[l]->Draw("BOX");
-    	  if(l==0) muJetF_pos_muon1[l]->GetXaxis()->SetTitle("local x position [cm]");
-    	  if(l==0) muJetF_pos_muon1[l]->GetYaxis()->SetTitle("local y position [cm]");
-    	  else muJetF_pos_muon1[l]->Draw("BOXsame");
-    	  sprintf(legname4,"muJetF muon1 Det_%d",l);
-    	  leg->AddEntry(muJetF_pos_muon1[l], legname4,"P");
-    	}
+      // 	char legname4[50];
+      // 	TCanvas *c3 = new TCanvas("c3","c3",700,500);
+      // 	for(int l=0;l<Detmu1jetF;l++){
+      // 	  muJetF_pos_muon1[l]->SetFillColor(4+l);
+      // 	  if(l==0) muJetF_pos_muon1[l]->Draw("BOX");
+      // 	  if(l==0) muJetF_pos_muon1[l]->GetXaxis()->SetTitle("local x position [cm]");
+      // 	  if(l==0) muJetF_pos_muon1[l]->GetYaxis()->SetTitle("local y position [cm]");
+      // 	  else muJetF_pos_muon1[l]->Draw("BOXsame");
+      // 	  sprintf(legname4,"muJetF muon1 Det_%d",l);
+      // 	  leg->AddEntry(muJetF_pos_muon1[l], legname4,"P");
+      // 	}
 	  
-    	for(int l=0;l<Detmu2jetF;l++){
-    	  muJetF_pos_muon2[l]->SetLineColor(4+l);
-    	  if(l==0) muJetF_pos_muon2[l]->Draw("BOXsame");
-    	  else muJetF_pos_muon2[l]->Draw("BOXsame");
-    	  sprintf(legname4,"muJetF muon2 Det_%d",l);
-    	  leg->AddEntry(muJetF_pos_muon2[l], legname4,"L");
-    	}
+      // 	for(int l=0;l<Detmu2jetF;l++){
+      // 	  muJetF_pos_muon2[l]->SetLineColor(4+l);
+      // 	  if(l==0) muJetF_pos_muon2[l]->Draw("BOXsame");
+      // 	  else muJetF_pos_muon2[l]->Draw("BOXsame");
+      // 	  sprintf(legname4,"muJetF muon2 Det_%d",l);
+      // 	  leg->AddEntry(muJetF_pos_muon2[l], legname4,"L");
+      // 	}
 	  
-    	muJetF_pos_muon1_rechit->SetFillColor(2);
-    	muJetF_pos_muon1_rechit->Draw("BOXsame");
+      // 	muJetF_pos_muon1_rechit->SetFillColor(2);
+      // 	muJetF_pos_muon1_rechit->Draw("BOXsame");
 
-    	muJetF_pos_muon2_rechit->SetFillColor(2);
-    	muJetF_pos_muon2_rechit->Draw("BOXsame");
+      // 	muJetF_pos_muon2_rechit->SetFillColor(2);
+      // 	muJetF_pos_muon2_rechit->Draw("BOXsame");
 	  
   
-    	//   leg->Draw("same");
+      // 	//   leg->Draw("same");
   
-    	char namec5[50];
-    	sprintf(namec5,"muon_recover_pos/muJetF_2dim_hits_%d.pdf",event);
-    	c3->SaveAs(namec5,"recreate");
+      // 	char namec5[50];
+      // 	sprintf(namec5,"muon_recover_pos/muJetF_2dim_hits_%d.pdf",event);
+      // 	c3->SaveAs(namec5,"recreate");
 
 
 
 
-    	// TLegend *leg = new TLegend(0.6,0.5,0.8,0.9);
-    	// leg->SetBorderSize(0);
-    	// leg->SetFillColor(0);
-    	// leg->SetTextSize(0.036);	  
+      // 	// TLegend *leg = new TLegend(0.6,0.5,0.8,0.9);
+      // 	// leg->SetBorderSize(0);
+      // 	// leg->SetFillColor(0);
+      // 	// leg->SetTextSize(0.036);	  
 	  
-    	char legname5[50];
-    	TCanvas *c4 = new TCanvas("c4","c4",700,500);
-    	for(int l=0;l<Detmu1jetF;l++){
-    	  muJetF_pos_muon1_zoomin[l]->SetFillColor(4+l);
-    	  if(l==0) muJetF_pos_muon1_zoomin[l]->Draw("BOX");
-    	  if(l==0) muJetF_pos_muon1_zoomin[l]->GetXaxis()->SetTitle("local x position [cm]");
-    	  if(l==0) muJetF_pos_muon1_zoomin[l]->GetYaxis()->SetTitle("local y position [cm]");
-    	  else muJetF_pos_muon1_zoomin[l]->Draw("BOXsame");
-	  sprintf(legname5,"muJetF muon1 Det_%d",l);
-	  leg->AddEntry(muJetF_pos_muon1[l], legname5,"P");
-    	}
+      // 	char legname5[50];
+      // 	TCanvas *c4 = new TCanvas("c4","c4",700,500);
+      // 	for(int l=0;l<Detmu1jetF;l++){
+      // 	  muJetF_pos_muon1_zoomin[l]->SetFillColor(4+l);
+      // 	  if(l==0) muJetF_pos_muon1_zoomin[l]->Draw("BOX");
+      // 	  if(l==0) muJetF_pos_muon1_zoomin[l]->GetXaxis()->SetTitle("local x position [cm]");
+      // 	  if(l==0) muJetF_pos_muon1_zoomin[l]->GetYaxis()->SetTitle("local y position [cm]");
+      // 	  else muJetF_pos_muon1_zoomin[l]->Draw("BOXsame");
+      // 	  sprintf(legname5,"muJetF muon1 Det_%d",l);
+      // 	  leg->AddEntry(muJetF_pos_muon1[l], legname5,"P");
+      // 	}
 	  
-    	for(int l=0;l<Detmu2jetF;l++){
-    	  muJetF_pos_muon2_zoomin[l]->SetLineColor(4+l);
-    	  if(l==0) muJetF_pos_muon2_zoomin[l]->Draw("BOXsame");
-    	  else muJetF_pos_muon2_zoomin[l]->Draw("BOXsame");
-	  sprintf(legname5,"muJetF muon2 Det_%d",l);
-	  leg->AddEntry(muJetF_pos_muon2[l], legname5,"L");
-    	}
+      // 	for(int l=0;l<Detmu2jetF;l++){
+      // 	  muJetF_pos_muon2_zoomin[l]->SetLineColor(4+l);
+      // 	  if(l==0) muJetF_pos_muon2_zoomin[l]->Draw("BOXsame");
+      // 	  else muJetF_pos_muon2_zoomin[l]->Draw("BOXsame");
+      // 	  sprintf(legname5,"muJetF muon2 Det_%d",l);
+      // 	  leg->AddEntry(muJetF_pos_muon2[l], legname5,"L");
+      // 	}
 	  
-    	muJetF_pos_muon1_rechit_zoomin->SetFillColor(2);
-    	muJetF_pos_muon1_rechit_zoomin->Draw("BOXsame");
-    	muJetF_pos_muon2_rechit_zoomin->SetFillColor(2);
-    	muJetF_pos_muon2_rechit_zoomin->Draw("BOXsame");
+      // 	muJetF_pos_muon1_rechit_zoomin->SetFillColor(2);
+      // 	muJetF_pos_muon1_rechit_zoomin->Draw("BOXsame");
+      // 	muJetF_pos_muon2_rechit_zoomin->SetFillColor(2);
+      // 	muJetF_pos_muon2_rechit_zoomin->Draw("BOXsame");
 	  
   
-    	//   leg->Draw("same");
+      // 	//   leg->Draw("same");
 	  
-    	char namec6[50];
-    	sprintf(namec6,"muon_recover_pos/muJetF_2dim_hits_%d_zoomin.pdf",event);
-    	c4->SaveAs(namec6,"recreate");
+      // 	char namec6[50];
+      // 	sprintf(namec6,"muon_recover_pos/muJetF_2dim_hits_%d_zoomin.pdf",event);
+      // 	c4->SaveAs(namec6,"recreate");
  
 
 
 
-    	char namec7[50];
-    	sprintf(namec7,"muon_recover_pos/muJetC_2dim_hits_%d.pdf",event);
-    	c4->SaveAs(namec7,"recreate");
+      // 	char namec7[50];
+      // 	sprintf(namec7,"muon_recover_pos/muJetC_2dim_hits_%d.pdf",event);
+      // 	c4->SaveAs(namec7,"recreate");
 
 
 
 
-    	// TLegend *leg = new TLegend(0.6,0.5,0.8,0.9);
-    	// leg->SetBorderSize(0);
-    	// leg->SetFillColor(0);
-    	// leg->SetTextSize(0.036);	  
+      // 	// TLegend *leg = new TLegend(0.6,0.5,0.8,0.9);
+      // 	// leg->SetBorderSize(0);
+      // 	// leg->SetFillColor(0);
+      // 	// leg->SetTextSize(0.036);	  
 	  
-    	char legname6[50];
-    	TCanvas *c5 = new TCanvas("c5","c5",700,500);
-    	for(int l=0;l<Detmu1jetC;l++){
-    	  muJetC_pos_muon1_zoomin[l]->SetFillColor(4+l);
-    	  if(l==0) muJetC_pos_muon1_zoomin[l]->Draw("BOX");
-    	  if(l==0) muJetC_pos_muon1_zoomin[l]->GetXaxis()->SetTitle("local x position [cm]");
-    	  if(l==0) muJetC_pos_muon1_zoomin[l]->GetYaxis()->SetTitle("local y position [cm]");
-    	  else muJetC_pos_muon1_zoomin[l]->Draw("BOXsame");
-	  sprintf(legname6,"muJetC muon1 Det_%d",l);
-	  leg->AddEntry(muJetC_pos_muon1[l], legname6,"P");
-    	}
+      // 	char legname6[50];
+      // 	TCanvas *c5 = new TCanvas("c5","c5",700,500);
+      // 	for(int l=0;l<Detmu1jetC;l++){
+      // 	  muJetC_pos_muon1_zoomin[l]->SetFillColor(4+l);
+      // 	  if(l==0) muJetC_pos_muon1_zoomin[l]->Draw("BOX");
+      // 	  if(l==0) muJetC_pos_muon1_zoomin[l]->GetXaxis()->SetTitle("local x position [cm]");
+      // 	  if(l==0) muJetC_pos_muon1_zoomin[l]->GetYaxis()->SetTitle("local y position [cm]");
+      // 	  else muJetC_pos_muon1_zoomin[l]->Draw("BOXsame");
+      // 	  sprintf(legname6,"muJetC muon1 Det_%d",l);
+      // 	  leg->AddEntry(muJetC_pos_muon1[l], legname6,"P");
+      // 	}
 	  
-    	for(int l=0;l<Detmu2jetC;l++){
-    	  muJetC_pos_muon2_zoomin[l]->SetLineColor(4+l);
-    	  if(l==0) muJetC_pos_muon2_zoomin[l]->Draw("BOXsame");
-    	  else muJetC_pos_muon2_zoomin[l]->Draw("BOXsame");
-	  sprintf(legname6,"muJetC muon2 Det_%d",l);
-	  leg->AddEntry(muJetC_pos_muon2[l], legname6,"L");
-    	}
+      // 	for(int l=0;l<Detmu2jetC;l++){
+      // 	  muJetC_pos_muon2_zoomin[l]->SetLineColor(4+l);
+      // 	  if(l==0) muJetC_pos_muon2_zoomin[l]->Draw("BOXsame");
+      // 	  else muJetC_pos_muon2_zoomin[l]->Draw("BOXsame");
+      // 	  sprintf(legname6,"muJetC muon2 Det_%d",l);
+      // 	  leg->AddEntry(muJetC_pos_muon2[l], legname6,"L");
+      // 	}
 	  
-    	muJetC_pos_muon1_rechit_zoomin->SetFillColor(2);
-    	muJetC_pos_muon1_rechit_zoomin->Draw("BOXsame");
-    	muJetC_pos_muon2_rechit_zoomin->SetFillColor(2);
-    	muJetC_pos_muon2_rechit_zoomin->Draw("BOXsame");
+      // 	muJetC_pos_muon1_rechit_zoomin->SetFillColor(2);
+      // 	muJetC_pos_muon1_rechit_zoomin->Draw("BOXsame");
+      // 	muJetC_pos_muon2_rechit_zoomin->SetFillColor(2);
+      // 	muJetC_pos_muon2_rechit_zoomin->Draw("BOXsame");
 	  
   
-    	//   leg->Draw("same");
+      // 	//   leg->Draw("same");
 	  
-    	char namec8[50];
-    	sprintf(namec8,"muon_recover_pos/muJetC_2dim_hits_%d_zoomin.pdf",event);
-    	c5->SaveAs(namec8,"recreate");
+      // 	char namec8[50];
+      // 	sprintf(namec8,"muon_recover_pos/muJetC_2dim_hits_%d_zoomin.pdf",event);
+      // 	c5->SaveAs(namec8,"recreate");
  
-      }
+      // }
     }
   }
+
+  cout<<" DimuonC fails   "<<count_dmCfail<<endl;
 }
 
 
 
   
-// TH2F *pixelHit1_pos = new TH2F("pixelHit1_pos","",100,xmin,xmax,100,ymin,ymax);
-// TH2F *pixelHit2_pos = new TH2F("pixelHit2_pos","",100,xmin,xmax,100,ymin,ymax);
-// TH2F *pixelHit3_pos = new TH2F("pixelHit3_pos","",100,xmin,xmax,100,ymin,ymax);
-// TH2F *pixelHit4_pos = new TH2F("pixelHit4_pos","",100,xmin,xmax,100,ymin,ymax);
-// TH2F *pixelHit5_pos = new TH2F("pixelHit5_pos","",100,xmin,xmax,100,ymin,ymax);
-// TH2F *pixelHit6_pos = new TH2F("pixelHit6_pos","",100,xmin,xmax,100,ymin,ymax);
-// TH2F *pixelHit7_pos = new TH2F("pixelHit7_pos","",100,xmin,xmax,100,ymin,ymax);
-// TH2F *pixelHit8_pos = new TH2F("pixelHit8_pos","",100,xmin,xmax,100,ymin,ymax);
-// TH2F *pixelHit9_pos = new TH2F("pixelHit9_pos","",100,xmin,xmax,100,ymin,ymax);
-// TH2F *pixelHit10_pos = new TH2F("pixelHit10_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit1_pos = new TH2F("pixelHit1_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit2_pos = new TH2F("pixelHit2_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit3_pos = new TH2F("pixelHit3_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit4_pos = new TH2F("pixelHit4_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit5_pos = new TH2F("pixelHit5_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit6_pos = new TH2F("pixelHit6_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit7_pos = new TH2F("pixelHit7_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit8_pos = new TH2F("pixelHit8_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit9_pos = new TH2F("pixelHit9_pos","",100,xmin,xmax,100,ymin,ymax);
+// // TH2F *pixelHit10_pos = new TH2F("pixelHit10_pos","",100,xmin,xmax,100,ymin,ymax);
 
-// cout<<"  2 dimuons         "<<t->GetEntries("2dimuon==1")<<endl;
-// cout<<"  2 dimuons+hit     "<<t->GetEntries("2dimuon==1&&( (muJetC_hitpix[0]==1||muJetC_hitpix[1]==1)&&(muJetC_hitpix[0]==1||muJetC_hitpix[1]==1) )")<<endl;
+// // cout<<"  2 dimuons         "<<t->GetEntries("2dimuon==1")<<endl;
+// // cout<<"  2 dimuons+hit     "<<t->GetEntries("2dimuon==1&&( (muJetC_hitpix[0]==1||muJetC_hitpix[1]==1)&&(muJetC_hitpix[0]==1||muJetC_hitpix[1]==1) )")<<endl;
 
-// // t->Scan("muJetC_muon_posx1stpix[0]:muJetC_muon_posz1stpix[0]:muJetC_muon_posx1stpix[1]:muJetC_muon_posz1stpix[1]:comphits_muJetC:pixelhit_muJetC_posx[0]:pixelhit_muJetC_posz[0]:pixelhit_muJetC_posx[1]:pixelhit_muJetC_posz[1]:pixelhit_muJetC_posx[2]:pixelhit_muJetC_posz[2]:pixelhit_muJetC_posx[3]:pixelhit_muJetC_posz[3]:pixelhit_muJetC_posx[4]:pixelhit_muJetC_posz[4]:pixelhit_muJetC_posx[5]:pixelhit_muJetC_posz[5]:pixelhit_muJetC_posx[6]:pixelhit_muJetC_posz[6]","2dimuon==1&&((muJetC_hitpix[0]==0&&muJetC_hitpix[1]==0)||(muJetC_hitpix[0]==0&&muJetC_hitpix[1]==0))","BOX");
+// // // t->Scan("muJetC_muon_posx1stpix[0]:muJetC_muon_posz1stpix[0]:muJetC_muon_posx1stpix[1]:muJetC_muon_posz1stpix[1]:comphits_muJetC:pixelhit_muJetC_posx[0]:pixelhit_muJetC_posz[0]:pixelhit_muJetC_posx[1]:pixelhit_muJetC_posz[1]:pixelhit_muJetC_posx[2]:pixelhit_muJetC_posz[2]:pixelhit_muJetC_posx[3]:pixelhit_muJetC_posz[3]:pixelhit_muJetC_posx[4]:pixelhit_muJetC_posz[4]:pixelhit_muJetC_posx[5]:pixelhit_muJetC_posz[5]:pixelhit_muJetC_posx[6]:pixelhit_muJetC_posz[6]","2dimuon==1&&((muJetC_hitpix[0]==0&&muJetC_hitpix[1]==0)||(muJetC_hitpix[0]==0&&muJetC_hitpix[1]==0))","BOX");
 
-// t->Draw("muJetC_muon_posy1stpix[0]:muJetC_muon_posx1stpix[0]>>muJetC_pos_mu1","event==6675","BOX");
-// t->Draw("muJetC_muon_posy1stpix[1]:muJetC_muon_posx1stpix[1]>>muJetC_pos_mu2","event==6675","BOX");
+// // t->Draw("muJetC_muon_posy1stpix[0]:muJetC_muon_posx1stpix[0]>>muJetC_pos_mu1","event==6675","BOX");
+// // t->Draw("muJetC_muon_posy1stpix[1]:muJetC_muon_posx1stpix[1]>>muJetC_pos_mu2","event==6675","BOX");
 
 
 
-// t->Draw("pixelhit_muJetC_posy[0]:pixelhit_muJetC_posx[0]>>pixelHit1_pos","event==6675","BOX");
-// t->Draw("pixelhit_muJetC_posy[1]:pixelhit_muJetC_posx[1]>>pixelHit2_pos","event==6675","BOX");
-// t->Draw("pixelhit_muJetC_posy[2]:pixelhit_muJetC_posx[2]>>pixelHit3_pos","event==6675","BOX");
-// t->Draw("pixelhit_muJetC_posy[3]:pixelhit_muJetC_posx[3]>>pixelHit4_pos","event==6675","BOX");
-// t->Draw("pixelhit_muJetC_posy[4]:pixelhit_muJetC_posx[4]>>pixelHit5_pos","event==6675","BOX");
-// t->Draw("pixelhit_muJetC_posy[5]:pixelhit_muJetC_posx[5]>>pixelHit6_pos","event==6675","BOX");
-// t->Draw("pixelhit_muJetC_posy[6]:pixelhit_muJetC_posx[6]>>pixelHit7_pos","event==6675","BOX");
+// // t->Draw("pixelhit_muJetC_posy[0]:pixelhit_muJetC_posx[0]>>pixelHit1_pos","event==6675","BOX");
+// // t->Draw("pixelhit_muJetC_posy[1]:pixelhit_muJetC_posx[1]>>pixelHit2_pos","event==6675","BOX");
+// // t->Draw("pixelhit_muJetC_posy[2]:pixelhit_muJetC_posx[2]>>pixelHit3_pos","event==6675","BOX");
+// // t->Draw("pixelhit_muJetC_posy[3]:pixelhit_muJetC_posx[3]>>pixelHit4_pos","event==6675","BOX");
+// // t->Draw("pixelhit_muJetC_posy[4]:pixelhit_muJetC_posx[4]>>pixelHit5_pos","event==6675","BOX");
+// // t->Draw("pixelhit_muJetC_posy[5]:pixelhit_muJetC_posx[5]>>pixelHit6_pos","event==6675","BOX");
+// // t->Draw("pixelhit_muJetC_posy[6]:pixelhit_muJetC_posx[6]>>pixelHit7_pos","event==6675","BOX");
 
   
-// TLegend *leg = new TLegend(0.65,0.5,0.8,0.9);
-// leg->SetBorderSize(0);
-// leg->SetFillColor(0);
-// leg->SetTextSize(0.015);
-// leg->AddEntry(muJetC_pos_mu1,"Extrapolated dimuon position in 1st pixel layer","L");
-// leg->AddEntry(pixelHit1_pos, "compatible Hits in 1st pixel Layer","L");
+// // TLegend *leg = new TLegend(0.65,0.5,0.8,0.9);
+// // leg->SetBorderSize(0);
+// // leg->SetFillColor(0);
+// // leg->SetTextSize(0.015);
+// // leg->AddEntry(muJetC_pos_mu1,"Extrapolated dimuon position in 1st pixel layer","L");
+// // leg->AddEntry(pixelHit1_pos, "compatible Hits in 1st pixel Layer","L");
 
 
-// TCanvas *c = new TCanvas("c","c");
-// muJetC_pos_mu1->SetLineColor(4);
-// muJetC_pos_mu2->SetLineColor(4);
-// muJetC_pos_mu2->SetFillColor(4);
-// muJetC_pos_mu1->SetFillColor(4);
-// muJetC_pos_mu1->GetXaxis()->SetTitle("local x position 1stpix [cm]");
-// muJetC_pos_mu1->GetYaxis()->SetTitle("local y position 1stpix [cm]");
-// muJetC_pos_mu1->Draw("BOX");
-// muJetC_pos_mu2->Draw("BOXSAME");
+// // TCanvas *c = new TCanvas("c","c");
+// // muJetC_pos_mu1->SetLineColor(4);
+// // muJetC_pos_mu2->SetLineColor(4);
+// // muJetC_pos_mu2->SetFillColor(4);
+// // muJetC_pos_mu1->SetFillColor(4);
+// // muJetC_pos_mu1->GetXaxis()->SetTitle("local x position 1stpix [cm]");
+// // muJetC_pos_mu1->GetYaxis()->SetTitle("local y position 1stpix [cm]");
+// // muJetC_pos_mu1->Draw("BOX");
+// // muJetC_pos_mu2->Draw("BOXSAME");
   
-// pixelHit1_pos->SetLineColor(2);
-// pixelHit1_pos->SetLineWidth(3);
-// pixelHit1_pos->SetFillColor(2);
-// pixelHit1_pos->SetMarkerSize(2);
-// pixelHit1_pos->Draw("BOXSAME");
+// // pixelHit1_pos->SetLineColor(2);
+// // pixelHit1_pos->SetLineWidth(3);
+// // pixelHit1_pos->SetFillColor(2);
+// // pixelHit1_pos->SetMarkerSize(2);
+// // pixelHit1_pos->Draw("BOXSAME");
 
-// pixelHit2_pos->SetLineColor(2);
-// pixelHit2_pos->SetFillColor(2);
-// pixelHit2_pos->Draw("BOXSAME");
+// // pixelHit2_pos->SetLineColor(2);
+// // pixelHit2_pos->SetFillColor(2);
+// // pixelHit2_pos->Draw("BOXSAME");
 
-// pixelHit3_pos->SetLineColor(2);
-// pixelHit3_pos->SetFillColor(2);
-// pixelHit3_pos->Draw("BOXSAME");
+// // pixelHit3_pos->SetLineColor(2);
+// // pixelHit3_pos->SetFillColor(2);
+// // pixelHit3_pos->Draw("BOXSAME");
 
-// pixelHit4_pos->SetLineColor(2);
-// pixelHit4_pos->SetFillColor(2);
-// pixelHit4_pos->Draw("BOXSAME");
-//  leg->Draw("same");
+// // pixelHit4_pos->SetLineColor(2);
+// // pixelHit4_pos->SetFillColor(2);
+// // pixelHit4_pos->Draw("BOXSAME");
+// //  leg->Draw("same");
 
-// pixelHit5_pos->SetLineColor(2);
-// pixelHit5_pos->Draw("BOXSAME");
+// // pixelHit5_pos->SetLineColor(2);
+// // pixelHit5_pos->Draw("BOXSAME");
 
-// pixelHit6_pos->SetLineColor(2);
-// pixelHit6_pos->Draw("BOXSAME");
+// // pixelHit6_pos->SetLineColor(2);
+// // pixelHit6_pos->Draw("BOXSAME");
 
-// pixelHit7_pos->SetLineColor(2);
-// pixelHit7_pos->Draw("BOXSAME");
+// // pixelHit7_pos->SetLineColor(2);
+// // pixelHit7_pos->Draw("BOXSAME");
 
-// pixelHit8_pos->SetLineColor(2);
-// pixelHit8_pos->Draw("BOXSAME");
+// // pixelHit8_pos->SetLineColor(2);
+// // pixelHit8_pos->Draw("BOXSAME");
 
-// pixelHit9_pos->SetLineColor(2);
-// pixelHit9_pos->Draw("BOXSAME");
+// // pixelHit9_pos->SetLineColor(2);
+// // pixelHit9_pos->Draw("BOXSAME");
 
-// pixelHit10_pos->SetLineColor(2);
-// pixelHit10_pos->Draw("BOXSAME");
+// // pixelHit10_pos->SetLineColor(2);
+// // pixelHit10_pos->Draw("BOXSAME");
 
 
