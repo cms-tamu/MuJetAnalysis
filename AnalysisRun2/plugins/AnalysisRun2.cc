@@ -285,6 +285,7 @@ private:
   Int_t b_event;
   Int_t b_run;
   Int_t b_lumi;
+  Int_t b_nJob;
 
   Float_t b_beamSpot_x;
   Float_t b_beamSpot_y;
@@ -690,6 +691,7 @@ AnalysisRun2::AnalysisRun2(const edm::ParameterSet& iConfig)
 
   m_debug = iConfig.getParameter<int>("analyzerDebug");
   m_antraj = iConfig.getParameter<int>("analyzerTraj");
+  b_nJob = iConfig.getParameter<int>("nJob");
   m_ttree  = NULL;
 
   b_nrecm = 0;
@@ -1305,7 +1307,8 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   
   nevents++;
 
-  b_event = iEvent.id().event();
+  //b_event = iEvent.id().event();
+  b_event = nevents;
   b_run   = iEvent.id().run();
   b_lumi  = iEvent.id().luminosityBlock();
 
@@ -3489,6 +3492,7 @@ AnalysisRun2::beginJob()
   m_ttree->Branch("event", &b_event, "event/I");
   m_ttree->Branch("run",   &b_run,   "run/I");
   m_ttree->Branch("lumi",  &b_lumi,  "lumi/I");
+  m_ttree->Branch("nJob",  &b_nJob,  "nJob/I");
 
   m_ttree->Branch("beamSpot_x", &b_beamSpot_x,"beamSpot_x/F");
   m_ttree->Branch("beamSpot_y", &b_beamSpot_y,"beamSpot_y/F");

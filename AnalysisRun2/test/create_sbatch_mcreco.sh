@@ -35,12 +35,12 @@ cat  >  SBATCH_JOBS/${name}.slrm <<EOF
 #SBATCH -e $PWD/SBATCHLOG/SBATCH_%a.stderr
       
 export PROCESS=\$SLURM_ARRAY_TASK_ID
-cd /fdata/scratch/castaned/Analysis2015data/SL6/AnalysisRun2/CMSSW_7_4_1_patch1/src/
+cd /home/lpernie/VertexRec/CMSSW_7_4_1_patch1/src/
 export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
 source $VO_CMS_SW_DIR/cmsset_default.sh
 export SCRAM_ARCH=slc6_amd64_gcc491
 eval \`scramv1 runtime -sh\`
-cd /fdata/scratch/castaned/Analysis2015data/SL6/AnalysisRun2/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/test
+cd /home/lpernie/VertexRec/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/test
 cmsRun step3_RAW2DIGI_L1Reco_RECO_PAT.py $name $nJobs
       
 exit 0

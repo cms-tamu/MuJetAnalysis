@@ -1,27 +1,23 @@
 #include <iostream>
+#include "TH2F.h"
+#include "TFile.h"
+#include "TTree.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "TString.h"
+#include "TEllipse.h"
 using namespace std;
 
 void hitpos(){
   
-  //  TFile *f = new TFile("~/histo.root");
-  //  TFile *f = new TFile("~/DarkSUSY_mH_125_mGammaD_0250_8TeV-madgraph452_bridge224_LHE_pythia6_537p4_RECO_v1_0.root");
-  //  TFile *f = new TFile("../MCsamples/DarkSUSY_mH_125_mGammaD_0300_cT_000_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1.root");
-  TFile *f = new TFile("../MCsamples/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1.root");
-
-  //  TFile *f = new TFile("DarkSUSY_mH_125_mGammaD_0250_8TeV-madgraph452_bridge224_LHE_pythia6_537p4_RECO_v1_0.root");
-
-  
-    f->cd("ana2012");
-  //  f->cd("anatraj");
-  
-    TTree *t = (TTree*)f->Get("ana2012/Events");
-    //  TTree *t = (TTree*)f->Get("anatraj/Events");
-  
+  //TFile *f = new TFile("../MCsamples/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1.root");
+  TFile *f = new TFile("../../test/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/Ntup_ALL.root");
+  f->cd("ana2012");
+  TTree *t = (TTree*)f->Get("ana2012/Events");
   
   cout<<"  Events  "<<t->GetEntries()<<endl;
 
   Float_t ev_2dim;
-  
   ev_2dim = t->GetEntries("2dimuon==1");
   
   cout<<" Events with 2 dimuons  "<<ev_2dim<<endl;
@@ -52,6 +48,7 @@ void hitpos(){
   //===================================================================
 
   Int_t event;
+  Int_t nJob;
   Int_t ev2dim;
   Int_t muJetChit[2];
   Int_t muJetFhit[2];
@@ -119,6 +116,7 @@ void hitpos(){
 
 
   t->SetBranchAddress("event",&event);
+  t->SetBranchAddress("nJob",&nJob);
   t->SetBranchAddress("2dimuon",&ev2dim);
   t->SetBranchAddress("muJetC_hitpix",&muJetChit);
   t->SetBranchAddress("muJetF_hitpix",&muJetFhit);
@@ -202,20 +200,6 @@ void hitpos(){
 
     bool skip_event=true;
 
-    //    for(int ne=0;ne<500;ne++){
-    //      if(event==event_list[ne]) skip_event=false;
-    //    }
-    
-    //    if(event==6494) skip_event=false;
-
-    //    if(skip_event) continue;
-
-    //    if(event!=14662) continue;
-
-    //    if(event>55000) continue;
-
-
-
     if(ev2dim &&(genA0_Lxy_rdet<4.4 && genA1_Lxy_rdet<4.4 && abs(genA0_Lz_rdet)<34.5 && abs(genA1_Lz_rdet)<34.5) ){
       
       if( (muJetChit[0]!=1&&muJetChit[1]!=1) && (muJetFhit[0]==1||muJetFhit[1]==1)){
@@ -238,13 +222,13 @@ void hitpos(){
 
 	for(int j=0;j<Detmu1jetC;j++){
 	  char nameh[80];
-	  sprintf(nameh,"muJetC_pos_muon1_det%d_%d",j,event);
+	  sprintf(nameh,"muJetC_pos_muon1_det%d_%d",j,nJob*10000+event);
 	  muJetC_pos_muon1[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
 	  muJetC_pos_muon1[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
 	  
 	  
 	  char nameh2[80];
-	  sprintf(nameh2,"muJetC_pos_muon1_det%d_%d_zoomin",j,event);
+	  sprintf(nameh2,"muJetC_pos_muon1_det%d_%d_zoomin",j,nJob*10000+event);
 	  muJetC_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
 	  muJetC_pos_muon1_zoomin[j]->Fill(mu1JetCposx[j],mu1JetCposy[j]);
 	}
@@ -253,12 +237,12 @@ void hitpos(){
 
 	for(int j=0;j<Detmu2jetC;j++){
 	  char nameh[80];
-	  sprintf(nameh,"muJetC_pos_muon2_det%d_%d",j,event);
+	  sprintf(nameh,"muJetC_pos_muon2_det%d_%d",j,nJob*10000+event);
 	  muJetC_pos_muon2[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
 	  muJetC_pos_muon2[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
 	  
 	  char nameh2[80];
-	  sprintf(nameh2,"muJetC_pos_muon2_det%d_%d_zoomin",j,event);
+	  sprintf(nameh2,"muJetC_pos_muon2_det%d_%d_zoomin",j,nJob*10000+event);
 	  muJetC_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
 	  muJetC_pos_muon2_zoomin[j]->Fill(mu2JetCposx[j],mu2JetCposy[j]);
 	}
@@ -273,8 +257,8 @@ void hitpos(){
       	char nameh5[80];
       	char nameh6[80];
 	
-	sprintf(nameh3,"muJetC_pos_muon1_rechit_%d_%d",k,event);
-	sprintf(nameh4,"muJetC_pos_muon1_rechit_zoomin_%d_%d",k,event);
+	sprintf(nameh3,"muJetC_pos_muon1_rechit_%d_%d",k,nJob*10000+event);
+	sprintf(nameh4,"muJetC_pos_muon1_rechit_zoomin_%d_%d",k,nJob*10000+event);
 	muJetC_pos_muon1_rechit = new TH2F(nameh3,"",100,xmin2,xmax2,100,ymin2,ymax2);
 	muJetC_pos_muon1_rechit_zoomin = new TH2F(nameh4,"",100,xmin,xmax,100,ymin,ymax);
 	
@@ -285,8 +269,8 @@ void hitpos(){
       	}
 	
 	
-      	sprintf(nameh5,"muJetC_pos_muon2_rechit_%d_%d",k,event);
-	sprintf(nameh6,"muJetC_pos_muon2_rechit_zoomin_%d_%d",k,event);
+      	sprintf(nameh5,"muJetC_pos_muon2_rechit_%d_%d",k,nJob*10000+event);
+	sprintf(nameh6,"muJetC_pos_muon2_rechit_zoomin_%d_%d",k,nJob*10000+event);
       	muJetC_pos_muon2_rechit = new TH2F(nameh5,"",100,xmin2,xmax2,100,ymin2,ymax2);
       	muJetC_pos_muon2_rechit_zoomin = new TH2F(nameh6,"",100,xmin,xmax,100,ymin,ymax);
       	for(int j=0;j<comphitmu2JetC;j++){
@@ -321,7 +305,7 @@ void hitpos(){
 
 	
       	char namec[50];
-      	sprintf(namec,"muon_recover_pos/muJetC/muJetC_hits_%d.pdf",event);
+      	sprintf(namec,"muon_recover_pos/muJetC/muJetC_hits_%d.pdf",nJob*10000+event);
       	c->SaveAs(namec,"recreate");
 
 	char legname1[50];
@@ -346,7 +330,7 @@ void hitpos(){
       	muJetC_pos_muon2_rechit_zoomin->Draw("BOXsame");
 	  
       	char namec2[50];
-      	sprintf(namec2,"muon_recover_pos/muJetC/muJetC_hits_%d_zoomin.pdf",event);
+      	sprintf(namec2,"muon_recover_pos/muJetC/muJetC_hits_%d_zoomin.pdf",nJob*10000+event);
       	c1->SaveAs(namec2,"recreate");
       }
 
@@ -366,24 +350,24 @@ void hitpos(){
 
       	for(int j=0;j<Detmu1jetF;j++){
       	  char nameh[30];
-      	  sprintf(nameh,"muJetF_pos_muon1_det%d_%d",j,event);
+      	  sprintf(nameh,"muJetF_pos_muon1_det%d_%d",j,nJob*10000+event);
       	  muJetF_pos_muon1[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
       	  muJetF_pos_muon1[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
 	  
       	  char nameh2[30];
-      	  sprintf(nameh2,"muJetF_pos_muon1_det%d_%d_zoomin",j,event);
+      	  sprintf(nameh2,"muJetF_pos_muon1_det%d_%d_zoomin",j,nJob*10000+event);
       	  muJetF_pos_muon1_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
       	  muJetF_pos_muon1_zoomin[j]->Fill(mu1JetFposx[j],mu1JetFposy[j]);
       	}
 	
       	for(int j=0;j<Detmu2jetF;j++){
       	  char nameh[30];
-      	  sprintf(nameh,"muJetF_pos_muon2_det%d_%d",j,event);
+      	  sprintf(nameh,"muJetF_pos_muon2_det%d_%d",j,nJob*10000+event);
       	  muJetF_pos_muon2[j] = new TH2F(nameh,"",100,xmin2,xmax2,100,ymin2,ymax2);
       	  muJetF_pos_muon2[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
 	  
       	  char nameh2[30];
-      	  sprintf(nameh2,"muJetF_pos_muon2_det%d_%d_zoomin",j,event);
+      	  sprintf(nameh2,"muJetF_pos_muon2_det%d_%d_zoomin",j,nJob*10000+event);
       	  muJetF_pos_muon2_zoomin[j] = new TH2F(nameh2,"",100,xmin,xmax,100,ymin,ymax);
       	  muJetF_pos_muon2_zoomin[j]->Fill(mu2JetFposx[j],mu2JetFposy[j]);
       	}
@@ -428,7 +412,7 @@ void hitpos(){
       	muJetF_pos_muon2_rechit->Draw("BOXsame");
 	  
       	char namec3[50];
-      	sprintf(namec3,"muon_recover_pos/muJetF/muJetF_hits_%d.pdf",event);
+      	sprintf(namec3,"muon_recover_pos/muJetF/muJetF_hits_%d.pdf",nJob*10000+event);
       	c->SaveAs(namec3,"recreate");
 
       	char legname3[50];
@@ -453,7 +437,7 @@ void hitpos(){
       	muJetF_pos_muon2_rechit_zoomin->Draw("BOXsame");
 	  
       	char namec4[50];
-      	sprintf(namec4,"muon_recover_pos/muJetF/muJetF_hits_%d_zoomin.pdf",event);
+      	sprintf(namec4,"muon_recover_pos/muJetF/muJetF_hits_%d_zoomin.pdf",nJob*10000+event);
       	c2->SaveAs(namec4,"recreate");
       }
 
@@ -601,7 +585,7 @@ void hitpos(){
     	//   leg->Draw("same");
   
     	char namec5[50];
-    	sprintf(namec5,"muon_recover_pos/muJetF_2dim_hits_%d.pdf",event);
+    	sprintf(namec5,"muon_recover_pos/muJetF_2dim_hits_%d.pdf",nJob*10000+event);
     	c3->SaveAs(namec5,"recreate");
 
 
@@ -641,14 +625,14 @@ void hitpos(){
     	//   leg->Draw("same");
 	  
     	char namec6[50];
-    	sprintf(namec6,"muon_recover_pos/muJetF_2dim_hits_%d_zoomin.pdf",event);
+    	sprintf(namec6,"muon_recover_pos/muJetF_2dim_hits_%d_zoomin.pdf",nJob*10000+event);
     	c4->SaveAs(namec6,"recreate");
  
 
 
 
     	char namec7[50];
-    	sprintf(namec7,"muon_recover_pos/muJetC_2dim_hits_%d.pdf",event);
+    	sprintf(namec7,"muon_recover_pos/muJetC_2dim_hits_%d.pdf",nJob*10000+event);
     	c4->SaveAs(namec7,"recreate");
 
 
@@ -688,7 +672,7 @@ void hitpos(){
     	//   leg->Draw("same");
 	  
     	char namec8[50];
-    	sprintf(namec8,"muon_recover_pos/muJetC_2dim_hits_%d_zoomin.pdf",event);
+    	sprintf(namec8,"muon_recover_pos/muJetC_2dim_hits_%d_zoomin.pdf",nJob*10000+event);
     	c5->SaveAs(namec8,"recreate");
  
       }

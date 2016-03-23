@@ -104,7 +104,7 @@ process.PFMuJetProducer05 = process.MuJetProducer.clone(
 process.ana2012 = cms.EDAnalyzer("AnalysisRun2",
                                  trajectoryInput = cms.string("TrackRefitter"),
                                  NavigationSchool   = cms.string('SimpleNavigationSchool'),
-#                                 navigationSchool   = cms.string(''),
+#                                navigationSchool   = cms.string(''),
                                  MeasurementTracker = cms.string(''),
                                  MeasurementTrackerEvent = cms.InputTag('MeasurementTrackerEvent'),
                                  Propagator = cms.string("RungeKuttaTrackerPropagator"),
@@ -117,9 +117,9 @@ process.ana2012 = cms.EDAnalyzer("AnalysisRun2",
                                  muon_pT = cms.double(8.0),
                                  muon_eta = cms.double(2.4),
                                  hltPaths = cms.vstring('HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1'),
-                                 fillGenLevel = cms.bool(True)
+                                 fillGenLevel = cms.bool(True),
+                                 nJob = cms.int32(PROCESS)
                                    )
-
 
 #process.Path = cms.Path(process.patifyMC * process.PFMuJetProducer05 * process.cutFlowAnalyzer)
 #process.Path = cms.Path(process.patifyMC * process.PFMuJetProducer05 * process.TrackRefitter * process.cutFlowAnalyzer)
