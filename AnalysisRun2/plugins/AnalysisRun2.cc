@@ -1,4 +1,4 @@
-1;4002;0c// -*- C++ -*-
+// -*- C++ -*-
 //
 // Package:    MuJetAnalysis/AnalysisRun2
 // Class:      AnalysisRun2
@@ -1848,13 +1848,13 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		
       	  	  temp_mu2_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
       	  	    pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-      	  	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.348e-08,2) + 
+      	  	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
       	  	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
       	  	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 
       	  	  temp_mu2_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
       	  	    pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-      	  	    pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.348e-08,2) + 
+      	  	    pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
       	  	    pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
       	  	    pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 		
@@ -1885,16 +1885,16 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  	  temp_mu1_muJetF.first = counter_match;
       	  	  temp_mu1_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
       	  	    pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-      	  	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.348e-08,2) + 
+      	  	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
       	  	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
       	  	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 
       	  	  temp_mu1_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
       	  	    pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-      	  	    pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.348e-08,2) + 
+      	  	    pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
       	  	    pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
       	  	    pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-      	  	    pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+		   pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.703e-06,2);
 
 
       	  	  // std::cout<<" track    "<<counter_match<<"    chi2  muon1 muJetC   "<< temp_mu1_muJetC.second <<std::endl;
@@ -1920,20 +1920,20 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  	  muJetC_muon1_track_diffphi[counter_track] =  My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi());
       	  	  muJetC_muon1_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
       	  	  muJetC_muon1_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
-		
+		  
       	  	  muJetC_muon1_track_diffchi2[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
       	  	    pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-      	  	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.347e-07,2) + 
-      	  	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2) + 
-      	  	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+      	  	    pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
+      	  	    pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
+      	  	    pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 		
 		
-		
-      	  	  muJetC_muon1_track_diffchi2theta[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(1.23140e-07,2);
-      	  	  muJetC_muon1_track_diffchi2qoverpt[counter_track] = pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(1.76958e-07,2);
-      	  	  muJetC_muon1_track_diffchi2phi[counter_track] = pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(2.98078e-08,2); 
-      	  	  muJetC_muon1_track_diffchi2dxy[counter_track] = pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.24229e-07,2);
-      	  	  muJetC_muon1_track_diffchi2dz[counter_track] = pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.72624e-07,2);
+		  
+      	  	  muJetC_muon1_track_diffchi2theta[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2);
+      	  	  muJetC_muon1_track_diffchi2qoverpt[counter_track] = pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2);
+      	  	  muJetC_muon1_track_diffchi2phi[counter_track] = pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2); 
+      	  	  muJetC_muon1_track_diffchi2dxy[counter_track] = pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2);
+      	  	  muJetC_muon1_track_diffchi2dz[counter_track] = pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 		
       	  	  b_track_pt[counter_track] = trackrf->pt();
       	  	  b_track_charge[counter_track] = trackrf->charge();
@@ -2047,11 +2047,11 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  //   pow(minphi[0],2)/pow(2.98078e-08,2) + pow(mindxy[0],2)/pow(3.24229e-07,2) + pow(mindz[0],2)/pow(8.72624e-07,2);
 	
 
-      	  muJetC_muon1_track_minchi2theta   = pow(mintheta[0],2)/pow(1.23140e-07,2);
-      	  muJetC_muon1_track_minchi2qoverpt = pow(minqoverpt[0],2)/pow(1.76958e-07,2);
-      	  muJetC_muon1_track_minchi2phi     = pow(minphi[0],2)/pow(2.98078e-08,2);
-      	  muJetC_muon1_track_minchi2dxy     =  pow(mindxy[0],2)/pow(3.24229e-07,2);
-      	  muJetC_muon1_track_minchi2dz      = pow(mindz[0],2)/pow(8.72624e-07,2);
+      	  muJetC_muon1_track_minchi2theta   = pow(mintheta[0],2)/pow(6.515e-07,2);
+      	  muJetC_muon1_track_minchi2qoverpt = pow(minqoverpt[0],2)/pow(5.847e-07,2);
+      	  muJetC_muon1_track_minchi2phi     = pow(minphi[0],2)/pow(5.34e-07,2);
+      	  muJetC_muon1_track_minchi2dxy     =  pow(mindxy[0],2)/pow(3.6e-06,2);
+      	  muJetC_muon1_track_minchi2dz      = pow(mindz[0],2)/pow(3.703e-06,2);
 
       	  mintheta.clear();
       	  minqoverpt.clear();
