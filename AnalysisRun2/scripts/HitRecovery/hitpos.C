@@ -18,8 +18,8 @@ void hitpos(){
 
   cout<<"  Events  "<<t->GetEntries()<<endl;
 
-  //  TCut  sel = "2dimuon&&2mjets&&is2DiMuonsDzOK&&is2DiMuonsMassOK&&is2DiMuonsIsoTkOK&&is2DiMuonHLTFired";
-  TCut  sel = "2dimuon";
+  TCut  sel = "2dimuon&&2mjets&&is2DiMuonsDzOK&&is2DiMuonsMassOK&&is2DiMuonsIsoTkOK&&is2DiMuonHLTFired";
+  //  TCut  sel = "2dimuon";
 
   Float_t ev_2dim;
 
@@ -260,7 +260,7 @@ void hitpos(){
     t->GetEntry(k);
 
     
-    if(ev2dim==1){
+    if(ev2dim&&isVtxOK&&is2DimDzOK&&is2DimVtxOK&&is2DimMassOK&&is2DimIsoTkOK&&is2DimHLTFired){
     
       evid = (nJob*10000)+nevent;
       cout<<" ev id   "<<evid<<endl;
