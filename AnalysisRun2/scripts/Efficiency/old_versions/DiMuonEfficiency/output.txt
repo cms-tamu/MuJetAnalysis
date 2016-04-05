@@ -1,0 +1,26 @@
+   ------------------------------------------------------------
+  | Welcome to ROOT 6.02/05                http://root.cern.ch |
+  |                               (c) 1995-2014, The ROOT Team |
+  | Built for linuxx8664gcc                                    |
+  | From tag , 9 February 2015                                 |
+  | Try '.help', '.demo', '.license', '.credits', '.quit'/'.q' |
+   ------------------------------------------------------------
+
+
+Processing bam2_eff_pergramD2DLxyLz.C...
+In file included from input_line_24:1:
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/Efficiency/DiMuonEfficiency/bam2_eff_pergramD2DLxyLz.C:357:11: error: use of undeclared identifier 'dr'
+                                                        if(dr < 0.5) count_rec_A0[n][m]++;
+                                                           ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/Efficiency/DiMuonEfficiency/bam2_eff_pergramD2DLxyLz.C:374:16: error: use of undeclared identifier 'j'
+                                                                           if(j==0){ dphi1 = My_dPhi(selMu0_phi,genA1_phi); deta1 = selMu0_eta - genA1_eta;}
+                                                                              ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/Efficiency/DiMuonEfficiency/bam2_eff_pergramD2DLxyLz.C:375:16: error: use of undeclared identifier 'j'
+                                                                           if(j==1){ dphi1 = My_dPhi(selMu1_phi,genA1_phi); deta1 = selMu1_eta - genA1_eta;}
+                                                                              ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/Efficiency/DiMuonEfficiency/bam2_eff_pergramD2DLxyLz.C:376:16: error: use of undeclared identifier 'j'
+                                                                           if(j==2){ dphi1 = My_dPhi(selMu2_phi,genA1_phi); deta1 = selMu2_eta - genA1_eta;}
+                                                                              ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/Efficiency/DiMuonEfficiency/bam2_eff_pergramD2DLxyLz.C:377:16: error: use of undeclared identifier 'j'
+                                                                           if(j==3){ dphi1 = My_dPhi(selMu3_phi,genA1_phi); deta1 = selMu3_eta - genA1_eta;}
+                                                                              ^
