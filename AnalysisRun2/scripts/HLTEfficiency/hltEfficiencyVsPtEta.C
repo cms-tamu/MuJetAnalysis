@@ -14,11 +14,11 @@ std::map<TString, TString > mass_strings = {
 };
 std::map<TString, double > cT_strings = {
   {"000_",0.0}, {"005_", 0.05}, {"010_", 0.10}, {"020_", 0.20}, {"050_", 0.50}, {"100_", 1.00}, 
-  {"200_", 2.00}, {"300_", 3.00}, {"500_", 5.00}, {"1000", 10.0}, {"2000", 20.0}
+  {"200_", 2.00}, {"300_", 3.00}, {"500_", 5.00}, {"1000", 10.0}, {"2000", 20.0}, {"8500", 85.0}
 };
 std::map<TString, TString > cT_strings2 = {
   {"000_","0.0"}, {"005_", "0.05"}, {"010_", "0.10"}, {"020_", "0.20"}, {"050_", "0.50"}, {"100_", "1.00"}, 
-  {"200_", "2.00"}, {"300_", "3.00"}, {"500_", "5.00"}, {"1000", "10.0"}, {"2000", "20.0"}
+  {"200_", "2.00"}, {"300_", "3.00"}, {"500_", "5.00"}, {"1000", "10.0"}, {"2000", "20.0"}, {"8500", "85.0"}
 };
 std::map<TString, int > mass_colors = {
   {"0250", kRed}, {"0275", kOrange}, {"0300", kSpring}, {"0400", kGreen+2}, {"0700", kAzure+9}, 
@@ -367,7 +367,7 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1
       leg->AddEntry(eff,"m_{#gamma D}= " + mass_strings[mass_string] +  " GeV, " + "c#tau_{#gamma D}= " + cT_strings2[cT_string] + " mm", "PL");      
       leg->Draw("same");
 
-      c->SaveAs(TString(cTitle + "_" + fileName + ".png"),"recreate");
+      c->SaveAs(TString("trigger_efficiency_plots_pt_eta_phi/" + cTitle + "_" + fileName + ".png"),"recreate");
       c->Clear();
     }
   };
@@ -385,8 +385,9 @@ void hltEfficiencyVsPtEta()
   std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
   readTextFileWithSamples("ANASamplesSven2.txt", DarkSUSY_mH_125_mGammaD_v);
   // printFileNames(DarkSUSY_mH_125_mGammaD_v);
+
   for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 1);
-  // for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 2);
-  // for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 3);
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 2);
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 3);
 }
 
