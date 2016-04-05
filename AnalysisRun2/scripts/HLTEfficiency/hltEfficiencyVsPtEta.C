@@ -4,6 +4,10 @@ using namespace std;
 #include <stdlib.h>
 #include "../Helpers.h"
 
+TString mass_string;
+TString cT_string;
+TString fileName;
+
 std::map<TString, TString > mass_strings = {
   {"0250", "0.25"}, {"0275", "0.275"}, {"0300","0.3"}, {"0400", "0.4"}, {"0700", "0.7"}, 
   {"1000", "1.0"}, {"1500", "1.5"}, {"2000", "2.0"}, {"8500", "8.5"}
@@ -12,17 +16,14 @@ std::map<TString, double > cT_strings = {
   {"000_",0.0}, {"005_", 0.05}, {"010_", 0.10}, {"020_", 0.20}, {"050_", 0.50}, {"100_", 1.00}, 
   {"200_", 2.00}, {"300_", 3.00}, {"500_", 5.00}, {"1000", 10.0}, {"2000", 20.0}
 };
+std::map<TString, TString > cT_strings2 = {
+  {"000_","0.0"}, {"005_", "0.05"}, {"010_", "0.10"}, {"020_", "0.20"}, {"050_", "0.50"}, {"100_", "1.00"}, 
+  {"200_", "2.00"}, {"300_", "3.00"}, {"500_", "5.00"}, {"1000", "10.0"}, {"2000", "20.0"}
+};
 std::map<TString, int > mass_colors = {
   {"0250", kRed}, {"0275", kOrange}, {"0300", kSpring}, {"0400", kGreen+2}, {"0700", kAzure+9}, 
   {"1000", kBlue}, {"1500", kViolet+6}, {"2000", kMagenta}, {"8500", kBlack}
 };
-
-double calc_eff(double num, double denom)
-{
-  //eff = num/denom;
-  double eff_uncert = sqrt( ((num/(1.0*denom))*(1-(num/(1.0*denom)) ))/(1.0*denom) );
-  return eff_uncert;
-}
 
 void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1)
 {
@@ -30,19 +31,25 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
 
-  static TString mass_string;
-  static TString cT_string;
   decodeFileNameMany(dirNames, mass_string, cT_string);
-  static TString fileName = "DarkSUSY_mH_125_mGammaD_" + mass_string + "_cT_" + cT_string;
+  fileName = "DarkSUSY_mH_125_mGammaD_" + mass_string + "_cT_" + cT_string;
   cout << "Tag name " << fileName << endl;
 
   cout << "Preparing histograms" << endl;
   TH1D* leading_pt_fid = new TH1D("leading_pt_fid" + fileName,"",50,0.,50.);
-  TH1D* leading_eta_fid = new TH1D("leading_eta_fid" + fileName,"",50,-2.5,2.5);
+  TH1D* fullAna_leading_pt_fid = new TH1D("fullAna_leading_pt_fid" + fileName,"",50,0.,50.);
   TH1D* hlt_leading_pt_fid = new TH1D("hlt_leading_pt_fid" + fileName,"",50,0.,50.);
-  TH1D* hlt_leading_eta_fid = new TH1D("hlt_leading_eta_fid" + fileName,"",50,-2.5,2.5);
   TH1D* hlt_fullAna_leading_pt_fid = new TH1D("hlt_fullAna_leading_pt_fid" + fileName,"",50,0.,50.);
+
+  TH1D* leading_eta_fid = new TH1D("leading_eta_fid" + fileName,"",50,-2.5,2.5);
+  TH1D* fullAna_leading_eta_fid = new TH1D("fullAna_leading_eta_fid" + fileName,"",50,-2.5,2.5);
+  TH1D* hlt_leading_eta_fid = new TH1D("hlt_leading_eta_fid" + fileName,"",50,-2.5,2.5);
   TH1D* hlt_fullAna_leading_eta_fid = new TH1D("hlt_fullAna_leading_eta_fid" + fileName,"",50,-2.5,2.5);
+
+  TH1D* leading_phi_fid = new TH1D("leading_phi_fid" + fileName,"",60,-TMath::Pi(),TMath::Pi());
+  TH1D* fullAna_leading_phi_fid = new TH1D("fullAna_leading_phi_fid" + fileName,"",60,-TMath::Pi(),TMath::Pi());
+  TH1D* hlt_leading_phi_fid = new TH1D("hlt_leading_phi_fid" + fileName,"",60,-TMath::Pi(),TMath::Pi());
+  TH1D* hlt_fullAna_leading_phi_fid = new TH1D("hlt_fullAna_leading_phi_fid" + fileName,"",60,-TMath::Pi(),TMath::Pi());
 
   // add files to the chain
   addfilesMany(chain, dirNames, ext);
@@ -255,29 +262,40 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1
       if(is4SelMu8)  c4recm++;
 
       //  ===========   GEN LEVEL information  ==============//
-      if(is4GenMu8){
-        if(fabs(genA0_Lxy)< pixelLayerRadius && fabs(genA1_Lxy)< pixelLayerRadius && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
+      if(is4GenMu8 and 
+	 fabs(genA0_Lxy)< pixelLayerRadius and 
+	 fabs(genA1_Lxy)< pixelLayerRadius and 
+	 fabs(genA0_Lz)<34.5 and 
+	 fabs(genA1_Lz)<34.5){
 
-	  leading_pt_fid->Fill(genMu0_pT);
-	  leading_eta_fid->Fill(genMu0_eta);
-
-	  if (isDiMuonHLTFired){
-	    hlt_leading_pt_fid->Fill(genMu0_pT);
-	    hlt_leading_eta_fid->Fill(genMu0_eta);
-	  }
+	leading_pt_fid->Fill(genMu0_pT);
+	leading_eta_fid->Fill(genMu0_eta);
+	leading_phi_fid->Fill(genMu0_phi);
+	
+	if (isDiMuonHLTFired){
+	  hlt_leading_pt_fid->Fill(genMu0_pT);
+	  hlt_leading_eta_fid->Fill(genMu0_eta);
+	  hlt_leading_phi_fid->Fill(genMu0_phi);
+	}
+	
+	if(is4SelMu8 and 
+	   isVertexOK and 
+	   is2MuJets and 
+	   is2DiMuons and 
+	   is2DiMuonsFittedVtxOK and 
+	   pixelLayer and 
+	   is2DiMuonsDzOK_FittedVtx and 
+	   is2DiMuonsMassOK_FittedVtx and 
+	   is2DiMuonsIsoTkOK_FittedVtx){
 	  
-	  if(is4SelMu8 and 
-	     isVertexOK and 
-	     is2MuJets and 
-	     is2DiMuons and 
-	     is2DiMuonsFittedVtxOK and 
-	     pixelLayer and 
-	     is2DiMuonsDzOK_FittedVtx and 
-	     is2DiMuonsMassOK_FittedVtx and 
-	     is2DiMuonsIsoTkOK_FittedVtx and 
-	     isDiMuonHLTFired){
+	  fullAna_leading_pt_fid->Fill(genMu0_pT);
+	  fullAna_leading_eta_fid->Fill(genMu0_eta);
+	  fullAna_leading_phi_fid->Fill(genMu0_phi);
+	  
+	  if (isDiMuonHLTFired){
 	    hlt_fullAna_leading_pt_fid->Fill(genMu0_pT);
 	    hlt_fullAna_leading_eta_fid->Fill(genMu0_eta);
+	    hlt_fullAna_leading_phi_fid->Fill(genMu0_phi);
 	  }
 	}
       }
@@ -288,24 +306,49 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1
   // TEfficiency objects
   TEfficiency* eff_hlt_leading_pt_fid = new TEfficiency(*hlt_leading_pt_fid, *leading_pt_fid);
   TEfficiency* eff_hlt_leading_eta_fid = new TEfficiency(*hlt_leading_eta_fid, *leading_eta_fid);
-  TEfficiency* eff_hlt_fullAna_leading_pt_fid = new TEfficiency(*hlt_fullAna_leading_pt_fid, *leading_pt_fid);
-  TEfficiency* eff_hlt_fullAna_leading_eta_fid = new TEfficiency(*hlt_fullAna_leading_eta_fid, *leading_eta_fid);
+  TEfficiency* eff_hlt_leading_phi_fid = new TEfficiency(*hlt_leading_phi_fid, *leading_phi_fid);
+  TEfficiency* eff_hlt_fullAna_leading_pt_fid = new TEfficiency(*hlt_fullAna_leading_pt_fid, *fullAna_leading_pt_fid);
+  TEfficiency* eff_hlt_fullAna_leading_eta_fid = new TEfficiency(*hlt_fullAna_leading_eta_fid, *fullAna_leading_eta_fid);
+  TEfficiency* eff_hlt_fullAna_leading_phi_fid = new TEfficiency(*hlt_fullAna_leading_phi_fid, *fullAna_leading_phi_fid);
   
+  enum Variable{Pt=0,Eta=1,Phi=3};
+
   // Plots
   struct MyEfficiencyPlot
   {
-    static void plot(bool doEta, TEfficiency* eff, int layers) { 
+    static void plot(enum Variable v, TEfficiency* eff, TString cTitle) { 
 
       TCanvas *c = new TCanvas("c","c",700,500);
       gStyle->SetOptStat(0);
       
-      double xMin = doEta? -2.5 : 0;
-      double xMax = doEta? 2.5 : 50;
-      TString xTitle = doEta? "Leading muon #eta" : "Leading muon p_{T} [GeV]";
-      TString title = doEta? "Leading muon #eta" : "Leading muon p_{T}";
+      double xMin;
+      double xMax;
+      int xBin = 50;
+      TString xTitle;
       TString yTitle = "Trigger efficiency";
+      TString title;
+
+      if (v==Variable::Pt){
+	xMin = 0;
+	xMax = 50;
+	xTitle = "Leading muon p_{T} [GeV]";
+	title = "leading muon p_{T}";
+      }
+      else if (v==Variable::Eta){
+	xMin = -2.5;
+	xMax = 2.5;
+	xTitle ="Leading muon #eta";
+	title = "leading muon #eta";
+      }
+      else if (v==Variable::Phi){
+	xMin = -TMath::Pi();
+	xMax = TMath::Pi();
+	xBin = 60;
+	xTitle ="Leading muon #phi";
+	title = "leading muon #phi";
+      }
       
-      TH1F *base = new TH1F("","Trigger efficiency versus " + title, 50, xMin, xMax);
+      TH1F *base = new TH1F("","Trigger efficiency versus " + title, xBin, xMin, xMax);
       base->GetXaxis()->SetTitle(xTitle);
       base->GetYaxis()->SetTitle(yTitle);
       base->Draw();
@@ -317,29 +360,31 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, int layers = 1
       eff->SetMarkerStyle(7);
       eff->Draw("same");
 
-      TLegend *leg = new TLegend(0.5,0.15,0.85,0.45);
+      TLegend *leg = new TLegend(0.15,0.15,0.85,0.45);
       leg->SetBorderSize(0);
       leg->SetFillColor(0);
       leg->SetTextSize(0.045);
-      leg->AddEntry(eff,"m_{#gamma D}=" + mass_strings[mass_string] +  "GeV","PL");
-      
+      leg->AddEntry(eff,"m_{#gamma D}= " + mass_strings[mass_string] +  " GeV, " + "c#tau_{#gamma D}= " + cT_strings2[cT_string] + " mm", "PL");      
       leg->Draw("same");
-      c->SaveAs(TString("e_hlt_vs_pT_L" + std::to_string(layers) + "_" + fileName + ".png"),"recreate");
+
+      c->SaveAs(TString(cTitle + "_" + fileName + ".png"),"recreate");
       c->Clear();
     }
   };
 
-  MyEfficiencyPlot::plot(false, eff_hlt_leading_pt_fid, layers);
-  MyEfficiencyPlot::plot(false, eff_hlt_leading_eta_fid, layers);
-  MyEfficiencyPlot::plot(false, eff_hlt_fullAna_leading_pt_fid, layers);
-  MyEfficiencyPlot::plot(false, eff_hlt_fullAna_leading_eta_fid, layers);
+  MyEfficiencyPlot::plot(Variable::Pt,  eff_hlt_leading_pt_fid, "eff_hlt_vs_leading_pT_L" + std::to_string(layers));
+  MyEfficiencyPlot::plot(Variable::Eta, eff_hlt_leading_eta_fid, "eff_hlt_vs_leading_eta_L" + std::to_string(layers));
+  MyEfficiencyPlot::plot(Variable::Phi, eff_hlt_leading_phi_fid, "eff_hlt_vs_leading_phi_L" + std::to_string(layers));
+  MyEfficiencyPlot::plot(Variable::Pt,  eff_hlt_fullAna_leading_pt_fid, "eff_hlt_fullAna_vs_leading_pT_L" + std::to_string(layers));
+  MyEfficiencyPlot::plot(Variable::Eta, eff_hlt_fullAna_leading_eta_fid, "eff_hlt_fullAna_vs_leading_eta_L" + std::to_string(layers));
+  MyEfficiencyPlot::plot(Variable::Phi, eff_hlt_fullAna_leading_phi_fid, "eff_hlt_fullAna_vs_leading_phi_L" + std::to_string(layers));
 }
 
 void hltEfficiencyVsPtEta()
 {
   std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
   readTextFileWithSamples("ANASamplesSven2.txt", DarkSUSY_mH_125_mGammaD_v);
- 
+  // printFileNames(DarkSUSY_mH_125_mGammaD_v);
   for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 1);
   // for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 2);
   // for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, 3);

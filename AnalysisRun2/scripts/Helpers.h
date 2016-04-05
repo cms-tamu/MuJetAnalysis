@@ -91,3 +91,13 @@ void readTextFileWithSamples(const std::string fileName, std::vector< std::vecto
   v.push_back(vv);
   infile.close();
 }
+
+void printFileNames(const std::vector< std::vector<string> >& vec)
+{
+  for (int i = 0; i < vec.size(); i++){
+    for (int j = 0; j < vec[i].size(); j++){
+      cout << vec[i][j] <<endl;
+    }
+    cout <<endl;
+  }
+}
