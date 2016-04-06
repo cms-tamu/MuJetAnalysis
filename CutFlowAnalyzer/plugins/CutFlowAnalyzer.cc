@@ -419,7 +419,6 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
 		Int_t b_pixelhitfailure_F;
 
 		Int_t b_diMuonC_m1_FittedVtx_HBV;
-		Int_t b_diMuonC_m1_FittedVtx_HBV;
 		Int_t b_diMuonC_m2_FittedVtx_HBV;
 		Int_t b_diMuonF_m1_FittedVtx_HBV;
 		Int_t b_diMuonF_m2_FittedVtx_HBV;
