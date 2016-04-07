@@ -55,6 +55,7 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/MuonReco/interface/MuonFwd.h"
+#include "DataFormats/TrackReco/interface/HitPattern.h"
 
 #include "RecoTracker/TrackProducer/interface/TrackProducerBase.h"
 #include "RecoTracker/Record/interface/NavigationSchoolRecord.h"
@@ -345,6 +346,12 @@ private:
   Int_t b_muJetC_hitpix[2];
   Int_t b_muJetF_hitpix[2];
 
+  Int_t b_muJetC_hitpix_2ndlay[2];
+  Int_t b_muJetF_hitpix_2ndlay[2];
+
+  Int_t b_muJetC_hitpix_3rdlay[2];
+  Int_t b_muJetF_hitpix_3rdlay[2];
+
   Float_t HiggsPt;
 
   Float_t b_track_pt[1000];
@@ -430,6 +437,12 @@ private:
 
   Int_t b_muJetC_hitpix_genTrk[2];
   Int_t b_muJetF_hitpix_genTrk[2];
+
+  Int_t b_muJetC_hitpix_2ndlay_genTrk[2];
+  Int_t b_muJetF_hitpix_2ndlay_genTrk[2];
+
+  Int_t b_muJetC_hitpix_3rdlay_genTrk[2];
+  Int_t b_muJetF_hitpix_3rdlay_genTrk[2];
 
   Bool_t muJetC_validVtx;
   Bool_t muJetC_validVtx_fitted;
@@ -522,6 +535,17 @@ private:
 
   Float_t b_muJetC_trackdist_1stpixel;
   Float_t b_muJetF_trackdist_1stpixel;
+
+
+  Int_t b_muJetC_muon1_layerB[200];
+  Int_t b_muJetC_muon2_layerB[200];
+  Int_t b_muJetF_muon1_layerB[200];
+  Int_t b_muJetF_muon2_layerB[200];
+
+  Int_t b_muJetC_muon1_layerF[200];
+  Int_t b_muJetC_muon2_layerF[200];
+  Int_t b_muJetF_muon1_layerF[200];
+  Int_t b_muJetF_muon2_layerF[200];
 
   Float_t b_muJetC_muon1_posx1stpix[200];
   Float_t b_muJetC_muon1_posy1stpix[200];
@@ -888,14 +912,36 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   for(int k=0;k<2;k++) b_muJetC_hitpix[k]=-100000;
   for(int k=0;k<2;k++) b_muJetF_hitpix[k]=-100000;
 
+  for(int k=0;k<2;k++) b_muJetC_hitpix_2ndlay[k]=-100000;
+  for(int k=0;k<2;k++) b_muJetF_hitpix_2ndlay[k]=-100000;
+
+  for(int k=0;k<2;k++) b_muJetC_hitpix_3rdlay[k]=-100000;
+  for(int k=0;k<2;k++) b_muJetF_hitpix_3rdlay[k]=-100000;
 
   for(int k=0;k<2;k++) b_muJetC_hitpix_genTrk[k]=-100000;
   for(int k=0;k<2;k++) b_muJetF_hitpix_genTrk[k]=-100000;
+
+  for(int k=0;k<2;k++) b_muJetC_hitpix_2ndlay_genTrk[k]=-100000;
+  for(int k=0;k<2;k++) b_muJetF_hitpix_2ndlay_genTrk[k]=-100000;
+
+  for(int k=0;k<2;k++) b_muJetC_hitpix_3rdlay_genTrk[k]=-100000;
+  for(int k=0;k<2;k++) b_muJetF_hitpix_3rdlay_genTrk[k]=-100000;
 
   for(int k=0;k<200;k++) b_mindist_hit_mu1_muJetC[k]=-10000;
   for(int k=0;k<200;k++) b_mindist_hit_mu2_muJetC[k]=-10000;
   for(int k=0;k<200;k++) b_mindist_hit_mu1_muJetF[k]=-10000;
   for(int k=0;k<200;k++) b_mindist_hit_mu2_muJetF[k]=-10000;
+
+  for(int k=0;k<200;k++) b_muJetC_muon1_layerB[k]=-100000.;
+  for(int k=0;k<200;k++) b_muJetC_muon2_layerB[k]=-100000.;
+  for(int k=0;k<200;k++) b_muJetF_muon1_layerB[k]=-100000.;
+  for(int k=0;k<200;k++) b_muJetF_muon2_layerB[k]=-100000.;
+
+  for(int k=0;k<200;k++) b_muJetC_muon1_layerF[k]=-100000.;
+  for(int k=0;k<200;k++) b_muJetC_muon2_layerF[k]=-100000.;
+  for(int k=0;k<200;k++) b_muJetF_muon1_layerF[k]=-100000.;
+  for(int k=0;k<200;k++) b_muJetF_muon2_layerF[k]=-100000.;
+  
 
   for(int k=0;k<200;k++) b_muJetC_muon1_posx1stpix[k]=-100000.;
   for(int k=0;k<200;k++) b_muJetC_muon1_posy1stpix[k]=-100000.;
@@ -1694,6 +1740,12 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		  if(k==0) std::cout<<"  hit   gt  mu1 muJetC  "<<counter_gt<<std::endl;
 		  if(k==1) std::cout<<"  hit   gt  mu2 muJetC  "<<counter_gt<<std::endl;
 		}
+	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      	b_muJetC_hitpix_2ndlay_genTrk[k] = 1;
+	      }
+	      if(p.hasValidHitInThirdPixelBarrel()){
+	      	b_muJetC_hitpix_3rdlay_genTrk[k] = 1;
+	      }
 	      }
 	    }
 	  
@@ -1710,7 +1762,12 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		  if(k==0) std::cout<<"  hit   gt  mu1 muJetF  "<<counter_gt<<std::endl;
 		  if(k==1) std::cout<<"  hit   gt  mu2 muJetF  "<<counter_gt<<std::endl;
 		}
-
+	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      	b_muJetF_hitpix_2ndlay_genTrk[k] = 1;
+	      }
+	      if(p.hasValidHitInThirdPixelBarrel()){
+	      	b_muJetF_hitpix_3rdlay_genTrk[k] = 1;
+	      }
 
 	      }
 	    }
@@ -1894,7 +1951,6 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  	    pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
       	  	    pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
       	  	    pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-		   pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(8.703e-06,2);
 
 
       	  	  // std::cout<<" track    "<<counter_match<<"    chi2  muon1 muJetC   "<< temp_mu1_muJetC.second <<std::endl;
@@ -2120,6 +2176,13 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  	indxtrkmj1_validhit[0] = 1;
       	  	b_muJetC_hitpix[0] = 1;
       	      }
+	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      	b_muJetC_hitpix_2ndlay[0] = 1;
+	      }
+	      if(p.hasValidHitInThirdPixelBarrel()){
+	      	b_muJetC_hitpix_3rdlay[0] = 1;
+	      }
+	      
       	    }
 
       	    if(counter_track_hit == indxtrkmj1[1]){
@@ -2132,6 +2195,13 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  	indxtrkmj1_validhit[1] = 1;
       	  	b_muJetC_hitpix[1] = 1;
       	      }
+	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      	b_muJetC_hitpix_2ndlay[1] = 1;
+	      }
+	      if(p.hasValidHitInThirdPixelBarrel()){
+	      	b_muJetC_hitpix_3rdlay[1] = 1;
+	      }
+
       	    }
 
       	    if(counter_track_hit == indxtrkmj2[0]){
@@ -2145,6 +2215,13 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  	indxtrkmj2_validhit[0] = 1;
       	  	b_muJetF_hitpix[0] = 1;
       	      }
+	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      	b_muJetF_hitpix_2ndlay[0] = 1;
+	      }
+	      if(p.hasValidHitInThirdPixelBarrel()){
+	      	b_muJetF_hitpix_3rdlay[0] = 1;
+	      }
+
       	    }
 
       	    if(counter_track_hit == indxtrkmj2[1]){
@@ -2157,8 +2234,15 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  	indxtrkmj2_validhit[1] = 1;
       	  	b_muJetF_hitpix[1] = 1;
       	      }
-      	    }
+	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      	b_muJetF_hitpix_2ndlay[1] = 1;
+	      }
+	      if(p.hasValidHitInThirdPixelBarrel()){
+	      	b_muJetF_hitpix_3rdlay[1] = 1;
+	      }
+	    }
 
+	      
       	    counter_track_hit++;
 	  }
 	  
@@ -2301,27 +2385,27 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       if(km==1)  b_mutrack_eta_mu2JetC = muJetC->muon(km)->eta();
 
 
-
-
+      
+      
       //====================== Loop for Trajectories from TrackRefitter  =================================//
-  	    Int_t counter_traj=0;
-  	    for(vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
-	    
-  	      if(counter_traj==indxtrkmj1[km]){
+      Int_t counter_traj=0;
+      for(vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
 	
-  		if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
-  					<< "isValid: " << it->isValid()<<std::endl;
-  		}
-	      
-  		//	    if(it->firstMeasurement().updatedState().isValid() && it->lastMeasurement().updatedState().isValid()){
-
-  		if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentum
-	      
-  		  const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
-  		  const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
-  		  TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
-  		  TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
-		
+	if(counter_traj==indxtrkmj1[km]){
+	  
+	  if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
+				  << "isValid: " << it->isValid()<<std::endl;
+	  }
+	  
+	  //	    if(it->firstMeasurement().updatedState().isValid() && it->lastMeasurement().updatedState().isValid()){
+	  
+	  if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentum
+	    
+	    const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
+	    const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
+	    TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
+	    TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
+	    
 		  if (!outerState || !innerState){
 		    std::cout << "No outer layer or no inner layer!" << std::endl;
 		  }
@@ -2388,7 +2472,7 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
   		  if(km==1) b_innerlayers_mu2_muJetC = innerCompLayers.size();
 
   		  if(innerCompLayers.size()==0) {
-		  
+
   		    if(m_debug>10) std::cout<<"  already in 1st pixel layer   "<<std::endl;
 		  
   		    if(km==0) mj1m0pos[0] = Local2DPoint(it->firstMeasurement().updatedState().localPosition().x(),
@@ -2436,8 +2520,22 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		    
 		      DetId id = detWithState[k].first->geographicalId();
   		      MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
-  		      if( ( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) || 
-  			    ( (*dd)->subDetector() == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive() ){
+  		      // if( ( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) || 
+  		      // 	    ( (*dd)->subDetector() == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive() ){
+
+  		      if( ( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel) || 
+  			    ( (*dd)->subDetector() == GeomDetEnumerators::PixelEndcap) ) && measDet.isActive() ){
+			
+			if(km==0){
+			  b_muJetC_muon1_layerB[k] = PXBDetId(id).layer()==1;
+			  b_muJetC_muon1_layerF[k] = PXFDetId(id).disk()==1;
+			}
+			if(km==1){
+			  b_muJetC_muon2_layerB[k] = PXBDetId(id).layer()==1;
+			  b_muJetC_muon2_layerF[k] = PXFDetId(id).disk()==1;
+			}
+
+
   			if(m_debug>10){
   			  std::cout<<"  compatible Det  number  "<<k<<std::endl;
   			  std::cout<<" local position rho  Det   "<<detWithState[k].second.localPosition().perp()<<std::endl;
@@ -2692,8 +2790,21 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		      DetId id = detWithState[k].first->geographicalId();
 		      MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
 
-  		      if( ( ((*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) 
-  			    || ((*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive()  ){
+  		      // if( ( ((*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) 
+  		      // 	    || ((*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive()  ){
+
+  		      if( ( ((*dd)->subDetector() == GeomDetEnumerators::PixelBarrel) 
+  			    || ((*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap) ) && measDet.isActive()  ){
+
+
+			if(km==0){
+			  b_muJetF_muon1_layerB[k] = PXBDetId(id).layer()==1;
+			  b_muJetF_muon1_layerF[k] = PXFDetId(id).disk()==1;
+			}
+			if(km==1){
+			  b_muJetF_muon2_layerB[k] = PXBDetId(id).layer()==1;
+			  b_muJetF_muon2_layerF[k] = PXFDetId(id).disk()==1;
+			}
 		      
   			if(m_debug>10){
   			  std::cout<<"  compatible Det  number  "<<k<<std::endl;
@@ -3615,6 +3726,12 @@ AnalysisRun2::beginJob()
   m_ttree->Branch("muJetC_hitpix", &b_muJetC_hitpix, "muJetC_hitpix[2]/I");
   m_ttree->Branch("muJetF_hitpix", &b_muJetF_hitpix, "muJetF_hitpix[2]/I");
 
+  m_ttree->Branch("muJetC_hitpix_2ndlay", &b_muJetC_hitpix_2ndlay, "muJetC_hitpix_2ndlay[2]/I");
+  m_ttree->Branch("muJetF_hitpix_2ndlay", &b_muJetF_hitpix_2ndlay, "muJetF_hitpix_2ndlay[2]/I");
+
+  m_ttree->Branch("muJetC_hitpix_3rdlay", &b_muJetC_hitpix_3rdlay, "muJetC_hitpix_3rdlay[2]/I");
+  m_ttree->Branch("muJetF_hitpix_3rdlay", &b_muJetF_hitpix_3rdlay, "muJetF_hitpix_3rdlay[2]/I");
+
   m_ttree->Branch("ntracks",&b_ntracks,"ntracks/I");
 
   m_ttree->Branch("HiggsPt", &HiggsPt,"HiggsPt/F");
@@ -3707,6 +3824,12 @@ AnalysisRun2::beginJob()
   m_ttree->Branch("muJetC_hitpix_genTrk", &b_muJetC_hitpix_genTrk, "muJetC_hitpix_genTrk[2]/I");
   m_ttree->Branch("muJetF_hitpix_genTrk", &b_muJetF_hitpix_genTrk, "muJetF_hitpix_genTrk[2]/I");
 
+  m_ttree->Branch("muJetC_hitpix_2ndlay_genTrk", &b_muJetC_hitpix_2ndlay_genTrk, "muJetC_hitpix_2ndlay_genTrk[2]/I");
+  m_ttree->Branch("muJetF_hitpix_2ndlay_genTrk", &b_muJetF_hitpix_2ndlay_genTrk, "muJetF_hitpix_2ndlay_genTrk[2]/I");
+
+  m_ttree->Branch("muJetC_hitpix_3rdlay_genTrk", &b_muJetC_hitpix_3rdlay_genTrk, "muJetC_hitpix_3rdlay_genTrk[2]/I");
+  m_ttree->Branch("muJetF_hitpix_3rdlay_genTrk", &b_muJetF_hitpix_3rdlay_genTrk, "muJetF_hitpix_3rdlay_genTrk[2]/I");
+
   m_ttree->Branch("muJetC_validVtx", &muJetC_validVtx, "muJetC_validVtx/O");
   m_ttree->Branch("muJetC_validVtx_fitted", &muJetC_validVtx_fitted, "muJetC_validVtx_fitted/O");
   m_ttree->Branch("muJetC_validVtx_mindist", &muJetC_validVtx_mindist, "muJetC_validVtx_mindist/O");
@@ -3797,6 +3920,16 @@ AnalysisRun2::beginJob()
   m_ttree->Branch("Det_mu2_muJetC", &b_Det_mu2_muJetC,"Det_mu2_muJetC/I");
   m_ttree->Branch("Det_mu1_muJetF", &b_Det_mu1_muJetF,"Det_mu1_muJetF/I");
   m_ttree->Branch("Det_mu2_muJetF", &b_Det_mu2_muJetF,"Det_mu2_muJetF/I");
+
+  m_ttree->Branch("muJetC_muon1_layerB",&b_muJetC_muon1_layerB,"muJetC_muon1_layerB[Det_mu1_muJetC]/F");
+  m_ttree->Branch("muJetC_muon2_layerB",&b_muJetC_muon2_layerB,"muJetC_muon2_layerB[Det_mu2_muJetC]/F");
+  m_ttree->Branch("muJetF_muon1_layerB",&b_muJetF_muon1_layerB,"muJetF_muon1_layerB[Det_mu1_muJetC]/F");
+  m_ttree->Branch("muJetF_muon2_layerB",&b_muJetF_muon2_layerB,"muJetF_muon2_layerB[Det_mu2_muJetC]/F");
+
+  m_ttree->Branch("muJetC_muon1_layerF",&b_muJetC_muon1_layerF,"muJetC_muon1_layerF[Det_mu1_muJetC]/F");
+  m_ttree->Branch("muJetC_muon2_layerF",&b_muJetC_muon2_layerF,"muJetC_muon2_layerF[Det_mu2_muJetC]/F");
+  m_ttree->Branch("muJetF_muon1_layerF",&b_muJetF_muon1_layerF,"muJetF_muon1_layerF[Det_mu1_muJetC]/F");
+  m_ttree->Branch("muJetF_muon2_layerF",&b_muJetF_muon2_layerF,"muJetF_muon2_layerF[Det_mu2_muJetC]/F");
 
   m_ttree->Branch("muJetC_muon1_posx1stpix", &b_muJetC_muon1_posx1stpix, "muJetC_muon1_posx1stpix[Det_mu1_muJetC]/F");
   m_ttree->Branch("muJetC_muon1_posy1stpix", &b_muJetC_muon1_posy1stpix, "muJetC_muon1_posy1stpix[Det_mu1_muJetC]/F");
