@@ -343,6 +343,7 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Int_t  m_events2DiMuonsLxyOK_ConsistentVtx;
   
   // Reco branches in ROOT tree (they all start with b_)
+  Int_t b_nRecoMu;
   Float_t b_selMu0_px;
   Float_t b_selMu1_px;
   Float_t b_selMu2_px;
@@ -358,6 +359,11 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
   Float_t b_selMu2_pz;
   Float_t b_selMu3_pz;
   
+  Float_t b_selMu0_pT;
+  Float_t b_selMu1_pT;
+  Float_t b_selMu2_pT;
+  Float_t b_selMu3_pT;
+
   Float_t b_selMu0_eta;
   Float_t b_selMu1_eta;
   Float_t b_selMu2_eta;
@@ -1060,16 +1066,20 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     }
   }
   
+  b_nRecoMu = selMuons.size();
+
   if ( selMuons.size() > 0 ) {
     b_selMu0_px  = selMuons[0]->px();
     b_selMu0_py  = selMuons[0]->py();
     b_selMu0_pz  = selMuons[0]->pz();
+    b_selMu0_pT  = selMuons[0]->pt();
     b_selMu0_eta = selMuons[0]->eta();
     b_selMu0_phi = selMuons[0]->phi();
   } else {
     b_selMu0_px  = -100.0;
     b_selMu0_py  = -100.0;
     b_selMu0_pz  = -100.0;
+    b_selMu0_pT  = -100.0;
     b_selMu0_eta = -100.0;
     b_selMu0_phi = -100.0;
   }
@@ -1077,12 +1087,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu1_px  = selMuons[1]->px();
     b_selMu1_py  = selMuons[1]->py();
     b_selMu1_pz  = selMuons[1]->pz();
+    b_selMu1_pT  = selMuons[1]->pt();
     b_selMu1_eta = selMuons[1]->eta();
     b_selMu1_phi = selMuons[1]->phi();
   } else {
     b_selMu1_px  = -100.0;
     b_selMu1_py  = -100.0;
     b_selMu1_pz  = -100.0;
+    b_selMu1_pT  = -100.0;
     b_selMu1_eta = -100.0;
     b_selMu1_phi = -100.0;
   }
@@ -1090,12 +1102,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu2_px  = selMuons[2]->px();
     b_selMu2_py  = selMuons[2]->py();
     b_selMu2_pz  = selMuons[2]->pz();
+    b_selMu2_pT  = selMuons[2]->pt();
     b_selMu2_eta = selMuons[2]->eta();
     b_selMu2_phi = selMuons[2]->phi();
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
     b_selMu2_pz  = -100.0;
+    b_selMu2_pT  = -100.0;
     b_selMu2_eta = -100.0;
     b_selMu2_phi = -100.0;
   }
@@ -1103,12 +1117,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu3_px  = selMuons[3]->px();
     b_selMu3_py  = selMuons[3]->py();
     b_selMu3_pz  = selMuons[3]->pz();
+    b_selMu3_pT  = selMuons[3]->pt();
     b_selMu3_eta = selMuons[3]->eta();
     b_selMu3_phi = selMuons[3]->phi();
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
     b_selMu3_pz  = -100.0;
+    b_selMu3_pT  = -100.0;
     b_selMu3_eta = -100.0;
     b_selMu3_phi = -100.0;
   }
@@ -1970,6 +1986,8 @@ CutFlowAnalyzer::beginJob() {
   //****************************************************************************
   
   // Reco Muons
+  m_ttree->Branch("nRecoMu",  &b_nRecoMu,  "nRecoMu/I");
+
   m_ttree->Branch("selMu0_px",  &b_selMu0_px,  "selMu0_px/F");
   m_ttree->Branch("selMu1_px",  &b_selMu1_px,  "selMu1_px/F");
   m_ttree->Branch("selMu2_px",  &b_selMu2_px,  "selMu2_px/F");
@@ -1985,6 +2003,11 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("selMu2_pz",  &b_selMu2_pz,  "selMu2_pz/F");
   m_ttree->Branch("selMu3_pz",  &b_selMu3_pz,  "selMu3_pz/F");
   
+  m_ttree->Branch("selMu0_pT",  &b_selMu0_pT,  "selMu0_pT/F");
+  m_ttree->Branch("selMu1_pT",  &b_selMu1_pT,  "selMu1_pT/F");
+  m_ttree->Branch("selMu2_pT",  &b_selMu2_pT,  "selMu2_pT/F");
+  m_ttree->Branch("selMu3_pT",  &b_selMu3_pT,  "selMu3_pT/F");
+
   m_ttree->Branch("selMu0_eta", &b_selMu0_eta, "selMu0_eta/F");
   m_ttree->Branch("selMu1_eta", &b_selMu1_eta, "selMu1_eta/F");
   m_ttree->Branch("selMu2_eta", &b_selMu2_eta, "selMu2_eta/F");
