@@ -364,6 +364,8 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
     Int_t  m_events2DiMuonsLxyOK_ConsistentVtx;
 
     // Reco branches in ROOT tree (they all start with b_)
+    Int_t b_nRecoMu;
+  
     Float_t b_selMu0_px;
     Float_t b_selMu1_px;
     Float_t b_selMu2_px;
@@ -388,6 +390,11 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
     Float_t b_selMu1_phi;
     Float_t b_selMu2_phi;
     Float_t b_selMu3_phi;
+
+    Float_t b_selMu0_pT;
+    Float_t b_selMu1_pT;
+    Float_t b_selMu2_pT;
+    Float_t b_selMu3_pT;
 
     Float_t b_diMuonC_FittedVtx_m;
     Float_t b_diMuonC_FittedVtx_px;
@@ -1415,7 +1422,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   // HLT cut
   edm::Handle<pat::TriggerEvent> triggerEvent;
   iEvent.getByLabel("patTriggerEvent", triggerEvent);
-
   b_isDiMuonHLTFired = false;
   b_hltPaths.clear();
   for (auto p : hltPaths_){
