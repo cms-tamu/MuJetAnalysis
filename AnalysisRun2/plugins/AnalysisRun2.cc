@@ -1740,15 +1740,16 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		  if(k==0) std::cout<<"  hit   gt  mu1 muJetC  "<<counter_gt<<std::endl;
 		  if(k==1) std::cout<<"  hit   gt  mu2 muJetC  "<<counter_gt<<std::endl;
 		}
+	      }
 	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
-	      	b_muJetC_hitpix_2ndlay_genTrk[k] = 1;
+		b_muJetC_hitpix_2ndlay_genTrk[k] = 1;
 	      }
 	      if(p.hasValidHitInThirdPixelBarrel()){
-	      	b_muJetC_hitpix_3rdlay_genTrk[k] = 1;
-	      }
+		b_muJetC_hitpix_3rdlay_genTrk[k] = 1;
 	      }
 	    }
-	  
+
+	    
 	    //	    if(sameTrackRF(&*track,&*(muJetF->muon(k)->innerTrack()))){
 	    if(sameTrack(&*track,&*(muJetF->muon(k)->innerTrack()))){
 	      if(m_debug>10){
@@ -1762,13 +1763,12 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		  if(k==0) std::cout<<"  hit   gt  mu1 muJetF  "<<counter_gt<<std::endl;
 		  if(k==1) std::cout<<"  hit   gt  mu2 muJetF  "<<counter_gt<<std::endl;
 		}
+	      }
 	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
 	      	b_muJetF_hitpix_2ndlay_genTrk[k] = 1;
 	      }
 	      if(p.hasValidHitInThirdPixelBarrel()){
 	      	b_muJetF_hitpix_3rdlay_genTrk[k] = 1;
-	      }
-
 	      }
 	    }
 	    counter_gt++;
