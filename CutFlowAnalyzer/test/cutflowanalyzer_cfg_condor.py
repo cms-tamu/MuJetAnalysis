@@ -78,7 +78,7 @@ process.GlobalTag.globaltag = "FT_53_V6_AN3::All"
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
 
 process.TrackerMuJetProducer05 = process.MuJetProducer.clone(
-  maxMass = cms.double(5.),
+  maxMass = cms.double(9.),
   muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),
   selectTrackerMuons = cms.bool(True),
   selectGlobalMuons = cms.bool(False),
@@ -90,7 +90,7 @@ process.TrackerMuJetProducer05 = process.MuJetProducer.clone(
 )
 
 process.PFMuJetProducer05 = process.MuJetProducer.clone(
-  maxMass = cms.double(5.),
+  maxMass = cms.double(9.),
   muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
   selectTrackerMuons = cms.bool(False),
   selectGlobalMuons = cms.bool(False),

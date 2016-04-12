@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 from MuJetAnalysis.MuJetProducer.MuJetProducer_cfi import *
 
 TrackerMuJetProducer05 = MuJetProducer.clone(
-    maxMass = cms.double(5.),
+    maxMass = cms.double(9.),
     muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),
     selectTrackerMuons = cms.bool(True),
     selectGlobalMuons = cms.bool(False),
@@ -15,7 +15,7 @@ TrackerMuJetProducer05 = MuJetProducer.clone(
 )
 
 PFMuJetProducer05 = MuJetProducer.clone(
-    maxMass = cms.double(5.),
+    maxMass = cms.double(9.),
     muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
     selectTrackerMuons = cms.bool(False),
     selectGlobalMuons = cms.bool(False),
@@ -27,7 +27,16 @@ PFMuJetProducer05 = MuJetProducer.clone(
     maxTrackerNormChi2 = cms.double(-1.0)
 )
 
+TrackerMuJetProducer05GroupByDeltaROrMass = TrackerMuJetProducer05.clone(
+    groupingMode = cms.string("GroupByDeltaROrMass"),
+)
+PFMuJetProducer05GroupByDeltaROrMass = PFMuJetProducer05.clone(
+    groupingMode = cms.string("GroupByDeltaROrMass"),
+)
+
 MuJetProducers = cms.Sequence(
-	TrackerMuJetProducer05 * 
-	PFMuJetProducer05	
+    TrackerMuJetProducer05 * 
+    PFMuJetProducer05 *
+    TrackerMuJetProducer05GroupByDeltaROrMass *
+    PFMuJetProducer05GroupByDeltaROrMass
 )

@@ -98,6 +98,16 @@ void efficiency_hitrecovery(TString fileName){
   Int_t diMuonF_m1_FittedVtx_hitpix;
   Int_t diMuonF_m2_FittedVtx_hitpix;
 
+  Int_t diMuonC_m1_FittedVtx_hitpix_l2inc;
+  Int_t diMuonC_m2_FittedVtx_hitpix_l2inc;
+  Int_t diMuonF_m1_FittedVtx_hitpix_l2inc;
+  Int_t diMuonF_m2_FittedVtx_hitpix_l2inc;
+
+  Int_t diMuonC_m1_FittedVtx_hitpix_l3inc;
+  Int_t diMuonC_m2_FittedVtx_hitpix_l3inc;
+  Int_t diMuonF_m1_FittedVtx_hitpix_l3inc;
+  Int_t diMuonF_m2_FittedVtx_hitpix_l3inc;
+
   //============= Counters ===========================//
 
   Int_t ev_all = 0;
@@ -185,8 +195,52 @@ while ((chEl=(TChainElement*)next())) {
     t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix", &diMuonF_m1_FittedVtx_hitpix);
     t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix", &diMuonF_m2_FittedVtx_hitpix);
 
- for(int k=0;k<t->GetEntries();k++){
+    t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_l2inc", &diMuonC_m1_FittedVtx_hitpix_l2inc);
+    t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l2inc", &diMuonC_m2_FittedVtx_hitpix_l2inc);
+    t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l2inc", &diMuonF_m1_FittedVtx_hitpix_l2inc);
+    t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l2inc", &diMuonF_m2_FittedVtx_hitpix_l2inc);
+
+    t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_l3inc", &diMuonC_m1_FittedVtx_hitpix_l3inc);
+    t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l3inc", &diMuonC_m2_FittedVtx_hitpix_l3inc);
+    t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l3inc", &diMuonF_m1_FittedVtx_hitpix_l3inc);
+    t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l3inc", &diMuonF_m2_FittedVtx_hitpix_l3inc);
+    
+    for(int k=0;k<t->GetEntries();k++){
       t->GetEntry(k);
+
+      const bool firstPixelLayer((diMuonC_m1_FittedVtx_hitpix==1 || 
+				  diMuonC_m2_FittedVtx_hitpix==1) && 
+				 (diMuonF_m1_FittedVtx_hitpix==1 || 
+				  diMuonF_m2_FittedVtx_hitpix==1));
+      const bool secondPixelLayer((diMuonC_m1_FittedVtx_hitpix_l2inc==1 || 
+				   diMuonC_m2_FittedVtx_hitpix_l2inc==1) && 
+				  (diMuonF_m1_FittedVtx_hitpix_l2inc==1 || 
+				   diMuonF_m2_FittedVtx_hitpix_l2inc==1));
+      const bool thirdPixelLayer((diMuonC_m1_FittedVtx_hitpix_l3inc==1 || 
+				  diMuonC_m2_FittedVtx_hitpix_l3inc==1) && 
+				 (diMuonF_m1_FittedVtx_hitpix_l3inc==1 || 
+				  diMuonF_m2_FittedVtx_hitpix_l3inc==1));
+
+      const double firstPixelLayerRadius(4.4);
+      const double secondPixelLayerRadius(7.3);
+      const double thirdPixelLayerRadius(10.2);
+
+      bool pixelLayer;
+      double pixelLayerRadius;
+      int layers = 1;
+
+      if (layers==1) {
+	pixelLayer = firstPixelLayer;
+	pixelLayerRadius = firstPixelLayerRadius;
+      }
+      else if (layers==2) {
+	pixelLayer = secondPixelLayer;
+	pixelLayerRadius = secondPixelLayerRadius;
+      }
+      else if (layers==3) {
+	pixelLayer = thirdPixelLayer;
+	pixelLayerRadius = thirdPixelLayerRadius;
+      }
 
       ev_all++;
 
@@ -202,44 +256,44 @@ while ((chEl=(TChainElement*)next())) {
 
       //  ===========   GEN LEVEL information  ==============//
       if(is4GenMu8){
-        if(fabs(genA0_Lxy)<4.4 && fabs(genA1_Lxy)<4.4 && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
+        if(fabs(genA0_Lxy)< pixelLayerRadius && fabs(genA1_Lxy)< pixelLayerRadius && fabs(genA0_Lz)<34.5 && fabs(genA1_Lz)<34.5){
           ev_4gmlxylzcut++;
         }
       }
-//  =============  Reco information ====================//
+      //  =============  Reco information ====================//
       if(is4SelMu8){
-        if(isVertexOK){
-          ev_isVtxOK++;
-          if(is2MuJets){
-            ev_is2MuJets++;
-            if(is2DiMuons){
-              ev_is2DiMuons++;
-              if(is2DiMuonsFittedVtxOK){
-                ev_is2DiMuonsFittedVtxOK++;
-                if( (diMuonC_m1_FittedVtx_hitpix==1||diMuonC_m2_FittedVtx_hitpix==1)&&(diMuonF_m1_FittedVtx_hitpix==1||diMuonF_m2_FittedVtx_hitpix==1) ){
-                  ev_isPixelHitOK++;
-                  if(is2DiMuonsDzOK_FittedVtx){
-                    ev_is2DiMuonsDzOK_FittedVtx++;
-                    if(is2DiMuonsMassOK_FittedVtx){
-                      ev_is2DiMuonsMassOK_FittedVtx++;
-                      if(is2DiMuonsIsoTkOK_FittedVtx){
-                        ev_is2DiMuonsIsoTkOK_FittedVtx++;
-                        if(isDiMuonHLTFired){
-                          ev_isDiMuonHLTFired++;
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+	if(isVertexOK){
+	  ev_isVtxOK++;
+	  if(is2MuJets){
+	    ev_is2MuJets++;
+	    if(is2DiMuons){
+	      ev_is2DiMuons++;
+	      if(is2DiMuonsFittedVtxOK){
+		ev_is2DiMuonsFittedVtxOK++;
+		if( pixelLayer ){
+		  ev_isPixelHitOK++;
+		  if(is2DiMuonsDzOK_FittedVtx){
+		    ev_is2DiMuonsDzOK_FittedVtx++;
+		    if(is2DiMuonsMassOK_FittedVtx){
+		      ev_is2DiMuonsMassOK_FittedVtx++;
+		      if(is2DiMuonsIsoTkOK_FittedVtx){
+			ev_is2DiMuonsIsoTkOK_FittedVtx++;
+			if(isDiMuonHLTFired){
+			  ev_isDiMuonHLTFired++;
+			}
+		      }
+		    }
+		  }
+		}
+	      }
+	    }
+	  }
+	}
       }
     } // closing for loop
-myfile->Close();
-} // closing while loop
-  std::cout<<" Sample: " << fileName << endl;
+    myfile->Close();
+ } // closing while loop
+ std::cout<<" Sample: " << fileName << endl;
   std::cout<<" Events          "<<ev_all<<std::endl;
   std::cout<<" ================ GEN MUONS ========================================= "<<std::endl;
   std::cout<<" 1GenMu17                       "<<c1genm<<"   reff "<<c1genm/(ev_all*1.0)<<std::endl;
@@ -370,7 +424,7 @@ int size_8500 = null_8500.size();
 
 	TGraphErrors *gr_eff_mD_8500 = new TGraphErrors(size_8500,array_mGammaD_8500_cT,array_mGammaD_8500_eff,array_null_8500,array_mGammaD_8500_eff_uncert);
 
-	TLegend *leg = new TLegend(0.5,0.3,0.85,0.6);
+	TLegend *leg = new TLegend(0.5,0.15,0.85,0.45);
 	leg->SetBorderSize(0);
 	leg->SetFillColor(0);
 	leg->SetTextSize(0.045);
@@ -432,6 +486,46 @@ int size_8500 = null_8500.size();
 
 void bam_Analysis_hitrecovery()
 {
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112552/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112613/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112633/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112537/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112648/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112703/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112723/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151026_112739/0000/");
+
+//efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0275_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_025434/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0275_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_025509/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0275_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_025523/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0275_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_025545/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0275_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_025453/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0275_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_025601/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0275_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_025619/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0275_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_025635/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0275_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_025655/0000/");
+
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_2000_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151106/151106_194045/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_2000_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151106/151106_194119/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_2000_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151106/151106_194135/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_2000_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151106/151106_194154/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_2000_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151106/151106_194104/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_2000_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151106/151106_194216/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_2000_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151106/151106_194231/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_2000_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151106/151106_194246/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_2000_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151106/151106_194304/0000/");
+
+
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_8500_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_161154/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_8500_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_161209/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_8500_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_161008/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_8500_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_161139/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_8500_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_161229/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_8500_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_161255/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_8500_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_161309/0000/");
+efficiency_hitrecovery("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_8500_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_ANA_20151026/151027_161324/0000/");
+
+/*
 //These cT's should be in order.
 efficiency_hitrecovery("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
 efficiency_hitrecovery("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/");
@@ -499,8 +593,7 @@ efficiency_hitrecovery("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_
 efficiency_hitrecovery("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3/");
 efficiency_hitrecovery("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3/");
 
-
-
-
 makePlot();
 }     
+
+//  LocalWords:  hitrecovery

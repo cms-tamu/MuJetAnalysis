@@ -50,7 +50,7 @@ process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cfi")
 
 
 process.PFMuJetProducer05 = process.MuJetProducer.clone(
-    maxMass = cms.double(5.),
+    maxMass = cms.double(9.),
     minPt = cms.double(8.0),
     maxAbsEta = cms.double(2.4),
     muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),

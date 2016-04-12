@@ -1,0 +1,2814 @@
+   ------------------------------------------------------------
+  | Welcome to ROOT 6.02/05                http://root.cern.ch |
+  |                               (c) 1995-2014, The ROOT Team |
+  | Built for linuxx8664gcc                                    |
+  | From tag , 9 February 2015                                 |
+  | Try '.help', '.demo', '.license', '.credits', '.quit'/'.q' |
+   ------------------------------------------------------------
+
+
+Processing FakeInvestigation.C+...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation_C.so
+In file included from /home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/FakeInvestigation_C_ACLiC_dict.cxx:41:0:
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C: In function 'void makePlot()':
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C:1011:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0250_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C:1023:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0275_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C:1035:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0300_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C:1047:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_2000_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C:1058:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_8500_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C:1070:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0400_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C:1082:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0700_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C:1094:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_1000_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/FidCutNum/./FakeInvestigation.C:1106:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_1500_cT.size(); i++){
+                 ^
+Begin Fake Investigation
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/
+ Events          76800
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       27361   reff 0.356263
+ 2GenMu8                        24810   reff  0.906765
+ 3GenMu8                        16569   reff  0.667836
+ 4GenMu8                        6699   reff  0.404309
+ 4GenMu8 Lxy/Lz                 6699   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       27343  reff  0.356029
+ 2RecMu8                        24725  reff  0.904253
+ 3RecMu8                        16432  reff  0.66459
+ 4RecMu8                        6609  reff  0.402203
+ ================ EVENT variables ================= 
+ Events with VtxOK              6609    reff  1
+ Events with 2 muonjets         6065     reff  0.917688
+ Events with 2 Dimuons          6065    reff  1
+ Events with 2DimVtxOK          6065    reff  1
+ Events with 2DimHitPix         5979     reff  0.98582
+ Events with 2DimDzOK           5977   reff   0.999665
+ Events with 2DimMassOK         5829  reff   0.975238
+ Events with 2DimIsoOK          4671   reff   0.801338
+ Events with 2DimHLT            4576   reff   0.979662
+ ratio reco/gen                 0.683087 +/-  0.00568464
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 000_, 0
+mass_string, mass_double: 2000, 2
+ev_all                  : 76800
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/
+ Events          78400
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       28067   reff 0.357997
+ 2GenMu8                        25474   reff  0.907614
+ 3GenMu8                        17102   reff  0.671351
+ 4GenMu8                        7015   reff  0.410186
+ 4GenMu8 Lxy/Lz                 7015   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       27986  reff  0.356964
+ 2RecMu8                        25349  reff  0.905774
+ 3RecMu8                        16966  reff  0.669297
+ 4RecMu8                        6890  reff  0.406106
+ ================ EVENT variables ================= 
+ Events with VtxOK              6890    reff  1
+ Events with 2 muonjets         6343     reff  0.92061
+ Events with 2 Dimuons          6341    reff  0.999685
+ Events with 2DimVtxOK          6341    reff  1
+ Events with 2DimHitPix         6253     reff  0.986122
+ Events with 2DimDzOK           6253   reff   1
+ Events with 2DimMassOK         6108  reff   0.976811
+ Events with 2DimIsoOK          4944   reff   0.80943
+ Events with 2DimHLT            4867   reff   0.984426
+ ratio reco/gen                 0.693799 +/-  0.00550309
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 005_, 0.05
+mass_string, mass_double: 2000, 2
+ev_all                  : 78400
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/
+ Events          79200
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       28519   reff 0.360088
+ 2GenMu8                        25908   reff  0.908447
+ 3GenMu8                        17360   reff  0.670063
+ 4GenMu8                        7003   reff  0.403399
+ 4GenMu8 Lxy/Lz                 6994   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       28481  reff  0.359609
+ 2RecMu8                        25798  reff  0.905797
+ 3RecMu8                        17157  reff  0.665052
+ 4RecMu8                        6876  reff  0.400769
+ ================ EVENT variables ================= 
+ Events with VtxOK              6876    reff  1
+ Events with 2 muonjets         6324     reff  0.919721
+ Events with 2 Dimuons          6324    reff  1
+ Events with 2DimVtxOK          6324    reff  1
+ Events with 2DimHitPix         6197     reff  0.979918
+ Events with 2DimDzOK           6196   reff   0.999839
+ Events with 2DimMassOK         6064  reff   0.978696
+ Events with 2DimIsoOK          4874   reff   0.80376
+ Events with 2DimHLT            4793   reff   0.983381
+ ratio reco/gen                 0.685302 +/-  0.00555297
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 010_, 0.1
+mass_string, mass_double: 2000, 2
+ev_all                  : 79200
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/
+ Events          79200
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       28447   reff 0.359179
+ 2GenMu8                        25801   reff  0.906985
+ 3GenMu8                        17260   reff  0.668966
+ 4GenMu8                        6952   reff  0.402781
+ 4GenMu8 Lxy/Lz                 6906   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       28367  reff  0.358169
+ 2RecMu8                        25623  reff  0.903268
+ 3RecMu8                        17047  reff  0.665301
+ 4RecMu8                        6820  reff  0.40007
+ ================ EVENT variables ================= 
+ Events with VtxOK              6820    reff  1
+ Events with 2 muonjets         6264     reff  0.918475
+ Events with 2 Dimuons          6263    reff  0.99984
+ Events with 2DimVtxOK          6263    reff  1
+ Events with 2DimHitPix         6111     reff  0.97573
+ Events with 2DimDzOK           6109   reff   0.999673
+ Events with 2DimMassOK         5969  reff   0.977083
+ Events with 2DimIsoOK          4811   reff   0.805998
+ Events with 2DimHLT            4706   reff   0.978175
+ ratio reco/gen                 0.681436 +/-  0.00560657
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 020_, 0.2
+mass_string, mass_double: 2000, 2
+ev_all                  : 79200
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/
+ Events          78400
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       28127   reff 0.358763
+ 2GenMu8                        25514   reff  0.9071
+ 3GenMu8                        17101   reff  0.670259
+ 4GenMu8                        6972   reff  0.407695
+ 4GenMu8 Lxy/Lz                 6443   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       28079  reff  0.358151
+ 2RecMu8                        25364  reff  0.903309
+ 3RecMu8                        16861  reff  0.664761
+ 4RecMu8                        6774  reff  0.401756
+ ================ EVENT variables ================= 
+ Events with VtxOK              6774    reff  1
+ Events with 2 muonjets         6186     reff  0.913198
+ Events with 2 Dimuons          6185    reff  0.999838
+ Events with 2DimVtxOK          6185    reff  1
+ Events with 2DimHitPix         5671     reff  0.916896
+ Events with 2DimDzOK           5668   reff   0.999471
+ Events with 2DimMassOK         5525  reff   0.974771
+ Events with 2DimIsoOK          4429   reff   0.801629
+ Events with 2DimHLT            4325   reff   0.976518
+ ratio reco/gen                 0.671271 +/-  0.00585226
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 050_, 0.5
+mass_string, mass_double: 2000, 2
+ev_all                  : 78400
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/
+ Events          78400
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       28302   reff 0.360995
+ 2GenMu8                        25697   reff  0.907957
+ 3GenMu8                        17189   reff  0.668911
+ 4GenMu8                        6924   reff  0.402816
+ 4GenMu8 Lxy/Lz                 4955   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       28195  reff  0.35963
+ 2RecMu8                        25417  reff  0.901472
+ 3RecMu8                        16815  reff  0.661565
+ 4RecMu8                        6591  reff  0.391971
+ ================ EVENT variables ================= 
+ Events with VtxOK              6591    reff  1
+ Events with 2 muonjets         6033     reff  0.915339
+ Events with 2 Dimuons          6032    reff  0.999834
+ Events with 2DimVtxOK          6032    reff  1
+ Events with 2DimHitPix         4389     reff  0.727619
+ Events with 2DimDzOK           4386   reff   0.999316
+ Events with 2DimMassOK         4285  reff   0.976972
+ Events with 2DimIsoOK          3459   reff   0.807235
+ Events with 2DimHLT            3374   reff   0.975426
+ ratio reco/gen                 0.680928 +/-  0.00662175
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 100_, 1
+mass_string, mass_double: 2000, 2
+ev_all                  : 78400
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/
+ Events          79200
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       28395   reff 0.358523
+ 2GenMu8                        25783   reff  0.908012
+ 3GenMu8                        17145   reff  0.664973
+ 4GenMu8                        7034   reff  0.410265
+ 4GenMu8 Lxy/Lz                 2766   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       28191  reff  0.355947
+ 2RecMu8                        25269  reff  0.89635
+ 3RecMu8                        16434  reff  0.650362
+ 4RecMu8                        6355  reff  0.386698
+ ================ EVENT variables ================= 
+ Events with VtxOK              6355    reff  1
+ Events with 2 muonjets         5688     reff  0.895043
+ Events with 2 Dimuons          5687    reff  0.999824
+ Events with 2DimVtxOK          5685    reff  0.999648
+ Events with 2DimHitPix         2488     reff  0.437643
+ Events with 2DimDzOK           2486   reff   0.999196
+ Events with 2DimMassOK         2417  reff   0.972245
+ Events with 2DimIsoOK          1921   reff   0.794787
+ Events with 2DimHLT            1866   reff   0.971369
+ ratio reco/gen                 0.67462 +/-  0.00890838
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 200_, 2
+mass_string, mass_double: 2000, 2
+ev_all                  : 79200
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/
+ Events          75200
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       26967   reff 0.358604
+ 2GenMu8                        24455   reff  0.906849
+ 3GenMu8                        16221   reff  0.6633
+ 4GenMu8                        6597   reff  0.406695
+ 4GenMu8 Lxy/Lz                 1529   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       26632  reff  0.354149
+ 2RecMu8                        23710  reff  0.890282
+ 3RecMu8                        15226  reff  0.642176
+ 4RecMu8                        5700  reff  0.37436
+ ================ EVENT variables ================= 
+ Events with VtxOK              5700    reff  1
+ Events with 2 muonjets         5001     reff  0.877368
+ Events with 2 Dimuons          5001    reff  1
+ Events with 2DimVtxOK          5000    reff  0.9998
+ Events with 2DimHitPix         1485     reff  0.297
+ Events with 2DimDzOK           1479   reff   0.99596
+ Events with 2DimMassOK         1445  reff   0.977011
+ Events with 2DimIsoOK          1165   reff   0.806228
+ Events with 2DimHLT            1138   reff   0.976824
+ ratio reco/gen                 0.744277 +/-  0.011157
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 300_, 3
+mass_string, mass_double: 2000, 2
+ev_all                  : 75200
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f/
+ Events          78400
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       28245   reff 0.360268
+ 2GenMu8                        25658   reff  0.908409
+ 3GenMu8                        17116   reff  0.667082
+ 4GenMu8                        6984   reff  0.408039
+ 4GenMu8 Lxy/Lz                 744   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       27425  reff  0.349809
+ 2RecMu8                        24186  reff  0.881896
+ 3RecMu8                        15198  reff  0.62838
+ 4RecMu8                        5336  reff  0.351099
+ ================ EVENT variables ================= 
+ Events with VtxOK              5336    reff  1
+ Events with 2 muonjets         4603     reff  0.862631
+ Events with 2 Dimuons          4599    reff  0.999131
+ Events with 2DimVtxOK          4598    reff  0.999783
+ Events with 2DimHitPix         715     reff  0.155502
+ Events with 2DimDzOK           711   reff   0.994406
+ Events with 2DimMassOK         696  reff   0.978903
+ Events with 2DimIsoOK          561   reff   0.806034
+ Events with 2DimHLT            548   reff   0.976827
+ ratio reco/gen                 0.736559 +/-  0.0161495
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 500_, 5
+mass_string, mass_double: 2000, 2
+ev_all                  : 78400
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          509300
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       182528   reff 0.35839
+ 2GenMu8                        166263   reff  0.91089
+ 3GenMu8                        111295   reff  0.669391
+ 4GenMu8                        45654   reff  0.410207
+ 4GenMu8 Lxy/Lz                 1661   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       164647  reff  0.323281
+ 2RecMu8                        139801  reff  0.849095
+ 3RecMu8                        80909  reff  0.578744
+ 4RecMu8                        25803  reff  0.318914
+ ================ EVENT variables ================= 
+ Events with VtxOK              25803    reff  1
+ Events with 2 muonjets         21044     reff  0.815564
+ Events with 2 Dimuons          21037    reff  0.999667
+ Events with 2DimVtxOK          21024    reff  0.999382
+ Events with 2DimHitPix         1639     reff  0.0779585
+ Events with 2DimDzOK           1618   reff   0.987187
+ Events with 2DimMassOK         1585  reff   0.979604
+ Events with 2DimIsoOK          1264   reff   0.797476
+ Events with 2DimHLT            1206   reff   0.954114
+ ratio reco/gen                 0.726069 +/-  0.0109427
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 1000, 10
+mass_string, mass_double: 2000, 2
+ev_all                  : 509300
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          438250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       156792   reff 0.357768
+ 2GenMu8                        142739   reff  0.910372
+ 3GenMu8                        95793   reff  0.671106
+ 4GenMu8                        39157   reff  0.408767
+ 4GenMu8 Lxy/Lz                 431   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       117093  reff  0.267183
+ 2RecMu8                        91489  reff  0.781336
+ 3RecMu8                        44867  reff  0.490409
+ 4RecMu8                        12290  reff  0.273921
+ ================ EVENT variables ================= 
+ Events with VtxOK              12290    reff  1
+ Events with 2 muonjets         9490     reff  0.772172
+ Events with 2 Dimuons          9489    reff  0.999895
+ Events with 2DimVtxOK          9485    reff  0.999578
+ Events with 2DimHitPix         427     reff  0.0450185
+ Events with 2DimDzOK           418   reff   0.978923
+ Events with 2DimMassOK         413  reff   0.988038
+ Events with 2DimIsoOK          321   reff   0.77724
+ Events with 2DimHLT            313   reff   0.975078
+ ratio reco/gen                 0.726218 +/-  0.0214782
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 2000, 20
+mass_string, mass_double: 2000, 2
+ev_all                  : 438250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          126250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       40585   reff 0.321465
+ 2GenMu8                        39734   reff  0.979032
+ 3GenMu8                        26613   reff  0.669779
+ 4GenMu8                        17879   reff  0.671815
+ 4GenMu8 Lxy/Lz                 17879   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       40369  reff  0.319754
+ 2RecMu8                        38981  reff  0.965617
+ 3RecMu8                        26071  reff  0.668813
+ 4RecMu8                        16248  reff  0.623221
+ ================ EVENT variables ================= 
+ Events with VtxOK              16248    reff  1
+ Events with 2 muonjets         15845     reff  0.975197
+ Events with 2 Dimuons          15841    reff  0.999748
+ Events with 2DimVtxOK          15764    reff  0.995139
+ Events with 2DimHitPix         14399     reff  0.91341
+ Events with 2DimDzOK           14376   reff   0.998403
+ Events with 2DimMassOK         14352  reff   0.998331
+ Events with 2DimIsoOK          11578   reff   0.806717
+ Events with 2DimHLT            11207   reff   0.967956
+ ratio reco/gen                 0.626825 +/-  0.00361708
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 000_, 0
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 126250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          146788
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       47372   reff 0.322724
+ 2GenMu8                        46305   reff  0.977476
+ 3GenMu8                        30837   reff  0.665954
+ 4GenMu8                        20729   reff  0.672212
+ 4GenMu8 Lxy/Lz                 19966   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       47018  reff  0.320312
+ 2RecMu8                        45127  reff  0.959781
+ 3RecMu8                        30021  reff  0.665256
+ 4RecMu8                        18427  reff  0.613804
+ ================ EVENT variables ================= 
+ Events with VtxOK              18427    reff  1
+ Events with 2 muonjets         17886     reff  0.970641
+ Events with 2 Dimuons          17878    reff  0.999553
+ Events with 2DimVtxOK          17776    reff  0.994295
+ Events with 2DimHitPix         15697     reff  0.883045
+ Events with 2DimDzOK           15664   reff   0.997898
+ Events with 2DimMassOK         15639  reff   0.998404
+ Events with 2DimIsoOK          12640   reff   0.808236
+ Events with 2DimHLT            12185   reff   0.964003
+ ratio reco/gen                 0.610287 +/-  0.00345139
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 005_, 0.05
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 146788
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          143250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       46090   reff 0.321745
+ 2GenMu8                        45090   reff  0.978303
+ 3GenMu8                        30157   reff  0.668818
+ 4GenMu8                        20140   reff  0.667838
+ 4GenMu8 Lxy/Lz                 16385   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       45695  reff  0.318988
+ 2RecMu8                        43735  reff  0.957107
+ 3RecMu8                        29176  reff  0.667109
+ 4RecMu8                        17670  reff  0.605635
+ ================ EVENT variables ================= 
+ Events with VtxOK              17670    reff  1
+ Events with 2 muonjets         17102     reff  0.967855
+ Events with 2 Dimuons          17101    reff  0.999942
+ Events with 2DimVtxOK          16996    reff  0.99386
+ Events with 2DimHitPix         12995     reff  0.764592
+ Events with 2DimDzOK           12963   reff   0.997538
+ Events with 2DimMassOK         12942  reff   0.99838
+ Events with 2DimIsoOK          10347   reff   0.79949
+ Events with 2DimHLT            9995   reff   0.96598
+ ratio reco/gen                 0.610009 +/-  0.00381041
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 010_, 0.1
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 143250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       48830   reff 0.32231
+ 2GenMu8                        47775   reff  0.978394
+ 3GenMu8                        31887   reff  0.667441
+ 4GenMu8                        21247   reff  0.666322
+ 4GenMu8 Lxy/Lz                 11059   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       48249  reff  0.318475
+ 2RecMu8                        45980  reff  0.952973
+ 3RecMu8                        30468  reff  0.662636
+ 4RecMu8                        18003  reff  0.590882
+ ================ EVENT variables ================= 
+ Events with VtxOK              18003    reff  1
+ Events with 2 muonjets         17042     reff  0.94662
+ Events with 2 Dimuons          17035    reff  0.999589
+ Events with 2DimVtxOK          16900    reff  0.992075
+ Events with 2DimHitPix         8932     reff  0.528521
+ Events with 2DimDzOK           8907   reff   0.997201
+ Events with 2DimMassOK         8897  reff   0.998877
+ Events with 2DimIsoOK          7207   reff   0.810048
+ Events with 2DimHLT            6952   reff   0.964618
+ ratio reco/gen                 0.628628 +/-  0.00459455
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 020_, 0.2
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 151500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       48598   reff 0.321309
+ 2GenMu8                        47532   reff  0.978065
+ 3GenMu8                        31757   reff  0.668118
+ 4GenMu8                        21243   reff  0.668923
+ 4GenMu8 Lxy/Lz                 3621   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       47345  reff  0.313025
+ 2RecMu8                        44345  reff  0.936635
+ 3RecMu8                        28983  reff  0.65358
+ 4RecMu8                        15772  reff  0.544181
+ ================ EVENT variables ================= 
+ Events with VtxOK              15772    reff  1
+ Events with 2 muonjets         13648     reff  0.865331
+ Events with 2 Dimuons          13643    reff  0.999634
+ Events with 2DimVtxOK          13554    reff  0.993477
+ Events with 2DimHitPix         3062     reff  0.225911
+ Events with 2DimDzOK           3048   reff   0.995428
+ Events with 2DimMassOK         3045  reff   0.999016
+ Events with 2DimIsoOK          2465   reff   0.809524
+ Events with 2DimHLT            2362   reff   0.958215
+ ratio reco/gen                 0.652306 +/-  0.00791425
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 050_, 0.5
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 151250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       48032   reff 0.322904
+ 2GenMu8                        46959   reff  0.977661
+ 3GenMu8                        31251   reff  0.665495
+ 4GenMu8                        20870   reff  0.667819
+ 4GenMu8 Lxy/Lz                 1173   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       44082  reff  0.29635
+ 2RecMu8                        40118  reff  0.910077
+ 3RecMu8                        24800  reff  0.618176
+ 4RecMu8                        12019  reff  0.484637
+ ================ EVENT variables ================= 
+ Events with VtxOK              12019    reff  1
+ Events with 2 muonjets         9385     reff  0.780847
+ Events with 2 Dimuons          9382    reff  0.99968
+ Events with 2DimVtxOK          9314    reff  0.992752
+ Events with 2DimHitPix         1058     reff  0.113592
+ Events with 2DimDzOK           1048   reff   0.990548
+ Events with 2DimMassOK         1047  reff   0.999046
+ Events with 2DimIsoOK          848   reff   0.809933
+ Events with 2DimHLT            813   reff   0.958726
+ ratio reco/gen                 0.693095 +/-  0.0134663
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 100_, 1
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 148750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       47472   reff 0.321299
+ 2GenMu8                        46443   reff  0.978324
+ 3GenMu8                        30999   reff  0.667463
+ 4GenMu8                        20916   reff  0.674731
+ 4GenMu8 Lxy/Lz                 367   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       36796  reff  0.249042
+ 2RecMu8                        31828  reff  0.864985
+ 3RecMu8                        17313  reff  0.543955
+ 4RecMu8                        7238  reff  0.418067
+ ================ EVENT variables ================= 
+ Events with VtxOK              7238    reff  1
+ Events with 2 muonjets         5173     reff  0.7147
+ Events with 2 Dimuons          5172    reff  0.999807
+ Events with 2DimVtxOK          5140    reff  0.993813
+ Events with 2DimHitPix         316     reff  0.0614786
+ Events with 2DimDzOK           310   reff   0.981013
+ Events with 2DimMassOK         310  reff   1
+ Events with 2DimIsoOK          253   reff   0.816129
+ Events with 2DimHLT            243   reff   0.960474
+ ratio reco/gen                 0.662125 +/-  0.0246896
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 200_, 2
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 147750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       48720   reff 0.322116
+ 2GenMu8                        47638   reff  0.977791
+ 3GenMu8                        31844   reff  0.668458
+ 4GenMu8                        21363   reff  0.670864
+ 4GenMu8 Lxy/Lz                 162   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       32180  reff  0.21276
+ 2RecMu8                        26739  reff  0.83092
+ 3RecMu8                        12874  reff  0.481469
+ 4RecMu8                        4736  reff  0.367873
+ ================ EVENT variables ================= 
+ Events with VtxOK              4736    reff  1
+ Events with 2 muonjets         3232     reff  0.682432
+ Events with 2 Dimuons          3232    reff  1
+ Events with 2DimVtxOK          3216    reff  0.99505
+ Events with 2DimHitPix         156     reff  0.0485075
+ Events with 2DimDzOK           154   reff   0.987179
+ Events with 2DimMassOK         154  reff   1
+ Events with 2DimIsoOK          121   reff   0.785714
+ Events with 2DimHLT            118   reff   0.975207
+ ratio reco/gen                 0.728395 +/-  0.0349458
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 300_, 3
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 151250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          144250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       46554   reff 0.322731
+ 2GenMu8                        45550   reff  0.978434
+ 3GenMu8                        30403   reff  0.667464
+ 4GenMu8                        20414   reff  0.671447
+ 4GenMu8 Lxy/Lz                 55   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       23384  reff  0.162107
+ 2RecMu8                        18092  reff  0.773691
+ 3RecMu8                        6912  reff  0.382047
+ 4RecMu8                        2331  reff  0.33724
+ ================ EVENT variables ================= 
+ Events with VtxOK              2331    reff  1
+ Events with 2 muonjets         1512     reff  0.648649
+ Events with 2 Dimuons          1512    reff  1
+ Events with 2DimVtxOK          1507    reff  0.996693
+ Events with 2DimHitPix         54     reff  0.0358328
+ Events with 2DimDzOK           52   reff   0.962963
+ Events with 2DimMassOK         52  reff   1
+ Events with 2DimIsoOK          39   reff   0.75
+ Events with 2DimHLT            37   reff   0.948718
+ ratio reco/gen                 0.672727 +/-  0.0632693
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 500_, 5
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 144250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          340022
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       109040   reff 0.320685
+ 2GenMu8                        106699   reff  0.978531
+ 3GenMu8                        71337   reff  0.668582
+ 4GenMu8                        47919   reff  0.671727
+ 4GenMu8 Lxy/Lz                 44   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       34048  reff  0.100135
+ 2RecMu8                        23734  reff  0.697075
+ 3RecMu8                        6202  reff  0.261313
+ 4RecMu8                        1822  reff  0.293776
+ ================ EVENT variables ================= 
+ Events with VtxOK              1822    reff  1
+ Events with 2 muonjets         1147     reff  0.629528
+ Events with 2 Dimuons          1147    reff  1
+ Events with 2DimVtxOK          1142    reff  0.995641
+ Events with 2DimHitPix         35     reff  0.030648
+ Events with 2DimDzOK           33   reff   0.942857
+ Events with 2DimMassOK         33  reff   1
+ Events with 2DimIsoOK          23   reff   0.69697
+ Events with 2DimHLT            22   reff   0.956522
+ ratio reco/gen                 0.5 +/-  0.0753778
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 1000, 10
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 340022
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          291920
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       93908   reff 0.321691
+ 2GenMu8                        91909   reff  0.978713
+ 3GenMu8                        61471   reff  0.668825
+ 4GenMu8                        41381   reff  0.673179
+ 4GenMu8 Lxy/Lz                 11   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       17285  reff  0.0592114
+ 2RecMu8                        10895  reff  0.630315
+ 3RecMu8                        1868  reff  0.171455
+ 4RecMu8                        429  reff  0.229657
+ ================ EVENT variables ================= 
+ Events with VtxOK              429    reff  1
+ Events with 2 muonjets         267     reff  0.622378
+ Events with 2 Dimuons          267    reff  1
+ Events with 2DimVtxOK          265    reff  0.992509
+ Events with 2DimHitPix         10     reff  0.0377358
+ Events with 2DimDzOK           9   reff   0.9
+ Events with 2DimMassOK         9  reff   1
+ Events with 2DimIsoOK          7   reff   0.777778
+ Events with 2DimHLT            7   reff   1
+ ratio reco/gen                 0.636364 +/-  0.145041
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 2000, 20
+mass_string, mass_double: 0250, 0.25
+ev_all                  : 291920
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          76670
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       42518   reff 0.554558
+ 2GenMu8                        40693   reff  0.957077
+ 3GenMu8                        33829   reff  0.831322
+ 4GenMu8                        15596   reff  0.461025
+ 4GenMu8 Lxy/Lz                 15596   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       42492  reff  0.554219
+ 2RecMu8                        40638  reff  0.956368
+ 3RecMu8                        33650  reff  0.828043
+ 4RecMu8                        15510  reff  0.460921
+ ================ EVENT variables ================= 
+ Events with VtxOK              15510    reff  1
+ Events with 2 muonjets         14312     reff  0.92276
+ Events with 2 Dimuons          14304    reff  0.999441
+ Events with 2DimVtxOK          14304    reff  1
+ Events with 2DimHitPix         14228     reff  0.994687
+ Events with 2DimDzOK           14225   reff   0.999789
+ Events with 2DimMassOK         13300  reff   0.934974
+ Events with 2DimIsoOK          10649   reff   0.800677
+ Events with 2DimHLT            10549   reff   0.990609
+ ratio reco/gen                 0.676391 +/-  0.0037463
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 000_, 0
+mass_string, mass_double: 8500, 8.5
+ev_all                  : 76670
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/
+ Events          76800
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       42776   reff 0.556979
+ 2GenMu8                        40972   reff  0.957827
+ 3GenMu8                        33916   reff  0.827785
+ 4GenMu8                        15691   reff  0.462643
+ 4GenMu8 Lxy/Lz                 15691   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       42737  reff  0.556471
+ 2RecMu8                        40915  reff  0.957367
+ 3RecMu8                        33738  reff  0.824588
+ 4RecMu8                        15602  reff  0.462446
+ ================ EVENT variables ================= 
+ Events with VtxOK              15602    reff  1
+ Events with 2 muonjets         14332     reff  0.9186
+ Events with 2 Dimuons          14325    reff  0.999512
+ Events with 2DimVtxOK          14325    reff  1
+ Events with 2DimHitPix         14238     reff  0.993927
+ Events with 2DimDzOK           14237   reff   0.99993
+ Events with 2DimMassOK         13283  reff   0.932992
+ Events with 2DimIsoOK          10654   reff   0.802078
+ Events with 2DimHLT            10558   reff   0.990989
+ ratio reco/gen                 0.67287 +/-  0.00374542
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 005_, 0.05
+mass_string, mass_double: 8500, 8.5
+ev_all                  : 76800
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/
+ Events          77600
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       43107   reff 0.555503
+ 2GenMu8                        41305   reff  0.958197
+ 3GenMu8                        34347   reff  0.831546
+ 4GenMu8                        15778   reff  0.459371
+ 4GenMu8 Lxy/Lz                 15777   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       43081  reff  0.555168
+ 2RecMu8                        41248  reff  0.957452
+ 3RecMu8                        34156  reff  0.828064
+ 4RecMu8                        15661  reff  0.458514
+ ================ EVENT variables ================= 
+ Events with VtxOK              15661    reff  1
+ Events with 2 muonjets         14462     reff  0.92344
+ Events with 2 Dimuons          14448    reff  0.999032
+ Events with 2DimVtxOK          14448    reff  1
+ Events with 2DimHitPix         14367     reff  0.994394
+ Events with 2DimDzOK           14363   reff   0.999722
+ Events with 2DimMassOK         13416  reff   0.934067
+ Events with 2DimIsoOK          10708   reff   0.798151
+ Events with 2DimHLT            10585   reff   0.988513
+ ratio reco/gen                 0.670913 +/-  0.0037409
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 010_, 0.1
+mass_string, mass_double: 8500, 8.5
+ev_all                  : 77600
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/
+ Events          79200
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       44059   reff 0.556301
+ 2GenMu8                        42219   reff  0.958238
+ 3GenMu8                        35132   reff  0.832137
+ 4GenMu8                        16109   reff  0.458528
+ 4GenMu8 Lxy/Lz                 16103   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       44035  reff  0.555997
+ 2RecMu8                        42165  reff  0.957534
+ 3RecMu8                        34910  reff  0.827938
+ 4RecMu8                        15993  reff  0.458121
+ ================ EVENT variables ================= 
+ Events with VtxOK              15993    reff  1
+ Events with 2 muonjets         14668     reff  0.917151
+ Events with 2 Dimuons          14660    reff  0.999455
+ Events with 2DimVtxOK          14660    reff  1
+ Events with 2DimHitPix         14573     reff  0.994065
+ Events with 2DimDzOK           14572   reff   0.999931
+ Events with 2DimMassOK         13628  reff   0.935218
+ Events with 2DimIsoOK          10865   reff   0.797256
+ Events with 2DimHLT            10771   reff   0.991348
+ ratio reco/gen                 0.668882 +/-  0.00370862
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 020_, 0.2
+mass_string, mass_double: 8500, 8.5
+ev_all                  : 79200
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/
+ Events          79200
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       44028   reff 0.555909
+ 2GenMu8                        42182   reff  0.958072
+ 3GenMu8                        35065   reff  0.831279
+ 4GenMu8                        16162   reff  0.460915
+ 4GenMu8 Lxy/Lz                 16121   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       43995  reff  0.555492
+ 2RecMu8                        42129  reff  0.957586
+ 3RecMu8                        34873  reff  0.827767
+ 4RecMu8                        15943  reff  0.457173
+ ================ EVENT variables ================= 
+ Events with VtxOK              15943    reff  1
+ Events with 2 muonjets         14711     reff  0.922725
+ Events with 2 Dimuons          14704    reff  0.999524
+ Events with 2DimVtxOK          14704    reff  1
+ Events with 2DimHitPix         14576     reff  0.991295
+ Events with 2DimDzOK           14564   reff   0.999177
+ Events with 2DimMassOK         13634  reff   0.936144
+ Events with 2DimIsoOK          10901   reff   0.799545
+ Events with 2DimHLT            10808   reff   0.991469
+ ratio reco/gen                 0.67043 +/-  0.00370216
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 050_, 0.5
+mass_string, mass_double: 8500, 8.5
+ev_all                  : 79200
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/
+ Events          79200
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       43971   reff 0.555189
+ 2GenMu8                        42112   reff  0.957722
+ 3GenMu8                        34922   reff  0.829265
+ 4GenMu8                        16018   reff  0.458679
+ 4GenMu8 Lxy/Lz                 15778   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       43910  reff  0.554419
+ 2RecMu8                        42009  reff  0.956707
+ 3RecMu8                        34612  reff  0.823919
+ 4RecMu8                        15772  reff  0.45568
+ ================ EVENT variables ================= 
+ Events with VtxOK              15772    reff  1
+ Events with 2 muonjets         14488     reff  0.91859
+ Events with 2 Dimuons          14486    reff  0.999862
+ Events with 2DimVtxOK          14486    reff  1
+ Events with 2DimHitPix         14189     reff  0.979497
+ Events with 2DimDzOK           14159   reff   0.997886
+ Events with 2DimMassOK         13255  reff   0.936154
+ Events with 2DimIsoOK          10569   reff   0.797359
+ Events with 2DimHLT            10462   reff   0.989876
+ ratio reco/gen                 0.663075 +/-  0.00376289
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 100_, 1
+mass_string, mass_double: 8500, 8.5
+ev_all                  : 79200
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/
+ Events          78400
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       43542   reff 0.555383
+ 2GenMu8                        41728   reff  0.958339
+ 3GenMu8                        34632   reff  0.829946
+ 4GenMu8                        15900   reff  0.459113
+ 4GenMu8 Lxy/Lz                 14422   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       43488  reff  0.554694
+ 2RecMu8                        41613  reff  0.956885
+ 3RecMu8                        34308  reff  0.824454
+ 4RecMu8                        15523  reff  0.45246
+ ================ EVENT variables ================= 
+ Events with VtxOK              15523    reff  1
+ Events with 2 muonjets         14203     reff  0.914965
+ Events with 2 Dimuons          14197    reff  0.999578
+ Events with 2DimVtxOK          14197    reff  1
+ Events with 2DimHitPix         12944     reff  0.911742
+ Events with 2DimDzOK           12878   reff   0.994901
+ Events with 2DimMassOK         12075  reff   0.937646
+ Events with 2DimIsoOK          9631   reff   0.797598
+ Events with 2DimHLT            9501   reff   0.986502
+ ratio reco/gen                 0.658785 +/-  0.00394796
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 200_, 2
+mass_string, mass_double: 8500, 8.5
+ev_all                  : 78400
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/
+ Events          72000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       39809   reff 0.552903
+ 2GenMu8                        38137   reff  0.957999
+ 3GenMu8                        31653   reff  0.829981
+ 4GenMu8                        14485   reff  0.457619
+ 4GenMu8 Lxy/Lz                 11401   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       39748  reff  0.552056
+ 2RecMu8                        38015  reff  0.9564
+ 3RecMu8                        31220  reff  0.821255
+ 4RecMu8                        13995  reff  0.44827
+ ================ EVENT variables ================= 
+ Events with VtxOK              13995    reff  1
+ Events with 2 muonjets         12813     reff  0.915541
+ Events with 2 Dimuons          12803    reff  0.99922
+ Events with 2DimVtxOK          12803    reff  1
+ Events with 2DimHitPix         10305     reff  0.804889
+ Events with 2DimDzOK           10236   reff   0.993304
+ Events with 2DimMassOK         9643  reff   0.942067
+ Events with 2DimIsoOK          7749   reff   0.803588
+ Events with 2DimHLT            7640   reff   0.985934
+ ratio reco/gen                 0.670117 +/-  0.00440336
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 300_, 3
+mass_string, mass_double: 8500, 8.5
+ev_all                  : 72000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b/
+ Events          79200
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       44200   reff 0.558081
+ 2GenMu8                        42328   reff  0.957647
+ 3GenMu8                        35069   reff  0.828506
+ 4GenMu8                        16157   reff  0.46072
+ 4GenMu8 Lxy/Lz                 9051   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       44047  reff  0.556149
+ 2RecMu8                        42024  reff  0.954072
+ 3RecMu8                        34155  reff  0.81275
+ 4RecMu8                        15067  reff  0.441136
+ ================ EVENT variables ================= 
+ Events with VtxOK              15067    reff  1
+ Events with 2 muonjets         13632     reff  0.904759
+ Events with 2 Dimuons          13628    reff  0.999707
+ Events with 2DimVtxOK          13628    reff  1
+ Events with 2DimHitPix         8343     reff  0.612195
+ Events with 2DimDzOK           8232   reff   0.986695
+ Events with 2DimMassOK         7774  reff   0.944363
+ Events with 2DimIsoOK          6234   reff   0.801904
+ Events with 2DimHLT            6151   reff   0.986686
+ ratio reco/gen                 0.679593 +/-  0.00490486
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 500_, 5
+mass_string, mass_double: 8500, 8.5
+ev_all                  : 79200
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_000_Evt_80k_PATANA_v4/151117_123308/asdf/
+ Events          98250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       32026   reff 0.325964
+ 2GenMu8                        30666   reff  0.957535
+ 3GenMu8                        20536   reff  0.669667
+ 4GenMu8                        12280   reff  0.597974
+ 4GenMu8 Lxy/Lz                 12280   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       31890  reff  0.32458
+ 2RecMu8                        30236  reff  0.948134
+ 3RecMu8                        20159  reff  0.666722
+ 4RecMu8                        11498  reff  0.570366
+ ================ EVENT variables ================= 
+ Events with VtxOK              11498    reff  1
+ Events with 2 muonjets         11072     reff  0.96295
+ Events with 2 Dimuons          11072    reff  1
+ Events with 2DimVtxOK          11056    reff  0.998555
+ Events with 2DimHitPix         10215     reff  0.923933
+ Events with 2DimDzOK           10200   reff   0.998532
+ Events with 2DimMassOK         10189  reff   0.998922
+ Events with 2DimIsoOK          8226   reff   0.807341
+ Events with 2DimHLT            8010   reff   0.973742
+ ratio reco/gen                 0.65228 +/-  0.00429767
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 000_, 0
+mass_string, mass_double: 0275, 0.275
+ev_all                  : 98250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_005_Evt_80k_PATANA_v4/151117_151528/asdf/
+ Events          93250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       30499   reff 0.327067
+ 2GenMu8                        29158   reff  0.956031
+ 3GenMu8                        19547   reff  0.670382
+ 4GenMu8                        11802   reff  0.603776
+ 4GenMu8 Lxy/Lz                 11462   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       30365  reff  0.32563
+ 2RecMu8                        28671  reff  0.944212
+ 3RecMu8                        19131  reff  0.66726
+ 4RecMu8                        10934  reff  0.571533
+ ================ EVENT variables ================= 
+ Events with VtxOK              10934    reff  1
+ Events with 2 muonjets         10548     reff  0.964697
+ Events with 2 Dimuons          10546    reff  0.99981
+ Events with 2DimVtxOK          10514    reff  0.996966
+ Events with 2DimHitPix         9452     reff  0.898992
+ Events with 2DimDzOK           9437   reff   0.998413
+ Events with 2DimMassOK         9419  reff   0.998093
+ Events with 2DimIsoOK          7582   reff   0.804969
+ Events with 2DimHLT            7370   reff   0.972039
+ ratio reco/gen                 0.642994 +/-  0.00447518
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 005_, 0.05
+mass_string, mass_double: 0275, 0.275
+ev_all                  : 93250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_010_Evt_80k_PATANA_v4/151117_151628/asdf/
+ Events          151750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       49506   reff 0.326234
+ 2GenMu8                        47414   reff  0.957742
+ 3GenMu8                        31830   reff  0.671321
+ 4GenMu8                        18949   reff  0.595319
+ 4GenMu8 Lxy/Lz                 15926   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       49258  reff  0.3246
+ 2RecMu8                        46490  reff  0.943806
+ 3RecMu8                        31055  reff  0.667993
+ 4RecMu8                        17270  reff  0.55611
+ ================ EVENT variables ================= 
+ Events with VtxOK              17270    reff  1
+ Events with 2 muonjets         16527     reff  0.956977
+ Events with 2 Dimuons          16519    reff  0.999516
+ Events with 2DimVtxOK          16468    reff  0.996913
+ Events with 2DimHitPix         13082     reff  0.794389
+ Events with 2DimDzOK           13059   reff   0.998242
+ Events with 2DimMassOK         13051  reff   0.999387
+ Events with 2DimIsoOK          10426   reff   0.798866
+ Events with 2DimHLT            10103   reff   0.96902
+ ratio reco/gen                 0.634371 +/-  0.00381626
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 010_, 0.1
+mass_string, mass_double: 0275, 0.275
+ev_all                  : 151750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_020_Evt_80k_PATANA_v4/151117_151724/asdf/
+ Events          148750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       48761   reff 0.327805
+ 2GenMu8                        46733   reff  0.958409
+ 3GenMu8                        31334   reff  0.67049
+ 4GenMu8                        18818   reff  0.600562
+ 4GenMu8 Lxy/Lz                 10392   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       48386  reff  0.325284
+ 2RecMu8                        45466  reff  0.939652
+ 3RecMu8                        30196  reff  0.664145
+ 4RecMu8                        16591  reff  0.549444
+ ================ EVENT variables ================= 
+ Events with VtxOK              16591    reff  1
+ Events with 2 muonjets         15551     reff  0.937315
+ Events with 2 Dimuons          15548    reff  0.999807
+ Events with 2DimVtxOK          15468    reff  0.994855
+ Events with 2DimHitPix         8714     reff  0.563357
+ Events with 2DimDzOK           8696   reff   0.997934
+ Events with 2DimMassOK         8690  reff   0.99931
+ Events with 2DimIsoOK          6996   reff   0.805063
+ Events with 2DimHLT            6759   reff   0.966123
+ ratio reco/gen                 0.650404 +/-  0.00467762
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 020_, 0.2
+mass_string, mass_double: 0275, 0.275
+ev_all                  : 148750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_050_Evt_80k_PATANA_v4/151117_151824/asdf/
+ Events          94500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       31036   reff 0.328423
+ 2GenMu8                        29719   reff  0.957565
+ 3GenMu8                        19884   reff  0.669067
+ 4GenMu8                        12048   reff  0.605914
+ 4GenMu8 Lxy/Lz                 2361   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       30285  reff  0.320476
+ 2RecMu8                        27856  reff  0.919795
+ 3RecMu8                        18123  reff  0.650596
+ 4RecMu8                        9157  reff  0.50527
+ ================ EVENT variables ================= 
+ Events with VtxOK              9157    reff  1
+ Events with 2 muonjets         8004     reff  0.874085
+ Events with 2 Dimuons          8003    reff  0.999875
+ Events with 2DimVtxOK          7966    reff  0.995377
+ Events with 2DimHitPix         2078     reff  0.260859
+ Events with 2DimDzOK           2074   reff   0.998075
+ Events with 2DimMassOK         2070  reff   0.998071
+ Events with 2DimIsoOK          1664   reff   0.803865
+ Events with 2DimHLT            1592   reff   0.956731
+ ratio reco/gen                 0.674291 +/-  0.00964474
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 050_, 0.5
+mass_string, mass_double: 0275, 0.275
+ev_all                  : 94500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_100_Evt_80k_PATANA_v4/151117_151935/asdf/
+ Events          89000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       29002   reff 0.325865
+ 2GenMu8                        27770   reff  0.95752
+ 3GenMu8                        18646   reff  0.671444
+ 4GenMu8                        11175   reff  0.599324
+ 4GenMu8 Lxy/Lz                 725   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       26848  reff  0.301663
+ 2RecMu8                        24031  reff  0.895076
+ 3RecMu8                        14864  reff  0.618534
+ 4RecMu8                        6455  reff  0.434271
+ ================ EVENT variables ================= 
+ Events with VtxOK              6455    reff  1
+ Events with 2 muonjets         5225     reff  0.80945
+ Events with 2 Dimuons          5225    reff  1
+ Events with 2DimVtxOK          5200    reff  0.995215
+ Events with 2DimHitPix         683     reff  0.131346
+ Events with 2DimDzOK           679   reff   0.994143
+ Events with 2DimMassOK         678  reff   0.998527
+ Events with 2DimIsoOK          563   reff   0.830383
+ Events with 2DimHLT            540   reff   0.959147
+ ratio reco/gen                 0.744828 +/-  0.0161911
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 100_, 1
+mass_string, mass_double: 0275, 0.275
+ev_all                  : 89000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_200_Evt_80k_PATANA_v4/151117_152115/asdf/
+ Events          128750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       42006   reff 0.32626
+ 2GenMu8                        40195   reff  0.956887
+ 3GenMu8                        26878   reff  0.66869
+ 4GenMu8                        16161   reff  0.601272
+ 4GenMu8 Lxy/Lz                 292   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       33638  reff  0.261266
+ 2RecMu8                        28377  reff  0.8436
+ 3RecMu8                        15420  reff  0.543398
+ 4RecMu8                        5736  reff  0.371984
+ ================ EVENT variables ================= 
+ Events with VtxOK              5736    reff  1
+ Events with 2 muonjets         4255     reff  0.741806
+ Events with 2 Dimuons          4255    reff  1
+ Events with 2DimVtxOK          4242    reff  0.996945
+ Events with 2DimHitPix         295     reff  0.0695427
+ Events with 2DimDzOK           292   reff   0.989831
+ Events with 2DimMassOK         292  reff   1
+ Events with 2DimIsoOK          239   reff   0.818493
+ Events with 2DimHLT            228   reff   0.953975
+ ratio reco/gen                 0.780822 +/-  0.0242094
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 200_, 2
+mass_string, mass_double: 0275, 0.275
+ev_all                  : 128750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_300_Evt_80k_PATANA_v4/151117_152230/asdf/
+ Events          46750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       15294   reff 0.327144
+ 2GenMu8                        14584   reff  0.953577
+ 3GenMu8                        9822   reff  0.673478
+ 4GenMu8                        5911   reff  0.601812
+ 4GenMu8 Lxy/Lz                 46   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       10660  reff  0.228021
+ 2RecMu8                        8553  reff  0.802345
+ 3RecMu8                        4125  reff  0.482287
+ 4RecMu8                        1421  reff  0.344485
+ ================ EVENT variables ================= 
+ Events with VtxOK              1421    reff  1
+ Events with 2 muonjets         990     reff  0.696692
+ Events with 2 Dimuons          989    reff  0.99899
+ Events with 2DimVtxOK          986    reff  0.996967
+ Events with 2DimHitPix         48     reff  0.0486815
+ Events with 2DimDzOK           48   reff   1
+ Events with 2DimMassOK         48  reff   1
+ Events with 2DimIsoOK          40   reff   0.833333
+ Events with 2DimHLT            39   reff   0.975
+ ratio reco/gen                 0.847826 +/-  0.0529596
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 300_, 3
+mass_string, mass_double: 0275, 0.275
+ev_all                  : 46750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0275_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0275_cT_500_Evt_80k_PATANA_v4/151117_152335/asdf/
+ Events          61250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       20016   reff 0.326792
+ 2GenMu8                        19199   reff  0.959183
+ 3GenMu8                        12904   reff  0.672118
+ 4GenMu8                        7658   reff  0.593459
+ 4GenMu8 Lxy/Lz                 31   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       10712  reff  0.17489
+ 2RecMu8                        7989  reff  0.745799
+ 3RecMu8                        3199  reff  0.400426
+ 4RecMu8                        948  reff  0.296343
+ ================ EVENT variables ================= 
+ Events with VtxOK              948    reff  1
+ Events with 2 muonjets         645     reff  0.68038
+ Events with 2 Dimuons          645    reff  1
+ Events with 2DimVtxOK          644    reff  0.99845
+ Events with 2DimHitPix         32     reff  0.0496894
+ Events with 2DimDzOK           32   reff   1
+ Events with 2DimMassOK         32  reff   1
+ Events with 2DimIsoOK          29   reff   0.90625
+ Events with 2DimHLT            26   reff   0.896552
+ ratio reco/gen                 0.83871 +/-  0.0660586
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 500_, 5
+mass_string, mass_double: 0275, 0.275
+ev_all                  : 61250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_000_Evt_80k_PATANA_v4/151117_152519/asdf/
+ Events          80250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       26746   reff 0.333283
+ 2GenMu8                        25216   reff  0.942795
+ 3GenMu8                        16881   reff  0.669456
+ 4GenMu8                        9164   reff  0.542859
+ 4GenMu8 Lxy/Lz                 9164   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       26675  reff  0.332399
+ 2RecMu8                        24965  reff  0.935895
+ 3RecMu8                        16683  reff  0.668256
+ 4RecMu8                        8798  reff  0.527363
+ ================ EVENT variables ================= 
+ Events with VtxOK              8798    reff  1
+ Events with 2 muonjets         8404     reff  0.955217
+ Events with 2 Dimuons          8400    reff  0.999524
+ Events with 2DimVtxOK          8386    reff  0.998333
+ Events with 2DimHitPix         7861     reff  0.937396
+ Events with 2DimDzOK           7858   reff   0.999618
+ Events with 2DimMassOK         7837  reff   0.997328
+ Events with 2DimIsoOK          6357   reff   0.811152
+ Events with 2DimHLT            6174   reff   0.971213
+ ratio reco/gen                 0.673723 +/-  0.00489769
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 000_, 0
+mass_string, mass_double: 0300, 0.3
+ev_all                  : 80250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_005_Evt_80k_PATANA_v4/151117_152556/asdf/
+ Events          54750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       18077   reff 0.330174
+ 2GenMu8                        17073   reff  0.94446
+ 3GenMu8                        11468   reff  0.671704
+ 4GenMu8                        6311   reff  0.550314
+ 4GenMu8 Lxy/Lz                 6161   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       18040  reff  0.329498
+ 2RecMu8                        16875  reff  0.935421
+ 3RecMu8                        11311  reff  0.670281
+ 4RecMu8                        6039  reff  0.533905
+ ================ EVENT variables ================= 
+ Events with VtxOK              6039    reff  1
+ Events with 2 muonjets         5721     reff  0.947342
+ Events with 2 Dimuons          5718    reff  0.999476
+ Events with 2DimVtxOK          5709    reff  0.998426
+ Events with 2DimHitPix         5190     reff  0.909091
+ Events with 2DimDzOK           5187   reff   0.999422
+ Events with 2DimMassOK         5182  reff   0.999036
+ Events with 2DimIsoOK          4171   reff   0.804902
+ Events with 2DimHLT            4073   reff   0.976504
+ ratio reco/gen                 0.661094 +/-  0.00603039
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 005_, 0.05
+mass_string, mass_double: 0300, 0.3
+ev_all                  : 54750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_010_Evt_80k_PATANA_v4/151117_152703/asdf/
+ Events          128000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       42189   reff 0.329602
+ 2GenMu8                        39791   reff  0.943161
+ 3GenMu8                        26607   reff  0.668669
+ 4GenMu8                        14483   reff  0.54433
+ 4GenMu8 Lxy/Lz                 12518   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       42059  reff  0.328586
+ 2RecMu8                        39214  reff  0.932357
+ 3RecMu8                        26105  reff  0.665706
+ 4RecMu8                        13542  reff  0.518751
+ ================ EVENT variables ================= 
+ Events with VtxOK              13542    reff  1
+ Events with 2 muonjets         12753     reff  0.941737
+ Events with 2 Dimuons          12752    reff  0.999922
+ Events with 2DimVtxOK          12728    reff  0.998118
+ Events with 2DimHitPix         10353     reff  0.813404
+ Events with 2DimDzOK           10343   reff   0.999034
+ Events with 2DimMassOK         10331  reff   0.99884
+ Events with 2DimIsoOK          8318   reff   0.80515
+ Events with 2DimHLT            8072   reff   0.970426
+ ratio reco/gen                 0.644831 +/-  0.00427733
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 010_, 0.1
+mass_string, mass_double: 0300, 0.3
+ev_all                  : 128000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_020_Evt_80k_PATANA_v4/151117_152813/asdf/
+ Events          116750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       38920   reff 0.333362
+ 2GenMu8                        36736   reff  0.943885
+ 3GenMu8                        24740   reff  0.673454
+ 4GenMu8                        13504   reff  0.545837
+ 4GenMu8 Lxy/Lz                 7989   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       38640  reff  0.330964
+ 2RecMu8                        35807  reff  0.926682
+ 3RecMu8                        23854  reff  0.666183
+ 4RecMu8                        12002  reff  0.503144
+ ================ EVENT variables ================= 
+ Events with VtxOK              12002    reff  1
+ Events with 2 muonjets         11136     reff  0.927845
+ Events with 2 Dimuons          11134    reff  0.99982
+ Events with 2DimVtxOK          11102    reff  0.997126
+ Events with 2DimHitPix         6776     reff  0.61034
+ Events with 2DimDzOK           6769   reff   0.998967
+ Events with 2DimMassOK         6763  reff   0.999114
+ Events with 2DimIsoOK          5440   reff   0.804377
+ Events with 2DimHLT            5274   reff   0.969485
+ ratio reco/gen                 0.660158 +/-  0.00529927
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 020_, 0.2
+mass_string, mass_double: 0300, 0.3
+ev_all                  : 116750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_050_Evt_80k_PATANA_v4/151117_153006/asdf/
+ Events          143750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       47535   reff 0.330678
+ 2GenMu8                        44788   reff  0.942211
+ 3GenMu8                        30103   reff  0.672122
+ 4GenMu8                        16373   reff  0.543899
+ 4GenMu8 Lxy/Lz                 3521   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       46621  reff  0.32432
+ 2RecMu8                        42351  reff  0.90841
+ 3RecMu8                        27524  reff  0.649902
+ 4RecMu8                        12739  reff  0.462832
+ ================ EVENT variables ================= 
+ Events with VtxOK              12739    reff  1
+ Events with 2 muonjets         11184     reff  0.877934
+ Events with 2 Dimuons          11182    reff  0.999821
+ Events with 2DimVtxOK          11148    reff  0.996959
+ Events with 2DimHitPix         3123     reff  0.28014
+ Events with 2DimDzOK           3109   reff   0.995517
+ Events with 2DimMassOK         3104  reff   0.998392
+ Events with 2DimIsoOK          2511   reff   0.808956
+ Events with 2DimHLT            2428   reff   0.966945
+ ratio reco/gen                 0.689577 +/-  0.00779714
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 050_, 0.5
+mass_string, mass_double: 0300, 0.3
+ev_all                  : 143750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_100_Evt_80k_PATANA_v4/151117_153036/asdf/
+ Events          3250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       1063   reff 0.327077
+ 2GenMu8                        1007   reff  0.947319
+ 3GenMu8                        666   reff  0.66137
+ 4GenMu8                        390   reff  0.585586
+ 4GenMu8 Lxy/Lz                 34   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       992  reff  0.305231
+ 2RecMu8                        876  reff  0.883065
+ 3RecMu8                        549  reff  0.626712
+ 4RecMu8                        241  reff  0.43898
+ ================ EVENT variables ================= 
+ Events with VtxOK              241    reff  1
+ Events with 2 muonjets         202     reff  0.838174
+ Events with 2 Dimuons          202    reff  1
+ Events with 2DimVtxOK          201    reff  0.99505
+ Events with 2DimHitPix         36     reff  0.179104
+ Events with 2DimDzOK           35   reff   0.972222
+ Events with 2DimMassOK         35  reff   1
+ Events with 2DimIsoOK          29   reff   0.828571
+ Events with 2DimHLT            27   reff   0.931034
+ ratio reco/gen                 0.794118 +/-  0.0693446
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 100_, 1
+mass_string, mass_double: 0300, 0.3
+ev_all                  : 3250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_200_Evt_80k_PATANA_v4/151117_153141/asdf/
+ Events          148750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       49280   reff 0.331294
+ 2GenMu8                        46402   reff  0.941599
+ 3GenMu8                        31164   reff  0.671609
+ 4GenMu8                        16881   reff  0.541683
+ 4GenMu8 Lxy/Lz                 343   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       40558  reff  0.272659
+ 2RecMu8                        33746  reff  0.832043
+ 3RecMu8                        18566  reff  0.550169
+ 4RecMu8                        6308  reff  0.339761
+ ================ EVENT variables ================= 
+ Events with VtxOK              6308    reff  1
+ Events with 2 muonjets         4757     reff  0.754122
+ Events with 2 Dimuons          4757    reff  1
+ Events with 2DimVtxOK          4744    reff  0.997267
+ Events with 2DimHitPix         333     reff  0.0701939
+ Events with 2DimDzOK           329   reff   0.987988
+ Events with 2DimMassOK         328  reff   0.99696
+ Events with 2DimIsoOK          265   reff   0.807927
+ Events with 2DimHLT            257   reff   0.969811
+ ratio reco/gen                 0.749271 +/-  0.0234032
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 200_, 2
+mass_string, mass_double: 0300, 0.3
+ev_all                  : 148750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_300_Evt_80k_PATANA_v4/151117_153244/asdf/
+ Events          146000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       48420   reff 0.331644
+ 2GenMu8                        45627   reff  0.942317
+ 3GenMu8                        30586   reff  0.670349
+ 4GenMu8                        16735   reff  0.547146
+ 4GenMu8 Lxy/Lz                 184   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       34598  reff  0.236973
+ 2RecMu8                        27419  reff  0.792502
+ 3RecMu8                        13368  reff  0.487545
+ 4RecMu8                        4130  reff  0.308947
+ ================ EVENT variables ================= 
+ Events with VtxOK              4130    reff  1
+ Events with 2 muonjets         2996     reff  0.725424
+ Events with 2 Dimuons          2993    reff  0.998999
+ Events with 2DimVtxOK          2989    reff  0.998664
+ Events with 2DimHitPix         170     reff  0.0568752
+ Events with 2DimDzOK           166   reff   0.976471
+ Events with 2DimMassOK         166  reff   1
+ Events with 2DimIsoOK          139   reff   0.837349
+ Events with 2DimHLT            132   reff   0.94964
+ ratio reco/gen                 0.717391 +/-  0.0331942
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 300_, 3
+mass_string, mass_double: 0300, 0.3
+ev_all                  : 146000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0300_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0300_cT_500_Evt_80k_PATANA_v4/151117_153321/asdf/
+ Events          67000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       22196   reff 0.331284
+ 2GenMu8                        20908   reff  0.941972
+ 3GenMu8                        14159   reff  0.677205
+ 4GenMu8                        7699   reff  0.543753
+ 4GenMu8 Lxy/Lz                 20   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       12383  reff  0.184821
+ 2RecMu8                        8955  reff  0.723169
+ 3RecMu8                        3740  reff  0.417644
+ 4RecMu8                        1023  reff  0.273529
+ ================ EVENT variables ================= 
+ Events with VtxOK              1023    reff  1
+ Events with 2 muonjets         728     reff  0.711632
+ Events with 2 Dimuons          728    reff  1
+ Events with 2DimVtxOK          726    reff  0.997253
+ Events with 2DimHitPix         25     reff  0.0344353
+ Events with 2DimDzOK           25   reff   1
+ Events with 2DimMassOK         25  reff   1
+ Events with 2DimIsoOK          21   reff   0.84
+ Events with 2DimHLT            21   reff   1
+ ratio reco/gen                 1.05 +/-  -nan
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 500_, 5
+mass_string, mass_double: 0300, 0.3
+ev_all                  : 67000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_000_Evt_80k_PATANA_v4/151117_153421/asdf/
+ Events          146000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       49272   reff 0.337479
+ 2GenMu8                        45364   reff  0.920685
+ 3GenMu8                        30015   reff  0.661648
+ 4GenMu8                        14272   reff  0.475496
+ 4GenMu8 Lxy/Lz                 14272   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       49193  reff  0.336938
+ 2RecMu8                        45104  reff  0.916878
+ 3RecMu8                        29701  reff  0.6585
+ 4RecMu8                        13843  reff  0.466079
+ ================ EVENT variables ================= 
+ Events with VtxOK              13843    reff  1
+ Events with 2 muonjets         12844     reff  0.927834
+ Events with 2 Dimuons          12840    reff  0.999689
+ Events with 2DimVtxOK          12840    reff  1
+ Events with 2DimHitPix         12181     reff  0.948676
+ Events with 2DimDzOK           12168   reff   0.998933
+ Events with 2DimMassOK         12146  reff   0.998192
+ Events with 2DimIsoOK          9836   reff   0.809814
+ Events with 2DimHLT            9639   reff   0.979972
+ ratio reco/gen                 0.675378 +/-  0.0039194
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 000_, 0
+mass_string, mass_double: 0400, 0.4
+ev_all                  : 146000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_005_Evt_80k_PATANA_v4/151117_153513/asdf/
+ Events          127000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       42579   reff 0.335268
+ 2GenMu8                        39153   reff  0.919538
+ 3GenMu8                        26056   reff  0.665492
+ 4GenMu8                        12398   reff  0.475821
+ 4GenMu8 Lxy/Lz                 12252   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       42477  reff  0.334465
+ 2RecMu8                        38817  reff  0.913836
+ 3RecMu8                        25792  reff  0.664451
+ 4RecMu8                        11903  reff  0.4615
+ ================ EVENT variables ================= 
+ Events with VtxOK              11903    reff  1
+ Events with 2 muonjets         10997     reff  0.923885
+ Events with 2 Dimuons          10993    reff  0.999636
+ Events with 2DimVtxOK          10989    reff  0.999636
+ Events with 2DimHitPix         10335     reff  0.940486
+ Events with 2DimDzOK           10326   reff   0.999129
+ Events with 2DimMassOK         10312  reff   0.998644
+ Events with 2DimIsoOK          8191   reff   0.794317
+ Events with 2DimHLT            7993   reff   0.975827
+ ratio reco/gen                 0.652383 +/-  0.00430228
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 005_, 0.05
+mass_string, mass_double: 0400, 0.4
+ev_all                  : 127000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_010_Evt_80k_PATANA_v4/151117_153558/asdf/
+ Events          67750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       22926   reff 0.338391
+ 2GenMu8                        21121   reff  0.921268
+ 3GenMu8                        13930   reff  0.659533
+ 4GenMu8                        6637   reff  0.476454
+ 4GenMu8 Lxy/Lz                 6155   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       22891  reff  0.337875
+ 2RecMu8                        20919  reff  0.913853
+ 3RecMu8                        13740  reff  0.656819
+ 4RecMu8                        6304  reff  0.458806
+ ================ EVENT variables ================= 
+ Events with VtxOK              6304    reff  1
+ Events with 2 muonjets         5804     reff  0.920685
+ Events with 2 Dimuons          5803    reff  0.999828
+ Events with 2DimVtxOK          5802    reff  0.999828
+ Events with 2DimHitPix         5145     reff  0.886763
+ Events with 2DimDzOK           5137   reff   0.998445
+ Events with 2DimMassOK         5129  reff   0.998443
+ Events with 2DimIsoOK          4152   reff   0.809515
+ Events with 2DimHLT            4058   reff   0.97736
+ ratio reco/gen                 0.659301 +/-  0.00604106
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 010_, 0.1
+mass_string, mass_double: 0400, 0.4
+ev_all                  : 67750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_020_Evt_80k_PATANA_v4/151117_153657/asdf/
+ Events          36250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       12162   reff 0.335503
+ 2GenMu8                        11188   reff  0.919914
+ 3GenMu8                        7418   reff  0.663032
+ 4GenMu8                        3579   reff  0.482475
+ 4GenMu8 Lxy/Lz                 2563   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       12128  reff  0.334566
+ 2RecMu8                        11021  reff  0.908724
+ 3RecMu8                        7199  reff  0.653208
+ 4RecMu8                        3293  reff  0.457425
+ ================ EVENT variables ================= 
+ Events with VtxOK              3293    reff  1
+ Events with 2 muonjets         2997     reff  0.910112
+ Events with 2 Dimuons          2997    reff  1
+ Events with 2DimVtxOK          2995    reff  0.999333
+ Events with 2DimHitPix         2132     reff  0.711853
+ Events with 2DimDzOK           2129   reff   0.998593
+ Events with 2DimMassOK         2128  reff   0.99953
+ Events with 2DimIsoOK          1721   reff   0.808741
+ Events with 2DimHLT            1676   reff   0.973852
+ ratio reco/gen                 0.653921 +/-  0.00939671
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 020_, 0.2
+mass_string, mass_double: 0400, 0.4
+ev_all                  : 36250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_050_Evt_80k_PATANA_v4/151117_153812/asdf/
+ Events          135250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       45680   reff 0.337745
+ 2GenMu8                        42158   reff  0.922898
+ 3GenMu8                        27866   reff  0.66099
+ 4GenMu8                        13271   reff  0.476243
+ 4GenMu8 Lxy/Lz                 4195   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       45082  reff  0.333323
+ 2RecMu8                        40464  reff  0.897564
+ 3RecMu8                        25838  reff  0.638543
+ 4RecMu8                        10768  reff  0.416751
+ ================ EVENT variables ================= 
+ Events with VtxOK              10768    reff  1
+ Events with 2 muonjets         9497     reff  0.881965
+ Events with 2 Dimuons          9495    reff  0.999789
+ Events with 2DimVtxOK          9472    reff  0.997578
+ Events with 2DimHitPix         3649     reff  0.385241
+ Events with 2DimDzOK           3637   reff   0.996711
+ Events with 2DimMassOK         3634  reff   0.999175
+ Events with 2DimIsoOK          2943   reff   0.809851
+ Events with 2DimHLT            2852   reff   0.969079
+ ratio reco/gen                 0.679857 +/-  0.00720302
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 050_, 0.5
+mass_string, mass_double: 0400, 0.4
+ev_all                  : 135250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_100_Evt_80k_PATANA_v4/151117_153904/asdf/
+ Events          100750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       34024   reff 0.337707
+ 2GenMu8                        31270   reff  0.919057
+ 3GenMu8                        20610   reff  0.659098
+ 4GenMu8                        9832   reff  0.47705
+ 4GenMu8 Lxy/Lz                 1165   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       32705  reff  0.324615
+ 2RecMu8                        28552  reff  0.873016
+ 3RecMu8                        17553  reff  0.614773
+ 4RecMu8                        6633  reff  0.377884
+ ================ EVENT variables ================= 
+ Events with VtxOK              6633    reff  1
+ Events with 2 muonjets         5534     reff  0.834313
+ Events with 2 Dimuons          5532    reff  0.999639
+ Events with 2DimVtxOK          5520    reff  0.997831
+ Events with 2DimHitPix         1083     reff  0.196196
+ Events with 2DimDzOK           1072   reff   0.989843
+ Events with 2DimMassOK         1072  reff   1
+ Events with 2DimIsoOK          862   reff   0.804104
+ Events with 2DimHLT            843   reff   0.977958
+ ratio reco/gen                 0.723605 +/-  0.0131025
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 100_, 1
+mass_string, mass_double: 0400, 0.4
+ev_all                  : 100750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_200_Evt_80k_PATANA_v4/151117_153951/asdf/
+ Events          82500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       27961   reff 0.338921
+ 2GenMu8                        25707   reff  0.919388
+ 3GenMu8                        17046   reff  0.663088
+ 4GenMu8                        8052   reff  0.472369
+ 4GenMu8 Lxy/Lz                 307   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       24766  reff  0.300194
+ 2RecMu8                        20677  reff  0.834895
+ 3RecMu8                        11592  reff  0.560623
+ 4RecMu8                        3725  reff  0.321342
+ ================ EVENT variables ================= 
+ Events with VtxOK              3725    reff  1
+ Events with 2 muonjets         2911     reff  0.781477
+ Events with 2 Dimuons          2910    reff  0.999656
+ Events with 2DimVtxOK          2906    reff  0.998625
+ Events with 2DimHitPix         283     reff  0.0973847
+ Events with 2DimDzOK           280   reff   0.989399
+ Events with 2DimMassOK         279  reff   0.996429
+ Events with 2DimIsoOK          232   reff   0.831541
+ Events with 2DimHLT            224   reff   0.965517
+ ratio reco/gen                 0.729642 +/-  0.0253487
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 200_, 2
+mass_string, mass_double: 0400, 0.4
+ev_all                  : 82500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_300_Evt_80k_PATANA_v4/151117_154045/asdf/
+ Events          90250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       30544   reff 0.338438
+ 2GenMu8                        27988   reff  0.916317
+ 3GenMu8                        18584   reff  0.663999
+ 4GenMu8                        8886   reff  0.478153
+ 4GenMu8 Lxy/Lz                 146   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       24553  reff  0.272055
+ 2RecMu8                        19658  reff  0.800635
+ 3RecMu8                        10164  reff  0.517041
+ 4RecMu8                        2985  reff  0.293684
+ ================ EVENT variables ================= 
+ Events with VtxOK              2985    reff  1
+ Events with 2 muonjets         2207     reff  0.739363
+ Events with 2 Dimuons          2207    reff  1
+ Events with 2DimVtxOK          2202    reff  0.997734
+ Events with 2DimHitPix         148     reff  0.0672116
+ Events with 2DimDzOK           145   reff   0.97973
+ Events with 2DimMassOK         145  reff   1
+ Events with 2DimIsoOK          115   reff   0.793103
+ Events with 2DimHLT            106   reff   0.921739
+ ratio reco/gen                 0.726027 +/-  0.0369108
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 300_, 3
+mass_string, mass_double: 0400, 0.4
+ev_all                  : 90250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0400_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0400_cT_500_Evt_80k_PATANA_v4/151117_154251/asdf/
+ Events          112750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       37927   reff 0.336381
+ 2GenMu8                        34922   reff  0.920769
+ 3GenMu8                        23104   reff  0.661589
+ 4GenMu8                        11035   reff  0.477623
+ 4GenMu8 Lxy/Lz                 78   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       24993  reff  0.221667
+ 2RecMu8                        18452  reff  0.738287
+ 3RecMu8                        8174  reff  0.442987
+ 4RecMu8                        2147  reff  0.262662
+ ================ EVENT variables ================= 
+ Events with VtxOK              2147    reff  1
+ Events with 2 muonjets         1555     reff  0.724266
+ Events with 2 Dimuons          1555    reff  1
+ Events with 2DimVtxOK          1550    reff  0.996785
+ Events with 2DimHitPix         77     reff  0.0496774
+ Events with 2DimDzOK           76   reff   0.987013
+ Events with 2DimMassOK         76  reff   1
+ Events with 2DimIsoOK          59   reff   0.776316
+ Events with 2DimHLT            55   reff   0.932203
+ ratio reco/gen                 0.705128 +/-  0.0516301
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 500_, 5
+mass_string, mass_double: 0400, 0.4
+ev_all                  : 112750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_000_Evt_80k_PATANA_v4/151117_154344/asdf/
+ Events          145000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       49463   reff 0.341124
+ 2GenMu8                        45065   reff  0.911085
+ 3GenMu8                        29715   reff  0.659381
+ 4GenMu8                        13253   reff  0.446004
+ 4GenMu8 Lxy/Lz                 13253   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       49405  reff  0.340724
+ 2RecMu8                        44855  reff  0.907904
+ 3RecMu8                        29500  reff  0.657675
+ 4RecMu8                        12929  reff  0.438271
+ ================ EVENT variables ================= 
+ Events with VtxOK              12929    reff  1
+ Events with 2 muonjets         11937     reff  0.923273
+ Events with 2 Dimuons          11936    reff  0.999916
+ Events with 2DimVtxOK          11936    reff  1
+ Events with 2DimHitPix         11534     reff  0.96632
+ Events with 2DimDzOK           11524   reff   0.999133
+ Events with 2DimMassOK         11459  reff   0.99436
+ Events with 2DimIsoOK          9250   reff   0.807226
+ Events with 2DimHLT            9102   reff   0.984
+ ratio reco/gen                 0.686788 +/-  0.00402878
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 000_, 0
+mass_string, mass_double: 0700, 0.7
+ev_all                  : 145000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_005_Evt_80k_PATANA_v4/151117_154442/asdf/
+ Events          155500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       52924   reff 0.340347
+ 2GenMu8                        48296   reff  0.912554
+ 3GenMu8                        31646   reff  0.655251
+ 4GenMu8                        14214   reff  0.449156
+ 4GenMu8 Lxy/Lz                 14169   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       52839  reff  0.339801
+ 2RecMu8                        47998  reff  0.908382
+ 3RecMu8                        31357  reff  0.653298
+ 4RecMu8                        13877  reff  0.442549
+ ================ EVENT variables ================= 
+ Events with VtxOK              13877    reff  1
+ Events with 2 muonjets         12769     reff  0.920156
+ Events with 2 Dimuons          12766    reff  0.999765
+ Events with 2DimVtxOK          12762    reff  0.999687
+ Events with 2DimHitPix         12228     reff  0.958157
+ Events with 2DimDzOK           12224   reff   0.999673
+ Events with 2DimMassOK         12150  reff   0.993946
+ Events with 2DimIsoOK          9741   reff   0.801728
+ Events with 2DimHLT            9534   reff   0.97875
+ ratio reco/gen                 0.672877 +/-  0.00394143
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 005_, 0.05
+mass_string, mass_double: 0700, 0.7
+ev_all                  : 155500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_010_Evt_80k_PATANA_v4/151117_154535/asdf/
+ Events          150500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       51042   reff 0.33915
+ 2GenMu8                        46474   reff  0.910505
+ 3GenMu8                        30565   reff  0.65768
+ 4GenMu8                        13754   reff  0.449992
+ 4GenMu8 Lxy/Lz                 13503   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       50953  reff  0.338558
+ 2RecMu8                        46170  reff  0.906129
+ 3RecMu8                        30277  reff  0.655772
+ 4RecMu8                        13336  reff  0.440466
+ ================ EVENT variables ================= 
+ Events with VtxOK              13336    reff  1
+ Events with 2 muonjets         12283     reff  0.921041
+ Events with 2 Dimuons          12282    reff  0.999919
+ Events with 2DimVtxOK          12279    reff  0.999756
+ Events with 2DimHitPix         11647     reff  0.94853
+ Events with 2DimDzOK           11637   reff   0.999141
+ Events with 2DimMassOK         11572  reff   0.994414
+ Events with 2DimIsoOK          9303   reff   0.803923
+ Events with 2DimHLT            9107   reff   0.978932
+ ratio reco/gen                 0.674443 +/-  0.00403247
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 010_, 0.1
+mass_string, mass_double: 0700, 0.7
+ev_all                  : 150500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_020_Evt_80k_PATANA_v4/151117_154632/asdf/
+ Events          136750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       46870   reff 0.342742
+ 2GenMu8                        42698   reff  0.910988
+ 3GenMu8                        28114   reff  0.658438
+ 4GenMu8                        12660   reff  0.450309
+ 4GenMu8 Lxy/Lz                 11304   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       46727  reff  0.341697
+ 2RecMu8                        42267  reff  0.904552
+ 3RecMu8                        27678  reff  0.654837
+ 4RecMu8                        12117  reff  0.437785
+ ================ EVENT variables ================= 
+ Events with VtxOK              12117    reff  1
+ Events with 2 muonjets         11114     reff  0.917224
+ Events with 2 Dimuons          11113    reff  0.99991
+ Events with 2DimVtxOK          11111    reff  0.99982
+ Events with 2DimHitPix         9706     reff  0.873549
+ Events with 2DimDzOK           9699   reff   0.999279
+ Events with 2DimMassOK         9645  reff   0.994432
+ Events with 2DimIsoOK          7791   reff   0.807776
+ Events with 2DimHLT            7616   reff   0.977538
+ ratio reco/gen                 0.673744 +/-  0.00440972
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 020_, 0.2
+mass_string, mass_double: 0700, 0.7
+ev_all                  : 136750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_050_Evt_80k_PATANA_v4/151117_154716/asdf/
+ Events          135250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       46176   reff 0.341412
+ 2GenMu8                        42068   reff  0.911036
+ 3GenMu8                        27767   reff  0.66005
+ 4GenMu8                        12502   reff  0.450247
+ 4GenMu8 Lxy/Lz                 6935   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       45926  reff  0.339564
+ 2RecMu8                        41141  reff  0.895811
+ 3RecMu8                        26682  reff  0.64855
+ 4RecMu8                        11190  reff  0.419384
+ ================ EVENT variables ================= 
+ Events with VtxOK              11190    reff  1
+ Events with 2 muonjets         10191     reff  0.910724
+ Events with 2 Dimuons          10187    reff  0.999607
+ Events with 2DimVtxOK          10182    reff  0.999509
+ Events with 2DimHitPix         6085     reff  0.597623
+ Events with 2DimDzOK           6075   reff   0.998357
+ Events with 2DimMassOK         6045  reff   0.995062
+ Events with 2DimIsoOK          4817   reff   0.796857
+ Events with 2DimHLT            4701   reff   0.975919
+ ratio reco/gen                 0.677866 +/-  0.00561135
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 050_, 0.5
+mass_string, mass_double: 0700, 0.7
+ev_all                  : 135250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_100_Evt_80k_PATANA_v4/151117_154749/asdf/
+ Events          63500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       21741   reff 0.342378
+ 2GenMu8                        19772   reff  0.909434
+ 3GenMu8                        12905   reff  0.652691
+ 4GenMu8                        5847   reff  0.45308
+ 4GenMu8 Lxy/Lz                 1478   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       21388  reff  0.336819
+ 2RecMu8                        18870  reff  0.88227
+ 3RecMu8                        11777  reff  0.624112
+ 4RecMu8                        4633  reff  0.393394
+ ================ EVENT variables ================= 
+ Events with VtxOK              4633    reff  1
+ Events with 2 muonjets         4105     reff  0.886035
+ Events with 2 Dimuons          4103    reff  0.999513
+ Events with 2DimVtxOK          4094    reff  0.997806
+ Events with 2DimHitPix         1342     reff  0.327797
+ Events with 2DimDzOK           1335   reff   0.994784
+ Events with 2DimMassOK         1328  reff   0.994757
+ Events with 2DimIsoOK          1071   reff   0.806476
+ Events with 2DimHLT            1043   reff   0.973856
+ ratio reco/gen                 0.705683 +/-  0.0118543
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 100_, 1
+mass_string, mass_double: 0700, 0.7
+ev_all                  : 63500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_200_Evt_80k_PATANA_v4/151117_154834/asdf/
+ Events          100750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       34315   reff 0.340596
+ 2GenMu8                        31170   reff  0.908349
+ 3GenMu8                        20675   reff  0.663298
+ 4GenMu8                        9201   reff  0.44503
+ 4GenMu8 Lxy/Lz                 885   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       32691  reff  0.324476
+ 2RecMu8                        28147  reff  0.861001
+ 3RecMu8                        16985  reff  0.603439
+ 4RecMu8                        5909  reff  0.347895
+ ================ EVENT variables ================= 
+ Events with VtxOK              5909    reff  1
+ Events with 2 muonjets         4966     reff  0.840413
+ Events with 2 Dimuons          4966    reff  1
+ Events with 2DimVtxOK          4945    reff  0.995771
+ Events with 2DimHitPix         817     reff  0.165217
+ Events with 2DimDzOK           812   reff   0.99388
+ Events with 2DimMassOK         809  reff   0.996305
+ Events with 2DimIsoOK          644   reff   0.796044
+ Events with 2DimHLT            626   reff   0.97205
+ ratio reco/gen                 0.707345 +/-  0.015294
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 200_, 2
+mass_string, mass_double: 0700, 0.7
+ev_all                  : 100750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_300_Evt_80k_PATANA_v4/151117_154929/asdf/
+ Events          149500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       51044   reff 0.341431
+ 2GenMu8                        46490   reff  0.910783
+ 3GenMu8                        30648   reff  0.659239
+ 4GenMu8                        13744   reff  0.448447
+ 4GenMu8 Lxy/Lz                 657   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       46448  reff  0.310689
+ 2RecMu8                        38934  reff  0.838228
+ 3RecMu8                        22337  reff  0.573714
+ 4RecMu8                        7235  reff  0.323902
+ ================ EVENT variables ================= 
+ Events with VtxOK              7235    reff  1
+ Events with 2 muonjets         5810     reff  0.803041
+ Events with 2 Dimuons          5809    reff  0.999828
+ Events with 2DimVtxOK          5761    reff  0.991737
+ Events with 2DimHitPix         630     reff  0.109356
+ Events with 2DimDzOK           622   reff   0.987302
+ Events with 2DimMassOK         621  reff   0.998392
+ Events with 2DimIsoOK          501   reff   0.806763
+ Events with 2DimHLT            487   reff   0.972056
+ ratio reco/gen                 0.741248 +/-  0.017086
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 300_, 3
+mass_string, mass_double: 0700, 0.7
+ev_all                  : 149500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0700_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_0700_cT_500_Evt_80k_PATANA_v4/151117_155023/asdf/
+ Events          50500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       17141   reff 0.339426
+ 2GenMu8                        15564   reff  0.907998
+ 3GenMu8                        10264   reff  0.659471
+ 4GenMu8                        4585   reff  0.446707
+ 4GenMu8 Lxy/Lz                 80   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       13984  reff  0.276911
+ 2RecMu8                        11159  reff  0.797983
+ 3RecMu8                        5813  reff  0.520925
+ 4RecMu8                        1632  reff  0.28075
+ ================ EVENT variables ================= 
+ Events with VtxOK              1632    reff  1
+ Events with 2 muonjets         1264     reff  0.77451
+ Events with 2 Dimuons          1263    reff  0.999209
+ Events with 2DimVtxOK          1245    reff  0.985748
+ Events with 2DimHitPix         74     reff  0.0594378
+ Events with 2DimDzOK           74   reff   1
+ Events with 2DimMassOK         73  reff   0.986486
+ Events with 2DimIsoOK          63   reff   0.863014
+ Events with 2DimHLT            59   reff   0.936508
+ ratio reco/gen                 0.7375 +/-  0.0491927
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 500_, 5
+mass_string, mass_double: 0700, 0.7
+ev_all                  : 50500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_000_Evt_80k_PATANA_v4/151117_155128/asdf/
+ Events          125250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       43177   reff 0.344727
+ 2GenMu8                        39196   reff  0.907798
+ 3GenMu8                        25950   reff  0.662057
+ 4GenMu8                        11524   reff  0.444085
+ 4GenMu8 Lxy/Lz                 11524   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       43132  reff  0.344367
+ 2RecMu8                        39009  reff  0.90441
+ 3RecMu8                        25724  reff  0.659438
+ 4RecMu8                        11222  reff  0.436246
+ ================ EVENT variables ================= 
+ Events with VtxOK              11222    reff  1
+ Events with 2 muonjets         10323     reff  0.91989
+ Events with 2 Dimuons          10320    reff  0.999709
+ Events with 2DimVtxOK          10320    reff  1
+ Events with 2DimHitPix         10029     reff  0.971802
+ Events with 2DimDzOK           10022   reff   0.999302
+ Events with 2DimMassOK         9911  reff   0.988924
+ Events with 2DimIsoOK          7934   reff   0.800525
+ Events with 2DimHLT            7786   reff   0.981346
+ ratio reco/gen                 0.675633 +/-  0.00436086
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 000_, 0
+mass_string, mass_double: 1000, 1
+ev_all                  : 125250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_005_Evt_80k_PATANA_v4/151117_155253/asdf/
+ Events          117250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       40226   reff 0.343079
+ 2GenMu8                        36593   reff  0.909685
+ 3GenMu8                        24132   reff  0.65947
+ 4GenMu8                        10662   reff  0.44182
+ 4GenMu8 Lxy/Lz                 10651   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       40133  reff  0.342286
+ 2RecMu8                        36360  reff  0.905988
+ 3RecMu8                        23928  reff  0.658086
+ 4RecMu8                        10401  reff  0.434679
+ ================ EVENT variables ================= 
+ Events with VtxOK              10401    reff  1
+ Events with 2 muonjets         9556     reff  0.918758
+ Events with 2 Dimuons          9553    reff  0.999686
+ Events with 2DimVtxOK          9552    reff  0.999895
+ Events with 2DimHitPix         9264     reff  0.969849
+ Events with 2DimDzOK           9259   reff   0.99946
+ Events with 2DimMassOK         9172  reff   0.990604
+ Events with 2DimIsoOK          7361   reff   0.802551
+ Events with 2DimHLT            7223   reff   0.981253
+ ratio reco/gen                 0.678152 +/-  0.00452682
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 005_, 0.05
+mass_string, mass_double: 1000, 1
+ev_all                  : 117250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_010_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_010_Evt_80k_PATANA_v4/151117_155348/asdf/
+ Events          152000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       52342   reff 0.344355
+ 2GenMu8                        47509   reff  0.907665
+ 3GenMu8                        31390   reff  0.660717
+ 4GenMu8                        13939   reff  0.444059
+ 4GenMu8 Lxy/Lz                 13821   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       52221  reff  0.343559
+ 2RecMu8                        47180  reff  0.903468
+ 3RecMu8                        31064  reff  0.658415
+ 4RecMu8                        13591  reff  0.437516
+ ================ EVENT variables ================= 
+ Events with VtxOK              13591    reff  1
+ Events with 2 muonjets         12503     reff  0.919947
+ Events with 2 Dimuons          12496    reff  0.99944
+ Events with 2DimVtxOK          12496    reff  1
+ Events with 2DimHitPix         12053     reff  0.964549
+ Events with 2DimDzOK           12045   reff   0.999336
+ Events with 2DimMassOK         11911  reff   0.988875
+ Events with 2DimIsoOK          9554   reff   0.802116
+ Events with 2DimHLT            9363   reff   0.980008
+ ratio reco/gen                 0.677447 +/-  0.0039762
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 010_, 0.1
+mass_string, mass_double: 1000, 1
+ev_all                  : 152000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_020_Evt_80k_PATANA_v4/151117_155445/asdf/
+ Events          143000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       49238   reff 0.344322
+ 2GenMu8                        44703   reff  0.907896
+ 3GenMu8                        29450   reff  0.658792
+ 4GenMu8                        13029   reff  0.442411
+ 4GenMu8 Lxy/Lz                 12448   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       49147  reff  0.343685
+ 2RecMu8                        44342  reff  0.902232
+ 3RecMu8                        29050  reff  0.655135
+ 4RecMu8                        12579  reff  0.433012
+ ================ EVENT variables ================= 
+ Events with VtxOK              12579    reff  1
+ Events with 2 muonjets         11562     reff  0.919151
+ Events with 2 Dimuons          11556    reff  0.999481
+ Events with 2DimVtxOK          11554    reff  0.999827
+ Events with 2DimHitPix         10768     reff  0.931972
+ Events with 2DimDzOK           10763   reff   0.999536
+ Events with 2DimMassOK         10646  reff   0.989129
+ Events with 2DimIsoOK          8516   reff   0.799925
+ Events with 2DimHLT            8338   reff   0.979098
+ ratio reco/gen                 0.669826 +/-  0.00421505
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 020_, 0.2
+mass_string, mass_double: 1000, 1
+ev_all                  : 143000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_050_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_050_Evt_80k_PATANA_v4/151117_155539/asdf/
+ Events          136250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       46697   reff 0.34273
+ 2GenMu8                        42492   reff  0.909951
+ 3GenMu8                        27990   reff  0.658712
+ 4GenMu8                        12474   reff  0.445659
+ 4GenMu8 Lxy/Lz                 8954   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       46554  reff  0.341681
+ 2RecMu8                        41898  reff  0.899987
+ 3RecMu8                        27304  reff  0.651678
+ 4RecMu8                        11664  reff  0.42719
+ ================ EVENT variables ================= 
+ Events with VtxOK              11664    reff  1
+ Events with 2 muonjets         10661     reff  0.914009
+ Events with 2 Dimuons          10660    reff  0.999906
+ Events with 2DimVtxOK          10659    reff  0.999906
+ Events with 2DimHitPix         7833     reff  0.734872
+ Events with 2DimDzOK           7827   reff   0.999234
+ Events with 2DimMassOK         7745  reff   0.989523
+ Events with 2DimIsoOK          6193   reff   0.799613
+ Events with 2DimHLT            6048   reff   0.976586
+ ratio reco/gen                 0.675452 +/-  0.00494798
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 050_, 0.5
+mass_string, mass_double: 1000, 1
+ev_all                  : 136250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_100_Evt_80k_PATANA_v4/151117_155629/asdf/
+ Events          129500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       44585   reff 0.344286
+ 2GenMu8                        40508   reff  0.908557
+ 3GenMu8                        26809   reff  0.66182
+ 4GenMu8                        11847   reff  0.441904
+ 4GenMu8 Lxy/Lz                 4781   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       44151  reff  0.340934
+ 2RecMu8                        39341  reff  0.891056
+ 3RecMu8                        25343  reff  0.644188
+ 4RecMu8                        10238  reff  0.403977
+ ================ EVENT variables ================= 
+ Events with VtxOK              10238    reff  1
+ Events with 2 muonjets         9198     reff  0.898418
+ Events with 2 Dimuons          9196    reff  0.999783
+ Events with 2DimVtxOK          9193    reff  0.999674
+ Events with 2DimHitPix         4254     reff  0.462743
+ Events with 2DimDzOK           4247   reff   0.998354
+ Events with 2DimMassOK         4200  reff   0.988933
+ Events with 2DimIsoOK          3380   reff   0.804762
+ Events with 2DimHLT            3312   reff   0.979882
+ ratio reco/gen                 0.692742 +/-  0.00667234
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 100_, 1
+mass_string, mass_double: 1000, 1
+ev_all                  : 129500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_200_Evt_80k_PATANA_v4/151117_155726/asdf/
+ Events          111000
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       37902   reff 0.341459
+ 2GenMu8                        34527   reff  0.910955
+ 3GenMu8                        22705   reff  0.657601
+ 4GenMu8                        10144   reff  0.446774
+ 4GenMu8 Lxy/Lz                 1642   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       36972  reff  0.333081
+ 2RecMu8                        32486  reff  0.878665
+ 3RecMu8                        20223  reff  0.622514
+ 4RecMu8                        7633  reff  0.377442
+ ================ EVENT variables ================= 
+ Events with VtxOK              7633    reff  1
+ Events with 2 muonjets         6683     reff  0.87554
+ Events with 2 Dimuons          6682    reff  0.99985
+ Events with 2DimVtxOK          6671    reff  0.998354
+ Events with 2DimHitPix         1531     reff  0.229501
+ Events with 2DimDzOK           1528   reff   0.99804
+ Events with 2DimMassOK         1508  reff   0.986911
+ Events with 2DimIsoOK          1219   reff   0.808355
+ Events with 2DimHLT            1180   reff   0.968007
+ ratio reco/gen                 0.718636 +/-  0.0110969
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 200_, 2
+mass_string, mass_double: 1000, 1
+ev_all                  : 111000
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_300_Evt_80k_PATANA_v4/151117_155825/asdf/
+ Events          92250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       31985   reff 0.346721
+ 2GenMu8                        29100   reff  0.909801
+ 3GenMu8                        19302   reff  0.663299
+ 4GenMu8                        8590   reff  0.445032
+ 4GenMu8 Lxy/Lz                 735   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       30499  reff  0.330612
+ 2RecMu8                        26316  reff  0.862848
+ 3RecMu8                        16084  reff  0.611187
+ 4RecMu8                        5680  reff  0.353146
+ ================ EVENT variables ================= 
+ Events with VtxOK              5680    reff  1
+ Events with 2 muonjets         4842     reff  0.852465
+ Events with 2 Dimuons          4839    reff  0.99938
+ Events with 2DimVtxOK          4823    reff  0.996694
+ Events with 2DimHitPix         692     reff  0.143479
+ Events with 2DimDzOK           686   reff   0.991329
+ Events with 2DimMassOK         680  reff   0.991254
+ Events with 2DimIsoOK          567   reff   0.833824
+ Events with 2DimHLT            548   reff   0.96649
+ ratio reco/gen                 0.745578 +/-  0.016065
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 300_, 3
+mass_string, mass_double: 1000, 1
+ev_all                  : 92250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1000_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1000_cT_500_Evt_80k_PATANA_v4/151117_155914/asdf/
+ Events          117250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       40480   reff 0.345245
+ 2GenMu8                        36841   reff  0.910104
+ 3GenMu8                        24377   reff  0.661681
+ 4GenMu8                        10817   reff  0.443738
+ 4GenMu8 Lxy/Lz                 377   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       36174  reff  0.30852
+ 2RecMu8                        30321  reff  0.838199
+ 3RecMu8                        17231  reff  0.568286
+ 4RecMu8                        5600  reff  0.324996
+ ================ EVENT variables ================= 
+ Events with VtxOK              5600    reff  1
+ Events with 2 muonjets         4490     reff  0.801786
+ Events with 2 Dimuons          4490    reff  1
+ Events with 2DimVtxOK          4463    reff  0.993987
+ Events with 2DimHitPix         363     reff  0.0813354
+ Events with 2DimDzOK           361   reff   0.99449
+ Events with 2DimMassOK         359  reff   0.99446
+ Events with 2DimIsoOK          280   reff   0.779944
+ Events with 2DimHLT            268   reff   0.957143
+ ratio reco/gen                 0.710875 +/-  0.023349
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 500_, 5
+mass_string, mass_double: 1000, 1
+ev_all                  : 117250
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_000_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_000_Evt_80k_PATANA_v4/151117_160012/asdf/
+ Events          143750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       50160   reff 0.348939
+ 2GenMu8                        45525   reff  0.907596
+ 3GenMu8                        30299   reff  0.665546
+ 4GenMu8                        12842   reff  0.423842
+ 4GenMu8 Lxy/Lz                 12842   reff   1
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       50065  reff  0.348278
+ 2RecMu8                        45276  reff  0.904344
+ 3RecMu8                        30017  reff  0.662978
+ 4RecMu8                        12553  reff  0.418196
+ ================ EVENT variables ================= 
+ Events with VtxOK              12553    reff  1
+ Events with 2 muonjets         11602     reff  0.924241
+ Events with 2 Dimuons          11597    reff  0.999569
+ Events with 2DimVtxOK          11597    reff  1
+ Events with 2DimHitPix         11406     reff  0.98353
+ Events with 2DimDzOK           11403   reff   0.999737
+ Events with 2DimMassOK         11199  reff   0.98211
+ Events with 2DimIsoOK          8928   reff   0.797214
+ Events with 2DimHLT            8748   reff   0.979839
+ ratio reco/gen                 0.681202 +/-  0.00411225
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 000_, 0
+mass_string, mass_double: 1500, 1.5
+ev_all                  : 143750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_005_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_005_Evt_80k_PATANA_v4/151117_160122/asdf/
+ Events          137750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       47827   reff 0.347201
+ 2GenMu8                        43388   reff  0.907186
+ 3GenMu8                        28924   reff  0.666636
+ 4GenMu8                        12292   reff  0.424976
+ 4GenMu8 Lxy/Lz                 12288   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       47733  reff  0.346519
+ 2RecMu8                        43145  reff  0.903882
+ 3RecMu8                        28693  reff  0.665037
+ 4RecMu8                        12050  reff  0.419963
+ ================ EVENT variables ================= 
+ Events with VtxOK              12050    reff  1
+ Events with 2 muonjets         11081     reff  0.919585
+ Events with 2 Dimuons          11076    reff  0.999549
+ Events with 2DimVtxOK          11076    reff  1
+ Events with 2DimHitPix         10829     reff  0.9777
+ Events with 2DimDzOK           10825   reff   0.999631
+ Events with 2DimMassOK         10644  reff   0.983279
+ Events with 2DimIsoOK          8474   reff   0.796129
+ Events with 2DimHLT            8311   reff   0.980765
+ ratio reco/gen                 0.676351 +/-  0.00422068
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 005_, 0.05
+mass_string, mass_double: 1500, 1.5
+ev_all                  : 137750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_010_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_010_Evt_79k_PATANA_v4/151117_160146/asdf/
+ Events          13750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       4858   reff 0.353309
+ 2GenMu8                        4402   reff  0.906134
+ 3GenMu8                        2958   reff  0.671967
+ 4GenMu8                        1264   reff  0.427316
+ 4GenMu8 Lxy/Lz                 1261   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       4854  reff  0.353018
+ 2RecMu8                        4384  reff  0.903173
+ 3RecMu8                        2936  reff  0.669708
+ 4RecMu8                        1231  reff  0.419278
+ ================ EVENT variables ================= 
+ Events with VtxOK              1231    reff  1
+ Events with 2 muonjets         1121     reff  0.910642
+ Events with 2 Dimuons          1121    reff  1
+ Events with 2DimVtxOK          1121    reff  1
+ Events with 2DimHitPix         1094     reff  0.975914
+ Events with 2DimDzOK           1094   reff   1
+ Events with 2DimMassOK         1079  reff   0.986289
+ Events with 2DimIsoOK          875   reff   0.810936
+ Events with 2DimHLT            864   reff   0.987429
+ ratio reco/gen                 0.68517 +/-  0.0130791
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 010_, 0.1
+mass_string, mass_double: 1500, 1.5
+ev_all                  : 13750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_020_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_020_Evt_80k_PATANA_v4/151117_160315/asdf/
+ Events          109750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       37991   reff 0.346159
+ 2GenMu8                        34562   reff  0.909742
+ 3GenMu8                        23026   reff  0.666223
+ 4GenMu8                        9657   reff  0.419395
+ 4GenMu8 Lxy/Lz                 9516   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       37941  reff  0.345704
+ 2RecMu8                        34345  reff  0.905221
+ 3RecMu8                        22771  reff  0.663008
+ 4RecMu8                        9486  reff  0.416582
+ ================ EVENT variables ================= 
+ Events with VtxOK              9486    reff  1
+ Events with 2 muonjets         8738     reff  0.921147
+ Events with 2 Dimuons          8734    reff  0.999542
+ Events with 2DimVtxOK          8733    reff  0.999886
+ Events with 2DimHitPix         8449     reff  0.96748
+ Events with 2DimDzOK           8448   reff   0.999882
+ Events with 2DimMassOK         8315  reff   0.984257
+ Events with 2DimIsoOK          6691   reff   0.80469
+ Events with 2DimHLT            6546   reff   0.978329
+ ratio reco/gen                 0.687894 +/-  0.0047499
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 020_, 0.2
+mass_string, mass_double: 1500, 1.5
+ev_all                  : 109750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_100_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_100_Evt_80k_PATANA_v4/151117_160426/asdf/
+ Events          97750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       34158   reff 0.349442
+ 2GenMu8                        30967   reff  0.906581
+ 3GenMu8                        20588   reff  0.664837
+ 4GenMu8                        8828   reff  0.428793
+ 4GenMu8 Lxy/Lz                 5122   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       34003  reff  0.347857
+ 2RecMu8                        30485  reff  0.896539
+ 3RecMu8                        20003  reff  0.656159
+ 4RecMu8                        8173  reff  0.408589
+ ================ EVENT variables ================= 
+ Events with VtxOK              8173    reff  1
+ Events with 2 muonjets         7468     reff  0.91374
+ Events with 2 Dimuons          7466    reff  0.999732
+ Events with 2DimVtxOK          7466    reff  1
+ Events with 2DimHitPix         4579     reff  0.613314
+ Events with 2DimDzOK           4575   reff   0.999126
+ Events with 2DimMassOK         4507  reff   0.985137
+ Events with 2DimIsoOK          3612   reff   0.80142
+ Events with 2DimHLT            3524   reff   0.975637
+ ratio reco/gen                 0.688012 +/-  0.00647362
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 100_, 1
+mass_string, mass_double: 1500, 1.5
+ev_all                  : 97750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_200_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_200_Evt_80k_PATANA_v4/151117_160522/asdf/
+ Events          98750
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       34414   reff 0.348496
+ 2GenMu8                        31189   reff  0.906288
+ 3GenMu8                        20662   reff  0.662477
+ 4GenMu8                        8829   reff  0.427306
+ 4GenMu8 Lxy/Lz                 2515   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       33972  reff  0.34402
+ 2RecMu8                        30149  reff  0.887466
+ 3RecMu8                        19401  reff  0.643504
+ 4RecMu8                        7544  reff  0.388846
+ ================ EVENT variables ================= 
+ Events with VtxOK              7544    reff  1
+ Events with 2 muonjets         6709     reff  0.889316
+ Events with 2 Dimuons          6709    reff  1
+ Events with 2DimVtxOK          6705    reff  0.999404
+ Events with 2DimHitPix         2304     reff  0.343624
+ Events with 2DimDzOK           2300   reff   0.998264
+ Events with 2DimMassOK         2258  reff   0.981739
+ Events with 2DimIsoOK          1822   reff   0.806909
+ Events with 2DimHLT            1779   reff   0.9764
+ ratio reco/gen                 0.707356 +/-  0.00907235
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 200_, 2
+mass_string, mass_double: 1500, 1.5
+ev_all                  : 98750
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_300_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_300_Evt_80k_PATANA_v4/151117_160613/asdf/
+ Events          139500
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       48610   reff 0.348459
+ 2GenMu8                        44134   reff  0.90792
+ 3GenMu8                        29341   reff  0.664816
+ 4GenMu8                        12415   reff  0.423128
+ 4GenMu8 Lxy/Lz                 2006   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       47615  reff  0.341326
+ 2RecMu8                        42052  reff  0.883167
+ 3RecMu8                        26649  reff  0.633715
+ 4RecMu8                        9909  reff  0.371834
+ ================ EVENT variables ================= 
+ Events with VtxOK              9909    reff  1
+ Events with 2 muonjets         8683     reff  0.876274
+ Events with 2 Dimuons          8682    reff  0.999885
+ Events with 2DimVtxOK          8678    reff  0.999539
+ Events with 2DimHitPix         1881     reff  0.216755
+ Events with 2DimDzOK           1871   reff   0.994684
+ Events with 2DimMassOK         1836  reff   0.981293
+ Events with 2DimIsoOK          1478   reff   0.805011
+ Events with 2DimHLT            1425   reff   0.964141
+ ratio reco/gen                 0.710369 +/-  0.0101274
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 300_, 3
+mass_string, mass_double: 1500, 1.5
+ev_all                  : 139500
+numFakes                : 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_1500_cT_500_Evt_80k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v3/DarkSUSY_mH_125_mGammaD_1500_cT_500_Evt_80k_PATANA_v4/151117_160729/asdf/
+ Events          140250
+ ================ GEN MUONS ========================================= 
+ 1GenMu17                       48933   reff 0.348898
+ 2GenMu8                        44442   reff  0.908221
+ 3GenMu8                        29577   reff  0.665519
+ 4GenMu8                        12578   reff  0.425263
+ 4GenMu8 Lxy/Lz                 874   reff   0
+ ================ RECO MUONS ========================================= 
+ 1RecMu17                       46423  reff  0.331002
+ 2RecMu8                        40248  reff  0.866984
+ 3RecMu8                        24637  reff  0.61213
+ 4RecMu8                        8589  reff  0.348622
+ ================ EVENT variables ================= 
+ Events with VtxOK              8589    reff  1
+ Events with 2 muonjets         7209     reff  0.839329
+ Events with 2 Dimuons          7208    reff  0.999861
+ Events with 2DimVtxOK          7202    reff  0.999168
+ Events with 2DimHitPix         863     reff  0.119828
+ Events with 2DimDzOK           855   reff   0.99073
+ Events with 2DimMassOK         841  reff   0.983626
+ Events with 2DimIsoOK          689   reff   0.819263
+ Events with 2DimHLT            658   reff   0.955007
+ ratio reco/gen                 0.75286 +/-  0.0145906
+Fake rate (#Fakes/#Events): 0
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 0, 0, 0
+Filling fake stat vector: 
+cT_string, cT_double    : 500_, 5
+mass_string, mass_double: 1500, 1.5
+ev_all                  : 140250
+numFakes                : 0
+Info in <TCanvas::Print>: pdf file e_rec_alpha_gen_vs_cT_withElipCut.pdf has been created

@@ -1,0 +1,64 @@
+   ------------------------------------------------------------
+  | Welcome to ROOT 6.02/05                http://root.cern.ch |
+  |                               (c) 1995-2014, The ROOT Team |
+  | Built for linuxx8664gcc                                    |
+  | From tag , 9 February 2015                                 |
+  | Try '.help', '.demo', '.license', '.credits', '.quit'/'.q' |
+   ------------------------------------------------------------
+
+
+Processing FakeInvestigation.C+...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation_C.so
+In file included from /home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/FakeInvestigation_C_ACLiC_dict.cxx:41:0:
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C: In function 'void makePlot()':
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C:820:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0250_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C:832:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0275_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C:844:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0300_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C:856:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_2000_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C:867:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_8500_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C:879:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0400_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C:891:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0700_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C:903:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_1000_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/HalfEllipse_Feb_22/February_18_2016_97%/HalfEllipse/2000/./FakeInvestigation.C:915:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_1500_cT.size(); i++){
+                 ^
+Begin Efficiency Investigation...
+ ratio reco/gen for 2 	 0 	 0.677415 +/-  0.00571143
+ ratio reco/gen for 2 	 0.05 	 0.688525 +/-  0.00552914
+ ratio reco/gen for 2 	 0.1 	 0.679297 +/-  0.00558109
+ ratio reco/gen for 2 	 0.2 	 0.67521 +/-  0.00563518
+ ratio reco/gen for 2 	 0.5 	 0.663356 +/-  0.00588728
+ ratio reco/gen for 2 	 1 	 0.670434 +/-  0.00667771
+ ratio reco/gen for 2 	 2 	 0.655459 +/-  0.00903581
+ ratio reco/gen for 2 	 3 	 0.69261 +/-  0.0118001
+ ratio reco/gen for 2 	 5 	 0.68414 +/-  0.0170425
+ ratio reco/gen for 2 	 10 	 0.664058 +/-  0.0115891
+ ratio reco/gen for 2 	 20 	 0.654292 +/-  0.0229088
+Info in <TCanvas::Print>: pdf file eta.pdf has been created
+Info in <TCanvas::Print>: pdf file lxy.pdf has been created
+Info in <TCanvas::Print>: pdf file reco_eta.pdf has been created
+Info in <TCanvas::Print>: pdf file reco_lxy.pdf has been created
+Info in <TCanvas::Print>: pdf file e_rec_alpha_gen_vs_cT.pdf has been created
+Info in <TCanvas::Print>: pdf file Real_Reco_Eta_vs_Lxy.pdf has been created
+Info in <TCanvas::Print>: pdf file Fake_Reco_Eta_vs_Lxy.pdf has been created
+Info in <TCanvas::Print>: pdf file FakeEvent_Reco_Eta_vs_Lxy.pdf has been created
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (eta_num) has not been written.
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (eta_den) has not been written.
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (lxy_num) has not been written.
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (lxy_den) has not been written.
