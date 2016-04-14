@@ -30,6 +30,7 @@
 
 #include "DataFormats/GeometrySurface/interface/Plane.h"
 #include "DataFormats/GeometryVector/interface/Point2DBase.h"
+
 #include <DataFormats/SiPixelDetId/interface/PXBDetId.h>
 #include <DataFormats/SiPixelDetId/interface/PXFDetId.h>
 
@@ -190,6 +191,7 @@ private:
   
   // ----------member data ---------------------------
   edm::ParameterSet param_;
+  edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
 
   edm::InputTag m_muJets; // muon jets built from reconstructed muons
   edm::InputTag m_muons;  // reconstructed PAT muons
