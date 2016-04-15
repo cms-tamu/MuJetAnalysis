@@ -49,7 +49,7 @@ process.source = cms.Source ("PoolSource",
 #                             fileNames=cms.untracked.vstring('file:out_reco_106.root'),
                              skipEvents=cms.untracked.uint32(0)
                             )
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 
 process.Path = cms.Path(process.TrackRefitter*process.MeasurementTrackerEvent)
