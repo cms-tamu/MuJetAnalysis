@@ -300,9 +300,11 @@ class CutFlowAnalyzer : public edm::EDAnalyzer {
     edm::InputTag m_muJets;       // muon jets built from reconstructed muons
     edm::InputTag m_muJetOrphans; // muon orphan, not found in any group
     Int_t         m_nThrowsConsistentVertexesCalculator;
+    Int_t         m_barrelPixelLayer;
+    Int_t         m_endcapPixelLayer;
 
-    unsigned int m_randomSeed;
-    TRandom3       m_trandom3;
+    unsigned int  m_randomSeed;
+    TRandom3      m_trandom3;
 
     // bb Estimation
     Float_t b_massC;
@@ -595,6 +597,8 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_muJets = iConfig.getParameter<edm::InputTag>("muJets");
   m_muJetOrphans = iConfig.getParameter<edm::InputTag>("muJetOrphans");
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
+  m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
+  m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
   runBBestimation_ = iConfig.getUntrackedParameter<bool>("runBBestimation",true);
 
   m_randomSeed = 1234;
@@ -1337,8 +1341,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition); 
       ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
       ConsistentVtx.SetDebug(99);      
-      ConsistentVtx.setBarrelPixelLayer(1);
-      ConsistentVtx.setEndcapPixelLayer(1);
+      ConsistentVtx.setBarrelPixelLayer(m_barrelPixelLayer);
+      ConsistentVtx.setEndcapPixelLayer(m_endcapPixelLayer);
 
       b_is2DiMuonsConsistentVtxOK = ConsistentVtx.Calculate(diMuonC, diMuonF);
 
