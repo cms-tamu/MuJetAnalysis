@@ -191,7 +191,6 @@ private:
   
   // ----------member data ---------------------------
   edm::ParameterSet param_;
-  edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
 
   edm::InputTag m_muJets; // muon jets built from reconstructed muons
   edm::InputTag m_muons;  // reconstructed PAT muons
