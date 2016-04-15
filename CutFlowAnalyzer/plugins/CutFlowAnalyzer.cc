@@ -2151,6 +2151,41 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
   if (runPixelHitRecovery_ && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK) {
 
+    //===================== Initializing navigation school, propagator, etc..======================//
+    
+    edm::ESHandle<NavigationSchool> theSchool;
+    edm::ESHandle<MeasurementTracker> theMeasTk;
+    edm::Handle<MeasurementTrackerEvent> theMeasTkEventHandle;
+    iEvent.getByToken(measurementTrkToken_, theMeasTkEventHandle);
+    const MeasurementTrackerEvent *theMeasTkEvent = theMeasTkEventHandle.product();
+    
+    std::string theNavigationSchool ="";
+    if (param_.exists("NavigationSchool")) theNavigationSchool= param_.getParameter<std::string>("NavigationSchool");
+    else edm::LogWarning("TrackProducerBase")<<"NavigationSchool parameter not set. secondary hit pattern will not be filled.";
+    
+    if (theNavigationSchool!=""){
+      iSetup.get<NavigationSchoolRecord>().get(theNavigationSchool, theSchool);
+      LogDebug("TrackProducer") << "get also the measTk" << "\n";
+      std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
+      iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
+      
+    }
+    else{
+      theSchool = edm::ESHandle<NavigationSchool>(); //put an invalid handle
+      theMeasTk = edm::ESHandle<MeasurementTracker>(); //put an invalid handle
+      }
+    
+    if (!theSchool.isValid()) 
+      edm::LogWarning("NavigationSchool")<<"NavigationSchool is invalid!";
+    
+    edm::ESHandle<Propagator> thePropagator;
+    std::string propagatorName = param_.getParameter<std::string>("Propagator");
+    iSetup.get<TrackingComponentsRecord>().get(propagatorName,thePropagator);
+    
+    Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
+    Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
+    
+
 
     //============== Refitted collection of tracks =============================//
     Handle<reco::TrackCollection> tracksrf;  
@@ -2461,378 +2496,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       if(km==0)  b_mutrack_eta_mu1JetC = muJetC->muon(km)->eta();
       if(km==1)  b_mutrack_eta_mu2JetC = muJetC->muon(km)->eta();
       
-      edm::ESHandle<NavigationSchool> theSchool;
-      edm::ESHandle<MeasurementTracker> theMeasTk;
-      edm::Handle<MeasurementTrackerEvent> theMeasTkEventHandle;
-      iEvent.getByToken(measurementTrkToken_, theMeasTkEventHandle);
-      const MeasurementTrackerEvent *theMeasTkEvent = theMeasTkEventHandle.product();
-      
-      std::string theNavigationSchool ="";
-      if (param_.exists("NavigationSchool")) theNavigationSchool= param_.getParameter<std::string>("NavigationSchool");
-      else edm::LogWarning("TrackProducerBase")<<"NavigationSchool parameter not set. secondary hit pattern will not be filled.";
-      
-      if (theNavigationSchool!=""){
-	iSetup.get<NavigationSchoolRecord>().get(theNavigationSchool, theSchool);
-	LogDebug("TrackProducer") << "get also the measTk" << "\n";
-	std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
-	iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
-	
-      }
-      else{
-	theSchool = edm::ESHandle<NavigationSchool>(); //put an invalid handle
-	theMeasTk = edm::ESHandle<MeasurementTracker>(); //put an invalid handle
-      }
-      
-      if (!theSchool.isValid()) 
-	edm::LogWarning("NavigationSchool")<<"NavigationSchool is invalid!";
-      
-      edm::ESHandle<Propagator> thePropagator;
-      std::string propagatorName = param_.getParameter<std::string>("Propagator");
-      iSetup.get<TrackingComponentsRecord>().get(propagatorName,thePropagator);
-      
-      Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
-      Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
-      
-      //============================================================================================//
-	  
-      std::vector<Float_t> mincharge;
-      std::vector<Float_t> mintheta;
-      std::vector<Float_t> minqoverpt;
-      std::vector<Float_t> minphi;
-      std::vector<Float_t> mindxy;
-      std::vector<Float_t> mindz;
-      
-      std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetC;
-      std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetC;
-      std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetF;
-      std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetF;
-      
-      
-      //====== MATCHING selected muons to refitted tracks and asking for hits in 1st layer (barrel or endcap)
-	
-      for(uint32_t k=0;k<2;k++){
-	
-	mtrack_pt[k] = muJetC->muon(k)->innerTrack()->pt();
-	mtrack_charge[k] = muJetC->muon(k)->innerTrack()->charge();
-	
-	mtrack_theta[k] = muJetC->muon(k)->innerTrack()->theta();
-	mtrack_phi[k] = muJetC->muon(k)->innerTrack()->phi();
-	mtrack_dxy[k] = muJetC->muon(k)->innerTrack()->dxy();
-	mtrack_dz[k] = muJetC->muon(k)->innerTrack()->dz();
-	
-	mtrack_errpt[k] = muJetC->muon(k)->innerTrack()->ptError();
-	mtrack_errcharge[k] = muJetC->muon(k)->innerTrack()->charge();
-	mtrack_errqoverp[k] = muJetC->muon(k)->innerTrack()->qoverpError();
-	mtrack_errtheta[k] = muJetC->muon(k)->innerTrack()->thetaError();
-	mtrack_errphi[k] = muJetC->muon(k)->innerTrack()->phiError();
-	mtrack_errdxy[k] = muJetC->muon(k)->innerTrack()->dxyError();
-	mtrack_errdz[k] = muJetC->muon(k)->innerTrack()->dzError();
-	
-	
-	Int_t counter_match=0;
-	Int_t counter_track=0;
-	
-	for (reco::TrackCollection::const_iterator trackrf = tracksrf->begin(); trackrf != tracksrf->end(); ++trackrf) {
-	  
-	  if(trackrf->pt()>3.0 && fabs(trackrf->eta())<2.5){
-	    
-	    
-	    if(k==1){
-	      std::pair<Int_t,Float_t> temp_mu2_muJetC;
-	      std::pair<Int_t,Float_t> temp_mu2_muJetF;
-	      
-	      temp_mu2_muJetC.first = counter_match;
-	      temp_mu2_muJetF.first = counter_match;
-	      
-	      
-	      temp_mu2_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-		pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-		pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-		pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-		pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-
-	      temp_mu2_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-		pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-		pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-		pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-		pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-		
-
-	      minchi2_mu2_muJetC.push_back(temp_mu2_muJetC);
-	      minchi2_mu2_muJetF.push_back(temp_mu2_muJetF);
-
-	      muJetC_muon2_track_diffcharge[counter_track] = muJetC->muon(k)->innerTrack()->charge() - trackrf->charge();
-	      muJetC_muon2_track_diffpt[counter_track] = muJetC->muon(k)->innerTrack()->pt() - trackrf->pt();
-	      muJetC_muon2_track_diffqoverp[counter_track] = muJetC->muon(k)->innerTrack()->qoverp() - trackrf->qoverp();
-	      muJetC_muon2_track_difftheta[counter_track] = muJetC->muon(k)->innerTrack()->theta() - trackrf->theta();
-	      muJetC_muon2_track_diffphi[counter_track] = muJetC->muon(k)->innerTrack()->phi() - trackrf->phi();
-	      muJetC_muon2_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
-	      muJetC_muon2_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
-	      
-	    }
-	      
-	      
-	    if(k==0){
-		
-	      std::pair<Int_t,Float_t> temp_mu1_muJetC;
-	      std::pair<Int_t,Float_t> temp_mu1_muJetF;
-		
-	      temp_mu1_muJetC.first = counter_match;
-	      temp_mu1_muJetF.first = counter_match;
-	      temp_mu1_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-		pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-		pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-		pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-		pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-
-	      temp_mu1_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-		pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-		pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-		pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-		pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-
-	      minchi2_mu1_muJetC.push_back(temp_mu1_muJetC);
-	      minchi2_mu1_muJetF.push_back(temp_mu1_muJetF);
-
-		
-	      mintheta.push_back( cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()) );
-	      minqoverpt.push_back((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt())  -  (trackrf->charge()/trackrf->pt())  );
-	      minphi.push_back(  My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()) );
-	      mindxy.push_back(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy() );
-	      mindz.push_back( muJetC->muon(k)->innerTrack()->dz() - trackrf->dz() );
-	      mincharge.push_back( muJetC->muon(k)->innerTrack()->charge() - trackrf->charge());
-		
-		
-	      muJetC_muon1_track_diffpt[counter_track] = muJetC->muon(k)->innerTrack()->pt() - trackrf->pt();
-	      muJetC_muon1_track_diffcharge[counter_track] = muJetC->muon(k)->innerTrack()->charge() - trackrf->charge();
-	      muJetC_muon1_track_diffqoverp[counter_track] = (muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt());
-	      muJetC_muon1_track_difftheta[counter_track] = cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta());
-	      muJetC_muon1_track_diffphi[counter_track] =  My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi());
-	      muJetC_muon1_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
-	      muJetC_muon1_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
-		  
-	      muJetC_muon1_track_diffchi2[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-		pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-		pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-		pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-		pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-		
-		
-		  
-	      muJetC_muon1_track_diffchi2theta[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2);
-	      muJetC_muon1_track_diffchi2qoverpt[counter_track] = pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2);
-	      muJetC_muon1_track_diffchi2phi[counter_track] = pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2); 
-	      muJetC_muon1_track_diffchi2dxy[counter_track] = pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2);
-	      muJetC_muon1_track_diffchi2dz[counter_track] = pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-		
-	      b_track_pt[counter_track] = trackrf->pt();
-	      b_track_charge[counter_track] = trackrf->charge();
-	      b_track_qoverp[counter_track] = trackrf->qoverp();
-	      b_track_theta[counter_track] = trackrf->theta();
-	      b_track_phi[counter_track] = trackrf->phi();
-	      b_track_dxy[counter_track] = trackrf->dxy();
-	      b_track_dz[counter_track] = trackrf->dz();
-		
-	      b_track_errpt[counter_track] = trackrf->ptError();
-	      b_track_errcharge[counter_track] = trackrf->charge();
-	      b_track_errqoverp[counter_track] = trackrf->qoverpError();
-	      b_track_errtheta[counter_track] = trackrf->thetaError();
-	      b_track_errphi[counter_track] = trackrf->phiError();
-	      b_track_errdxy[counter_track] = trackrf->dxyError();
-	      b_track_errdz[counter_track] = trackrf->dzError();
-	    }
-	      
-
-	    indxtrkmj1[k] = counter_match;
-	    if(k==0) b_match_mu1track_muJetC=1;
-	    if(k==1) b_match_mu2track_muJetC=1;
-
-	    if(m_debug>10){
-	      if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-	      if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-		    
-	      if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-	      if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-		    
-	      if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
-	      if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
-		    
-		    
-	      if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
-	      if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
-		    
-	      if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
-	      if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
-		    
-	      if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
-	      if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
-
-	    }
-
-	    if(sameTrackRF(&*trackrf,&*(muJetF->muon(k)->innerTrack()))){
-	      //	    if(sameTrack(&*track,&*(muJetF->muon(k)->innerTrack()))){
-	      indxtrkmj2[k] = counter_match;
-	      if(k==0) b_match_mu1track_muJetF=1;
-	      if(k==1) b_match_mu2track_muJetF=1;
-	      if(m_debug>10){
-		if(k==0) std::cout<<"  match mj2m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<std::endl;
-			
-	      }
-
-	    }
-	    counter_track++;
-	  }
-	  counter_match++;
-	}
-	if(k==0) b_ntracks = counter_track;
-      }
-
-      std::sort(mintheta.begin(),mintheta.end(),order);
-      std::sort(minqoverpt.begin(),minqoverpt.end(),order);
-      std::sort(minphi.begin(),minphi.end(),order);
-      std::sort(mindxy.begin(),mindxy.end(),order);
-      std::sort(mindz.begin(),mindz.end(),order);
-      std::sort(mincharge.begin(),mincharge.end(),order);
-	  
-      muJetC_muon1_track_mincharge  = mincharge[0];
-      muJetC_muon1_track_minqoverpt = minqoverpt[0];
-      muJetC_muon1_track_mintheta   = mintheta[0];
-      muJetC_muon1_track_minphi     = minphi[0];
-      muJetC_muon1_track_mindxy     = mindxy[0];
-      muJetC_muon1_track_mindz      = mindz[0];
-
-
-      muJetC_muon1_track_minchi2theta   = pow(mintheta[0],2)/pow(6.515e-07,2);
-      muJetC_muon1_track_minchi2qoverpt = pow(minqoverpt[0],2)/pow(5.847e-07,2);
-      muJetC_muon1_track_minchi2phi     = pow(minphi[0],2)/pow(5.34e-07,2);
-      muJetC_muon1_track_minchi2dxy     =  pow(mindxy[0],2)/pow(3.6e-06,2);
-      muJetC_muon1_track_minchi2dz      = pow(mindz[0],2)/pow(3.703e-06,2);
-
-      mintheta.clear();
-      minqoverpt.clear();
-      minphi.clear();
-      mindxy.clear();
-      mindz.clear();
-      mincharge.clear();
-
-      //==================================================================================================
-	
-      std::sort(minchi2_mu1_muJetC.begin(),minchi2_mu1_muJetC.end(),matchorder);
-      std::sort(minchi2_mu2_muJetC.begin(),minchi2_mu2_muJetC.end(),matchorder);
-      std::sort(minchi2_mu1_muJetF.begin(),minchi2_mu1_muJetF.end(),matchorder);
-      std::sort(minchi2_mu2_muJetF.begin(),minchi2_mu2_muJetF.end(),matchorder);
-
-
-      muJetC_muon1_track_minchi2 = minchi2_mu1_muJetC[0].second;
-      muJetC_muon2_track_minchi2 = minchi2_mu2_muJetC[0].second;
-      muJetF_muon1_track_minchi2 = minchi2_mu1_muJetF[0].second;
-      muJetF_muon2_track_minchi2 = minchi2_mu2_muJetF[0].second;
-
-
-      if(minchi2_mu1_muJetC[0].second<100000.0){
-	b_match_mu1track_muJetC=1;
-	indxtrkmj1[0] = minchi2_mu1_muJetC[0].first;
-      }
-      if(minchi2_mu2_muJetC[0].second<100000.0){
-	b_match_mu2track_muJetC=1;
-	indxtrkmj1[1] = minchi2_mu2_muJetC[0].first;
-      }
-      if(minchi2_mu1_muJetF[0].second<100000.0){
-	b_match_mu1track_muJetF=1;
-	indxtrkmj2[0] = minchi2_mu1_muJetF[0].first;
-      }
-      if(minchi2_mu2_muJetF[0].second<100000.0){
-	b_match_mu2track_muJetF=1;
-	indxtrkmj2[1] = minchi2_mu2_muJetF[0].first;
-      }
-
-
-      if(m_debug>10){
-	std::cout<<"  matching   chi2  mu1 muJetC  "<<minchi2_mu1_muJetC[0].first<<std::endl;
-	std::cout<<"  matching   chi2  mu2 muJetC  "<<minchi2_mu2_muJetC[0].first<<std::endl;
-	std::cout<<"  matching   chi2  mu1 muJetF  "<<minchi2_mu1_muJetF[0].first<<std::endl;
-	std::cout<<"  matching   chi2  mu2 muJetF  "<<minchi2_mu2_muJetF[0].first<<std::endl;
-      }
-
-
-      minchi2_mu1_muJetC.clear();
-      minchi2_mu2_muJetC.clear();
-      minchi2_mu1_muJetF.clear();
-      minchi2_mu2_muJetF.clear();
-
-
-      Local2DPoint mj1m0pos[200];
-      Local2DPoint mj1m1pos[200];
-      Local2DPoint mj2m0pos[200];
-      Local2DPoint mj2m1pos[200];
-
-      for(int in=0;in<200;in++){
-	mj1m0pos[in] = Local2DPoint(-10000,-10000);
-	mj1m1pos[in] = Local2DPoint(-10000,-10000);
-	mj2m0pos[in] = Local2DPoint(-10000,-10000);
-	mj2m1pos[in] = Local2DPoint(-10000,-10000);
-      }
-
-
-      Local2DPoint mj1m0poserr[200];
-      Local2DPoint mj1m1poserr[200];
-      Local2DPoint mj2m0poserr[200];
-      Local2DPoint mj2m1poserr[200];
-
-      for(int in=0;in<200;in++){
-	mj1m0poserr[in] = Local2DPoint(-10000,-10000);
-	mj1m1poserr[in] = Local2DPoint(-10000,-10000);
-	mj2m0poserr[in] = Local2DPoint(-10000,-10000);
-	mj2m1poserr[in] = Local2DPoint(-10000,-10000);
-      }
-
-
-      Local2DPoint mj1m0pos_lastmeas[200];
-      Local2DPoint mj1m1pos_lastmeas[200];
-      Local2DPoint mj2m0pos_lastmeas[200];
-      Local2DPoint mj2m1pos_lastmeas[200];
-
-      for(int in=0;in<200;in++){
-	mj1m0pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-	mj1m1pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-	mj2m0pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-	mj2m1pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-      }
-    
-
-      // Collection of Trajectories from Refitted Tracks
-      Handle<std::vector<Trajectory> > trajCollectionHandle;
-      iEvent.getByLabel(param_.getParameter<std::string>("trajectoryInput"),trajCollectionHandle);
-      
-      if(m_debug>10){
-	std::cout<<"   genTrack collection: " <<tracks->size()<<std::endl;
-	std::cout<<"   Refitted trajectoryColl->size(): " << trajCollectionHandle->size()<<std::endl;
-      }
-
-
-      for(uint32_t km=0;km<2;km++){  // loop for muJetC muon trajectories
-	  
-	if(m_debug>10){
-	  std::cout<<"  muon-track indx   "<<indxtrkmj1[km]<<"  muon pT   "<<muJetC->muon(km)->pt()<<"  muon eta  "
-		   <<muJetC->muon(km)->eta()<<std::endl;
-	}
-      
-
-	//===================   Information for the muon-tracks ===================================//
-	if(km==0)  b_mutrack_pT_mu1JetC = muJetC->muon(km)->pt();
-	if(km==1)  b_mutrack_pT_mu2JetC = muJetC->muon(km)->pt();
-
-	if(km==0)  b_mutrack_phi_mu1JetC = muJetC->muon(km)->phi();
-	if(km==1)  b_mutrack_phi_mu2JetC = muJetC->muon(km)->phi();
-
-	if(km==0)  b_mutrack_charge_mu1JetC = muJetC->muon(km)->charge();
-	if(km==1)  b_mutrack_charge_mu2JetC = muJetC->muon(km)->charge();
-
-	if(km==0)  b_mutrack_eta_mu1JetC = muJetC->muon(km)->eta();
-	if(km==1)  b_mutrack_eta_mu2JetC = muJetC->muon(km)->eta();
-
-
-      
       
 	//====================== Loop for Trajectories from TrackRefitter  =================================//
 	Int_t counter_traj=0;
@@ -3069,7 +2732,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	  }
 	  counter_traj++;
 	}
-      }
+    }
 
       if(m_debug>10) std::cout<<" second muonJet  muJetF  "<<std::endl;
       
@@ -3476,8 +3139,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	}
 	d_mu2_muJetF_hit.clear();
       }
-    }
   }
+
+
     
 
   if(runBBestimation_){
