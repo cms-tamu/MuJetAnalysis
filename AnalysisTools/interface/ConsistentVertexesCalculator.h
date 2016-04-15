@@ -23,7 +23,6 @@
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 #include "MuJetAnalysis/AnalysisTools/interface/eig3.h"
-#include "MuJetAnalysis/AnalysisTools/src/eig3.cc"
 
 //******************************************************************************
 // Struct to hold relevant details from iterative vertex technique
@@ -206,6 +205,9 @@ class ConsistentVertexesCalculator {
     std::vector< std::vector<double> > cholesky(std::vector<std::vector<double> > A);
     
     bool Calculate(const pat::MultiMuon *&mm_0, const pat::MultiMuon *&mm_1);
+
+    void setBarrelPixelLayer(int barrelPixelLayer = 1) {_barrelPixelLayer = barrelPixelLayer;}
+    void setEndcapPixelLayer(int endcapPixelLayer = 1) {_endcapPixelLayer = endcapPixelLayer;}
   
   private:
     
@@ -240,7 +242,9 @@ class ConsistentVertexesCalculator {
     
     std::vector<math::XYZTLorentzVector> _vVtxP4_0;
     std::vector<math::XYZTLorentzVector> _vVtxP4_1;
-    
+
+    int    _barrelPixelLayer;
+    int    _endcapPixelLayer;
 };
 
 #endif // ConsistentVertexesCalculator_H

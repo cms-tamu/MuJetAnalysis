@@ -17,7 +17,7 @@ process.patTrigger.processName = cms.string( "*" )
 process.patTriggerEvent.processName = cms.string( "*" )
 
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
-process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cfi")
+process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
@@ -29,8 +29,8 @@ process.source = cms.Source("PoolSource",
 process.maxEvents.input = -1
 
 process.p = cms.Path(
-	process.MuJetProducers * 
-    process.cutFlowAnalyzer
+    process.MuJetProducers * 
+    process.cutFlowAnalyzers
 )
 
 process.outpath = cms.EndPath(process.out)

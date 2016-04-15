@@ -279,16 +279,22 @@ bool ConsistentVertexesCalculator::Calculate( const pat::MultiMuon *&mm_0, const
       bool pix1 = false;
       bool pix2 = false;
 
-      if ( ((newVtx3D_0.x()*newVtx3D_0.x())+(newVtx3D_0.y()*newVtx3D_0.y())) > 16.0 ){
+      // Sven Dildick: Implementation note
+      // The modifications below were made so that for the Run2 2015 iteration the fiducial volume 
+      // of the analysis could be extended to the second and/or third layer of the pixel detector
+      // The resolutions of dz and dxy below were optimized for the first pixel layer only
+      // One would need to re-evaluate these numbers for different pixel layers as described in the AN
+      // (Check the appendices on svn)
+      if ( ((newVtx3D_0.x()*newVtx3D_0.x())+(newVtx3D_0.y()*newVtx3D_0.y())) > pat::pixelBarrelR2(_barrelPixelLayer) ){
         pix1 = true;
       }
-      if ( fabs(newVtx3D_0.z()) > 34.5 ){
+      if ( fabs(newVtx3D_0.z()) > pat::pixelEndcapZ(_endcapPixelLayer) ){
         pix1 = true;
       }
-      if ( ((newVtx3D_1.x()*newVtx3D_1.x())+(newVtx3D_1.y()*newVtx3D_1.y())) > 16.0 ){
+      if ( ((newVtx3D_1.x()*newVtx3D_1.x())+(newVtx3D_1.y()*newVtx3D_1.y())) > pat::pixelBarrelR2(_barrelPixelLayer) ){
         pix2 = true;
       }
-      if ( fabs(newVtx3D_1.z()) > 34.5 ){
+      if ( fabs(newVtx3D_1.z()) > pat::pixelEndcapZ(_endcapPixelLayer) ){
         pix2 = true;
       }
 

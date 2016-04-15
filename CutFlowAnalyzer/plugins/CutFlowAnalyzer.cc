@@ -1337,6 +1337,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition); 
       ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
       ConsistentVtx.SetDebug(99);      
+      ConsistentVtx.setBarrelPixelLayer(1);
+      ConsistentVtx.setEndcapPixelLayer(1);
+
       b_is2DiMuonsConsistentVtxOK = ConsistentVtx.Calculate(diMuonC, diMuonF);
 
       if (runDisplacedVtxFinder_) { 
