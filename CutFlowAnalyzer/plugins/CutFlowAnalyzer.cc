@@ -2524,7 +2524,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		if(m_debug>10) std::cout<<" innerTrajectory local error yy  "<<sqrt(innerTSOS.localError().positionError().yy())<<std::endl;
 		//  		    if(m_debug>10) std::cout<<" innerTrajectory local error xy "<<sqrt(innerTSOS.localError().positionError().xy())<<std::endl;
 
-
 		if(km==0) {
 		  b_errposx_inlay_mu1_muJetC = sqrt(innerTSOS.localError().positionError().xx());
 		  b_errposy_inlay_mu1_muJetC = sqrt(innerTSOS.localError().positionError().yy());
@@ -2593,11 +2592,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 							      it->lastMeasurement().updatedState().localPosition().y());
 		if(km==1) mj1m1pos_lastmeas[0] = Local2DPoint(it->lastMeasurement().updatedState().localPosition().x(),
 							      it->lastMeasurement().updatedState().localPosition().y());
-		  
 	      }
 	    
-
-
 	      Int_t det1stpix=0;
 	      Int_t counter_hit=0;
 
@@ -2631,9 +2627,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		  // if( ( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) || 
 		  // 	    ( (*dd)->subDetector() == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive() ){
 
-		  if( ( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel) || 
-			( (*dd)->subDetector() == GeomDetEnumerators::PixelEndcap) ) && measDet.isActive() ){
-			
+		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
+		    			
 		    if(km==0){
 		      b_muJetC_muon1_layerB[k] = PXBDetId(id).layer();
 		      b_muJetC_muon1_layerF[k] = PXFDetId(id).disk();
@@ -2719,13 +2714,11 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		}
 		delete localProp;
 	      }
-		
 	      if(km==0) b_Det_mu1_muJetC = det1stpix;
 	      if(km==1) b_Det_mu2_muJetC = det1stpix;
 		
 	      if(km==0)  b_comphits_mu1_muJetC = counter_hit;
 	      if(km==1)  b_comphits_mu2_muJetC = counter_hit;
-		
 	    }
 	  }
 	  counter_traj++;
@@ -2883,8 +2876,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		  // if( ( ((*dd)->subDetector() == GeomDetEnumerators::PixelBarrel && PXBDetId(id).layer()==1) 
 		  // 	    || ((*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap && PXFDetId(id).disk()==1) ) && measDet.isActive()  ){
 
-		  if( ( ((*dd)->subDetector() == GeomDetEnumerators::PixelBarrel) 
-			|| ((*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap) ) && measDet.isActive()  ){
+		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
 
 
 		    if(km==0){
