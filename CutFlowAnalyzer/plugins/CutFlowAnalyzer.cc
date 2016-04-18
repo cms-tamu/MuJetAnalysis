@@ -2168,7 +2168,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       LogDebug("TrackProducer") << "get also the measTk" << "\n";
       std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
       iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
-      
     }
     else{
       theSchool = edm::ESHandle<NavigationSchool>(); //put an invalid handle
@@ -2185,7 +2184,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
     Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
     
-
 
     //============== Refitted collection of tracks =============================//
     Handle<reco::TrackCollection> tracksrf;  
@@ -2637,12 +2635,12 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 			( (*dd)->subDetector() == GeomDetEnumerators::PixelEndcap) ) && measDet.isActive() ){
 			
 		    if(km==0){
-		      b_muJetC_muon1_layerB[k] = PXBDetId(id).layer()==1;
-		      b_muJetC_muon1_layerF[k] = PXFDetId(id).disk()==1;
+		      b_muJetC_muon1_layerB[k] = PXBDetId(id).layer();
+		      b_muJetC_muon1_layerF[k] = PXFDetId(id).disk();
 		    }
 		    if(km==1){
-		      b_muJetC_muon2_layerB[k] = PXBDetId(id).layer()==1;
-		      b_muJetC_muon2_layerF[k] = PXFDetId(id).disk()==1;
+		      b_muJetC_muon2_layerB[k] = PXBDetId(id).layer();
+		      b_muJetC_muon2_layerF[k] = PXFDetId(id).disk();
 		    }
 
 
@@ -2734,26 +2732,25 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	}
     }
 
-      if(m_debug>10) std::cout<<" second muonJet  muJetF  "<<std::endl;
+    if(m_debug>10) std::cout<<" second muonJet  muJetF  "<<std::endl;
+    
+    for(uint32_t km=0;km<2;km++){
       
-      for(uint32_t km=0;km<2;km++){
+      //	std::cout<<" indx track   "<<indxtrkmj2[km]<<std::endl;
+      
+      if(m_debug>10) std::cout<<"  muon-track indx   "<<indxtrkmj2[km]<<"  muon pT   "<<muJetF->muon(km)->pt()<<"  muon eta  "<<muJetF->muon(km)->eta()<<std::endl;
 	
-	//	std::cout<<" indx track   "<<indxtrkmj2[km]<<std::endl;
-
-	if(m_debug>10) std::cout<<"  muon-track indx   "<<indxtrkmj2[km]<<"  muon pT   "<<muJetF->muon(km)->pt()<<"  muon eta  "<<muJetF->muon(km)->eta()<<std::endl;
-	
-
-	  
-	//===================   Information for the muon-tracks ===================================//
-	if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
-	if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
-
-	if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
-	if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
-
-	if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
-	if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
-
+      
+      //===================   Information for the muon-tracks ===================================//
+      if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
+      if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
+      
+      if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
+      if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
+      
+      if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
+      if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
+      
 	if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
 	if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
 
@@ -2891,12 +2888,12 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
 
 		    if(km==0){
-		      b_muJetF_muon1_layerB[k] = PXBDetId(id).layer()==1;
-		      b_muJetF_muon1_layerF[k] = PXFDetId(id).disk()==1;
+		      b_muJetF_muon1_layerB[k] = PXBDetId(id).layer();
+		      b_muJetF_muon1_layerF[k] = PXFDetId(id).disk();
 		    }
 		    if(km==1){
-		      b_muJetF_muon2_layerB[k] = PXBDetId(id).layer()==1;
-		      b_muJetF_muon2_layerF[k] = PXFDetId(id).disk()==1;
+		      b_muJetF_muon2_layerB[k] = PXBDetId(id).layer();
+		      b_muJetF_muon2_layerF[k] = PXFDetId(id).disk();
 		    }
 		      
 		    if(m_debug>10){
@@ -2986,7 +2983,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	  }
 	  counter_traj++;
 	}
-      }
+    }
 
 
       if(b_Det_mu1_muJetC>0 && b_Det_mu2_muJetC>0){
@@ -3140,6 +3137,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	d_mu2_muJetF_hit.clear();
       }
   }
+
 
 
     
@@ -3681,13 +3679,13 @@ CutFlowAnalyzer::beginJob() {
 
   m_ttree->Branch("muJetC_muon1_layerB",&b_muJetC_muon1_layerB,"muJetC_muon1_layerB[Det_mu1_muJetC]/F");
   m_ttree->Branch("muJetC_muon2_layerB",&b_muJetC_muon2_layerB,"muJetC_muon2_layerB[Det_mu2_muJetC]/F");
-  m_ttree->Branch("muJetF_muon1_layerB",&b_muJetF_muon1_layerB,"muJetF_muon1_layerB[Det_mu1_muJetC]/F");
-  m_ttree->Branch("muJetF_muon2_layerB",&b_muJetF_muon2_layerB,"muJetF_muon2_layerB[Det_mu2_muJetC]/F");
+  m_ttree->Branch("muJetF_muon1_layerB",&b_muJetF_muon1_layerB,"muJetF_muon1_layerB[Det_mu1_muJetF]/F");
+  m_ttree->Branch("muJetF_muon2_layerB",&b_muJetF_muon2_layerB,"muJetF_muon2_layerB[Det_mu2_muJetF]/F");
 
   m_ttree->Branch("muJetC_muon1_layerF",&b_muJetC_muon1_layerF,"muJetC_muon1_layerF[Det_mu1_muJetC]/F");
   m_ttree->Branch("muJetC_muon2_layerF",&b_muJetC_muon2_layerF,"muJetC_muon2_layerF[Det_mu2_muJetC]/F");
-  m_ttree->Branch("muJetF_muon1_layerF",&b_muJetF_muon1_layerF,"muJetF_muon1_layerF[Det_mu1_muJetC]/F");
-  m_ttree->Branch("muJetF_muon2_layerF",&b_muJetF_muon2_layerF,"muJetF_muon2_layerF[Det_mu2_muJetC]/F");
+  m_ttree->Branch("muJetF_muon1_layerF",&b_muJetF_muon1_layerF,"muJetF_muon1_layerF[Det_mu1_muJetF]/F");
+  m_ttree->Branch("muJetF_muon2_layerF",&b_muJetF_muon2_layerF,"muJetF_muon2_layerF[Det_mu2_muJetF]/F");
 
   m_ttree->Branch("muJetC_muon1_posx1stpix", &b_muJetC_muon1_posx1stpix, "muJetC_muon1_posx1stpix[Det_mu1_muJetC]/F");
   m_ttree->Branch("muJetC_muon1_posy1stpix", &b_muJetC_muon1_posy1stpix, "muJetC_muon1_posy1stpix[Det_mu1_muJetC]/F");
