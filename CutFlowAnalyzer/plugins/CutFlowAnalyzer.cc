@@ -2475,46 +2475,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     minchi2_mu1_muJetF.clear();
     minchi2_mu2_muJetF.clear();
 
-
-    
-    Local2DPoint mj1m0pos[200];
-    Local2DPoint mj1m1pos[200];
-    Local2DPoint mj2m0pos[200];
-    Local2DPoint mj2m1pos[200];
-    
-    for(int in=0;in<200;in++){
-      mj1m0pos[in] = Local2DPoint(-10000,-10000);
-      mj1m1pos[in] = Local2DPoint(-10000,-10000);
-      mj2m0pos[in] = Local2DPoint(-10000,-10000);
-      mj2m1pos[in] = Local2DPoint(-10000,-10000);
-    }
-    
-    
-    Local2DPoint mj1m0poserr[200];
-    Local2DPoint mj1m1poserr[200];
-    Local2DPoint mj2m0poserr[200];
-    Local2DPoint mj2m1poserr[200];
-    
-    for(int in=0;in<200;in++){
-      mj1m0poserr[in] = Local2DPoint(-10000,-10000);
-      mj1m1poserr[in] = Local2DPoint(-10000,-10000);
-      mj2m0poserr[in] = Local2DPoint(-10000,-10000);
-      mj2m1poserr[in] = Local2DPoint(-10000,-10000);
-    }
-    
-    Local2DPoint mj1m0pos_lastmeas[200];
-    Local2DPoint mj1m1pos_lastmeas[200];
-    Local2DPoint mj2m0pos_lastmeas[200];
-    Local2DPoint mj2m1pos_lastmeas[200];
-    
-    for(int in=0;in<200;in++){
-      mj1m0pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-      mj1m1pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-      mj2m0pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-      mj2m1pos_lastmeas[in] = Local2DPoint(-10000,-10000);
-    }
-
-
   
     // Collection of Trajectories from Refitted Tracks
     Handle<std::vector<Trajectory> > trajCollectionHandle;
