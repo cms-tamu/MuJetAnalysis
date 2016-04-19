@@ -1051,44 +1051,44 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_ntracks=-10000;
 
   b_innerlayers_mu1_muJetC=-10000;
-   b_innerlayers_mu2_muJetC=-10000;
-   b_innerlayers_mu1_muJetF=-10000;
-   b_innerlayers_mu2_muJetF=-10000;
+  b_innerlayers_mu2_muJetC=-10000;
+  b_innerlayers_mu1_muJetF=-10000;
+  b_innerlayers_mu2_muJetF=-10000;
 
-   for(int k=0;k<20;k++){
-   b_compdet_mu1_muJetC[k]=-10000;
-   b_compdet_mu2_muJetC[k]=-10000;
-   b_compdet_mu1_muJetF[k]=-10000;
-   b_compdet_mu2_muJetF[k]=-10000;
+  for(int k=0;k<20;k++){
+    b_compdet_mu1_muJetC[k]=-10000;
+    b_compdet_mu2_muJetC[k]=-10000;
+    b_compdet_mu1_muJetF[k]=-10000;
+    b_compdet_mu2_muJetF[k]=-10000;
 
-   b_PXBID_1stDet_mu1muJetC[k]=-10000;
-   b_PXBID_2ndDet_mu1muJetC[k]=-10000;
-   b_PXBID_3rdDet_mu1muJetC[k]=-10000;
-   b_PXFID_1stDet_mu1muJetC[k]=-10000;
-   b_PXFID_2ndDet_mu1muJetC[k]=-10000;
-   b_PXFID_3rdDet_mu1muJetC[k]=-10000;
+    b_PXBID_1stDet_mu1muJetC[k]=-10000;
+    b_PXBID_2ndDet_mu1muJetC[k]=-10000;
+    b_PXBID_3rdDet_mu1muJetC[k]=-10000;
+    b_PXFID_1stDet_mu1muJetC[k]=-10000;
+    b_PXFID_2ndDet_mu1muJetC[k]=-10000;
+    b_PXFID_3rdDet_mu1muJetC[k]=-10000;
 
-   b_PXBID_1stDet_mu2muJetC[k]=-10000;
-   b_PXBID_2ndDet_mu2muJetC[k]=-10000;
-   b_PXBID_3rdDet_mu2muJetC[k]=-10000;
-   b_PXFID_1stDet_mu2muJetC[k]=-10000;
-   b_PXFID_2ndDet_mu2muJetC[k]=-10000;
-   b_PXFID_3rdDet_mu2muJetC[k]=-10000;
+    b_PXBID_1stDet_mu2muJetC[k]=-10000;
+    b_PXBID_2ndDet_mu2muJetC[k]=-10000;
+    b_PXBID_3rdDet_mu2muJetC[k]=-10000;
+    b_PXFID_1stDet_mu2muJetC[k]=-10000;
+    b_PXFID_2ndDet_mu2muJetC[k]=-10000;
+    b_PXFID_3rdDet_mu2muJetC[k]=-10000;
 
 
-   b_PXBID_1stDet_mu1muJetF[k]=-10000;
-   b_PXBID_2ndDet_mu1muJetF[k]=-10000;
-   b_PXBID_3rdDet_mu1muJetF[k]=-10000;
-   b_PXFID_1stDet_mu1muJetF[k]=-10000;
-   b_PXFID_2ndDet_mu1muJetF[k]=-10000;
-   b_PXFID_3rdDet_mu1muJetF[k]=-10000;
+    b_PXBID_1stDet_mu1muJetF[k]=-10000;
+    b_PXBID_2ndDet_mu1muJetF[k]=-10000;
+    b_PXBID_3rdDet_mu1muJetF[k]=-10000;
+    b_PXFID_1stDet_mu1muJetF[k]=-10000;
+    b_PXFID_2ndDet_mu1muJetF[k]=-10000;
+    b_PXFID_3rdDet_mu1muJetF[k]=-10000;
 
-   b_PXBID_1stDet_mu2muJetF[k]=-10000;
-   b_PXBID_2ndDet_mu2muJetF[k]=-10000;
-   b_PXBID_3rdDet_mu2muJetF[k]=-10000;
-   b_PXFID_1stDet_mu2muJetF[k]=-10000;
-   b_PXFID_2ndDet_mu2muJetF[k]=-10000;
-   b_PXFID_3rdDet_mu2muJetF[k]=-10000;
+    b_PXBID_1stDet_mu2muJetF[k]=-10000;
+    b_PXBID_2ndDet_mu2muJetF[k]=-10000;
+    b_PXBID_3rdDet_mu2muJetF[k]=-10000;
+    b_PXFID_1stDet_mu2muJetF[k]=-10000;
+    b_PXFID_2ndDet_mu2muJetF[k]=-10000;
+    b_PXFID_3rdDet_mu2muJetF[k]=-10000;
 
 
     b_mj1m0posx_1stDet[k]=-10000;
@@ -1143,65 +1143,65 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_mj2m1posy_3rdDet[k]=-10000;
     b_mj2m1posx_err_3rdDet[k]=-10000;
     b_mj2m1posy_err_3rdDet[k]=-10000;    
-   }
+  }
 
-   for(int k=0;k<200;k++){
-   b_pixelhit_mu1_muJetC_1stextlay_posx[k]=-10000;
-   b_pixelhit_mu1_muJetC_1stextlay_posy[k]=-10000;
-   b_pixelhit_mu1_muJetC_1stextlay_errposx[k]=-10000;
-   b_pixelhit_mu1_muJetC_1stextlay_errposy[k]=-10000;
-   b_pixelhit_mu2_muJetC_1stextlay_posx[k]=-10000;
-   b_pixelhit_mu2_muJetC_1stextlay_posy[k]=-10000;
-   b_pixelhit_mu2_muJetC_1stextlay_errposx[k]=-10000;
-   b_pixelhit_mu2_muJetC_1stextlay_errposy[k]=-10000;
-   b_pixelhit_mu1_muJetF_1stextlay_posx[k]=-10000;
-   b_pixelhit_mu1_muJetF_1stextlay_posy[k]=-10000;
-   b_pixelhit_mu1_muJetF_1stextlay_errposx[k]=-10000;
-   b_pixelhit_mu1_muJetF_1stextlay_errposy[k]=-10000;
-   b_pixelhit_mu2_muJetF_1stextlay_posx[k]=-10000;
-   b_pixelhit_mu2_muJetF_1stextlay_posy[k]=-10000;
-   b_pixelhit_mu2_muJetF_1stextlay_errposx[k]=-10000;
-   b_pixelhit_mu2_muJetF_1stextlay_errposy[k]=-10000;
+  for(int k=0;k<200;k++){
+    b_pixelhit_mu1_muJetC_1stextlay_posx[k]=-10000;
+    b_pixelhit_mu1_muJetC_1stextlay_posy[k]=-10000;
+    b_pixelhit_mu1_muJetC_1stextlay_errposx[k]=-10000;
+    b_pixelhit_mu1_muJetC_1stextlay_errposy[k]=-10000;
+    b_pixelhit_mu2_muJetC_1stextlay_posx[k]=-10000;
+    b_pixelhit_mu2_muJetC_1stextlay_posy[k]=-10000;
+    b_pixelhit_mu2_muJetC_1stextlay_errposx[k]=-10000;
+    b_pixelhit_mu2_muJetC_1stextlay_errposy[k]=-10000;
+    b_pixelhit_mu1_muJetF_1stextlay_posx[k]=-10000;
+    b_pixelhit_mu1_muJetF_1stextlay_posy[k]=-10000;
+    b_pixelhit_mu1_muJetF_1stextlay_errposx[k]=-10000;
+    b_pixelhit_mu1_muJetF_1stextlay_errposy[k]=-10000;
+    b_pixelhit_mu2_muJetF_1stextlay_posx[k]=-10000;
+    b_pixelhit_mu2_muJetF_1stextlay_posy[k]=-10000;
+    b_pixelhit_mu2_muJetF_1stextlay_errposx[k]=-10000;
+    b_pixelhit_mu2_muJetF_1stextlay_errposy[k]=-10000;
 
-   b_pixelhit_mu1_muJetC_2ndextlay_posx[k]=-10000;
-   b_pixelhit_mu1_muJetC_2ndextlay_posy[k]=-10000;
-   b_pixelhit_mu1_muJetC_2ndextlay_errposx[k]=-10000;
-   b_pixelhit_mu1_muJetC_2ndextlay_errposy[k]=-10000;
-   b_pixelhit_mu2_muJetC_2ndextlay_posx[k]=-10000;
-   b_pixelhit_mu2_muJetC_2ndextlay_posy[k]=-10000;
-   b_pixelhit_mu2_muJetC_2ndextlay_errposx[k]=-10000;
-   b_pixelhit_mu2_muJetC_2ndextlay_errposy[k]=-10000;
-   b_pixelhit_mu1_muJetF_2ndextlay_posx[k]=-10000;
-   b_pixelhit_mu1_muJetF_2ndextlay_posy[k]=-10000;
-   b_pixelhit_mu1_muJetF_2ndextlay_errposx[k]=-10000;
-   b_pixelhit_mu1_muJetF_2ndextlay_errposy[k]=-10000;
-   b_pixelhit_mu2_muJetF_2ndextlay_posx[k]=-10000;
-   b_pixelhit_mu2_muJetF_2ndextlay_posy[k]=-10000;
-   b_pixelhit_mu2_muJetF_2ndextlay_errposx[k]=-10000;
-   b_pixelhit_mu2_muJetF_2ndextlay_errposy[k]=-10000;
+    b_pixelhit_mu1_muJetC_2ndextlay_posx[k]=-10000;
+    b_pixelhit_mu1_muJetC_2ndextlay_posy[k]=-10000;
+    b_pixelhit_mu1_muJetC_2ndextlay_errposx[k]=-10000;
+    b_pixelhit_mu1_muJetC_2ndextlay_errposy[k]=-10000;
+    b_pixelhit_mu2_muJetC_2ndextlay_posx[k]=-10000;
+    b_pixelhit_mu2_muJetC_2ndextlay_posy[k]=-10000;
+    b_pixelhit_mu2_muJetC_2ndextlay_errposx[k]=-10000;
+    b_pixelhit_mu2_muJetC_2ndextlay_errposy[k]=-10000;
+    b_pixelhit_mu1_muJetF_2ndextlay_posx[k]=-10000;
+    b_pixelhit_mu1_muJetF_2ndextlay_posy[k]=-10000;
+    b_pixelhit_mu1_muJetF_2ndextlay_errposx[k]=-10000;
+    b_pixelhit_mu1_muJetF_2ndextlay_errposy[k]=-10000;
+    b_pixelhit_mu2_muJetF_2ndextlay_posx[k]=-10000;
+    b_pixelhit_mu2_muJetF_2ndextlay_posy[k]=-10000;
+    b_pixelhit_mu2_muJetF_2ndextlay_errposx[k]=-10000;
+    b_pixelhit_mu2_muJetF_2ndextlay_errposy[k]=-10000;
 
 
-   b_pixelhit_mu1_muJetC_3rdextlay_posx[k]=-10000;
-   b_pixelhit_mu1_muJetC_3rdextlay_posy[k]=-10000;
-   b_pixelhit_mu1_muJetC_3rdextlay_errposx[k]=-10000;
-   b_pixelhit_mu1_muJetC_3rdextlay_errposy[k]=-10000;
-   b_pixelhit_mu2_muJetC_3rdextlay_posx[k]=-10000;
-   b_pixelhit_mu2_muJetC_3rdextlay_posy[k]=-10000;
-   b_pixelhit_mu2_muJetC_3rdextlay_errposx[k]=-10000;
-   b_pixelhit_mu2_muJetC_3rdextlay_errposy[k]=-10000;
-   b_pixelhit_mu1_muJetF_3rdextlay_posx[k]=-10000;
-   b_pixelhit_mu1_muJetF_3rdextlay_posy[k]=-10000;
-   b_pixelhit_mu1_muJetF_3rdextlay_errposx[k]=-10000;
-   b_pixelhit_mu1_muJetF_3rdextlay_errposy[k]=-10000;
-   b_pixelhit_mu2_muJetF_3rdextlay_posx[k]=-10000;
-   b_pixelhit_mu2_muJetF_3rdextlay_posy[k]=-10000;
-   b_pixelhit_mu2_muJetF_3rdextlay_errposx[k]=-10000;
-   b_pixelhit_mu2_muJetF_3rdextlay_errposy[k]=-10000;
-   }
+    b_pixelhit_mu1_muJetC_3rdextlay_posx[k]=-10000;
+    b_pixelhit_mu1_muJetC_3rdextlay_posy[k]=-10000;
+    b_pixelhit_mu1_muJetC_3rdextlay_errposx[k]=-10000;
+    b_pixelhit_mu1_muJetC_3rdextlay_errposy[k]=-10000;
+    b_pixelhit_mu2_muJetC_3rdextlay_posx[k]=-10000;
+    b_pixelhit_mu2_muJetC_3rdextlay_posy[k]=-10000;
+    b_pixelhit_mu2_muJetC_3rdextlay_errposx[k]=-10000;
+    b_pixelhit_mu2_muJetC_3rdextlay_errposy[k]=-10000;
+    b_pixelhit_mu1_muJetF_3rdextlay_posx[k]=-10000;
+    b_pixelhit_mu1_muJetF_3rdextlay_posy[k]=-10000;
+    b_pixelhit_mu1_muJetF_3rdextlay_errposx[k]=-10000;
+    b_pixelhit_mu1_muJetF_3rdextlay_errposy[k]=-10000;
+    b_pixelhit_mu2_muJetF_3rdextlay_posx[k]=-10000;
+    b_pixelhit_mu2_muJetF_3rdextlay_posy[k]=-10000;
+    b_pixelhit_mu2_muJetF_3rdextlay_errposx[k]=-10000;
+    b_pixelhit_mu2_muJetF_3rdextlay_errposy[k]=-10000;
+  }
    
    
-   // //BB estimation
-   // Bool_t runBBestimation_;
+  // //BB estimation
+  // Bool_t runBBestimation_;
 
 
 
@@ -2166,9 +2166,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
 
 
-  if (runPixelHitRecovery_ && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK && 
-      ( (b_diMuonF_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonF_m2_FittedVtx_hitpix_l3inc!=1) ||
-	(b_diMuonC_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonC_m2_FittedVtx_hitpix_l3inc!=1)) ){
+  if (runPixelHitRecovery_ && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
 
     Int_t indxtrkmj1[2];
     Int_t indxtrkmj2[2];
@@ -2179,39 +2177,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     indxtrkmj2[0]=-100000;
     indxtrkmj2[1]=-100000;
     
-    
-    //===================== Initializing navigation school, propagator, etc..======================//
-    
-    edm::ESHandle<NavigationSchool> theSchool;
-    edm::ESHandle<MeasurementTracker> theMeasTk;
-    edm::Handle<MeasurementTrackerEvent> theMeasTkEventHandle;
-    iEvent.getByToken(measurementTrkToken_, theMeasTkEventHandle);
-    const MeasurementTrackerEvent *theMeasTkEvent = theMeasTkEventHandle.product();
-    
-    std::string theNavigationSchool ="";
-    if (param_.exists("NavigationSchool")) theNavigationSchool= param_.getParameter<std::string>("NavigationSchool");
-    else edm::LogWarning("TrackProducerBase")<<"NavigationSchool parameter not set. secondary hit pattern will not be filled.";
-    
-    if (theNavigationSchool!=""){
-      iSetup.get<NavigationSchoolRecord>().get(theNavigationSchool, theSchool);
-      LogDebug("TrackProducer") << "get also the measTk" << "\n";
-      std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
-      iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
-    }
-    else{
-      theSchool = edm::ESHandle<NavigationSchool>(); //put an invalid handle
-      theMeasTk = edm::ESHandle<MeasurementTracker>(); //put an invalid handle
-    }
-    
-    if (!theSchool.isValid()) 
-      edm::LogWarning("NavigationSchool")<<"NavigationSchool is invalid!";
-    
-    edm::ESHandle<Propagator> thePropagator;
-    std::string propagatorName = param_.getParameter<std::string>("Propagator");
-    iSetup.get<TrackingComponentsRecord>().get(propagatorName,thePropagator);
-    
-    Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
-    Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
     
 
     //============== Refitted collection of tracks =============================//
@@ -2483,507 +2448,547 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     minchi2_mu1_muJetF.clear();
     minchi2_mu2_muJetF.clear();
 
+
+    if( (b_diMuonF_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonF_m2_FittedVtx_hitpix_l3inc!=1) ||
+	(b_diMuonC_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonC_m2_FittedVtx_hitpix_l3inc!=1) ){
+
+      //===================== Initializing navigation school, propagator, etc..======================//
+    
+      edm::ESHandle<NavigationSchool> theSchool;
+      edm::ESHandle<MeasurementTracker> theMeasTk;
+      edm::Handle<MeasurementTrackerEvent> theMeasTkEventHandle;
+      iEvent.getByToken(measurementTrkToken_, theMeasTkEventHandle);
+      const MeasurementTrackerEvent *theMeasTkEvent = theMeasTkEventHandle.product();
+    
+      std::string theNavigationSchool ="";
+      if (param_.exists("NavigationSchool")) theNavigationSchool= param_.getParameter<std::string>("NavigationSchool");
+      else edm::LogWarning("TrackProducerBase")<<"NavigationSchool parameter not set. secondary hit pattern will not be filled.";
+    
+      if (theNavigationSchool!=""){
+	iSetup.get<NavigationSchoolRecord>().get(theNavigationSchool, theSchool);
+	LogDebug("TrackProducer") << "get also the measTk" << "\n";
+	std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
+	iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
+      }
+      else{
+	theSchool = edm::ESHandle<NavigationSchool>(); //put an invalid handle
+	theMeasTk = edm::ESHandle<MeasurementTracker>(); //put an invalid handle
+      }
+    
+      if (!theSchool.isValid()) 
+	edm::LogWarning("NavigationSchool")<<"NavigationSchool is invalid!";
+    
+      edm::ESHandle<Propagator> thePropagator;
+      std::string propagatorName = param_.getParameter<std::string>("Propagator");
+      iSetup.get<TrackingComponentsRecord>().get(propagatorName,thePropagator);
+    
+      Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
+      Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
+    
+
+      
   
-    // Collection of Trajectories from Refitted Tracks
-    Handle<std::vector<Trajectory> > trajCollectionHandle;
-    iEvent.getByLabel(param_.getParameter<std::string>("trajectoryInput"),trajCollectionHandle);
+      // Collection of Trajectories from Refitted Tracks
+      Handle<std::vector<Trajectory> > trajCollectionHandle;
+      iEvent.getByLabel(param_.getParameter<std::string>("trajectoryInput"),trajCollectionHandle);
     
-    if(m_debug>10){
-      std::cout<<"   genTrack collection: " <<tracks->size()<<std::endl;
-      std::cout<<"   Refitted trajectoryColl->size(): " << trajCollectionHandle->size()<<std::endl;
-    }
-
-
-    for(uint32_t km=0;km<2;km++){  // loop for muJetC muon trajectories
-      
       if(m_debug>10){
-	std::cout<<"  muon-track indx   "<<indxtrkmj1[km]<<"  muon pT   "<<muJetC->muon(km)->pt()<<"  muon eta  "
-		 <<muJetC->muon(km)->eta()<<std::endl;
+	std::cout<<"   genTrack collection: " <<tracks->size()<<std::endl;
+	std::cout<<"   Refitted trajectoryColl->size(): " << trajCollectionHandle->size()<<std::endl;
       }
 
-      //===================   Information for the muon-tracks ===================================//
-      if(km==0)  b_mutrack_pT_mu1JetC = muJetC->muon(km)->pt();
-      if(km==1)  b_mutrack_pT_mu2JetC = muJetC->muon(km)->pt();
+
+      for(uint32_t km=0;km<2;km++){  // loop for muJetC muon trajectories
       
-      if(km==0)  b_mutrack_phi_mu1JetC = muJetC->muon(km)->phi();
-      if(km==1)  b_mutrack_phi_mu2JetC = muJetC->muon(km)->phi();
+	if(m_debug>10){
+	  std::cout<<"  muon-track indx   "<<indxtrkmj1[km]<<"  muon pT   "<<muJetC->muon(km)->pt()<<"  muon eta  "
+		   <<muJetC->muon(km)->eta()<<std::endl;
+	}
+
+	//===================   Information for the muon-tracks ===================================//
+	if(km==0)  b_mutrack_pT_mu1JetC = muJetC->muon(km)->pt();
+	if(km==1)  b_mutrack_pT_mu2JetC = muJetC->muon(km)->pt();
       
-      if(km==0)  b_mutrack_charge_mu1JetC = muJetC->muon(km)->charge();
-      if(km==1)  b_mutrack_charge_mu2JetC = muJetC->muon(km)->charge();
+	if(km==0)  b_mutrack_phi_mu1JetC = muJetC->muon(km)->phi();
+	if(km==1)  b_mutrack_phi_mu2JetC = muJetC->muon(km)->phi();
       
-      if(km==0)  b_mutrack_eta_mu1JetC = muJetC->muon(km)->eta();
-      if(km==1)  b_mutrack_eta_mu2JetC = muJetC->muon(km)->eta();
+	if(km==0)  b_mutrack_charge_mu1JetC = muJetC->muon(km)->charge();
+	if(km==1)  b_mutrack_charge_mu2JetC = muJetC->muon(km)->charge();
       
-      //====================== Loop for Trajectories from TrackRefitter  =================================//
-      Int_t counter_traj=0;
-      for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
+	if(km==0)  b_mutrack_eta_mu1JetC = muJetC->muon(km)->eta();
+	if(km==1)  b_mutrack_eta_mu2JetC = muJetC->muon(km)->eta();
       
-	if(counter_traj==indxtrkmj1[km]){
+	//====================== Loop for Trajectories from TrackRefitter  =================================//
+	Int_t counter_traj=0;
+	for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
+      
+	  if(counter_traj==indxtrkmj1[km]){
 	
-	  if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
-				  << "isValid: " << it->isValid()<<std::endl;
-	  }
+	    if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
+				    << "isValid: " << it->isValid()<<std::endl;
+	    }
 	
-	  if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
+	    if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
 	  
-	    const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
-	    const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
-	    TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
-	    TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
+	      const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
+	      const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
+	      TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
+	      TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
 	  
-	    if (!outerState || !innerState){
-	      std::cout << "No outer layer or no inner layer!" << std::endl;
-	    }
-
-	    const DetLayer* outerLayer = it->firstMeasurement().layer();
-	    const DetLayer* innerLayer = it->lastMeasurement().layer();
-
-	    if (!outerLayer || !innerLayer){
-	      //means  that the trajectory was fit/smoothed in a special case: not setting those pointers
-	      if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
-				      <<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
-	    }
-	  
-	    //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
-	    PropagationDirection dirForInnerLayers = oppositeToMomentum;
-	    PropagationDirection dirForOuterLayers = alongMomentum;
-	    if(it->direction() != oppositeToMomentum){
-	      dirForInnerLayers = alongMomentum;
-	      dirForOuterLayers = oppositeToMomentum;
-	      //throw cms::Exception("TrackProducer") 
-	    }
-		  
-	    std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-	    std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
-	  
-	    if(m_debug>10){
-	      std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
-	      std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
-	    }
-
-	    if(m_debug>10){
-	      std::cout<<"========================================================"<<std::endl;
-	      std::cout<< "inner DetLayer  sub: " 
-		       << innerLayer->subDetector() <<"\n"
-		       << "outer DetLayer  sub: " 
-		       << outerLayer->subDetector() << "\n"
-		       <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
-		       <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
-		       <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
-		       <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
-	      std::cout<<"========================================================"<<std::endl;
-	    }
-	  
-	    if(km==0) b_innerlayers_mu1_muJetC = innerCompLayers.size();
-	    if(km==1) b_innerlayers_mu2_muJetC = innerCompLayers.size();
-
-	    Int_t count_numlay=0;
-	    for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
-	      
-	      if ((*dd)->basicComponents().empty()) {
-		//	this should never happen. but better protect for it
-		if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
-		continue;
+	      if (!outerState || !innerState){
+		std::cout << "No outer layer or no inner layer!" << std::endl;
 	      }
-	    
-	      Propagator* localProp = thePropagator->clone();
-	      localProp->setPropagationDirection(oppositeToMomentum);
-	    
-	      if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
-	      std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
-	    
-	      if(km==0) b_compdet_mu1_muJetC[count_numlay] = detWithState.size();
-	      if(km==1) b_compdet_mu2_muJetC[count_numlay] = detWithState.size();
-	    
-	      if(!detWithState.size()) continue;
-	    
-	      if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
-			       detWithState.size()<<std::endl;
+
+	      const DetLayer* outerLayer = it->firstMeasurement().layer();
+	      const DetLayer* innerLayer = it->lastMeasurement().layer();
+
+	      if (!outerLayer || !innerLayer){
+		//means  that the trajectory was fit/smoothed in a special case: not setting those pointers
+		if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
+					<<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
+	      }
+	  
+	      //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
+	      PropagationDirection dirForInnerLayers = oppositeToMomentum;
+	      PropagationDirection dirForOuterLayers = alongMomentum;
+	      if(it->direction() != oppositeToMomentum){
+		dirForInnerLayers = alongMomentum;
+		dirForOuterLayers = oppositeToMomentum;
+		//throw cms::Exception("TrackProducer") 
+	      }
+		  
+	      std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
+	      std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
+	  
+	      if(m_debug>10){
+		std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
+		std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
+	      }
+
+	      if(m_debug>10){
+		std::cout<<"========================================================"<<std::endl;
+		std::cout<< "inner DetLayer  sub: " 
+			 << innerLayer->subDetector() <<"\n"
+			 << "outer DetLayer  sub: " 
+			 << outerLayer->subDetector() << "\n"
+			 <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
+			 <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
+			 <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
+			 <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
+		std::cout<<"========================================================"<<std::endl;
+	      }
+	  
+	      if(km==0) b_innerlayers_mu1_muJetC = innerCompLayers.size();
+	      if(km==1) b_innerlayers_mu2_muJetC = innerCompLayers.size();
+
+	      Int_t count_numlay=0;
+	      for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
 	      
-	      Int_t counter_hit=0;
+		if ((*dd)->basicComponents().empty()) {
+		  //	this should never happen. but better protect for it
+		  if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
+		  continue;
+		}
+	    
+		Propagator* localProp = thePropagator->clone();
+		localProp->setPropagationDirection(oppositeToMomentum);
+	    
+		if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
+		std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
+	    
+		if(km==0) b_compdet_mu1_muJetC[count_numlay] = detWithState.size();
+		if(km==1) b_compdet_mu2_muJetC[count_numlay] = detWithState.size();
+	    
+		if(!detWithState.size()) continue;
+	    
+		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
+				 detWithState.size()<<std::endl;
+	      
+		Int_t counter_hit=0;
 
 	    
-	      for(uint32_t k=0;k<detWithState.size();k++){
+		for(uint32_t k=0;k<detWithState.size();k++){
 		    
-		DetId id = detWithState[k].first->geographicalId();
-		MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
+		  DetId id = detWithState[k].first->geographicalId();
+		  MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
 	      
-		if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
+		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
 		
 		
-		  if(km==0){
-		    if(k==0)  b_PXBID_1stDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
-		    if(k==1)  b_PXBID_2ndDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
-		    if(k==2)  b_PXBID_3rdDet_mu1muJetC[count_numlay]  = PXBDetId(id).layer();
+		    if(km==0){
+		      if(k==0)  b_PXBID_1stDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
+		      if(k==1)  b_PXBID_2ndDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
+		      if(k==2)  b_PXBID_3rdDet_mu1muJetC[count_numlay]  = PXBDetId(id).layer();
 
-		    if(k==0)  b_PXFID_1stDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		    if(k==1)  b_PXFID_2ndDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		    if(k==2)  b_PXFID_3rdDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		  }
-		  if(km==1){
-		    if(k==0)  b_PXBID_1stDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
-		    if(k==1)  b_PXBID_2ndDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
-		    if(k==2)  b_PXBID_3rdDet_mu2muJetC[count_numlay]  = PXBDetId(id).layer();
+		      if(k==0)  b_PXFID_1stDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
+		      if(k==1)  b_PXFID_2ndDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
+		      if(k==2)  b_PXFID_3rdDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
+		    }
+		    if(km==1){
+		      if(k==0)  b_PXBID_1stDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
+		      if(k==1)  b_PXBID_2ndDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
+		      if(k==2)  b_PXBID_3rdDet_mu2muJetC[count_numlay]  = PXBDetId(id).layer();
 
-		    if(k==0)  b_PXFID_1stDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
-		    if(k==1)  b_PXFID_2ndDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
-		    if(k==2)  b_PXFID_3rdDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
-		  }
+		      if(k==0)  b_PXFID_1stDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
+		      if(k==1)  b_PXFID_2ndDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
+		      if(k==2)  b_PXFID_3rdDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
+		    }
 
-		  if(km==0){
-		    if(k==0) b_mj1m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==0) b_mj1m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==0) b_mj1m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==0) b_mj1m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    if(km==0){
+		      if(k==0) b_mj1m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==0) b_mj1m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==0) b_mj1m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==0) b_mj1m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		    if(k==1) b_mj1m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==1) b_mj1m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==1) b_mj1m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==1) b_mj1m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		      if(k==1) b_mj1m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==1) b_mj1m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==1) b_mj1m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==1) b_mj1m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		    if(k==3) b_mj1m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==3) b_mj1m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==3) b_mj1m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==3) b_mj1m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		  }
+		      if(k==3) b_mj1m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==3) b_mj1m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==3) b_mj1m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==3) b_mj1m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    }
 
-		  if(km==1){
-		    if(k==0) b_mj1m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==0) b_mj1m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==0) b_mj1m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==0) b_mj1m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    if(km==1){
+		      if(k==0) b_mj1m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==0) b_mj1m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==0) b_mj1m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==0) b_mj1m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		    if(k==1) b_mj1m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==1) b_mj1m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==1) b_mj1m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==1) b_mj1m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		      if(k==1) b_mj1m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==1) b_mj1m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==1) b_mj1m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==1) b_mj1m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		    if(k==3) b_mj1m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==3) b_mj1m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==3) b_mj1m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==3) b_mj1m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		  }
+		      if(k==3) b_mj1m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==3) b_mj1m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==3) b_mj1m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==3) b_mj1m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    }
 		
 					    
-		  TrajectoryStateOnSurface ts; //dummy
+		    TrajectoryStateOnSurface ts; //dummy
 		
-		  std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
+		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
 		
-		  if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
+		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
 			
 		
-		  for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
+		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
 			  
-		    if(tmpIt->recHit()->getType()==0){ // valid hit
+		      if(tmpIt->recHit()->getType()==0){ // valid hit
 			    
-		      if(m_debug>10){
-			std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-			std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-			std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-			std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-		      }
+			if(m_debug>10){
+			  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
+			  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
+			  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
+			  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
+			}
 
 
-		      if(km==0){
-			if(count_numlay==0){
-			  b_pixelhit_mu1_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu1_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu1_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu1_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			if(km==0){
+			  if(count_numlay==0){
+			    b_pixelhit_mu1_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu1_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu1_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu1_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
+			  if(count_numlay==1){
+			    b_pixelhit_mu1_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu1_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu1_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu1_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
+			  if(count_numlay==2){
+			    b_pixelhit_mu1_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu1_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu1_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu1_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
 			}
-			if(count_numlay==1){
-			  b_pixelhit_mu1_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu1_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu1_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu1_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			}
-			if(count_numlay==2){
-			  b_pixelhit_mu1_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu1_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu1_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu1_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			}
-		      }
 		    
-		      if(km==1){
-			if(count_numlay==0){
-			  b_pixelhit_mu2_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu2_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu2_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu2_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			if(km==1){
+			  if(count_numlay==0){
+			    b_pixelhit_mu2_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu2_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu2_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu2_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
+			  if(count_numlay==1){
+			    b_pixelhit_mu2_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu2_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu2_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu2_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
+			  if(count_numlay==2){
+			    b_pixelhit_mu2_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu2_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu2_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu2_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
 			}
-			if(count_numlay==1){
-			  b_pixelhit_mu2_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu2_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu2_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu2_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			}
-			if(count_numlay==2){
-			  b_pixelhit_mu2_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu2_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu2_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu2_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			}
+			counter_hit++;
 		      }
-		      counter_hit++;
 		    }
 		  }
 		}
+		delete localProp;
+		count_numlay++;
 	      }
-	      delete localProp;
-	      count_numlay++;
 	    }
 	  }
+	  counter_traj++;
 	}
-	counter_traj++;
       }
-    }
 
 
-    for(uint32_t km=0;km<2;km++){  // loop for muJetF muon trajectories
+      for(uint32_t km=0;km<2;km++){  // loop for muJetF muon trajectories
     
-      if(m_debug>10){
-	std::cout<<"  muon-track indx   "<<indxtrkmj2[km]<<"  muon pT   "<<muJetF->muon(km)->pt()<<"  muon eta  "
-		 <<muJetF->muon(km)->eta()<<std::endl;
-      }
+	if(m_debug>10){
+	  std::cout<<"  muon-track indx   "<<indxtrkmj2[km]<<"  muon pT   "<<muJetF->muon(km)->pt()<<"  muon eta  "
+		   <<muJetF->muon(km)->eta()<<std::endl;
+	}
       
-      //===================   Information for the muon-tracks ===================================//
-      if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
-      if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
+	//===================   Information for the muon-tracks ===================================//
+	if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
+	if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
       
-      if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
-      if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
+	if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
+	if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
       
-      if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
-      if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
+	if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
+	if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
       
-      if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
-      if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
+	if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
+	if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
       
       
-      //====================== Loop for Trajectories from TrackRefitter  =================================//
-      Int_t counter_traj=0;
-      for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
+	//====================== Loop for Trajectories from TrackRefitter  =================================//
+	Int_t counter_traj=0;
+	for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
       
-	if(counter_traj==indxtrkmj2[km]){
+	  if(counter_traj==indxtrkmj2[km]){
 	
-	  if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
-				  << "isValid: " << it->isValid()<<std::endl;
-	  }
+	    if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
+				    << "isValid: " << it->isValid()<<std::endl;
+	    }
 	
-	  if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
+	    if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
 	  
-	    const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
-	    const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
-	    TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
-	    TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
+	      const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
+	      const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
+	      TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
+	      TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
 	  
-	    if (!outerState || !innerState){
-	      std::cout << "No outer layer or no inner layer!" << std::endl;
-	    }
-
-	    const DetLayer* outerLayer = it->firstMeasurement().layer();
-	    const DetLayer* innerLayer = it->lastMeasurement().layer();
-
-	    if (!outerLayer || !innerLayer){
-	      //means  that the trajectory was fit/smoothed in a special case: not setting those pointers
-	      if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
-				      <<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
-	    }
-	  
-	    //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
-	    PropagationDirection dirForInnerLayers = oppositeToMomentum;
-	    PropagationDirection dirForOuterLayers = alongMomentum;
-	    if(it->direction() != oppositeToMomentum){
-	      dirForInnerLayers = alongMomentum;
-	      dirForOuterLayers = oppositeToMomentum;
-	      //throw cms::Exception("TrackProducer") 
-	    }
-		  
-	    std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-	    std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
-	  
-	    if(m_debug>10){
-	      std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
-	      std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
-	    }
-
-	    if(m_debug>10){
-	      std::cout<<"========================================================"<<std::endl;
-	      std::cout<< "inner DetLayer  sub: " 
-		       << innerLayer->subDetector() <<"\n"
-		       << "outer DetLayer  sub: " 
-		       << outerLayer->subDetector() << "\n"
-		       <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
-		       <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
-		       <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
-		       <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
-	      std::cout<<"========================================================"<<std::endl;
-	    }
-	  
-
-	    if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
-	    if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
-
-	    Int_t count_numlay=0;
-	    for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
-	      
-	      if ((*dd)->basicComponents().empty()) {
-		//	this should never happen. but better protect for it
-		if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
-		continue;
+	      if (!outerState || !innerState){
+		std::cout << "No outer layer or no inner layer!" << std::endl;
 	      }
-	    
-	      Propagator* localProp = thePropagator->clone();
-	      localProp->setPropagationDirection(oppositeToMomentum);
-	    
-	      if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
-	      std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
-	    
-	      if(km==0) b_compdet_mu1_muJetF[count_numlay] = detWithState.size();
-	      if(km==1) b_compdet_mu2_muJetF[count_numlay] = detWithState.size();
-	    
-	      if(!detWithState.size()) continue;
-	    
-	      if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
-			       detWithState.size()<<std::endl;
+
+	      const DetLayer* outerLayer = it->firstMeasurement().layer();
+	      const DetLayer* innerLayer = it->lastMeasurement().layer();
+
+	      if (!outerLayer || !innerLayer){
+		//means  that the trajectory was fit/smoothed in a special case: not setting those pointers
+		if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
+					<<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
+	      }
+	  
+	      //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
+	      PropagationDirection dirForInnerLayers = oppositeToMomentum;
+	      PropagationDirection dirForOuterLayers = alongMomentum;
+	      if(it->direction() != oppositeToMomentum){
+		dirForInnerLayers = alongMomentum;
+		dirForOuterLayers = oppositeToMomentum;
+		//throw cms::Exception("TrackProducer") 
+	      }
+		  
+	      std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
+	      std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
+	  
+	      if(m_debug>10){
+		std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
+		std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
+	      }
+
+	      if(m_debug>10){
+		std::cout<<"========================================================"<<std::endl;
+		std::cout<< "inner DetLayer  sub: " 
+			 << innerLayer->subDetector() <<"\n"
+			 << "outer DetLayer  sub: " 
+			 << outerLayer->subDetector() << "\n"
+			 <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
+			 <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
+			 <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
+			 <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
+		std::cout<<"========================================================"<<std::endl;
+	      }
+	  
+
+	      if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
+	      if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
+
+	      Int_t count_numlay=0;
+	      for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
 	      
-	      Int_t counter_hit=0;
+		if ((*dd)->basicComponents().empty()) {
+		  //	this should never happen. but better protect for it
+		  if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
+		  continue;
+		}
+	    
+		Propagator* localProp = thePropagator->clone();
+		localProp->setPropagationDirection(oppositeToMomentum);
+	    
+		if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
+		std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
+	    
+		if(km==0) b_compdet_mu1_muJetF[count_numlay] = detWithState.size();
+		if(km==1) b_compdet_mu2_muJetF[count_numlay] = detWithState.size();
+	    
+		if(!detWithState.size()) continue;
+	    
+		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
+				 detWithState.size()<<std::endl;
+	      
+		Int_t counter_hit=0;
 
 	    
-	      for(uint32_t k=0;k<detWithState.size();k++){
+		for(uint32_t k=0;k<detWithState.size();k++){
 		    
-		DetId id = detWithState[k].first->geographicalId();
-		MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
+		  DetId id = detWithState[k].first->geographicalId();
+		  MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
 	      
-		if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
+		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
 		
 		
-		  if(km==0){
-		    if(k==0)  b_PXBID_1stDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
-		    if(k==1)  b_PXBID_2ndDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
-		    if(k==2)  b_PXBID_3rdDet_mu1muJetF[count_numlay]  = PXBDetId(id).layer();
+		    if(km==0){
+		      if(k==0)  b_PXBID_1stDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
+		      if(k==1)  b_PXBID_2ndDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
+		      if(k==2)  b_PXBID_3rdDet_mu1muJetF[count_numlay]  = PXBDetId(id).layer();
 
-		    if(k==0)  b_PXFID_1stDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
-		    if(k==1)  b_PXFID_2ndDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
-		    if(k==2)  b_PXFID_3rdDet_mu1muJetF[count_numlay]  = PXFDetId(id).disk();
-		  }
-		  if(km==1){
-		    if(k==0)  b_PXBID_1stDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
-		    if(k==1)  b_PXBID_2ndDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
-		    if(k==2)  b_PXBID_3rdDet_mu2muJetF[count_numlay]  = PXBDetId(id).layer();
+		      if(k==0)  b_PXFID_1stDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
+		      if(k==1)  b_PXFID_2ndDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
+		      if(k==2)  b_PXFID_3rdDet_mu1muJetF[count_numlay]  = PXFDetId(id).disk();
+		    }
+		    if(km==1){
+		      if(k==0)  b_PXBID_1stDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
+		      if(k==1)  b_PXBID_2ndDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
+		      if(k==2)  b_PXBID_3rdDet_mu2muJetF[count_numlay]  = PXBDetId(id).layer();
 
-		    if(k==0)  b_PXFID_1stDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
-		    if(k==1)  b_PXFID_2ndDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
-		    if(k==2)  b_PXFID_3rdDet_mu2muJetF[count_numlay]  = PXFDetId(id).disk();
-		  }
+		      if(k==0)  b_PXFID_1stDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
+		      if(k==1)  b_PXFID_2ndDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
+		      if(k==2)  b_PXFID_3rdDet_mu2muJetF[count_numlay]  = PXFDetId(id).disk();
+		    }
 
-		  if(km==0){
-		    if(k==0) b_mj2m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==0) b_mj2m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==0) b_mj2m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==0) b_mj2m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    if(km==0){
+		      if(k==0) b_mj2m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==0) b_mj2m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==0) b_mj2m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==0) b_mj2m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		    if(k==1) b_mj2m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==1) b_mj2m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==1) b_mj2m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==1) b_mj2m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		      if(k==1) b_mj2m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==1) b_mj2m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==1) b_mj2m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==1) b_mj2m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		    if(k==3) b_mj2m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==3) b_mj2m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==3) b_mj2m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==3) b_mj2m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		  }
+		      if(k==3) b_mj2m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==3) b_mj2m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==3) b_mj2m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==3) b_mj2m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    }
 
-		  if(km==1){
-		    if(k==0) b_mj2m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==0) b_mj2m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==0) b_mj2m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==0) b_mj2m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    if(km==1){
+		      if(k==0) b_mj2m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==0) b_mj2m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==0) b_mj2m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==0) b_mj2m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		    if(k==1) b_mj2m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==1) b_mj2m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==1) b_mj2m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==1) b_mj2m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		      if(k==1) b_mj2m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==1) b_mj2m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==1) b_mj2m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==1) b_mj2m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		    if(k==3) b_mj2m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    if(k==3) b_mj2m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    if(k==3) b_mj2m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    if(k==3) b_mj2m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		  }
+		      if(k==3) b_mj2m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
+		      if(k==3) b_mj2m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
+		      if(k==3) b_mj2m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      if(k==3) b_mj2m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    }
 		
 					    
-		  TrajectoryStateOnSurface ts; //dummy
+		    TrajectoryStateOnSurface ts; //dummy
 		
-		  std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
+		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
 		
-		  if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
+		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
 			
 		
-		  for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
+		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
 			  
-		    if(tmpIt->recHit()->getType()==0){ // valid hit
+		      if(tmpIt->recHit()->getType()==0){ // valid hit
 			    
-		      if(m_debug>10){
-			std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-			std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-			std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-			std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-		      }
+			if(m_debug>10){
+			  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
+			  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
+			  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
+			  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
+			}
 
 
-		      if(km==0){
-			if(count_numlay==0){
-			  b_pixelhit_mu1_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu1_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu1_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu1_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			if(km==0){
+			  if(count_numlay==0){
+			    b_pixelhit_mu1_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu1_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu1_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu1_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
+			  if(count_numlay==1){
+			    b_pixelhit_mu1_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu1_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu1_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu1_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
+			  if(count_numlay==2){
+			    b_pixelhit_mu1_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu1_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu1_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu1_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
 			}
-			if(count_numlay==1){
-			  b_pixelhit_mu1_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu1_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu1_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu1_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			}
-			if(count_numlay==2){
-			  b_pixelhit_mu1_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu1_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu1_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu1_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			}
-		      }
 		    
-		      if(km==1){
-			if(count_numlay==0){
-			  b_pixelhit_mu2_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu2_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu2_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu2_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			if(km==1){
+			  if(count_numlay==0){
+			    b_pixelhit_mu2_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu2_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu2_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu2_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
+			  if(count_numlay==1){
+			    b_pixelhit_mu2_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu2_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu2_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu2_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
+			  if(count_numlay==2){
+			    b_pixelhit_mu2_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+			    b_pixelhit_mu2_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+			    b_pixelhit_mu2_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			    b_pixelhit_mu2_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+			  }
 			}
-			if(count_numlay==1){
-			  b_pixelhit_mu2_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu2_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu2_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu2_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			}
-			if(count_numlay==2){
-			  b_pixelhit_mu2_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu2_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu2_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu2_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			}
+			counter_hit++;
 		      }
-		      counter_hit++;
 		    }
 		  }
 		}
+		delete localProp;
+		count_numlay++;
 	      }
-	      delete localProp;
-	      count_numlay++;
 	    }
 	  }
+	  counter_traj++;
 	}
-	counter_traj++;
       }
     }
   }
@@ -2998,790 +3003,790 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     // Trimuons
     double m_trigpt = 17.;
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
-      for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
-	if (muon->pt() > m_trigpt  &&  fabs(muon->eta()) < 0.9) {
-	  const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
-	  const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
-	  const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
-	  if( mu01 != NULL || mu02 != NULL || mu03 != NULL ) m_orphan_FiredTrig = true;
-	  if((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt ) ) m_orphan_FiredTrig_pt = true;
-	  if((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt)  ||
-	     (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
-	     (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)){
-	    hightrigmuons.push_back(muon);
-	    m_orphan_FiredTrig_ptColl = true;
-	  }
-	}
-      }
-      //Orphan branches
-      m_orphan_dimu_mass = -999.;
-      m_orphan_mass = -999.;
-      m_orphan_isoTk = -1;
-      m_orphan_dimu_isoTk = -1;
-      m_orphan_z = -999.;
-      m_orphan_dimu_z = -999.;
-      m_dimuorphan_containstrig = 0;
-      m_dimuorphan_containstrig2 = 0;
-      edm::Handle<pat::MuonCollection> orphans;
-      iEvent.getByLabel(m_muJetOrphans, orphans);
-      if (muJets->size() == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
-	m_orphan_passOffLineSel = true;
-	pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
-	pat::MuonCollection::const_iterator orphan = orphans->begin();
-	if( muJet->muon(0)->pt() > m_trigpt || muJet->muon(1)->pt() > m_trigpt || orphan->pt() > m_trigpt ) m_orphan_passOffLineSelPt = true;
-	m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
-	m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
-	for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-	  if( orphan->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() &&  tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
-	    m_dimuorphan_containstrig++;
-	  }
-	}
-	for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-	  if( muJet->muon(0)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
-	    m_dimuorphan_containstrig2++;
-	  }
-	  if( muJet->muon(1)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
-	    m_dimuorphan_containstrig2++;
-	  }
-	}
-	m_orphan_dimu_mass = muJet->mass();
-	m_orphan_mass = orphan->mass();
-	//iso orphan
-	double iso_track_pt_treshold = 0.5;
-	for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-	  if (!muJet->sameTrack(&*track,&*(orphan->innerTrack()))) {
-	    double dphi = orphan->innerTrack()->phi() - track->phi();
-	    if (dphi > M_PI) dphi -= 2.*M_PI;
-	    if (dphi < -M_PI) dphi += 2.*M_PI;
-	    double deta = orphan->innerTrack()->eta() - track->eta();
-	    double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
-	    if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-	      double dz = fabs(track->dz(beamSpot->position())-orphan->innerTrack()->dz(beamSpot->position()));
-	      if (dz < 0.1) m_orphan_isoTk += track->pt();
-	    }
-	  }
-	}
-	//iso dimuon-orphan
-	for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-	  bool track_is_muon = false;
-	  if (muJet->sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) || muJet->sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
-	  if (!track_is_muon) {
-	    double dphi = muJet->phi() - track->phi();
-	    if (dphi > M_PI) dphi -= 2.*M_PI;
-	    if (dphi < -M_PI) dphi += 2.*M_PI;
-	    double deta = muJet->eta() - track->eta();
-	    double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
-	    if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-	      double dz = fabs(track->dz(beamSpot->position())-muJet->vertexDz(beamSpot->position()));
-	      if (dz < 0.1) m_orphan_dimu_isoTk += track->pt();
-	    }
-	  }    
+    for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
+      if (muon->pt() > m_trigpt  &&  fabs(muon->eta()) < 0.9) {
+	const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
+	const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
+	const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
+	if( mu01 != NULL || mu02 != NULL || mu03 != NULL ) m_orphan_FiredTrig = true;
+	if((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt ) ) m_orphan_FiredTrig_pt = true;
+	if((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt)  ||
+	   (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
+	   (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)){
+	  hightrigmuons.push_back(muon);
+	  m_orphan_FiredTrig_ptColl = true;
 	}
       }
     }
-
-    //****************************************************************************
-    //                          RECO LEVEL ANALYSIS FINISH                        
-    //****************************************************************************
-
-    //****************************************************************************
-    //                            FILL BRANCHES TO TREE                           
-    //****************************************************************************
-
-    m_ttree->Fill();
-    if(runBBestimation_) m_ttree_orphan->Fill();
-
+    //Orphan branches
+    m_orphan_dimu_mass = -999.;
+    m_orphan_mass = -999.;
+    m_orphan_isoTk = -1;
+    m_orphan_dimu_isoTk = -1;
+    m_orphan_z = -999.;
+    m_orphan_dimu_z = -999.;
+    m_dimuorphan_containstrig = 0;
+    m_dimuorphan_containstrig2 = 0;
+    edm::Handle<pat::MuonCollection> orphans;
+    iEvent.getByLabel(m_muJetOrphans, orphans);
+    if (muJets->size() == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
+      m_orphan_passOffLineSel = true;
+      pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
+      pat::MuonCollection::const_iterator orphan = orphans->begin();
+      if( muJet->muon(0)->pt() > m_trigpt || muJet->muon(1)->pt() > m_trigpt || orphan->pt() > m_trigpt ) m_orphan_passOffLineSelPt = true;
+      m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
+      m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
+      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+	if( orphan->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() &&  tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
+	  m_dimuorphan_containstrig++;
+	}
+      }
+      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+	if( muJet->muon(0)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
+	  m_dimuorphan_containstrig2++;
+	}
+	if( muJet->muon(1)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
+	  m_dimuorphan_containstrig2++;
+	}
+      }
+      m_orphan_dimu_mass = muJet->mass();
+      m_orphan_mass = orphan->mass();
+      //iso orphan
+      double iso_track_pt_treshold = 0.5;
+      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+	if (!muJet->sameTrack(&*track,&*(orphan->innerTrack()))) {
+	  double dphi = orphan->innerTrack()->phi() - track->phi();
+	  if (dphi > M_PI) dphi -= 2.*M_PI;
+	  if (dphi < -M_PI) dphi += 2.*M_PI;
+	  double deta = orphan->innerTrack()->eta() - track->eta();
+	  double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+	  if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
+	    double dz = fabs(track->dz(beamSpot->position())-orphan->innerTrack()->dz(beamSpot->position()));
+	    if (dz < 0.1) m_orphan_isoTk += track->pt();
+	  }
+	}
+      }
+      //iso dimuon-orphan
+      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+	bool track_is_muon = false;
+	if (muJet->sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) || muJet->sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
+	if (!track_is_muon) {
+	  double dphi = muJet->phi() - track->phi();
+	  if (dphi > M_PI) dphi -= 2.*M_PI;
+	  if (dphi < -M_PI) dphi += 2.*M_PI;
+	  double deta = muJet->eta() - track->eta();
+	  double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
+	  if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
+	    double dz = fabs(track->dz(beamSpot->position())-muJet->vertexDz(beamSpot->position()));
+	    if (dz < 0.1) m_orphan_dimu_isoTk += track->pt();
+	  }
+	}    
+      }
+    }
   }
 
+  //****************************************************************************
+  //                          RECO LEVEL ANALYSIS FINISH                        
+  //****************************************************************************
 
-  // ------------ method called once each job just before starting event loop  ------------
-  void 
-    CutFlowAnalyzer::beginJob() {
-    std::cout << "BEGIN JOB" << std::endl;
+  //****************************************************************************
+  //                            FILL BRANCHES TO TREE                           
+  //****************************************************************************
 
-    edm::Service<TFileService> tFileService;
-    m_ttree = tFileService->make<TTree>("Events", "Events");
-    //****************************************************************************
-    //                          EVENT LEVEL BRANCHES                              
-    //****************************************************************************
+  m_ttree->Fill();
+  if(runBBestimation_) m_ttree_orphan->Fill();
 
-    // Event info
-    m_ttree->Branch("event", &b_event, "event/I");
-    m_ttree->Branch("run",   &b_run,   "run/I");
-    m_ttree->Branch("lumi",  &b_lumi,  "lumi/I");
-
-    // Beam spot
-    m_ttree->Branch("beamSpot_x", &b_beamSpot_x, "beamSpot_x/F");
-    m_ttree->Branch("beamSpot_y", &b_beamSpot_y, "beamSpot_y/F");
-    m_ttree->Branch("beamSpot_z", &b_beamSpot_z, "beamSpot_z/F");
-
-    //****************************************************************************
-    //                          GEN LEVEL BRANCHES                                
-    //****************************************************************************
-
-    // Bosons
-    m_ttree->Branch("genH_m",    &b_genH_m,    "genH_m/F");
-    m_ttree->Branch("genH_px",   &b_genH_px,   "genH_px/F");
-    m_ttree->Branch("genH_py",   &b_genH_py,   "genH_py/F");
-    m_ttree->Branch("genH_pz",   &b_genH_pz,   "genH_pz/F");
-    m_ttree->Branch("genH_eta",  &b_genH_eta,  "genH_eta/F");
-    m_ttree->Branch("genH_phi",  &b_genH_phi,  "genH_phi/F");
-    m_ttree->Branch("genH_vx",   &b_genH_vx,   "genH_vx/F");
-    m_ttree->Branch("genH_vy",   &b_genH_vy,   "genH_vy/F");
-    m_ttree->Branch("genH_vz",   &b_genH_vz,   "genH_vz/F");
-
-    m_ttree->Branch("genA0_m",   &b_genA0_m,   "genA0_m/F");
-    m_ttree->Branch("genA0_px",  &b_genA0_px,  "genA0_px/F");
-    m_ttree->Branch("genA0_py",  &b_genA0_py,  "genA0_py/F");
-    m_ttree->Branch("genA0_pz",  &b_genA0_pz,  "genA0_pz/F");
-    m_ttree->Branch("genA0_eta", &b_genA0_eta, "genA0_eta/F");
-    m_ttree->Branch("genA0_phi", &b_genA0_phi, "genA0_phi/F");
-    m_ttree->Branch("genA0_vx",  &b_genA0_vx,  "genA0_vx/F");
-    m_ttree->Branch("genA0_vy",  &b_genA0_vy,  "genA0_vy/F");
-    m_ttree->Branch("genA0_vz",  &b_genA0_vz,  "genA0_vz/F");
-
-    m_ttree->Branch("genA0_Lx",  &b_genA0_Lx,  "genA0_Lx/F");
-    m_ttree->Branch("genA0_Ly",  &b_genA0_Ly,  "genA0_Ly/F");
-    m_ttree->Branch("genA0_Lz",  &b_genA0_Lz,  "genA0_Lz/F");
-    m_ttree->Branch("genA0_Lxy", &b_genA0_Lxy, "genA0_Lxy/F");
-    m_ttree->Branch("genA0_L",   &b_genA0_L,   "genA0_L/F");
-
-    m_ttree->Branch("genA1_m",   &b_genA1_m,   "genA1_m/F");
-    m_ttree->Branch("genA1_px",  &b_genA1_px,  "genA1_px/F");
-    m_ttree->Branch("genA1_py",  &b_genA1_py,  "genA1_py/F");
-    m_ttree->Branch("genA1_pz",  &b_genA1_pz,  "genA1_pz/F");
-    m_ttree->Branch("genA1_eta", &b_genA1_eta, "genA1_eta/F");
-    m_ttree->Branch("genA1_phi", &b_genA1_phi, "genA1_phi/F");
-    m_ttree->Branch("genA1_vx",  &b_genA1_vx,  "genA1_vx/F");
-    m_ttree->Branch("genA1_vy",  &b_genA1_vy,  "genA1_vy/F");
-    m_ttree->Branch("genA1_vz",  &b_genA1_vz,  "genA1_vz/F");
-
-    m_ttree->Branch("genA1_Lx",  &b_genA1_Lx,  "genA1_Lx/F");
-    m_ttree->Branch("genA1_Ly",  &b_genA1_Ly,  "genA1_Ly/F");
-    m_ttree->Branch("genA1_Lz",  &b_genA1_Lz,  "genA1_Lz/F");
-    m_ttree->Branch("genA1_Lxy", &b_genA1_Lxy, "genA1_Lxy/F");
-    m_ttree->Branch("genA1_L",   &b_genA1_L,   "genA1_L/F");
-
-    // Muons from bosons
-    m_ttree->Branch("genA0Mu0_px", &b_genA0Mu0_px, "genA0Mu0_px/F");
-    m_ttree->Branch("genA0Mu1_px", &b_genA0Mu1_px, "genA0Mu1_px/F");
-    m_ttree->Branch("genA1Mu0_px", &b_genA1Mu0_px, "genA1Mu0_px/F");
-    m_ttree->Branch("genA1Mu1_px", &b_genA1Mu1_px, "genA1Mu1_px/F");
-
-    m_ttree->Branch("genA0Mu0_py", &b_genA0Mu0_py, "genA0Mu0_py/F");
-    m_ttree->Branch("genA0Mu1_py", &b_genA0Mu1_py, "genA0Mu1_py/F");
-    m_ttree->Branch("genA1Mu0_py", &b_genA1Mu0_py, "genA1Mu0_py/F");
-    m_ttree->Branch("genA1Mu1_py", &b_genA1Mu1_py, "genA1Mu1_py/F");
-
-    m_ttree->Branch("genA0Mu0_pz", &b_genA0Mu0_pz, "genA0Mu0_pz/F");
-    m_ttree->Branch("genA0Mu1_pz", &b_genA0Mu1_pz, "genA0Mu1_pz/F");
-    m_ttree->Branch("genA1Mu0_pz", &b_genA1Mu0_pz, "genA1Mu0_pz/F");
-    m_ttree->Branch("genA1Mu1_pz", &b_genA1Mu1_pz, "genA1Mu1_pz/F");
-
-    m_ttree->Branch("genA0Mu0_eta", &b_genA0Mu0_eta, "genA0Mu0_eta/F");
-    m_ttree->Branch("genA0Mu1_eta", &b_genA0Mu1_eta, "genA0Mu1_eta/F");
-    m_ttree->Branch("genA1Mu0_eta", &b_genA1Mu0_eta, "genA1Mu0_eta/F");
-    m_ttree->Branch("genA1Mu1_eta", &b_genA1Mu1_eta, "genA1Mu1_eta/F");
-
-    m_ttree->Branch("genA0Mu0_phi", &b_genA0Mu0_phi, "genA0Mu0_phi/F");
-    m_ttree->Branch("genA0Mu1_phi", &b_genA0Mu1_phi, "genA0Mu1_phi/F");
-    m_ttree->Branch("genA1Mu0_phi", &b_genA1Mu0_phi, "genA1Mu0_phi/F");
-    m_ttree->Branch("genA1Mu1_phi", &b_genA1Mu1_phi, "genA1Mu1_phi/F");
-
-    m_ttree->Branch("genA0Mu0_vx", &b_genA0Mu0_vx, "genA0Mu0_vx/F");
-    m_ttree->Branch("genA0Mu1_vx", &b_genA0Mu1_vx, "genA0Mu1_vx/F");
-    m_ttree->Branch("genA1Mu0_vx", &b_genA1Mu0_vx, "genA1Mu0_vx/F");
-    m_ttree->Branch("genA1Mu1_vx", &b_genA1Mu1_vx, "genA1Mu1_vx/F");
-
-    m_ttree->Branch("genA0Mu0_vy", &b_genA0Mu0_vy, "genA0Mu0_vy/F");
-    m_ttree->Branch("genA0Mu1_vy", &b_genA0Mu1_vy, "genA0Mu1_vy/F");
-    m_ttree->Branch("genA1Mu0_vy", &b_genA1Mu0_vy, "genA1Mu0_vy/F");
-    m_ttree->Branch("genA1Mu1_vy", &b_genA1Mu1_vy, "genA1Mu1_vy/F");
-
-    m_ttree->Branch("genA0Mu0_vz", &b_genA0Mu0_vz, "genA0Mu0_vz/F");
-    m_ttree->Branch("genA0Mu1_vz", &b_genA0Mu1_vz, "genA0Mu1_vz/F");
-    m_ttree->Branch("genA1Mu0_vz", &b_genA1Mu0_vz, "genA1Mu0_vz/F");
-    m_ttree->Branch("genA1Mu1_vz", &b_genA1Mu1_vz, "genA1Mu1_vz/F");
-
-    m_ttree->Branch("genA0Mu_dEta", &b_genA0Mu_dEta, "genA0Mu_dEta/F");
-    m_ttree->Branch("genA1Mu_dEta", &b_genA1Mu_dEta, "genA1Mu_dEta/F");
-    m_ttree->Branch("genA0Mu_dPhi", &b_genA0Mu_dPhi, "genA0Mu_dPhi/F");
-    m_ttree->Branch("genA1Mu_dPhi", &b_genA1Mu_dPhi, "genA1Mu_dPhi/F");
-    m_ttree->Branch("genA0Mu_dR",   &b_genA0Mu_dR,   "genA0Mu_dR/F");
-    m_ttree->Branch("genA1Mu_dR",   &b_genA1Mu_dR,   "genA1Mu_dR/F");
-
-    // GEN Level Muons
-    m_ttree->Branch("genMu0_pT",  &b_genMu0_pT,  "genMu0_pT/F");
-    m_ttree->Branch("genMu1_pT",  &b_genMu1_pT,  "genMu1_pT/F");
-    m_ttree->Branch("genMu2_pT",  &b_genMu2_pT,  "genMu2_pT/F");
-    m_ttree->Branch("genMu3_pT",  &b_genMu3_pT,  "genMu3_pT/F");
-    m_ttree->Branch("genMu0_eta", &b_genMu0_eta, "genMu0_eta/F");
-    m_ttree->Branch("genMu1_eta", &b_genMu1_eta, "genMu1_eta/F");
-    m_ttree->Branch("genMu2_eta", &b_genMu2_eta, "genMu2_eta/F");
-    m_ttree->Branch("genMu3_eta", &b_genMu3_eta, "genMu3_eta/F");
-    m_ttree->Branch("genMu0_phi", &b_genMu0_phi, "genMu0_phi/F");
-    m_ttree->Branch("genMu1_phi", &b_genMu1_phi, "genMu1_phi/F");
-    m_ttree->Branch("genMu2_phi", &b_genMu2_phi, "genMu2_phi/F");
-    m_ttree->Branch("genMu3_phi", &b_genMu3_phi, "genMu3_phi/F");
-
-    // GEN Level Selectors
-    m_ttree->Branch("is4GenMu",    &b_is4GenMu,       "is4GenMu/O");
-
-    m_ttree->Branch("is1GenMu17",  &b_is1GenMu17,     "is1GenMu17/O");
-    m_ttree->Branch("is2GenMu8",   &b_is2GenMu8,      "is2GenMu8/O");
-    m_ttree->Branch("is3GenMu8",   &b_is3GenMu8,      "is3GenMu8/O");
-    m_ttree->Branch("is4GenMu8",   &b_is4GenMu8,      "is4GenMu8/O");
+}
 
 
-    //****************************************************************************
-    //                          RECO LEVEL BRANCHES                               
-    //****************************************************************************
+// ------------ method called once each job just before starting event loop  ------------
+void 
+CutFlowAnalyzer::beginJob() {
+  std::cout << "BEGIN JOB" << std::endl;
 
-    // Reco Muons
-    m_ttree->Branch("nRecoMu",  &b_nRecoMu,  "nRecoMu/I");
+  edm::Service<TFileService> tFileService;
+  m_ttree = tFileService->make<TTree>("Events", "Events");
+  //****************************************************************************
+  //                          EVENT LEVEL BRANCHES                              
+  //****************************************************************************
 
-    m_ttree->Branch("selMu0_px",  &b_selMu0_px,  "selMu0_px/F");
-    m_ttree->Branch("selMu1_px",  &b_selMu1_px,  "selMu1_px/F");
-    m_ttree->Branch("selMu2_px",  &b_selMu2_px,  "selMu2_px/F");
-    m_ttree->Branch("selMu3_px",  &b_selMu3_px,  "selMu3_px/F");
+  // Event info
+  m_ttree->Branch("event", &b_event, "event/I");
+  m_ttree->Branch("run",   &b_run,   "run/I");
+  m_ttree->Branch("lumi",  &b_lumi,  "lumi/I");
 
-    m_ttree->Branch("selMu0_py",  &b_selMu0_py,  "selMu0_py/F");
-    m_ttree->Branch("selMu1_py",  &b_selMu1_py,  "selMu1_py/F");
-    m_ttree->Branch("selMu2_py",  &b_selMu2_py,  "selMu2_py/F");
-    m_ttree->Branch("selMu3_py",  &b_selMu3_py,  "selMu3_py/F");
+  // Beam spot
+  m_ttree->Branch("beamSpot_x", &b_beamSpot_x, "beamSpot_x/F");
+  m_ttree->Branch("beamSpot_y", &b_beamSpot_y, "beamSpot_y/F");
+  m_ttree->Branch("beamSpot_z", &b_beamSpot_z, "beamSpot_z/F");
 
-    m_ttree->Branch("selMu0_pz",  &b_selMu0_pz,  "selMu0_pz/F");
-    m_ttree->Branch("selMu1_pz",  &b_selMu1_pz,  "selMu1_pz/F");
-    m_ttree->Branch("selMu2_pz",  &b_selMu2_pz,  "selMu2_pz/F");
-    m_ttree->Branch("selMu3_pz",  &b_selMu3_pz,  "selMu3_pz/F");
+  //****************************************************************************
+  //                          GEN LEVEL BRANCHES                                
+  //****************************************************************************
+
+  // Bosons
+  m_ttree->Branch("genH_m",    &b_genH_m,    "genH_m/F");
+  m_ttree->Branch("genH_px",   &b_genH_px,   "genH_px/F");
+  m_ttree->Branch("genH_py",   &b_genH_py,   "genH_py/F");
+  m_ttree->Branch("genH_pz",   &b_genH_pz,   "genH_pz/F");
+  m_ttree->Branch("genH_eta",  &b_genH_eta,  "genH_eta/F");
+  m_ttree->Branch("genH_phi",  &b_genH_phi,  "genH_phi/F");
+  m_ttree->Branch("genH_vx",   &b_genH_vx,   "genH_vx/F");
+  m_ttree->Branch("genH_vy",   &b_genH_vy,   "genH_vy/F");
+  m_ttree->Branch("genH_vz",   &b_genH_vz,   "genH_vz/F");
+
+  m_ttree->Branch("genA0_m",   &b_genA0_m,   "genA0_m/F");
+  m_ttree->Branch("genA0_px",  &b_genA0_px,  "genA0_px/F");
+  m_ttree->Branch("genA0_py",  &b_genA0_py,  "genA0_py/F");
+  m_ttree->Branch("genA0_pz",  &b_genA0_pz,  "genA0_pz/F");
+  m_ttree->Branch("genA0_eta", &b_genA0_eta, "genA0_eta/F");
+  m_ttree->Branch("genA0_phi", &b_genA0_phi, "genA0_phi/F");
+  m_ttree->Branch("genA0_vx",  &b_genA0_vx,  "genA0_vx/F");
+  m_ttree->Branch("genA0_vy",  &b_genA0_vy,  "genA0_vy/F");
+  m_ttree->Branch("genA0_vz",  &b_genA0_vz,  "genA0_vz/F");
+
+  m_ttree->Branch("genA0_Lx",  &b_genA0_Lx,  "genA0_Lx/F");
+  m_ttree->Branch("genA0_Ly",  &b_genA0_Ly,  "genA0_Ly/F");
+  m_ttree->Branch("genA0_Lz",  &b_genA0_Lz,  "genA0_Lz/F");
+  m_ttree->Branch("genA0_Lxy", &b_genA0_Lxy, "genA0_Lxy/F");
+  m_ttree->Branch("genA0_L",   &b_genA0_L,   "genA0_L/F");
+
+  m_ttree->Branch("genA1_m",   &b_genA1_m,   "genA1_m/F");
+  m_ttree->Branch("genA1_px",  &b_genA1_px,  "genA1_px/F");
+  m_ttree->Branch("genA1_py",  &b_genA1_py,  "genA1_py/F");
+  m_ttree->Branch("genA1_pz",  &b_genA1_pz,  "genA1_pz/F");
+  m_ttree->Branch("genA1_eta", &b_genA1_eta, "genA1_eta/F");
+  m_ttree->Branch("genA1_phi", &b_genA1_phi, "genA1_phi/F");
+  m_ttree->Branch("genA1_vx",  &b_genA1_vx,  "genA1_vx/F");
+  m_ttree->Branch("genA1_vy",  &b_genA1_vy,  "genA1_vy/F");
+  m_ttree->Branch("genA1_vz",  &b_genA1_vz,  "genA1_vz/F");
+
+  m_ttree->Branch("genA1_Lx",  &b_genA1_Lx,  "genA1_Lx/F");
+  m_ttree->Branch("genA1_Ly",  &b_genA1_Ly,  "genA1_Ly/F");
+  m_ttree->Branch("genA1_Lz",  &b_genA1_Lz,  "genA1_Lz/F");
+  m_ttree->Branch("genA1_Lxy", &b_genA1_Lxy, "genA1_Lxy/F");
+  m_ttree->Branch("genA1_L",   &b_genA1_L,   "genA1_L/F");
+
+  // Muons from bosons
+  m_ttree->Branch("genA0Mu0_px", &b_genA0Mu0_px, "genA0Mu0_px/F");
+  m_ttree->Branch("genA0Mu1_px", &b_genA0Mu1_px, "genA0Mu1_px/F");
+  m_ttree->Branch("genA1Mu0_px", &b_genA1Mu0_px, "genA1Mu0_px/F");
+  m_ttree->Branch("genA1Mu1_px", &b_genA1Mu1_px, "genA1Mu1_px/F");
+
+  m_ttree->Branch("genA0Mu0_py", &b_genA0Mu0_py, "genA0Mu0_py/F");
+  m_ttree->Branch("genA0Mu1_py", &b_genA0Mu1_py, "genA0Mu1_py/F");
+  m_ttree->Branch("genA1Mu0_py", &b_genA1Mu0_py, "genA1Mu0_py/F");
+  m_ttree->Branch("genA1Mu1_py", &b_genA1Mu1_py, "genA1Mu1_py/F");
+
+  m_ttree->Branch("genA0Mu0_pz", &b_genA0Mu0_pz, "genA0Mu0_pz/F");
+  m_ttree->Branch("genA0Mu1_pz", &b_genA0Mu1_pz, "genA0Mu1_pz/F");
+  m_ttree->Branch("genA1Mu0_pz", &b_genA1Mu0_pz, "genA1Mu0_pz/F");
+  m_ttree->Branch("genA1Mu1_pz", &b_genA1Mu1_pz, "genA1Mu1_pz/F");
+
+  m_ttree->Branch("genA0Mu0_eta", &b_genA0Mu0_eta, "genA0Mu0_eta/F");
+  m_ttree->Branch("genA0Mu1_eta", &b_genA0Mu1_eta, "genA0Mu1_eta/F");
+  m_ttree->Branch("genA1Mu0_eta", &b_genA1Mu0_eta, "genA1Mu0_eta/F");
+  m_ttree->Branch("genA1Mu1_eta", &b_genA1Mu1_eta, "genA1Mu1_eta/F");
+
+  m_ttree->Branch("genA0Mu0_phi", &b_genA0Mu0_phi, "genA0Mu0_phi/F");
+  m_ttree->Branch("genA0Mu1_phi", &b_genA0Mu1_phi, "genA0Mu1_phi/F");
+  m_ttree->Branch("genA1Mu0_phi", &b_genA1Mu0_phi, "genA1Mu0_phi/F");
+  m_ttree->Branch("genA1Mu1_phi", &b_genA1Mu1_phi, "genA1Mu1_phi/F");
+
+  m_ttree->Branch("genA0Mu0_vx", &b_genA0Mu0_vx, "genA0Mu0_vx/F");
+  m_ttree->Branch("genA0Mu1_vx", &b_genA0Mu1_vx, "genA0Mu1_vx/F");
+  m_ttree->Branch("genA1Mu0_vx", &b_genA1Mu0_vx, "genA1Mu0_vx/F");
+  m_ttree->Branch("genA1Mu1_vx", &b_genA1Mu1_vx, "genA1Mu1_vx/F");
+
+  m_ttree->Branch("genA0Mu0_vy", &b_genA0Mu0_vy, "genA0Mu0_vy/F");
+  m_ttree->Branch("genA0Mu1_vy", &b_genA0Mu1_vy, "genA0Mu1_vy/F");
+  m_ttree->Branch("genA1Mu0_vy", &b_genA1Mu0_vy, "genA1Mu0_vy/F");
+  m_ttree->Branch("genA1Mu1_vy", &b_genA1Mu1_vy, "genA1Mu1_vy/F");
+
+  m_ttree->Branch("genA0Mu0_vz", &b_genA0Mu0_vz, "genA0Mu0_vz/F");
+  m_ttree->Branch("genA0Mu1_vz", &b_genA0Mu1_vz, "genA0Mu1_vz/F");
+  m_ttree->Branch("genA1Mu0_vz", &b_genA1Mu0_vz, "genA1Mu0_vz/F");
+  m_ttree->Branch("genA1Mu1_vz", &b_genA1Mu1_vz, "genA1Mu1_vz/F");
+
+  m_ttree->Branch("genA0Mu_dEta", &b_genA0Mu_dEta, "genA0Mu_dEta/F");
+  m_ttree->Branch("genA1Mu_dEta", &b_genA1Mu_dEta, "genA1Mu_dEta/F");
+  m_ttree->Branch("genA0Mu_dPhi", &b_genA0Mu_dPhi, "genA0Mu_dPhi/F");
+  m_ttree->Branch("genA1Mu_dPhi", &b_genA1Mu_dPhi, "genA1Mu_dPhi/F");
+  m_ttree->Branch("genA0Mu_dR",   &b_genA0Mu_dR,   "genA0Mu_dR/F");
+  m_ttree->Branch("genA1Mu_dR",   &b_genA1Mu_dR,   "genA1Mu_dR/F");
+
+  // GEN Level Muons
+  m_ttree->Branch("genMu0_pT",  &b_genMu0_pT,  "genMu0_pT/F");
+  m_ttree->Branch("genMu1_pT",  &b_genMu1_pT,  "genMu1_pT/F");
+  m_ttree->Branch("genMu2_pT",  &b_genMu2_pT,  "genMu2_pT/F");
+  m_ttree->Branch("genMu3_pT",  &b_genMu3_pT,  "genMu3_pT/F");
+  m_ttree->Branch("genMu0_eta", &b_genMu0_eta, "genMu0_eta/F");
+  m_ttree->Branch("genMu1_eta", &b_genMu1_eta, "genMu1_eta/F");
+  m_ttree->Branch("genMu2_eta", &b_genMu2_eta, "genMu2_eta/F");
+  m_ttree->Branch("genMu3_eta", &b_genMu3_eta, "genMu3_eta/F");
+  m_ttree->Branch("genMu0_phi", &b_genMu0_phi, "genMu0_phi/F");
+  m_ttree->Branch("genMu1_phi", &b_genMu1_phi, "genMu1_phi/F");
+  m_ttree->Branch("genMu2_phi", &b_genMu2_phi, "genMu2_phi/F");
+  m_ttree->Branch("genMu3_phi", &b_genMu3_phi, "genMu3_phi/F");
+
+  // GEN Level Selectors
+  m_ttree->Branch("is4GenMu",    &b_is4GenMu,       "is4GenMu/O");
+
+  m_ttree->Branch("is1GenMu17",  &b_is1GenMu17,     "is1GenMu17/O");
+  m_ttree->Branch("is2GenMu8",   &b_is2GenMu8,      "is2GenMu8/O");
+  m_ttree->Branch("is3GenMu8",   &b_is3GenMu8,      "is3GenMu8/O");
+  m_ttree->Branch("is4GenMu8",   &b_is4GenMu8,      "is4GenMu8/O");
+
+
+  //****************************************************************************
+  //                          RECO LEVEL BRANCHES                               
+  //****************************************************************************
+
+  // Reco Muons
+  m_ttree->Branch("nRecoMu",  &b_nRecoMu,  "nRecoMu/I");
+
+  m_ttree->Branch("selMu0_px",  &b_selMu0_px,  "selMu0_px/F");
+  m_ttree->Branch("selMu1_px",  &b_selMu1_px,  "selMu1_px/F");
+  m_ttree->Branch("selMu2_px",  &b_selMu2_px,  "selMu2_px/F");
+  m_ttree->Branch("selMu3_px",  &b_selMu3_px,  "selMu3_px/F");
+
+  m_ttree->Branch("selMu0_py",  &b_selMu0_py,  "selMu0_py/F");
+  m_ttree->Branch("selMu1_py",  &b_selMu1_py,  "selMu1_py/F");
+  m_ttree->Branch("selMu2_py",  &b_selMu2_py,  "selMu2_py/F");
+  m_ttree->Branch("selMu3_py",  &b_selMu3_py,  "selMu3_py/F");
+
+  m_ttree->Branch("selMu0_pz",  &b_selMu0_pz,  "selMu0_pz/F");
+  m_ttree->Branch("selMu1_pz",  &b_selMu1_pz,  "selMu1_pz/F");
+  m_ttree->Branch("selMu2_pz",  &b_selMu2_pz,  "selMu2_pz/F");
+  m_ttree->Branch("selMu3_pz",  &b_selMu3_pz,  "selMu3_pz/F");
   
-    m_ttree->Branch("selMu0_pT",  &b_selMu0_pT,  "selMu0_pT/F");
-    m_ttree->Branch("selMu1_pT",  &b_selMu1_pT,  "selMu1_pT/F");
-    m_ttree->Branch("selMu2_pT",  &b_selMu2_pT,  "selMu2_pT/F");
-    m_ttree->Branch("selMu3_pT",  &b_selMu3_pT,  "selMu3_pT/F");
+  m_ttree->Branch("selMu0_pT",  &b_selMu0_pT,  "selMu0_pT/F");
+  m_ttree->Branch("selMu1_pT",  &b_selMu1_pT,  "selMu1_pT/F");
+  m_ttree->Branch("selMu2_pT",  &b_selMu2_pT,  "selMu2_pT/F");
+  m_ttree->Branch("selMu3_pT",  &b_selMu3_pT,  "selMu3_pT/F");
 
-    m_ttree->Branch("selMu0_eta", &b_selMu0_eta, "selMu0_eta/F");
-    m_ttree->Branch("selMu1_eta", &b_selMu1_eta, "selMu1_eta/F");
-    m_ttree->Branch("selMu2_eta", &b_selMu2_eta, "selMu2_eta/F");
-    m_ttree->Branch("selMu3_eta", &b_selMu3_eta, "selMu3_eta/F");
+  m_ttree->Branch("selMu0_eta", &b_selMu0_eta, "selMu0_eta/F");
+  m_ttree->Branch("selMu1_eta", &b_selMu1_eta, "selMu1_eta/F");
+  m_ttree->Branch("selMu2_eta", &b_selMu2_eta, "selMu2_eta/F");
+  m_ttree->Branch("selMu3_eta", &b_selMu3_eta, "selMu3_eta/F");
 
-    m_ttree->Branch("selMu0_phi", &b_selMu0_phi, "selMu0_phi/F");
-    m_ttree->Branch("selMu1_phi", &b_selMu1_phi, "selMu1_phi/F");
-    m_ttree->Branch("selMu2_phi", &b_selMu2_phi, "selMu2_phi/F");
-    m_ttree->Branch("selMu3_phi", &b_selMu3_phi, "selMu3_phi/F");
+  m_ttree->Branch("selMu0_phi", &b_selMu0_phi, "selMu0_phi/F");
+  m_ttree->Branch("selMu1_phi", &b_selMu1_phi, "selMu1_phi/F");
+  m_ttree->Branch("selMu2_phi", &b_selMu2_phi, "selMu2_phi/F");
+  m_ttree->Branch("selMu3_phi", &b_selMu3_phi, "selMu3_phi/F");
 
-    // RECO DiMuons
-    m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
-    m_ttree->Branch("diMuonC_FittedVtx_px",  &b_diMuonC_FittedVtx_px,  "diMuonC_FittedVtx_px/F");
-    m_ttree->Branch("diMuonC_FittedVtx_py",  &b_diMuonC_FittedVtx_py,  "diMuonC_FittedVtx_py/F");
-    m_ttree->Branch("diMuonC_FittedVtx_pz",  &b_diMuonC_FittedVtx_pz,  "diMuonC_FittedVtx_pz/F");
-    m_ttree->Branch("diMuonC_FittedVtx_eta", &b_diMuonC_FittedVtx_eta, "diMuonC_FittedVtx_eta/F");
-    m_ttree->Branch("diMuonC_FittedVtx_phi", &b_diMuonC_FittedVtx_phi, "diMuonC_FittedVtx_phi/F");
-    m_ttree->Branch("diMuonC_FittedVtx_vx",  &b_diMuonC_FittedVtx_vx,  "diMuonC_FittedVtx_vx/F");
-    m_ttree->Branch("diMuonC_FittedVtx_vy",  &b_diMuonC_FittedVtx_vy,  "diMuonC_FittedVtx_vy/F");
-    m_ttree->Branch("diMuonC_FittedVtx_vz",  &b_diMuonC_FittedVtx_vz,  "diMuonC_FittedVtx_vz/F");
+  // RECO DiMuons
+  m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
+  m_ttree->Branch("diMuonC_FittedVtx_px",  &b_diMuonC_FittedVtx_px,  "diMuonC_FittedVtx_px/F");
+  m_ttree->Branch("diMuonC_FittedVtx_py",  &b_diMuonC_FittedVtx_py,  "diMuonC_FittedVtx_py/F");
+  m_ttree->Branch("diMuonC_FittedVtx_pz",  &b_diMuonC_FittedVtx_pz,  "diMuonC_FittedVtx_pz/F");
+  m_ttree->Branch("diMuonC_FittedVtx_eta", &b_diMuonC_FittedVtx_eta, "diMuonC_FittedVtx_eta/F");
+  m_ttree->Branch("diMuonC_FittedVtx_phi", &b_diMuonC_FittedVtx_phi, "diMuonC_FittedVtx_phi/F");
+  m_ttree->Branch("diMuonC_FittedVtx_vx",  &b_diMuonC_FittedVtx_vx,  "diMuonC_FittedVtx_vx/F");
+  m_ttree->Branch("diMuonC_FittedVtx_vy",  &b_diMuonC_FittedVtx_vy,  "diMuonC_FittedVtx_vy/F");
+  m_ttree->Branch("diMuonC_FittedVtx_vz",  &b_diMuonC_FittedVtx_vz,  "diMuonC_FittedVtx_vz/F");
 
-    m_ttree->Branch("diMuonC_FittedVtx_Lxy", &b_diMuonC_FittedVtx_Lxy, "diMuonC_FittedVtx_Lxy/F");
-    m_ttree->Branch("diMuonC_FittedVtx_L",   &b_diMuonC_FittedVtx_L,   "diMuonC_FittedVtx_L/F");
-    m_ttree->Branch("diMuonC_FittedVtx_dz",  &b_diMuonC_FittedVtx_dz,  "diMuonC_FittedVtx_dz/F");
+  m_ttree->Branch("diMuonC_FittedVtx_Lxy", &b_diMuonC_FittedVtx_Lxy, "diMuonC_FittedVtx_Lxy/F");
+  m_ttree->Branch("diMuonC_FittedVtx_L",   &b_diMuonC_FittedVtx_L,   "diMuonC_FittedVtx_L/F");
+  m_ttree->Branch("diMuonC_FittedVtx_dz",  &b_diMuonC_FittedVtx_dz,  "diMuonC_FittedVtx_dz/F");
 
-    m_ttree->Branch("diMuonF_FittedVtx_m",   &b_diMuonF_FittedVtx_m,   "diMuonF_FittedVtx_m/F");
-    m_ttree->Branch("diMuonF_FittedVtx_px",  &b_diMuonF_FittedVtx_px,  "diMuonF_FittedVtx_px/F");
-    m_ttree->Branch("diMuonF_FittedVtx_py",  &b_diMuonF_FittedVtx_py,  "diMuonF_FittedVtx_py/F");
-    m_ttree->Branch("diMuonF_FittedVtx_pz",  &b_diMuonF_FittedVtx_pz,  "diMuonF_FittedVtx_pz/F");
-    m_ttree->Branch("diMuonF_FittedVtx_eta", &b_diMuonF_FittedVtx_eta, "diMuonF_FittedVtx_eta/F");
-    m_ttree->Branch("diMuonF_FittedVtx_phi", &b_diMuonF_FittedVtx_phi, "diMuonF_FittedVtx_phi/F");
-    m_ttree->Branch("diMuonF_FittedVtx_vx",  &b_diMuonF_FittedVtx_vx,  "diMuonF_FittedVtx_vx/F");
-    m_ttree->Branch("diMuonF_FittedVtx_vy",  &b_diMuonF_FittedVtx_vy,  "diMuonF_FittedVtx_vy/F");
-    m_ttree->Branch("diMuonF_FittedVtx_vz",  &b_diMuonF_FittedVtx_vz,  "diMuonF_FittedVtx_vz/F");
+  m_ttree->Branch("diMuonF_FittedVtx_m",   &b_diMuonF_FittedVtx_m,   "diMuonF_FittedVtx_m/F");
+  m_ttree->Branch("diMuonF_FittedVtx_px",  &b_diMuonF_FittedVtx_px,  "diMuonF_FittedVtx_px/F");
+  m_ttree->Branch("diMuonF_FittedVtx_py",  &b_diMuonF_FittedVtx_py,  "diMuonF_FittedVtx_py/F");
+  m_ttree->Branch("diMuonF_FittedVtx_pz",  &b_diMuonF_FittedVtx_pz,  "diMuonF_FittedVtx_pz/F");
+  m_ttree->Branch("diMuonF_FittedVtx_eta", &b_diMuonF_FittedVtx_eta, "diMuonF_FittedVtx_eta/F");
+  m_ttree->Branch("diMuonF_FittedVtx_phi", &b_diMuonF_FittedVtx_phi, "diMuonF_FittedVtx_phi/F");
+  m_ttree->Branch("diMuonF_FittedVtx_vx",  &b_diMuonF_FittedVtx_vx,  "diMuonF_FittedVtx_vx/F");
+  m_ttree->Branch("diMuonF_FittedVtx_vy",  &b_diMuonF_FittedVtx_vy,  "diMuonF_FittedVtx_vy/F");
+  m_ttree->Branch("diMuonF_FittedVtx_vz",  &b_diMuonF_FittedVtx_vz,  "diMuonF_FittedVtx_vz/F");
 
-    m_ttree->Branch("diMuonF_FittedVtx_Lxy", &b_diMuonF_FittedVtx_Lxy, "diMuonF_FittedVtx_Lxy/F");
-    m_ttree->Branch("diMuonF_FittedVtx_L",   &b_diMuonF_FittedVtx_L,   "diMuonF_FittedVtx_L/F");
-    m_ttree->Branch("diMuonF_FittedVtx_dz",  &b_diMuonF_FittedVtx_dz,  "diMuonF_FittedVtx_dz/F");
+  m_ttree->Branch("diMuonF_FittedVtx_Lxy", &b_diMuonF_FittedVtx_Lxy, "diMuonF_FittedVtx_Lxy/F");
+  m_ttree->Branch("diMuonF_FittedVtx_L",   &b_diMuonF_FittedVtx_L,   "diMuonF_FittedVtx_L/F");
+  m_ttree->Branch("diMuonF_FittedVtx_dz",  &b_diMuonF_FittedVtx_dz,  "diMuonF_FittedVtx_dz/F");
 
-    m_ttree->Branch("diMuonC_ConsistentVtx_m",   &b_diMuonC_ConsistentVtx_m,   "diMuonC_ConsistentVtx_m/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_px",  &b_diMuonC_ConsistentVtx_px,  "diMuonC_ConsistentVtx_px/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_py",  &b_diMuonC_ConsistentVtx_py,  "diMuonC_ConsistentVtx_py/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_pz",  &b_diMuonC_ConsistentVtx_pz,  "diMuonC_ConsistentVtx_pz/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_eta", &b_diMuonC_ConsistentVtx_eta, "diMuonC_ConsistentVtx_eta/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_phi", &b_diMuonC_ConsistentVtx_phi, "diMuonC_ConsistentVtx_phi/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_vx",  &b_diMuonC_ConsistentVtx_vx,  "diMuonC_ConsistentVtx_vx/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_vy",  &b_diMuonC_ConsistentVtx_vy,  "diMuonC_ConsistentVtx_vy/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_vz",  &b_diMuonC_ConsistentVtx_vz,  "diMuonC_ConsistentVtx_vz/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_m",   &b_diMuonC_ConsistentVtx_m,   "diMuonC_ConsistentVtx_m/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_px",  &b_diMuonC_ConsistentVtx_px,  "diMuonC_ConsistentVtx_px/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_py",  &b_diMuonC_ConsistentVtx_py,  "diMuonC_ConsistentVtx_py/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_pz",  &b_diMuonC_ConsistentVtx_pz,  "diMuonC_ConsistentVtx_pz/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_eta", &b_diMuonC_ConsistentVtx_eta, "diMuonC_ConsistentVtx_eta/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_phi", &b_diMuonC_ConsistentVtx_phi, "diMuonC_ConsistentVtx_phi/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_vx",  &b_diMuonC_ConsistentVtx_vx,  "diMuonC_ConsistentVtx_vx/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_vy",  &b_diMuonC_ConsistentVtx_vy,  "diMuonC_ConsistentVtx_vy/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_vz",  &b_diMuonC_ConsistentVtx_vz,  "diMuonC_ConsistentVtx_vz/F");
 
-    m_ttree->Branch("diMuonC_ConsistentVtx_Lxy", &b_diMuonC_ConsistentVtx_Lxy, "diMuonC_ConsistentVtx_Lxy/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_L",   &b_diMuonC_ConsistentVtx_L,   "diMuonC_ConsistentVtx_L/F");
-    m_ttree->Branch("diMuonC_ConsistentVtx_dz",  &b_diMuonC_ConsistentVtx_dz,  "diMuonC_ConsistentVtx_dz/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_Lxy", &b_diMuonC_ConsistentVtx_Lxy, "diMuonC_ConsistentVtx_Lxy/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_L",   &b_diMuonC_ConsistentVtx_L,   "diMuonC_ConsistentVtx_L/F");
+  m_ttree->Branch("diMuonC_ConsistentVtx_dz",  &b_diMuonC_ConsistentVtx_dz,  "diMuonC_ConsistentVtx_dz/F");
 
-    m_ttree->Branch("diMuonF_ConsistentVtx_m",   &b_diMuonF_ConsistentVtx_m,   "diMuonF_ConsistentVtx_m/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_px",  &b_diMuonF_ConsistentVtx_px,  "diMuonF_ConsistentVtx_px/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_py",  &b_diMuonF_ConsistentVtx_py,  "diMuonF_ConsistentVtx_py/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_pz",  &b_diMuonF_ConsistentVtx_pz,  "diMuonF_ConsistentVtx_pz/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_eta", &b_diMuonF_ConsistentVtx_eta, "diMuonF_ConsistentVtx_eta/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_phi", &b_diMuonF_ConsistentVtx_phi, "diMuonF_ConsistentVtx_phi/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_vx",  &b_diMuonF_ConsistentVtx_vx,  "diMuonF_ConsistentVtx_vx/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_vy",  &b_diMuonF_ConsistentVtx_vy,  "diMuonF_ConsistentVtx_vy/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_vz",  &b_diMuonF_ConsistentVtx_vz,  "diMuonF_ConsistentVtx_vz/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_m",   &b_diMuonF_ConsistentVtx_m,   "diMuonF_ConsistentVtx_m/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_px",  &b_diMuonF_ConsistentVtx_px,  "diMuonF_ConsistentVtx_px/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_py",  &b_diMuonF_ConsistentVtx_py,  "diMuonF_ConsistentVtx_py/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_pz",  &b_diMuonF_ConsistentVtx_pz,  "diMuonF_ConsistentVtx_pz/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_eta", &b_diMuonF_ConsistentVtx_eta, "diMuonF_ConsistentVtx_eta/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_phi", &b_diMuonF_ConsistentVtx_phi, "diMuonF_ConsistentVtx_phi/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_vx",  &b_diMuonF_ConsistentVtx_vx,  "diMuonF_ConsistentVtx_vx/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_vy",  &b_diMuonF_ConsistentVtx_vy,  "diMuonF_ConsistentVtx_vy/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_vz",  &b_diMuonF_ConsistentVtx_vz,  "diMuonF_ConsistentVtx_vz/F");
 
-    m_ttree->Branch("diMuonF_ConsistentVtx_Lxy", &b_diMuonF_ConsistentVtx_Lxy, "diMuonF_ConsistentVtx_Lxy/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_L",   &b_diMuonF_ConsistentVtx_L,   "diMuonF_ConsistentVtx_L/F");
-    m_ttree->Branch("diMuonF_ConsistentVtx_dz",  &b_diMuonF_ConsistentVtx_dz,  "diMuonF_ConsistentVtx_dz/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_Lxy", &b_diMuonF_ConsistentVtx_Lxy, "diMuonF_ConsistentVtx_Lxy/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_L",   &b_diMuonF_ConsistentVtx_L,   "diMuonF_ConsistentVtx_L/F");
+  m_ttree->Branch("diMuonF_ConsistentVtx_dz",  &b_diMuonF_ConsistentVtx_dz,  "diMuonF_ConsistentVtx_dz/F");
 
-    m_ttree->Branch("diMuonC_IsoTk_FittedVtx", &b_diMuonC_IsoTk_FittedVtx, "diMuonC_IsoTk_FittedVtx/F");
-    m_ttree->Branch("diMuonF_IsoTk_FittedVtx", &b_diMuonF_IsoTk_FittedVtx, "diMuonF_IsoTk_FittedVtx/F");
+  m_ttree->Branch("diMuonC_IsoTk_FittedVtx", &b_diMuonC_IsoTk_FittedVtx, "diMuonC_IsoTk_FittedVtx/F");
+  m_ttree->Branch("diMuonF_IsoTk_FittedVtx", &b_diMuonF_IsoTk_FittedVtx, "diMuonF_IsoTk_FittedVtx/F");
 
-    m_ttree->Branch("diMuons_dz_FittedVtx", &b_diMuons_dz_FittedVtx, "diMuons_dz_FittedVtx/F");
-    m_ttree->Branch("diMuons_dz_ConsistentVtx", &b_diMuons_dz_ConsistentVtx, "diMuons_dz_ConsistentVtx/F");
+  m_ttree->Branch("diMuons_dz_FittedVtx", &b_diMuons_dz_FittedVtx, "diMuons_dz_FittedVtx/F");
+  m_ttree->Branch("diMuons_dz_ConsistentVtx", &b_diMuons_dz_ConsistentVtx, "diMuons_dz_ConsistentVtx/F");
 
-    m_ttree->Branch("diMuonC_IsoTk_ConsistentVtx", &b_diMuonC_IsoTk_ConsistentVtx, "diMuonC_IsoTk_ConsistentVtx/F");
-    m_ttree->Branch("diMuonF_IsoTk_ConsistentVtx", &b_diMuonF_IsoTk_ConsistentVtx, "diMuonF_IsoTk_ConsistentVtx/F");
+  m_ttree->Branch("diMuonC_IsoTk_ConsistentVtx", &b_diMuonC_IsoTk_ConsistentVtx, "diMuonC_IsoTk_ConsistentVtx/F");
+  m_ttree->Branch("diMuonF_IsoTk_ConsistentVtx", &b_diMuonF_IsoTk_ConsistentVtx, "diMuonF_IsoTk_ConsistentVtx/F");
 
-    m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix", &b_diMuonC_m1_FittedVtx_hitpix, "diMuonC_m1_FittedVtx_hitpix/I");
-    m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix", &b_diMuonC_m2_FittedVtx_hitpix, "diMuonC_m2_FittedVtx_hitpix/I");
-    m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix", &b_diMuonF_m1_FittedVtx_hitpix, "diMuonF_m1_FittedVtx_hitpix/I");
-    m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix", &b_diMuonF_m2_FittedVtx_hitpix, "diMuonF_m2_FittedVtx_hitpix/I");
+  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix", &b_diMuonC_m1_FittedVtx_hitpix, "diMuonC_m1_FittedVtx_hitpix/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix", &b_diMuonC_m2_FittedVtx_hitpix, "diMuonC_m2_FittedVtx_hitpix/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix", &b_diMuonF_m1_FittedVtx_hitpix, "diMuonF_m1_FittedVtx_hitpix/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix", &b_diMuonF_m2_FittedVtx_hitpix, "diMuonF_m2_FittedVtx_hitpix/I");
 
-    m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l2inc", &b_diMuonC_m1_FittedVtx_hitpix_l2inc, "diMuonC_m1_FittedVtx_hitpix_l2inc/I");
-    m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l2inc", &b_diMuonC_m2_FittedVtx_hitpix_l2inc, "diMuonC_m2_FittedVtx_hitpix_l2inc/I");
-    m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l2inc", &b_diMuonF_m1_FittedVtx_hitpix_l2inc, "diMuonF_m1_FittedVtx_hitpix_l2inc/I");
-    m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l2inc", &b_diMuonF_m2_FittedVtx_hitpix_l2inc, "diMuonF_m2_FittedVtx_hitpix_l2inc/I");
+  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l2inc", &b_diMuonC_m1_FittedVtx_hitpix_l2inc, "diMuonC_m1_FittedVtx_hitpix_l2inc/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l2inc", &b_diMuonC_m2_FittedVtx_hitpix_l2inc, "diMuonC_m2_FittedVtx_hitpix_l2inc/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l2inc", &b_diMuonF_m1_FittedVtx_hitpix_l2inc, "diMuonF_m1_FittedVtx_hitpix_l2inc/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l2inc", &b_diMuonF_m2_FittedVtx_hitpix_l2inc, "diMuonF_m2_FittedVtx_hitpix_l2inc/I");
 
-    m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l3inc", &b_diMuonC_m1_FittedVtx_hitpix_l3inc, "diMuonC_m1_FittedVtx_hitpix_l3inc/I");
-    m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l3inc", &b_diMuonC_m2_FittedVtx_hitpix_l3inc, "diMuonC_m2_FittedVtx_hitpix_l3inc/I");
-    m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l3inc", &b_diMuonF_m1_FittedVtx_hitpix_l3inc, "diMuonF_m1_FittedVtx_hitpix_l3inc/I");
-    m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l3inc", &b_diMuonF_m2_FittedVtx_hitpix_l3inc, "diMuonF_m2_FittedVtx_hitpix_l3inc/I");
+  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l3inc", &b_diMuonC_m1_FittedVtx_hitpix_l3inc, "diMuonC_m1_FittedVtx_hitpix_l3inc/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l3inc", &b_diMuonC_m2_FittedVtx_hitpix_l3inc, "diMuonC_m2_FittedVtx_hitpix_l3inc/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l3inc", &b_diMuonF_m1_FittedVtx_hitpix_l3inc, "diMuonF_m1_FittedVtx_hitpix_l3inc/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l3inc", &b_diMuonF_m2_FittedVtx_hitpix_l3inc, "diMuonF_m2_FittedVtx_hitpix_l3inc/I");
 
-    m_ttree->Branch("b_diMuonC_m1_FittedVtx_HBV", &b_diMuonC_m1_FittedVtx_HBV, "diMuonC_m1_FittedVtx_HBV/I");
-    m_ttree->Branch("b_diMuonC_m2_FittedVtx_HBV", &b_diMuonC_m2_FittedVtx_HBV, "diMuonC_m2_FittedVtx_HBV/I");
-    m_ttree->Branch("b_diMuonF_m1_FittedVtx_HBV", &b_diMuonF_m1_FittedVtx_HBV, "diMuonF_m1_FittedVtx_HBV/I");
-    m_ttree->Branch("b_diMuonF_m2_FittedVtx_HBV", &b_diMuonF_m2_FittedVtx_HBV, "diMuonF_m2_FittedVtx_HBV/I");
-    m_ttree->Branch("b_diMuonC_m1_FittedVtx_MHAV", &b_diMuonC_m1_FittedVtx_MHAV, "diMuonC_m1_FittedVtx_MHAV/I");
-    m_ttree->Branch("b_diMuonC_m2_FittedVtx_MHAV", &b_diMuonC_m2_FittedVtx_MHAV, "diMuonC_m2_FittedVtx_MHAV/I");
-    m_ttree->Branch("b_diMuonF_m1_FittedVtx_MHAV", &b_diMuonF_m1_FittedVtx_MHAV, "diMuonF_m1_FittedVtx_MHAV/I");
-    m_ttree->Branch("b_diMuonF_m2_FittedVtx_MHAV", &b_diMuonF_m2_FittedVtx_MHAV, "diMuonF_m2_FittedVtx_MHAV/I");
+  m_ttree->Branch("b_diMuonC_m1_FittedVtx_HBV", &b_diMuonC_m1_FittedVtx_HBV, "diMuonC_m1_FittedVtx_HBV/I");
+  m_ttree->Branch("b_diMuonC_m2_FittedVtx_HBV", &b_diMuonC_m2_FittedVtx_HBV, "diMuonC_m2_FittedVtx_HBV/I");
+  m_ttree->Branch("b_diMuonF_m1_FittedVtx_HBV", &b_diMuonF_m1_FittedVtx_HBV, "diMuonF_m1_FittedVtx_HBV/I");
+  m_ttree->Branch("b_diMuonF_m2_FittedVtx_HBV", &b_diMuonF_m2_FittedVtx_HBV, "diMuonF_m2_FittedVtx_HBV/I");
+  m_ttree->Branch("b_diMuonC_m1_FittedVtx_MHAV", &b_diMuonC_m1_FittedVtx_MHAV, "diMuonC_m1_FittedVtx_MHAV/I");
+  m_ttree->Branch("b_diMuonC_m2_FittedVtx_MHAV", &b_diMuonC_m2_FittedVtx_MHAV, "diMuonC_m2_FittedVtx_MHAV/I");
+  m_ttree->Branch("b_diMuonF_m1_FittedVtx_MHAV", &b_diMuonF_m1_FittedVtx_MHAV, "diMuonF_m1_FittedVtx_MHAV/I");
+  m_ttree->Branch("b_diMuonF_m2_FittedVtx_MHAV", &b_diMuonF_m2_FittedVtx_MHAV, "diMuonF_m2_FittedVtx_MHAV/I");
 
-    // bb Estimation
-    m_ttree->Branch("massC",                          &b_massC,                          "massC/F");
-    m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
-    m_ttree->Branch("isoC_1mm",                       &b_isoC_1mm,                       "isoC_1mm/F");
-    m_ttree->Branch("isoF_1mm",                       &b_isoF_1mm,                       "isoF_1mm/F");
+  // bb Estimation
+  m_ttree->Branch("massC",                          &b_massC,                          "massC/F");
+  m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
+  m_ttree->Branch("isoC_1mm",                       &b_isoC_1mm,                       "isoC_1mm/F");
+  m_ttree->Branch("isoF_1mm",                       &b_isoF_1mm,                       "isoF_1mm/F");
 
-    // RECO Level Selectors
-    m_ttree->Branch("is1SelMu17",                     &b_is1SelMu17,                     "is1SelMu17/O");
-    m_ttree->Branch("is2SelMu8",                      &b_is2SelMu8,                      "is2SelMu8/O");
-    m_ttree->Branch("is3SelMu8",                      &b_is3SelMu8,                      "is3SelMu8/O");
-    m_ttree->Branch("is4SelMu8",                      &b_is4SelMu8,                      "is4SelMu8/O");
+  // RECO Level Selectors
+  m_ttree->Branch("is1SelMu17",                     &b_is1SelMu17,                     "is1SelMu17/O");
+  m_ttree->Branch("is2SelMu8",                      &b_is2SelMu8,                      "is2SelMu8/O");
+  m_ttree->Branch("is3SelMu8",                      &b_is3SelMu8,                      "is3SelMu8/O");
+  m_ttree->Branch("is4SelMu8",                      &b_is4SelMu8,                      "is4SelMu8/O");
 
-    m_ttree->Branch("is2MuJets",                      &b_is2MuJets,                      "is2MuJets/O");
-    m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
-    m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
-    m_ttree->Branch("is2DiMuonsFittedVtxOK_KF",       &b_is2DiMuonsFittedVtxOK_KF,       "is2DiMuonsFittedVtxOK_KF/O");
-    m_ttree->Branch("is2DiMuonsFittedVtxOK_VS",       &b_is2DiMuonsFittedVtxOK_VS,       "is2DiMuonsFittedVtxOK_VS/O");
+  m_ttree->Branch("is2MuJets",                      &b_is2MuJets,                      "is2MuJets/O");
+  m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
+  m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
+  m_ttree->Branch("is2DiMuonsFittedVtxOK_KF",       &b_is2DiMuonsFittedVtxOK_KF,       "is2DiMuonsFittedVtxOK_KF/O");
+  m_ttree->Branch("is2DiMuonsFittedVtxOK_VS",       &b_is2DiMuonsFittedVtxOK_VS,       "is2DiMuonsFittedVtxOK_VS/O");
 
 
-    m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
-    m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
-    m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
-    m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
-    m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
+  m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
+  m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
+  m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
+  m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
+  m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
 
-    m_ttree->Branch("hltPaths",  &b_hltPaths);  
+  m_ttree->Branch("hltPaths",  &b_hltPaths);  
 
-    if(runPixelHitRecovery_){
-      //pixelHitRecovery
+  if(runPixelHitRecovery_){
+    //pixelHitRecovery
     
-      m_ttree->Branch("ntracks",&b_ntracks,"ntracks/I");
-      m_ttree->Branch("track_pt", &b_track_pt,"track_pt[ntracks]/F");
-      m_ttree->Branch("track_charge", &b_track_charge,"track_charge[ntracks]/F");
-      m_ttree->Branch("track_qoverp", &b_track_qoverp,"track_qoverp[ntracks]/F");
-      m_ttree->Branch("track_theta", &b_track_theta,"track_theta[ntracks]/F");
-      m_ttree->Branch("track_phi", &b_track_phi,"track_phi[ntracks]/F");
-      m_ttree->Branch("track_dxy", &b_track_dxy,"track_dxy[ntracks]/F");
-      m_ttree->Branch("track_dz", &b_track_dz,"track_dz[ntracks]/F");
+    m_ttree->Branch("ntracks",&b_ntracks,"ntracks/I");
+    m_ttree->Branch("track_pt", &b_track_pt,"track_pt[ntracks]/F");
+    m_ttree->Branch("track_charge", &b_track_charge,"track_charge[ntracks]/F");
+    m_ttree->Branch("track_qoverp", &b_track_qoverp,"track_qoverp[ntracks]/F");
+    m_ttree->Branch("track_theta", &b_track_theta,"track_theta[ntracks]/F");
+    m_ttree->Branch("track_phi", &b_track_phi,"track_phi[ntracks]/F");
+    m_ttree->Branch("track_dxy", &b_track_dxy,"track_dxy[ntracks]/F");
+    m_ttree->Branch("track_dz", &b_track_dz,"track_dz[ntracks]/F");
 
-      m_ttree->Branch("track_errpt", &b_track_errpt,"track_errpt[ntracks]/F");
-      m_ttree->Branch("track_errcharge", &b_track_errcharge,"track_errcharge[ntracks]/F");
-      m_ttree->Branch("track_errqoverp", &b_track_errqoverp,"track_errqoverp[ntracks]/F");
-      m_ttree->Branch("track_errtheta", &b_track_errtheta,"track_errtheta[ntracks]/F");
-      m_ttree->Branch("track_errphi", &b_track_errphi,"track_errphi[ntracks]/F");
-      m_ttree->Branch("track_errdxy", &b_track_errdxy,"track_errdxy[ntracks]/F");
-      m_ttree->Branch("track_errdz", &b_track_errdz,"track_errdz[ntracks]/F");
-
-
-      m_ttree->Branch("mtrack_pt", &mtrack_pt,"mtrack_pt[2]/F");
-      m_ttree->Branch("mtrack_charge", &mtrack_charge,"mtrack_charge[2]/F");
-      m_ttree->Branch("mtrack_qoverp", &mtrack_qoverp,"mtrack_qoverp[2]/F");
-      m_ttree->Branch("mtrack_theta", &mtrack_theta,"mtrack_theta[2]/F");
-      m_ttree->Branch("mtrack_phi", &mtrack_phi,"mtrack_phi[2]/F");
-      m_ttree->Branch("mtrack_dxy", &mtrack_dxy,"mtrack_dxy[2]/F");
-      m_ttree->Branch("mtrack_dz", &mtrack_dz,"mtrack_dz[2]/F");
-
-      m_ttree->Branch("mtrack_errpt", &mtrack_errpt,"mtrack_errpt[2]/F");
-      m_ttree->Branch("mtrack_errcharge", &mtrack_errcharge,"mtrack_errcharge[2]/F");
-      m_ttree->Branch("mtrack_errqoverp", &mtrack_errqoverp,"mtrack_errqoverp[2]/F");
-      m_ttree->Branch("mtrack_errtheta", &mtrack_errtheta,"mtrack_errtheta[2]/F");
-      m_ttree->Branch("mtrack_errphi", &mtrack_errphi,"mtrack_errphi[2]/F");
-      m_ttree->Branch("mtrack_errdxy", &mtrack_errdxy,"mtrack_errdxy[2]/F");
-      m_ttree->Branch("mtrack_errdz", &mtrack_errdz,"mtrack_errdz[2]/F");
+    m_ttree->Branch("track_errpt", &b_track_errpt,"track_errpt[ntracks]/F");
+    m_ttree->Branch("track_errcharge", &b_track_errcharge,"track_errcharge[ntracks]/F");
+    m_ttree->Branch("track_errqoverp", &b_track_errqoverp,"track_errqoverp[ntracks]/F");
+    m_ttree->Branch("track_errtheta", &b_track_errtheta,"track_errtheta[ntracks]/F");
+    m_ttree->Branch("track_errphi", &b_track_errphi,"track_errphi[ntracks]/F");
+    m_ttree->Branch("track_errdxy", &b_track_errdxy,"track_errdxy[ntracks]/F");
+    m_ttree->Branch("track_errdz", &b_track_errdz,"track_errdz[ntracks]/F");
 
 
-      m_ttree->Branch("muJetC_muon1_track_minchi2", &muJetC_muon1_track_minchi2,"muJetC_muon1_track_minchi2/F");
-      m_ttree->Branch("muJetC_muon2_track_minchi2", &muJetC_muon2_track_minchi2,"muJetC_muon2_track_minchi2/F");
-      m_ttree->Branch("muJetF_muon1_track_minchi2", &muJetF_muon1_track_minchi2,"muJetF_muon1_track_minchi2/F");
-      m_ttree->Branch("muJetF_muon2_track_minchi2", &muJetF_muon2_track_minchi2,"muJetF_muon2_track_minchi2/F");
+    m_ttree->Branch("mtrack_pt", &mtrack_pt,"mtrack_pt[2]/F");
+    m_ttree->Branch("mtrack_charge", &mtrack_charge,"mtrack_charge[2]/F");
+    m_ttree->Branch("mtrack_qoverp", &mtrack_qoverp,"mtrack_qoverp[2]/F");
+    m_ttree->Branch("mtrack_theta", &mtrack_theta,"mtrack_theta[2]/F");
+    m_ttree->Branch("mtrack_phi", &mtrack_phi,"mtrack_phi[2]/F");
+    m_ttree->Branch("mtrack_dxy", &mtrack_dxy,"mtrack_dxy[2]/F");
+    m_ttree->Branch("mtrack_dz", &mtrack_dz,"mtrack_dz[2]/F");
+
+    m_ttree->Branch("mtrack_errpt", &mtrack_errpt,"mtrack_errpt[2]/F");
+    m_ttree->Branch("mtrack_errcharge", &mtrack_errcharge,"mtrack_errcharge[2]/F");
+    m_ttree->Branch("mtrack_errqoverp", &mtrack_errqoverp,"mtrack_errqoverp[2]/F");
+    m_ttree->Branch("mtrack_errtheta", &mtrack_errtheta,"mtrack_errtheta[2]/F");
+    m_ttree->Branch("mtrack_errphi", &mtrack_errphi,"mtrack_errphi[2]/F");
+    m_ttree->Branch("mtrack_errdxy", &mtrack_errdxy,"mtrack_errdxy[2]/F");
+    m_ttree->Branch("mtrack_errdz", &mtrack_errdz,"mtrack_errdz[2]/F");
 
 
-
-      m_ttree->Branch("muJetC_muon1_track_minchi2theta", &muJetC_muon1_track_minchi2theta,"muJetC_muon1_track_minchi2theta/F");
-      m_ttree->Branch("muJetC_muon1_track_minchi2qoverpt", &muJetC_muon1_track_minchi2qoverpt,"muJetC_muon1_track_minchi2qoverpt/F");
-      m_ttree->Branch("muJetC_muon1_track_minchi2phi", &muJetC_muon1_track_minchi2phi,"muJetC_muon1_track_minchi2phi/F");
-      m_ttree->Branch("muJetC_muon1_track_minchi2dxy", &muJetC_muon1_track_minchi2dxy,"muJetC_muon1_track_minchi2dxy/F");
-      m_ttree->Branch("muJetC_muon1_track_minchi2dz", &muJetC_muon1_track_minchi2dz,"muJetC_muon1_track_minchi2dz/F");
-
-
-      m_ttree->Branch("muJetC_muon1_track_mincharge", &muJetC_muon1_track_mincharge,"muJetC_muon1_track_mincharge/F");
-      m_ttree->Branch("muJetC_muon1_track_minqoverpt", &muJetC_muon1_track_minqoverpt,"muJetC_muon1_track_minqoverpt/F");
-      m_ttree->Branch("muJetC_muon1_track_mintheta", &muJetC_muon1_track_mintheta,"muJetC_muon1_track_mintheta/F");
-      m_ttree->Branch("muJetC_muon1_track_minphi", &muJetC_muon1_track_minphi,"muJetC_muon1_track_minphi/F");
-      m_ttree->Branch("muJetC_muon1_track_mindxy", &muJetC_muon1_track_mindxy,"muJetC_muon1_track_mindxy/F");
-      m_ttree->Branch("muJetC_muon1_track_mindz", &muJetC_muon1_track_mindz,"muJetC_muon1_track_mindz/F");
-
-
-      m_ttree->Branch("muJetC_muon1_track_diffchi2", &muJetC_muon1_track_diffchi2,"muJetC_muon1_track_diffchi2[ntracks]/F");
-
-      m_ttree->Branch("muJetC_muon1_track_diffchi2theta", &muJetC_muon1_track_diffchi2theta,"muJetC_muon1_track_diffchi2theta[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_diffchi2qoverpt", &muJetC_muon1_track_diffchi2qoverpt,"muJetC_muon1_track_diffchi2qoverpt[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_diffchi2phi", &muJetC_muon1_track_diffchi2phi,"muJetC_muon1_track_diffchi2phi[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_diffchi2dxy", &muJetC_muon1_track_diffchi2dxy,"muJetC_muon1_track_diffchi2dxy[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_diffchi2dz", &muJetC_muon1_track_diffchi2dz,"muJetC_muon1_track_diffchi2dz[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_minchi2", &muJetC_muon1_track_minchi2,"muJetC_muon1_track_minchi2/F");
+    m_ttree->Branch("muJetC_muon2_track_minchi2", &muJetC_muon2_track_minchi2,"muJetC_muon2_track_minchi2/F");
+    m_ttree->Branch("muJetF_muon1_track_minchi2", &muJetF_muon1_track_minchi2,"muJetF_muon1_track_minchi2/F");
+    m_ttree->Branch("muJetF_muon2_track_minchi2", &muJetF_muon2_track_minchi2,"muJetF_muon2_track_minchi2/F");
 
 
 
-      m_ttree->Branch("muJetC_muon1_track_diffcharge", &muJetC_muon1_track_diffcharge,"muJetC_muon1_track_diffcharge[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_diffpt", &muJetC_muon1_track_diffpt,"muJetC_muon1_track_diffpt[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_diffqoverp", &muJetC_muon1_track_diffqoverp,"muJetC_muon1_track_diffqoverp[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_difftheta", &muJetC_muon1_track_difftheta,"muJetC_muon1_track_difftheta[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_diffphi", &muJetC_muon1_track_diffphi,"muJetC_muon1_track_diffphi[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_diffdxy", &muJetC_muon1_track_diffdxy,"muJetC_muon1_track_diffdxy[ntracks]/F");
-      m_ttree->Branch("muJetC_muon1_track_diffdz", &muJetC_muon1_track_diffdz,"muJetC_muon1_track_diffdz[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_minchi2theta", &muJetC_muon1_track_minchi2theta,"muJetC_muon1_track_minchi2theta/F");
+    m_ttree->Branch("muJetC_muon1_track_minchi2qoverpt", &muJetC_muon1_track_minchi2qoverpt,"muJetC_muon1_track_minchi2qoverpt/F");
+    m_ttree->Branch("muJetC_muon1_track_minchi2phi", &muJetC_muon1_track_minchi2phi,"muJetC_muon1_track_minchi2phi/F");
+    m_ttree->Branch("muJetC_muon1_track_minchi2dxy", &muJetC_muon1_track_minchi2dxy,"muJetC_muon1_track_minchi2dxy/F");
+    m_ttree->Branch("muJetC_muon1_track_minchi2dz", &muJetC_muon1_track_minchi2dz,"muJetC_muon1_track_minchi2dz/F");
 
-      m_ttree->Branch("muJetC_muon2_track_diffcharge", &muJetC_muon2_track_diffcharge,"muJetC_muon2_track_diffcharge[ntracks]/F");
-      m_ttree->Branch("muJetC_muon2_track_diffpt", &muJetC_muon2_track_diffpt,"muJetC_muon2_track_diffpt[ntracks]/F");
-      m_ttree->Branch("muJetC_muon2_track_diffqoverp", &muJetC_muon2_track_diffqoverp,"muJetC_muon2_track_diffqoverp[ntracks]/F");
-      m_ttree->Branch("muJetC_muon2_track_difftheta", &muJetC_muon2_track_difftheta,"muJetC_muon2_track_difftheta[ntracks]/F");
-      m_ttree->Branch("muJetC_muon2_track_diffphi", &muJetC_muon2_track_diffphi,"muJetC_muon2_track_diffphi[ntracks]/F");
-      m_ttree->Branch("muJetC_muon2_track_diffdxy", &muJetC_muon2_track_diffdxy,"muJetC_muon2_track_diffdxy[ntracks]/F");
-      m_ttree->Branch("muJetC_muon2_track_diffdz", &muJetC_muon2_track_diffdz,"muJetC_muon2_track_diffdz[ntracks]/F");
 
-      m_ttree->Branch("mutrack_pT_mu1JetC", &b_mutrack_pT_mu1JetC, "mutrack_pT_mu1JetC/F");
-      m_ttree->Branch("mutrack_pT_mu2JetC", &b_mutrack_pT_mu2JetC, "mutrack_pT_mu2JetC/F");
-      m_ttree->Branch("mutrack_eta_mu1JetC", &b_mutrack_eta_mu1JetC, "mutrack_eta_mu1JetC/F");
-      m_ttree->Branch("mutrack_eta_mu2JetC", &b_mutrack_eta_mu2JetC, "mutrack_eta_mu2JetC/F");
+    m_ttree->Branch("muJetC_muon1_track_mincharge", &muJetC_muon1_track_mincharge,"muJetC_muon1_track_mincharge/F");
+    m_ttree->Branch("muJetC_muon1_track_minqoverpt", &muJetC_muon1_track_minqoverpt,"muJetC_muon1_track_minqoverpt/F");
+    m_ttree->Branch("muJetC_muon1_track_mintheta", &muJetC_muon1_track_mintheta,"muJetC_muon1_track_mintheta/F");
+    m_ttree->Branch("muJetC_muon1_track_minphi", &muJetC_muon1_track_minphi,"muJetC_muon1_track_minphi/F");
+    m_ttree->Branch("muJetC_muon1_track_mindxy", &muJetC_muon1_track_mindxy,"muJetC_muon1_track_mindxy/F");
+    m_ttree->Branch("muJetC_muon1_track_mindz", &muJetC_muon1_track_mindz,"muJetC_muon1_track_mindz/F");
 
-      m_ttree->Branch("mutrack_phi_mu1JetC", &b_mutrack_phi_mu1JetC, "mutrack_phi_mu1JetC/F");
-      m_ttree->Branch("mutrack_phi_mu2JetC", &b_mutrack_phi_mu2JetC, "mutrack_phi_mu2JetC/F");
-      m_ttree->Branch("mutrack_phi_mu1JetF", &b_mutrack_phi_mu1JetF, "mutrack_phi_mu1JetF/F");
-      m_ttree->Branch("mutrack_phi_mu2JetF", &b_mutrack_phi_mu2JetF, "mutrack_phi_mu2JetF/F");
 
-      m_ttree->Branch("mutrack_pT_mu1JetF", &b_mutrack_pT_mu1JetF, "mutrack_pT_mu1JetF/F");
-      m_ttree->Branch("mutrack_pT_mu2JetF", &b_mutrack_pT_mu2JetF, "mutrack_pT_mu2JetF/F");
-      m_ttree->Branch("mutrack_eta_mu1JetF", &b_mutrack_eta_mu1JetF, "mutrack_eta_mu1JetF/F");
-      m_ttree->Branch("mutrack_eta_mu2JetF", &b_mutrack_eta_mu2JetF, "mutrack_eta_mu2JetF/F");
+    m_ttree->Branch("muJetC_muon1_track_diffchi2", &muJetC_muon1_track_diffchi2,"muJetC_muon1_track_diffchi2[ntracks]/F");
 
-      m_ttree->Branch("mutrack_charge_mu1JetC", &b_mutrack_charge_mu1JetC, "mutrack_charge_mu1JetC/F");
-      m_ttree->Branch("mutrack_charge_mu2JetC", &b_mutrack_charge_mu2JetC, "mutrack_charge_mu2JetC/F");
-      m_ttree->Branch("mutrack_charge_mu1JetF", &b_mutrack_charge_mu1JetF, "mutrack_charge_mu1JetF/F");
-      m_ttree->Branch("mutrack_charge_mu2JetF", &b_mutrack_charge_mu2JetF, "mutrack_charge_mu2JetF/F");
+    m_ttree->Branch("muJetC_muon1_track_diffchi2theta", &muJetC_muon1_track_diffchi2theta,"muJetC_muon1_track_diffchi2theta[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_diffchi2qoverpt", &muJetC_muon1_track_diffchi2qoverpt,"muJetC_muon1_track_diffchi2qoverpt[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_diffchi2phi", &muJetC_muon1_track_diffchi2phi,"muJetC_muon1_track_diffchi2phi[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_diffchi2dxy", &muJetC_muon1_track_diffchi2dxy,"muJetC_muon1_track_diffchi2dxy[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_diffchi2dz", &muJetC_muon1_track_diffchi2dz,"muJetC_muon1_track_diffchi2dz[ntracks]/F");
 
 
 
-      m_ttree->Branch("match_mu1track_muJetC",&b_match_mu1track_muJetC,"match_mu1track_muJetC/I");
-      m_ttree->Branch("match_mu2track_muJetC",&b_match_mu2track_muJetC,"match_mu2track_muJetC/I");
-      m_ttree->Branch("match_mu1track_muJetF",&b_match_mu1track_muJetF,"match_mu1track_muJetF/I");
-      m_ttree->Branch("match_mu2track_muJetF",&b_match_mu2track_muJetF,"match_mu2track_muJetF/I");
+    m_ttree->Branch("muJetC_muon1_track_diffcharge", &muJetC_muon1_track_diffcharge,"muJetC_muon1_track_diffcharge[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_diffpt", &muJetC_muon1_track_diffpt,"muJetC_muon1_track_diffpt[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_diffqoverp", &muJetC_muon1_track_diffqoverp,"muJetC_muon1_track_diffqoverp[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_difftheta", &muJetC_muon1_track_difftheta,"muJetC_muon1_track_difftheta[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_diffphi", &muJetC_muon1_track_diffphi,"muJetC_muon1_track_diffphi[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_diffdxy", &muJetC_muon1_track_diffdxy,"muJetC_muon1_track_diffdxy[ntracks]/F");
+    m_ttree->Branch("muJetC_muon1_track_diffdz", &muJetC_muon1_track_diffdz,"muJetC_muon1_track_diffdz[ntracks]/F");
 
+    m_ttree->Branch("muJetC_muon2_track_diffcharge", &muJetC_muon2_track_diffcharge,"muJetC_muon2_track_diffcharge[ntracks]/F");
+    m_ttree->Branch("muJetC_muon2_track_diffpt", &muJetC_muon2_track_diffpt,"muJetC_muon2_track_diffpt[ntracks]/F");
+    m_ttree->Branch("muJetC_muon2_track_diffqoverp", &muJetC_muon2_track_diffqoverp,"muJetC_muon2_track_diffqoverp[ntracks]/F");
+    m_ttree->Branch("muJetC_muon2_track_difftheta", &muJetC_muon2_track_difftheta,"muJetC_muon2_track_difftheta[ntracks]/F");
+    m_ttree->Branch("muJetC_muon2_track_diffphi", &muJetC_muon2_track_diffphi,"muJetC_muon2_track_diffphi[ntracks]/F");
+    m_ttree->Branch("muJetC_muon2_track_diffdxy", &muJetC_muon2_track_diffdxy,"muJetC_muon2_track_diffdxy[ntracks]/F");
+    m_ttree->Branch("muJetC_muon2_track_diffdz", &muJetC_muon2_track_diffdz,"muJetC_muon2_track_diffdz[ntracks]/F");
 
-      // Hit Recovery
-      m_ttree->Branch("innerlayers_mu1_muJetC",&b_innerlayers_mu1_muJetC,"innerlayers_mu1_muJetC/I");
-      m_ttree->Branch("innerlayers_mu2_muJetC",&b_innerlayers_mu2_muJetC,"innerlayers_mu2_muJetC/I");
-      m_ttree->Branch("innerlayers_mu1_muJetF",&b_innerlayers_mu1_muJetF,"innerlayers_mu1_muJetF/I");
-      m_ttree->Branch("innerlayers_mu2_muJetF",&b_innerlayers_mu2_muJetF,"innerlayers_mu2_muJetF/I");
+    m_ttree->Branch("mutrack_pT_mu1JetC", &b_mutrack_pT_mu1JetC, "mutrack_pT_mu1JetC/F");
+    m_ttree->Branch("mutrack_pT_mu2JetC", &b_mutrack_pT_mu2JetC, "mutrack_pT_mu2JetC/F");
+    m_ttree->Branch("mutrack_eta_mu1JetC", &b_mutrack_eta_mu1JetC, "mutrack_eta_mu1JetC/F");
+    m_ttree->Branch("mutrack_eta_mu2JetC", &b_mutrack_eta_mu2JetC, "mutrack_eta_mu2JetC/F");
 
-      m_ttree->Branch("compdet_mu1_muJetC",&b_compdet_mu1_muJetC,"compdet_mu1_muJetC[innerlayers_mu1_muJetC]/I");
-      m_ttree->Branch("compdet_mu2_muJetC",&b_compdet_mu2_muJetC,"compdet_mu2_muJetC[innerlayers_mu2_muJetC]/I");
-      m_ttree->Branch("compdet_mu1_muJetF",&b_compdet_mu1_muJetF,"compdet_mu1_muJetF[innerlayers_mu1_muJetF]/I");
-      m_ttree->Branch("compdet_mu2_muJetF",&b_compdet_mu2_muJetF,"compdet_mu2_muJetF[innerlayers_mu2_muJetF]/I");
+    m_ttree->Branch("mutrack_phi_mu1JetC", &b_mutrack_phi_mu1JetC, "mutrack_phi_mu1JetC/F");
+    m_ttree->Branch("mutrack_phi_mu2JetC", &b_mutrack_phi_mu2JetC, "mutrack_phi_mu2JetC/F");
+    m_ttree->Branch("mutrack_phi_mu1JetF", &b_mutrack_phi_mu1JetF, "mutrack_phi_mu1JetF/F");
+    m_ttree->Branch("mutrack_phi_mu2JetF", &b_mutrack_phi_mu2JetF, "mutrack_phi_mu2JetF/F");
 
-      m_ttree->Branch("PXBID_1stDet_mu1muJetC",&b_PXBID_1stDet_mu1muJetC,"b_PXBID_1stDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
-      m_ttree->Branch("PXBID_1stDet_mu2muJetC",&b_PXBID_1stDet_mu2muJetC,"b_PXBID_1stDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
-      m_ttree->Branch("PXBID_1stDet_mu1muJetF",&b_PXBID_1stDet_mu1muJetF,"b_PXBID_1stDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
-      m_ttree->Branch("PXBID_1stDet_mu2muJetF",&b_PXBID_1stDet_mu1muJetF,"b_PXBID_1stDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
+    m_ttree->Branch("mutrack_pT_mu1JetF", &b_mutrack_pT_mu1JetF, "mutrack_pT_mu1JetF/F");
+    m_ttree->Branch("mutrack_pT_mu2JetF", &b_mutrack_pT_mu2JetF, "mutrack_pT_mu2JetF/F");
+    m_ttree->Branch("mutrack_eta_mu1JetF", &b_mutrack_eta_mu1JetF, "mutrack_eta_mu1JetF/F");
+    m_ttree->Branch("mutrack_eta_mu2JetF", &b_mutrack_eta_mu2JetF, "mutrack_eta_mu2JetF/F");
 
-      m_ttree->Branch("PXBID_2ndDet_mu1muJetC",&b_PXBID_2ndDet_mu1muJetC,"b_PXBID_2ndDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
-      m_ttree->Branch("PXBID_2ndDet_mu2muJetC",&b_PXBID_2ndDet_mu2muJetC,"b_PXBID_2ndDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
-      m_ttree->Branch("PXBID_2ndDet_mu1muJetF",&b_PXBID_2ndDet_mu1muJetF,"b_PXBID_2ndDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
-      m_ttree->Branch("PXBID_2ndDet_mu2muJetF",&b_PXBID_2ndDet_mu1muJetF,"b_PXBID_2ndDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
-
-      m_ttree->Branch("PXBID_3rdDet_mu1muJetC",&b_PXBID_3rdDet_mu1muJetC,"b_PXBID_3rdDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
-      m_ttree->Branch("PXBID_3rdDet_mu2muJetC",&b_PXBID_3rdDet_mu2muJetC,"b_PXBID_3rdDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
-      m_ttree->Branch("PXBID_3rdDet_mu1muJetF",&b_PXBID_3rdDet_mu1muJetF,"b_PXBID_3rdDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
-      m_ttree->Branch("PXBID_3rdDet_mu2muJetF",&b_PXBID_3rdDet_mu1muJetF,"b_PXBID_3rdDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
-
-
-
-      m_ttree->Branch("mj1m0posx_1stDet",&b_mj1m0posx_1stDet,"mj1m0posx_1stDe[innerlayers_mu1_muJetC]/F");
-      m_ttree->Branch("mj1m0posy_1stDet",&b_mj1m0posy_1stDet,"mj1m0posy_1stDe[innerlayers_mu1_muJetC]/F");
-      m_ttree->Branch("mj1m0posx_err_1stDet",&b_mj1m0posx_err_1stDet,"mj1m0posx_err_1stDe[innerlayers_mu1_muJetC]/F");
-      m_ttree->Branch("mj1m0posy_err_1stDet",&b_mj1m0posy_err_1stDet,"mj1m0posy_err_1stDe[innerlayers_mu1_muJetC]/F");
-
-      m_ttree->Branch("mj1m0posx_2ndDet",&b_mj1m0posx_2ndDet,"mj1m0posx_2ndDet[innerlayers_mu1_muJetC]/F");
-      m_ttree->Branch("mj1m0posy_2ndDet",&b_mj1m0posy_2ndDet,"mj1m0posy_2ndDet[innerlayers_mu1_muJetC]/F");
-      m_ttree->Branch("mj1m0posx_err_2ndDet",&b_mj1m0posx_err_2ndDet,"mj1m0posx_err_2ndDet[innerlayers_mu1_muJetC]/F");
-      m_ttree->Branch("mj1m0posy_err_2ndDet",&b_mj1m0posy_err_2ndDet,"mj1m0posy_err_2ndDet[innerlayers_mu1_muJetC]/F");
-
-      m_ttree->Branch("mj1m0posx_3rdDet",&b_mj1m0posx_3rdDet,"mj1m0posx_3rdDet[innerlayers_mu1_muJetC]/F");
-      m_ttree->Branch("mj1m0posy_3rdDet",&b_mj1m0posy_3rdDet,"mj1m0posy_3rdDet[innerlayers_mu1_muJetC]/F");
-      m_ttree->Branch("mj1m0posx_err_3rdDet",&b_mj1m0posx_err_3rdDet,"mj1m0posx_err_3rdDet[innerlayers_mu1_muJetC]/F");
-      m_ttree->Branch("mj1m0posy_err_3rdDet",&b_mj1m0posy_err_3rdDet,"mj1m0posy_err_3rdDet[innerlayers_mu1_muJetC]/F");
-
-      m_ttree->Branch("mj1m1posx_1stDet",&b_mj1m1posx_1stDet,"mj1m1posx_1stDe[innerlayers_mu2_muJetC]/F");
-      m_ttree->Branch("mj1m1posy_1stDet",&b_mj1m1posy_1stDet,"mj1m1posy_1stDe[innerlayers_mu2_muJetC]/F");
-      m_ttree->Branch("mj1m1posx_err_1stDet",&b_mj1m1posx_err_1stDet,"mj1m1posx_err_1stDe[innerlayers_mu2_muJetC]/F");
-      m_ttree->Branch("mj1m1posy_err_1stDet",&b_mj1m1posy_err_1stDet,"mj1m1posy_err_1stDe[innerlayers_mu2_muJetC]/F");
-
-      m_ttree->Branch("mj1m1posx_2ndDet",&b_mj1m1posx_2ndDet,"mj1m1posx_2ndDet[innerlayers_mu2_muJetC]/F");
-      m_ttree->Branch("mj1m1posy_2ndDet",&b_mj1m1posy_2ndDet,"mj1m1posy_2ndDet[innerlayers_mu2_muJetC]/F");
-      m_ttree->Branch("mj1m1posx_err_2ndDet",&b_mj1m1posx_err_2ndDet,"mj1m1posx_err_2ndDet[innerlayers_mu2_muJetC]/F");
-      m_ttree->Branch("mj1m1posy_err_2ndDet",&b_mj1m1posy_err_2ndDet,"mj1m1posy_err_2ndDet[innerlayers_mu2_muJetC]/F");
-
-      m_ttree->Branch("mj1m1posx_3rdDet",&b_mj1m1posx_3rdDet,"mj1m1posx_3rdDet[innerlayers_mu2_muJetC]/F");
-      m_ttree->Branch("mj1m1posy_3rdDet",&b_mj1m1posy_3rdDet,"mj1m1posy_3rdDet[innerlayers_mu2_muJetC]/F");
-      m_ttree->Branch("mj1m1posx_err_3rdDet",&b_mj1m1posx_err_3rdDet,"mj1m1posx_err_3rdDet[innerlayers_mu2_muJetC]/F");
-      m_ttree->Branch("mj1m1posy_err_3rdDet",&b_mj1m1posy_err_3rdDet,"mj1m1posy_err_3rdDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mutrack_charge_mu1JetC", &b_mutrack_charge_mu1JetC, "mutrack_charge_mu1JetC/F");
+    m_ttree->Branch("mutrack_charge_mu2JetC", &b_mutrack_charge_mu2JetC, "mutrack_charge_mu2JetC/F");
+    m_ttree->Branch("mutrack_charge_mu1JetF", &b_mutrack_charge_mu1JetF, "mutrack_charge_mu1JetF/F");
+    m_ttree->Branch("mutrack_charge_mu2JetF", &b_mutrack_charge_mu2JetF, "mutrack_charge_mu2JetF/F");
 
 
 
-
-      m_ttree->Branch("mj1m0posx_1stDet",&b_mj1m0posx_1stDet,"mj1m0posx_1stDe[innerlayers_mu1_muJetF]/F");
-      m_ttree->Branch("mj1m0posy_1stDet",&b_mj1m0posy_1stDet,"mj1m0posy_1stDe[innerlayers_mu1_muJetF]/F");
-      m_ttree->Branch("mj1m0posx_err_1stDet",&b_mj1m0posx_err_1stDet,"mj1m0posx_err_1stDe[innerlayers_mu1_muJetF]/F");
-      m_ttree->Branch("mj1m0posy_err_1stDet",&b_mj1m0posy_err_1stDet,"mj1m0posy_err_1stDe[innerlayers_mu1_muJetF]/F");
-
-      m_ttree->Branch("mj1m0posx_2ndDet",&b_mj1m0posx_2ndDet,"mj1m0posx_2ndDet[innerlayers_mu1_muJetF]/F");
-      m_ttree->Branch("mj1m0posy_2ndDet",&b_mj1m0posy_2ndDet,"mj1m0posy_2ndDet[innerlayers_mu1_muJetF]/F");
-      m_ttree->Branch("mj1m0posx_err_2ndDet",&b_mj1m0posx_err_2ndDet,"mj1m0posx_err_2ndDet[innerlayers_mu1_muJetF]/F");
-      m_ttree->Branch("mj1m0posy_err_2ndDet",&b_mj1m0posy_err_2ndDet,"mj1m0posy_err_2ndDet[innerlayers_mu1_muJetF]/F");
-
-      m_ttree->Branch("mj1m0posx_3rdDet",&b_mj1m0posx_3rdDet,"mj1m0posx_3rdDet[innerlayers_mu1_muJetF]/F");
-      m_ttree->Branch("mj1m0posy_3rdDet",&b_mj1m0posy_3rdDet,"mj1m0posy_3rdDet[innerlayers_mu1_muJetF]/F");
-      m_ttree->Branch("mj1m0posx_err_3rdDet",&b_mj1m0posx_err_3rdDet,"mj1m0posx_err_3rdDet[innerlayers_mu1_muJetF]/F");
-      m_ttree->Branch("mj1m0posy_err_3rdDet",&b_mj1m0posy_err_3rdDet,"mj1m0posy_err_3rdDet[innerlayers_mu1_muJetF]/F");
-
-      m_ttree->Branch("mj1m1posx_1stDet",&b_mj1m1posx_1stDet,"mj1m1posx_1stDe[innerlayers_mu2_muJetF]/F");
-      m_ttree->Branch("mj1m1posy_1stDet",&b_mj1m1posy_1stDet,"mj1m1posy_1stDe[innerlayers_mu2_muJetF]/F");
-      m_ttree->Branch("mj1m1posx_err_1stDet",&b_mj1m1posx_err_1stDet,"mj1m1posx_err_1stDe[innerlayers_mu2_muJetF]/F");
-      m_ttree->Branch("mj1m1posy_err_1stDet",&b_mj1m1posy_err_1stDet,"mj1m1posy_err_1stDe[innerlayers_mu2_muJetF]/F");
-
-      m_ttree->Branch("mj1m1posx_2ndDet",&b_mj1m1posx_2ndDet,"mj1m1posx_2ndDet[innerlayers_mu2_muJetF]/F");
-      m_ttree->Branch("mj1m1posy_2ndDet",&b_mj1m1posy_2ndDet,"mj1m1posy_2ndDet[innerlayers_mu2_muJetF]/F");
-      m_ttree->Branch("mj1m1posx_err_2ndDet",&b_mj1m1posx_err_2ndDet,"mj1m1posx_err_2ndDet[innerlayers_mu2_muJetF]/F");
-      m_ttree->Branch("mj1m1posy_err_2ndDet",&b_mj1m1posy_err_2ndDet,"mj1m1posy_err_2ndDet[innerlayers_mu2_muJetF]/F");
-
-      m_ttree->Branch("mj1m1posx_3rdDet",&b_mj1m1posx_3rdDet,"mj1m1posx_3rdDet[innerlayers_mu2_muJetF]/F");
-      m_ttree->Branch("mj1m1posy_3rdDet",&b_mj1m1posy_3rdDet,"mj1m1posy_3rdDet[innerlayers_mu2_muJetF]/F");
-      m_ttree->Branch("mj1m1posx_err_3rdDet",&b_mj1m1posx_err_3rdDet,"mj1m1posx_err_3rdDet[innerlayers_mu2_muJetF]/F");
-      m_ttree->Branch("mj1m1posy_err_3rdDet",&b_mj1m1posy_err_3rdDet,"mj1m1posy_err_3rdDet[innerlayers_mu2_muJetF]/F");    
+    m_ttree->Branch("match_mu1track_muJetC",&b_match_mu1track_muJetC,"match_mu1track_muJetC/I");
+    m_ttree->Branch("match_mu2track_muJetC",&b_match_mu2track_muJetC,"match_mu2track_muJetC/I");
+    m_ttree->Branch("match_mu1track_muJetF",&b_match_mu1track_muJetF,"match_mu1track_muJetF/I");
+    m_ttree->Branch("match_mu2track_muJetF",&b_match_mu2track_muJetF,"match_mu2track_muJetF/I");
 
 
-      m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_posx",&b_pixelhit_mu1_muJetC_2ndextlay_posx,"pixelhit_mu1_muJetC_1stextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_posy",&b_pixelhit_mu1_muJetC_2ndextlay_posy,"pixelhit_mu1_muJetC_1stextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_errposx",&b_pixelhit_mu1_muJetC_2ndextlay_errposx,"pixelhit_mu1_muJetC_1stextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_errposy",&b_pixelhit_mu1_muJetC_2ndextlay_errposy,"pixelhit_mu1_muJetC_1stextlay_errposy/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_posx",&b_pixelhit_mu1_muJetC_2ndextlay_posx,"pixelhit_mu1_muJetC_2ndextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_posy",&b_pixelhit_mu1_muJetC_2ndextlay_posy,"pixelhit_mu1_muJetC_2ndextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_errposx",&b_pixelhit_mu1_muJetC_2ndextlay_errposx,"pixelhit_mu1_muJetC_2ndextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_errposy",&b_pixelhit_mu1_muJetC_2ndextlay_errposy,"pixelhit_mu1_muJetC_2ndextlay_errposy/F");
+    // Hit Recovery
+    m_ttree->Branch("innerlayers_mu1_muJetC",&b_innerlayers_mu1_muJetC,"innerlayers_mu1_muJetC/I");
+    m_ttree->Branch("innerlayers_mu2_muJetC",&b_innerlayers_mu2_muJetC,"innerlayers_mu2_muJetC/I");
+    m_ttree->Branch("innerlayers_mu1_muJetF",&b_innerlayers_mu1_muJetF,"innerlayers_mu1_muJetF/I");
+    m_ttree->Branch("innerlayers_mu2_muJetF",&b_innerlayers_mu2_muJetF,"innerlayers_mu2_muJetF/I");
 
-      m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_posx",&b_pixelhit_mu1_muJetC_3rdextlay_posx,"pixelhit_mu1_muJetC_3rdextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_posy",&b_pixelhit_mu1_muJetC_3rdextlay_posy,"pixelhit_mu1_muJetC_3rdextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_errposx",&b_pixelhit_mu1_muJetC_3rdextlay_errposx,"pixelhit_mu1_muJetC_3rdextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_errposy",&b_pixelhit_mu1_muJetC_3rdextlay_errposy,"pixelhit_mu1_muJetC_3rdextlay_errposy/F");
+    m_ttree->Branch("compdet_mu1_muJetC",&b_compdet_mu1_muJetC,"compdet_mu1_muJetC[innerlayers_mu1_muJetC]/I");
+    m_ttree->Branch("compdet_mu2_muJetC",&b_compdet_mu2_muJetC,"compdet_mu2_muJetC[innerlayers_mu2_muJetC]/I");
+    m_ttree->Branch("compdet_mu1_muJetF",&b_compdet_mu1_muJetF,"compdet_mu1_muJetF[innerlayers_mu1_muJetF]/I");
+    m_ttree->Branch("compdet_mu2_muJetF",&b_compdet_mu2_muJetF,"compdet_mu2_muJetF[innerlayers_mu2_muJetF]/I");
+
+    m_ttree->Branch("PXBID_1stDet_mu1muJetC",&b_PXBID_1stDet_mu1muJetC,"b_PXBID_1stDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
+    m_ttree->Branch("PXBID_1stDet_mu2muJetC",&b_PXBID_1stDet_mu2muJetC,"b_PXBID_1stDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
+    m_ttree->Branch("PXBID_1stDet_mu1muJetF",&b_PXBID_1stDet_mu1muJetF,"b_PXBID_1stDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
+    m_ttree->Branch("PXBID_1stDet_mu2muJetF",&b_PXBID_1stDet_mu1muJetF,"b_PXBID_1stDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
+
+    m_ttree->Branch("PXBID_2ndDet_mu1muJetC",&b_PXBID_2ndDet_mu1muJetC,"b_PXBID_2ndDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
+    m_ttree->Branch("PXBID_2ndDet_mu2muJetC",&b_PXBID_2ndDet_mu2muJetC,"b_PXBID_2ndDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
+    m_ttree->Branch("PXBID_2ndDet_mu1muJetF",&b_PXBID_2ndDet_mu1muJetF,"b_PXBID_2ndDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
+    m_ttree->Branch("PXBID_2ndDet_mu2muJetF",&b_PXBID_2ndDet_mu1muJetF,"b_PXBID_2ndDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
+
+    m_ttree->Branch("PXBID_3rdDet_mu1muJetC",&b_PXBID_3rdDet_mu1muJetC,"b_PXBID_3rdDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
+    m_ttree->Branch("PXBID_3rdDet_mu2muJetC",&b_PXBID_3rdDet_mu2muJetC,"b_PXBID_3rdDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
+    m_ttree->Branch("PXBID_3rdDet_mu1muJetF",&b_PXBID_3rdDet_mu1muJetF,"b_PXBID_3rdDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
+    m_ttree->Branch("PXBID_3rdDet_mu2muJetF",&b_PXBID_3rdDet_mu1muJetF,"b_PXBID_3rdDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
+
+
+
+    m_ttree->Branch("mj1m0posx_1stDet",&b_mj1m0posx_1stDet,"mj1m0posx_1stDe[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_1stDet",&b_mj1m0posy_1stDet,"mj1m0posy_1stDe[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posx_err_1stDet",&b_mj1m0posx_err_1stDet,"mj1m0posx_err_1stDe[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_err_1stDet",&b_mj1m0posy_err_1stDet,"mj1m0posy_err_1stDe[innerlayers_mu1_muJetC]/F");
+
+    m_ttree->Branch("mj1m0posx_2ndDet",&b_mj1m0posx_2ndDet,"mj1m0posx_2ndDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_2ndDet",&b_mj1m0posy_2ndDet,"mj1m0posy_2ndDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posx_err_2ndDet",&b_mj1m0posx_err_2ndDet,"mj1m0posx_err_2ndDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_err_2ndDet",&b_mj1m0posy_err_2ndDet,"mj1m0posy_err_2ndDet[innerlayers_mu1_muJetC]/F");
+
+    m_ttree->Branch("mj1m0posx_3rdDet",&b_mj1m0posx_3rdDet,"mj1m0posx_3rdDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_3rdDet",&b_mj1m0posy_3rdDet,"mj1m0posy_3rdDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posx_err_3rdDet",&b_mj1m0posx_err_3rdDet,"mj1m0posx_err_3rdDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_err_3rdDet",&b_mj1m0posy_err_3rdDet,"mj1m0posy_err_3rdDet[innerlayers_mu1_muJetC]/F");
+
+    m_ttree->Branch("mj1m1posx_1stDet",&b_mj1m1posx_1stDet,"mj1m1posx_1stDe[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_1stDet",&b_mj1m1posy_1stDet,"mj1m1posy_1stDe[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posx_err_1stDet",&b_mj1m1posx_err_1stDet,"mj1m1posx_err_1stDe[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_err_1stDet",&b_mj1m1posy_err_1stDet,"mj1m1posy_err_1stDe[innerlayers_mu2_muJetC]/F");
+
+    m_ttree->Branch("mj1m1posx_2ndDet",&b_mj1m1posx_2ndDet,"mj1m1posx_2ndDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_2ndDet",&b_mj1m1posy_2ndDet,"mj1m1posy_2ndDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posx_err_2ndDet",&b_mj1m1posx_err_2ndDet,"mj1m1posx_err_2ndDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_err_2ndDet",&b_mj1m1posy_err_2ndDet,"mj1m1posy_err_2ndDet[innerlayers_mu2_muJetC]/F");
+
+    m_ttree->Branch("mj1m1posx_3rdDet",&b_mj1m1posx_3rdDet,"mj1m1posx_3rdDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_3rdDet",&b_mj1m1posy_3rdDet,"mj1m1posy_3rdDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posx_err_3rdDet",&b_mj1m1posx_err_3rdDet,"mj1m1posx_err_3rdDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_err_3rdDet",&b_mj1m1posy_err_3rdDet,"mj1m1posy_err_3rdDet[innerlayers_mu2_muJetC]/F");
+
+
+
+
+    m_ttree->Branch("mj1m0posx_1stDet",&b_mj1m0posx_1stDet,"mj1m0posx_1stDe[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_1stDet",&b_mj1m0posy_1stDet,"mj1m0posy_1stDe[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posx_err_1stDet",&b_mj1m0posx_err_1stDet,"mj1m0posx_err_1stDe[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_err_1stDet",&b_mj1m0posy_err_1stDet,"mj1m0posy_err_1stDe[innerlayers_mu1_muJetF]/F");
+
+    m_ttree->Branch("mj1m0posx_2ndDet",&b_mj1m0posx_2ndDet,"mj1m0posx_2ndDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_2ndDet",&b_mj1m0posy_2ndDet,"mj1m0posy_2ndDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posx_err_2ndDet",&b_mj1m0posx_err_2ndDet,"mj1m0posx_err_2ndDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_err_2ndDet",&b_mj1m0posy_err_2ndDet,"mj1m0posy_err_2ndDet[innerlayers_mu1_muJetF]/F");
+
+    m_ttree->Branch("mj1m0posx_3rdDet",&b_mj1m0posx_3rdDet,"mj1m0posx_3rdDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_3rdDet",&b_mj1m0posy_3rdDet,"mj1m0posy_3rdDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posx_err_3rdDet",&b_mj1m0posx_err_3rdDet,"mj1m0posx_err_3rdDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_err_3rdDet",&b_mj1m0posy_err_3rdDet,"mj1m0posy_err_3rdDet[innerlayers_mu1_muJetF]/F");
+
+    m_ttree->Branch("mj1m1posx_1stDet",&b_mj1m1posx_1stDet,"mj1m1posx_1stDe[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_1stDet",&b_mj1m1posy_1stDet,"mj1m1posy_1stDe[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posx_err_1stDet",&b_mj1m1posx_err_1stDet,"mj1m1posx_err_1stDe[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_err_1stDet",&b_mj1m1posy_err_1stDet,"mj1m1posy_err_1stDe[innerlayers_mu2_muJetF]/F");
+
+    m_ttree->Branch("mj1m1posx_2ndDet",&b_mj1m1posx_2ndDet,"mj1m1posx_2ndDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_2ndDet",&b_mj1m1posy_2ndDet,"mj1m1posy_2ndDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posx_err_2ndDet",&b_mj1m1posx_err_2ndDet,"mj1m1posx_err_2ndDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_err_2ndDet",&b_mj1m1posy_err_2ndDet,"mj1m1posy_err_2ndDet[innerlayers_mu2_muJetF]/F");
+
+    m_ttree->Branch("mj1m1posx_3rdDet",&b_mj1m1posx_3rdDet,"mj1m1posx_3rdDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_3rdDet",&b_mj1m1posy_3rdDet,"mj1m1posy_3rdDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posx_err_3rdDet",&b_mj1m1posx_err_3rdDet,"mj1m1posx_err_3rdDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_err_3rdDet",&b_mj1m1posy_err_3rdDet,"mj1m1posy_err_3rdDet[innerlayers_mu2_muJetF]/F");    
+
+
+    m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_posx",&b_pixelhit_mu1_muJetC_2ndextlay_posx,"pixelhit_mu1_muJetC_1stextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_posy",&b_pixelhit_mu1_muJetC_2ndextlay_posy,"pixelhit_mu1_muJetC_1stextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_errposx",&b_pixelhit_mu1_muJetC_2ndextlay_errposx,"pixelhit_mu1_muJetC_1stextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_errposy",&b_pixelhit_mu1_muJetC_2ndextlay_errposy,"pixelhit_mu1_muJetC_1stextlay_errposy/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_posx",&b_pixelhit_mu1_muJetC_2ndextlay_posx,"pixelhit_mu1_muJetC_2ndextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_posy",&b_pixelhit_mu1_muJetC_2ndextlay_posy,"pixelhit_mu1_muJetC_2ndextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_errposx",&b_pixelhit_mu1_muJetC_2ndextlay_errposx,"pixelhit_mu1_muJetC_2ndextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_errposy",&b_pixelhit_mu1_muJetC_2ndextlay_errposy,"pixelhit_mu1_muJetC_2ndextlay_errposy/F");
+
+    m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_posx",&b_pixelhit_mu1_muJetC_3rdextlay_posx,"pixelhit_mu1_muJetC_3rdextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_posy",&b_pixelhit_mu1_muJetC_3rdextlay_posy,"pixelhit_mu1_muJetC_3rdextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_errposx",&b_pixelhit_mu1_muJetC_3rdextlay_errposx,"pixelhit_mu1_muJetC_3rdextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_errposy",&b_pixelhit_mu1_muJetC_3rdextlay_errposy,"pixelhit_mu1_muJetC_3rdextlay_errposy/F");
 
 
       
-      m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_posx",&b_pixelhit_mu2_muJetC_2ndextlay_posx,"pixelhit_mu2_muJetC_1stextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_posy",&b_pixelhit_mu2_muJetC_2ndextlay_posy,"pixelhit_mu2_muJetC_1stextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_errposx",&b_pixelhit_mu2_muJetC_2ndextlay_errposx,"pixelhit_mu2_muJetC_1stextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_errposy",&b_pixelhit_mu2_muJetC_2ndextlay_errposy,"pixelhit_mu2_muJetC_1stextlay_errposy/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_posx",&b_pixelhit_mu2_muJetC_2ndextlay_posx,"pixelhit_mu2_muJetC_2ndextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_posy",&b_pixelhit_mu2_muJetC_2ndextlay_posy,"pixelhit_mu2_muJetC_2ndextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_errposx",&b_pixelhit_mu2_muJetC_2ndextlay_errposx,"pixelhit_mu2_muJetC_2ndextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_errposy",&b_pixelhit_mu2_muJetC_2ndextlay_errposy,"pixelhit_mu2_muJetC_2ndextlay_errposy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_posx",&b_pixelhit_mu2_muJetC_2ndextlay_posx,"pixelhit_mu2_muJetC_1stextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_posy",&b_pixelhit_mu2_muJetC_2ndextlay_posy,"pixelhit_mu2_muJetC_1stextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_errposx",&b_pixelhit_mu2_muJetC_2ndextlay_errposx,"pixelhit_mu2_muJetC_1stextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_errposy",&b_pixelhit_mu2_muJetC_2ndextlay_errposy,"pixelhit_mu2_muJetC_1stextlay_errposy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_posx",&b_pixelhit_mu2_muJetC_2ndextlay_posx,"pixelhit_mu2_muJetC_2ndextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_posy",&b_pixelhit_mu2_muJetC_2ndextlay_posy,"pixelhit_mu2_muJetC_2ndextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_errposx",&b_pixelhit_mu2_muJetC_2ndextlay_errposx,"pixelhit_mu2_muJetC_2ndextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_errposy",&b_pixelhit_mu2_muJetC_2ndextlay_errposy,"pixelhit_mu2_muJetC_2ndextlay_errposy/F");
 
-      m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_posx",&b_pixelhit_mu2_muJetC_3rdextlay_posx,"pixelhit_mu2_muJetC_3rdextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_posy",&b_pixelhit_mu2_muJetC_3rdextlay_posy,"pixelhit_mu2_muJetC_3rdextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_errposx",&b_pixelhit_mu2_muJetC_3rdextlay_errposx,"pixelhit_mu2_muJetC_3rdextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_errposy",&b_pixelhit_mu2_muJetC_3rdextlay_errposy,"pixelhit_mu2_muJetC_3rdextlay_errposy/F");
-
-    
-
-
-
-
-      m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_posx",&b_pixelhit_mu1_muJetF_2ndextlay_posx,"pixelhit_mu1_muJetF_1stextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_posy",&b_pixelhit_mu1_muJetF_2ndextlay_posy,"pixelhit_mu1_muJetF_1stextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_errposx",&b_pixelhit_mu1_muJetF_2ndextlay_errposx,"pixelhit_mu1_muJetF_1stextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_errposy",&b_pixelhit_mu1_muJetF_2ndextlay_errposy,"pixelhit_mu1_muJetF_1stextlay_errposy/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_posx",&b_pixelhit_mu1_muJetF_2ndextlay_posx,"pixelhit_mu1_muJetF_2ndextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_posy",&b_pixelhit_mu1_muJetF_2ndextlay_posy,"pixelhit_mu1_muJetF_2ndextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_errposx",&b_pixelhit_mu1_muJetF_2ndextlay_errposx,"pixelhit_mu1_muJetF_2ndextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_errposy",&b_pixelhit_mu1_muJetF_2ndextlay_errposy,"pixelhit_mu1_muJetF_2ndextlay_errposy/F");
-
-      m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_posx",&b_pixelhit_mu1_muJetF_3rdextlay_posx,"pixelhit_mu1_muJetF_3rdextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_posy",&b_pixelhit_mu1_muJetF_3rdextlay_posy,"pixelhit_mu1_muJetF_3rdextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_errposx",&b_pixelhit_mu1_muJetF_3rdextlay_errposx,"pixelhit_mu1_muJetF_3rdextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_errposy",&b_pixelhit_mu1_muJetF_3rdextlay_errposy,"pixelhit_mu1_muJetF_3rdextlay_errposy/F");
-
-
-
-      m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_posx",&b_pixelhit_mu2_muJetF_2ndextlay_posx,"pixelhit_mu2_muJetF_1stextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_posy",&b_pixelhit_mu2_muJetF_2ndextlay_posy,"pixelhit_mu2_muJetF_1stextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_errposx",&b_pixelhit_mu2_muJetF_2ndextlay_errposx,"pixelhit_mu2_muJetF_1stextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_errposy",&b_pixelhit_mu2_muJetF_2ndextlay_errposy,"pixelhit_mu2_muJetF_1stextlay_errposy/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_posx",&b_pixelhit_mu2_muJetF_2ndextlay_posx,"pixelhit_mu2_muJetF_2ndextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_posy",&b_pixelhit_mu2_muJetF_2ndextlay_posy,"pixelhit_mu2_muJetF_2ndextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_errposx",&b_pixelhit_mu2_muJetF_2ndextlay_errposx,"pixelhit_mu2_muJetF_2ndextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_errposy",&b_pixelhit_mu2_muJetF_2ndextlay_errposy,"pixelhit_mu2_muJetF_2ndextlay_errposy/F");
-
-      m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_posx",&b_pixelhit_mu2_muJetF_3rdextlay_posx,"pixelhit_mu2_muJetF_3rdextlay_posx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_posy",&b_pixelhit_mu2_muJetF_3rdextlay_posy,"pixelhit_mu2_muJetF_3rdextlay_posy/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_errposx",&b_pixelhit_mu2_muJetF_3rdextlay_errposx,"pixelhit_mu2_muJetF_3rdextlay_errposx/F");
-      m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_errposy",&b_pixelhit_mu2_muJetF_3rdextlay_errposy,"pixelhit_mu2_muJetF_3rdextlay_errposy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_posx",&b_pixelhit_mu2_muJetC_3rdextlay_posx,"pixelhit_mu2_muJetC_3rdextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_posy",&b_pixelhit_mu2_muJetC_3rdextlay_posy,"pixelhit_mu2_muJetC_3rdextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_errposx",&b_pixelhit_mu2_muJetC_3rdextlay_errposx,"pixelhit_mu2_muJetC_3rdextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_errposy",&b_pixelhit_mu2_muJetC_3rdextlay_errposy,"pixelhit_mu2_muJetC_3rdextlay_errposy/F");
 
     
-    }
 
 
-    // Orpahn Muon
-    if(runBBestimation_){
-      m_ttree_orphan = tFileService->make<TTree>("Events_orphan", "Events_orphan");
-      m_ttree_orphan->Branch("run", &b_run, "run/I");
-      m_ttree_orphan->Branch("lumi", &b_lumi, "lumi/I");
-      m_ttree_orphan->Branch("event", &b_event, "event/I");
-      m_ttree_orphan->Branch("orph_mass", &m_orphan_mass, "orph_mass/F");
-      m_ttree_orphan->Branch("orph_dimu_mass", &m_orphan_dimu_mass, "orph_dimu_mass/F");
-      m_ttree_orphan->Branch("containstrig", &m_dimuorphan_containstrig, "containstrig/I");
-      m_ttree_orphan->Branch("containstrig2", &m_dimuorphan_containstrig2, "containstrig2/I");
-      m_ttree_orphan->Branch("orph_z", &m_orphan_z, "orph_z/F");
-      m_ttree_orphan->Branch("orph_dimu_z", &m_orphan_dimu_z, "orph_dimu_z/F");
-      m_ttree_orphan->Branch("orph_isoTk", &m_orphan_isoTk, "orph_isoTk/F");
-      m_ttree_orphan->Branch("orph_dimu_isoTk", &m_orphan_dimu_isoTk, "orph_dimu_isoTk/F");
-      m_ttree_orphan->Branch("orph_passOffLineSel", &m_orphan_passOffLineSel, "orph_passOffLineSel/O");
-      m_ttree_orphan->Branch("orph_passOffLineSelPt", &m_orphan_passOffLineSelPt, "orph_passOffLineSelPt/O");
-      m_ttree_orphan->Branch("orph_FiredTrig", &m_orphan_FiredTrig, "orph_FiredTrig/O");
-      m_ttree_orphan->Branch("orph_FiredTrig_pt", &m_orphan_FiredTrig_pt, "orph_FiredTrig_pt/O");
-      m_ttree_orphan->Branch("orph_FiredTrig_ptColl", &m_orphan_FiredTrig_ptColl, "orph_FiredTrig_ptColl/O");
-    }
+
+
+    m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_posx",&b_pixelhit_mu1_muJetF_2ndextlay_posx,"pixelhit_mu1_muJetF_1stextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_posy",&b_pixelhit_mu1_muJetF_2ndextlay_posy,"pixelhit_mu1_muJetF_1stextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_errposx",&b_pixelhit_mu1_muJetF_2ndextlay_errposx,"pixelhit_mu1_muJetF_1stextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_errposy",&b_pixelhit_mu1_muJetF_2ndextlay_errposy,"pixelhit_mu1_muJetF_1stextlay_errposy/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_posx",&b_pixelhit_mu1_muJetF_2ndextlay_posx,"pixelhit_mu1_muJetF_2ndextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_posy",&b_pixelhit_mu1_muJetF_2ndextlay_posy,"pixelhit_mu1_muJetF_2ndextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_errposx",&b_pixelhit_mu1_muJetF_2ndextlay_errposx,"pixelhit_mu1_muJetF_2ndextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_errposy",&b_pixelhit_mu1_muJetF_2ndextlay_errposy,"pixelhit_mu1_muJetF_2ndextlay_errposy/F");
+
+    m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_posx",&b_pixelhit_mu1_muJetF_3rdextlay_posx,"pixelhit_mu1_muJetF_3rdextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_posy",&b_pixelhit_mu1_muJetF_3rdextlay_posy,"pixelhit_mu1_muJetF_3rdextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_errposx",&b_pixelhit_mu1_muJetF_3rdextlay_errposx,"pixelhit_mu1_muJetF_3rdextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_errposy",&b_pixelhit_mu1_muJetF_3rdextlay_errposy,"pixelhit_mu1_muJetF_3rdextlay_errposy/F");
+
+
+
+    m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_posx",&b_pixelhit_mu2_muJetF_2ndextlay_posx,"pixelhit_mu2_muJetF_1stextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_posy",&b_pixelhit_mu2_muJetF_2ndextlay_posy,"pixelhit_mu2_muJetF_1stextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_errposx",&b_pixelhit_mu2_muJetF_2ndextlay_errposx,"pixelhit_mu2_muJetF_1stextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_errposy",&b_pixelhit_mu2_muJetF_2ndextlay_errposy,"pixelhit_mu2_muJetF_1stextlay_errposy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_posx",&b_pixelhit_mu2_muJetF_2ndextlay_posx,"pixelhit_mu2_muJetF_2ndextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_posy",&b_pixelhit_mu2_muJetF_2ndextlay_posy,"pixelhit_mu2_muJetF_2ndextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_errposx",&b_pixelhit_mu2_muJetF_2ndextlay_errposx,"pixelhit_mu2_muJetF_2ndextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_errposy",&b_pixelhit_mu2_muJetF_2ndextlay_errposy,"pixelhit_mu2_muJetF_2ndextlay_errposy/F");
+
+    m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_posx",&b_pixelhit_mu2_muJetF_3rdextlay_posx,"pixelhit_mu2_muJetF_3rdextlay_posx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_posy",&b_pixelhit_mu2_muJetF_3rdextlay_posy,"pixelhit_mu2_muJetF_3rdextlay_posy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_errposx",&b_pixelhit_mu2_muJetF_3rdextlay_errposx,"pixelhit_mu2_muJetF_3rdextlay_errposx/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_errposy",&b_pixelhit_mu2_muJetF_3rdextlay_errposy,"pixelhit_mu2_muJetF_3rdextlay_errposy/F");
+
+    
   }
 
-  // ------------ method called once each job just after ending the event loop  ------------
-  void 
-    CutFlowAnalyzer::endJob() 
-  {
-    std::cout << "END JOB" << std::endl;
 
-    std:: cout << "Total number of events:          " << m_events << std::endl;
-    std:: cout << "Total number of events with 4mu: " << m_events4GenMu << " fraction: " <<  m_events4GenMu/m_events << std::endl;
-
-    if (m_fillGenLevel){  
-      std:: cout << "********** GEN **********" << std::endl;
-      std:: cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << std::endl;
-      std:: cout << "pT1>17 |eta1|<0.9:       " << m_events1GenMu17 << " \t" << (float)m_events1GenMu17/(float)m_events << " \t" << (float)m_events1GenMu17/(float)m_events << std::endl;
-      std:: cout << "pT2>8  |eta2|<2.4:       " << m_events2GenMu8  << " \t" << (float)m_events2GenMu8/(float)m_events1GenMu17  << " \t" << (float)m_events2GenMu8/(float)m_events << std::endl;
-      std:: cout << "pT3>8  |eta2|<2.4:       " << m_events3GenMu8  << " \t" << (float)m_events3GenMu8/(float)m_events2GenMu8   << " \t" << (float)m_events3GenMu8/(float)m_events << std::endl;
-      std:: cout << "pT4>8  |eta2|<2.4:       " << m_events4GenMu8  << " \t" << (float)m_events4GenMu8/(float)m_events3GenMu8   << " \t" << (float)m_events4GenMu8/(float)m_events << std::endl;
-      std:: cout << "Basic MC Acceptance:     " << (float)m_events4GenMu8/(float)m_events << std::endl;
-    }
-    std:: cout << "********** RECO **********" << std::endl;
-    std:: cout << "Selection                " << "nEv"                   << " \t RelEff"                                                         << " \t Eff" << std::endl;
-    std:: cout << "m_events1SelMu17:        " << m_events1SelMu17        << " \t" << (float)m_events1SelMu17/(float)m_events                << " \t" << (float)m_events1SelMu17/(float)m_events        << std::endl;
-    std:: cout << "m_events2SelMu8:         " << m_events2SelMu8         << " \t" << (float)m_events2SelMu8/(float)m_events1SelMu17              << " \t" << (float)m_events2SelMu8/(float)m_events         << std::endl;
-    std:: cout << "m_events3SelMu8:         " << m_events3SelMu8         << " \t" << (float)m_events3SelMu8/(float)m_events2SelMu8               << " \t" << (float)m_events3SelMu8/(float)m_events         << std::endl;
-    std:: cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << std::endl;
-
-    std:: cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << std::endl;
-    if (m_fillGenLevel) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl; 
-
-    std:: cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << std::endl;
-    std:: cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << std::endl;
-
-    std:: cout << " *** FITTED VERTEXES *** " << std::endl;
-
-
-    std:: cout << " *** CONSISTENT VERTEXES *** " << std::endl;
-
-    std:: cout << " *** FITTED VERTEXES *** " << std::endl;
-    std::cout << m_events << std::endl;
-    std::cout << m_events1GenMu17                  << std::endl;
-    std::cout << m_events2GenMu8                   << std::endl;
-    std::cout << m_events3GenMu8                   << std::endl;
-    std::cout << m_events4GenMu8                   << std::endl;
-    std::cout << m_events1SelMu17                  << std::endl;
-    std::cout << m_events2SelMu8                   << std::endl;
-    std::cout << m_events3SelMu8                   << std::endl;
-    std::cout << m_events4SelMu8                   << std::endl;
-    std::cout << m_events2MuJets                   << std::endl;
-    std::cout << m_events2DiMuons                  << std::endl;
-
-    std:: cout << " *** CONSISTENT VERTEXES *** " << std::endl;
-    std::cout << m_events << std::endl;
-    std::cout << m_events1GenMu17                      << std::endl;
-    std::cout << m_events2GenMu8                       << std::endl;
-    std::cout << m_events3GenMu8                       << std::endl;
-    std::cout << m_events4GenMu8                       << std::endl;
-    std::cout << m_events1SelMu17                      << std::endl;
-    std::cout << m_events2SelMu8                       << std::endl;
-    std::cout << m_events3SelMu8                       << std::endl;
-    std::cout << m_events4SelMu8                       << std::endl;
-    std::cout << m_events2MuJets                       << std::endl;
-    std::cout << m_events2DiMuons                      << std::endl;
-
-
+  // Orpahn Muon
+  if(runBBestimation_){
+    m_ttree_orphan = tFileService->make<TTree>("Events_orphan", "Events_orphan");
+    m_ttree_orphan->Branch("run", &b_run, "run/I");
+    m_ttree_orphan->Branch("lumi", &b_lumi, "lumi/I");
+    m_ttree_orphan->Branch("event", &b_event, "event/I");
+    m_ttree_orphan->Branch("orph_mass", &m_orphan_mass, "orph_mass/F");
+    m_ttree_orphan->Branch("orph_dimu_mass", &m_orphan_dimu_mass, "orph_dimu_mass/F");
+    m_ttree_orphan->Branch("containstrig", &m_dimuorphan_containstrig, "containstrig/I");
+    m_ttree_orphan->Branch("containstrig2", &m_dimuorphan_containstrig2, "containstrig2/I");
+    m_ttree_orphan->Branch("orph_z", &m_orphan_z, "orph_z/F");
+    m_ttree_orphan->Branch("orph_dimu_z", &m_orphan_dimu_z, "orph_dimu_z/F");
+    m_ttree_orphan->Branch("orph_isoTk", &m_orphan_isoTk, "orph_isoTk/F");
+    m_ttree_orphan->Branch("orph_dimu_isoTk", &m_orphan_dimu_isoTk, "orph_dimu_isoTk/F");
+    m_ttree_orphan->Branch("orph_passOffLineSel", &m_orphan_passOffLineSel, "orph_passOffLineSel/O");
+    m_ttree_orphan->Branch("orph_passOffLineSelPt", &m_orphan_passOffLineSelPt, "orph_passOffLineSelPt/O");
+    m_ttree_orphan->Branch("orph_FiredTrig", &m_orphan_FiredTrig, "orph_FiredTrig/O");
+    m_ttree_orphan->Branch("orph_FiredTrig_pt", &m_orphan_FiredTrig_pt, "orph_FiredTrig_pt/O");
+    m_ttree_orphan->Branch("orph_FiredTrig_ptColl", &m_orphan_FiredTrig_ptColl, "orph_FiredTrig_ptColl/O");
   }
+}
 
-  // ------------ method called when starting to processes a run  ------------
-  void 
-    CutFlowAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
-  {
-  }
+// ------------ method called once each job just after ending the event loop  ------------
+void 
+CutFlowAnalyzer::endJob() 
+{
+  std::cout << "END JOB" << std::endl;
 
-  // ------------ method called when ending the processing of a run  ------------
-  void 
-    CutFlowAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
-  {
-  }
+  std:: cout << "Total number of events:          " << m_events << std::endl;
+  std:: cout << "Total number of events with 4mu: " << m_events4GenMu << " fraction: " <<  m_events4GenMu/m_events << std::endl;
 
-  // ------------ method called when starting to processes a luminosity block  ------------
-  void 
-    CutFlowAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
-  {
+  if (m_fillGenLevel){  
+    std:: cout << "********** GEN **********" << std::endl;
+    std:: cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << std::endl;
+    std:: cout << "pT1>17 |eta1|<0.9:       " << m_events1GenMu17 << " \t" << (float)m_events1GenMu17/(float)m_events << " \t" << (float)m_events1GenMu17/(float)m_events << std::endl;
+    std:: cout << "pT2>8  |eta2|<2.4:       " << m_events2GenMu8  << " \t" << (float)m_events2GenMu8/(float)m_events1GenMu17  << " \t" << (float)m_events2GenMu8/(float)m_events << std::endl;
+    std:: cout << "pT3>8  |eta2|<2.4:       " << m_events3GenMu8  << " \t" << (float)m_events3GenMu8/(float)m_events2GenMu8   << " \t" << (float)m_events3GenMu8/(float)m_events << std::endl;
+    std:: cout << "pT4>8  |eta2|<2.4:       " << m_events4GenMu8  << " \t" << (float)m_events4GenMu8/(float)m_events3GenMu8   << " \t" << (float)m_events4GenMu8/(float)m_events << std::endl;
+    std:: cout << "Basic MC Acceptance:     " << (float)m_events4GenMu8/(float)m_events << std::endl;
   }
+  std:: cout << "********** RECO **********" << std::endl;
+  std:: cout << "Selection                " << "nEv"                   << " \t RelEff"                                                         << " \t Eff" << std::endl;
+  std:: cout << "m_events1SelMu17:        " << m_events1SelMu17        << " \t" << (float)m_events1SelMu17/(float)m_events                << " \t" << (float)m_events1SelMu17/(float)m_events        << std::endl;
+  std:: cout << "m_events2SelMu8:         " << m_events2SelMu8         << " \t" << (float)m_events2SelMu8/(float)m_events1SelMu17              << " \t" << (float)m_events2SelMu8/(float)m_events         << std::endl;
+  std:: cout << "m_events3SelMu8:         " << m_events3SelMu8         << " \t" << (float)m_events3SelMu8/(float)m_events2SelMu8               << " \t" << (float)m_events3SelMu8/(float)m_events         << std::endl;
+  std:: cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << std::endl;
 
-  // ------------ method called when ending the processing of a luminosity block  ------------
-  void 
-    CutFlowAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
-  {
-  }
+  std:: cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << std::endl;
+  if (m_fillGenLevel) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl; 
 
-  // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-  void
-    CutFlowAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-    //The following says we do not know what parameters are allowed so do no validation
-    // Please change this to state exactly what you do use, even if it is no parameters
-    edm::ParameterSetDescription desc;
-    desc.setUnknown();
-    descriptions.addDefault(desc);
-  }
-  //Indentation change
-  //define this as a plug-in
-  DEFINE_FWK_MODULE(CutFlowAnalyzer);
+  std:: cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << std::endl;
+  std:: cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << std::endl;
+
+  std:: cout << " *** FITTED VERTEXES *** " << std::endl;
+
+
+  std:: cout << " *** CONSISTENT VERTEXES *** " << std::endl;
+
+  std:: cout << " *** FITTED VERTEXES *** " << std::endl;
+  std::cout << m_events << std::endl;
+  std::cout << m_events1GenMu17                  << std::endl;
+  std::cout << m_events2GenMu8                   << std::endl;
+  std::cout << m_events3GenMu8                   << std::endl;
+  std::cout << m_events4GenMu8                   << std::endl;
+  std::cout << m_events1SelMu17                  << std::endl;
+  std::cout << m_events2SelMu8                   << std::endl;
+  std::cout << m_events3SelMu8                   << std::endl;
+  std::cout << m_events4SelMu8                   << std::endl;
+  std::cout << m_events2MuJets                   << std::endl;
+  std::cout << m_events2DiMuons                  << std::endl;
+
+  std:: cout << " *** CONSISTENT VERTEXES *** " << std::endl;
+  std::cout << m_events << std::endl;
+  std::cout << m_events1GenMu17                      << std::endl;
+  std::cout << m_events2GenMu8                       << std::endl;
+  std::cout << m_events3GenMu8                       << std::endl;
+  std::cout << m_events4GenMu8                       << std::endl;
+  std::cout << m_events1SelMu17                      << std::endl;
+  std::cout << m_events2SelMu8                       << std::endl;
+  std::cout << m_events3SelMu8                       << std::endl;
+  std::cout << m_events4SelMu8                       << std::endl;
+  std::cout << m_events2MuJets                       << std::endl;
+  std::cout << m_events2DiMuons                      << std::endl;
+
+
+}
+
+// ------------ method called when starting to processes a run  ------------
+void 
+CutFlowAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
+{
+}
+
+// ------------ method called when ending the processing of a run  ------------
+void 
+CutFlowAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
+{
+}
+
+// ------------ method called when starting to processes a luminosity block  ------------
+void 
+CutFlowAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+{
+}
+
+// ------------ method called when ending the processing of a luminosity block  ------------
+void 
+CutFlowAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+{
+}
+
+// ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
+void
+CutFlowAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+  //The following says we do not know what parameters are allowed so do no validation
+  // Please change this to state exactly what you do use, even if it is no parameters
+  edm::ParameterSetDescription desc;
+  desc.setUnknown();
+  descriptions.addDefault(desc);
+}
+//Indentation change
+//define this as a plug-in
+DEFINE_FWK_MODULE(CutFlowAnalyzer);
