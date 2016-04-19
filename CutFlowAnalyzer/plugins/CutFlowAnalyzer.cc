@@ -2158,6 +2158,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
   if ( m_debug > 10 ) std::cout << m_events << " Stop RECO Level" << std::endl;
   
+  if (m_debug>10 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
+    std::cout<<"  hitpix diMuonF m1   "<<b_diMuonF_m1_FittedVtx_hitpix_l3inc<<std::endl;
+    std::cout<<"  hitpix diMuonF m2   "<<b_diMuonF_m2_FittedVtx_hitpix_l3inc<<std::endl;
+    std::cout<<"  hitpix diMuonC m1   "<<b_diMuonC_m1_FittedVtx_hitpix_l3inc<<std::endl;
+    std::cout<<"  hitpix diMuonC m2   "<<b_diMuonC_m2_FittedVtx_hitpix_l3inc<<std::endl;
+  }
+
+
   if (runPixelHitRecovery_ && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK && 
       ( (b_diMuonF_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonF_m2_FittedVtx_hitpix_l3inc!=1) ||
 	(b_diMuonC_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonC_m2_FittedVtx_hitpix_l3inc!=1)) ){
@@ -2813,6 +2821,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	      std::cout<<"========================================================"<<std::endl;
 	    }
 	  
+
 	    if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
 	    if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
 
