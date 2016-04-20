@@ -974,11 +974,11 @@ double pat::pixelBarrelR(int pixelBarrelLayer)
 {
   switch(pixelBarrelLayer){
   case 1:
-    return 4.4; 
+    return 4.0; //Documentation shows detector center at 4.4 cm
   case 2:
-    return 7.4;
+    return 6.8; //Documentation shows detector center 7.3 cm
   case 3:
-    return 10.2;
+    return 9.8; //Documentation shows detector center at 10.2 cm
   default:
       return -99;
   };
