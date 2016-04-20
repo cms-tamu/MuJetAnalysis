@@ -86,8 +86,7 @@ double cotan(double i) { return(1 / tan(i)); }
 
 bool PtOrderGen (const reco::GenParticle* p1, const reco::GenParticle* p2) { return (p1->pt() > p2->pt() ); }
 bool PtOrder (const reco::Muon* p1, const reco::Muon* p2) { return (p1->pt() > p2->pt() ); }
-bool dRorder(const std::pair<Int_t,Float_t>  &v1, const std::pair<Int_t,Float_t> &v2) { return (v1.second < v2.second ); }
-bool order(Float_t v1, Float_t v2){ return (abs(v1)<abs(v2));}
+bool order(Float_t v1, Float_t v2){ return (fabs(v1)<fabs(v2));}
 
 
 double My_dPhi (double phi1, double phi2) {
@@ -645,34 +644,65 @@ private:
   Int_t b_compdet_mu1_muJetF[20];
   Int_t b_compdet_mu2_muJetF[20];
 
+  Int_t b_PXBID_mu1muJetC[20][20];
+  Int_t b_PXFID_mu1muJetC[20][20];
+  Int_t b_PXBID_mu2muJetC[20][20];
+  Int_t b_PXFID_mu2muJetC[20][20];
+
+  Float_t b_mj1m0posx[20][20];
+  Float_t b_mj1m0posy[20][20];
+  Float_t b_mj1m0posx_err[20][20];
+  Float_t b_mj1m0posy_err[20][20];
+  Float_t b_mj1m1posx[20][20];
+  Float_t b_mj1m1posy[20][20];
+  Float_t b_mj1m1posx_err[20][20];
+  Float_t b_mj1m1posy_err[20][20];
+
+
   Int_t b_PXBID_1stDet_mu1muJetC[20];
   Int_t b_PXBID_2ndDet_mu1muJetC[20];
   Int_t b_PXBID_3rdDet_mu1muJetC[20];
+  Int_t b_PXBID_4thDet_mu1muJetC[20];
+  Int_t b_PXBID_5thDet_mu1muJetC[20];
   Int_t b_PXFID_1stDet_mu1muJetC[20];
   Int_t b_PXFID_2ndDet_mu1muJetC[20];
   Int_t b_PXFID_3rdDet_mu1muJetC[20];
+  Int_t b_PXFID_4thDet_mu1muJetC[20];
+  Int_t b_PXFID_5thDet_mu1muJetC[20];
 
   Int_t b_PXBID_1stDet_mu2muJetC[20];
   Int_t b_PXBID_2ndDet_mu2muJetC[20];
   Int_t b_PXBID_3rdDet_mu2muJetC[20];
+  Int_t b_PXBID_4thDet_mu2muJetC[20];
+  Int_t b_PXBID_5thDet_mu2muJetC[20];
   Int_t b_PXFID_1stDet_mu2muJetC[20];
   Int_t b_PXFID_2ndDet_mu2muJetC[20];
   Int_t b_PXFID_3rdDet_mu2muJetC[20];
+  Int_t b_PXFID_4thDet_mu2muJetC[20];
+  Int_t b_PXFID_5thDet_mu2muJetC[20];
 
 
   Int_t b_PXBID_1stDet_mu1muJetF[20];
   Int_t b_PXBID_2ndDet_mu1muJetF[20];
   Int_t b_PXBID_3rdDet_mu1muJetF[20];
+  Int_t b_PXBID_4thDet_mu1muJetF[20];
+  Int_t b_PXBID_5thDet_mu1muJetF[20];
   Int_t b_PXFID_1stDet_mu1muJetF[20];
   Int_t b_PXFID_2ndDet_mu1muJetF[20];
   Int_t b_PXFID_3rdDet_mu1muJetF[20];
+  Int_t b_PXFID_4thDet_mu1muJetF[20];
+  Int_t b_PXFID_5thDet_mu1muJetF[20];
 
   Int_t b_PXBID_1stDet_mu2muJetF[20];
   Int_t b_PXBID_2ndDet_mu2muJetF[20];
   Int_t b_PXBID_3rdDet_mu2muJetF[20];
+  Int_t b_PXBID_4thDet_mu2muJetF[20];
+  Int_t b_PXBID_5thDet_mu2muJetF[20];
   Int_t b_PXFID_1stDet_mu2muJetF[20];
   Int_t b_PXFID_2ndDet_mu2muJetF[20];
   Int_t b_PXFID_3rdDet_mu2muJetF[20];
+  Int_t b_PXFID_4thDet_mu2muJetF[20];
+  Int_t b_PXFID_5thDet_mu2muJetF[20];
 
 
   Float_t  b_mj1m0posx_1stDet[20];
@@ -687,6 +717,14 @@ private:
   Float_t  b_mj1m0posy_3rdDet[20];
   Float_t  b_mj1m0posx_err_3rdDet[20];
   Float_t  b_mj1m0posy_err_3rdDet[20];
+  Float_t  b_mj1m0posx_4thDet[20];
+  Float_t  b_mj1m0posy_4thDet[20];
+  Float_t  b_mj1m0posx_err_4thDet[20];
+  Float_t  b_mj1m0posy_err_4thDet[20];
+  Float_t  b_mj1m0posx_5thDet[20];
+  Float_t  b_mj1m0posy_5thDet[20];
+  Float_t  b_mj1m0posx_err_5thDet[20];
+  Float_t  b_mj1m0posy_err_5thDet[20];
 
   Float_t  b_mj1m1posx_1stDet[20];
   Float_t  b_mj1m1posy_1stDet[20];
@@ -700,6 +738,14 @@ private:
   Float_t  b_mj1m1posy_3rdDet[20];
   Float_t  b_mj1m1posx_err_3rdDet[20];
   Float_t  b_mj1m1posy_err_3rdDet[20];
+  Float_t  b_mj1m1posx_4thDet[20];
+  Float_t  b_mj1m1posy_4thDet[20];
+  Float_t  b_mj1m1posx_err_4thDet[20];
+  Float_t  b_mj1m1posy_err_4thDet[20];
+  Float_t  b_mj1m1posx_5thDet[20];
+  Float_t  b_mj1m1posy_5thDet[20];
+  Float_t  b_mj1m1posx_err_5thDet[20];
+  Float_t  b_mj1m1posy_err_5thDet[20];
 
 
   Float_t  b_mj2m0posx_1stDet[20];
@@ -714,6 +760,14 @@ private:
   Float_t  b_mj2m0posy_3rdDet[20];
   Float_t  b_mj2m0posx_err_3rdDet[20];
   Float_t  b_mj2m0posy_err_3rdDet[20];
+  Float_t  b_mj2m0posx_4thDet[20];
+  Float_t  b_mj2m0posy_4thDet[20];
+  Float_t  b_mj2m0posx_err_4thDet[20];
+  Float_t  b_mj2m0posy_err_4thDet[20];
+  Float_t  b_mj2m0posx_5thDet[20];
+  Float_t  b_mj2m0posy_5thDet[20];
+  Float_t  b_mj2m0posx_err_5thDet[20];
+  Float_t  b_mj2m0posy_err_5thDet[20];
 
   Float_t  b_mj2m1posx_1stDet[20];
   Float_t  b_mj2m1posy_1stDet[20];
@@ -727,6 +781,14 @@ private:
   Float_t  b_mj2m1posy_3rdDet[20];
   Float_t  b_mj2m1posx_err_3rdDet[20];
   Float_t  b_mj2m1posy_err_3rdDet[20];    
+  Float_t  b_mj2m1posx_4thDet[20];
+  Float_t  b_mj2m1posy_4thDet[20];
+  Float_t  b_mj2m1posx_err_4thDet[20];
+  Float_t  b_mj2m1posy_err_4thDet[20];    
+  Float_t  b_mj2m1posx_5thDet[20];
+  Float_t  b_mj2m1posy_5thDet[20];
+  Float_t  b_mj2m1posx_err_5thDet[20];
+  Float_t  b_mj2m1posy_err_5thDet[20];    
   
 
   Float_t b_pixelhit_mu1_muJetC_1stextlay_posx[200];
@@ -1055,6 +1117,27 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_innerlayers_mu1_muJetF=-10000;
   b_innerlayers_mu2_muJetF=-10000;
 
+
+  for(int k=0;k<20;k++){
+    for(int j=0;j<20;j++){
+      b_PXBID_mu1muJetC[k][j]=-10000;
+      b_PXFID_mu1muJetC[k][j]=-10000;
+      b_PXBID_mu2muJetC[k][j]=-10000;
+      b_PXFID_mu2muJetC[k][j]=-10000;
+
+      b_mj1m0posx[k][j]=-10000;    
+      b_mj1m0posy[k][j]=-10000;    
+      b_mj1m0posx_err[k][j]=-10000;
+      b_mj1m0posy_err[k][j]=-10000;
+      b_mj1m1posx[k][j]=-10000;    
+      b_mj1m1posy[k][j]=-10000;    
+      b_mj1m1posx_err[k][j]=-10000;
+      b_mj1m1posy_err[k][j]=-10000;
+      
+    }
+  }
+
+
   for(int k=0;k<20;k++){
     b_compdet_mu1_muJetC[k]=-10000;
     b_compdet_mu2_muJetC[k]=-10000;
@@ -1064,31 +1147,47 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_PXBID_1stDet_mu1muJetC[k]=-10000;
     b_PXBID_2ndDet_mu1muJetC[k]=-10000;
     b_PXBID_3rdDet_mu1muJetC[k]=-10000;
+    b_PXBID_4thDet_mu1muJetC[k]=-10000;
+    b_PXBID_5thDet_mu1muJetC[k]=-10000;
     b_PXFID_1stDet_mu1muJetC[k]=-10000;
     b_PXFID_2ndDet_mu1muJetC[k]=-10000;
     b_PXFID_3rdDet_mu1muJetC[k]=-10000;
+    b_PXFID_4thDet_mu1muJetC[k]=-10000;
+    b_PXFID_5thDet_mu1muJetC[k]=-10000;
 
     b_PXBID_1stDet_mu2muJetC[k]=-10000;
     b_PXBID_2ndDet_mu2muJetC[k]=-10000;
     b_PXBID_3rdDet_mu2muJetC[k]=-10000;
+    b_PXBID_4thDet_mu2muJetC[k]=-10000;
+    b_PXBID_5thDet_mu2muJetC[k]=-10000;
     b_PXFID_1stDet_mu2muJetC[k]=-10000;
     b_PXFID_2ndDet_mu2muJetC[k]=-10000;
     b_PXFID_3rdDet_mu2muJetC[k]=-10000;
+    b_PXFID_4thDet_mu2muJetC[k]=-10000;
+    b_PXFID_5thDet_mu2muJetC[k]=-10000;
 
 
     b_PXBID_1stDet_mu1muJetF[k]=-10000;
     b_PXBID_2ndDet_mu1muJetF[k]=-10000;
     b_PXBID_3rdDet_mu1muJetF[k]=-10000;
+    b_PXBID_4thDet_mu1muJetF[k]=-10000;
+    b_PXBID_5thDet_mu1muJetF[k]=-10000;
     b_PXFID_1stDet_mu1muJetF[k]=-10000;
     b_PXFID_2ndDet_mu1muJetF[k]=-10000;
     b_PXFID_3rdDet_mu1muJetF[k]=-10000;
+    b_PXFID_4thDet_mu1muJetF[k]=-10000;
+    b_PXFID_5thDet_mu1muJetF[k]=-10000;
 
     b_PXBID_1stDet_mu2muJetF[k]=-10000;
     b_PXBID_2ndDet_mu2muJetF[k]=-10000;
     b_PXBID_3rdDet_mu2muJetF[k]=-10000;
+    b_PXBID_4thDet_mu2muJetF[k]=-10000;
+    b_PXBID_5thDet_mu2muJetF[k]=-10000;
     b_PXFID_1stDet_mu2muJetF[k]=-10000;
     b_PXFID_2ndDet_mu2muJetF[k]=-10000;
     b_PXFID_3rdDet_mu2muJetF[k]=-10000;
+    b_PXFID_4thDet_mu2muJetF[k]=-10000;
+    b_PXFID_5thDet_mu2muJetF[k]=-10000;
 
 
     b_mj1m0posx_1stDet[k]=-10000;
@@ -1103,6 +1202,15 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_mj1m0posy_3rdDet[k]=-10000;
     b_mj1m0posx_err_3rdDet[k]=-10000;
     b_mj1m0posy_err_3rdDet[k]=-10000;
+    b_mj1m0posx_4thDet[k]=-10000;
+    b_mj1m0posy_4thDet[k]=-10000;
+    b_mj1m0posx_err_4thDet[k]=-10000;
+    b_mj1m0posy_err_4thDet[k]=-10000;
+    b_mj1m0posx_5thDet[k]=-10000;
+    b_mj1m0posy_5thDet[k]=-10000;
+    b_mj1m0posx_err_5thDet[k]=-10000;
+    b_mj1m0posy_err_5thDet[k]=-10000;
+
 
     b_mj1m1posx_1stDet[k]=-10000;
     b_mj1m1posy_1stDet[k]=-10000;
@@ -1116,6 +1224,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_mj1m1posy_3rdDet[k]=-10000;
     b_mj1m1posx_err_3rdDet[k]=-10000;
     b_mj1m1posy_err_3rdDet[k]=-10000;
+    b_mj1m1posx_4thDet[k]=-10000;
+    b_mj1m1posy_4thDet[k]=-10000;
+    b_mj1m1posx_err_4thDet[k]=-10000;
+    b_mj1m1posy_err_4thDet[k]=-10000;
+    b_mj1m1posx_5thDet[k]=-10000;
+    b_mj1m1posy_5thDet[k]=-10000;
+    b_mj1m1posx_err_5thDet[k]=-10000;
+    b_mj1m1posy_err_5thDet[k]=-10000;
 
 
     b_mj2m0posx_1stDet[k]=-10000;
@@ -1130,6 +1246,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_mj2m0posy_3rdDet[k]=-10000;
     b_mj2m0posx_err_3rdDet[k]=-10000;
     b_mj2m0posy_err_3rdDet[k]=-10000;
+    b_mj2m0posx_4thDet[k]=-10000;
+    b_mj2m0posy_4thDet[k]=-10000;
+    b_mj2m0posx_err_4thDet[k]=-10000;
+    b_mj2m0posy_err_4thDet[k]=-10000;
+    b_mj2m0posx_5thDet[k]=-10000;
+    b_mj2m0posy_5thDet[k]=-10000;
+    b_mj2m0posx_err_5thDet[k]=-10000;
+    b_mj2m0posy_err_5thDet[k]=-10000;
 
     b_mj2m1posx_1stDet[k]=-10000;
     b_mj2m1posy_1stDet[k]=-10000;
@@ -1143,6 +1267,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_mj2m1posy_3rdDet[k]=-10000;
     b_mj2m1posx_err_3rdDet[k]=-10000;
     b_mj2m1posy_err_3rdDet[k]=-10000;    
+    b_mj2m1posx_4thDet[k]=-10000;
+    b_mj2m1posy_4thDet[k]=-10000;
+    b_mj2m1posx_err_4thDet[k]=-10000;
+    b_mj2m1posy_err_4thDet[k]=-10000;    
+    b_mj2m1posx_5thDet[k]=-10000;
+    b_mj2m1posy_5thDet[k]=-10000;
+    b_mj2m1posx_err_5thDet[k]=-10000;
+    b_mj2m1posy_err_5thDet[k]=-10000;    
   }
 
   for(int k=0;k<200;k++){
@@ -2169,13 +2301,13 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if (runPixelHitRecovery_ && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
 
     Int_t indxtrkmj1[2];
-    Int_t indxtrkmj2[2];
+    //    Int_t indxtrkmj2[2];
     
     indxtrkmj1[0]=-100000;
     indxtrkmj1[1]=-100000;
     
-    indxtrkmj2[0]=-100000;
-    indxtrkmj2[1]=-100000;
+    // indxtrkmj2[0]=-100000;
+    // indxtrkmj2[1]=-100000;
     
     
 
@@ -2221,11 +2353,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       Int_t counter_match=0;
       Int_t counter_track=0;
 
-      if(m_debug>10){
-	std::cout<<" muJetC muon1 pT   "<<muJetC->muon(0)->innerTrack()->pt()<<std::endl;
-	std::cout<<" muJetC muon2 pT   "<<muJetC->muon(1)->innerTrack()->pt()<<std::endl;
-      }
-      
       for (reco::TrackCollection::const_iterator trackrf = tracksrf->begin(); trackrf != tracksrf->end(); ++trackrf) {
 	    
 	if(trackrf->pt()>3.0 && fabs(trackrf->eta())<2.5){
@@ -2428,11 +2555,11 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     }
     if(minchi2_mu1_muJetF[0].second<100000.0){
       b_match_mu1track_muJetF=1;
-      indxtrkmj2[0] = minchi2_mu1_muJetF[0].first;
+      //      indxtrkmj2[0] = minchi2_mu1_muJetF[0].first;
     }
     if(minchi2_mu2_muJetF[0].second<100000.0){
       b_match_mu2track_muJetF=1;
-      indxtrkmj2[1] = minchi2_mu2_muJetF[0].first;
+      //      indxtrkmj2[1] = minchi2_mu2_muJetF[0].first;
     }
 
 
@@ -2448,9 +2575,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     minchi2_mu1_muJetF.clear();
     minchi2_mu2_muJetF.clear();
 
-
-    if( (b_diMuonF_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonF_m2_FittedVtx_hitpix_l3inc!=1) ||
-	(b_diMuonC_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonC_m2_FittedVtx_hitpix_l3inc!=1) ){
+    
+    // if( (b_diMuonF_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonF_m2_FittedVtx_hitpix_l3inc!=1) ||
+    // 	(b_diMuonC_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonC_m2_FittedVtx_hitpix_l3inc!=1) ){
 
       //===================== Initializing navigation school, propagator, etc..======================//
     
@@ -2484,7 +2611,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     
       Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
       Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
-    
 
       
   
@@ -2604,135 +2730,185 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
 				 detWithState.size()<<std::endl;
 	      
-		Int_t counter_hit=0;
+		//		Int_t counter_hit=0;
 
-	    
+
+		Int_t count_numdet=0;
 		for(uint32_t k=0;k<detWithState.size();k++){
 		    
 		  DetId id = detWithState[k].first->geographicalId();
 		  MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
 	      
 		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
-		
-		
-		    if(km==0){
-		      if(k==0)  b_PXBID_1stDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
-		      if(k==1)  b_PXBID_2ndDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
-		      if(k==2)  b_PXBID_3rdDet_mu1muJetC[count_numlay]  = PXBDetId(id).layer();
 
-		      if(k==0)  b_PXFID_1stDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		      if(k==1)  b_PXFID_2ndDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		      if(k==2)  b_PXFID_3rdDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		    }
-		    if(km==1){
-		      if(k==0)  b_PXBID_1stDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
-		      if(k==1)  b_PXBID_2ndDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
-		      if(k==2)  b_PXBID_3rdDet_mu2muJetC[count_numlay]  = PXBDetId(id).layer();
-
-		      if(k==0)  b_PXFID_1stDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
-		      if(k==1)  b_PXFID_2ndDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
-		      if(k==2)  b_PXFID_3rdDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
-		    }
+		    std::cout<<" Detector element in pixels"<<std::endl;
+		    std::cout<<" Detector element in pixels"<<std::endl;
+		    std::cout<<" Detector element in pixels"<<std::endl;
 
 		    if(km==0){
-		      if(k==0) b_mj1m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==0) b_mj1m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==0) b_mj1m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==0) b_mj1m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		      if(k==1) b_mj1m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==1) b_mj1m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==1) b_mj1m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==1) b_mj1m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		      if(k==3) b_mj1m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==3) b_mj1m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==3) b_mj1m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==3) b_mj1m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    }
-
+		      b_PXBID_mu1muJetC[count_numlay][count_numdet] = PXBDetId(id).layer();
+		      b_PXFID_mu1muJetC[count_numlay][count_numdet] = PXFDetId(id).disk();
+		      b_mj1m0posx[count_numlay][count_numdet] = detWithState[k].second.localPosition().x();
+		      b_mj1m0posy[count_numlay][count_numdet] = detWithState[k].second.localPosition().y();
+		      b_mj1m0posx_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      b_mj1m0posy_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    }		      
 		    if(km==1){
-		      if(k==0) b_mj1m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==0) b_mj1m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==0) b_mj1m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==0) b_mj1m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		      b_PXBID_mu2muJetC[count_numlay][count_numdet] = PXBDetId(id).layer();
+		      b_PXFID_mu2muJetC[count_numlay][count_numdet] = PXFDetId(id).disk();
+		      b_mj1m1posx[count_numlay][count_numdet] = detWithState[k].second.localPosition().x();
+		      b_mj1m1posy[count_numlay][count_numdet] = detWithState[k].second.localPosition().y();
+		      b_mj1m1posx_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      b_mj1m1posy_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    }		      
+		
+		    // if(km==0){
+		    //   if(k==0)  b_PXBID_1stDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
+		    //   if(k==1)  b_PXBID_2ndDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
+		    //   if(k==2)  b_PXBID_3rdDet_mu1muJetC[count_numlay]  = PXBDetId(id).layer();
+		    //   if(k==3)  b_PXBID_4thDet_mu1muJetC[count_numlay]  = PXBDetId(id).layer();
+		    //   if(k==4)  b_PXBID_5thDet_mu1muJetC[count_numlay]  = PXBDetId(id).layer();
 
-		      if(k==1) b_mj1m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==1) b_mj1m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==1) b_mj1m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==1) b_mj1m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    //   if(k==0)  b_PXFID_1stDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
+		    //   if(k==1)  b_PXFID_2ndDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
+		    //   if(k==2)  b_PXFID_3rdDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
+		    //   if(k==3)  b_PXFID_4thDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
+		    //   if(k==4)  b_PXFID_5thDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
+		    // }
+		    // if(km==1){
+		    //   if(k==0)  b_PXBID_1stDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
+		    //   if(k==1)  b_PXBID_2ndDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
+		    //   if(k==2)  b_PXBID_3rdDet_mu2muJetC[count_numlay]  = PXBDetId(id).layer();
+		    //   if(k==3)  b_PXBID_4thDet_mu2muJetC[count_numlay]  = PXBDetId(id).layer();
+		    //   if(k==4)  b_PXBID_5thDet_mu2muJetC[count_numlay]  = PXBDetId(id).layer();
 
-		      if(k==3) b_mj1m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==3) b_mj1m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==3) b_mj1m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==3) b_mj1m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    }
+		    //   if(k==0)  b_PXFID_1stDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
+		    //   if(k==1)  b_PXFID_2ndDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
+		    //   if(k==2)  b_PXFID_3rdDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
+		    //   if(k==3)  b_PXFID_4thDet_mu2muJetC[count_numlay]  = PXFDetId(id).disk();
+		    //   if(k==4)  b_PXFID_5thDet_mu2muJetC[count_numlay]  = PXFDetId(id).disk();
+		    // }
+
+		    // if(km==0){
+		    //   if(k==0) b_mj1m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==0) b_mj1m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==0) b_mj1m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==0) b_mj1m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+
+		    //   if(k==1) b_mj1m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==1) b_mj1m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==1) b_mj1m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==1) b_mj1m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+
+		    //   if(k==2) b_mj1m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==2) b_mj1m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==2) b_mj1m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==2) b_mj1m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+
+		    //   if(k==3) b_mj1m0posx_4thDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==3) b_mj1m0posy_4thDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==3) b_mj1m0posx_err_4thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==3) b_mj1m0posy_err_4thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+
+		    //   if(k==4) b_mj1m0posx_5thDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==4) b_mj1m0posy_5thDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==4) b_mj1m0posx_err_5thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==4) b_mj1m0posy_err_5thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    // }
+
+		    // if(km==1){
+		    //   if(k==0) b_mj1m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==0) b_mj1m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==0) b_mj1m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==0) b_mj1m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+
+		    //   if(k==1) b_mj1m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==1) b_mj1m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==1) b_mj1m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==1) b_mj1m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+
+		    //   if(k==3) b_mj1m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==3) b_mj1m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==3) b_mj1m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==3) b_mj1m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+
+		    //   if(k==4) b_mj1m1posx_4thDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==4) b_mj1m1posy_4thDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==4) b_mj1m1posx_err_4thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==4) b_mj1m1posy_err_4thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+
+		    //   if(k==5) b_mj1m1posx_5thDet[count_numlay] = detWithState[k].second.localPosition().x();
+		    //   if(k==5) b_mj1m1posy_5thDet[count_numlay] = detWithState[k].second.localPosition().y();
+		    //   if(k==5) b_mj1m1posx_err_5thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+		    //   if(k==5) b_mj1m1posy_err_5thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    // }
 		
 					    
-		    TrajectoryStateOnSurface ts; //dummy
+		    // TrajectoryStateOnSurface ts; //dummy
 		
-		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
+		    // std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
 		
-		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
+		    // if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
 			
 		
-		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
+		    // for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
 			  
-		      if(tmpIt->recHit()->getType()==0){ // valid hit
+		    //   if(tmpIt->recHit()->getType()==0){ // valid hit
 			    
-			if(m_debug>10){
-			  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-			  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-			  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-			  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-			}
+		    // 	if(m_debug>10){
+		    // 	  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
+		    // 	  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
+		    // 	  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
+		    // 	  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
+		    // 	}
 
 
-			if(km==0){
-			  if(count_numlay==0){
-			    b_pixelhit_mu1_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu1_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu1_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu1_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			  if(count_numlay==1){
-			    b_pixelhit_mu1_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu1_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu1_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu1_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			  if(count_numlay==2){
-			    b_pixelhit_mu1_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu1_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu1_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu1_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			}
+		    // 	if(km==0){
+		    // 	  if(count_numlay==0){
+		    // 	    b_pixelhit_mu1_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+		    // 	    b_pixelhit_mu1_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+		    // 	    b_pixelhit_mu1_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+		    // 	    b_pixelhit_mu1_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    // 	  }
+		    // 	  if(count_numlay==1){
+		    // 	    b_pixelhit_mu1_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+		    // 	    b_pixelhit_mu1_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+		    // 	    b_pixelhit_mu1_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+		    // 	    b_pixelhit_mu1_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    // 	  }
+		    // 	  if(count_numlay==2){
+		    // 	    b_pixelhit_mu1_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+		    // 	    b_pixelhit_mu1_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+		    // 	    b_pixelhit_mu1_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+		    // 	    b_pixelhit_mu1_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    // 	  }
+		    // 	}
 		    
-			if(km==1){
-			  if(count_numlay==0){
-			    b_pixelhit_mu2_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu2_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu2_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu2_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			  if(count_numlay==1){
-			    b_pixelhit_mu2_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu2_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu2_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu2_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			  if(count_numlay==2){
-			    b_pixelhit_mu2_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu2_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu2_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu2_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			}
-			counter_hit++;
-		      }
-		    }
+		    // 	if(km==1){
+		    // 	  if(count_numlay==0){
+		    // 	    b_pixelhit_mu2_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+		    // 	    b_pixelhit_mu2_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+		    // 	    b_pixelhit_mu2_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+		    // 	    b_pixelhit_mu2_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    // 	  }
+		    // 	  if(count_numlay==1){
+		    // 	    b_pixelhit_mu2_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+		    // 	    b_pixelhit_mu2_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+		    // 	    b_pixelhit_mu2_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+		    // 	    b_pixelhit_mu2_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    // 	  }
+		    // 	  if(count_numlay==2){
+		    // 	    b_pixelhit_mu2_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+		    // 	    b_pixelhit_mu2_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+		    // 	    b_pixelhit_mu2_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+		    // 	    b_pixelhit_mu2_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    // 	  }
+		    // 	}
+		    // 	counter_hit++;
+		    //   }
+		    // }
 		  }
+		  count_numdet++;
 		}
 		delete localProp;
 		count_numlay++;
@@ -2744,253 +2920,253 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       }
 
 
-      for(uint32_t km=0;km<2;km++){  // loop for muJetF muon trajectories
+      // for(uint32_t km=0;km<2;km++){  // loop for muJetF muon trajectories
     
-	if(m_debug>10){
-	  std::cout<<"  muon-track indx   "<<indxtrkmj2[km]<<"  muon pT   "<<muJetF->muon(km)->pt()<<"  muon eta  "
-		   <<muJetF->muon(km)->eta()<<std::endl;
-	}
+      // 	if(m_debug>10){
+      // 	  std::cout<<"  muon-track indx   "<<indxtrkmj2[km]<<"  muon pT   "<<muJetF->muon(km)->pt()<<"  muon eta  "
+      // 		   <<muJetF->muon(km)->eta()<<std::endl;
+      // 	}
       
-	//===================   Information for the muon-tracks ===================================//
-	if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
-	if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
+      // 	//===================   Information for the muon-tracks ===================================//
+      // 	if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
+      // 	if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
       
-	if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
-	if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
+      // 	if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
+      // 	if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
       
-	if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
-	if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
+      // 	if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
+      // 	if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
       
-	if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
-	if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
+      // 	if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
+      // 	if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
       
       
-	//====================== Loop for Trajectories from TrackRefitter  =================================//
-	Int_t counter_traj=0;
-	for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
+      // 	//====================== Loop for Trajectories from TrackRefitter  =================================//
+      // 	Int_t counter_traj=0;
+      // 	for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
       
-	  if(counter_traj==indxtrkmj2[km]){
+      // 	  if(counter_traj==indxtrkmj2[km]){
 	
-	    if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
-				    << "isValid: " << it->isValid()<<std::endl;
-	    }
+      // 	    if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
+      // 				    << "isValid: " << it->isValid()<<std::endl;
+      // 	    }
 	
-	    if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
+      // 	    if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
 	  
-	      const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
-	      const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
-	      TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
-	      TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
+      // 	      const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
+      // 	      const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
+      // 	      TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
+      // 	      TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
 	  
-	      if (!outerState || !innerState){
-		std::cout << "No outer layer or no inner layer!" << std::endl;
-	      }
+      // 	      if (!outerState || !innerState){
+      // 		std::cout << "No outer layer or no inner layer!" << std::endl;
+      // 	      }
 
-	      const DetLayer* outerLayer = it->firstMeasurement().layer();
-	      const DetLayer* innerLayer = it->lastMeasurement().layer();
+      // 	      const DetLayer* outerLayer = it->firstMeasurement().layer();
+      // 	      const DetLayer* innerLayer = it->lastMeasurement().layer();
 
-	      if (!outerLayer || !innerLayer){
-		//means  that the trajectory was fit/smoothed in a special case: not setting those pointers
-		if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
-					<<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
-	      }
+      // 	      if (!outerLayer || !innerLayer){
+      // 		//means  that the trajectory was fit/smoothed in a special case: not setting those pointers
+      // 		if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
+      // 					<<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
+      // 	      }
 	  
-	      //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
-	      PropagationDirection dirForInnerLayers = oppositeToMomentum;
-	      PropagationDirection dirForOuterLayers = alongMomentum;
-	      if(it->direction() != oppositeToMomentum){
-		dirForInnerLayers = alongMomentum;
-		dirForOuterLayers = oppositeToMomentum;
-		//throw cms::Exception("TrackProducer") 
-	      }
+      // 	      //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
+      // 	      PropagationDirection dirForInnerLayers = oppositeToMomentum;
+      // 	      PropagationDirection dirForOuterLayers = alongMomentum;
+      // 	      if(it->direction() != oppositeToMomentum){
+      // 		dirForInnerLayers = alongMomentum;
+      // 		dirForOuterLayers = oppositeToMomentum;
+      // 		//throw cms::Exception("TrackProducer") 
+      // 	      }
 		  
-	      std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-	      std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
+      // 	      std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
+      // 	      std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
 	  
-	      if(m_debug>10){
-		std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
-		std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
-	      }
+      // 	      if(m_debug>10){
+      // 		std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
+      // 		std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
+      // 	      }
 
-	      if(m_debug>10){
-		std::cout<<"========================================================"<<std::endl;
-		std::cout<< "inner DetLayer  sub: " 
-			 << innerLayer->subDetector() <<"\n"
-			 << "outer DetLayer  sub: " 
-			 << outerLayer->subDetector() << "\n"
-			 <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
-			 <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
-			 <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
-			 <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
-		std::cout<<"========================================================"<<std::endl;
-	      }
+      // 	      if(m_debug>10){
+      // 		std::cout<<"========================================================"<<std::endl;
+      // 		std::cout<< "inner DetLayer  sub: " 
+      // 			 << innerLayer->subDetector() <<"\n"
+      // 			 << "outer DetLayer  sub: " 
+      // 			 << outerLayer->subDetector() << "\n"
+      // 			 <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
+      // 			 <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
+      // 			 <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
+      // 			 <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
+      // 		std::cout<<"========================================================"<<std::endl;
+      // 	      }
 	  
 
-	      if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
-	      if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
+      // 	      if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
+      // 	      if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
 
-	      Int_t count_numlay=0;
-	      for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
+      // 	      Int_t count_numlay=0;
+      // 	      for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
 	      
-		if ((*dd)->basicComponents().empty()) {
-		  //	this should never happen. but better protect for it
-		  if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
-		  continue;
-		}
+      // 		if ((*dd)->basicComponents().empty()) {
+      // 		  //	this should never happen. but better protect for it
+      // 		  if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
+      // 		  continue;
+      // 		}
 	    
-		Propagator* localProp = thePropagator->clone();
-		localProp->setPropagationDirection(oppositeToMomentum);
+      // 		Propagator* localProp = thePropagator->clone();
+      // 		localProp->setPropagationDirection(oppositeToMomentum);
 	    
-		if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
-		std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
+      // 		if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
+      // 		std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
 	    
-		if(km==0) b_compdet_mu1_muJetF[count_numlay] = detWithState.size();
-		if(km==1) b_compdet_mu2_muJetF[count_numlay] = detWithState.size();
+      // 		if(km==0) b_compdet_mu1_muJetF[count_numlay] = detWithState.size();
+      // 		if(km==1) b_compdet_mu2_muJetF[count_numlay] = detWithState.size();
 	    
-		if(!detWithState.size()) continue;
+      // 		if(!detWithState.size()) continue;
 	    
-		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
-				 detWithState.size()<<std::endl;
+      // 		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
+      // 				 detWithState.size()<<std::endl;
 	      
-		Int_t counter_hit=0;
+      // 		Int_t counter_hit=0;
 
 	    
-		for(uint32_t k=0;k<detWithState.size();k++){
+      // 		for(uint32_t k=0;k<detWithState.size();k++){
 		    
-		  DetId id = detWithState[k].first->geographicalId();
-		  MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
+      // 		  DetId id = detWithState[k].first->geographicalId();
+      // 		  MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
 	      
-		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
+      // 		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
 		
 		
-		    if(km==0){
-		      if(k==0)  b_PXBID_1stDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
-		      if(k==1)  b_PXBID_2ndDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
-		      if(k==2)  b_PXBID_3rdDet_mu1muJetF[count_numlay]  = PXBDetId(id).layer();
+      // 		    if(km==0){
+      // 		      if(k==0)  b_PXBID_1stDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
+      // 		      if(k==1)  b_PXBID_2ndDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
+      // 		      if(k==2)  b_PXBID_3rdDet_mu1muJetF[count_numlay]  = PXBDetId(id).layer();
 
-		      if(k==0)  b_PXFID_1stDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
-		      if(k==1)  b_PXFID_2ndDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
-		      if(k==2)  b_PXFID_3rdDet_mu1muJetF[count_numlay]  = PXFDetId(id).disk();
-		    }
-		    if(km==1){
-		      if(k==0)  b_PXBID_1stDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
-		      if(k==1)  b_PXBID_2ndDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
-		      if(k==2)  b_PXBID_3rdDet_mu2muJetF[count_numlay]  = PXBDetId(id).layer();
+      // 		      if(k==0)  b_PXFID_1stDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
+      // 		      if(k==1)  b_PXFID_2ndDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
+      // 		      if(k==2)  b_PXFID_3rdDet_mu1muJetF[count_numlay]  = PXFDetId(id).disk();
+      // 		    }
+      // 		    if(km==1){
+      // 		      if(k==0)  b_PXBID_1stDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
+      // 		      if(k==1)  b_PXBID_2ndDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
+      // 		      if(k==2)  b_PXBID_3rdDet_mu2muJetF[count_numlay]  = PXBDetId(id).layer();
 
-		      if(k==0)  b_PXFID_1stDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
-		      if(k==1)  b_PXFID_2ndDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
-		      if(k==2)  b_PXFID_3rdDet_mu2muJetF[count_numlay]  = PXFDetId(id).disk();
-		    }
+      // 		      if(k==0)  b_PXFID_1stDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
+      // 		      if(k==1)  b_PXFID_2ndDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
+      // 		      if(k==2)  b_PXFID_3rdDet_mu2muJetF[count_numlay]  = PXFDetId(id).disk();
+      // 		    }
 
-		    if(km==0){
-		      if(k==0) b_mj2m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==0) b_mj2m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==0) b_mj2m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==0) b_mj2m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+      // 		    if(km==0){
+      // 		      if(k==0) b_mj2m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
+      // 		      if(k==0) b_mj2m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
+      // 		      if(k==0) b_mj2m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+      // 		      if(k==0) b_mj2m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		      if(k==1) b_mj2m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==1) b_mj2m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==1) b_mj2m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==1) b_mj2m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+      // 		      if(k==1) b_mj2m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
+      // 		      if(k==1) b_mj2m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
+      // 		      if(k==1) b_mj2m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+      // 		      if(k==1) b_mj2m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		      if(k==3) b_mj2m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==3) b_mj2m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==3) b_mj2m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==3) b_mj2m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    }
+      // 		      if(k==3) b_mj2m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
+      // 		      if(k==3) b_mj2m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
+      // 		      if(k==3) b_mj2m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+      // 		      if(k==3) b_mj2m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+      // 		    }
 
-		    if(km==1){
-		      if(k==0) b_mj2m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==0) b_mj2m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==0) b_mj2m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==0) b_mj2m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+      // 		    if(km==1){
+      // 		      if(k==0) b_mj2m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
+      // 		      if(k==0) b_mj2m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
+      // 		      if(k==0) b_mj2m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+      // 		      if(k==0) b_mj2m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		      if(k==1) b_mj2m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==1) b_mj2m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==1) b_mj2m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==1) b_mj2m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+      // 		      if(k==1) b_mj2m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
+      // 		      if(k==1) b_mj2m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
+      // 		      if(k==1) b_mj2m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+      // 		      if(k==1) b_mj2m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
 
-		      if(k==3) b_mj2m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		      if(k==3) b_mj2m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		      if(k==3) b_mj2m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      if(k==3) b_mj2m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    }
+      // 		      if(k==3) b_mj2m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
+      // 		      if(k==3) b_mj2m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
+      // 		      if(k==3) b_mj2m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
+      // 		      if(k==3) b_mj2m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
+      // 		    }
 		
 					    
-		    TrajectoryStateOnSurface ts; //dummy
+      // 		    TrajectoryStateOnSurface ts; //dummy
 		
-		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
+      // 		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
 		
-		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
+      // 		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
 			
 		
-		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
+      // 		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
 			  
-		      if(tmpIt->recHit()->getType()==0){ // valid hit
+      // 		      if(tmpIt->recHit()->getType()==0){ // valid hit
 			    
-			if(m_debug>10){
-			  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-			  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-			  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-			  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-			}
+      // 			if(m_debug>10){
+      // 			  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
+      // 			  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
+      // 			  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
+      // 			  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
+      // 			}
 
 
-			if(km==0){
-			  if(count_numlay==0){
-			    b_pixelhit_mu1_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu1_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu1_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu1_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			  if(count_numlay==1){
-			    b_pixelhit_mu1_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu1_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu1_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu1_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			  if(count_numlay==2){
-			    b_pixelhit_mu1_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu1_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu1_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu1_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			}
+      // 			if(km==0){
+      // 			  if(count_numlay==0){
+      // 			    b_pixelhit_mu1_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+      // 			    b_pixelhit_mu1_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+      // 			    b_pixelhit_mu1_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+      // 			    b_pixelhit_mu1_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+      // 			  }
+      // 			  if(count_numlay==1){
+      // 			    b_pixelhit_mu1_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+      // 			    b_pixelhit_mu1_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+      // 			    b_pixelhit_mu1_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+      // 			    b_pixelhit_mu1_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+      // 			  }
+      // 			  if(count_numlay==2){
+      // 			    b_pixelhit_mu1_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+      // 			    b_pixelhit_mu1_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+      // 			    b_pixelhit_mu1_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+      // 			    b_pixelhit_mu1_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+      // 			  }
+      // 			}
 		    
-			if(km==1){
-			  if(count_numlay==0){
-			    b_pixelhit_mu2_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu2_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu2_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu2_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			  if(count_numlay==1){
-			    b_pixelhit_mu2_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu2_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu2_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu2_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			  if(count_numlay==2){
-			    b_pixelhit_mu2_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-			    b_pixelhit_mu2_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-			    b_pixelhit_mu2_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			    b_pixelhit_mu2_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-			  }
-			}
-			counter_hit++;
-		      }
-		    }
-		  }
-		}
-		delete localProp;
-		count_numlay++;
-	      }
-	    }
-	  }
-	  counter_traj++;
-	}
-      }
-    }
+      // 			if(km==1){
+      // 			  if(count_numlay==0){
+      // 			    b_pixelhit_mu2_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+      // 			    b_pixelhit_mu2_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+      // 			    b_pixelhit_mu2_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+      // 			    b_pixelhit_mu2_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+      // 			  }
+      // 			  if(count_numlay==1){
+      // 			    b_pixelhit_mu2_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+      // 			    b_pixelhit_mu2_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+      // 			    b_pixelhit_mu2_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+      // 			    b_pixelhit_mu2_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+      // 			  }
+      // 			  if(count_numlay==2){
+      // 			    b_pixelhit_mu2_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
+      // 			    b_pixelhit_mu2_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
+      // 			    b_pixelhit_mu2_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+      // 			    b_pixelhit_mu2_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+      // 			  }
+      // 			}
+      // 			counter_hit++;
+      // 		      }
+      // 		    }
+      //      		  }
+      	// 	}
+      	// 	delete localProp;
+      	// 	count_numlay++;
+      	//       }
+      	//     }
+      	//   }
+      	//   counter_traj++;
+      	// }
+        //  }
+      //    }
   }
     
 
@@ -3092,6 +3268,22 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   //****************************************************************************
   //                            FILL BRANCHES TO TREE                           
   //****************************************************************************
+
+  for(int k=0;k<20;k++){
+    std::cout<<" compdet mu1 muJetC   "<<b_compdet_mu1_muJetC[k]<<std::endl;
+    std::cout<<" compdet mu2 muJetC   "<<b_compdet_mu2_muJetC[k]<<std::endl;
+  }
+
+
+  for(int k=0;k<20;k++){
+    for(int j=0;j<20;j++){
+      std::cout<<" PXBID mu1  "<<b_PXBID_mu1muJetC[k][j]<<std::endl;
+      std::cout<<" PXBID mu2  "<<b_PXBID_mu2muJetC[k][j]<<std::endl;
+      std::cout<<" PXFID mu1  "<<b_PXFID_mu1muJetC[k][j]<<std::endl;
+      std::cout<<" PXFID mu2  "<<b_PXFID_mu2muJetC[k][j]<<std::endl;
+    }
+  }
+
 
   m_ttree->Fill();
   if(runBBestimation_) m_ttree_orphan->Fill();
@@ -3517,6 +3709,25 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("compdet_mu1_muJetF",&b_compdet_mu1_muJetF,"compdet_mu1_muJetF[innerlayers_mu1_muJetF]/I");
     m_ttree->Branch("compdet_mu2_muJetF",&b_compdet_mu2_muJetF,"compdet_mu2_muJetF[innerlayers_mu2_muJetF]/I");
 
+
+    m_ttree->Branch("PXBID_mu1muJetC",&b_PXBID_mu1muJetC,"PXBID_mu1muJetC[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/I");
+    m_ttree->Branch("PXFID_mu1muJetC",&b_PXFID_mu1muJetC,"PXFID_mu1muJetC[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/I");
+    m_ttree->Branch("PXBID_mu2muJetC",&b_PXBID_mu2muJetC,"PXBID_mu2muJetC[innerlayers_mu2_muJetC][compdet_mu2_muJetC]/I");
+    m_ttree->Branch("PXFID_mu2muJetC",&b_PXFID_mu2muJetC,"PXFID_mu2muJetC[innerlayers_mu2_muJetC][compdet_mu2_muJetC]/I");
+
+
+    m_ttree->Branch("mj1m0posx",b_mj1m0posx,"mj1m0posx[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy",b_mj1m0posy,"mj1m0posy[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posx_err",b_mj1m0posx_err,"mj1m0posx_err[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_err",b_mj1m0posy_err,"mj1m0posy_err[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
+
+    m_ttree->Branch("mj1m1posx",b_mj1m1posx,"mj1m1posx[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy",b_mj1m1posy,"mj1m1posy[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posx_err",b_mj1m1posx_err,"mj1m1posx_err[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_err",b_mj1m1posy_err,"mj1m1posy_err[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
+
+
+
     m_ttree->Branch("PXBID_1stDet_mu1muJetC",&b_PXBID_1stDet_mu1muJetC,"b_PXBID_1stDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
     m_ttree->Branch("PXBID_1stDet_mu2muJetC",&b_PXBID_1stDet_mu2muJetC,"b_PXBID_1stDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
     m_ttree->Branch("PXBID_1stDet_mu1muJetF",&b_PXBID_1stDet_mu1muJetF,"b_PXBID_1stDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
@@ -3531,6 +3742,18 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("PXBID_3rdDet_mu2muJetC",&b_PXBID_3rdDet_mu2muJetC,"b_PXBID_3rdDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
     m_ttree->Branch("PXBID_3rdDet_mu1muJetF",&b_PXBID_3rdDet_mu1muJetF,"b_PXBID_3rdDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
     m_ttree->Branch("PXBID_3rdDet_mu2muJetF",&b_PXBID_3rdDet_mu1muJetF,"b_PXBID_3rdDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
+
+    m_ttree->Branch("PXBID_4thDet_mu1muJetC",&b_PXBID_4thDet_mu1muJetC,"b_PXBID_4thDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
+    m_ttree->Branch("PXBID_4thDet_mu2muJetC",&b_PXBID_4thDet_mu2muJetC,"b_PXBID_4thDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
+    m_ttree->Branch("PXBID_4thDet_mu1muJetF",&b_PXBID_4thDet_mu1muJetF,"b_PXBID_4thDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
+    m_ttree->Branch("PXBID_4thDet_mu2muJetF",&b_PXBID_4thDet_mu1muJetF,"b_PXBID_4thDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
+
+    m_ttree->Branch("PXBID_5thDet_mu1muJetC",&b_PXBID_5thDet_mu1muJetC,"b_PXBID_5thDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
+    m_ttree->Branch("PXBID_5thDet_mu2muJetC",&b_PXBID_5thDet_mu2muJetC,"b_PXBID_5thDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
+    m_ttree->Branch("PXBID_5thDet_mu1muJetF",&b_PXBID_5thDet_mu1muJetF,"b_PXBID_5thDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
+    m_ttree->Branch("PXBID_5thDet_mu2muJetF",&b_PXBID_5thDet_mu1muJetF,"b_PXBID_5thDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
+
+
 
 
 
@@ -3549,6 +3772,16 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("mj1m0posx_err_3rdDet",&b_mj1m0posx_err_3rdDet,"mj1m0posx_err_3rdDet[innerlayers_mu1_muJetC]/F");
     m_ttree->Branch("mj1m0posy_err_3rdDet",&b_mj1m0posy_err_3rdDet,"mj1m0posy_err_3rdDet[innerlayers_mu1_muJetC]/F");
 
+    m_ttree->Branch("mj1m0posx_4thDet",&b_mj1m0posx_4thDet,"mj1m0posx_4thDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_4thDet",&b_mj1m0posy_4thDet,"mj1m0posy_4thDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posx_err_4thDet",&b_mj1m0posx_err_4thDet,"mj1m0posx_err_4thDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_err_4thDet",&b_mj1m0posy_err_4thDet,"mj1m0posy_err_4thDet[innerlayers_mu1_muJetC]/F");
+
+    m_ttree->Branch("mj1m0posx_5thDet",&b_mj1m0posx_5thDet,"mj1m0posx_5thDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_5thDet",&b_mj1m0posy_5thDet,"mj1m0posy_5thDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posx_err_5thDet",&b_mj1m0posx_err_5thDet,"mj1m0posx_err_5thDet[innerlayers_mu1_muJetC]/F");
+    m_ttree->Branch("mj1m0posy_err_5thDet",&b_mj1m0posy_err_5thDet,"mj1m0posy_err_5thDet[innerlayers_mu1_muJetC]/F");
+
     m_ttree->Branch("mj1m1posx_1stDet",&b_mj1m1posx_1stDet,"mj1m1posx_1stDe[innerlayers_mu2_muJetC]/F");
     m_ttree->Branch("mj1m1posy_1stDet",&b_mj1m1posy_1stDet,"mj1m1posy_1stDe[innerlayers_mu2_muJetC]/F");
     m_ttree->Branch("mj1m1posx_err_1stDet",&b_mj1m1posx_err_1stDet,"mj1m1posx_err_1stDe[innerlayers_mu2_muJetC]/F");
@@ -3563,6 +3796,17 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("mj1m1posy_3rdDet",&b_mj1m1posy_3rdDet,"mj1m1posy_3rdDet[innerlayers_mu2_muJetC]/F");
     m_ttree->Branch("mj1m1posx_err_3rdDet",&b_mj1m1posx_err_3rdDet,"mj1m1posx_err_3rdDet[innerlayers_mu2_muJetC]/F");
     m_ttree->Branch("mj1m1posy_err_3rdDet",&b_mj1m1posy_err_3rdDet,"mj1m1posy_err_3rdDet[innerlayers_mu2_muJetC]/F");
+
+
+    m_ttree->Branch("mj1m1posx_4thDet",&b_mj1m1posx_4thDet,"mj1m1posx_4thDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_4thDet",&b_mj1m1posy_4thDet,"mj1m1posy_4thDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posx_err_4thDet",&b_mj1m1posx_err_4thDet,"mj1m1posx_err_4thDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_err_4thDet",&b_mj1m1posy_err_4thDet,"mj1m1posy_err_4thDet[innerlayers_mu2_muJetC]/F");
+
+    m_ttree->Branch("mj1m1posx_5thDet",&b_mj1m1posx_5thDet,"mj1m1posx_5thDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_5thDet",&b_mj1m1posy_5thDet,"mj1m1posy_5thDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posx_err_5thDet",&b_mj1m1posx_err_5thDet,"mj1m1posx_err_5thDet[innerlayers_mu2_muJetC]/F");
+    m_ttree->Branch("mj1m1posy_err_5thDet",&b_mj1m1posy_err_5thDet,"mj1m1posy_err_5thDet[innerlayers_mu2_muJetC]/F");
 
 
 
@@ -3582,6 +3826,16 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("mj1m0posx_err_3rdDet",&b_mj1m0posx_err_3rdDet,"mj1m0posx_err_3rdDet[innerlayers_mu1_muJetF]/F");
     m_ttree->Branch("mj1m0posy_err_3rdDet",&b_mj1m0posy_err_3rdDet,"mj1m0posy_err_3rdDet[innerlayers_mu1_muJetF]/F");
 
+    m_ttree->Branch("mj1m0posx_4thDet",&b_mj1m0posx_4thDet,"mj1m0posx_4thDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_4thDet",&b_mj1m0posy_4thDet,"mj1m0posy_4thDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posx_err_4thDet",&b_mj1m0posx_err_4thDet,"mj1m0posx_err_4thDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_err_4thDet",&b_mj1m0posy_err_4thDet,"mj1m0posy_err_4thDet[innerlayers_mu1_muJetF]/F");
+
+    m_ttree->Branch("mj1m0posx_5thDet",&b_mj1m0posx_5thDet,"mj1m0posx_5thDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_5thDet",&b_mj1m0posy_5thDet,"mj1m0posy_5thDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posx_err_5thDet",&b_mj1m0posx_err_5thDet,"mj1m0posx_err_5thDet[innerlayers_mu1_muJetF]/F");
+    m_ttree->Branch("mj1m0posy_err_5thDet",&b_mj1m0posy_err_5thDet,"mj1m0posy_err_5thDet[innerlayers_mu1_muJetF]/F");
+
     m_ttree->Branch("mj1m1posx_1stDet",&b_mj1m1posx_1stDet,"mj1m1posx_1stDe[innerlayers_mu2_muJetF]/F");
     m_ttree->Branch("mj1m1posy_1stDet",&b_mj1m1posy_1stDet,"mj1m1posy_1stDe[innerlayers_mu2_muJetF]/F");
     m_ttree->Branch("mj1m1posx_err_1stDet",&b_mj1m1posx_err_1stDet,"mj1m1posx_err_1stDe[innerlayers_mu2_muJetF]/F");
@@ -3596,6 +3850,17 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("mj1m1posy_3rdDet",&b_mj1m1posy_3rdDet,"mj1m1posy_3rdDet[innerlayers_mu2_muJetF]/F");
     m_ttree->Branch("mj1m1posx_err_3rdDet",&b_mj1m1posx_err_3rdDet,"mj1m1posx_err_3rdDet[innerlayers_mu2_muJetF]/F");
     m_ttree->Branch("mj1m1posy_err_3rdDet",&b_mj1m1posy_err_3rdDet,"mj1m1posy_err_3rdDet[innerlayers_mu2_muJetF]/F");    
+
+    m_ttree->Branch("mj1m1posx_4thDet",&b_mj1m1posx_4thDet,"mj1m1posx_4thDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_4thDet",&b_mj1m1posy_4thDet,"mj1m1posy_4thDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posx_err_4thDet",&b_mj1m1posx_err_4thDet,"mj1m1posx_err_4thDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_err_4thDet",&b_mj1m1posy_err_4thDet,"mj1m1posy_err_4thDet[innerlayers_mu2_muJetF]/F");    
+
+    m_ttree->Branch("mj1m1posx_5thDet",&b_mj1m1posx_5thDet,"mj1m1posx_5thDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_5thDet",&b_mj1m1posy_5thDet,"mj1m1posy_5thDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posx_err_5thDet",&b_mj1m1posx_err_5thDet,"mj1m1posx_err_5thDet[innerlayers_mu2_muJetF]/F");
+    m_ttree->Branch("mj1m1posy_err_5thDet",&b_mj1m1posy_err_5thDet,"mj1m1posy_err_5thDet[innerlayers_mu2_muJetF]/F");    
+
 
 
     m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_posx",&b_pixelhit_mu1_muJetC_2ndextlay_posx,"pixelhit_mu1_muJetC_1stextlay_posx/F");
