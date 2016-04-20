@@ -681,7 +681,7 @@ private:
   Float_t b_pixelhit_mu2_muJetC_posx[10][100];
   Float_t b_pixelhit_mu2_muJetC_posy[10][100];
   Float_t b_pixelhit_mu2_muJetC_errposx[10][100];
-  Float_t b_pixelhit_mu2_muJetC_errpos[10][100];
+  Float_t b_pixelhit_mu2_muJetC_errposy[10][100];
 
   Float_t b_pixelhit_mu1_muJetF_posx[10][100];
   Float_t b_pixelhit_mu1_muJetF_posy[10][100];
@@ -1010,7 +1010,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_pixelhit_mu2_muJetC_posx[k][j]=-10000;
       b_pixelhit_mu2_muJetC_posy[k][j]=-10000;
       b_pixelhit_mu2_muJetC_errposx[k][j]=-10000;
-      b_pixelhit_mu2_muJetC_errpos[k][j]=-10000;
+      b_pixelhit_mu2_muJetC_errposy[k][j]=-10000;
       
       b_pixelhit_mu1_muJetF_posx[k][j]=-10000;
       b_pixelhit_mu1_muJetF_posy[k][j]=-10000;
@@ -2479,7 +2479,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 			  b_pixelhit_mu1_muJetC_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
 		    	}
 
-			if(km==0){
+			if(km==1){
 			  b_pixelhit_mu2_muJetC_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
 			  b_pixelhit_mu2_muJetC_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
 			  b_pixelhit_mu2_muJetC_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
@@ -2492,15 +2492,15 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		    if(km==0) b_numhit_mu1_muJetC[count_numlay] = counter_hit;
 		    if(km==1) b_numhit_mu2_muJetC[count_numlay] = counter_hit;
 		  }
-		}
 		count_numdet++;
+		}
+		delete localProp;
+		count_numlay++;
 	      }
-	      delete localProp;
-	      count_numlay++;
 	    }
 	  }
-	}
 	counter_traj++;
+	}
       }
       
       for(uint32_t km=0;km<2;km++){  // loop for muJetF muon trajectories
@@ -2667,7 +2667,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 			  b_pixelhit_mu1_muJetF_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
 		    	}
 
-			if(km==0){
+			if(km==1){
 			  b_pixelhit_mu2_muJetF_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
 			  b_pixelhit_mu2_muJetF_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
 			  b_pixelhit_mu2_muJetF_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
@@ -2680,18 +2680,21 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		    if(km==0) b_numhit_mu1_muJetF[count_numlay] = counter_hit;
 		    if(km==1) b_numhit_mu2_muJetF[count_numlay] = counter_hit;
 		  }
+		  count_numdet++;
 		}
-		count_numdet++;
-	      }
 	      delete localProp;
 	      count_numlay++;
+	      }
 	    }
 	  }
-	}
 	counter_traj++;
       }
     }
+
+
+    }
   }
+
     
 
   if(runBBestimation_){
