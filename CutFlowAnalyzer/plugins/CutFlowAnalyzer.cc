@@ -567,7 +567,6 @@ private:
   Float_t mtrack_errdxy[10];
   Float_t mtrack_errdz[10];
 
-
   Float_t muJetC_muon1_track_diffcharge[1000];
   Float_t muJetC_muon1_track_diffpt[1000];
   Float_t muJetC_muon1_track_diffqoverp[1000];
@@ -631,219 +630,67 @@ private:
   Float_t b_mutrack_charge_mu2JetC;
   Float_t b_mutrack_charge_mu1JetF;
   Float_t b_mutrack_charge_mu2JetF;
-
-
   
   Int_t b_innerlayers_mu1_muJetC;
   Int_t b_innerlayers_mu2_muJetC;
   Int_t b_innerlayers_mu1_muJetF;
   Int_t b_innerlayers_mu2_muJetF;
 
-  Int_t b_compdet_mu1_muJetC[20];
-  Int_t b_compdet_mu2_muJetC[20];
-  Int_t b_compdet_mu1_muJetF[20];
-  Int_t b_compdet_mu2_muJetF[20];
+  Int_t b_compdet_mu1_muJetC[10];
+  Int_t b_compdet_mu2_muJetC[10];
+  Int_t b_compdet_mu1_muJetF[10];
+  Int_t b_compdet_mu2_muJetF[10];
 
-  Int_t b_PXBID_mu1muJetC[20][20];
-  Int_t b_PXFID_mu1muJetC[20][20];
-  Int_t b_PXBID_mu2muJetC[20][20];
-  Int_t b_PXFID_mu2muJetC[20][20];
+  Int_t b_numhit_mu1_muJetC[10];
+  Int_t b_numhit_mu2_muJetC[10];
+  Int_t b_numhit_mu1_muJetF[10];
+  Int_t b_numhit_mu2_muJetF[10];
 
-  Float_t b_mj1m0posx[20][20];
-  Float_t b_mj1m0posy[20][20];
-  Float_t b_mj1m0posx_err[20][20];
-  Float_t b_mj1m0posy_err[20][20];
-  Float_t b_mj1m1posx[20][20];
-  Float_t b_mj1m1posy[20][20];
-  Float_t b_mj1m1posx_err[20][20];
-  Float_t b_mj1m1posy_err[20][20];
+  Int_t b_PXBID_mu1muJetC[10][10];
+  Int_t b_PXFID_mu1muJetC[10][10];
+  Int_t b_PXBID_mu2muJetC[10][10];
+  Int_t b_PXFID_mu2muJetC[10][10];
 
+  Int_t b_PXBID_mu1muJetF[10][10];
+  Int_t b_PXFID_mu1muJetF[10][10];
+  Int_t b_PXBID_mu2muJetF[10][10];
+  Int_t b_PXFID_mu2muJetF[10][10];
 
-  Int_t b_PXBID_1stDet_mu1muJetC[20];
-  Int_t b_PXBID_2ndDet_mu1muJetC[20];
-  Int_t b_PXBID_3rdDet_mu1muJetC[20];
-  Int_t b_PXBID_4thDet_mu1muJetC[20];
-  Int_t b_PXBID_5thDet_mu1muJetC[20];
-  Int_t b_PXFID_1stDet_mu1muJetC[20];
-  Int_t b_PXFID_2ndDet_mu1muJetC[20];
-  Int_t b_PXFID_3rdDet_mu1muJetC[20];
-  Int_t b_PXFID_4thDet_mu1muJetC[20];
-  Int_t b_PXFID_5thDet_mu1muJetC[20];
+  Float_t b_mj1m0posx[10][10];
+  Float_t b_mj1m0posy[10][10];
+  Float_t b_mj1m0posx_err[10][10];
+  Float_t b_mj1m0posy_err[10][10];
+  Float_t b_mj1m1posx[10][10];
+  Float_t b_mj1m1posy[10][10];
+  Float_t b_mj1m1posx_err[10][10];
+  Float_t b_mj1m1posy_err[10][10];
 
-  Int_t b_PXBID_1stDet_mu2muJetC[20];
-  Int_t b_PXBID_2ndDet_mu2muJetC[20];
-  Int_t b_PXBID_3rdDet_mu2muJetC[20];
-  Int_t b_PXBID_4thDet_mu2muJetC[20];
-  Int_t b_PXBID_5thDet_mu2muJetC[20];
-  Int_t b_PXFID_1stDet_mu2muJetC[20];
-  Int_t b_PXFID_2ndDet_mu2muJetC[20];
-  Int_t b_PXFID_3rdDet_mu2muJetC[20];
-  Int_t b_PXFID_4thDet_mu2muJetC[20];
-  Int_t b_PXFID_5thDet_mu2muJetC[20];
-
-
-  Int_t b_PXBID_1stDet_mu1muJetF[20];
-  Int_t b_PXBID_2ndDet_mu1muJetF[20];
-  Int_t b_PXBID_3rdDet_mu1muJetF[20];
-  Int_t b_PXBID_4thDet_mu1muJetF[20];
-  Int_t b_PXBID_5thDet_mu1muJetF[20];
-  Int_t b_PXFID_1stDet_mu1muJetF[20];
-  Int_t b_PXFID_2ndDet_mu1muJetF[20];
-  Int_t b_PXFID_3rdDet_mu1muJetF[20];
-  Int_t b_PXFID_4thDet_mu1muJetF[20];
-  Int_t b_PXFID_5thDet_mu1muJetF[20];
-
-  Int_t b_PXBID_1stDet_mu2muJetF[20];
-  Int_t b_PXBID_2ndDet_mu2muJetF[20];
-  Int_t b_PXBID_3rdDet_mu2muJetF[20];
-  Int_t b_PXBID_4thDet_mu2muJetF[20];
-  Int_t b_PXBID_5thDet_mu2muJetF[20];
-  Int_t b_PXFID_1stDet_mu2muJetF[20];
-  Int_t b_PXFID_2ndDet_mu2muJetF[20];
-  Int_t b_PXFID_3rdDet_mu2muJetF[20];
-  Int_t b_PXFID_4thDet_mu2muJetF[20];
-  Int_t b_PXFID_5thDet_mu2muJetF[20];
-
-
-  Float_t  b_mj1m0posx_1stDet[20];
-  Float_t  b_mj1m0posy_1stDet[20];
-  Float_t  b_mj1m0posx_err_1stDet[20];
-  Float_t  b_mj1m0posy_err_1stDet[20];
-  Float_t  b_mj1m0posx_2ndDet[20];
-  Float_t  b_mj1m0posy_2ndDet[20];
-  Float_t  b_mj1m0posx_err_2ndDet[20];
-  Float_t  b_mj1m0posy_err_2ndDet[20];
-  Float_t  b_mj1m0posx_3rdDet[20];
-  Float_t  b_mj1m0posy_3rdDet[20];
-  Float_t  b_mj1m0posx_err_3rdDet[20];
-  Float_t  b_mj1m0posy_err_3rdDet[20];
-  Float_t  b_mj1m0posx_4thDet[20];
-  Float_t  b_mj1m0posy_4thDet[20];
-  Float_t  b_mj1m0posx_err_4thDet[20];
-  Float_t  b_mj1m0posy_err_4thDet[20];
-  Float_t  b_mj1m0posx_5thDet[20];
-  Float_t  b_mj1m0posy_5thDet[20];
-  Float_t  b_mj1m0posx_err_5thDet[20];
-  Float_t  b_mj1m0posy_err_5thDet[20];
-
-  Float_t  b_mj1m1posx_1stDet[20];
-  Float_t  b_mj1m1posy_1stDet[20];
-  Float_t  b_mj1m1posx_err_1stDet[20];
-  Float_t  b_mj1m1posy_err_1stDet[20];
-  Float_t  b_mj1m1posx_2ndDet[20];
-  Float_t  b_mj1m1posy_2ndDet[20];
-  Float_t  b_mj1m1posx_err_2ndDet[20];
-  Float_t  b_mj1m1posy_err_2ndDet[20];
-  Float_t  b_mj1m1posx_3rdDet[20];
-  Float_t  b_mj1m1posy_3rdDet[20];
-  Float_t  b_mj1m1posx_err_3rdDet[20];
-  Float_t  b_mj1m1posy_err_3rdDet[20];
-  Float_t  b_mj1m1posx_4thDet[20];
-  Float_t  b_mj1m1posy_4thDet[20];
-  Float_t  b_mj1m1posx_err_4thDet[20];
-  Float_t  b_mj1m1posy_err_4thDet[20];
-  Float_t  b_mj1m1posx_5thDet[20];
-  Float_t  b_mj1m1posy_5thDet[20];
-  Float_t  b_mj1m1posx_err_5thDet[20];
-  Float_t  b_mj1m1posy_err_5thDet[20];
-
-
-  Float_t  b_mj2m0posx_1stDet[20];
-  Float_t  b_mj2m0posy_1stDet[20];
-  Float_t  b_mj2m0posx_err_1stDet[20];
-  Float_t  b_mj2m0posy_err_1stDet[20];
-  Float_t  b_mj2m0posx_2ndDet[20];
-  Float_t  b_mj2m0posy_2ndDet[20];
-  Float_t  b_mj2m0posx_err_2ndDet[20];
-  Float_t  b_mj2m0posy_err_2ndDet[20];
-  Float_t  b_mj2m0posx_3rdDet[20];
-  Float_t  b_mj2m0posy_3rdDet[20];
-  Float_t  b_mj2m0posx_err_3rdDet[20];
-  Float_t  b_mj2m0posy_err_3rdDet[20];
-  Float_t  b_mj2m0posx_4thDet[20];
-  Float_t  b_mj2m0posy_4thDet[20];
-  Float_t  b_mj2m0posx_err_4thDet[20];
-  Float_t  b_mj2m0posy_err_4thDet[20];
-  Float_t  b_mj2m0posx_5thDet[20];
-  Float_t  b_mj2m0posy_5thDet[20];
-  Float_t  b_mj2m0posx_err_5thDet[20];
-  Float_t  b_mj2m0posy_err_5thDet[20];
-
-  Float_t  b_mj2m1posx_1stDet[20];
-  Float_t  b_mj2m1posy_1stDet[20];
-  Float_t  b_mj2m1posx_err_1stDet[20];
-  Float_t  b_mj2m1posy_err_1stDet[20];
-  Float_t  b_mj2m1posx_2ndDet[20];
-  Float_t  b_mj2m1posy_2ndDet[20];
-  Float_t  b_mj2m1posx_err_2ndDet[20];
-  Float_t  b_mj2m1posy_err_2ndDet[20];
-  Float_t  b_mj2m1posx_3rdDet[20];
-  Float_t  b_mj2m1posy_3rdDet[20];
-  Float_t  b_mj2m1posx_err_3rdDet[20];
-  Float_t  b_mj2m1posy_err_3rdDet[20];    
-  Float_t  b_mj2m1posx_4thDet[20];
-  Float_t  b_mj2m1posy_4thDet[20];
-  Float_t  b_mj2m1posx_err_4thDet[20];
-  Float_t  b_mj2m1posy_err_4thDet[20];    
-  Float_t  b_mj2m1posx_5thDet[20];
-  Float_t  b_mj2m1posy_5thDet[20];
-  Float_t  b_mj2m1posx_err_5thDet[20];
-  Float_t  b_mj2m1posy_err_5thDet[20];    
+  Float_t  b_mj2m0posx[10][10];
+  Float_t  b_mj2m0posy[10][10];
+  Float_t  b_mj2m0posx_err[10][10];
+  Float_t  b_mj2m0posy_err[10][10];
+  Float_t  b_mj2m1posx[10][10];
+  Float_t  b_mj2m1posy[10][10];
+  Float_t  b_mj2m1posx_err[10][10];
+  Float_t  b_mj2m1posy_err[10][10];
   
+  Float_t b_pixelhit_mu1_muJetC_posx[10][100];
+  Float_t b_pixelhit_mu1_muJetC_posy[10][100];
+  Float_t b_pixelhit_mu1_muJetC_errposx[10][100];
+  Float_t b_pixelhit_mu1_muJetC_errposy[10][100];
+  Float_t b_pixelhit_mu2_muJetC_posx[10][100];
+  Float_t b_pixelhit_mu2_muJetC_posy[10][100];
+  Float_t b_pixelhit_mu2_muJetC_errposx[10][100];
+  Float_t b_pixelhit_mu2_muJetC_errpos[10][100];
 
-  Float_t b_pixelhit_mu1_muJetC_1stextlay_posx[200];
-  Float_t b_pixelhit_mu1_muJetC_1stextlay_posy[200];
-  Float_t b_pixelhit_mu1_muJetC_1stextlay_errposx[200];
-  Float_t b_pixelhit_mu1_muJetC_1stextlay_errposy[200];
-  Float_t b_pixelhit_mu2_muJetC_1stextlay_posx[200];
-  Float_t b_pixelhit_mu2_muJetC_1stextlay_posy[200];
-  Float_t b_pixelhit_mu2_muJetC_1stextlay_errposx[200];
-  Float_t b_pixelhit_mu2_muJetC_1stextlay_errposy[200];
-  Float_t b_pixelhit_mu1_muJetF_1stextlay_posx[200];
-  Float_t b_pixelhit_mu1_muJetF_1stextlay_posy[200];
-  Float_t b_pixelhit_mu1_muJetF_1stextlay_errposx[200];
-  Float_t b_pixelhit_mu1_muJetF_1stextlay_errposy[200];
-  Float_t b_pixelhit_mu2_muJetF_1stextlay_posx[200];
-  Float_t b_pixelhit_mu2_muJetF_1stextlay_posy[200];
-  Float_t b_pixelhit_mu2_muJetF_1stextlay_errposx[200];
-  Float_t b_pixelhit_mu2_muJetF_1stextlay_errposy[200];
-
-  Float_t b_pixelhit_mu1_muJetC_2ndextlay_posx[200];
-  Float_t b_pixelhit_mu1_muJetC_2ndextlay_posy[200];
-  Float_t b_pixelhit_mu1_muJetC_2ndextlay_errposx[200];
-  Float_t b_pixelhit_mu1_muJetC_2ndextlay_errposy[200];
-  Float_t b_pixelhit_mu2_muJetC_2ndextlay_posx[200];
-  Float_t b_pixelhit_mu2_muJetC_2ndextlay_posy[200];
-  Float_t b_pixelhit_mu2_muJetC_2ndextlay_errposx[200];
-  Float_t b_pixelhit_mu2_muJetC_2ndextlay_errposy[200];
-  Float_t b_pixelhit_mu1_muJetF_2ndextlay_posx[200];
-  Float_t b_pixelhit_mu1_muJetF_2ndextlay_posy[200];
-  Float_t b_pixelhit_mu1_muJetF_2ndextlay_errposx[200];
-  Float_t b_pixelhit_mu1_muJetF_2ndextlay_errposy[200];
-  Float_t b_pixelhit_mu2_muJetF_2ndextlay_posx[200];
-  Float_t b_pixelhit_mu2_muJetF_2ndextlay_posy[200];
-  Float_t b_pixelhit_mu2_muJetF_2ndextlay_errposx[200];
-  Float_t b_pixelhit_mu2_muJetF_2ndextlay_errposy[200];
-
-
-  Float_t b_pixelhit_mu1_muJetC_3rdextlay_posx[200];
-  Float_t b_pixelhit_mu1_muJetC_3rdextlay_posy[200];
-  Float_t b_pixelhit_mu1_muJetC_3rdextlay_errposx[200];
-  Float_t b_pixelhit_mu1_muJetC_3rdextlay_errposy[200];
-  Float_t b_pixelhit_mu2_muJetC_3rdextlay_posx[200];
-  Float_t b_pixelhit_mu2_muJetC_3rdextlay_posy[200];
-  Float_t b_pixelhit_mu2_muJetC_3rdextlay_errposx[200];
-  Float_t b_pixelhit_mu2_muJetC_3rdextlay_errposy[200];
-  Float_t b_pixelhit_mu1_muJetF_3rdextlay_posx[200];
-  Float_t b_pixelhit_mu1_muJetF_3rdextlay_posy[200];
-  Float_t b_pixelhit_mu1_muJetF_3rdextlay_errposx[200];
-  Float_t b_pixelhit_mu1_muJetF_3rdextlay_errposy[200];
-  Float_t b_pixelhit_mu2_muJetF_3rdextlay_posx[200];
-  Float_t b_pixelhit_mu2_muJetF_3rdextlay_posy[200];
-  Float_t b_pixelhit_mu2_muJetF_3rdextlay_errposx[200];
-  Float_t b_pixelhit_mu2_muJetF_3rdextlay_errposy[200];
-
-
+  Float_t b_pixelhit_mu1_muJetF_posx[10][100];
+  Float_t b_pixelhit_mu1_muJetF_posy[10][100];
+  Float_t b_pixelhit_mu1_muJetF_errposx[10][100];
+  Float_t b_pixelhit_mu1_muJetF_errposy[10][100];
+  Float_t b_pixelhit_mu2_muJetF_posx[10][100];
+  Float_t b_pixelhit_mu2_muJetF_posy[10][100];
+  Float_t b_pixelhit_mu2_muJetF_errposx[10][100];
+  Float_t b_pixelhit_mu2_muJetF_errposy[10][100];
 
 
   //BB estimation
@@ -994,7 +841,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_diMuonF_m2_FittedVtx_MHAV = -1000;
 
 
-
   //Pixel Hit Recovery
   muJetC_muon1_track_minchi2=-10000000;
   muJetC_muon2_track_minchi2=-10000000;
@@ -1016,13 +862,11 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
   for(int k=0;k<1000;k++){
     muJetC_muon1_track_diffchi2[k]=-10000000;
-
     muJetC_muon1_track_diffchi2theta[k]=-10000000;
     muJetC_muon1_track_diffchi2qoverpt[k]=-10000000;
     muJetC_muon1_track_diffchi2phi[k]=-10000000;
     muJetC_muon1_track_diffchi2dxy[k]=-10000000;
     muJetC_muon1_track_diffchi2dz[k]=-10000000;
-
 
     muJetC_muon1_track_diffcharge[k]=-10000000;
     muJetC_muon1_track_diffpt[k]=-10000000;
@@ -1031,7 +875,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     muJetC_muon1_track_diffphi[k]=-10000000;
     muJetC_muon1_track_diffdxy[k]=-10000000;
     muJetC_muon1_track_diffdz[k]=-10000000;
-
 
     muJetC_muon2_track_diffcharge[k]=-10000000;
     muJetC_muon2_track_diffpt[k]=-10000000;
@@ -1053,7 +896,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_track_dxy[k]=-10000000;
     b_track_dz[k]=-10000000;
 
-
     b_track_errpt[k]=-10000000;
     b_track_errcharge[k]=-10000000;
     b_track_errqoverp[k]=-10000000;
@@ -1073,7 +915,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     mtrack_dxy[k]=-10000000;
     mtrack_dz[k]=-10000000;
 
-
     mtrack_errpt[k]=-10000000;
     mtrack_errcharge[k]=-10000000;
     mtrack_errqoverp[k]=-10000000;
@@ -1087,7 +928,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_match_mu2track_muJetC=0;
   b_match_mu1track_muJetF=0;
   b_match_mu2track_muJetF=0;
-  
 
   b_mutrack_pT_mu1JetC=-100000;
   b_mutrack_pT_mu2JetC=-100000;
@@ -1109,7 +949,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_mutrack_charge_mu1JetF=-100000;
   b_mutrack_charge_mu2JetF=-100000;
 
-
   b_ntracks=-10000;
 
   b_innerlayers_mu1_muJetC=-10000;
@@ -1117,13 +956,29 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_innerlayers_mu1_muJetF=-10000;
   b_innerlayers_mu2_muJetF=-10000;
 
+  for(int k=0;k<10;k++){
+    b_compdet_mu1_muJetC[k]=-10000;
+    b_compdet_mu2_muJetC[k]=-10000;
+    b_compdet_mu1_muJetF[k]=-10000;
+    b_compdet_mu2_muJetF[k]=-10000;
 
-  for(int k=0;k<20;k++){
-    for(int j=0;j<20;j++){
+    b_numhit_mu1_muJetC[k]=-10000;
+    b_numhit_mu2_muJetC[k]=-10000;
+    b_numhit_mu1_muJetF[k]=-10000;
+    b_numhit_mu2_muJetF[k]=-10000;
+  }
+
+  for(int k=0;k<10;k++){
+    for(int j=0;j<10;j++){
       b_PXBID_mu1muJetC[k][j]=-10000;
       b_PXFID_mu1muJetC[k][j]=-10000;
       b_PXBID_mu2muJetC[k][j]=-10000;
       b_PXFID_mu2muJetC[k][j]=-10000;
+
+      b_PXBID_mu1muJetF[k][j]=-10000;
+      b_PXFID_mu1muJetF[k][j]=-10000;
+      b_PXBID_mu2muJetF[k][j]=-10000;
+      b_PXFID_mu2muJetF[k][j]=-10000;
 
       b_mj1m0posx[k][j]=-10000;    
       b_mj1m0posy[k][j]=-10000;    
@@ -1133,203 +988,42 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_mj1m1posy[k][j]=-10000;    
       b_mj1m1posx_err[k][j]=-10000;
       b_mj1m1posy_err[k][j]=-10000;
+
+      b_mj2m0posx[k][j]=-10000;    
+      b_mj2m0posy[k][j]=-10000;    
+      b_mj2m0posx_err[k][j]=-10000;
+      b_mj2m0posy_err[k][j]=-10000;
+      b_mj2m1posx[k][j]=-10000;    
+      b_mj2m1posy[k][j]=-10000;    
+      b_mj2m1posx_err[k][j]=-10000;
+      b_mj2m1posy_err[k][j]=-10000;
       
     }
   }
 
-
-  for(int k=0;k<20;k++){
-    b_compdet_mu1_muJetC[k]=-10000;
-    b_compdet_mu2_muJetC[k]=-10000;
-    b_compdet_mu1_muJetF[k]=-10000;
-    b_compdet_mu2_muJetF[k]=-10000;
-
-    b_PXBID_1stDet_mu1muJetC[k]=-10000;
-    b_PXBID_2ndDet_mu1muJetC[k]=-10000;
-    b_PXBID_3rdDet_mu1muJetC[k]=-10000;
-    b_PXBID_4thDet_mu1muJetC[k]=-10000;
-    b_PXBID_5thDet_mu1muJetC[k]=-10000;
-    b_PXFID_1stDet_mu1muJetC[k]=-10000;
-    b_PXFID_2ndDet_mu1muJetC[k]=-10000;
-    b_PXFID_3rdDet_mu1muJetC[k]=-10000;
-    b_PXFID_4thDet_mu1muJetC[k]=-10000;
-    b_PXFID_5thDet_mu1muJetC[k]=-10000;
-
-    b_PXBID_1stDet_mu2muJetC[k]=-10000;
-    b_PXBID_2ndDet_mu2muJetC[k]=-10000;
-    b_PXBID_3rdDet_mu2muJetC[k]=-10000;
-    b_PXBID_4thDet_mu2muJetC[k]=-10000;
-    b_PXBID_5thDet_mu2muJetC[k]=-10000;
-    b_PXFID_1stDet_mu2muJetC[k]=-10000;
-    b_PXFID_2ndDet_mu2muJetC[k]=-10000;
-    b_PXFID_3rdDet_mu2muJetC[k]=-10000;
-    b_PXFID_4thDet_mu2muJetC[k]=-10000;
-    b_PXFID_5thDet_mu2muJetC[k]=-10000;
-
-
-    b_PXBID_1stDet_mu1muJetF[k]=-10000;
-    b_PXBID_2ndDet_mu1muJetF[k]=-10000;
-    b_PXBID_3rdDet_mu1muJetF[k]=-10000;
-    b_PXBID_4thDet_mu1muJetF[k]=-10000;
-    b_PXBID_5thDet_mu1muJetF[k]=-10000;
-    b_PXFID_1stDet_mu1muJetF[k]=-10000;
-    b_PXFID_2ndDet_mu1muJetF[k]=-10000;
-    b_PXFID_3rdDet_mu1muJetF[k]=-10000;
-    b_PXFID_4thDet_mu1muJetF[k]=-10000;
-    b_PXFID_5thDet_mu1muJetF[k]=-10000;
-
-    b_PXBID_1stDet_mu2muJetF[k]=-10000;
-    b_PXBID_2ndDet_mu2muJetF[k]=-10000;
-    b_PXBID_3rdDet_mu2muJetF[k]=-10000;
-    b_PXBID_4thDet_mu2muJetF[k]=-10000;
-    b_PXBID_5thDet_mu2muJetF[k]=-10000;
-    b_PXFID_1stDet_mu2muJetF[k]=-10000;
-    b_PXFID_2ndDet_mu2muJetF[k]=-10000;
-    b_PXFID_3rdDet_mu2muJetF[k]=-10000;
-    b_PXFID_4thDet_mu2muJetF[k]=-10000;
-    b_PXFID_5thDet_mu2muJetF[k]=-10000;
-
-
-    b_mj1m0posx_1stDet[k]=-10000;
-    b_mj1m0posy_1stDet[k]=-10000;
-    b_mj1m0posx_err_1stDet[k]=-10000;
-    b_mj1m0posy_err_1stDet[k]=-10000;
-    b_mj1m0posx_2ndDet[k]=-10000;
-    b_mj1m0posy_2ndDet[k]=-10000;
-    b_mj1m0posx_err_2ndDet[k]=-10000;
-    b_mj1m0posy_err_2ndDet[k]=-10000;
-    b_mj1m0posx_3rdDet[k]=-10000;
-    b_mj1m0posy_3rdDet[k]=-10000;
-    b_mj1m0posx_err_3rdDet[k]=-10000;
-    b_mj1m0posy_err_3rdDet[k]=-10000;
-    b_mj1m0posx_4thDet[k]=-10000;
-    b_mj1m0posy_4thDet[k]=-10000;
-    b_mj1m0posx_err_4thDet[k]=-10000;
-    b_mj1m0posy_err_4thDet[k]=-10000;
-    b_mj1m0posx_5thDet[k]=-10000;
-    b_mj1m0posy_5thDet[k]=-10000;
-    b_mj1m0posx_err_5thDet[k]=-10000;
-    b_mj1m0posy_err_5thDet[k]=-10000;
-
-
-    b_mj1m1posx_1stDet[k]=-10000;
-    b_mj1m1posy_1stDet[k]=-10000;
-    b_mj1m1posx_err_1stDet[k]=-10000;
-    b_mj1m1posy_err_1stDet[k]=-10000;
-    b_mj1m1posx_2ndDet[k]=-10000;
-    b_mj1m1posy_2ndDet[k]=-10000;
-    b_mj1m1posx_err_2ndDet[k]=-10000;
-    b_mj1m1posy_err_2ndDet[k]=-10000;
-    b_mj1m1posx_3rdDet[k]=-10000;
-    b_mj1m1posy_3rdDet[k]=-10000;
-    b_mj1m1posx_err_3rdDet[k]=-10000;
-    b_mj1m1posy_err_3rdDet[k]=-10000;
-    b_mj1m1posx_4thDet[k]=-10000;
-    b_mj1m1posy_4thDet[k]=-10000;
-    b_mj1m1posx_err_4thDet[k]=-10000;
-    b_mj1m1posy_err_4thDet[k]=-10000;
-    b_mj1m1posx_5thDet[k]=-10000;
-    b_mj1m1posy_5thDet[k]=-10000;
-    b_mj1m1posx_err_5thDet[k]=-10000;
-    b_mj1m1posy_err_5thDet[k]=-10000;
-
-
-    b_mj2m0posx_1stDet[k]=-10000;
-    b_mj2m0posy_1stDet[k]=-10000;
-    b_mj2m0posx_err_1stDet[k]=-10000;
-    b_mj2m0posy_err_1stDet[k]=-10000;
-    b_mj2m0posx_2ndDet[k]=-10000;
-    b_mj2m0posy_2ndDet[k]=-10000;
-    b_mj2m0posx_err_2ndDet[k]=-10000;
-    b_mj2m0posy_err_2ndDet[k]=-10000;
-    b_mj2m0posx_3rdDet[k]=-10000;
-    b_mj2m0posy_3rdDet[k]=-10000;
-    b_mj2m0posx_err_3rdDet[k]=-10000;
-    b_mj2m0posy_err_3rdDet[k]=-10000;
-    b_mj2m0posx_4thDet[k]=-10000;
-    b_mj2m0posy_4thDet[k]=-10000;
-    b_mj2m0posx_err_4thDet[k]=-10000;
-    b_mj2m0posy_err_4thDet[k]=-10000;
-    b_mj2m0posx_5thDet[k]=-10000;
-    b_mj2m0posy_5thDet[k]=-10000;
-    b_mj2m0posx_err_5thDet[k]=-10000;
-    b_mj2m0posy_err_5thDet[k]=-10000;
-
-    b_mj2m1posx_1stDet[k]=-10000;
-    b_mj2m1posy_1stDet[k]=-10000;
-    b_mj2m1posx_err_1stDet[k]=-10000;
-    b_mj2m1posy_err_1stDet[k]=-10000;
-    b_mj2m1posx_2ndDet[k]=-10000;
-    b_mj2m1posy_2ndDet[k]=-10000;
-    b_mj2m1posx_err_2ndDet[k]=-10000;
-    b_mj2m1posy_err_2ndDet[k]=-10000;
-    b_mj2m1posx_3rdDet[k]=-10000;
-    b_mj2m1posy_3rdDet[k]=-10000;
-    b_mj2m1posx_err_3rdDet[k]=-10000;
-    b_mj2m1posy_err_3rdDet[k]=-10000;    
-    b_mj2m1posx_4thDet[k]=-10000;
-    b_mj2m1posy_4thDet[k]=-10000;
-    b_mj2m1posx_err_4thDet[k]=-10000;
-    b_mj2m1posy_err_4thDet[k]=-10000;    
-    b_mj2m1posx_5thDet[k]=-10000;
-    b_mj2m1posy_5thDet[k]=-10000;
-    b_mj2m1posx_err_5thDet[k]=-10000;
-    b_mj2m1posy_err_5thDet[k]=-10000;    
+  for(int k=0;k<10;k++){
+    for(int j=0;j<100;j++){
+      b_pixelhit_mu1_muJetC_posx[k][j]=-10000;
+      b_pixelhit_mu1_muJetC_posy[k][j]=-10000;
+      b_pixelhit_mu1_muJetC_errposx[k][j]=-10000;
+      b_pixelhit_mu1_muJetC_errposy[k][j]=-10000;
+      b_pixelhit_mu2_muJetC_posx[k][j]=-10000;
+      b_pixelhit_mu2_muJetC_posy[k][j]=-10000;
+      b_pixelhit_mu2_muJetC_errposx[k][j]=-10000;
+      b_pixelhit_mu2_muJetC_errpos[k][j]=-10000;
+      
+      b_pixelhit_mu1_muJetF_posx[k][j]=-10000;
+      b_pixelhit_mu1_muJetF_posy[k][j]=-10000;
+      b_pixelhit_mu1_muJetF_errposx[k][j]=-10000;
+      b_pixelhit_mu1_muJetF_errposy[k][j]=-10000;
+      b_pixelhit_mu2_muJetF_posx[k][j]=-10000;
+      b_pixelhit_mu2_muJetF_posy[k][j]=-10000;
+      b_pixelhit_mu2_muJetF_errposx[k][j]=-10000;
+      b_pixelhit_mu2_muJetF_errposy[k][j]=-10000;
+    }
   }
+   
 
-  for(int k=0;k<200;k++){
-    b_pixelhit_mu1_muJetC_1stextlay_posx[k]=-10000;
-    b_pixelhit_mu1_muJetC_1stextlay_posy[k]=-10000;
-    b_pixelhit_mu1_muJetC_1stextlay_errposx[k]=-10000;
-    b_pixelhit_mu1_muJetC_1stextlay_errposy[k]=-10000;
-    b_pixelhit_mu2_muJetC_1stextlay_posx[k]=-10000;
-    b_pixelhit_mu2_muJetC_1stextlay_posy[k]=-10000;
-    b_pixelhit_mu2_muJetC_1stextlay_errposx[k]=-10000;
-    b_pixelhit_mu2_muJetC_1stextlay_errposy[k]=-10000;
-    b_pixelhit_mu1_muJetF_1stextlay_posx[k]=-10000;
-    b_pixelhit_mu1_muJetF_1stextlay_posy[k]=-10000;
-    b_pixelhit_mu1_muJetF_1stextlay_errposx[k]=-10000;
-    b_pixelhit_mu1_muJetF_1stextlay_errposy[k]=-10000;
-    b_pixelhit_mu2_muJetF_1stextlay_posx[k]=-10000;
-    b_pixelhit_mu2_muJetF_1stextlay_posy[k]=-10000;
-    b_pixelhit_mu2_muJetF_1stextlay_errposx[k]=-10000;
-    b_pixelhit_mu2_muJetF_1stextlay_errposy[k]=-10000;
-
-    b_pixelhit_mu1_muJetC_2ndextlay_posx[k]=-10000;
-    b_pixelhit_mu1_muJetC_2ndextlay_posy[k]=-10000;
-    b_pixelhit_mu1_muJetC_2ndextlay_errposx[k]=-10000;
-    b_pixelhit_mu1_muJetC_2ndextlay_errposy[k]=-10000;
-    b_pixelhit_mu2_muJetC_2ndextlay_posx[k]=-10000;
-    b_pixelhit_mu2_muJetC_2ndextlay_posy[k]=-10000;
-    b_pixelhit_mu2_muJetC_2ndextlay_errposx[k]=-10000;
-    b_pixelhit_mu2_muJetC_2ndextlay_errposy[k]=-10000;
-    b_pixelhit_mu1_muJetF_2ndextlay_posx[k]=-10000;
-    b_pixelhit_mu1_muJetF_2ndextlay_posy[k]=-10000;
-    b_pixelhit_mu1_muJetF_2ndextlay_errposx[k]=-10000;
-    b_pixelhit_mu1_muJetF_2ndextlay_errposy[k]=-10000;
-    b_pixelhit_mu2_muJetF_2ndextlay_posx[k]=-10000;
-    b_pixelhit_mu2_muJetF_2ndextlay_posy[k]=-10000;
-    b_pixelhit_mu2_muJetF_2ndextlay_errposx[k]=-10000;
-    b_pixelhit_mu2_muJetF_2ndextlay_errposy[k]=-10000;
-
-
-    b_pixelhit_mu1_muJetC_3rdextlay_posx[k]=-10000;
-    b_pixelhit_mu1_muJetC_3rdextlay_posy[k]=-10000;
-    b_pixelhit_mu1_muJetC_3rdextlay_errposx[k]=-10000;
-    b_pixelhit_mu1_muJetC_3rdextlay_errposy[k]=-10000;
-    b_pixelhit_mu2_muJetC_3rdextlay_posx[k]=-10000;
-    b_pixelhit_mu2_muJetC_3rdextlay_posy[k]=-10000;
-    b_pixelhit_mu2_muJetC_3rdextlay_errposx[k]=-10000;
-    b_pixelhit_mu2_muJetC_3rdextlay_errposy[k]=-10000;
-    b_pixelhit_mu1_muJetF_3rdextlay_posx[k]=-10000;
-    b_pixelhit_mu1_muJetF_3rdextlay_posy[k]=-10000;
-    b_pixelhit_mu1_muJetF_3rdextlay_errposx[k]=-10000;
-    b_pixelhit_mu1_muJetF_3rdextlay_errposy[k]=-10000;
-    b_pixelhit_mu2_muJetF_3rdextlay_posx[k]=-10000;
-    b_pixelhit_mu2_muJetF_3rdextlay_posy[k]=-10000;
-    b_pixelhit_mu2_muJetF_3rdextlay_errposx[k]=-10000;
-    b_pixelhit_mu2_muJetF_3rdextlay_errposy[k]=-10000;
-  }
    
    
   // //BB estimation
@@ -2301,14 +1995,13 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if (runPixelHitRecovery_ && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
 
     Int_t indxtrkmj1[2];
-    //    Int_t indxtrkmj2[2];
+    Int_t indxtrkmj2[2];
     
     indxtrkmj1[0]=-100000;
     indxtrkmj1[1]=-100000;
     
-    // indxtrkmj2[0]=-100000;
-    // indxtrkmj2[1]=-100000;
-    
+    indxtrkmj2[0]=-100000;
+    indxtrkmj2[1]=-100000;
     
 
     //============== Refitted collection of tracks =============================//
@@ -2330,7 +2023,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetF;
 
 
-    //====== MATCHING selected muons to refitted tracks and asking for hits in 1st layer (barrel or endcap)
+    //====== MATCHING selected muons to refitted tracks 
 	
     for(uint32_t k=0;k<2;k++){
 	  
@@ -2555,11 +2248,11 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     }
     if(minchi2_mu1_muJetF[0].second<100000.0){
       b_match_mu1track_muJetF=1;
-      //      indxtrkmj2[0] = minchi2_mu1_muJetF[0].first;
+      indxtrkmj2[0] = minchi2_mu1_muJetF[0].first;
     }
     if(minchi2_mu2_muJetF[0].second<100000.0){
       b_match_mu2track_muJetF=1;
-      //      indxtrkmj2[1] = minchi2_mu2_muJetF[0].first;
+      indxtrkmj2[1] = minchi2_mu2_muJetF[0].first;
     }
 
 
@@ -2574,10 +2267,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     minchi2_mu2_muJetC.clear();
     minchi2_mu1_muJetF.clear();
     minchi2_mu2_muJetF.clear();
-
     
-    // if( (b_diMuonF_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonF_m2_FittedVtx_hitpix_l3inc!=1) ||
-    // 	(b_diMuonC_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonC_m2_FittedVtx_hitpix_l3inc!=1) ){
+    if( (b_diMuonF_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonF_m2_FittedVtx_hitpix_l3inc!=1) ||
+     	(b_diMuonC_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonC_m2_FittedVtx_hitpix_l3inc!=1) ){
 
       //===================== Initializing navigation school, propagator, etc..======================//
     
@@ -2730,9 +2422,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
 				 detWithState.size()<<std::endl;
 	      
-		//		Int_t counter_hit=0;
-
-
+		Int_t counter_hit=0;
 		Int_t count_numdet=0;
 		for(uint32_t k=0;k<detWithState.size();k++){
 		    
@@ -2741,9 +2431,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	      
 		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
 
-		    std::cout<<" Detector element in pixels"<<std::endl;
-		    std::cout<<" Detector element in pixels"<<std::endl;
-		    std::cout<<" Detector element in pixels"<<std::endl;
+		    // std::cout<<" Detector element in pixels"<<std::endl;
+		    // std::cout<<" Detector element in pixels"<<std::endl;
+		    // std::cout<<" Detector element in pixels"<<std::endl;
 
 		    if(km==0){
 		      b_PXBID_mu1muJetC[count_numlay][count_numdet] = PXBDetId(id).layer();
@@ -2762,411 +2452,245 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 		      b_mj1m1posy_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().yy());
 		    }		      
 		
-		    // if(km==0){
-		    //   if(k==0)  b_PXBID_1stDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
-		    //   if(k==1)  b_PXBID_2ndDet_mu1muJetC[count_numlay] = PXBDetId(id).layer();
-		    //   if(k==2)  b_PXBID_3rdDet_mu1muJetC[count_numlay]  = PXBDetId(id).layer();
-		    //   if(k==3)  b_PXBID_4thDet_mu1muJetC[count_numlay]  = PXBDetId(id).layer();
-		    //   if(k==4)  b_PXBID_5thDet_mu1muJetC[count_numlay]  = PXBDetId(id).layer();
-
-		    //   if(k==0)  b_PXFID_1stDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		    //   if(k==1)  b_PXFID_2ndDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		    //   if(k==2)  b_PXFID_3rdDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		    //   if(k==3)  b_PXFID_4thDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		    //   if(k==4)  b_PXFID_5thDet_mu1muJetC[count_numlay] = PXFDetId(id).disk();
-		    // }
-		    // if(km==1){
-		    //   if(k==0)  b_PXBID_1stDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
-		    //   if(k==1)  b_PXBID_2ndDet_mu2muJetC[count_numlay] = PXBDetId(id).layer();
-		    //   if(k==2)  b_PXBID_3rdDet_mu2muJetC[count_numlay]  = PXBDetId(id).layer();
-		    //   if(k==3)  b_PXBID_4thDet_mu2muJetC[count_numlay]  = PXBDetId(id).layer();
-		    //   if(k==4)  b_PXBID_5thDet_mu2muJetC[count_numlay]  = PXBDetId(id).layer();
-
-		    //   if(k==0)  b_PXFID_1stDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
-		    //   if(k==1)  b_PXFID_2ndDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
-		    //   if(k==2)  b_PXFID_3rdDet_mu2muJetC[count_numlay] = PXFDetId(id).disk();
-		    //   if(k==3)  b_PXFID_4thDet_mu2muJetC[count_numlay]  = PXFDetId(id).disk();
-		    //   if(k==4)  b_PXFID_5thDet_mu2muJetC[count_numlay]  = PXFDetId(id).disk();
-		    // }
-
-		    // if(km==0){
-		    //   if(k==0) b_mj1m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==0) b_mj1m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==0) b_mj1m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==0) b_mj1m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		    //   if(k==1) b_mj1m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==1) b_mj1m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==1) b_mj1m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==1) b_mj1m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		    //   if(k==2) b_mj1m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==2) b_mj1m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==2) b_mj1m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==2) b_mj1m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		    //   if(k==3) b_mj1m0posx_4thDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==3) b_mj1m0posy_4thDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==3) b_mj1m0posx_err_4thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==3) b_mj1m0posy_err_4thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		    //   if(k==4) b_mj1m0posx_5thDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==4) b_mj1m0posy_5thDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==4) b_mj1m0posx_err_5thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==4) b_mj1m0posy_err_5thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    // }
-
-		    // if(km==1){
-		    //   if(k==0) b_mj1m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==0) b_mj1m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==0) b_mj1m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==0) b_mj1m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		    //   if(k==1) b_mj1m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==1) b_mj1m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==1) b_mj1m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==1) b_mj1m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		    //   if(k==3) b_mj1m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==3) b_mj1m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==3) b_mj1m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==3) b_mj1m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		    //   if(k==4) b_mj1m1posx_4thDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==4) b_mj1m1posy_4thDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==4) b_mj1m1posx_err_4thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==4) b_mj1m1posy_err_4thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-		    //   if(k==5) b_mj1m1posx_5thDet[count_numlay] = detWithState[k].second.localPosition().x();
-		    //   if(k==5) b_mj1m1posy_5thDet[count_numlay] = detWithState[k].second.localPosition().y();
-		    //   if(k==5) b_mj1m1posx_err_5thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-		    //   if(k==5) b_mj1m1posy_err_5thDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    // }
-		
 					    
-		    // TrajectoryStateOnSurface ts; //dummy
+		    TrajectoryStateOnSurface ts; //dummy
 		
-		    // std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
+		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
 		
-		    // if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
+		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
 			
 		
-		    // for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
+		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
 			  
-		    //   if(tmpIt->recHit()->getType()==0){ // valid hit
+		      if(tmpIt->recHit()->getType()==0){ // valid hit
 			    
-		    // 	if(m_debug>10){
-		    // 	  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-		    // 	  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-		    // 	  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-		    // 	  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-		    // 	}
+		    	if(m_debug>10){
+		    	  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
+		    	  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
+		    	  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
+		    	  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
+		    	}
 
 
-		    // 	if(km==0){
-		    // 	  if(count_numlay==0){
-		    // 	    b_pixelhit_mu1_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-		    // 	    b_pixelhit_mu1_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-		    // 	    b_pixelhit_mu1_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-		    // 	    b_pixelhit_mu1_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    // 	  }
-		    // 	  if(count_numlay==1){
-		    // 	    b_pixelhit_mu1_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-		    // 	    b_pixelhit_mu1_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-		    // 	    b_pixelhit_mu1_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-		    // 	    b_pixelhit_mu1_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    // 	  }
-		    // 	  if(count_numlay==2){
-		    // 	    b_pixelhit_mu1_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-		    // 	    b_pixelhit_mu1_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-		    // 	    b_pixelhit_mu1_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-		    // 	    b_pixelhit_mu1_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    // 	  }
-		    // 	}
+		    	if(km==0){
+			  b_pixelhit_mu1_muJetC_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
+			  b_pixelhit_mu1_muJetC_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
+			  b_pixelhit_mu1_muJetC_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			  b_pixelhit_mu1_muJetC_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    	}
+
+			if(km==0){
+			  b_pixelhit_mu2_muJetC_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
+			  b_pixelhit_mu2_muJetC_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
+			  b_pixelhit_mu2_muJetC_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			  b_pixelhit_mu2_muJetC_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    	}
 		    
-		    // 	if(km==1){
-		    // 	  if(count_numlay==0){
-		    // 	    b_pixelhit_mu2_muJetC_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-		    // 	    b_pixelhit_mu2_muJetC_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-		    // 	    b_pixelhit_mu2_muJetC_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-		    // 	    b_pixelhit_mu2_muJetC_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    // 	  }
-		    // 	  if(count_numlay==1){
-		    // 	    b_pixelhit_mu2_muJetC_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-		    // 	    b_pixelhit_mu2_muJetC_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-		    // 	    b_pixelhit_mu2_muJetC_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-		    // 	    b_pixelhit_mu2_muJetC_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    // 	  }
-		    // 	  if(count_numlay==2){
-		    // 	    b_pixelhit_mu2_muJetC_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-		    // 	    b_pixelhit_mu2_muJetC_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-		    // 	    b_pixelhit_mu2_muJetC_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-		    // 	    b_pixelhit_mu2_muJetC_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    // 	  }
-		    // 	}
-		    // 	counter_hit++;
-		    //   }
-		    // }
+		      }
+		      counter_hit++;
+		    }
+		    if(km==0) b_numhit_mu1_muJetC[count_numlay] = counter_hit;
+		    if(km==1) b_numhit_mu2_muJetC[count_numlay] = counter_hit;
 		  }
-		  count_numdet++;
 		}
-		delete localProp;
-		count_numlay++;
+		count_numdet++;
 	      }
+	      delete localProp;
+	      count_numlay++;
 	    }
 	  }
-	  counter_traj++;
 	}
+	counter_traj++;
       }
+      
+      for(uint32_t km=0;km<2;km++){  // loop for muJetF muon trajectories
+      
+	if(m_debug>10){
+	  std::cout<<"  muon-track indx   "<<indxtrkmj1[km]<<"  muon pT   "<<muJetC->muon(km)->pt()<<"  muon eta  "
+		   <<muJetC->muon(km)->eta()<<std::endl;
+	}
 
-
-      // for(uint32_t km=0;km<2;km++){  // loop for muJetF muon trajectories
-    
-      // 	if(m_debug>10){
-      // 	  std::cout<<"  muon-track indx   "<<indxtrkmj2[km]<<"  muon pT   "<<muJetF->muon(km)->pt()<<"  muon eta  "
-      // 		   <<muJetF->muon(km)->eta()<<std::endl;
-      // 	}
+	//===================   Information for the muon-tracks ===================================//
+	if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
+	if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
       
-      // 	//===================   Information for the muon-tracks ===================================//
-      // 	if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
-      // 	if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
+	if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
+	if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
       
-      // 	if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
-      // 	if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
+	if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
+	if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
       
-      // 	if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
-      // 	if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
+	if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
+	if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
       
-      // 	if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
-      // 	if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
+	//====================== Loop for Trajectories from TrackRefitter  =================================//
+	Int_t counter_traj=0;
+	for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
       
-      
-      // 	//====================== Loop for Trajectories from TrackRefitter  =================================//
-      // 	Int_t counter_traj=0;
-      // 	for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
-      
-      // 	  if(counter_traj==indxtrkmj2[km]){
+	  if(counter_traj==indxtrkmj2[km]){
 	
-      // 	    if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
-      // 				    << "isValid: " << it->isValid()<<std::endl;
-      // 	    }
+	    if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
+				    << "isValid: " << it->isValid()<<std::endl;
+	    }
 	
-      // 	    if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
+	    if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
 	  
-      // 	      const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
-      // 	      const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
-      // 	      TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
-      // 	      TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
+	      const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
+	      const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
+	      TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
+	      TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
 	  
-      // 	      if (!outerState || !innerState){
-      // 		std::cout << "No outer layer or no inner layer!" << std::endl;
-      // 	      }
+	      if (!outerState || !innerState){
+		std::cout << "No outer layer or no inner layer!" << std::endl;
+	      }
 
-      // 	      const DetLayer* outerLayer = it->firstMeasurement().layer();
-      // 	      const DetLayer* innerLayer = it->lastMeasurement().layer();
+	      const DetLayer* outerLayer = it->firstMeasurement().layer();
+	      const DetLayer* innerLayer = it->lastMeasurement().layer();
 
-      // 	      if (!outerLayer || !innerLayer){
-      // 		//means  that the trajectory was fit/smoothed in a special case: not setting those pointers
-      // 		if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
-      // 					<<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
-      // 	      }
+	      if (!outerLayer || !innerLayer){
+		//means  that the trajectory was fit/smoothed in a special case: not setting those pointers
+		if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
+					<<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
+	      }
 	  
-      // 	      //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
-      // 	      PropagationDirection dirForInnerLayers = oppositeToMomentum;
-      // 	      PropagationDirection dirForOuterLayers = alongMomentum;
-      // 	      if(it->direction() != oppositeToMomentum){
-      // 		dirForInnerLayers = alongMomentum;
-      // 		dirForOuterLayers = oppositeToMomentum;
-      // 		//throw cms::Exception("TrackProducer") 
-      // 	      }
+	      //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
+	      PropagationDirection dirForInnerLayers = oppositeToMomentum;
+	      PropagationDirection dirForOuterLayers = alongMomentum;
+	      if(it->direction() != oppositeToMomentum){
+		dirForInnerLayers = alongMomentum;
+		dirForOuterLayers = oppositeToMomentum;
+		//throw cms::Exception("TrackProducer") 
+	      }
 		  
-      // 	      std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-      // 	      std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
+	      std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
+	      std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
 	  
-      // 	      if(m_debug>10){
-      // 		std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
-      // 		std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
-      // 	      }
+	      if(m_debug>10){
+		std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
+		std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
+	      }
 
-      // 	      if(m_debug>10){
-      // 		std::cout<<"========================================================"<<std::endl;
-      // 		std::cout<< "inner DetLayer  sub: " 
-      // 			 << innerLayer->subDetector() <<"\n"
-      // 			 << "outer DetLayer  sub: " 
-      // 			 << outerLayer->subDetector() << "\n"
-      // 			 <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
-      // 			 <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
-      // 			 <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
-      // 			 <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
-      // 		std::cout<<"========================================================"<<std::endl;
-      // 	      }
+	      if(m_debug>10){
+		std::cout<<"========================================================"<<std::endl;
+		std::cout<< "inner DetLayer  sub: " 
+			 << innerLayer->subDetector() <<"\n"
+			 << "outer DetLayer  sub: " 
+			 << outerLayer->subDetector() << "\n"
+			 <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
+			 <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
+			 <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
+			 <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
+		std::cout<<"========================================================"<<std::endl;
+	      }
 	  
+	      if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
+	      if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
 
-      // 	      if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
-      // 	      if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
-
-      // 	      Int_t count_numlay=0;
-      // 	      for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
+	      Int_t count_numlay=0;
+	      for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
 	      
-      // 		if ((*dd)->basicComponents().empty()) {
-      // 		  //	this should never happen. but better protect for it
-      // 		  if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
-      // 		  continue;
-      // 		}
+		if ((*dd)->basicComponents().empty()) {
+		  //	this should never happen. but better protect for it
+		  if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
+		  continue;
+		}
 	    
-      // 		Propagator* localProp = thePropagator->clone();
-      // 		localProp->setPropagationDirection(oppositeToMomentum);
+		Propagator* localProp = thePropagator->clone();
+		localProp->setPropagationDirection(oppositeToMomentum);
 	    
-      // 		if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
-      // 		std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
+		if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
+		std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
 	    
-      // 		if(km==0) b_compdet_mu1_muJetF[count_numlay] = detWithState.size();
-      // 		if(km==1) b_compdet_mu2_muJetF[count_numlay] = detWithState.size();
-	    
-      // 		if(!detWithState.size()) continue;
-	    
-      // 		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
-      // 				 detWithState.size()<<std::endl;
-	      
-      // 		Int_t counter_hit=0;
+		if(km==0) b_compdet_mu1_muJetF[count_numlay] = detWithState.size();
+		if(km==1) b_compdet_mu2_muJetF[count_numlay] = detWithState.size();
 
 	    
-      // 		for(uint32_t k=0;k<detWithState.size();k++){
+		if(!detWithState.size()) continue;
+	    
+		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
+				 detWithState.size()<<std::endl;
+	      
+		Int_t counter_hit=0;
+		Int_t count_numdet=0;
+		for(uint32_t k=0;k<detWithState.size();k++){
 		    
-      // 		  DetId id = detWithState[k].first->geographicalId();
-      // 		  MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
+		  DetId id = detWithState[k].first->geographicalId();
+		  MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
 	      
-      // 		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
-		
-		
-      // 		    if(km==0){
-      // 		      if(k==0)  b_PXBID_1stDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
-      // 		      if(k==1)  b_PXBID_2ndDet_mu1muJetF[count_numlay] = PXBDetId(id).layer();
-      // 		      if(k==2)  b_PXBID_3rdDet_mu1muJetF[count_numlay]  = PXBDetId(id).layer();
+		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
 
-      // 		      if(k==0)  b_PXFID_1stDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
-      // 		      if(k==1)  b_PXFID_2ndDet_mu1muJetF[count_numlay] = PXFDetId(id).disk();
-      // 		      if(k==2)  b_PXFID_3rdDet_mu1muJetF[count_numlay]  = PXFDetId(id).disk();
-      // 		    }
-      // 		    if(km==1){
-      // 		      if(k==0)  b_PXBID_1stDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
-      // 		      if(k==1)  b_PXBID_2ndDet_mu2muJetF[count_numlay] = PXBDetId(id).layer();
-      // 		      if(k==2)  b_PXBID_3rdDet_mu2muJetF[count_numlay]  = PXBDetId(id).layer();
+		    // std::cout<<" Detector element in pixels"<<std::endl;
+		    // std::cout<<" Detector element in pixels"<<std::endl;
+		    // std::cout<<" Detector element in pixels"<<std::endl;
 
-      // 		      if(k==0)  b_PXFID_1stDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
-      // 		      if(k==1)  b_PXFID_2ndDet_mu2muJetF[count_numlay] = PXFDetId(id).disk();
-      // 		      if(k==2)  b_PXFID_3rdDet_mu2muJetF[count_numlay]  = PXFDetId(id).disk();
-      // 		    }
-
-      // 		    if(km==0){
-      // 		      if(k==0) b_mj2m0posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-      // 		      if(k==0) b_mj2m0posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-      // 		      if(k==0) b_mj2m0posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-      // 		      if(k==0) b_mj2m0posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-      // 		      if(k==1) b_mj2m0posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-      // 		      if(k==1) b_mj2m0posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-      // 		      if(k==1) b_mj2m0posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-      // 		      if(k==1) b_mj2m0posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-      // 		      if(k==3) b_mj2m0posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-      // 		      if(k==3) b_mj2m0posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-      // 		      if(k==3) b_mj2m0posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-      // 		      if(k==3) b_mj2m0posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-      // 		    }
-
-      // 		    if(km==1){
-      // 		      if(k==0) b_mj2m1posx_1stDet[count_numlay] = detWithState[k].second.localPosition().x();
-      // 		      if(k==0) b_mj2m1posy_1stDet[count_numlay] = detWithState[k].second.localPosition().y();
-      // 		      if(k==0) b_mj2m1posx_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-      // 		      if(k==0) b_mj2m1posy_err_1stDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-      // 		      if(k==1) b_mj2m1posx_2ndDet[count_numlay] = detWithState[k].second.localPosition().x();
-      // 		      if(k==1) b_mj2m1posy_2ndDet[count_numlay] = detWithState[k].second.localPosition().y();
-      // 		      if(k==1) b_mj2m1posx_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-      // 		      if(k==1) b_mj2m1posy_err_2ndDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-
-      // 		      if(k==3) b_mj2m1posx_3rdDet[count_numlay] = detWithState[k].second.localPosition().x();
-      // 		      if(k==3) b_mj2m1posy_3rdDet[count_numlay] = detWithState[k].second.localPosition().y();
-      // 		      if(k==3) b_mj2m1posx_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().xx());
-      // 		      if(k==3) b_mj2m1posy_err_3rdDet[count_numlay] = sqrt(detWithState[k].second.localError().positionError().yy());
-      // 		    }
+		    if(km==0){
+		      b_PXBID_mu1muJetF[count_numlay][count_numdet] = PXBDetId(id).layer();
+		      b_PXFID_mu1muJetF[count_numlay][count_numdet] = PXFDetId(id).disk();
+		      b_mj2m0posx[count_numlay][count_numdet] = detWithState[k].second.localPosition().x();
+		      b_mj2m0posy[count_numlay][count_numdet] = detWithState[k].second.localPosition().y();
+		      b_mj2m0posx_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      b_mj2m0posy_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    }		      
+		    if(km==1){
+		      b_PXBID_mu2muJetF[count_numlay][count_numdet] = PXBDetId(id).layer();
+		      b_PXFID_mu2muJetF[count_numlay][count_numdet] = PXFDetId(id).disk();
+		      b_mj2m1posx[count_numlay][count_numdet] = detWithState[k].second.localPosition().x();
+		      b_mj2m1posy[count_numlay][count_numdet] = detWithState[k].second.localPosition().y();
+		      b_mj2m1posx_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().xx());
+		      b_mj2m1posy_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().yy());
+		    }		      
 		
 					    
-      // 		    TrajectoryStateOnSurface ts; //dummy
+		    TrajectoryStateOnSurface ts; //dummy
 		
-      // 		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
+		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
 		
-      // 		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
+		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
 			
 		
-      // 		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
+		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
 			  
-      // 		      if(tmpIt->recHit()->getType()==0){ // valid hit
+		      if(tmpIt->recHit()->getType()==0){ // valid hit
 			    
-      // 			if(m_debug>10){
-      // 			  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-      // 			  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-      // 			  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-      // 			  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-      // 			}
+		    	if(m_debug>10){
+		    	  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
+		    	  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
+		    	  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
+		    	  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
+		    	}
 
 
-      // 			if(km==0){
-      // 			  if(count_numlay==0){
-      // 			    b_pixelhit_mu1_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-      // 			    b_pixelhit_mu1_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-      // 			    b_pixelhit_mu1_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-      // 			    b_pixelhit_mu1_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-      // 			  }
-      // 			  if(count_numlay==1){
-      // 			    b_pixelhit_mu1_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-      // 			    b_pixelhit_mu1_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-      // 			    b_pixelhit_mu1_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-      // 			    b_pixelhit_mu1_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-      // 			  }
-      // 			  if(count_numlay==2){
-      // 			    b_pixelhit_mu1_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-      // 			    b_pixelhit_mu1_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-      // 			    b_pixelhit_mu1_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-      // 			    b_pixelhit_mu1_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-      // 			  }
-      // 			}
+		    	if(km==0){
+			  b_pixelhit_mu1_muJetF_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
+			  b_pixelhit_mu1_muJetF_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
+			  b_pixelhit_mu1_muJetF_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			  b_pixelhit_mu1_muJetF_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    	}
+
+			if(km==0){
+			  b_pixelhit_mu2_muJetF_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
+			  b_pixelhit_mu2_muJetF_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
+			  b_pixelhit_mu2_muJetF_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
+			  b_pixelhit_mu2_muJetF_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
+		    	}
 		    
-      // 			if(km==1){
-      // 			  if(count_numlay==0){
-      // 			    b_pixelhit_mu2_muJetF_1stextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-      // 			    b_pixelhit_mu2_muJetF_1stextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-      // 			    b_pixelhit_mu2_muJetF_1stextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-      // 			    b_pixelhit_mu2_muJetF_1stextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-      // 			  }
-      // 			  if(count_numlay==1){
-      // 			    b_pixelhit_mu2_muJetF_2ndextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-      // 			    b_pixelhit_mu2_muJetF_2ndextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-      // 			    b_pixelhit_mu2_muJetF_2ndextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-      // 			    b_pixelhit_mu2_muJetF_2ndextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-      // 			  }
-      // 			  if(count_numlay==2){
-      // 			    b_pixelhit_mu2_muJetF_3rdextlay_posx[counter_hit] = tmpIt->recHit()->localPosition().x();
-      // 			    b_pixelhit_mu2_muJetF_3rdextlay_posy[counter_hit] = tmpIt->recHit()->localPosition().y();
-      // 			    b_pixelhit_mu2_muJetF_3rdextlay_errposx[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-      // 			    b_pixelhit_mu2_muJetF_3rdextlay_errposy[counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-      // 			  }
-      // 			}
-      // 			counter_hit++;
-      // 		      }
-      // 		    }
-      //      		  }
-      	// 	}
-      	// 	delete localProp;
-      	// 	count_numlay++;
-      	//       }
-      	//     }
-      	//   }
-      	//   counter_traj++;
-      	// }
-        //  }
-      //    }
+		      }
+		      counter_hit++;
+		    }
+		    if(km==0) b_numhit_mu1_muJetF[count_numlay] = counter_hit;
+		    if(km==1) b_numhit_mu2_muJetF[count_numlay] = counter_hit;
+		  }
+		}
+		count_numdet++;
+	      }
+	      delete localProp;
+	      count_numlay++;
+	    }
+	  }
+	}
+	counter_traj++;
+      }
+    }
   }
     
 
@@ -3698,7 +3222,6 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("match_mu2track_muJetF",&b_match_mu2track_muJetF,"match_mu2track_muJetF/I");
 
 
-    // Hit Recovery
     m_ttree->Branch("innerlayers_mu1_muJetC",&b_innerlayers_mu1_muJetC,"innerlayers_mu1_muJetC/I");
     m_ttree->Branch("innerlayers_mu2_muJetC",&b_innerlayers_mu2_muJetC,"innerlayers_mu2_muJetC/I");
     m_ttree->Branch("innerlayers_mu1_muJetF",&b_innerlayers_mu1_muJetF,"innerlayers_mu1_muJetF/I");
@@ -3715,6 +3238,11 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("PXBID_mu2muJetC",&b_PXBID_mu2muJetC,"PXBID_mu2muJetC[innerlayers_mu2_muJetC][compdet_mu2_muJetC]/I");
     m_ttree->Branch("PXFID_mu2muJetC",&b_PXFID_mu2muJetC,"PXFID_mu2muJetC[innerlayers_mu2_muJetC][compdet_mu2_muJetC]/I");
 
+    m_ttree->Branch("PXBID_mu1muJetF",&b_PXBID_mu1muJetF,"PXBID_mu1muJetF[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/I");
+    m_ttree->Branch("PXFID_mu1muJetF",&b_PXFID_mu1muJetF,"PXFID_mu1muJetF[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/I");
+    m_ttree->Branch("PXBID_mu2muJetF",&b_PXBID_mu2muJetF,"PXBID_mu2muJetF[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/I");
+    m_ttree->Branch("PXFID_mu2muJetF",&b_PXFID_mu2muJetF,"PXFID_mu2muJetF[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/I");
+
 
     m_ttree->Branch("mj1m0posx",b_mj1m0posx,"mj1m0posx[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
     m_ttree->Branch("mj1m0posy",b_mj1m0posy,"mj1m0posy[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
@@ -3726,207 +3254,40 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("mj1m1posx_err",b_mj1m1posx_err,"mj1m1posx_err[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
     m_ttree->Branch("mj1m1posy_err",b_mj1m1posy_err,"mj1m1posy_err[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
 
+    m_ttree->Branch("mj2m0posx",b_mj2m0posx,"mj2m0posx[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/F");
+    m_ttree->Branch("mj2m0posy",b_mj2m0posy,"mj2m0posy[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/F");
+    m_ttree->Branch("mj2m0posx_err",b_mj2m0posx_err,"mj2m0posx_err[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/F");
+    m_ttree->Branch("mj2m0posy_err",b_mj2m0posy_err,"mj2m0posy_err[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/F");
 
+    m_ttree->Branch("mj2m1posx",b_mj2m1posx,"mj2m1posx[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/F");
+    m_ttree->Branch("mj2m1posy",b_mj2m1posy,"mj2m1posy[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/F");
+    m_ttree->Branch("mj2m1posx_err",b_mj2m1posx_err,"mj2m1posx_err[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/F");
+    m_ttree->Branch("mj2m1posy_err",b_mj2m1posy_err,"mj2m1posy_err[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/F");
 
-    m_ttree->Branch("PXBID_1stDet_mu1muJetC",&b_PXBID_1stDet_mu1muJetC,"b_PXBID_1stDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
-    m_ttree->Branch("PXBID_1stDet_mu2muJetC",&b_PXBID_1stDet_mu2muJetC,"b_PXBID_1stDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
-    m_ttree->Branch("PXBID_1stDet_mu1muJetF",&b_PXBID_1stDet_mu1muJetF,"b_PXBID_1stDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
-    m_ttree->Branch("PXBID_1stDet_mu2muJetF",&b_PXBID_1stDet_mu1muJetF,"b_PXBID_1stDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
-
-    m_ttree->Branch("PXBID_2ndDet_mu1muJetC",&b_PXBID_2ndDet_mu1muJetC,"b_PXBID_2ndDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
-    m_ttree->Branch("PXBID_2ndDet_mu2muJetC",&b_PXBID_2ndDet_mu2muJetC,"b_PXBID_2ndDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
-    m_ttree->Branch("PXBID_2ndDet_mu1muJetF",&b_PXBID_2ndDet_mu1muJetF,"b_PXBID_2ndDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
-    m_ttree->Branch("PXBID_2ndDet_mu2muJetF",&b_PXBID_2ndDet_mu1muJetF,"b_PXBID_2ndDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
-
-    m_ttree->Branch("PXBID_3rdDet_mu1muJetC",&b_PXBID_3rdDet_mu1muJetC,"b_PXBID_3rdDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
-    m_ttree->Branch("PXBID_3rdDet_mu2muJetC",&b_PXBID_3rdDet_mu2muJetC,"b_PXBID_3rdDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
-    m_ttree->Branch("PXBID_3rdDet_mu1muJetF",&b_PXBID_3rdDet_mu1muJetF,"b_PXBID_3rdDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
-    m_ttree->Branch("PXBID_3rdDet_mu2muJetF",&b_PXBID_3rdDet_mu1muJetF,"b_PXBID_3rdDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
-
-    m_ttree->Branch("PXBID_4thDet_mu1muJetC",&b_PXBID_4thDet_mu1muJetC,"b_PXBID_4thDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
-    m_ttree->Branch("PXBID_4thDet_mu2muJetC",&b_PXBID_4thDet_mu2muJetC,"b_PXBID_4thDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
-    m_ttree->Branch("PXBID_4thDet_mu1muJetF",&b_PXBID_4thDet_mu1muJetF,"b_PXBID_4thDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
-    m_ttree->Branch("PXBID_4thDet_mu2muJetF",&b_PXBID_4thDet_mu1muJetF,"b_PXBID_4thDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
-
-    m_ttree->Branch("PXBID_5thDet_mu1muJetC",&b_PXBID_5thDet_mu1muJetC,"b_PXBID_5thDet_mu1muJetC[innerlayers_mu1_muJetC]/I");
-    m_ttree->Branch("PXBID_5thDet_mu2muJetC",&b_PXBID_5thDet_mu2muJetC,"b_PXBID_5thDet_mu2muJetC[innerlayers_mu2_muJetC]/I");
-    m_ttree->Branch("PXBID_5thDet_mu1muJetF",&b_PXBID_5thDet_mu1muJetF,"b_PXBID_5thDet_mu1muJetF[innerlayers_mu1_muJetF]/I");
-    m_ttree->Branch("PXBID_5thDet_mu2muJetF",&b_PXBID_5thDet_mu1muJetF,"b_PXBID_5thDet_mu2muJetF[innerlayers_mu2_muJetF]/I");
-
-
-
-
-
-    m_ttree->Branch("mj1m0posx_1stDet",&b_mj1m0posx_1stDet,"mj1m0posx_1stDe[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_1stDet",&b_mj1m0posy_1stDet,"mj1m0posy_1stDe[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posx_err_1stDet",&b_mj1m0posx_err_1stDet,"mj1m0posx_err_1stDe[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_err_1stDet",&b_mj1m0posy_err_1stDet,"mj1m0posy_err_1stDe[innerlayers_mu1_muJetC]/F");
-
-    m_ttree->Branch("mj1m0posx_2ndDet",&b_mj1m0posx_2ndDet,"mj1m0posx_2ndDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_2ndDet",&b_mj1m0posy_2ndDet,"mj1m0posy_2ndDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posx_err_2ndDet",&b_mj1m0posx_err_2ndDet,"mj1m0posx_err_2ndDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_err_2ndDet",&b_mj1m0posy_err_2ndDet,"mj1m0posy_err_2ndDet[innerlayers_mu1_muJetC]/F");
-
-    m_ttree->Branch("mj1m0posx_3rdDet",&b_mj1m0posx_3rdDet,"mj1m0posx_3rdDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_3rdDet",&b_mj1m0posy_3rdDet,"mj1m0posy_3rdDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posx_err_3rdDet",&b_mj1m0posx_err_3rdDet,"mj1m0posx_err_3rdDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_err_3rdDet",&b_mj1m0posy_err_3rdDet,"mj1m0posy_err_3rdDet[innerlayers_mu1_muJetC]/F");
-
-    m_ttree->Branch("mj1m0posx_4thDet",&b_mj1m0posx_4thDet,"mj1m0posx_4thDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_4thDet",&b_mj1m0posy_4thDet,"mj1m0posy_4thDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posx_err_4thDet",&b_mj1m0posx_err_4thDet,"mj1m0posx_err_4thDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_err_4thDet",&b_mj1m0posy_err_4thDet,"mj1m0posy_err_4thDet[innerlayers_mu1_muJetC]/F");
-
-    m_ttree->Branch("mj1m0posx_5thDet",&b_mj1m0posx_5thDet,"mj1m0posx_5thDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_5thDet",&b_mj1m0posy_5thDet,"mj1m0posy_5thDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posx_err_5thDet",&b_mj1m0posx_err_5thDet,"mj1m0posx_err_5thDet[innerlayers_mu1_muJetC]/F");
-    m_ttree->Branch("mj1m0posy_err_5thDet",&b_mj1m0posy_err_5thDet,"mj1m0posy_err_5thDet[innerlayers_mu1_muJetC]/F");
-
-    m_ttree->Branch("mj1m1posx_1stDet",&b_mj1m1posx_1stDet,"mj1m1posx_1stDe[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_1stDet",&b_mj1m1posy_1stDet,"mj1m1posy_1stDe[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posx_err_1stDet",&b_mj1m1posx_err_1stDet,"mj1m1posx_err_1stDe[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_err_1stDet",&b_mj1m1posy_err_1stDet,"mj1m1posy_err_1stDe[innerlayers_mu2_muJetC]/F");
-
-    m_ttree->Branch("mj1m1posx_2ndDet",&b_mj1m1posx_2ndDet,"mj1m1posx_2ndDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_2ndDet",&b_mj1m1posy_2ndDet,"mj1m1posy_2ndDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posx_err_2ndDet",&b_mj1m1posx_err_2ndDet,"mj1m1posx_err_2ndDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_err_2ndDet",&b_mj1m1posy_err_2ndDet,"mj1m1posy_err_2ndDet[innerlayers_mu2_muJetC]/F");
-
-    m_ttree->Branch("mj1m1posx_3rdDet",&b_mj1m1posx_3rdDet,"mj1m1posx_3rdDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_3rdDet",&b_mj1m1posy_3rdDet,"mj1m1posy_3rdDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posx_err_3rdDet",&b_mj1m1posx_err_3rdDet,"mj1m1posx_err_3rdDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_err_3rdDet",&b_mj1m1posy_err_3rdDet,"mj1m1posy_err_3rdDet[innerlayers_mu2_muJetC]/F");
-
-
-    m_ttree->Branch("mj1m1posx_4thDet",&b_mj1m1posx_4thDet,"mj1m1posx_4thDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_4thDet",&b_mj1m1posy_4thDet,"mj1m1posy_4thDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posx_err_4thDet",&b_mj1m1posx_err_4thDet,"mj1m1posx_err_4thDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_err_4thDet",&b_mj1m1posy_err_4thDet,"mj1m1posy_err_4thDet[innerlayers_mu2_muJetC]/F");
-
-    m_ttree->Branch("mj1m1posx_5thDet",&b_mj1m1posx_5thDet,"mj1m1posx_5thDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_5thDet",&b_mj1m1posy_5thDet,"mj1m1posy_5thDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posx_err_5thDet",&b_mj1m1posx_err_5thDet,"mj1m1posx_err_5thDet[innerlayers_mu2_muJetC]/F");
-    m_ttree->Branch("mj1m1posy_err_5thDet",&b_mj1m1posy_err_5thDet,"mj1m1posy_err_5thDet[innerlayers_mu2_muJetC]/F");
-
-
-
-
-    m_ttree->Branch("mj1m0posx_1stDet",&b_mj1m0posx_1stDet,"mj1m0posx_1stDe[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_1stDet",&b_mj1m0posy_1stDet,"mj1m0posy_1stDe[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posx_err_1stDet",&b_mj1m0posx_err_1stDet,"mj1m0posx_err_1stDe[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_err_1stDet",&b_mj1m0posy_err_1stDet,"mj1m0posy_err_1stDe[innerlayers_mu1_muJetF]/F");
-
-    m_ttree->Branch("mj1m0posx_2ndDet",&b_mj1m0posx_2ndDet,"mj1m0posx_2ndDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_2ndDet",&b_mj1m0posy_2ndDet,"mj1m0posy_2ndDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posx_err_2ndDet",&b_mj1m0posx_err_2ndDet,"mj1m0posx_err_2ndDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_err_2ndDet",&b_mj1m0posy_err_2ndDet,"mj1m0posy_err_2ndDet[innerlayers_mu1_muJetF]/F");
-
-    m_ttree->Branch("mj1m0posx_3rdDet",&b_mj1m0posx_3rdDet,"mj1m0posx_3rdDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_3rdDet",&b_mj1m0posy_3rdDet,"mj1m0posy_3rdDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posx_err_3rdDet",&b_mj1m0posx_err_3rdDet,"mj1m0posx_err_3rdDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_err_3rdDet",&b_mj1m0posy_err_3rdDet,"mj1m0posy_err_3rdDet[innerlayers_mu1_muJetF]/F");
-
-    m_ttree->Branch("mj1m0posx_4thDet",&b_mj1m0posx_4thDet,"mj1m0posx_4thDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_4thDet",&b_mj1m0posy_4thDet,"mj1m0posy_4thDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posx_err_4thDet",&b_mj1m0posx_err_4thDet,"mj1m0posx_err_4thDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_err_4thDet",&b_mj1m0posy_err_4thDet,"mj1m0posy_err_4thDet[innerlayers_mu1_muJetF]/F");
-
-    m_ttree->Branch("mj1m0posx_5thDet",&b_mj1m0posx_5thDet,"mj1m0posx_5thDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_5thDet",&b_mj1m0posy_5thDet,"mj1m0posy_5thDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posx_err_5thDet",&b_mj1m0posx_err_5thDet,"mj1m0posx_err_5thDet[innerlayers_mu1_muJetF]/F");
-    m_ttree->Branch("mj1m0posy_err_5thDet",&b_mj1m0posy_err_5thDet,"mj1m0posy_err_5thDet[innerlayers_mu1_muJetF]/F");
-
-    m_ttree->Branch("mj1m1posx_1stDet",&b_mj1m1posx_1stDet,"mj1m1posx_1stDe[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_1stDet",&b_mj1m1posy_1stDet,"mj1m1posy_1stDe[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posx_err_1stDet",&b_mj1m1posx_err_1stDet,"mj1m1posx_err_1stDe[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_err_1stDet",&b_mj1m1posy_err_1stDet,"mj1m1posy_err_1stDe[innerlayers_mu2_muJetF]/F");
-
-    m_ttree->Branch("mj1m1posx_2ndDet",&b_mj1m1posx_2ndDet,"mj1m1posx_2ndDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_2ndDet",&b_mj1m1posy_2ndDet,"mj1m1posy_2ndDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posx_err_2ndDet",&b_mj1m1posx_err_2ndDet,"mj1m1posx_err_2ndDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_err_2ndDet",&b_mj1m1posy_err_2ndDet,"mj1m1posy_err_2ndDet[innerlayers_mu2_muJetF]/F");
-
-    m_ttree->Branch("mj1m1posx_3rdDet",&b_mj1m1posx_3rdDet,"mj1m1posx_3rdDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_3rdDet",&b_mj1m1posy_3rdDet,"mj1m1posy_3rdDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posx_err_3rdDet",&b_mj1m1posx_err_3rdDet,"mj1m1posx_err_3rdDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_err_3rdDet",&b_mj1m1posy_err_3rdDet,"mj1m1posy_err_3rdDet[innerlayers_mu2_muJetF]/F");    
-
-    m_ttree->Branch("mj1m1posx_4thDet",&b_mj1m1posx_4thDet,"mj1m1posx_4thDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_4thDet",&b_mj1m1posy_4thDet,"mj1m1posy_4thDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posx_err_4thDet",&b_mj1m1posx_err_4thDet,"mj1m1posx_err_4thDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_err_4thDet",&b_mj1m1posy_err_4thDet,"mj1m1posy_err_4thDet[innerlayers_mu2_muJetF]/F");    
-
-    m_ttree->Branch("mj1m1posx_5thDet",&b_mj1m1posx_5thDet,"mj1m1posx_5thDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_5thDet",&b_mj1m1posy_5thDet,"mj1m1posy_5thDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posx_err_5thDet",&b_mj1m1posx_err_5thDet,"mj1m1posx_err_5thDet[innerlayers_mu2_muJetF]/F");
-    m_ttree->Branch("mj1m1posy_err_5thDet",&b_mj1m1posy_err_5thDet,"mj1m1posy_err_5thDet[innerlayers_mu2_muJetF]/F");    
-
-
-
-    m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_posx",&b_pixelhit_mu1_muJetC_2ndextlay_posx,"pixelhit_mu1_muJetC_1stextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_posy",&b_pixelhit_mu1_muJetC_2ndextlay_posy,"pixelhit_mu1_muJetC_1stextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_errposx",&b_pixelhit_mu1_muJetC_2ndextlay_errposx,"pixelhit_mu1_muJetC_1stextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_1stextlay_errposy",&b_pixelhit_mu1_muJetC_2ndextlay_errposy,"pixelhit_mu1_muJetC_1stextlay_errposy/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_posx",&b_pixelhit_mu1_muJetC_2ndextlay_posx,"pixelhit_mu1_muJetC_2ndextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_posy",&b_pixelhit_mu1_muJetC_2ndextlay_posy,"pixelhit_mu1_muJetC_2ndextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_errposx",&b_pixelhit_mu1_muJetC_2ndextlay_errposx,"pixelhit_mu1_muJetC_2ndextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_2ndextlay_errposy",&b_pixelhit_mu1_muJetC_2ndextlay_errposy,"pixelhit_mu1_muJetC_2ndextlay_errposy/F");
-
-    m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_posx",&b_pixelhit_mu1_muJetC_3rdextlay_posx,"pixelhit_mu1_muJetC_3rdextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_posy",&b_pixelhit_mu1_muJetC_3rdextlay_posy,"pixelhit_mu1_muJetC_3rdextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_errposx",&b_pixelhit_mu1_muJetC_3rdextlay_errposx,"pixelhit_mu1_muJetC_3rdextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_3rdextlay_errposy",&b_pixelhit_mu1_muJetC_3rdextlay_errposy,"pixelhit_mu1_muJetC_3rdextlay_errposy/F");
-
-
-      
-    m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_posx",&b_pixelhit_mu2_muJetC_2ndextlay_posx,"pixelhit_mu2_muJetC_1stextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_posy",&b_pixelhit_mu2_muJetC_2ndextlay_posy,"pixelhit_mu2_muJetC_1stextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_errposx",&b_pixelhit_mu2_muJetC_2ndextlay_errposx,"pixelhit_mu2_muJetC_1stextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_1stextlay_errposy",&b_pixelhit_mu2_muJetC_2ndextlay_errposy,"pixelhit_mu2_muJetC_1stextlay_errposy/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_posx",&b_pixelhit_mu2_muJetC_2ndextlay_posx,"pixelhit_mu2_muJetC_2ndextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_posy",&b_pixelhit_mu2_muJetC_2ndextlay_posy,"pixelhit_mu2_muJetC_2ndextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_errposx",&b_pixelhit_mu2_muJetC_2ndextlay_errposx,"pixelhit_mu2_muJetC_2ndextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_2ndextlay_errposy",&b_pixelhit_mu2_muJetC_2ndextlay_errposy,"pixelhit_mu2_muJetC_2ndextlay_errposy/F");
-
-    m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_posx",&b_pixelhit_mu2_muJetC_3rdextlay_posx,"pixelhit_mu2_muJetC_3rdextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_posy",&b_pixelhit_mu2_muJetC_3rdextlay_posy,"pixelhit_mu2_muJetC_3rdextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_errposx",&b_pixelhit_mu2_muJetC_3rdextlay_errposx,"pixelhit_mu2_muJetC_3rdextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_3rdextlay_errposy",&b_pixelhit_mu2_muJetC_3rdextlay_errposy,"pixelhit_mu2_muJetC_3rdextlay_errposy/F");
-
+    m_ttree->Branch("numhit_mu1_muJetC",&b_numhit_mu1_muJetC,"numhit_mu1_muJetC[innerlayers_mu1_muJetC]/I");
+    m_ttree->Branch("numhit_mu2_muJetC",&b_numhit_mu2_muJetC,"numhit_mu2_muJetC[innerlayers_mu2_muJetC]/I");
+    m_ttree->Branch("numhit_mu1_muJetF",&b_numhit_mu1_muJetF,"numhit_mu1_muJetF[innerlayers_mu1_muJetF]/I");
+    m_ttree->Branch("numhit_mu2_muJetF",&b_numhit_mu2_muJetF,"numhit_mu2_muJetF[innerlayers_mu2_muJetF]/I");
     
+    m_ttree->Branch("pixelhit_mu1_muJetC_posx",&b_pixelhit_mu1_muJetC_posx,"pixelhit_mu1_muJetC_posx[innerlayers_mu1_muJetC][numhit_mu1_muJetC]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_posy",&b_pixelhit_mu1_muJetC_posy,"pixelhit_mu1_muJetC_posy[innerlayers_mu1_muJetC][numhit_mu1_muJetC]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_errposx",&b_pixelhit_mu1_muJetC_errposx,"pixelhit_mu1_muJetC_errposx[innerlayers_mu1_muJetC][numhit_mu1_muJetC]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_errposy",&b_pixelhit_mu1_muJetC_errposy,"pixelhit_mu1_muJetC_errposy[innerlayers_mu1_muJetC][numhit_mu1_muJetC]/F");
 
+    m_ttree->Branch("pixelhit_mu2_muJetC_posx",&b_pixelhit_mu2_muJetC_posx,"pixelhit_mu2_muJetC_posx[innerlayers_mu2_muJetC][numhit_mu2_muJetC]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_posy",&b_pixelhit_mu2_muJetC_posy,"pixelhit_mu2_muJetC_posy[innerlayers_mu2_muJetC][numhit_mu2_muJetC]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_errposx",&b_pixelhit_mu2_muJetC_errposx,"pixelhit_mu2_muJetC_errposx[innerlayers_mu2_muJetC][numhit_mu2_muJetC]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_errposy",&b_pixelhit_mu2_muJetC_errposy,"pixelhit_mu2_muJetC_errposy[innerlayers_mu2_muJetC][numhit_mu2_muJetC]/F");
 
+    m_ttree->Branch("pixelhit_mu1_muJetF_posx",&b_pixelhit_mu1_muJetF_posx,"pixelhit_mu1_muJetF_posx[innerlayers_mu1_muJetF][numhit_mu1_muJetF]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_posy",&b_pixelhit_mu1_muJetF_posy,"pixelhit_mu1_muJetF_posy[innerlayers_mu1_muJetF][numhit_mu1_muJetF]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_errposx",&b_pixelhit_mu1_muJetF_errposx,"pixelhit_mu1_muJetF_errposx[innerlayers_mu1_muJetF][numhit_mu1_muJetF]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_errposy",&b_pixelhit_mu1_muJetF_errposy,"pixelhit_mu1_muJetF_errposy[innerlayers_mu1_muJetF][numhit_mu1_muJetF]/F");
 
-
-    m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_posx",&b_pixelhit_mu1_muJetF_2ndextlay_posx,"pixelhit_mu1_muJetF_1stextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_posy",&b_pixelhit_mu1_muJetF_2ndextlay_posy,"pixelhit_mu1_muJetF_1stextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_errposx",&b_pixelhit_mu1_muJetF_2ndextlay_errposx,"pixelhit_mu1_muJetF_1stextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_1stextlay_errposy",&b_pixelhit_mu1_muJetF_2ndextlay_errposy,"pixelhit_mu1_muJetF_1stextlay_errposy/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_posx",&b_pixelhit_mu1_muJetF_2ndextlay_posx,"pixelhit_mu1_muJetF_2ndextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_posy",&b_pixelhit_mu1_muJetF_2ndextlay_posy,"pixelhit_mu1_muJetF_2ndextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_errposx",&b_pixelhit_mu1_muJetF_2ndextlay_errposx,"pixelhit_mu1_muJetF_2ndextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_2ndextlay_errposy",&b_pixelhit_mu1_muJetF_2ndextlay_errposy,"pixelhit_mu1_muJetF_2ndextlay_errposy/F");
-
-    m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_posx",&b_pixelhit_mu1_muJetF_3rdextlay_posx,"pixelhit_mu1_muJetF_3rdextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_posy",&b_pixelhit_mu1_muJetF_3rdextlay_posy,"pixelhit_mu1_muJetF_3rdextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_errposx",&b_pixelhit_mu1_muJetF_3rdextlay_errposx,"pixelhit_mu1_muJetF_3rdextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_3rdextlay_errposy",&b_pixelhit_mu1_muJetF_3rdextlay_errposy,"pixelhit_mu1_muJetF_3rdextlay_errposy/F");
-
-
-
-    m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_posx",&b_pixelhit_mu2_muJetF_2ndextlay_posx,"pixelhit_mu2_muJetF_1stextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_posy",&b_pixelhit_mu2_muJetF_2ndextlay_posy,"pixelhit_mu2_muJetF_1stextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_errposx",&b_pixelhit_mu2_muJetF_2ndextlay_errposx,"pixelhit_mu2_muJetF_1stextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_1stextlay_errposy",&b_pixelhit_mu2_muJetF_2ndextlay_errposy,"pixelhit_mu2_muJetF_1stextlay_errposy/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_posx",&b_pixelhit_mu2_muJetF_2ndextlay_posx,"pixelhit_mu2_muJetF_2ndextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_posy",&b_pixelhit_mu2_muJetF_2ndextlay_posy,"pixelhit_mu2_muJetF_2ndextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_errposx",&b_pixelhit_mu2_muJetF_2ndextlay_errposx,"pixelhit_mu2_muJetF_2ndextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_2ndextlay_errposy",&b_pixelhit_mu2_muJetF_2ndextlay_errposy,"pixelhit_mu2_muJetF_2ndextlay_errposy/F");
-
-    m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_posx",&b_pixelhit_mu2_muJetF_3rdextlay_posx,"pixelhit_mu2_muJetF_3rdextlay_posx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_posy",&b_pixelhit_mu2_muJetF_3rdextlay_posy,"pixelhit_mu2_muJetF_3rdextlay_posy/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_errposx",&b_pixelhit_mu2_muJetF_3rdextlay_errposx,"pixelhit_mu2_muJetF_3rdextlay_errposx/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_3rdextlay_errposy",&b_pixelhit_mu2_muJetF_3rdextlay_errposy,"pixelhit_mu2_muJetF_3rdextlay_errposy/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_posx",&b_pixelhit_mu2_muJetF_posx,"pixelhit_mu2_muJetF_posx[innerlayers_mu2_muJetF][numhit_mu2_muJetF]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_posy",&b_pixelhit_mu2_muJetF_posy,"pixelhit_mu2_muJetF_posy[innerlayers_mu2_muJetF][numhit_mu2_muJetF]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_errposx",&b_pixelhit_mu2_muJetF_errposx,"pixelhit_mu2_muJetF_errposx[innerlayers_mu2_muJetF][numhit_mu2_muJetF]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_errposy",&b_pixelhit_mu2_muJetF_errposy,"pixelhit_mu2_muJetF_errposy[innerlayers_mu2_muJetF][numhit_mu2_muJetF]/F");
 
     
   }
