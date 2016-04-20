@@ -17,7 +17,7 @@
 class TransientTrackBuilder {};
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 
-/// default constructor
+/// constructor with muons
 pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
                           const TransientTrackBuilder    *transientTrackBuilder,
                           const reco::TrackCollection    *tracks,
@@ -32,7 +32,10 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
                           double centralNumberAboveThresholdCone,
                           double unionNumberAboveThresholdCone,
                           double centralNumberAboveThresholdPt,
-                          double unionNumberAboveThresholdPt)
+			  double unionNumberAboveThresholdPt,
+			  int barrelPixelLayer,
+			  int endcapPixelLayer)
+
 {
   pat::CompositeCandidate();
 
@@ -134,6 +137,8 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
                                                              centralNumberAboveThresholdPt, 
                                                              unionNumberAboveThresholdPt);
   }
+  m_barrelPixelLayer = 1;
+  m_endcapPixelLayer = 1;
 }
 
 /// constructor from MultiMuonType
@@ -182,6 +187,9 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
   m_unionHCALIsolation          = aMultiMuon.m_unionHCALIsolation;
   m_centralNumberAboveThreshold = aMultiMuon.m_centralNumberAboveThreshold;
   m_unionNumberAboveThreshold   = aMultiMuon.m_unionNumberAboveThreshold;
+
+  m_barrelPixelLayer = aMultiMuon.m_barrelPixelLayer;
+  m_endcapPixelLayer = aMultiMuon.m_endcapPixelLayer;
 }
 
 /// destructor
@@ -290,7 +298,11 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       double current_x_bdy2 = 0.0;
       
       // setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
-      for (int i = 0; i < 4400; ++i){
+      const double pixelBarrelR(pat::pixelBarrelR(m_barrelPixelLayer));
+      const double pixelEndcapZ(pat::pixelEndcapZ(m_endcapPixelLayer));
+      const int maxR(pixelBarrelR*100);
+
+      for (int i = 0; i < maxR; ++i){
 	if (muonTracks[0]->px() < 0){
 	  current_x_bdy1 = -(i/(1000*1.0)) + muonTracks[0]->vx();
 	}
@@ -309,11 +321,11 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	double euclid1 = sqrt( pow(current_x_bdy1, 2) + pow(y_at_x_1, 2));
 
 	// FIXME: add parameters in this section!!!	
-	if (fabs(z_at_x_1) > 34.5) break;
+	if (fabs(z_at_x_1) > pixelEndcapZ) break;
 	//std::cout << "Euclidian distance: " << euclid1 << std::endl;
-	if (euclid1 > 4.4) break;
+	if (euclid1 > pixelBarrelR) break;
 	
-	for (int j = 0; j < 4400; ++j){
+	for (int j = 0; j < maxR; ++j){
 	  if (muonTracks[1]->px() < 0){
 	    current_x_bdy2 = -(j/(1000*1.0)) + muonTracks[1]->vx();
 	  }
@@ -326,8 +338,8 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	  double z_at_x_2 = muonTracks[1]->vz() + (muonTracks[1]->pz()*xscale_2);
 	  double euclid2 = sqrt( pow(current_x_bdy2, 2) + pow(y_at_x_2, 2));
 	  
-	  if (euclid2 > 4.4) continue;
-	  if (fabs(z_at_x_2) > 34.5) continue;
+	  if (euclid2 > pixelBarrelR) continue;
+	  if (fabs(z_at_x_2) > pixelEndcapZ) continue;
 	  
 	  float separation = sqrt( pow(current_x_bdy2 - current_x_bdy1 , 2) + pow(y_at_x_2 - y_at_x_1, 2) + pow(z_at_x_2 - z_at_x_1, 2));
 	  
@@ -952,4 +964,39 @@ std::vector<double> pat::MultiMuon::consistentPairMasses(bool vertex) const {
   }
 
   return output;
+}
+
+
+// functions that define fiducial volume
+// http://arxiv.org/pdf/0904.4761v1.pdf
+// units are in [cm]
+double pat::pixelBarrelR(int pixelBarrelLayer)
+{
+  switch(pixelBarrelLayer){
+  case 1:
+    return 4.4; 
+  case 2:
+    return 7.4;
+  case 3:
+    return 10.2;
+  default:
+      return -99;
+  };
+}
+
+double pat::pixelBarrelR2(int pixelBarrelLayer)
+{
+  return pixelBarrelR(pixelBarrelLayer)*pixelBarrelR(pixelBarrelLayer);
+}
+
+double pat::pixelEndcapZ(int pixelEndcapLayer)
+{
+  switch(pixelEndcapLayer){
+  case 1:
+    return 34.5; 
+  case 2:
+    return 46.5;
+  default:
+      return -99;
+  };
 }

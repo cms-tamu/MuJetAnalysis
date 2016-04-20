@@ -124,6 +124,8 @@ class MuJetProducer : public edm::EDProducer {
   double m_unionNumberAboveThresholdCone;
   double m_centralNumberAboveThresholdPt;
   double m_unionNumberAboveThresholdPt;
+  int m_barrelPixelLayer;
+  int m_endcapPixelLayer;
 };
 
 //
@@ -180,6 +182,8 @@ MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
    , m_unionNumberAboveThresholdCone(   iConfig.getParameter<double>("unionNumberAboveThresholdCone"))
    , m_centralNumberAboveThresholdPt(   iConfig.getParameter<double>("centralNumberAboveThresholdPt"))
    , m_unionNumberAboveThresholdPt(     iConfig.getParameter<double>("unionNumberAboveThresholdPt"))
+   , m_barrelPixelLayer(                iConfig.getParameter<int>("barrelPixelLayer"))
+   , m_endcapPixelLayer(                iConfig.getParameter<int>("endcapPixelLayer"))
 {
   //register your products
   produces<pat::MultiMuonCollection>("Pairs");
@@ -408,7 +412,9 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
                                    m_centralNumberAboveThresholdCone,
                                    m_unionNumberAboveThresholdCone,
                                    m_centralNumberAboveThresholdPt,
-                                   m_unionNumberAboveThresholdPt);
+                                   m_unionNumberAboveThresholdPt,
+				   m_barrelPixelLayer,
+				   m_endcapPixelLayer);
 
           bool satisfied_deltaR = (muonPair.dR(0, 1, muonPair.vertexValid()) < m_maxDeltaR);
 

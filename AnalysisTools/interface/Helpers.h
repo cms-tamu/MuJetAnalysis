@@ -1,5 +1,5 @@
-#ifndef MuJetAnalysis_CutFlowAnalyzer_Helpers_H
-#define MuJetAnalysis_CutFlowAnalyzer_Helpers_H
+#ifndef MuJetAnalysis_AnalysisTools_Helpers_H
+#define MuJetAnalysis_AnalysisTools_Helpers_H
 
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -28,7 +28,6 @@ bool isPFMuonLoose (const reco::Muon* mu);
 
 // Private ID for Muons
 bool isTrackerMuonPrivateID (const reco::Muon* mu);
-
 }
 
 }
