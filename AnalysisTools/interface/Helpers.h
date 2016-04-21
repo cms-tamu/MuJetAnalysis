@@ -18,6 +18,9 @@ bool PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2);
 
 bool sameTrack(const reco::Track *one, const reco::Track *two);
 
+bool matchorder(const std::pair<Int_t,Float_t>  &v1, const std::pair<Int_t,Float_t> &v2);
+
+
 //******************************************************************************
 // Auxiliary function: Calculate difference between two angles: -PI < phi < PI  
 //******************************************************************************
