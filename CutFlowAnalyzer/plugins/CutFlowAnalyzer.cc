@@ -2796,20 +2796,20 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   //                            FILL BRANCHES TO TREE                           
   //****************************************************************************
 
-  for(int k=0;k<20;k++){
-    std::cout<<" compdet mu1 muJetC   "<<b_compdet_mu1_muJetC[k]<<std::endl;
-    std::cout<<" compdet mu2 muJetC   "<<b_compdet_mu2_muJetC[k]<<std::endl;
-  }
+  // for(int k=0;k<10;k++){
+  //   std::cout<<" compdet mu1 muJetC   "<<b_compdet_mu1_muJetC[k]<<std::endl;
+  //   std::cout<<" compdet mu2 muJetC   "<<b_compdet_mu2_muJetC[k]<<std::endl;
+  // }
 
 
-  for(int k=0;k<20;k++){
-    for(int j=0;j<20;j++){
-      std::cout<<" PXBID mu1  "<<b_PXBID_mu1muJetC[k][j]<<std::endl;
-      std::cout<<" PXBID mu2  "<<b_PXBID_mu2muJetC[k][j]<<std::endl;
-      std::cout<<" PXFID mu1  "<<b_PXFID_mu1muJetC[k][j]<<std::endl;
-      std::cout<<" PXFID mu2  "<<b_PXFID_mu2muJetC[k][j]<<std::endl;
-    }
-  }
+  // for(int k=0;k<10;k++){
+  //   for(int j=0;j<10;j++){
+  //     std::cout<<" PXBID mu1  "<<b_PXBID_mu1muJetC[k][j]<<std::endl;
+  //     std::cout<<" PXBID mu2  "<<b_PXBID_mu2muJetC[k][j]<<std::endl;
+  //     std::cout<<" PXFID mu1  "<<b_PXFID_mu1muJetC[k][j]<<std::endl;
+  //     std::cout<<" PXFID mu2  "<<b_PXFID_mu2muJetC[k][j]<<std::endl;
+  //   }
+  // }
 
 
   m_ttree->Fill();
@@ -3236,15 +3236,15 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("compdet_mu2_muJetF",&b_compdet_mu2_muJetF,"compdet_mu2_muJetF[innerlayers_mu2_muJetF]/I");
 
 
-    m_ttree->Branch("PXBID_mu1muJetC",&b_PXBID_mu1muJetC,"PXBID_mu1muJetC[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/I");
-    m_ttree->Branch("PXFID_mu1muJetC",&b_PXFID_mu1muJetC,"PXFID_mu1muJetC[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/I");
-    m_ttree->Branch("PXBID_mu2muJetC",&b_PXBID_mu2muJetC,"PXBID_mu2muJetC[innerlayers_mu2_muJetC][compdet_mu2_muJetC]/I");
-    m_ttree->Branch("PXFID_mu2muJetC",&b_PXFID_mu2muJetC,"PXFID_mu2muJetC[innerlayers_mu2_muJetC][compdet_mu2_muJetC]/I");
+    m_ttree->Branch("PXBID_mu1muJetC",&b_PXBID_mu1muJetC,"PXBID_mu1muJetC[10][10]/I");
+    m_ttree->Branch("PXFID_mu1muJetC",&b_PXFID_mu1muJetC,"PXFID_mu1muJetC[10][10]/I");
+    m_ttree->Branch("PXBID_mu2muJetC",&b_PXBID_mu2muJetC,"PXBID_mu2muJetC[10][10]/I");
+    m_ttree->Branch("PXFID_mu2muJetC",&b_PXFID_mu2muJetC,"PXFID_mu2muJetC[10][10]/I");
 
-    m_ttree->Branch("PXBID_mu1muJetF",&b_PXBID_mu1muJetF,"PXBID_mu1muJetF[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/I");
-    m_ttree->Branch("PXFID_mu1muJetF",&b_PXFID_mu1muJetF,"PXFID_mu1muJetF[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/I");
-    m_ttree->Branch("PXBID_mu2muJetF",&b_PXBID_mu2muJetF,"PXBID_mu2muJetF[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/I");
-    m_ttree->Branch("PXFID_mu2muJetF",&b_PXFID_mu2muJetF,"PXFID_mu2muJetF[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/I");
+    // m_ttree->Branch("PXBID_mu1muJetF",&b_PXBID_mu1muJetF,"PXBID_mu1muJetF[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/I");
+    // m_ttree->Branch("PXFID_mu1muJetF",&b_PXFID_mu1muJetF,"PXFID_mu1muJetF[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/I");
+    // m_ttree->Branch("PXBID_mu2muJetF",&b_PXBID_mu2muJetF,"PXBID_mu2muJetF[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/I");
+    // m_ttree->Branch("PXFID_mu2muJetF",&b_PXFID_mu2muJetF,"PXFID_mu2muJetF[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/I");
 
 
     m_ttree->Branch("mj1m0posx",b_mj1m0posx,"mj1m0posx[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
