@@ -2270,8 +2270,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     minchi2_mu1_muJetF.clear();
     minchi2_mu2_muJetF.clear();
     
-    if( (b_diMuonF_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonF_m2_FittedVtx_hitpix_l3inc!=1) ||
-     	(b_diMuonC_m1_FittedVtx_hitpix_l3inc!=1&&b_diMuonC_m2_FittedVtx_hitpix_l3inc!=1) ){
 
       //===================== Initializing navigation school, propagator, etc..======================//
     
@@ -2691,10 +2689,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	  }
 	counter_traj++;
       }
-    }
+      }
 
-
-    }
   }
 
     
