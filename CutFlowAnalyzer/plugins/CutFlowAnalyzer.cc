@@ -641,10 +641,10 @@ private:
   Int_t b_compdet_mu1_muJetF[10];
   Int_t b_compdet_mu2_muJetF[10];
 
-  Int_t b_numhit_mu1_muJetC[10];
-  Int_t b_numhit_mu2_muJetC[10];
-  Int_t b_numhit_mu1_muJetF[10];
-  Int_t b_numhit_mu2_muJetF[10];
+  Int_t b_numhit_mu1_muJetC[100];
+  Int_t b_numhit_mu2_muJetC[100];
+  Int_t b_numhit_mu1_muJetF[100];
+  Int_t b_numhit_mu2_muJetF[100];
 
   Int_t b_PXBID_mu1muJetC[10][10];
   Int_t b_PXFID_mu1muJetC[10][10];
@@ -961,7 +961,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_compdet_mu2_muJetC[k]=-10000;
     b_compdet_mu1_muJetF[k]=-10000;
     b_compdet_mu2_muJetF[k]=-10000;
+  }
 
+  for(int k=0;k<100;k++){
     b_numhit_mu1_muJetC[k]=-10000;
     b_numhit_mu2_muJetC[k]=-10000;
     b_numhit_mu1_muJetF[k]=-10000;
@@ -2796,21 +2798,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   //                            FILL BRANCHES TO TREE                           
   //****************************************************************************
 
-  // for(int k=0;k<10;k++){
-  //   std::cout<<" compdet mu1 muJetC   "<<b_compdet_mu1_muJetC[k]<<std::endl;
-  //   std::cout<<" compdet mu2 muJetC   "<<b_compdet_mu2_muJetC[k]<<std::endl;
-  // }
-
-
-  // for(int k=0;k<10;k++){
-  //   for(int j=0;j<10;j++){
-  //     std::cout<<" PXBID mu1  "<<b_PXBID_mu1muJetC[k][j]<<std::endl;
-  //     std::cout<<" PXBID mu2  "<<b_PXBID_mu2muJetC[k][j]<<std::endl;
-  //     std::cout<<" PXFID mu1  "<<b_PXFID_mu1muJetC[k][j]<<std::endl;
-  //     std::cout<<" PXFID mu2  "<<b_PXFID_mu2muJetC[k][j]<<std::endl;
-  //   }
-  // }
-
 
   m_ttree->Fill();
   if(runBBestimation_) m_ttree_orphan->Fill();
@@ -3217,12 +3204,11 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("mutrack_charge_mu1JetF", &b_mutrack_charge_mu1JetF, "mutrack_charge_mu1JetF/F");
     m_ttree->Branch("mutrack_charge_mu2JetF", &b_mutrack_charge_mu2JetF, "mutrack_charge_mu2JetF/F");
 
-
-
     m_ttree->Branch("match_mu1track_muJetC",&b_match_mu1track_muJetC,"match_mu1track_muJetC/I");
     m_ttree->Branch("match_mu2track_muJetC",&b_match_mu2track_muJetC,"match_mu2track_muJetC/I");
     m_ttree->Branch("match_mu1track_muJetF",&b_match_mu1track_muJetF,"match_mu1track_muJetF/I");
     m_ttree->Branch("match_mu2track_muJetF",&b_match_mu2track_muJetF,"match_mu2track_muJetF/I");
+
 
 
     m_ttree->Branch("innerlayers_mu1_muJetC",&b_innerlayers_mu1_muJetC,"innerlayers_mu1_muJetC/I");
@@ -3235,73 +3221,55 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("compdet_mu1_muJetF",&b_compdet_mu1_muJetF,"compdet_mu1_muJetF[10]/I");
     m_ttree->Branch("compdet_mu2_muJetF",&b_compdet_mu2_muJetF,"compdet_mu2_muJetF[10]/I");
 
-    // m_ttree->Branch("compdet_mu1_muJetC",&b_compdet_mu1_muJetC,"compdet_mu1_muJetC[innerlayers_mu1_muJetC]/I");
-    // m_ttree->Branch("compdet_mu2_muJetC",&b_compdet_mu2_muJetC,"compdet_mu2_muJetC[innerlayers_mu2_muJetC]/I");
-    // m_ttree->Branch("compdet_mu1_muJetF",&b_compdet_mu1_muJetF,"compdet_mu1_muJetF[innerlayers_mu1_muJetF]/I");
-    // m_ttree->Branch("compdet_mu2_muJetF",&b_compdet_mu2_muJetF,"compdet_mu2_muJetF[innerlayers_mu2_muJetF]/I");
-
-
     m_ttree->Branch("PXBID_mu1muJetC",&b_PXBID_mu1muJetC,"PXBID_mu1muJetC[10][10]/I");
     m_ttree->Branch("PXFID_mu1muJetC",&b_PXFID_mu1muJetC,"PXFID_mu1muJetC[10][10]/I");
     m_ttree->Branch("PXBID_mu2muJetC",&b_PXBID_mu2muJetC,"PXBID_mu2muJetC[10][10]/I");
     m_ttree->Branch("PXFID_mu2muJetC",&b_PXFID_mu2muJetC,"PXFID_mu2muJetC[10][10]/I");
-
-    // m_ttree->Branch("PXBID_mu1muJetF",&b_PXBID_mu1muJetF,"PXBID_mu1muJetF[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/I");
-    // m_ttree->Branch("PXFID_mu1muJetF",&b_PXFID_mu1muJetF,"PXFID_mu1muJetF[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/I");
-    // m_ttree->Branch("PXBID_mu2muJetF",&b_PXBID_mu2muJetF,"PXBID_mu2muJetF[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/I");
-    // m_ttree->Branch("PXFID_mu2muJetF",&b_PXFID_mu2muJetF,"PXFID_mu2muJetF[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/I");
-
 
     m_ttree->Branch("mj1m0posx",b_mj1m0posx,"mj1m0posx[10][10]/F");
     m_ttree->Branch("mj1m0posy",b_mj1m0posy,"mj1m0posy[10][10]/F");
     m_ttree->Branch("mj1m0posx_err",b_mj1m0posx_err,"mj1m0posx_err[10][10]/F");
     m_ttree->Branch("mj1m0posy_err",b_mj1m0posy_err,"mj1m0posy_err[10][10]/F");
     
+    m_ttree->Branch("mj1m1posx",b_mj1m1posx,"mj1m1posx[10][10]/F");
+    m_ttree->Branch("mj1m1posy",b_mj1m1posy,"mj1m1posy[10][10]/F");
+    m_ttree->Branch("mj1m1posx_err",b_mj1m1posx_err,"mj1m1posx_err[10][10]/F");
+    m_ttree->Branch("mj1m1posy_err",b_mj1m1posy_err,"mj1m1posy_err[10][10]/F");
 
-    //     m_ttree->Branch("mj1m0posx",b_mj1m0posx,"mj1m0posx[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
-    // m_ttree->Branch("mj1m0posy",b_mj1m0posy,"mj1m0posy[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
-    // m_ttree->Branch("mj1m0posx_err",b_mj1m0posx_err,"mj1m0posx_err[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
-    // m_ttree->Branch("mj1m0posy_err",b_mj1m0posy_err,"mj1m0posy_err[innerlayers_mu1_muJetC][compdet_mu1_muJetC]/F");
+    m_ttree->Branch("mj2m0posx",b_mj2m0posx,"mj2m0posx[10][10]/F");
+    m_ttree->Branch("mj2m0posy",b_mj2m0posy,"mj2m0posy[10][10]/F");
+    m_ttree->Branch("mj2m0posx_err",b_mj2m0posx_err,"mj2m0posx_err[10][10]/F");
+    m_ttree->Branch("mj2m0posy_err",b_mj2m0posy_err,"mj2m0posy_err[10][10]/F");
 
-    // m_ttree->Branch("mj1m1posx",b_mj1m1posx,"mj1m1posx[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
-    // m_ttree->Branch("mj1m1posy",b_mj1m1posy,"mj1m1posy[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
-    // m_ttree->Branch("mj1m1posx_err",b_mj1m1posx_err,"mj1m1posx_err[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
-    // m_ttree->Branch("mj1m1posy_err",b_mj1m1posy_err,"mj1m1posy_err[innerlayers_mu1_muJetC][compdet_mu2_muJetC]/F");
+    m_ttree->Branch("mj2m1posx",b_mj2m1posx,"mj2m1posx[10][10]/F");
+    m_ttree->Branch("mj2m1posy",b_mj2m1posy,"mj2m1posy[10][10]/F");
+    m_ttree->Branch("mj2m1posx_err",b_mj2m1posx_err,"mj2m1posx_err[10][10]/F");
+    m_ttree->Branch("mj2m1posy_err",b_mj2m1posy_err,"mj2m1posy_err[10][10]/F");
 
-    // m_ttree->Branch("mj2m0posx",b_mj2m0posx,"mj2m0posx[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/F");
-    // m_ttree->Branch("mj2m0posy",b_mj2m0posy,"mj2m0posy[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/F");
-    // m_ttree->Branch("mj2m0posx_err",b_mj2m0posx_err,"mj2m0posx_err[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/F");
-    // m_ttree->Branch("mj2m0posy_err",b_mj2m0posy_err,"mj2m0posy_err[innerlayers_mu1_muJetF][compdet_mu1_muJetF]/F");
-
-    // m_ttree->Branch("mj2m1posx",b_mj2m1posx,"mj2m1posx[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/F");
-    // m_ttree->Branch("mj2m1posy",b_mj2m1posy,"mj2m1posy[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/F");
-    // m_ttree->Branch("mj2m1posx_err",b_mj2m1posx_err,"mj2m1posx_err[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/F");
-    // m_ttree->Branch("mj2m1posy_err",b_mj2m1posy_err,"mj2m1posy_err[innerlayers_mu2_muJetF][compdet_mu2_muJetF]/F");
-
-    // m_ttree->Branch("numhit_mu1_muJetC",&b_numhit_mu1_muJetC,"numhit_mu1_muJetC[innerlayers_mu1_muJetC]/I");
-    // m_ttree->Branch("numhit_mu2_muJetC",&b_numhit_mu2_muJetC,"numhit_mu2_muJetC[innerlayers_mu2_muJetC]/I");
-    // m_ttree->Branch("numhit_mu1_muJetF",&b_numhit_mu1_muJetF,"numhit_mu1_muJetF[innerlayers_mu1_muJetF]/I");
-    // m_ttree->Branch("numhit_mu2_muJetF",&b_numhit_mu2_muJetF,"numhit_mu2_muJetF[innerlayers_mu2_muJetF]/I");
+    m_ttree->Branch("numhit_mu1_muJetC",&b_numhit_mu1_muJetC,"numhit_mu1_muJetC[100]/I");
+    m_ttree->Branch("numhit_mu2_muJetC",&b_numhit_mu2_muJetC,"numhit_mu2_muJetC[100]/I");
+    m_ttree->Branch("numhit_mu1_muJetF",&b_numhit_mu1_muJetF,"numhit_mu1_muJetF[100]/I");
+    m_ttree->Branch("numhit_mu2_muJetF",&b_numhit_mu2_muJetF,"numhit_mu2_muJetF[100]/I");
     
-    // m_ttree->Branch("pixelhit_mu1_muJetC_posx",&b_pixelhit_mu1_muJetC_posx,"pixelhit_mu1_muJetC_posx[innerlayers_mu1_muJetC][numhit_mu1_muJetC]/F");
-    // m_ttree->Branch("pixelhit_mu1_muJetC_posy",&b_pixelhit_mu1_muJetC_posy,"pixelhit_mu1_muJetC_posy[innerlayers_mu1_muJetC][numhit_mu1_muJetC]/F");
-    // m_ttree->Branch("pixelhit_mu1_muJetC_errposx",&b_pixelhit_mu1_muJetC_errposx,"pixelhit_mu1_muJetC_errposx[innerlayers_mu1_muJetC][numhit_mu1_muJetC]/F");
-    // m_ttree->Branch("pixelhit_mu1_muJetC_errposy",&b_pixelhit_mu1_muJetC_errposy,"pixelhit_mu1_muJetC_errposy[innerlayers_mu1_muJetC][numhit_mu1_muJetC]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_posx",&b_pixelhit_mu1_muJetC_posx,"pixelhit_mu1_muJetC_posx[10][100]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_posy",&b_pixelhit_mu1_muJetC_posy,"pixelhit_mu1_muJetC_posy[10][100]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_errposx",&b_pixelhit_mu1_muJetC_errposx,"pixelhit_mu1_muJetC_errposx[10][100]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetC_errposy",&b_pixelhit_mu1_muJetC_errposy,"pixelhit_mu1_muJetC_errposy[10][100]/F");
 
-    // m_ttree->Branch("pixelhit_mu2_muJetC_posx",&b_pixelhit_mu2_muJetC_posx,"pixelhit_mu2_muJetC_posx[innerlayers_mu2_muJetC][numhit_mu2_muJetC]/F");
-    // m_ttree->Branch("pixelhit_mu2_muJetC_posy",&b_pixelhit_mu2_muJetC_posy,"pixelhit_mu2_muJetC_posy[innerlayers_mu2_muJetC][numhit_mu2_muJetC]/F");
-    // m_ttree->Branch("pixelhit_mu2_muJetC_errposx",&b_pixelhit_mu2_muJetC_errposx,"pixelhit_mu2_muJetC_errposx[innerlayers_mu2_muJetC][numhit_mu2_muJetC]/F");
-    // m_ttree->Branch("pixelhit_mu2_muJetC_errposy",&b_pixelhit_mu2_muJetC_errposy,"pixelhit_mu2_muJetC_errposy[innerlayers_mu2_muJetC][numhit_mu2_muJetC]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_posx",&b_pixelhit_mu2_muJetC_posx,"pixelhit_mu2_muJetC_posx[10][100]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_posy",&b_pixelhit_mu2_muJetC_posy,"pixelhit_mu2_muJetC_posy[10][100]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_errposx",&b_pixelhit_mu2_muJetC_errposx,"pixelhit_mu2_muJetC_errposx[10][100]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetC_errposy",&b_pixelhit_mu2_muJetC_errposy,"pixelhit_mu2_muJetC_errposy[10][100]/F");
 
-    // m_ttree->Branch("pixelhit_mu1_muJetF_posx",&b_pixelhit_mu1_muJetF_posx,"pixelhit_mu1_muJetF_posx[innerlayers_mu1_muJetF][numhit_mu1_muJetF]/F");
-    // m_ttree->Branch("pixelhit_mu1_muJetF_posy",&b_pixelhit_mu1_muJetF_posy,"pixelhit_mu1_muJetF_posy[innerlayers_mu1_muJetF][numhit_mu1_muJetF]/F");
-    // m_ttree->Branch("pixelhit_mu1_muJetF_errposx",&b_pixelhit_mu1_muJetF_errposx,"pixelhit_mu1_muJetF_errposx[innerlayers_mu1_muJetF][numhit_mu1_muJetF]/F");
-    // m_ttree->Branch("pixelhit_mu1_muJetF_errposy",&b_pixelhit_mu1_muJetF_errposy,"pixelhit_mu1_muJetF_errposy[innerlayers_mu1_muJetF][numhit_mu1_muJetF]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_posx",&b_pixelhit_mu1_muJetF_posx,"pixelhit_mu1_muJetF_posx[10][100]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_posy",&b_pixelhit_mu1_muJetF_posy,"pixelhit_mu1_muJetF_posy[10][100]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_errposx",&b_pixelhit_mu1_muJetF_errposx,"pixelhit_mu1_muJetF_errposx[10][100]/F");
+    m_ttree->Branch("pixelhit_mu1_muJetF_errposy",&b_pixelhit_mu1_muJetF_errposy,"pixelhit_mu1_muJetF_errposy[10][100]/F");
 
-    // m_ttree->Branch("pixelhit_mu2_muJetF_posx",&b_pixelhit_mu2_muJetF_posx,"pixelhit_mu2_muJetF_posx[innerlayers_mu2_muJetF][numhit_mu2_muJetF]/F");
-    // m_ttree->Branch("pixelhit_mu2_muJetF_posy",&b_pixelhit_mu2_muJetF_posy,"pixelhit_mu2_muJetF_posy[innerlayers_mu2_muJetF][numhit_mu2_muJetF]/F");
-    // m_ttree->Branch("pixelhit_mu2_muJetF_errposx",&b_pixelhit_mu2_muJetF_errposx,"pixelhit_mu2_muJetF_errposx[innerlayers_mu2_muJetF][numhit_mu2_muJetF]/F");
-    // m_ttree->Branch("pixelhit_mu2_muJetF_errposy",&b_pixelhit_mu2_muJetF_errposy,"pixelhit_mu2_muJetF_errposy[innerlayers_mu2_muJetF][numhit_mu2_muJetF]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_posx",&b_pixelhit_mu2_muJetF_posx,"pixelhit_mu2_muJetF_posx[10][100]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_posy",&b_pixelhit_mu2_muJetF_posy,"pixelhit_mu2_muJetF_posy[10][100]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_errposx",&b_pixelhit_mu2_muJetF_errposx,"pixelhit_mu2_muJetF_errposx[10][100]/F");
+    m_ttree->Branch("pixelhit_mu2_muJetF_errposy",&b_pixelhit_mu2_muJetF_errposy,"pixelhit_mu2_muJetF_errposy[10][100]/F");
 
     
   }
