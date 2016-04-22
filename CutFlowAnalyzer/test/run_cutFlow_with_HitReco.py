@@ -79,6 +79,6 @@ process.Path = cms.Path(process.patifyMC * process.MuJetProducers * process.Trac
 # customisation of the process.
 
 #process.TFileService = cms.Service("TFileService", fileName = cms.string(sys.argv[2]+"/Ntup_%03d.root" % PROCESS) )
-process.TFileService = cms.Service("TFileService", fileName = cms.string("test.root") )
+process.TFileService = cms.Service("TFileService", fileName = cms.string("out_ana.root") )
 
 # End of customisation functions
