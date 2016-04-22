@@ -183,7 +183,7 @@ private:
   Float_t b_beamSpot_x;
   Float_t b_beamSpot_y;
   Float_t b_beamSpot_z;
-  
+
   //****************************************************************************
   //                GEN LEVEL BRANCHES, COUNTERS AND SELECTORS                  
   //****************************************************************************
@@ -327,17 +327,6 @@ private:
   Float_t b_genA1Mu_dPhi;
   Float_t b_genA0Mu_dR;
   Float_t b_genA1Mu_dR;
-
-  //BAM: added for vertex finding sanity checks
-  Int_t hitsBeforeVertex_diMuonC_FittedVTX;
-  Int_t hitsBeforeVertex_diMuonF_FittedVTX;
-  Int_t hitsBeforeVertex_diMuonC_ConsistentVTX;
-  Int_t hitsBeforeVertex_diMuonF_ConsistentVTX;
-  
-  Int_t missingHitsAfterVertex_diMuonC_FittedVTX;
-  Int_t missingHitsAfterVertex_diMuonF_FittedVTX;
-  Int_t missingHitsAfterVertex_diMuonC_ConsistentVTX;
-  Int_t missingHitsAfterVertex_diMuonF_ConsistentVTX;
   
   //****************************************************************************
   //          HLT LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
@@ -394,153 +383,7 @@ private:
   Bool_t b_is2DiMuonsFittedVtxOK_KF;
   Bool_t b_is2DiMuonsFittedVtxOK_VS;
   Bool_t b_is2DiMuonsConsistentVtxOK;
-
-  Float_t b_beamSpot_x;
-  Float_t b_beamSpot_y;
-  Float_t b_beamSpot_z;
   
-  //****************************************************************************
-  //                GEN LEVEL BRANCHES, COUNTERS AND SELECTORS                  
-  //****************************************************************************
-  
-  bool m_fillGenLevel; // TRUE for simulation, FALSE for data
-  
-  // GEN Level Muon Branches: with this analyzer we search for events with 4 muons!
-  Float_t b_genMu0_px;
-  Float_t b_genMu1_px;
-  Float_t b_genMu2_px;
-  Float_t b_genMu3_px;
-  
-  Float_t b_genMu0_py;
-  Float_t b_genMu1_py;
-  Float_t b_genMu2_py;
-  Float_t b_genMu3_py;
-
-  Float_t b_genMu0_pz;
-  Float_t b_genMu1_pz;
-  Float_t b_genMu2_pz;
-  Float_t b_genMu3_pz;
-
-  Float_t b_genMu0_pT;
-  Float_t b_genMu1_pT;
-  Float_t b_genMu2_pT;
-  Float_t b_genMu3_pT;
-
-  Float_t b_genMu0_eta;
-  Float_t b_genMu1_eta;
-  Float_t b_genMu2_eta;
-  Float_t b_genMu3_eta;
-
-  Float_t b_genMu0_phi;
-  Float_t b_genMu1_phi;
-  Float_t b_genMu2_phi;
-  Float_t b_genMu3_phi;
-
-  // GEN Level Counters: number of events with ...
-  Int_t m_events4GenMu;    // ... with 4 gen muons
-  Int_t m_events1GenMu17;  // ... with 1 gen muon:  pT > 17 GeV, |eta| < 0.9
-  Int_t m_events2GenMu8;   // ... with 2 gen muons: pT > 8 GeV,  |eta| < 2.4
-  Int_t m_events3GenMu8;   // ... with 3 gen muons: pT > 8 GeV,  |eta| < 2.4
-  Int_t m_events4GenMu8;   // ... with 4 gen muons: pT > 8 GeV,  |eta| < 2.4
-
-  // GEN Level Selectors
-  Bool_t b_is4GenMu;
-  Bool_t b_is1GenMu17;
-  Bool_t b_is2GenMu8;
-  Bool_t b_is3GenMu8;
-  Bool_t b_is4GenMu8;
-
-  // Bosons
-  Float_t b_genH_m;
-  Float_t b_genH_px;
-  Float_t b_genH_py;
-  Float_t b_genH_pz;
-  Float_t b_genH_eta;
-  Float_t b_genH_phi;
-  Float_t b_genH_vx;
-  Float_t b_genH_vy;
-  Float_t b_genH_vz;
-
-  Float_t b_genA0_m;
-  Float_t b_genA0_px;
-  Float_t b_genA0_py;
-  Float_t b_genA0_pz;
-  Float_t b_genA0_eta;
-  Float_t b_genA0_phi;
-  Float_t b_genA0_vx;
-  Float_t b_genA0_vy;
-  Float_t b_genA0_vz;
-
-  Float_t b_genA0_Lx;
-  Float_t b_genA0_Ly;
-  Float_t b_genA0_Lz;
-  Float_t b_genA0_Lxy;
-  Float_t b_genA0_L;
-
-  Float_t b_genA1_m;
-  Float_t b_genA1_px;
-  Float_t b_genA1_py;
-  Float_t b_genA1_pz;
-  Float_t b_genA1_eta;
-  Float_t b_genA1_phi;
-  Float_t b_genA1_vx;
-  Float_t b_genA1_vy;
-  Float_t b_genA1_vz;
-
-  Float_t b_genA1_Lx;
-  Float_t b_genA1_Ly;
-  Float_t b_genA1_Lz;
-  Float_t b_genA1_Lxy;
-  Float_t b_genA1_L;
-
-  // Muons accossiated with A-bosons
-  Float_t b_genA0Mu0_px;
-  Float_t b_genA0Mu1_px;
-  Float_t b_genA1Mu0_px;
-  Float_t b_genA1Mu1_px;
-
-  Float_t b_genA0Mu0_py;
-  Float_t b_genA0Mu1_py;
-  Float_t b_genA1Mu0_py;
-  Float_t b_genA1Mu1_py;
-
-  Float_t b_genA0Mu0_pz;
-  Float_t b_genA0Mu1_pz;
-  Float_t b_genA1Mu0_pz;
-  Float_t b_genA1Mu1_pz;
-
-  Float_t b_genA0Mu0_eta;
-  Float_t b_genA0Mu1_eta;
-  Float_t b_genA1Mu0_eta;
-  Float_t b_genA1Mu1_eta;
-
-  Float_t b_genA0Mu0_phi;
-  Float_t b_genA0Mu1_phi;
-  Float_t b_genA1Mu0_phi;
-  Float_t b_genA1Mu1_phi;
-
-  Float_t b_genA0Mu0_vx;
-  Float_t b_genA0Mu1_vx;
-  Float_t b_genA1Mu0_vx;
-  Float_t b_genA1Mu1_vx;
-
-  Float_t b_genA0Mu0_vy;
-  Float_t b_genA0Mu1_vy;
-  Float_t b_genA1Mu0_vy;
-  Float_t b_genA1Mu1_vy;
-
-  Float_t b_genA0Mu0_vz;
-  Float_t b_genA0Mu1_vz;
-  Float_t b_genA1Mu0_vz;
-  Float_t b_genA1Mu1_vz;
-
-  Float_t b_genA0Mu_dEta;
-  Float_t b_genA1Mu_dEta;
-  Float_t b_genA0Mu_dPhi;
-  Float_t b_genA1Mu_dPhi;
-  Float_t b_genA0Mu_dR;
-  Float_t b_genA1Mu_dR;
-
   //BAM: added for vertex finding sanity checks
   Int_t hitsBeforeVertex_diMuonC_FittedVTX;
   Int_t hitsBeforeVertex_diMuonF_FittedVTX;
@@ -551,56 +394,6 @@ private:
   Int_t missingHitsAfterVertex_diMuonF_FittedVTX;
   Int_t missingHitsAfterVertex_diMuonC_ConsistentVTX;
   Int_t missingHitsAfterVertex_diMuonF_ConsistentVTX;
-
-  //****************************************************************************
-  //          HLT LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
-  //****************************************************************************
-
-  std::vector<std::string> hltPaths_;  
-  std::vector<std::string> b_hltPaths;
-
-  //****************************************************************************
-  //          RECO LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
-  //****************************************************************************
-
-  // Labels to access
-  edm::InputTag m_muons;        // reconstructed muons
-  edm::InputTag m_muJets;       // muon jets built from reconstructed muons
-  edm::InputTag m_muJetOrphans; // muon orphan, not found in any group
-  Int_t         m_nThrowsConsistentVertexesCalculator;
-
-  unsigned int m_randomSeed;
-  TRandom3       m_trandom3;
-
-  // bb Estimation
-  Float_t b_massC;
-  Float_t b_massF;
-  Float_t b_isoC_1mm;
-  Float_t b_isoF_1mm;
-
-  // Selectors and counters of events with ...
-  Bool_t b_is1SelMu17;
-  Int_t  m_events1SelMu17; // ... with 1 selected reco muon: pT > 17 GeV, |eta| < 0.9
-
-  Bool_t b_is2SelMu8;
-  Int_t  m_events2SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
-
-  Bool_t b_is3SelMu8;
-  Int_t  m_events3SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
-
-  Bool_t b_is4SelMu8;
-  Int_t  m_events4SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
-
-  Bool_t b_is2MuJets;
-  Int_t  m_events2MuJets;  // ... with 2 muon jets
-
-  Bool_t b_is2DiMuons;
-  Int_t  m_events2DiMuons; // ... with 2 dimuons (dimuon = muon jet with 2 muons)
-
-  Bool_t b_is2DiMuonsFittedVtxOK;
-  Bool_t b_is2DiMuonsFittedVtxOK_KF;
-  Bool_t b_is2DiMuonsFittedVtxOK_VS;
-  Bool_t b_is2DiMuonsConsistentVtxOK;
 
   Bool_t b_isDiMuonHLTFired;
 
