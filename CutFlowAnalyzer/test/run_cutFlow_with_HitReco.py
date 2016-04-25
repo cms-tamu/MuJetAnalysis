@@ -58,12 +58,9 @@ process.patTriggerEvent.processName = cms.string( "*" )
 
 ############## Analysis Modules ###################################
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
-process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cfi")
+process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzers_cff")
 
-process.cutFlowAnalyzer.analyzerDebug = cms.int32(100);
-process.cutFlowAnalyzer.runPixelHitRecovery = cms.bool(True);
-
-process.Path = cms.Path(process.patifyMC * process.MuJetProducers  * process.cutFlowAnalyzer)
+process.Path = cms.Path(process.patifyMC * process.MuJetProducers  * process.cutFlowAnalyzers)
 # customisation of the process.
 
 process.TFileService = cms.Service("TFileService", fileName = cms.string("out_ana.root") )
