@@ -58,7 +58,7 @@ process.patTriggerEvent.processName = cms.string( "*" )
 
 ############## Analysis Modules ###################################
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
-process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzers_cff")
+process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
 
 process.Path = cms.Path(process.patifyMC * process.MuJetProducers  * process.cutFlowAnalyzers)
 # customisation of the process.
