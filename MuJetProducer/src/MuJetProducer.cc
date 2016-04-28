@@ -353,7 +353,6 @@ bool MuJetProducer::muonOkay(const pat::Muon &muon) {
 
 // ------------ method called to produce the data  ------------
 void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
-std::cout << "MuJetProducer Checkpoint 1: " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl;
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByLabel(m_muons, muons);
   const pat::MuonCollection *muons_ptr = &*muons;
@@ -368,7 +367,6 @@ std::cout << "MuJetProducer Checkpoint 1: " << m_barrelPixelLayer << ", " << m_e
     tracks_ptr = &*tracks;
     caloTowers_ptr = &*caloTowers;
   }
-std::cout << "MuJetProducer Checkpoint 2: " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl;
 
   edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
   const TransientTrackBuilder *transientTrackBuilder_ptr = NULL;
@@ -389,23 +387,17 @@ std::cout << "MuJetProducer Checkpoint 2: " << m_barrelPixelLayer << ", " << m_e
   iEvent.getByLabel("offlinePrimaryVertices", primaryVertices);
 
   //  const reco::Vertex* vtx = &((*primaryVertices)[0]);
-std::cout << "MuJetProducer Checkpoint 3: " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl;
 
   std::map<const pat::Muon*,bool> used;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
-std::cout << "MuJetProducer Checkpoint 4: " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl;
     if (muonOkay(*one)) {
-std::cout << "MuJetProducer Checkpoint 5: " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl;
 	    for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
-std::cout << "MuJetProducer Checkpoint 6: " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl;
 	      if (one != two  &&  muonOkay(*two)) {
-std::cout << "MuJetProducer Checkpoint 7: " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl;
 
           std::vector<const pat::Muon*> pairOfMuons;
           pairOfMuons.push_back(&*one);
           pairOfMuons.push_back(&*two);
 //Checkpoint
-std::cout << "Printing from MuJetProducer A: " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl;
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
                                    tracks_ptr,
@@ -423,7 +415,6 @@ std::cout << "Printing from MuJetProducer A: " << m_barrelPixelLayer << ", " << 
 								   m_unionNumberAboveThresholdPt,
 								   m_barrelPixelLayer,
 								   m_endcapPixelLayer);
-		  std::cout << "Printing from MuJetProducer B: " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl;
 
           bool satisfied_deltaR = (muonPair.dR(0, 1, muonPair.vertexValid()) < m_maxDeltaR);
 

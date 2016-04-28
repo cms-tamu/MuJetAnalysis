@@ -37,7 +37,6 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
 		int endcapPixelLayer)
 
 {
-std::cout << "MultiMuon Checkpoint 1: " << barrelPixelLayer << ", " << endcapPixelLayer << std::endl; 
   pat::CompositeCandidate();
 
   int charge = 0;
@@ -52,7 +51,6 @@ std::cout << "MultiMuon Checkpoint 1: " << barrelPixelLayer << ", " << endcapPix
   setCharge(charge);
   setP4( PolarLorentzVector(lorentzVector.pt(),lorentzVector.eta(),lorentzVector.phi(),lorentzVector.mass()));
 
-std::cout << "MultiMuon Checkpoint 2: " << barrelPixelLayer << ", " << endcapPixelLayer << std::endl;
 
   std::map<const reco::Candidate*,unsigned int> ancestorCounter;
   for (std::vector<const pat::Muon*>::const_iterator muon = muons.begin();  muon != muons.end();  ++muon) {
@@ -68,7 +66,6 @@ std::cout << "MultiMuon Checkpoint 2: " << barrelPixelLayer << ", " << endcapPix
 	    }
     }
   }
-  std::cout << "MultiMuon Checkpoint 3: " << barrelPixelLayer << ", " << endcapPixelLayer << std::endl;
 
   const reco::Candidate *youngestCommonAncestor = NULL;
   unsigned int maxDepth = 0;
@@ -89,7 +86,6 @@ std::cout << "MultiMuon Checkpoint 2: " << barrelPixelLayer << ", " << endcapPix
     const reco::GenParticle *asGenParticle = dynamic_cast<const reco::GenParticle*>(youngestCommonAncestor);
     setGenParticle(*asGenParticle);
   }
-std::cout << "MultiMuon Checkpoint 4: " << barrelPixelLayer << ", " << endcapPixelLayer << std::endl;
   // Fitted vertex
   m_vertexValid = false;
   m_vertexValid_fitted = false;
@@ -102,15 +98,9 @@ std::cout << "MultiMuon Checkpoint 4: " << barrelPixelLayer << ", " << endcapPix
   m_vtx_y_scan=0.;
   m_vtx_z_scan=0.;
 
-  std::cout << "MultiMuon Checkpoint 5: " << barrelPixelLayer << ", " << endcapPixelLayer << std::endl;
   
   if (transientTrackBuilder != NULL) {
-	  std::cout << "transientTrackBuilder != NULL" << std::endl;
-	  std::cout << "Begin calculating vertex" << std::endl;
-	  std::cout << "Checkpoint A: Barrel, Endcap  : " << barrelPixelLayer << ", " << endcapPixelLayer << std::endl;
 	  calculateVertex(transientTrackBuilder, barrelPixelLayer, endcapPixelLayer);
-	  std::cout << "Checkpoint B: Barrel, Endcap  : " << barrelPixelLayer << ", " << endcapPixelLayer << std::endl;
-	  std::cout << "Completed calculating vertex" << std::endl;
   }
 
   // Consistent vertex
@@ -215,7 +205,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
   return false;
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
- std::cout << "Checkpoint 1: Barrel, Endcap  : " << barrelLayer << ", " << endcapLayer << std::endl; 
   std::vector<reco::TransientTrack> tracksToVertex;
   std::vector<const reco::Track*> muonTracks;
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
@@ -231,7 +220,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       muonTracks.push_back(&*muon(i)->outerTrack()); //&*track
     }
   }
- std::cout << "Checkpoint 2: Barrel, Endcap  : " << barrelLayer << ", " << endcapLayer << std::endl;
   if (tracksToVertex.size() < 2) return false;
 
   KalmanVertexFitter vertexFitter;
@@ -253,7 +241,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       fittedVertex.error().czy(), 
       fittedVertex.error().czz() 
     }; // YP: FIXME! Check if this definition is correct
-	 std::cout << "Checkpoint 3: Barrel, Endcap  : " << barrelLayer << ", " << endcapLayer << std::endl;
     m_chi2 = fittedVertex.totalChiSquared();
     m_ndof = fittedVertex.degreesOfFreedom();
     m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
@@ -272,10 +259,8 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     //       "  vx    "<<fittedVertex.position().x()<<
     //       "  vy    "<<fittedVertex.position().y()<<
     //      "  vz    "<<fittedVertex.position().z()<<std::endl;    
-	 std::cout << "Checkpoint 4: Barrel, Endcap  : " << barrelLayer << ", " << endcapLayer << std::endl;
   }
   else if( !fittedVertex.isValid()){
-   std::cout << "Checkpoint 5: Barrel, Endcap  : " << barrelLayer << ", " << endcapLayer << std::endl;
     
     FreeTrajectoryState const & posState = tracksToVertex[0].impactPointTSCP().theState();
     FreeTrajectoryState const & negState = tracksToVertex[1].impactPointTSCP().theState();
@@ -290,7 +275,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     m_mindisttrack = dca;
     
     if (muonTracks.size() > 0){
-	 std::cout << "Checkpoint 6: Barrel, Endcap  : " << barrelLayer << ", " << endcapLayer << std::endl;
       
       double newx1 = 0.0;
       double newy1 = 0.0;
@@ -314,19 +298,11 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       
       double current_x_bdy1 = 0.0;
       double current_x_bdy2 = 0.0;
-	   std::cout << "Checkpoint 7: Barrel, Endcap  : " << barrelLayer << ", " << endcapLayer << std::endl;
       
       // setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
       const double pixelBarrelR(pat::pixelBarrelR(barrelLayer));
       const double pixelEndcapZ(pat::pixelEndcapZ(endcapLayer));
       const int maxR(pixelBarrelR*100);
-
-//BAM:4/27/2016
-std::cout << "Running MultiMuon" << std::endl;
- std::cout << "Checkpoint 8: Barrel, Endcap  : " << barrelLayer << ", " << endcapLayer << std::endl;
-std::cout << "Barrel, Endcap  : " << barrelLayer << ", " << endcapLayer << std::endl;
-std::cout << "Max Search R    : " << maxR << std::endl;
-std::cout << "PixelBarrel R, Z: " << pixelBarrelR << ", " << pixelEndcapZ << std::endl;
 
       for (int i = 0; i < maxR; ++i){
 	if (muonTracks[0]->px() < 0){
