@@ -190,10 +190,8 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
   m_unionHCALIsolation          = aMultiMuon.m_unionHCALIsolation;
   m_centralNumberAboveThreshold = aMultiMuon.m_centralNumberAboveThreshold;
   m_unionNumberAboveThreshold   = aMultiMuon.m_unionNumberAboveThreshold;
-//std::cout << "Before aMultMuon (barrel, endcap): " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl; 
   m_barrelPixelLayer = aMultiMuon.m_barrelPixelLayer;
   m_endcapPixelLayer = aMultiMuon.m_endcapPixelLayer;
-std::cout << "After  aMultMuon (barrel, endcap): " << m_barrelPixelLayer << ", " << m_endcapPixelLayer << std::endl; 
 }
 
 /// destructor
@@ -324,7 +322,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 
 	// FIXME: add parameters in this section!!!	
 	if (fabs(z_at_x_1) > pixelEndcapZ) break;
-	std::cout << "Euclidian distance: " << euclid1 << std::endl;
 	if (euclid1 > pixelBarrelR) break;
 	
 	for (int j = 0; j < maxR; ++j){
@@ -347,8 +344,8 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	  
 	  if (separation < minSeparation){
 	    minSeparation = separation;
-	    std::cout << "new xyz1 " << i << ": " << current_x_bdy1 << ", " <<  y_at_x_1 << ", " << z_at_x_1 << std::endl;
-	    std::cout << "new xyz2 " << j << ": " << current_x_bdy2 << ", " <<  y_at_x_2 << ", " << z_at_x_2 << std::endl;
+	    //std::cout << "new xyz1 " << i << ": " << current_x_bdy1 << ", " <<  y_at_x_1 << ", " << z_at_x_1 << std::endl;
+	    //std::cout << "new xyz2 " << j << ": " << current_x_bdy2 << ", " <<  y_at_x_2 << ", " << z_at_x_2 << std::endl;
 	    newx1 = current_x_bdy1;
 	    newy1 = y_at_x_1;
 	    newz1 = z_at_x_1;
