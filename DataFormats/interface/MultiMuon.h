@@ -138,7 +138,7 @@ namespace pat {
     const pat::Muon *muon(int i) const { return dynamic_cast<const pat::Muon*>(daughter(i)); }
 
     /// calculate a vertex from the daughter muons (performed by constructor if transientTrackBuilder != NULL)
-    bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder);
+    bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder, int barrelPixelLayer, int endcapPixelLayer);
 
     // calculate isolation (performed by constructor if tracks, muons, and caloTowers != NULL)
     // Track Isolation

@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
-    analyzerDebug = cms.int32(0),
+    analyzerDebug = cms.int32(100),
     fillGenLevel = cms.bool(True),
 #    muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),
 #    muJets = cms.InputTag("TrackerMuJetProducer05"),
@@ -9,7 +9,7 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
     muJets = cms.InputTag("PFMuJetProducer05"),
     muJetOrphans = cms.InputTag("PFMuJetProducer05", "Orphans"),
     DiMuons_Iso_Max = cms.double(2.0),
-    nThrowsConsistentVertexesCalculator = cms.int32(100000),
+    nThrowsConsistentVertexesCalculator = cms.int32(0),
     barrelPixelLayer = cms.int32(1),
     endcapPixelLayer = cms.int32(1),
     runDisplacedVtxFinder = cms.bool(False),
