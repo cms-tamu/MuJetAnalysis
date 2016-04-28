@@ -34,7 +34,12 @@ process.TrackRefitter.NavigationSchool = ''
 ################## RECO Input #############################
 
 process.source = cms.Source ("PoolSource",
-                             fileNames=cms.untracked.vstring('file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_1.root'),
+                             fileNames=cms.untracked.vstring(
+							 'file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_1.root'
+#							 'file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_19.root',
+#							 'file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_200.root',
+#							 'file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_256.root'
+							 ),
                              skipEvents=cms.untracked.uint32(0)
                             )
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
@@ -58,12 +63,9 @@ process.patTriggerEvent.processName = cms.string( "*" )
 
 ############## Analysis Modules ###################################
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
-process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cfi")
+process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
 
-process.cutFlowAnalyzer.analyzerDebug = cms.int32(100);
-process.cutFlowAnalyzer.runPixelHitRecovery = cms.bool(True);
-
-process.Path = cms.Path(process.patifyMC * process.MuJetProducers  * process.cutFlowAnalyzer)
+process.Path = cms.Path(process.patifyMC * process.MuJetProducers  * process.cutFlowAnalyzers)
 # customisation of the process.
 
 process.TFileService = cms.Service("TFileService", fileName = cms.string("out_ana.root") )
