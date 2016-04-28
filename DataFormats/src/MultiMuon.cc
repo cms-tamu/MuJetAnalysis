@@ -19,22 +19,22 @@ class TransientTrackBuilder {};
 
 /// constructor with muons
 pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
-                          const TransientTrackBuilder    *transientTrackBuilder,
-                          const reco::TrackCollection    *tracks,
-                          const pat::MuonCollection      *allmuons,
-                          const CaloTowerCollection      *caloTowers,
-                          double centralTrackIsolationCone,
-                          double unionTrackIsolationCone,
-                          double centralTrackThresholdPt,
-                          double unionTrackThresholdPt,
-                          double centralCaloIsolationCone,
-                          double unionCaloIsolationCone,
-                          double centralNumberAboveThresholdCone,
-                          double unionNumberAboveThresholdCone,
-                          double centralNumberAboveThresholdPt,
-			  double unionNumberAboveThresholdPt,
-			  int barrelPixelLayer,
-			  int endcapPixelLayer)
+		const TransientTrackBuilder    *transientTrackBuilder,
+		const reco::TrackCollection    *tracks,
+		const pat::MuonCollection      *allmuons,
+		const CaloTowerCollection      *caloTowers,
+		double centralTrackIsolationCone,
+		double unionTrackIsolationCone,
+		double centralTrackThresholdPt,
+		double unionTrackThresholdPt,
+		double centralCaloIsolationCone,
+		double unionCaloIsolationCone,
+		double centralNumberAboveThresholdCone,
+		double unionNumberAboveThresholdCone,
+		double centralNumberAboveThresholdPt,
+		double unionNumberAboveThresholdPt,
+		int barrelPixelLayer,
+		int endcapPixelLayer)
 
 {
   pat::CompositeCandidate();
@@ -50,6 +50,7 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
   
   setCharge(charge);
   setP4( PolarLorentzVector(lorentzVector.pt(),lorentzVector.eta(),lorentzVector.phi(),lorentzVector.mass()));
+
 
   std::map<const reco::Candidate*,unsigned int> ancestorCounter;
   for (std::vector<const pat::Muon*>::const_iterator muon = muons.begin();  muon != muons.end();  ++muon) {
@@ -85,7 +86,6 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
     const reco::GenParticle *asGenParticle = dynamic_cast<const reco::GenParticle*>(youngestCommonAncestor);
     setGenParticle(*asGenParticle);
   }
-
   // Fitted vertex
   m_vertexValid = false;
   m_vertexValid_fitted = false;
@@ -97,9 +97,10 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
   m_vtx_x_scan=0.;
   m_vtx_y_scan=0.;
   m_vtx_z_scan=0.;
+
   
   if (transientTrackBuilder != NULL) {
-    calculateVertex(transientTrackBuilder);
+	  calculateVertex(transientTrackBuilder, barrelPixelLayer, endcapPixelLayer);
   }
 
   // Consistent vertex
@@ -137,8 +138,10 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
                                                              centralNumberAboveThresholdPt, 
                                                              unionNumberAboveThresholdPt);
   }
-  m_barrelPixelLayer = 1;
-  m_endcapPixelLayer = 1;
+  m_barrelPixelLayer = barrelPixelLayer;
+  //m_barrelPixelLayer = 10;
+  m_endcapPixelLayer = endcapPixelLayer;
+  //m_endcapPixelLayer = 10;
 }
 
 /// constructor from MultiMuonType
@@ -187,7 +190,6 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
   m_unionHCALIsolation          = aMultiMuon.m_unionHCALIsolation;
   m_centralNumberAboveThreshold = aMultiMuon.m_centralNumberAboveThreshold;
   m_unionNumberAboveThreshold   = aMultiMuon.m_unionNumberAboveThreshold;
-
   m_barrelPixelLayer = aMultiMuon.m_barrelPixelLayer;
   m_endcapPixelLayer = aMultiMuon.m_endcapPixelLayer;
 }
@@ -196,12 +198,11 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
 pat::MultiMuon::~MultiMuon() {}
 
 /// calculate the vertex from TransientTracks; return true iff successful
-bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrackBuilder) {
+bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrackBuilder, int barrelLayer, int endcapLayer) {
 #ifdef MULTIMUONCANDIDATE_FOR_FWLITE
   return false;
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
-  
   std::vector<reco::TransientTrack> tracksToVertex;
   std::vector<const reco::Track*> muonTracks;
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
@@ -217,7 +218,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       muonTracks.push_back(&*muon(i)->outerTrack()); //&*track
     }
   }
-
   if (tracksToVertex.size() < 2) return false;
 
   KalmanVertexFitter vertexFitter;
@@ -298,8 +298,8 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       double current_x_bdy2 = 0.0;
       
       // setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
-      const double pixelBarrelR(pat::pixelBarrelR(m_barrelPixelLayer));
-      const double pixelEndcapZ(pat::pixelEndcapZ(m_endcapPixelLayer));
+      const double pixelBarrelR(pat::pixelBarrelR(barrelLayer));
+      const double pixelEndcapZ(pat::pixelEndcapZ(endcapLayer));
       const int maxR(pixelBarrelR*100);
 
       for (int i = 0; i < maxR; ++i){
@@ -322,7 +322,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 
 	// FIXME: add parameters in this section!!!	
 	if (fabs(z_at_x_1) > pixelEndcapZ) break;
-	//std::cout << "Euclidian distance: " << euclid1 << std::endl;
 	if (euclid1 > pixelBarrelR) break;
 	
 	for (int j = 0; j < maxR; ++j){
@@ -345,8 +344,8 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	  
 	  if (separation < minSeparation){
 	    minSeparation = separation;
-	    // std::cout << "new xyz1 " << i << ": " << current_x_bdy1 << ", " <<  y_at_x_1 << ", " << z_at_x_1 << std::endl;
-	    // std::cout << "new xyz2 " << j << ": " << current_x_bdy2 << ", " <<  y_at_x_2 << ", " << z_at_x_2 << std::endl;
+	    //std::cout << "new xyz1 " << i << ": " << current_x_bdy1 << ", " <<  y_at_x_1 << ", " << z_at_x_1 << std::endl;
+	    //std::cout << "new xyz2 " << j << ": " << current_x_bdy2 << ", " <<  y_at_x_2 << ", " << z_at_x_2 << std::endl;
 	    newx1 = current_x_bdy1;
 	    newy1 = y_at_x_1;
 	    newz1 = z_at_x_1;
@@ -358,9 +357,9 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	}
       }
       
-      // std::cout<<"  scan  vertex 1   "<<"   vx   "<<newx1<<"   vy   "<<newy1<<"   vz   "<<newz1<<std::endl;      
-      // std::cout<<"  scan  vertex 2   "<<"   vx   "<<newx2<<"   vy   "<<newy2<<"   vz   "<<newz2<<std::endl;      
-      // std::cout << "min: " << minSeparation << std::endl;
+       std::cout<<"  scan  vertex 1   "<<"   vx   "<<newx1<<"   vy   "<<newy1<<"   vz   "<<newz1<<std::endl;      
+       std::cout<<"  scan  vertex 2   "<<"   vx   "<<newx2<<"   vy   "<<newy2<<"   vz   "<<newz2<<std::endl;      
+       std::cout << "min: " << minSeparation << std::endl;
       
       m_mindisttrack_scan = minSeparation;
       

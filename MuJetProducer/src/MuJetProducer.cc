@@ -397,7 +397,7 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
           std::vector<const pat::Muon*> pairOfMuons;
           pairOfMuons.push_back(&*one);
           pairOfMuons.push_back(&*two);
-
+//Checkpoint
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
                                    tracks_ptr,
@@ -412,9 +412,9 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
                                    m_centralNumberAboveThresholdCone,
                                    m_unionNumberAboveThresholdCone,
                                    m_centralNumberAboveThresholdPt,
-                                   m_unionNumberAboveThresholdPt,
-				   m_barrelPixelLayer,
-				   m_endcapPixelLayer);
+								   m_unionNumberAboveThresholdPt,
+								   m_barrelPixelLayer,
+								   m_endcapPixelLayer);
 
           bool satisfied_deltaR = (muonPair.dR(0, 1, muonPair.vertexValid()) < m_maxDeltaR);
 
