@@ -62,6 +62,7 @@ class MuJetProducer : public edm::EDProducer {
     kGroupByDeltaRAndVertexProb,
     kGroupByMassAndVertexProb,
     kGroupByDeltaROrMass,
+    kGroupByDeltaRAndMass,
     kGroupByDeltaROrMassAndVertexProb,
     kGroupByMassAndVertexProbOrDeltaR,
 
@@ -125,6 +126,8 @@ class MuJetProducer : public edm::EDProducer {
   double m_unionNumberAboveThresholdCone;
   double m_centralNumberAboveThresholdPt;
   double m_unionNumberAboveThresholdPt;
+  int m_barrelPixelLayer;
+  int m_endcapPixelLayer;
 };
 
 //
@@ -182,6 +185,8 @@ MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
    , m_unionNumberAboveThresholdCone(   iConfig.getParameter<double>("unionNumberAboveThresholdCone"))
    , m_centralNumberAboveThresholdPt(   iConfig.getParameter<double>("centralNumberAboveThresholdPt"))
    , m_unionNumberAboveThresholdPt(     iConfig.getParameter<double>("unionNumberAboveThresholdPt"))
+   , m_barrelPixelLayer(                iConfig.getParameter<int>("barrelPixelLayer"))
+   , m_endcapPixelLayer(                iConfig.getParameter<int>("endcapPixelLayer"))
 {
   //register your products
   produces<pat::MultiMuonCollection>("Pairs");
@@ -195,6 +200,7 @@ MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
   else if (m_groupingMode_string == "GroupByDeltaRAndVertexProb"      ) m_groupingMode = kGroupByDeltaRAndVertexProb;
   else if (m_groupingMode_string == "GroupByMassAndVertexProb"        ) m_groupingMode = kGroupByMassAndVertexProb;
   else if (m_groupingMode_string == "GroupByDeltaROrMass"             ) m_groupingMode = kGroupByDeltaROrMass;
+  else if (m_groupingMode_string == "GroupByDeltaRAndMass"            ) m_groupingMode = kGroupByDeltaRAndMass;
   else if (m_groupingMode_string == "GroupByDeltaROrMassAndVertexProb") m_groupingMode = kGroupByDeltaROrMassAndVertexProb;
   else if (m_groupingMode_string == "GroupByMassAndVertexProbOrDeltaR") m_groupingMode = kGroupByMassAndVertexProbOrDeltaR;
   else {
@@ -395,7 +401,7 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
           std::vector<const pat::Muon*> pairOfMuons;
           pairOfMuons.push_back(&*one);
           pairOfMuons.push_back(&*two);
-
+//Checkpoint
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
                                    tracks_ptr,
@@ -410,7 +416,9 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
                                    m_centralNumberAboveThresholdCone,
                                    m_unionNumberAboveThresholdCone,
                                    m_centralNumberAboveThresholdPt,
-                                   m_unionNumberAboveThresholdPt);
+								   m_unionNumberAboveThresholdPt,
+								   m_barrelPixelLayer,
+								   m_endcapPixelLayer);
 
           bool satisfied_deltaR = (muonPair.dR(0, 1, muonPair.vertexValid()) < m_maxDeltaR);
 
@@ -425,6 +433,7 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
           else if (m_groupingMode == kGroupByDeltaRAndVertexProb      ) satisfied = satisfied_deltaR  &&  satisfied_vertexProb;
           else if (m_groupingMode == kGroupByMassAndVertexProb        ) satisfied = satisfied_mass    &&  satisfied_vertexProb;
           else if (m_groupingMode == kGroupByDeltaROrMass             ) satisfied = satisfied_deltaR  ||  satisfied_mass;
+          else if (m_groupingMode == kGroupByDeltaRAndMass            ) satisfied = satisfied_deltaR  &&  satisfied_mass;
           else if (m_groupingMode == kGroupByDeltaROrMassAndVertexProb) satisfied = (satisfied_deltaR ||  satisfied_mass)        &&  satisfied_vertexProb;
           else if (m_groupingMode == kGroupByMassAndVertexProbOrDeltaR) satisfied = satisfied_mass    &&  (satisfied_vertexProb  ||  satisfied_deltaR);
           else     assert(false);

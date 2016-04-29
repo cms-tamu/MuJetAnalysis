@@ -122,8 +122,9 @@ namespace pat {
 	             double centralNumberAboveThresholdCone = 0.,
 	             double unionNumberAboveThresholdCone   = 0.,
 	             double centralNumberAboveThresholdPt   = 1e6,
-	             double unionNumberAboveThresholdPt     = 1e6);
-	 
+	             double unionNumberAboveThresholdPt     = 1e6,
+	             int barrelPixelLayer = 1,
+	             int endcapPixelLayer = 1);
     /// constructor from a composite candidate
     MultiMuon(const pat::MultiMuon & aMultiMuon);
 
@@ -137,7 +138,7 @@ namespace pat {
     const pat::Muon *muon(int i) const { return dynamic_cast<const pat::Muon*>(daughter(i)); }
 
     /// calculate a vertex from the daughter muons (performed by constructor if transientTrackBuilder != NULL)
-    bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder);
+    bool calculateVertex(const TransientTrackBuilder *transientTrackBuilder, int barrelPixelLayer, int endcapPixelLayer);
 
     // calculate isolation (performed by constructor if tracks, muons, and caloTowers != NULL)
     // Track Isolation
@@ -446,9 +447,17 @@ namespace pat {
     double m_unionECALIsolation;
     double m_centralHCALIsolation;
     double m_unionHCALIsolation;
-    int     m_centralNumberAboveThreshold;
-    int     m_unionNumberAboveThreshold;
+    int    m_centralNumberAboveThreshold;
+    int    m_unionNumberAboveThreshold;
+    
+    int    m_barrelPixelLayer;
+    int    m_endcapPixelLayer;
   };
+
+  // functions that define fiducial volume
+  double pixelBarrelR(int pixelBarrelLayer);
+  double pixelBarrelR2(int pixelBarrelLayer);
+  double pixelEndcapZ(int pixelEndcapLayer);
 }
 
 #endif // MuJetAnalysis_DataFormats_MultiMuon_h

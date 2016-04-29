@@ -32,9 +32,9 @@ void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".
       TIter next(files);
       while ((file=(TSystemFile*)next())) {
 	fname = file->GetName();
-	if (verbose) std::cout << "found fname " << fname << std::endl;
+	if (verbose) std::cout << "found fname " << dirname + fname << std::endl;
 	if (!file->IsDirectory() && fname.BeginsWith(ext)) {
-	  if (verbose) std::cout << "adding fname " << fname << std::endl;
+	  if (verbose) std::cout << "adding fname " << dirname + fname << std::endl;
 	  ch->Add(dirname + fname);
 	}
       }
@@ -90,4 +90,14 @@ void readTextFileWithSamples(const std::string fileName, std::vector< std::vecto
   }
   v.push_back(vv);
   infile.close();
+}
+
+void printFileNames(const std::vector< std::vector<string> >& vec)
+{
+  for (int i = 0; i < vec.size(); i++){
+    for (int j = 0; j < vec[i].size(); j++){
+      cout << vec[i][j] <<endl;
+    }
+    cout <<endl;
+  }
 }

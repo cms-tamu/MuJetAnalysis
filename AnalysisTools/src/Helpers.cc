@@ -13,6 +13,10 @@ bool tamu::helpers::sameTrack(const reco::Track *one, const reco::Track *two) {
 	  fabs(one->vz() - two->vz()) < 1e-10);
 }
 
+
+bool tamu::helpers::matchorder(const std::pair<Int_t,Float_t>  &v1, const std::pair<Int_t,Float_t> &v2) { return (fabs(v1.second) < fabs(v2.second) ); }
+
+
 //******************************************************************************
 // Auxiliary function: Calculate difference between two angles: -PI < phi < PI  
 //******************************************************************************

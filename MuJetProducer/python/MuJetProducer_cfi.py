@@ -58,4 +58,8 @@ MuJetProducer = cms.EDProducer(
     # calorimeter isolation is not recommended
     centralCaloIsolationCone = cms.double(0.),
     unionCaloIsolationCone = cms.double(0.),
+
+    # fiducial region
+    barrelPixelLayer = cms.int32(1),
+    endcapPixelLayer = cms.int32(1),
     )
