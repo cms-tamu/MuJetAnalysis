@@ -2774,16 +2774,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
     for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
       if (muon->pt() > m_trigpt  &&  fabs(muon->eta()) < 0.9) {
-<<<<<<< HEAD
-        const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
-        const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
-        const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
-         if((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt)  ||
-            (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
-            (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)){
-            hightrigmuons.push_back(muon);
-         }
-=======
 	const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
 	const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
 	const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
@@ -2795,7 +2785,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 	  hightrigmuons.push_back(muon);
 	  m_orphan_FiredTrig_ptColl = true;
 	}
->>>>>>> origin/for-CMSSW-74X
       }
       const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
       const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
@@ -2835,7 +2824,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     iEvent.getByToken(m_muJetOrphans, orphans);
     float mu1788 = 0;
     if (muJets->size() == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
-<<<<<<< HEAD
        m_orphan_passOffLineSel = true;
        pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
        pat::MuonCollection::const_iterator orphan = orphans->begin();
@@ -2905,62 +2893,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
        }
      }
    }
-=======
-      m_orphan_passOffLineSel = true;
-      pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
-      pat::MuonCollection::const_iterator orphan = orphans->begin();
-      if( muJet->muon(0)->pt() > m_trigpt || muJet->muon(1)->pt() > m_trigpt || orphan->pt() > m_trigpt ) m_orphan_passOffLineSelPt = true;
-      m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
-      m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
-      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-	if( orphan->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() &&  tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
-	  m_dimuorphan_containstrig++;
-	}
-      }
-      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-	if( muJet->muon(0)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
-	  m_dimuorphan_containstrig2++;
-	}
-	if( muJet->muon(1)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
-	  m_dimuorphan_containstrig2++;
-	}
-      }
-      m_orphan_dimu_mass = muJet->mass();
-      m_orphan_mass = orphan->mass();
-      //iso orphan
-      double iso_track_pt_treshold = 0.5;
-      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-	if (!muJet->sameTrack(&*track,&*(orphan->innerTrack()))) {
-	  double dphi = orphan->innerTrack()->phi() - track->phi();
-	  if (dphi > M_PI) dphi -= 2.*M_PI;
-	  if (dphi < -M_PI) dphi += 2.*M_PI;
-	  double deta = orphan->innerTrack()->eta() - track->eta();
-	  double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
-	  if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-	    double dz = fabs(track->dz(beamSpot->position())-orphan->innerTrack()->dz(beamSpot->position()));
-	    if (dz < 0.1) m_orphan_isoTk += track->pt();
-	  }
-	}
-      }
-      //iso dimuon-orphan
-      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-	bool track_is_muon = false;
-	if (muJet->sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) || muJet->sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
-	if (!track_is_muon) {
-	  double dphi = muJet->phi() - track->phi();
-	  if (dphi > M_PI) dphi -= 2.*M_PI;
-	  if (dphi < -M_PI) dphi += 2.*M_PI;
-	  double deta = muJet->eta() - track->eta();
-	  double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
-	  if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-	    double dz = fabs(track->dz(beamSpot->position())-muJet->vertexDz(beamSpot->position()));
-	    if (dz < 0.1) m_orphan_dimu_isoTk += track->pt();
-	  }
-	}    
-      }
-    }
-  }
->>>>>>> origin/for-CMSSW-74X
 
   //****************************************************************************
   //                          RECO LEVEL ANALYSIS FINISH                        
