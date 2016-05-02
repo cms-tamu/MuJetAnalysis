@@ -78,6 +78,8 @@ void readTextFileWithSamples(const std::string fileName, std::vector< std::vecto
   string line;
   std::vector<string> vv;
   while (std::getline(infile, line)) {
+    // skip lines in txt file
+    if (line.find("#") == 0) continue;
     if (line.empty()) {
       v.push_back(vv);
       vv.clear();
@@ -100,4 +102,18 @@ void printFileNames(const std::vector< std::vector<string> >& vec)
     }
     cout <<endl;
   }
+}
+
+double My_dPhi(double phi1, double phi2) {
+  double dPhi = phi1 - phi2;
+  if (dPhi >  M_PI) dPhi -= 2.*M_PI;
+  if (dPhi < -M_PI) dPhi += 2.*M_PI;
+  return dPhi;
+}
+
+double deltaR(double eta1, double phi1, double eta2, double phi2)
+{
+  double dEta = eta1 - eta2;
+  double dPhi = My_dPhi(phi1,phi2);
+  return sqrt(dEta*dEta+dPhi*dPhi);
 }
