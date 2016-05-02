@@ -1,3 +1,6 @@
+#include <iostream>
+#include <fstream>
+
 void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 {
   bool verbose(false);
