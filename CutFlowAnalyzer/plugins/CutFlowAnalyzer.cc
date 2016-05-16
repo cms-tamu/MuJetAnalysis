@@ -10,6 +10,7 @@
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
 #include "FWCore/Utilities/interface/InputTag.h"
+#include "FWCore/Common/interface/TriggerNames.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/DetId/interface/DetId.h"
@@ -29,6 +30,8 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerObjectMapRecord.h"
 #include "Geometry/CommonDetUnit/interface/GlobalTrackingGeometry.h"
 #include "Geometry/CommonTopologies/interface/PixelTopology.h"
 #include "Geometry/Records/interface/GlobalTrackingGeometryRecord.h"
@@ -118,7 +121,14 @@ bool sameTrack(const reco::Track *one, const reco::Track *two) {
 // 	   fabs(one->eta() - two->eta()) <1e-6);
 // }
 
-
+    static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+    void FillTrigInfo( TH1F *h1, edm::Handle<pat::TriggerEvent> triggerEvent, std::map<int,std::string> nameAndNumb );
+    TH1F* triggerComposition;
+    TH1F* triggerComposition_bb;
+  private:
+    virtual void beginJob() ;
+    virtual void analyze(const edm::Event&, const edm::EventSetup&);
+    virtual void endJob() ;
 
 bool sameTrackRF(const reco::Track *one, const reco::Track *two) {
   return ( fabs( one->charge() - two->charge())==0 && 
@@ -339,6 +349,8 @@ private:
   std::vector<std::string> allMuHltPaths_;
   std::vector<std::string> b_hltPaths;
   
+  bool histo_name;
+  std::map<int,std::string> NameAndNumb;
   //****************************************************************************
   //          RECO LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
   //****************************************************************************
@@ -729,6 +741,12 @@ private:
   Bool_t  m_orphan_FiredTrig_ptColl;
   Bool_t  m_orphan_FiredTrigPt_ptColl;
   Bool_t  m_orphan_FiredTrigPtEta_ptColl;
+  Float_t  m_orphan_PtOrph;
+  Float_t  m_orphan_EtaOrph;
+  Float_t  m_orphan_PtMu0;
+  Float_t  m_orphan_EtaMu0;
+  Float_t  m_orphan_PtMu1;
+  Float_t  m_orphan_EtaMu1;
 };
 
 //
@@ -821,6 +839,9 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_events4SelMu8                      = 0;
   m_events2MuJets                      = 0;
   m_events2DiMuons                     = 0;
+  //Fill trigger histo
+  histo_name = true;
+  NameAndNumb.clear();
 
   runDisplacedVtxFinder_ = iConfig.getParameter<bool>("runDisplacedVtxFinder");
   runPixelHitRecovery_ = iConfig.getParameter<bool>("runPixelHitRecovery");
@@ -834,7 +855,8 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
 
 CutFlowAnalyzer::~CutFlowAnalyzer()
 {
-
+  triggerComposition->Write();
+  triggerComposition_bb->Write();
   // do anything here that needs to be done at desctruction time
   // (e.g. close files, deallocate resources etc.)
 
@@ -1105,6 +1127,35 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
 
   GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
+  //Trigger names 
+  if( histo_name ){
+    edm::Handle< TriggerResults > TrResults;
+    iEvent.getByLabel( edm::InputTag("TriggerResults","","HLT"), TrResults);
+    const TriggerResults *trRes = TrResults.product();
+    int ntrigs = trRes->size();
+    if (ntrigs==0) std::cout << "No trigger name given in TriggerResults of the input " << std::endl;
+    edm::TriggerNames const& triggerNames = iEvent.triggerNames(*trRes);
+    int nBin=0, nBins=0;
+    for (int itrig = 0; itrig != ntrigs; ++itrig) {
+	TString trigName = triggerNames.triggerName(itrig);
+	if( trigName.BeginsWith("HLT_") && (trigName.Contains("Double") || trigName.Contains("TripleMu")) ){
+	  nBins++;
+	}
+    }
+    edm::Service<TFileService> tFileService;
+    triggerComposition = tFileService->make<TH1F>( "triggerComposition", "", nBins, -0.5, nBins-0.5 );
+    triggerComposition_bb = tFileService->make<TH1F>( "triggerComposition_bb", "", nBins, -0.5, nBins-0.5 );
+    for (int itrig = 0; itrig != ntrigs; ++itrig) {
+	TString trigName = triggerNames.triggerName(itrig);
+	if( trigName.BeginsWith("HLT_") && (trigName.Contains("Double") || trigName.Contains("TripleMu")) ){
+	  NameAndNumb[nBin] = trigName;
+	  triggerComposition->GetXaxis()->SetBinLabel(nBin+1,trigName);
+	  triggerComposition_bb->GetXaxis()->SetBinLabel(nBin+1,trigName);
+	  nBin++;
+	}
+    }
+    histo_name = false;
+  }
 
   //****************************************************************************
   //                          GEN LEVEL ANALYSIS START                          
@@ -2755,6 +2806,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     
 
   if(runBBestimation_){
+    FillTrigInfo(triggerComposition, triggerEvent, NameAndNumb );
     m_orphan_passOffLineSel = false;
     m_orphan_passOffLineSelPt = false;
     m_orphan_passOffLineSelPtEta = false;
@@ -2769,6 +2821,12 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     m_orphan_FiredTrig_ptColl = false;
     m_orphan_FiredTrigPt_ptColl = false;
     m_orphan_FiredTrigPtEta_ptColl = false;
+    m_orphan_PtOrph  = -99.;
+    m_orphan_EtaOrph = -99.;
+    m_orphan_PtMu0   = -99.;
+    m_orphan_EtaMu0  = -99.;
+    m_orphan_PtMu1   = -99.;
+    m_orphan_EtaMu1  = -99.;
     // Trimuons
     double m_trigpt = 17.;
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
@@ -2823,58 +2881,65 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     iEvent.getByToken(m_muJetOrphans, orphans);
     float mu1788 = 0;
     if (muJets->size() == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
-       m_orphan_passOffLineSel = true;
-       pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
-       pat::MuonCollection::const_iterator orphan = orphans->begin();
-       if( muJet->muon(0)->pt() > m_trigpt || muJet->muon(1)->pt() > m_trigpt || orphan->pt() > m_trigpt ) m_orphan_passOffLineSelPt = true;
-       if((muJet->muon(0)->pt() > m_trigpt && fabs(muJet->muon(0)->eta())<0.9) || (muJet->muon(1)->pt() > m_trigpt && fabs(muJet->muon(1)->eta())<0.9) || (orphan->pt() > m_trigpt && fabs(orphan->eta())<0.9)) m_orphan_passOffLineSelPtEta = true;
-       double triPt[3]  = {muJet->muon(0)->pt(), muJet->muon(1)->pt(), orphan->pt()};
-       double triEta[3] = {fabs(muJet->muon(0)->eta()), fabs(muJet->muon(1)->eta()), fabs(orphan->eta())};
-       int Index17=-1;
-       for(int i=0; i<3; i++){
-         if(triPt[i]>m_trigpt && triEta[i]<0.9) Index17 = i;
-       }
-       if(Index17>-1){
-          for(int i=0; i<3; i++){ if(i!=Index17 && triPt[i]>8) mu1788+=0.5; }
-       }
-       if( mu1788==1 ) m_orphan_passOffLineSelPt1788 = true;
-       if ( muJet->muon(0)->isTrackerMuon() && muJet->muon(0)->innerTrack().isNonnull() && muJet->muon(1)->isTrackerMuon() && muJet->muon(1)->innerTrack().isNonnull() && orphan->isTrackerMuon() && orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true; 
+      m_orphan_passOffLineSel = true;
+      pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
+      pat::MuonCollection::const_iterator orphan = orphans->begin();
+      if( muJet->muon(0)->pt() > m_trigpt || muJet->muon(1)->pt() > m_trigpt || orphan->pt() > m_trigpt ) m_orphan_passOffLineSelPt = true;
+      if((muJet->muon(0)->pt() > m_trigpt && fabs(muJet->muon(0)->eta())<0.9) || (muJet->muon(1)->pt() > m_trigpt && fabs(muJet->muon(1)->eta())<0.9) || (orphan->pt() > m_trigpt && fabs(orphan->eta())<0.9)) m_orphan_passOffLineSelPtEta = true;
+      m_orphan_PtOrph  = orphan->pt();
+      m_orphan_EtaOrph = orphan->eta();
+      m_orphan_PtMu0   = muJet->muon(0)->pt();
+      m_orphan_EtaMu0  = muJet->muon(0)->eta();
+      m_orphan_PtMu1   = muJet->muon(1)->pt();
+      m_orphan_EtaMu1  = muJet->muon(1)->eta();
+      double triPt[3]  = {muJet->muon(0)->pt(), muJet->muon(1)->pt(), orphan->pt()};
+      double triEta[3] = {fabs(muJet->muon(0)->eta()), fabs(muJet->muon(1)->eta()), fabs(orphan->eta())};
+      int Index17=-1;
+      for(int i=0; i<3; i++){
+        if(triPt[i]>m_trigpt && triEta[i]<0.9) Index17 = i;
+      }
+      if(Index17>-1){
+         for(int i=0; i<3; i++){ if(i!=Index17 && triPt[i]>8) mu1788+=0.5; }
+      }
+      if( mu1788==1 ) m_orphan_passOffLineSelPt1788 = true;
+      if ( muJet->muon(0)->isTrackerMuon() && muJet->muon(0)->innerTrack().isNonnull() && muJet->muon(1)->isTrackerMuon() && muJet->muon(1)->innerTrack().isNonnull() && orphan->isTrackerMuon() && orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true; 
+      if( m_orphan_passOffLineSelPtEta && m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerEvent, NameAndNumb );
 
-       m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
-       m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
-       for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-         if( orphan->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() &&  tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
-            m_dimuorphan_containstrig++;
-         }
-       }
-       for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-         if( muJet->muon(0)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
-           m_dimuorphan_containstrig2++;
-         }
-         if( muJet->muon(1)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
-           m_dimuorphan_containstrig2++;
-         }
-       }
-       m_orphan_dimu_mass = muJet->mass();
-       m_orphan_mass = orphan->mass();
-       //iso orphan
-       double iso_track_pt_treshold = 0.5;
-       m_orphan_isoTk = 0.;
-       m_orphan_dimu_isoTk = 0.;
-       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-         if (!muJet->sameTrack(&*track,&*(orphan->innerTrack()))) {
-           double dphi = orphan->innerTrack()->phi() - track->phi();
-           if (dphi > M_PI) dphi -= 2.*M_PI;
-           if (dphi < -M_PI) dphi += 2.*M_PI;
-           double deta = orphan->innerTrack()->eta() - track->eta();
-           double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
-           if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-             double dz = fabs(track->dz(beamSpot->position())-orphan->innerTrack()->dz(beamSpot->position()));
-             if (dz < 0.1){ m_orphan_isoTk += track->pt(); }
-           }
-         }
-       }
-       //iso dimuon-orphan
+      m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
+      m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
+      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+        if( orphan->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() &&  tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
+           m_dimuorphan_containstrig++;
+        }
+      }
+      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+        if( muJet->muon(0)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
+          m_dimuorphan_containstrig2++;
+        }
+        if( muJet->muon(1)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
+          m_dimuorphan_containstrig2++;
+        }
+      }
+      m_orphan_dimu_mass = muJet->mass();
+      m_orphan_mass = orphan->mass();
+      //iso orphan
+      double iso_track_pt_treshold = 0.5;
+      m_orphan_isoTk = 0.;
+      m_orphan_dimu_isoTk = 0.;
+      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+        if (!muJet->sameTrack(&*track,&*(orphan->innerTrack()))) {
+          double dphi = orphan->innerTrack()->phi() - track->phi();
+          if (dphi > M_PI) dphi -= 2.*M_PI;
+          if (dphi < -M_PI) dphi += 2.*M_PI;
+          double deta = orphan->innerTrack()->eta() - track->eta();
+          double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
+          if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
+            double dz = fabs(track->dz(beamSpot->position())-orphan->innerTrack()->dz(beamSpot->position()));
+            if (dz < 0.1){ m_orphan_isoTk += track->pt(); }
+          }
+        }
+      }
+      //iso dimuon-orphan
        for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
          bool track_is_muon = false;
          if (muJet->sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) || muJet->sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
@@ -2883,7 +2948,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
            if (dphi > M_PI) dphi -= 2.*M_PI;
            if (dphi < -M_PI) dphi += 2.*M_PI;
            double deta = muJet->eta() - track->eta();
-           double dR = sqrt(pow(dphi, 2) + pow(deta, 2)); 
+           double dR   = sqrt(pow(dphi, 2) + pow(deta, 2)); 
            if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
              double dz = fabs(track->dz(beamSpot->position())-muJet->vertexDz(beamSpot->position()));
              if (dz < 0.1){ m_orphan_dimu_isoTk += track->pt(); }
@@ -2892,7 +2957,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
        }
      }
    }
-
   //****************************************************************************
   //                          RECO LEVEL ANALYSIS FINISH                        
   //****************************************************************************
@@ -3404,6 +3468,12 @@ CutFlowAnalyzer::beginJob() {
     m_ttree_orphan->Branch("orph_FiredTrig_ptColl", &m_orphan_FiredTrig_ptColl, "orph_FiredTrig_ptColl/O");
     m_ttree_orphan->Branch("orph_FiredTrigPt_ptColl", &m_orphan_FiredTrigPt_ptColl, "orph_FiredTrigPt_ptColl/O");
     m_ttree_orphan->Branch("orph_FiredTrigPtEta_ptColl", &m_orphan_FiredTrigPtEta_ptColl, "orph_FiredTrigPtEta_ptColl/O");
+    m_ttree_orphan->Branch("orph_PtOrph", &m_orphan_PtOrph, "orph_PtOrph/F");
+    m_ttree_orphan->Branch("orph_EtaOrph", &m_orphan_EtaOrph, "orph_EtaOrph/F");
+    m_ttree_orphan->Branch("orph_PtMu0", &m_orphan_PtMu0, "orph_PtMu0/F");
+    m_ttree_orphan->Branch("orph_EtaMu0", &m_orphan_EtaMu0, "orph_EtaMu0/F");
+    m_ttree_orphan->Branch("orph_PtMu1", &m_orphan_PtMu1, "orph_PtMu1/F");
+    m_ttree_orphan->Branch("orph_EtaMu1", &m_orphan_EtaMu1, "orph_EtaMu1/F");
   }
 }
 
@@ -3468,8 +3538,17 @@ CutFlowAnalyzer::endJob()
   std::cout << m_events4SelMu8                       << std::endl;
   std::cout << m_events2MuJets                       << std::endl;
   std::cout << m_events2DiMuons                      << std::endl;
+}
 
-
+void CutFlowAnalyzer::FillTrigInfo( TH1F * h1, edm::Handle<pat::TriggerEvent> triggerEvent, std::map<int,std::string> nameAndNumb )
+{
+  for( unsigned int i=0; i<nameAndNumb.size(); i++ ){
+    if( triggerEvent->path(nameAndNumb[i]) ){
+	if ( triggerEvent->path(nameAndNumb[i])->wasAccept() ) {
+	  h1->Fill(i);
+      }
+    }
+  }
 }
 
 // ------------ method called when starting to processes a run  ------------
