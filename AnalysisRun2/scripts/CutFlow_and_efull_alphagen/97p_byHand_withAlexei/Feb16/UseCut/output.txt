@@ -1,0 +1,82 @@
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/32      23 June 2015   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/32 (heads/v5-34-00-patches@v5-34-30-102-g626b950, Nov 17 2015, 15:46:00 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing FakeInvestigation.C+...
+Begin Efficiency Investigation...
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+SysError in <TFile::ReadBuffer>: error reading from file /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root (Communication error on send)
+Error in <TFile::Init>: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/out_ana_Combined.root failed to read the file type data.
+Error in <TFile::cd>: Unknown directory cutFlowAnalyzer
+negCounter: 0
+GoodCounter: 0
+Info in <TCanvas::Print>: pdf file eta.pdf has been created
+Info in <TCanvas::Print>: pdf file lxy.pdf has been created
+Info in <TCanvas::Print>: pdf file reco_eta.pdf has been created
+Info in <TCanvas::Print>: pdf file reco_lxy.pdf has been created
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (eta_num) has not been written.
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (eta_den) has not been written.
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (lxy_num) has not been written.
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (lxy_den) has not been written.
