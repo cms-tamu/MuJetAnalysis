@@ -81,7 +81,7 @@ process.generator = cms.EDFilter("Pythia8GeneratorFilter",
 			'35:m0 = 90',
 			#'35:mMin = 50.',
 
-			'35:addChannel 1 0.0075 100 54 54', 
+			'35:addChannel 1 0.01 100 54 54', 
 			'35:onMode = off',
 			'35:onIfMatch = 54 54',
 
