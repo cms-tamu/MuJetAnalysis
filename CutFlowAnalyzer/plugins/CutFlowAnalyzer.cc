@@ -70,7 +70,6 @@
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
 #include "MuJetAnalysis/AnalysisTools/interface/DisplacedVertexFinder.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
-#include "FWCore/Framework/interface/ConsumesCollector.h"
 
 // user include files
 #include "TTree.h"
@@ -121,14 +120,7 @@ bool sameTrack(const reco::Track *one, const reco::Track *two) {
 // 	   fabs(one->eta() - two->eta()) <1e-6);
 // }
 
-    static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
-    void FillTrigInfo( TH1F *h1, edm::Handle<pat::TriggerEvent> triggerEvent, std::map<int,std::string> nameAndNumb );
-    TH1F* triggerComposition;
-    TH1F* triggerComposition_bb;
-  private:
-    virtual void beginJob() ;
-    virtual void analyze(const edm::Event&, const edm::EventSetup&);
-    virtual void endJob() ;
+
 
 bool sameTrackRF(const reco::Track *one, const reco::Track *two) {
   return ( fabs( one->charge() - two->charge())==0 && 
@@ -150,7 +142,9 @@ public:
   ~CutFlowAnalyzer();
   
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
-  
+  void FillTrigInfo( TH1F *h1, edm::Handle<pat::TriggerEvent> triggerEvent, std::map<int,std::string> nameAndNumb );
+  TH1F* triggerComposition;
+  TH1F* triggerComposition_bb;
 private:
   virtual void beginJob() ;
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
@@ -348,7 +342,6 @@ private:
   std::vector<std::string> otherMuHltPaths_;
   std::vector<std::string> allMuHltPaths_;
   std::vector<std::string> b_hltPaths;
-  
   bool histo_name;
   std::map<int,std::string> NameAndNumb;
   //****************************************************************************
@@ -363,6 +356,9 @@ private:
   edm::EDGetTokenT<pat::TriggerEvent> m_triggerEvent;
   edm::EDGetTokenT<reco::TrackCollection> m_tracks;
   edm::EDGetTokenT<reco::GenParticleCollection> m_genParticles;
+  edm::EDGetTokenT<edm::TriggerResults> m_trigRes;
+  edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
+  edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
@@ -816,7 +812,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //****************************************************************************
   //                 SET RECO LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
-  
+
   m_muons           = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"));
   m_muJets          = consumes<pat::MultiMuonCollection>(iConfig.getParameter<edm::InputTag>("muJets"));
   m_beamSpot        = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
@@ -824,6 +820,9 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_triggerEvent    = consumes<pat::TriggerEvent>(iConfig.getParameter<edm::InputTag>("triggerEvent"));
   m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
   m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genParticles"));
+  m_trigRes         = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
+  m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
+  m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
@@ -1129,8 +1128,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
   //Trigger names 
   if( histo_name ){
-    edm::Handle< TriggerResults > TrResults;
-    iEvent.getByLabel( edm::InputTag("TriggerResults","","HLT"), TrResults);
+    edm::Handle<edm::TriggerResults> TrResults;
+    iEvent.getByToken( m_trigRes, TrResults);
     const TriggerResults *trRes = TrResults.product();
     int ntrigs = trRes->size();
     if (ntrigs==0) std::cout << "No trigger name given in TriggerResults of the input " << std::endl;
@@ -1914,10 +1913,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   // Cut on isolation
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(m_tracks, tracks);
-  
-//  edm::Handle<reco::PFCandidateCollection> pfCandidates;
-//  iEvent.getByLabel("particleFlow", pfCandidates);
-  
+
   // Cut on isolation - use fitted vertexes
   b_diMuonC_IsoTk_FittedVtx = -1.;
   b_diMuonF_IsoTk_FittedVtx = -1.;
@@ -2077,7 +2073,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   // Cut on primary vertex in event
   edm::Handle<reco::VertexCollection> primaryVertices;
   iEvent.getByToken(m_primaryVertices, primaryVertices);
-  
+
   b_isVertexOK = false;
   for (reco::VertexCollection::const_iterator vertex = primaryVertices->begin();  vertex != primaryVertices->end();  ++vertex) {
     if (vertex->isValid() && !vertex->isFake() && vertex->tracksSize() >= 4 && fabs(vertex->z()) < 24.) {
@@ -2109,7 +2105,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
     //============== Refitted collection of tracks =============================//
     Handle<reco::TrackCollection> tracksrf;  
-    iEvent.getByLabel("TrackRefitter",tracksrf); 
+    iEvent.getByToken(m_trackRef,tracksrf); 
 
     if(m_debug>10) std::cout<<" number of refitted traks  "<<tracksrf->size()<<std::endl;
     
@@ -2417,8 +2413,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       
   
       // Collection of Trajectories from Refitted Tracks
-      Handle<std::vector<Trajectory> > trajCollectionHandle;
-      iEvent.getByLabel(param_.getParameter<std::string>("trajectoryInput"),trajCollectionHandle);
+      Handle< std::vector<Trajectory> > trajCollectionHandle;
+      iEvent.getByToken(m_traj,trajCollectionHandle);
     
       if(m_debug>10){
 	std::cout<<"   genTrack collection: " <<tracks->size()<<std::endl;
@@ -2818,7 +2814,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     m_orphan_FiredTrig_pt = false;
     m_orphan_FiredTrigPt_pt = false;
     m_orphan_FiredTrigPtEta_pt = false;
-    m_orphan_FiredTrig_ptColl = false;
+    m_orphan_FiredTrigPt_ptColl = false;
     m_orphan_FiredTrigPt_ptColl = false;
     m_orphan_FiredTrigPtEta_ptColl = false;
     m_orphan_PtOrph  = -99.;
@@ -2832,19 +2828,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
     for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
       if (muon->pt() > m_trigpt  &&  fabs(muon->eta()) < 0.9) {
-	const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
-	const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
-	const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
-	if( mu01 != NULL || mu02 != NULL || mu03 != NULL ) m_orphan_FiredTrig = true;
-	if((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt ) ) m_orphan_FiredTrig_pt = true;
-	if((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt)  ||
-	   (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
-	   (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)){
-	  hightrigmuons.push_back(muon);
+	  const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
+	  const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
+	  const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
+	  if((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt)  ||
+	     (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
+	     (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)){
+	    hightrigmuons.push_back(muon);
+	  }
 	}
-      }
-      const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
-      const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
+const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
+const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
       const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
       if(  mu01 != NULL || mu02 != NULL || mu03 != NULL)                                                       m_orphan_FiredTrig      = true;
       if( (mu01 != NULL || mu02 != NULL || mu03 != NULL) && muon->pt() > m_trigpt   )                          m_orphan_FiredTrigPt    = true;
@@ -2868,6 +2862,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
          m_orphan_FiredTrigPtEta_ptColl = true;
       }
     }
+
     //Orphan branches
     m_orphan_dimu_mass = -999.;
     m_orphan_mass = -999.;
@@ -2964,9 +2959,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   //****************************************************************************
   //                            FILL BRANCHES TO TREE                           
   //****************************************************************************
-  
+
   if(b_massC>-1. && b_massF>-1. ) m_ttree->Fill();
-  if(runBBestimation_ && m_orphan_passOffLineSel) m_ttree_orphan->Fill();  
+  if(runBBestimation_ && m_orphan_passOffLineSel) m_ttree_orphan->Fill();
 }
 
 
@@ -3438,8 +3433,6 @@ CutFlowAnalyzer::beginJob() {
 
     
   }
-
-
   // Orpahn Muon
   if(runBBestimation_){
     m_ttree_orphan = tFileService->make<TTree>("Events_orphan", "Events_orphan");
@@ -3538,6 +3531,8 @@ CutFlowAnalyzer::endJob()
   std::cout << m_events4SelMu8                       << std::endl;
   std::cout << m_events2MuJets                       << std::endl;
   std::cout << m_events2DiMuons                      << std::endl;
+
+
 }
 
 void CutFlowAnalyzer::FillTrigInfo( TH1F * h1, edm::Handle<pat::TriggerEvent> triggerEvent, std::map<int,std::string> nameAndNumb )
