@@ -1,0 +1,64 @@
+   ------------------------------------------------------------
+  | Welcome to ROOT 6.02/05                http://root.cern.ch |
+  |                               (c) 1995-2014, The ROOT Team |
+  | Built for linuxx8664gcc                                    |
+  | From tag , 9 February 2015                                 |
+  | Try '.help', '.demo', '.license', '.credits', '.quit'/'.q' |
+   ------------------------------------------------------------
+
+
+Processing FakeInvestigation.C+...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation_C.so
+In file included from /home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/FakeInvestigation_C_ACLiC_dict.cxx:41:0:
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C: In function 'void makePlot()':
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C:820:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0250_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C:832:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0275_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C:844:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0300_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C:856:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_2000_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C:867:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_8500_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C:879:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0400_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C:891:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_0700_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C:903:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_1000_cT.size(); i++){
+                 ^
+/home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/CutFlow_and_efull_alphagen/97p_byHand_withAlexei/ChangeBinWidth/EllipticalCut/0250/./FakeInvestigation.C:915:17: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+  for(int i=0; i < mGammaD_1500_cT.size(); i++){
+                 ^
+Begin Efficiency Investigation...
+ ratio reco/gen for 0.25 	 0 	 0.593993 +/-  0.0036727
+ ratio reco/gen for 0.25 	 0.05 	 0.569017 +/-  0.00350467
+ ratio reco/gen for 0.25 	 0.1 	 0.558987 +/-  0.00387885
+ ratio reco/gen for 0.25 	 0.2 	 0.563794 +/-  0.00471572
+ ratio reco/gen for 0.25 	 0.5 	 0.557028 +/-  0.00825491
+ ratio reco/gen for 0.25 	 1 	 0.567775 +/-  0.0144642
+ ratio reco/gen for 0.25 	 2 	 0.555858 +/-  0.0259364
+ ratio reco/gen for 0.25 	 3 	 0.555556 +/-  0.0390405
+ ratio reco/gen for 0.25 	 5 	 0.490909 +/-  0.0674088
+ ratio reco/gen for 0.25 	 10 	 0.409091 +/-  0.0741215
+ ratio reco/gen for 0.25 	 20 	 0.545455 +/-  0.150131
+Info in <TCanvas::Print>: pdf file eta.pdf has been created
+Info in <TCanvas::Print>: pdf file lxy.pdf has been created
+Info in <TCanvas::Print>: pdf file reco_eta.pdf has been created
+Info in <TCanvas::Print>: pdf file reco_lxy.pdf has been created
+Info in <TCanvas::Print>: pdf file e_rec_alpha_gen_vs_cT.pdf has been created
+Info in <TCanvas::Print>: pdf file Real_Reco_Eta_vs_Lxy.pdf has been created
+Info in <TCanvas::Print>: pdf file Fake_Reco_Eta_vs_Lxy.pdf has been created
+Info in <TCanvas::Print>: pdf file FakeEvent_Reco_Eta_vs_Lxy.pdf has been created
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (eta_num) has not been written.
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (eta_den) has not been written.
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (lxy_num) has not been written.
+Error in <TROOT::WriteTObject>: The current directory (Rint) is not associated with a file. The object (lxy_den) has not been written.

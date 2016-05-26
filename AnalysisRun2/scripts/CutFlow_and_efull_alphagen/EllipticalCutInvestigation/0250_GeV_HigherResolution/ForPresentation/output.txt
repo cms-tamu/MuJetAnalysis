@@ -1,0 +1,43 @@
+Sample: mGammaD_0250_cT_000
+Events          126250
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 10, 103.487
+
+Sample: mGammaD_0250_cT_005g
+Events          146788
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 10, 106.914
+
+Sample: mGammaD_0250_cT_010
+Events          143250
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 10, 95.1152
+
+Sample: mGammaD_0250_cT_020
+Events          151500
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 10, 77.0338
+
+Sample: mGammaD_0250_cT_050
+Events          151250
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 10, 42.1768
+
+Sample: mGammaD_0250_cT_100
+Events          148750
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 10, 24.3235
+
+Sample: mGammaD_0250_cT_200
+Events          147750
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 9.8, 13.5534
+
+Sample: mGammaD_0250_cT_300
+Events          151250
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 9.3, 8.45765
+
+Sample: mGammaD_0250_cT_500
+Events          144250
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.2, 9.7, 5.29465
+
+Sample: mGammaD_0250_cT_1000
+Events          340022
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.2, 9.2, 4.47214
+
+Sample: mGammaD_0250_cT_2000
+Events          291920
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.2, 8, 2.44949

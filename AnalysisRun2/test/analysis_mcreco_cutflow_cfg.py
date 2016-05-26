@@ -66,19 +66,9 @@ process.PFMuJetProducer05 = process.MuJetProducer.clone(
 )
 
 
-process.cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
-        analyzerDebug = cms.int32(0),
-        fillGenLevel = cms.bool(True),
-#       muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),
-#       muJets = cms.InputTag("TrackerMuJetProducer05"),
-        muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
-        muJets = cms.InputTag("PFMuJetProducer05"),
-        DiMuons_Iso_Max = cms.double(2.0),
-        nThrowsConsistentVertexesCalculator = cms.int32(0),
-        hltPaths = cms.vstring(
-        'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1',
-  )
-)
+process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cfi")
+
+
 
 process.Path = cms.Path(process.patifyData * process.PFMuJetProducer05 * process.cutFlowAnalyzer)
 

@@ -1,0 +1,3139 @@
+   ------------------------------------------------------------
+  | Welcome to ROOT 6.02/05                http://root.cern.ch |
+  |                               (c) 1995-2014, The ROOT Team |
+  | Built for linuxx8664gcc                                    |
+  | From tag , 9 February 2015                                 |
+  | Try '.help', '.demo', '.license', '.credits', '.quit'/'.q' |
+   ------------------------------------------------------------
+
+
+Processing FakeInvestigation.C+...
+Begin Fake Investigation
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 1, 1, 0, 0
+New Best (Eta, Lxy, CurrentFOM): 0.1, 1, 1
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 2, 7, 1, 1
+New Best (Eta, Lxy, CurrentFOM): 0.1, 2, 2.47487
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 3, 10, 1, 2.47487
+New Best (Eta, Lxy, CurrentFOM): 0.1, 3, 3.01511
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 4, 19, 1, 3.01511
+New Best (Eta, Lxy, CurrentFOM): 0.1, 4, 4.24853
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 5, 24, 1, 4.24853
+New Best (Eta, Lxy, CurrentFOM): 0.1, 5, 4.8
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 6, 28, 1, 4.8
+New Best (Eta, Lxy, CurrentFOM): 0.1, 6, 5.19947
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 7, 35, 1, 5.19947
+New Best (Eta, Lxy, CurrentFOM): 0.1, 7, 5.83333
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 8, 41, 1, 5.83333
+New Best (Eta, Lxy, CurrentFOM): 0.1, 8, 6.32644
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 9, 43, 1, 6.32644
+New Best (Eta, Lxy, CurrentFOM): 0.1, 9, 6.48249
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 1, 4, 0, 6.48249
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 2, 27, 1, 6.48249
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 3, 45, 1, 6.48249
+New Best (Eta, Lxy, CurrentFOM): 0.2, 3, 6.63489
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 4, 78, 1, 6.63489
+New Best (Eta, Lxy, CurrentFOM): 0.2, 4, 8.77569
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 5, 102, 1, 8.77569
+New Best (Eta, Lxy, CurrentFOM): 0.2, 5, 10.0504
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 6, 125, 4, 10.0504
+New Best (Eta, Lxy, CurrentFOM): 0.2, 6, 11.0056
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 7, 141, 4, 11.0056
+New Best (Eta, Lxy, CurrentFOM): 0.2, 7, 11.7094
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 8, 153, 6, 11.7094
+New Best (Eta, Lxy, CurrentFOM): 0.2, 8, 12.1337
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 9, 157, 6, 12.1337
+New Best (Eta, Lxy, CurrentFOM): 0.2, 9, 12.2972
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 1, 13, 0, 12.2972
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 2, 52, 1, 12.2972
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 3, 99, 1, 12.2972
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 4, 163, 1, 12.2972
+New Best (Eta, Lxy, CurrentFOM): 0.3, 4, 12.7282
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 5, 233, 2, 12.7282
+New Best (Eta, Lxy, CurrentFOM): 0.3, 5, 15.1992
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 6, 266, 6, 15.1992
+New Best (Eta, Lxy, CurrentFOM): 0.3, 6, 16.1286
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 7, 295, 9, 16.1286
+New Best (Eta, Lxy, CurrentFOM): 0.3, 7, 16.9194
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 8, 318, 9, 16.9194
+New Best (Eta, Lxy, CurrentFOM): 0.3, 8, 17.5854
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 9, 336, 9, 17.5854
+New Best (Eta, Lxy, CurrentFOM): 0.3, 9, 18.0896
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 1, 17, 0, 18.0896
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 2, 86, 1, 18.0896
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 3, 175, 1, 18.0896
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 4, 277, 1, 18.0896
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 5, 384, 7, 18.0896
+New Best (Eta, Lxy, CurrentFOM): 0.4, 5, 19.4197
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 6, 455, 12, 19.4197
+New Best (Eta, Lxy, CurrentFOM): 0.4, 6, 21.0549
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 7, 509, 14, 21.0549
+New Best (Eta, Lxy, CurrentFOM): 0.4, 7, 22.257
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 8, 546, 15, 22.257
+New Best (Eta, Lxy, CurrentFOM): 0.4, 8, 23.0521
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 9, 573, 17, 23.0521
+New Best (Eta, Lxy, CurrentFOM): 0.4, 9, 23.59
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 1, 28, 0, 23.59
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 2, 133, 1, 23.59
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 3, 280, 1, 23.59
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 4, 440, 3, 23.59
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 5, 601, 9, 23.59
+New Best (Eta, Lxy, CurrentFOM): 0.5, 5, 24.3338
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 6, 701, 14, 24.3338
+New Best (Eta, Lxy, CurrentFOM): 0.5, 6, 26.2159
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 7, 775, 21, 26.2159
+New Best (Eta, Lxy, CurrentFOM): 0.5, 7, 27.4691
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 8, 850, 25, 27.4691
+New Best (Eta, Lxy, CurrentFOM): 0.5, 8, 28.7352
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 9, 897, 26, 28.7352
+New Best (Eta, Lxy, CurrentFOM): 0.5, 9, 29.5251
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 1, 47, 0, 29.5251
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 2, 211, 2, 29.5251
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 3, 409, 2, 29.5251
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 4, 608, 4, 29.5251
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 5, 837, 13, 29.5251
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 6, 990, 20, 29.5251
+New Best (Eta, Lxy, CurrentFOM): 0.6, 6, 31.1512
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 7, 1098, 26, 31.1512
+New Best (Eta, Lxy, CurrentFOM): 0.6, 7, 32.7506
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 8, 1203, 28, 32.7506
+New Best (Eta, Lxy, CurrentFOM): 0.6, 8, 34.2876
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 9, 1269, 33, 34.2876
+New Best (Eta, Lxy, CurrentFOM): 0.6, 9, 35.1687
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 1, 66, 0, 35.1687
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 2, 264, 2, 35.1687
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 3, 528, 2, 35.1687
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 4, 818, 4, 35.1687
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 5, 1109, 16, 35.1687
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 6, 1332, 25, 35.1687
+New Best (Eta, Lxy, CurrentFOM): 0.7, 6, 36.1588
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 7, 1462, 33, 36.1588
+New Best (Eta, Lxy, CurrentFOM): 0.7, 7, 37.8117
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 8, 1597, 41, 37.8117
+New Best (Eta, Lxy, CurrentFOM): 0.7, 8, 39.4592
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 9, 1672, 45, 39.4592
+New Best (Eta, Lxy, CurrentFOM): 0.7, 9, 40.3507
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 1, 78, 0, 40.3507
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 2, 327, 2, 40.3507
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 3, 659, 3, 40.3507
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 4, 1029, 8, 40.3507
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 5, 1422, 20, 40.3507
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 6, 1657, 31, 40.3507
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 7, 1834, 45, 40.3507
+New Best (Eta, Lxy, CurrentFOM): 0.8, 7, 42.3093
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 8, 1983, 50, 42.3093
+New Best (Eta, Lxy, CurrentFOM): 0.8, 8, 43.9799
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 9, 2088, 53, 43.9799
+New Best (Eta, Lxy, CurrentFOM): 0.8, 9, 45.1255
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 1, 100, 0, 45.1255
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 2, 401, 2, 45.1255
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 3, 799, 3, 45.1255
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 4, 1250, 8, 45.1255
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 5, 1715, 22, 45.1255
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 6, 2014, 42, 45.1255
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 7, 2226, 55, 45.1255
+New Best (Eta, Lxy, CurrentFOM): 0.9, 7, 46.6082
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 8, 2401, 64, 46.6082
+New Best (Eta, Lxy, CurrentFOM): 0.9, 8, 48.3597
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 9, 2537, 68, 48.3597
+New Best (Eta, Lxy, CurrentFOM): 0.9, 9, 49.7069
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 1, 121, 0, 49.7069
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 2, 478, 2, 49.7069
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 3, 938, 5, 49.7069
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 4, 1481, 14, 49.7069
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 5, 2001, 27, 49.7069
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 6, 2350, 49, 49.7069
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 7, 2592, 67, 49.7069
+New Best (Eta, Lxy, CurrentFOM): 1, 7, 50.2662
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 8, 2791, 76, 50.2662
+New Best (Eta, Lxy, CurrentFOM): 1, 8, 52.125
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 9, 2960, 81, 52.125
+New Best (Eta, Lxy, CurrentFOM): 1, 9, 53.6764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 1, 137, 0, 53.6764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 2, 534, 6, 53.6764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 3, 1061, 8, 53.6764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 4, 1672, 16, 53.6764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 5, 2277, 30, 53.6764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 6, 2666, 54, 53.6764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 7, 2929, 75, 53.6764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 8, 3169, 91, 53.6764
+New Best (Eta, Lxy, CurrentFOM): 1.1, 8, 55.5026
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 9, 3370, 97, 55.5026
+New Best (Eta, Lxy, CurrentFOM): 1.1, 9, 57.2339
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 1, 157, 0, 57.2339
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 2, 582, 6, 57.2339
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 3, 1169, 9, 57.2339
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 4, 1861, 19, 57.2339
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 5, 2546, 36, 57.2339
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 6, 2971, 65, 57.2339
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 7, 3269, 91, 57.2339
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 8, 3513, 100, 57.2339
+New Best (Eta, Lxy, CurrentFOM): 1.2, 8, 58.4446
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 9, 3692, 110, 58.4446
+New Best (Eta, Lxy, CurrentFOM): 1.2, 9, 59.8764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 1, 167, 0, 59.8764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 2, 645, 11, 59.8764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 3, 1289, 16, 59.8764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 4, 2043, 26, 59.8764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 5, 2778, 45, 59.8764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 6, 3242, 77, 59.8764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 7, 3569, 105, 59.8764
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 8, 3822, 115, 59.8764
+New Best (Eta, Lxy, CurrentFOM): 1.3, 8, 60.9127
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 9, 4028, 125, 60.9127
+New Best (Eta, Lxy, CurrentFOM): 1.3, 9, 62.5041
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 1, 181, 0, 62.5041
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 2, 708, 11, 62.5041
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 3, 1405, 18, 62.5041
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 4, 2226, 28, 62.5041
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 5, 3003, 52, 62.5041
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 6, 3488, 89, 62.5041
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 7, 3834, 108, 62.5041
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 8, 4102, 124, 62.5041
+New Best (Eta, Lxy, CurrentFOM): 1.4, 8, 63.1002
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 9, 4321, 138, 63.1002
+New Best (Eta, Lxy, CurrentFOM): 1.4, 9, 64.7091
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 1, 197, 1, 64.7091
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 2, 765, 11, 64.7091
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 3, 1520, 20, 64.7091
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 4, 2376, 29, 64.7091
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 5, 3224, 55, 64.7091
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 6, 3730, 98, 64.7091
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 7, 4063, 121, 64.7091
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 8, 4342, 137, 64.7091
+New Best (Eta, Lxy, CurrentFOM): 1.5, 8, 64.8783
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 9, 4580, 147, 64.8783
+New Best (Eta, Lxy, CurrentFOM): 1.5, 9, 66.6151
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 1, 208, 1, 66.6151
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 2, 817, 12, 66.6151
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 3, 1614, 21, 66.6151
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 4, 2519, 30, 66.6151
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 5, 3403, 59, 66.6151
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 6, 3929, 106, 66.6151
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 7, 4269, 129, 66.6151
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 8, 4588, 146, 66.6151
+New Best (Eta, Lxy, CurrentFOM): 1.6, 8, 66.6821
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 9, 4839, 152, 66.6821
+New Best (Eta, Lxy, CurrentFOM): 1.6, 9, 68.4955
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 1, 228, 1, 68.4955
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 2, 855, 14, 68.4955
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 3, 1695, 22, 68.4955
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 4, 2640, 31, 68.4955
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 5, 3589, 63, 68.4955
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 6, 4123, 107, 68.4955
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 7, 4502, 137, 68.4955
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 8, 4821, 152, 68.4955
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 9, 5072, 156, 68.4955
+New Best (Eta, Lxy, CurrentFOM): 1.7, 9, 70.1474
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 1, 240, 1, 70.1474
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 2, 893, 14, 70.1474
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 3, 1773, 22, 70.1474
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 4, 2757, 31, 70.1474
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 5, 3755, 65, 70.1474
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 6, 4324, 114, 70.1474
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 7, 4691, 144, 70.1474
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 8, 5022, 161, 70.1474
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 9, 5276, 169, 70.1474
+New Best (Eta, Lxy, CurrentFOM): 1.8, 9, 71.5
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 1, 247, 1, 71.5
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 2, 929, 14, 71.5
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 3, 1851, 24, 71.5
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 4, 2871, 33, 71.5
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 5, 3912, 70, 71.5
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 6, 4493, 120, 71.5
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 7, 4867, 153, 71.5
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 8, 5208, 169, 71.5
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 9, 5478, 181, 71.5
+New Best (Eta, Lxy, CurrentFOM): 1.9, 9, 72.8203
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 1, 259, 1, 72.8203
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 2, 961, 15, 72.8203
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 3, 1915, 25, 72.8203
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 4, 2987, 33, 72.8203
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 5, 4071, 73, 72.8203
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 6, 4645, 128, 72.8203
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 7, 5033, 161, 72.8203
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 8, 5395, 176, 72.8203
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 9, 5655, 189, 72.8203
+New Best (Eta, Lxy, CurrentFOM): 2, 9, 73.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 1, 267, 1, 73.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 2, 983, 15, 73.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 3, 1982, 26, 73.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 4, 3063, 35, 73.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 5, 4177, 79, 73.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 6, 4773, 132, 73.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 7, 5152, 166, 73.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 8, 5532, 184, 73.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 9, 5789, 199, 73.9737
+New Best (Eta, Lxy, CurrentFOM): 2.1, 9, 74.8105
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 1, 282, 3, 74.8105
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 2, 1020, 15, 74.8105
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 3, 2025, 27, 74.8105
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 4, 3151, 37, 74.8105
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 5, 4276, 84, 74.8105
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 6, 4881, 140, 74.8105
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 7, 5280, 172, 74.8105
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 8, 5650, 193, 74.8105
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 9, 5919, 207, 74.8105
+New Best (Eta, Lxy, CurrentFOM): 2.2, 9, 75.624
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 1, 288, 3, 75.624
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 2, 1047, 16, 75.624
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 3, 2084, 27, 75.624
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 4, 3221, 39, 75.624
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 5, 4376, 87, 75.624
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 6, 4963, 146, 75.624
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 7, 5377, 177, 75.624
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 8, 5748, 200, 75.624
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151500
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 9, 6015, 217, 75.624
+New Best (Eta, Lxy, CurrentFOM): 2.3, 9, 76.1942
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 9, 76.1942
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 1, 0, 0, 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 2, 0, 0, 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 3, 1, 0, 0
+New Best (Eta, Lxy, CurrentFOM): 0.1, 3, 1
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 4, 4, 0, 1
+New Best (Eta, Lxy, CurrentFOM): 0.1, 4, 2
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 5, 10, 0, 2
+New Best (Eta, Lxy, CurrentFOM): 0.1, 5, 3.16228
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 6, 11, 0, 3.16228
+New Best (Eta, Lxy, CurrentFOM): 0.1, 6, 3.31662
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 7, 12, 0, 3.31662
+New Best (Eta, Lxy, CurrentFOM): 0.1, 7, 3.4641
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 8, 13, 0, 3.4641
+New Best (Eta, Lxy, CurrentFOM): 0.1, 8, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 9, 13, 0, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 1, 0, 0, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 2, 2, 0, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 3, 8, 0, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 4, 14, 1, 3.60555
+New Best (Eta, Lxy, CurrentFOM): 0.2, 4, 3.61478
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 5, 28, 2, 3.61478
+New Best (Eta, Lxy, CurrentFOM): 0.2, 5, 5.11208
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 6, 35, 3, 5.11208
+New Best (Eta, Lxy, CurrentFOM): 0.2, 6, 5.67775
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 7, 38, 4, 5.67775
+New Best (Eta, Lxy, CurrentFOM): 0.2, 7, 5.86353
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 8, 42, 4, 5.86353
+New Best (Eta, Lxy, CurrentFOM): 0.2, 8, 6.19256
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 9, 43, 4, 6.19256
+New Best (Eta, Lxy, CurrentFOM): 0.2, 9, 6.27219
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 1, 0, 0, 6.27219
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 2, 3, 0, 6.27219
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 3, 18, 0, 6.27219
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 4, 34, 1, 6.27219
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 5, 58, 4, 6.27219
+New Best (Eta, Lxy, CurrentFOM): 0.3, 5, 7.36601
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 6, 71, 7, 7.36601
+New Best (Eta, Lxy, CurrentFOM): 0.3, 6, 8.03917
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 7, 79, 7, 8.03917
+New Best (Eta, Lxy, CurrentFOM): 0.3, 7, 8.51879
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 8, 88, 8, 8.51879
+New Best (Eta, Lxy, CurrentFOM): 0.3, 8, 8.98146
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 9, 93, 8, 8.98146
+New Best (Eta, Lxy, CurrentFOM): 0.3, 9, 9.25385
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 1, 2, 0, 9.25385
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 2, 22, 1, 9.25385
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 3, 37, 1, 9.25385
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 4, 57, 2, 9.25385
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 5, 96, 6, 9.25385
+New Best (Eta, Lxy, CurrentFOM): 0.4, 5, 9.50542
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 6, 126, 8, 9.50542
+New Best (Eta, Lxy, CurrentFOM): 0.4, 6, 10.8847
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 7, 147, 9, 10.8847
+New Best (Eta, Lxy, CurrentFOM): 0.4, 7, 11.7694
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 8, 155, 12, 11.7694
+New Best (Eta, Lxy, CurrentFOM): 0.4, 8, 11.9943
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 9, 168, 12, 11.9943
+New Best (Eta, Lxy, CurrentFOM): 0.4, 9, 12.522
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 1, 9, 0, 12.522
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 2, 31, 1, 12.522
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 3, 58, 1, 12.522
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 4, 103, 2, 12.522
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 5, 161, 7, 12.522
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 6, 193, 10, 12.522
+New Best (Eta, Lxy, CurrentFOM): 0.5, 6, 13.5459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 7, 219, 11, 13.5459
+New Best (Eta, Lxy, CurrentFOM): 0.5, 7, 14.4404
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 8, 242, 13, 14.4404
+New Best (Eta, Lxy, CurrentFOM): 0.5, 8, 15.1546
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 9, 259, 15, 15.1546
+New Best (Eta, Lxy, CurrentFOM): 0.5, 9, 15.6468
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 1, 11, 0, 15.6468
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 2, 39, 1, 15.6468
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 3, 82, 1, 15.6468
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 4, 151, 2, 15.6468
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 5, 222, 9, 15.6468
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 6, 278, 15, 15.6468
+New Best (Eta, Lxy, CurrentFOM): 0.6, 6, 16.2409
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 7, 314, 17, 16.2409
+New Best (Eta, Lxy, CurrentFOM): 0.6, 7, 17.259
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 8, 337, 19, 17.259
+New Best (Eta, Lxy, CurrentFOM): 0.6, 8, 17.861
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 9, 370, 19, 17.861
+New Best (Eta, Lxy, CurrentFOM): 0.6, 9, 18.7597
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 1, 13, 0, 18.7597
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 2, 54, 1, 18.7597
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 3, 109, 1, 18.7597
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 4, 195, 3, 18.7597
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 5, 294, 14, 18.7597
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 6, 379, 20, 18.7597
+New Best (Eta, Lxy, CurrentFOM): 0.7, 6, 18.9737
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 7, 429, 20, 18.9737
+New Best (Eta, Lxy, CurrentFOM): 0.7, 7, 20.2458
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 8, 472, 26, 20.2458
+New Best (Eta, Lxy, CurrentFOM): 0.7, 8, 21.1508
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 9, 502, 28, 21.1508
+New Best (Eta, Lxy, CurrentFOM): 0.7, 9, 21.8055
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 1, 18, 0, 21.8055
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 2, 69, 1, 21.8055
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 3, 142, 2, 21.8055
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 4, 235, 5, 21.8055
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 5, 390, 18, 21.8055
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 6, 491, 23, 21.8055
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 7, 553, 27, 21.8055
+New Best (Eta, Lxy, CurrentFOM): 0.8, 7, 22.9621
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 8, 606, 32, 22.9621
+New Best (Eta, Lxy, CurrentFOM): 0.8, 8, 23.9918
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 9, 652, 36, 23.9918
+New Best (Eta, Lxy, CurrentFOM): 0.8, 9, 24.8573
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 1, 23, 0, 24.8573
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 2, 77, 1, 24.8573
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 3, 168, 3, 24.8573
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 4, 302, 8, 24.8573
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 5, 492, 19, 24.8573
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 6, 613, 27, 24.8573
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 7, 688, 31, 24.8573
+New Best (Eta, Lxy, CurrentFOM): 0.9, 7, 25.6581
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 8, 735, 37, 25.6581
+New Best (Eta, Lxy, CurrentFOM): 0.9, 8, 26.4532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 9, 791, 42, 26.4532
+New Best (Eta, Lxy, CurrentFOM): 0.9, 9, 27.4065
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 1, 28, 0, 27.4065
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 2, 89, 1, 27.4065
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 3, 199, 3, 27.4065
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 4, 379, 8, 27.4065
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 5, 587, 22, 27.4065
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 6, 711, 33, 27.4065
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 7, 794, 36, 27.4065
+New Best (Eta, Lxy, CurrentFOM): 1, 7, 27.5601
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 8, 861, 45, 27.5601
+New Best (Eta, Lxy, CurrentFOM): 1, 8, 28.6048
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 9, 915, 47, 28.6048
+New Best (Eta, Lxy, CurrentFOM): 1, 9, 29.5008
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 1, 30, 0, 29.5008
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 2, 103, 2, 29.5008
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 3, 234, 3, 29.5008
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 4, 438, 10, 29.5008
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 5, 665, 24, 29.5008
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 6, 808, 37, 29.5008
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 7, 887, 43, 29.5008
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 8, 960, 49, 29.5008
+New Best (Eta, Lxy, CurrentFOM): 1.1, 8, 30.2222
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 9, 1018, 50, 30.2222
+New Best (Eta, Lxy, CurrentFOM): 1.1, 9, 31.1503
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 1, 33, 0, 31.1503
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 2, 121, 2, 31.1503
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 3, 258, 3, 31.1503
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 4, 490, 10, 31.1503
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 5, 737, 24, 31.1503
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 6, 890, 38, 31.1503
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 7, 984, 45, 31.1503
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 8, 1054, 53, 31.1503
+New Best (Eta, Lxy, CurrentFOM): 1.2, 8, 31.6787
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 9, 1122, 58, 31.6787
+New Best (Eta, Lxy, CurrentFOM): 1.2, 9, 32.6627
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 1, 39, 0, 32.6627
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 2, 130, 2, 32.6627
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 3, 286, 4, 32.6627
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 4, 538, 10, 32.6627
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 5, 802, 25, 32.6627
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 6, 965, 41, 32.6627
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 7, 1080, 51, 32.6627
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 8, 1163, 58, 32.6627
+New Best (Eta, Lxy, CurrentFOM): 1.3, 8, 33.283
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 9, 1234, 61, 33.283
+New Best (Eta, Lxy, CurrentFOM): 1.3, 9, 34.291
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 1, 40, 0, 34.291
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 2, 141, 2, 34.291
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 3, 316, 4, 34.291
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 4, 577, 10, 34.291
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 5, 875, 28, 34.291
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 6, 1055, 42, 34.291
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 7, 1167, 54, 34.291
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 8, 1257, 60, 34.291
+New Best (Eta, Lxy, CurrentFOM): 1.4, 8, 34.6372
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 9, 1334, 63, 34.6372
+New Best (Eta, Lxy, CurrentFOM): 1.4, 9, 35.6909
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 1, 41, 0, 35.6909
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 2, 145, 2, 35.6909
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 3, 337, 5, 35.6909
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 4, 635, 10, 35.6909
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 5, 944, 32, 35.6909
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 6, 1133, 48, 35.6909
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 7, 1247, 59, 35.6909
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 8, 1345, 67, 35.6909
+New Best (Eta, Lxy, CurrentFOM): 1.5, 8, 35.7936
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 9, 1425, 69, 35.7936
+New Best (Eta, Lxy, CurrentFOM): 1.5, 9, 36.8671
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 1, 43, 0, 36.8671
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 2, 157, 2, 36.8671
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 3, 362, 5, 36.8671
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 4, 670, 12, 36.8671
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 5, 1002, 34, 36.8671
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 6, 1217, 52, 36.8671
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 7, 1319, 63, 36.8671
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 8, 1424, 69, 36.8671
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 9, 1503, 72, 36.8671
+New Best (Eta, Lxy, CurrentFOM): 1.6, 9, 37.872
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 1, 47, 0, 37.872
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 2, 165, 2, 37.872
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 3, 384, 5, 37.872
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 4, 711, 14, 37.872
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 5, 1073, 37, 37.872
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 6, 1273, 56, 37.872
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 7, 1396, 66, 37.872
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 8, 1508, 72, 37.872
+New Best (Eta, Lxy, CurrentFOM): 1.7, 8, 37.9379
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 9, 1583, 77, 37.9379
+New Best (Eta, Lxy, CurrentFOM): 1.7, 9, 38.8532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 1, 50, 0, 38.8532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 2, 179, 2, 38.8532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 3, 402, 7, 38.8532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 4, 748, 17, 38.8532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 5, 1121, 40, 38.8532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 6, 1330, 59, 38.8532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 7, 1456, 69, 38.8532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 8, 1561, 77, 38.8532
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 9, 1648, 87, 38.8532
+New Best (Eta, Lxy, CurrentFOM): 1.8, 9, 39.5647
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 1, 53, 0, 39.5647
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 2, 190, 2, 39.5647
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 3, 426, 9, 39.5647
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 4, 786, 22, 39.5647
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 5, 1169, 46, 39.5647
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 6, 1387, 66, 39.5647
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 7, 1513, 79, 39.5647
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 8, 1617, 89, 39.5647
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 9, 1716, 97, 39.5647
+New Best (Eta, Lxy, CurrentFOM): 1.9, 9, 40.3012
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 1, 57, 0, 40.3012
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 2, 195, 3, 40.3012
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 3, 441, 11, 40.3012
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 4, 812, 23, 40.3012
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 5, 1203, 47, 40.3012
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 6, 1435, 70, 40.3012
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 7, 1557, 87, 40.3012
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 8, 1670, 92, 40.3012
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 9, 1757, 104, 40.3012
+New Best (Eta, Lxy, CurrentFOM): 2, 9, 40.7285
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 1, 57, 0, 40.7285
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 2, 200, 6, 40.7285
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 3, 452, 12, 40.7285
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 4, 843, 24, 40.7285
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 5, 1241, 48, 40.7285
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 6, 1475, 76, 40.7285
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 7, 1597, 90, 40.7285
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 8, 1714, 98, 40.7285
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 9, 1811, 115, 40.7285
+New Best (Eta, Lxy, CurrentFOM): 2.1, 9, 41.2658
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 1, 57, 0, 41.2658
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 2, 203, 7, 41.2658
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 3, 469, 12, 41.2658
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 4, 866, 25, 41.2658
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 5, 1270, 52, 41.2658
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 6, 1510, 79, 41.2658
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 7, 1629, 93, 41.2658
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 8, 1754, 106, 41.2658
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 9, 1835, 124, 41.2658
+New Best (Eta, Lxy, CurrentFOM): 2.2, 9, 41.459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 1, 58, 0, 41.459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 2, 207, 7, 41.459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 3, 481, 12, 41.459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 4, 886, 27, 41.459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 5, 1297, 57, 41.459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 6, 1546, 81, 41.459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 7, 1662, 96, 41.459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 8, 1787, 112, 41.459
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          151250
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 9, 1870, 131, 41.459
+New Best (Eta, Lxy, CurrentFOM): 2.3, 9, 41.804
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 9, 41.804
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 1, 1, 0, 0
+New Best (Eta, Lxy, CurrentFOM): 0.1, 1, 1
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 2, 1, 0, 1
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 3, 1, 0, 1
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 4, 2, 0, 1
+New Best (Eta, Lxy, CurrentFOM): 0.1, 4, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 5, 2, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 6, 3, 0, 1.41421
+New Best (Eta, Lxy, CurrentFOM): 0.1, 6, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 7, 3, 0, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 8, 4, 0, 1.73205
+New Best (Eta, Lxy, CurrentFOM): 0.1, 8, 2
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 9, 5, 0, 2
+New Best (Eta, Lxy, CurrentFOM): 0.1, 9, 2.23607
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 1, 1, 0, 2.23607
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 2, 4, 0, 2.23607
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 3, 5, 0, 2.23607
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 4, 10, 0, 2.23607
+New Best (Eta, Lxy, CurrentFOM): 0.2, 4, 3.16228
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 5, 12, 0, 3.16228
+New Best (Eta, Lxy, CurrentFOM): 0.2, 5, 3.4641
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 6, 14, 0, 3.4641
+New Best (Eta, Lxy, CurrentFOM): 0.2, 6, 3.74166
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 7, 15, 0, 3.74166
+New Best (Eta, Lxy, CurrentFOM): 0.2, 7, 3.87298
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 8, 17, 0, 3.87298
+New Best (Eta, Lxy, CurrentFOM): 0.2, 8, 4.12311
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 9, 17, 0, 4.12311
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 1, 1, 0, 4.12311
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 2, 5, 0, 4.12311
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 3, 7, 0, 4.12311
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 4, 14, 0, 4.12311
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 5, 16, 0, 4.12311
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 6, 20, 0, 4.12311
+New Best (Eta, Lxy, CurrentFOM): 0.3, 6, 4.47214
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 7, 23, 0, 4.47214
+New Best (Eta, Lxy, CurrentFOM): 0.3, 7, 4.79583
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 8, 26, 0, 4.79583
+New Best (Eta, Lxy, CurrentFOM): 0.3, 8, 5.09902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 9, 28, 0, 5.09902
+New Best (Eta, Lxy, CurrentFOM): 0.3, 9, 5.2915
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 1, 1, 0, 5.2915
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 2, 6, 0, 5.2915
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 3, 12, 0, 5.2915
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 4, 23, 1, 5.2915
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 5, 32, 1, 5.2915
+New Best (Eta, Lxy, CurrentFOM): 0.4, 5, 5.57048
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 6, 39, 1, 5.57048
+New Best (Eta, Lxy, CurrentFOM): 0.4, 6, 6.16644
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 7, 46, 1, 6.16644
+New Best (Eta, Lxy, CurrentFOM): 0.4, 7, 6.70979
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 8, 48, 1, 6.70979
+New Best (Eta, Lxy, CurrentFOM): 0.4, 8, 6.85714
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 9, 50, 2, 6.85714
+New Best (Eta, Lxy, CurrentFOM): 0.4, 9, 6.93375
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 1, 3, 0, 6.93375
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 2, 11, 0, 6.93375
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 3, 22, 0, 6.93375
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 4, 35, 1, 6.93375
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 5, 47, 1, 6.93375
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 6, 62, 1, 6.93375
+New Best (Eta, Lxy, CurrentFOM): 0.5, 6, 7.81127
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 7, 68, 2, 7.81127
+New Best (Eta, Lxy, CurrentFOM): 0.5, 7, 8.12755
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 8, 75, 2, 8.12755
+New Best (Eta, Lxy, CurrentFOM): 0.5, 8, 8.54704
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 9, 77, 3, 8.54704
+New Best (Eta, Lxy, CurrentFOM): 0.5, 9, 8.60886
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 1, 4, 0, 8.60886
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 2, 18, 0, 8.60886
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 3, 33, 0, 8.60886
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 4, 53, 1, 8.60886
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 5, 71, 1, 8.60886
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 6, 84, 2, 8.60886
+New Best (Eta, Lxy, CurrentFOM): 0.6, 6, 9.05795
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 7, 99, 4, 9.05795
+New Best (Eta, Lxy, CurrentFOM): 0.6, 7, 9.75476
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 8, 104, 5, 9.75476
+New Best (Eta, Lxy, CurrentFOM): 0.6, 8, 9.96139
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 9, 113, 5, 9.96139
+New Best (Eta, Lxy, CurrentFOM): 0.6, 9, 10.4025
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 1, 5, 0, 10.4025
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 2, 26, 0, 10.4025
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 3, 43, 0, 10.4025
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 4, 67, 1, 10.4025
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 5, 97, 1, 10.4025
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 6, 118, 4, 10.4025
+New Best (Eta, Lxy, CurrentFOM): 0.7, 6, 10.6832
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 7, 129, 5, 10.6832
+New Best (Eta, Lxy, CurrentFOM): 0.7, 7, 11.1439
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 8, 140, 5, 11.1439
+New Best (Eta, Lxy, CurrentFOM): 0.7, 8, 11.6264
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 9, 147, 6, 11.6264
+New Best (Eta, Lxy, CurrentFOM): 0.7, 9, 11.8842
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 1, 7, 0, 11.8842
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 2, 29, 0, 11.8842
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 3, 50, 0, 11.8842
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 4, 86, 2, 11.8842
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 5, 124, 3, 11.8842
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 6, 153, 5, 11.8842
+New Best (Eta, Lxy, CurrentFOM): 0.8, 6, 12.172
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 7, 176, 7, 12.172
+New Best (Eta, Lxy, CurrentFOM): 0.8, 7, 13.0103
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 8, 190, 7, 13.0103
+New Best (Eta, Lxy, CurrentFOM): 0.8, 8, 13.5369
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 9, 205, 7, 13.5369
+New Best (Eta, Lxy, CurrentFOM): 0.8, 9, 14.0795
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 1, 7, 0, 14.0795
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 2, 31, 0, 14.0795
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 3, 57, 0, 14.0795
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 4, 99, 2, 14.0795
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 5, 151, 4, 14.0795
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 6, 183, 6, 14.0795
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 7, 210, 7, 14.0795
+New Best (Eta, Lxy, CurrentFOM): 0.9, 7, 14.2557
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 8, 229, 7, 14.2557
+New Best (Eta, Lxy, CurrentFOM): 0.9, 8, 14.9066
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 9, 244, 8, 14.9066
+New Best (Eta, Lxy, CurrentFOM): 0.9, 9, 15.3706
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 1, 7, 0, 15.3706
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 2, 36, 0, 15.3706
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 3, 68, 0, 15.3706
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 4, 117, 2, 15.3706
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 5, 181, 4, 15.3706
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 6, 216, 7, 15.3706
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 7, 264, 7, 15.3706
+New Best (Eta, Lxy, CurrentFOM): 1, 7, 16.0369
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 8, 286, 8, 16.0369
+New Best (Eta, Lxy, CurrentFOM): 1, 8, 16.6799
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 9, 301, 10, 16.6799
+New Best (Eta, Lxy, CurrentFOM): 1, 9, 17.0681
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 1, 7, 0, 17.0681
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 2, 39, 0, 17.0681
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 3, 79, 0, 17.0681
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 4, 136, 2, 17.0681
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 5, 217, 4, 17.0681
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 6, 261, 7, 17.0681
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 7, 299, 8, 17.0681
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 8, 319, 10, 17.0681
+New Best (Eta, Lxy, CurrentFOM): 1.1, 8, 17.587
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 9, 339, 13, 17.587
+New Best (Eta, Lxy, CurrentFOM): 1.1, 9, 18.0688
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 1, 7, 0, 18.0688
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 2, 44, 0, 18.0688
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 3, 88, 0, 18.0688
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 4, 151, 2, 18.0688
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 5, 236, 4, 18.0688
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 6, 289, 8, 18.0688
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 7, 324, 10, 18.0688
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 8, 349, 14, 18.0688
+New Best (Eta, Lxy, CurrentFOM): 1.2, 8, 18.3177
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 9, 363, 15, 18.3177
+New Best (Eta, Lxy, CurrentFOM): 1.2, 9, 18.6707
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 1, 7, 0, 18.6707
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 2, 45, 0, 18.6707
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 3, 97, 0, 18.6707
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 4, 165, 2, 18.6707
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 5, 266, 5, 18.6707
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 6, 321, 9, 18.6707
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 7, 356, 13, 18.6707
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 8, 380, 15, 18.6707
+New Best (Eta, Lxy, CurrentFOM): 1.3, 8, 19.1199
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.3, 9, 395, 17, 19.1199
+New Best (Eta, Lxy, CurrentFOM): 1.3, 9, 19.4603
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 1, 9, 0, 19.4603
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 2, 49, 0, 19.4603
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 3, 108, 0, 19.4603
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 4, 185, 3, 19.4603
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 5, 290, 5, 19.4603
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 6, 349, 9, 19.4603
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 7, 394, 15, 19.4603
+New Best (Eta, Lxy, CurrentFOM): 1.4, 7, 19.482
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 8, 421, 16, 19.482
+New Best (Eta, Lxy, CurrentFOM): 1.4, 8, 20.1392
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.4, 9, 436, 21, 20.1392
+New Best (Eta, Lxy, CurrentFOM): 1.4, 9, 20.3952
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 1, 9, 0, 20.3952
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 2, 53, 0, 20.3952
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 3, 115, 0, 20.3952
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 4, 197, 3, 20.3952
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 5, 311, 6, 20.3952
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 6, 379, 11, 20.3952
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 7, 426, 17, 20.3952
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 8, 450, 20, 20.3952
+New Best (Eta, Lxy, CurrentFOM): 1.5, 8, 20.757
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.5, 9, 470, 22, 20.757
+New Best (Eta, Lxy, CurrentFOM): 1.5, 9, 21.1892
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 1, 10, 0, 21.1892
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 2, 57, 0, 21.1892
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 3, 120, 0, 21.1892
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 4, 213, 3, 21.1892
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 5, 338, 7, 21.1892
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 6, 413, 14, 21.1892
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 7, 452, 20, 21.1892
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 8, 475, 23, 21.1892
+New Best (Eta, Lxy, CurrentFOM): 1.6, 8, 21.2853
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.6, 9, 495, 26, 21.2853
+New Best (Eta, Lxy, CurrentFOM): 1.6, 9, 21.6863
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 1, 11, 0, 21.6863
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 2, 60, 0, 21.6863
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 3, 125, 0, 21.6863
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 4, 228, 3, 21.6863
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 5, 355, 9, 21.6863
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 6, 434, 15, 21.6863
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 7, 472, 20, 21.6863
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 8, 492, 26, 21.6863
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.7, 9, 528, 28, 21.6863
+New Best (Eta, Lxy, CurrentFOM): 1.7, 9, 22.3922
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 1, 11, 0, 22.3922
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 2, 64, 0, 22.3922
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 3, 134, 1, 22.3922
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 4, 236, 6, 22.3922
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 5, 374, 12, 22.3922
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 6, 450, 17, 22.3922
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 7, 493, 23, 22.3922
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 8, 525, 28, 22.3922
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.8, 9, 561, 30, 22.3922
+New Best (Eta, Lxy, CurrentFOM): 1.8, 9, 23.0765
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 1, 12, 0, 23.0765
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 2, 65, 0, 23.0765
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 3, 139, 3, 23.0765
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 4, 249, 7, 23.0765
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 5, 389, 13, 23.0765
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 6, 468, 21, 23.0765
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 7, 521, 26, 23.0765
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 8, 549, 30, 23.0765
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.9, 9, 573, 36, 23.0765
+New Best (Eta, Lxy, CurrentFOM): 1.9, 9, 23.2191
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 1, 14, 0, 23.2191
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 2, 67, 0, 23.2191
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 3, 147, 3, 23.2191
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 4, 262, 7, 23.2191
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 5, 407, 13, 23.2191
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 6, 487, 21, 23.2191
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 7, 534, 28, 23.2191
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 8, 562, 32, 23.2191
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2, 9, 587, 39, 23.2191
+New Best (Eta, Lxy, CurrentFOM): 2, 9, 23.4612
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 1, 15, 0, 23.4612
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 2, 70, 0, 23.4612
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 3, 156, 3, 23.4612
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 4, 273, 7, 23.4612
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 5, 427, 13, 23.4612
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 6, 509, 21, 23.4612
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 7, 549, 28, 23.4612
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 8, 582, 34, 23.4612
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.1, 9, 601, 40, 23.4612
+New Best (Eta, Lxy, CurrentFOM): 2.1, 9, 23.7381
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 1, 15, 0, 23.7381
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 2, 73, 0, 23.7381
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 3, 165, 3, 23.7381
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 4, 279, 7, 23.7381
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 5, 436, 13, 23.7381
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 6, 517, 24, 23.7381
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 7, 560, 29, 23.7381
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 8, 585, 36, 23.7381
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.2, 9, 607, 44, 23.7381
+New Best (Eta, Lxy, CurrentFOM): 2.2, 9, 23.7902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 1, 15, 0, 23.7902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 2, 73, 0, 23.7902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 3, 166, 3, 23.7902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 4, 286, 7, 23.7902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 5, 450, 13, 23.7902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 6, 523, 26, 23.7902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 7, 564, 32, 23.7902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 8, 591, 38, 23.7902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          148750
+In Progress (Eta, Lxy, Signal, Background, FOM): 2.3, 9, 617, 45, 23.7902
+New Best (Eta, Lxy, CurrentFOM): 2.3, 9, 23.9804
+
+Best Ellipse Parameters (Eta, Lxy, FOM): 2.3, 9, 23.9804
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 1, 0, 0, 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 2, 0, 0, 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 3, 0, 0, 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 4, 0, 0, 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 5, 0, 0, 0
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 6, 1, 0, 0
+New Best (Eta, Lxy, CurrentFOM): 0.1, 6, 1
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 7, 2, 0, 1
+New Best (Eta, Lxy, CurrentFOM): 0.1, 7, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 8, 2, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.1, 9, 2, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 1, 0, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 2, 0, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 3, 0, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 4, 0, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 5, 1, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 6, 1, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 7, 2, 0, 1.41421
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 8, 3, 0, 1.41421
+New Best (Eta, Lxy, CurrentFOM): 0.2, 8, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.2, 9, 3, 0, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 1, 0, 0, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 2, 0, 0, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 3, 0, 0, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 4, 1, 0, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 5, 3, 0, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 6, 3, 0, 1.73205
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 7, 4, 0, 1.73205
+New Best (Eta, Lxy, CurrentFOM): 0.3, 7, 2
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 8, 4, 0, 2
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.3, 9, 5, 0, 2
+New Best (Eta, Lxy, CurrentFOM): 0.3, 9, 2.23607
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 1, 1, 0, 2.23607
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 2, 1, 0, 2.23607
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 3, 2, 0, 2.23607
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 4, 3, 0, 2.23607
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 5, 7, 0, 2.23607
+New Best (Eta, Lxy, CurrentFOM): 0.4, 5, 2.64575
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 6, 9, 0, 2.64575
+New Best (Eta, Lxy, CurrentFOM): 0.4, 6, 3
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 7, 12, 0, 3
+New Best (Eta, Lxy, CurrentFOM): 0.4, 7, 3.4641
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 8, 12, 0, 3.4641
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.4, 9, 13, 0, 3.4641
+New Best (Eta, Lxy, CurrentFOM): 0.4, 9, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 1, 1, 0, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 2, 2, 0, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 3, 7, 0, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 4, 10, 0, 3.60555
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 5, 16, 0, 3.60555
+New Best (Eta, Lxy, CurrentFOM): 0.5, 5, 4
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 6, 18, 0, 4
+New Best (Eta, Lxy, CurrentFOM): 0.5, 6, 4.24264
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 7, 21, 0, 4.24264
+New Best (Eta, Lxy, CurrentFOM): 0.5, 7, 4.58258
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 8, 22, 0, 4.58258
+New Best (Eta, Lxy, CurrentFOM): 0.5, 8, 4.69042
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.5, 9, 24, 0, 4.69042
+New Best (Eta, Lxy, CurrentFOM): 0.5, 9, 4.89898
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 1, 2, 0, 4.89898
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 2, 3, 0, 4.89898
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 3, 12, 0, 4.89898
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 4, 13, 0, 4.89898
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 5, 23, 0, 4.89898
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 6, 26, 0, 4.89898
+New Best (Eta, Lxy, CurrentFOM): 0.6, 6, 5.09902
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 7, 29, 0, 5.09902
+New Best (Eta, Lxy, CurrentFOM): 0.6, 7, 5.38516
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 8, 31, 0, 5.38516
+New Best (Eta, Lxy, CurrentFOM): 0.6, 8, 5.56776
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.6, 9, 33, 0, 5.56776
+New Best (Eta, Lxy, CurrentFOM): 0.6, 9, 5.74456
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 1, 2, 0, 5.74456
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 2, 6, 0, 5.74456
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 3, 15, 0, 5.74456
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 4, 20, 0, 5.74456
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 5, 30, 0, 5.74456
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 6, 34, 0, 5.74456
+New Best (Eta, Lxy, CurrentFOM): 0.7, 6, 5.83095
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 7, 42, 0, 5.83095
+New Best (Eta, Lxy, CurrentFOM): 0.7, 7, 6.48074
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 8, 47, 0, 6.48074
+New Best (Eta, Lxy, CurrentFOM): 0.7, 8, 6.85565
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.7, 9, 50, 0, 6.85565
+New Best (Eta, Lxy, CurrentFOM): 0.7, 9, 7.07107
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 1, 3, 0, 7.07107
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 2, 10, 0, 7.07107
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 3, 18, 0, 7.07107
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 4, 21, 1, 7.07107
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 5, 38, 1, 7.07107
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 6, 50, 1, 7.07107
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 7, 58, 1, 7.07107
+New Best (Eta, Lxy, CurrentFOM): 0.8, 7, 7.55096
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 8, 62, 1, 7.55096
+New Best (Eta, Lxy, CurrentFOM): 0.8, 8, 7.81127
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.8, 9, 69, 1, 7.81127
+New Best (Eta, Lxy, CurrentFOM): 0.8, 9, 8.24708
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 1, 4, 0, 8.24708
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 2, 12, 0, 8.24708
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 3, 19, 0, 8.24708
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 4, 26, 1, 8.24708
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 5, 48, 1, 8.24708
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 6, 59, 1, 8.24708
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 7, 67, 1, 8.24708
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 8, 72, 1, 8.24708
+New Best (Eta, Lxy, CurrentFOM): 0.9, 8, 8.42696
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 0.9, 9, 74, 1, 8.42696
+New Best (Eta, Lxy, CurrentFOM): 0.9, 9, 8.54478
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 1, 5, 0, 8.54478
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 2, 12, 0, 8.54478
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 3, 19, 0, 8.54478
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 4, 31, 1, 8.54478
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 5, 52, 1, 8.54478
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 6, 67, 1, 8.54478
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 7, 74, 1, 8.54478
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 8, 79, 1, 8.54478
+New Best (Eta, Lxy, CurrentFOM): 1, 8, 8.83247
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1, 9, 88, 1, 8.83247
+New Best (Eta, Lxy, CurrentFOM): 1, 9, 9.32798
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 1, 5, 0, 9.32798
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 2, 13, 0, 9.32798
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 3, 22, 0, 9.32798
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 4, 39, 1, 9.32798
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 5, 63, 1, 9.32798
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 6, 75, 1, 9.32798
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 7, 88, 2, 9.32798
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 8, 97, 2, 9.32798
+New Best (Eta, Lxy, CurrentFOM): 1.1, 8, 9.74887
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.1, 9, 108, 3, 9.74887
+New Best (Eta, Lxy, CurrentFOM): 1.1, 9, 10.2509
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 1, 6, 0, 10.2509
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 2, 13, 0, 10.2509
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 3, 23, 0, 10.2509
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 4, 44, 1, 10.2509
+
+ Sample: /fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf/
+ Events          147750
+In Progress (Eta, Lxy, Signal, Background, FOM): 1.2, 5, 67, 1, 10.2509

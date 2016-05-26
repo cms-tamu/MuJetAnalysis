@@ -17,22 +17,25 @@
 class TransientTrackBuilder {};
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 
-/// default constructor
+/// constructor with muons
 pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
-                          const TransientTrackBuilder    *transientTrackBuilder,
-                          const reco::TrackCollection    *tracks,
-                          const pat::MuonCollection      *allmuons,
-                          const CaloTowerCollection      *caloTowers,
-                          double centralTrackIsolationCone,
-                          double unionTrackIsolationCone,
-                          double centralTrackThresholdPt,
-                          double unionTrackThresholdPt,
-                          double centralCaloIsolationCone,
-                          double unionCaloIsolationCone,
-                          double centralNumberAboveThresholdCone,
-                          double unionNumberAboveThresholdCone,
-                          double centralNumberAboveThresholdPt,
-                          double unionNumberAboveThresholdPt)
+		const TransientTrackBuilder    *transientTrackBuilder,
+		const reco::TrackCollection    *tracks,
+		const pat::MuonCollection      *allmuons,
+		const CaloTowerCollection      *caloTowers,
+		double centralTrackIsolationCone,
+		double unionTrackIsolationCone,
+		double centralTrackThresholdPt,
+		double unionTrackThresholdPt,
+		double centralCaloIsolationCone,
+		double unionCaloIsolationCone,
+		double centralNumberAboveThresholdCone,
+		double unionNumberAboveThresholdCone,
+		double centralNumberAboveThresholdPt,
+		double unionNumberAboveThresholdPt,
+		int barrelPixelLayer,
+		int endcapPixelLayer)
+
 {
   pat::CompositeCandidate();
 
@@ -47,6 +50,7 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
   
   setCharge(charge);
   setP4( PolarLorentzVector(lorentzVector.pt(),lorentzVector.eta(),lorentzVector.phi(),lorentzVector.mass()));
+
 
   std::map<const reco::Candidate*,unsigned int> ancestorCounter;
   for (std::vector<const pat::Muon*>::const_iterator muon = muons.begin();  muon != muons.end();  ++muon) {
@@ -82,7 +86,6 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
     const reco::GenParticle *asGenParticle = dynamic_cast<const reco::GenParticle*>(youngestCommonAncestor);
     setGenParticle(*asGenParticle);
   }
-
   // Fitted vertex
   m_vertexValid = false;
   m_vertexValid_fitted = false;
@@ -94,9 +97,10 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
   m_vtx_x_scan=0.;
   m_vtx_y_scan=0.;
   m_vtx_z_scan=0.;
+
   
   if (transientTrackBuilder != NULL) {
-    calculateVertex(transientTrackBuilder);
+	  calculateVertex(transientTrackBuilder, barrelPixelLayer, endcapPixelLayer);
   }
 
   // Consistent vertex
@@ -134,6 +138,10 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
                                                              centralNumberAboveThresholdPt, 
                                                              unionNumberAboveThresholdPt);
   }
+  m_barrelPixelLayer = barrelPixelLayer;
+  //m_barrelPixelLayer = 10;
+  m_endcapPixelLayer = endcapPixelLayer;
+  //m_endcapPixelLayer = 10;
 }
 
 /// constructor from MultiMuonType
@@ -182,18 +190,19 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
   m_unionHCALIsolation          = aMultiMuon.m_unionHCALIsolation;
   m_centralNumberAboveThreshold = aMultiMuon.m_centralNumberAboveThreshold;
   m_unionNumberAboveThreshold   = aMultiMuon.m_unionNumberAboveThreshold;
+  m_barrelPixelLayer = aMultiMuon.m_barrelPixelLayer;
+  m_endcapPixelLayer = aMultiMuon.m_endcapPixelLayer;
 }
 
 /// destructor
 pat::MultiMuon::~MultiMuon() {}
 
 /// calculate the vertex from TransientTracks; return true iff successful
-bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrackBuilder) {
+bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrackBuilder, int barrelLayer, int endcapLayer) {
 #ifdef MULTIMUONCANDIDATE_FOR_FWLITE
   return false;
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
-  
   std::vector<reco::TransientTrack> tracksToVertex;
   std::vector<const reco::Track*> muonTracks;
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
@@ -209,7 +218,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       muonTracks.push_back(&*muon(i)->outerTrack()); //&*track
     }
   }
-
   if (tracksToVertex.size() < 2) return false;
 
   KalmanVertexFitter vertexFitter;
@@ -290,7 +298,11 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       double current_x_bdy2 = 0.0;
       
       // setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
-      for (int i = 0; i < 4400; ++i){
+      const double pixelBarrelR(pat::pixelBarrelR(barrelLayer));
+      const double pixelEndcapZ(pat::pixelEndcapZ(endcapLayer));
+      const int maxR(pixelBarrelR*100);
+
+      for (int i = 0; i < maxR; ++i){
 	if (muonTracks[0]->px() < 0){
 	  current_x_bdy1 = -(i/(1000*1.0)) + muonTracks[0]->vx();
 	}
@@ -309,11 +321,10 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	double euclid1 = sqrt( pow(current_x_bdy1, 2) + pow(y_at_x_1, 2));
 
 	// FIXME: add parameters in this section!!!	
-	if (fabs(z_at_x_1) > 34.5) break;
-	//std::cout << "Euclidian distance: " << euclid1 << std::endl;
-	if (euclid1 > 4.4) break;
+	if (fabs(z_at_x_1) > pixelEndcapZ) break;
+	if (euclid1 > pixelBarrelR) break;
 	
-	for (int j = 0; j < 4400; ++j){
+	for (int j = 0; j < maxR; ++j){
 	  if (muonTracks[1]->px() < 0){
 	    current_x_bdy2 = -(j/(1000*1.0)) + muonTracks[1]->vx();
 	  }
@@ -326,15 +337,15 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	  double z_at_x_2 = muonTracks[1]->vz() + (muonTracks[1]->pz()*xscale_2);
 	  double euclid2 = sqrt( pow(current_x_bdy2, 2) + pow(y_at_x_2, 2));
 	  
-	  if (euclid2 > 4.4) continue;
-	  if (fabs(z_at_x_2) > 34.5) continue;
+	  if (euclid2 > pixelBarrelR) continue;
+	  if (fabs(z_at_x_2) > pixelEndcapZ) continue;
 	  
 	  float separation = sqrt( pow(current_x_bdy2 - current_x_bdy1 , 2) + pow(y_at_x_2 - y_at_x_1, 2) + pow(z_at_x_2 - z_at_x_1, 2));
 	  
 	  if (separation < minSeparation){
 	    minSeparation = separation;
-	    // std::cout << "new xyz1 " << i << ": " << current_x_bdy1 << ", " <<  y_at_x_1 << ", " << z_at_x_1 << std::endl;
-	    // std::cout << "new xyz2 " << j << ": " << current_x_bdy2 << ", " <<  y_at_x_2 << ", " << z_at_x_2 << std::endl;
+	    //std::cout << "new xyz1 " << i << ": " << current_x_bdy1 << ", " <<  y_at_x_1 << ", " << z_at_x_1 << std::endl;
+	    //std::cout << "new xyz2 " << j << ": " << current_x_bdy2 << ", " <<  y_at_x_2 << ", " << z_at_x_2 << std::endl;
 	    newx1 = current_x_bdy1;
 	    newy1 = y_at_x_1;
 	    newz1 = z_at_x_1;
@@ -346,9 +357,9 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	}
       }
       
-      // std::cout<<"  scan  vertex 1   "<<"   vx   "<<newx1<<"   vy   "<<newy1<<"   vz   "<<newz1<<std::endl;      
-      // std::cout<<"  scan  vertex 2   "<<"   vx   "<<newx2<<"   vy   "<<newy2<<"   vz   "<<newz2<<std::endl;      
-      // std::cout << "min: " << minSeparation << std::endl;
+       std::cout<<"  scan  vertex 1   "<<"   vx   "<<newx1<<"   vy   "<<newy1<<"   vz   "<<newz1<<std::endl;      
+       std::cout<<"  scan  vertex 2   "<<"   vx   "<<newx2<<"   vy   "<<newy2<<"   vz   "<<newz2<<std::endl;      
+       std::cout << "min: " << minSeparation << std::endl;
       
       m_mindisttrack_scan = minSeparation;
       
@@ -952,4 +963,39 @@ std::vector<double> pat::MultiMuon::consistentPairMasses(bool vertex) const {
   }
 
   return output;
+}
+
+
+// functions that define fiducial volume
+// http://arxiv.org/pdf/0904.4761v1.pdf
+// units are in [cm]
+double pat::pixelBarrelR(int pixelBarrelLayer)
+{
+  switch(pixelBarrelLayer){
+  case 1:
+    return 4.0; //Documentation shows detector center at 4.4 cm
+  case 2:
+    return 6.9; //Documentation shows detector center 7.3 cm
+  case 3:
+    return 9.8; //Documentation shows detector center at 10.2 cm
+  default:
+      return -99;
+  };
+}
+
+double pat::pixelBarrelR2(int pixelBarrelLayer)
+{
+  return pixelBarrelR(pixelBarrelLayer)*pixelBarrelR(pixelBarrelLayer);
+}
+
+double pat::pixelEndcapZ(int pixelEndcapLayer)
+{
+  switch(pixelEndcapLayer){
+  case 1:
+    return 34.5; 
+  case 2:
+    return 46.5;
+  default:
+      return -99;
+  };
 }
