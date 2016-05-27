@@ -544,6 +544,7 @@ private:
 
   bool runDisplacedVtxFinder_;
   bool runPixelHitRecovery_;
+  bool skimOutput_; //fill only events with 2 good dimuons
 
   //PixelHitRecovery
 
@@ -827,7 +828,8 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
-  runBBestimation_ = iConfig.getUntrackedParameter<bool>("runBBestimation",true);
+  runBBestimation_ = iConfig.getParameter<bool>("runBBestimation");
+  skimOutput_ = iConfig.getParameter<bool>("skimOutput");
 
   m_randomSeed = 1234;
   m_trandom3   = TRandom3(m_randomSeed); // Random generator 
@@ -2960,7 +2962,9 @@ const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_
   //                            FILL BRANCHES TO TREE                           
   //****************************************************************************
 
-  if(b_massC>-1. && b_massF>-1. ) m_ttree->Fill();
+  if(skimOutput_) { if (b_massC>-1. && b_massF>-1.) m_ttree->Fill(); }
+  else m_ttree->Fill();
+
   if(runBBestimation_ && m_orphan_passOffLineSel) m_ttree_orphan->Fill();
 }
 
