@@ -2,6 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 from MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cfi import *
 
+## Monte Carlo
 cutFlowAnalyzerPXBL2PXFL2 = cutFlowAnalyzer.clone(
     barrelPixelLayer = cms.int32(2),
     endcapPixelLayer = cms.int32(2),
@@ -20,9 +21,9 @@ cutFlowAnalyzers = cms.Sequence(
     cutFlowAnalyzerPXBL3PXFL2
 )
 
+## Data
 cutFlowAnalyzer_Data = cutFlowAnalyzer.clone(
-    fillGenLevel = cms.bool(False),
-    runBBestimation = cms.untracked.bool(True),
+    fillGenLevel = cms.bool(False)
 )
 cutFlowAnalyzerPXBL2PXFL2_Data = cutFlowAnalyzer_Data.clone(
     barrelPixelLayer = cms.int32(2),
