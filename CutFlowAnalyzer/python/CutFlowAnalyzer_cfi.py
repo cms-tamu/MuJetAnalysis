@@ -29,14 +29,13 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
     runBBestimation = cms.bool(False),
     skimOutput = cms.bool(False),
     signalHltPaths = cms.vstring(
-        'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1',
         'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2',
     ),
     backupHltPaths = cms.vstring(
-        'HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx_v1',
         'HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx_v2',
     ),
     otherMuHltPaths = cms.vstring(
+        'HLT_DoubleMu18NoFiltersNoVtx_v2',
         'HLT_DoubleMu23NoFiltersNoVtxDisplaced_v2',
         'HLT_DoubleMu28NoFiltersNoVtxDisplaced_v2',
         'HLT_DoubleMu33NoFiltersNoVtx_v2',
