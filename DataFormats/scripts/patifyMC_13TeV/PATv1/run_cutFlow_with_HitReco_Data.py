@@ -54,8 +54,8 @@ process=convertToUnscheduled(process)
 
 ################# RECOtoPAT  ==========================================
 process.load("MuJetAnalysis.DataFormats.RECOtoPAT_cff")
-process.patMuons.addGenMatch = cms.bool(True)
-process.patMuons.embedGenMatch = cms.bool(True)
+process.patMuons.addGenMatch = cms.bool(False)
+process.patMuons.embedGenMatch = cms.bool(False)
 
 ## pick latest HLT process
 process.patTrigger.processName = cms.string( "*" )
