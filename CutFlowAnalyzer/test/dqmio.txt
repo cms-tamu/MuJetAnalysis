@@ -1,0 +1,8 @@
+# Conditions read from  CMS_CONDITIONS  via FrontierProd 
+ ################################################################### 
+ # WARNING: this module is deprecated.                             # 
+ # Please use CondCore.CondDB.CondDB_cfi.py                        # 
+ ################################################################### 
+15-Jul-2016 01:16:13 CEST  Initiating request to open file file:/afs/cern.ch/work/b/bmichlin/public/withTAMU/NMSSM/data/dqmio/042CC7A8-572A-E611-B2A2-44A84225C4EB.root
+15-Jul-2016 01:16:14 CEST  Successfully opened file file:/afs/cern.ch/work/b/bmichlin/public/withTAMU/NMSSM/data/dqmio/042CC7A8-572A-E611-B2A2-44A84225C4EB.root
+cmsRun: /build/cmsbuild/auto-builds/CMSSW_8_0_3-slc6_amd64_gcc493/build/CMSSW_8_0_3-build/tmp/BUILDROOT/eb320c94b45470efe4cf33be473d9fa9/opt/cmssw/slc6_amd64_gcc493/cms/cmssw/CMSSW_8_0_3/src/IOPool/Input/src/RootTree.cc:65: edm::RootTree::RootTree(std::shared_ptr<edm::InputFile>, const edm::BranchType&, unsigned int, unsigned int, unsigned int, unsigned int, bool, edm::InputType): Assertion `tree_' failed.

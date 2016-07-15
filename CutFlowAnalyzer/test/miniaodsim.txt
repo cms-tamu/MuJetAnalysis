@@ -1,0 +1,15 @@
+# Conditions read from  CMS_CONDITIONS  via FrontierProd 
+ ################################################################### 
+ # WARNING: this module is deprecated.                             # 
+ # Please use CondCore.CondDB.CondDB_cfi.py                        # 
+ ################################################################### 
+15-Jul-2016 01:17:19 CEST  Initiating request to open file file:/afs/cern.ch/work/b/bmichlin/public/withTAMU/NMSSM/data/miniaodsim/22E8A9DE-2929-E611-855C-00266CF2CD48.root
+15-Jul-2016 01:17:22 CEST  Successfully opened file file:/afs/cern.ch/work/b/bmichlin/public/withTAMU/NMSSM/data/miniaodsim/22E8A9DE-2929-E611-855C-00266CF2CD48.root
+15-Jul-2016 01:17:23 CEST  Closed file file:/afs/cern.ch/work/b/bmichlin/public/withTAMU/NMSSM/data/miniaodsim/22E8A9DE-2929-E611-855C-00266CF2CD48.root
+----- Begin Fatal Exception 15-Jul-2016 01:17:23 CEST-----------------------
+An exception of category 'Configuration' occurred while
+   [0] Constructing the EventProcessor
+Exception Message:
+Duplicate Process The process name PAT was previously used on these products.
+Please modify the configuration file to use a distinct process name.
+----- End Fatal Exception -------------------------------------------------

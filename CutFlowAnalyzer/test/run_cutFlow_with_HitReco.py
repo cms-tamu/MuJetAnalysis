@@ -35,17 +35,20 @@ process.TrackRefitter.NavigationSchool = ''
 
 process.source = cms.Source ("PoolSource",
                              fileNames=cms.untracked.vstring(
-							 'file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_1.root'
-#							 'file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_19.root',
-#							 'file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_200.root',
-#							 'file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_256.root'
+							 #'file:/afs/cern.ch/work/b/bmichlin/public/withTAMU/NMSSM/data/aodsim/0A163FCD-3038-E611-9188-0025905A6136.root'
+							 #'file:/afs/cern.ch/work/b/bmichlin/public/withTAMU/NMSSM/data/dqmio/042CC7A8-572A-E611-B2A2-44A84225C4EB.root'
+							 #'file:/afs/cern.ch/work/b/bmichlin/public/withTAMU/NMSSM/data/miniaodsim/22E8A9DE-2929-E611-855C-00266CF2CD48.root'
+							 'file:/afs/cern.ch/work/b/bmichlin/public/withTAMU/NMSSM/data/rawaodsim/089561FA-AC26-E611-A673-0025904C67BA.root'
+
+
+							 #'file:/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_cT_000_Evt_79k_13TeV_RAW2DIGI_L1Reco_RECO_MCRUN2_74_V9_v1/151026_194054/0000/out_reco_1.root'
 							 ),
                              skipEvents=cms.untracked.uint32(0)
                             )
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(100))
 
 
-process.Path = cms.Path(process.TrackRefitter*process.MeasurementTrackerEvent)
+#process.Path = cms.Path(process.TrackRefitter*process.MeasurementTrackerEvent)
 
 # End of customisation functions
 #do not add changes to your config after this point (unless you know what you are doing)
