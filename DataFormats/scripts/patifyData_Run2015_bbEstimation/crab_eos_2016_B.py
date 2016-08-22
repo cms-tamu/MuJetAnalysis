@@ -2,14 +2,15 @@ from CRABClient.UserUtilities import config
 config = config()
 
 config.section_("General")
-config.General.requestName = 'DoubleMuon_2016B_AOD_808_patana_01'
+config.General.requestName = 'DoubleMuon_2016B_AOD_808_patana_03'
 config.General.workArea = 'crab_projects'
 config.General.transferLogs = True
 
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
 config.JobType.psetName = 'patTuple_cutana_mujets_73X_cfg.py'
-config.JobType.outputFiles = ['out_pat.root','out_ana.root']
+#config.JobType.outputFiles = ['out_pat.root','out_ana.root']
+config.JobType.outputFiles = ['out_ana.root']
 
 config.section_("Data")
 config.Data.inputDataset = '/DoubleMuon/Run2016B-PromptReco-v2/AOD'
@@ -21,7 +22,7 @@ config.Data.lumiMask = 'Cert_271036-278808_13TeV_PromptReco_Collisions16_JSON_No
 #config.Data.outLFNDirBase = '/store/group/lpcdarksusy/'
 config.Data.outLFNDirBase = '/store/user/lpernie/'
 config.Data.publication = True
-config.Data.outputDatasetTag = 'DoubleMuon_2016B_AOD_808_patana_01'
+config.Data.outputDatasetTag = 'DoubleMuon_2016B_AOD_808_patana_03'
 
 config.section_("Site")
 #config.Site.storageSite = 'T2_CH_CERN'

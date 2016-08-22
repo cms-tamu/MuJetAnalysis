@@ -24,7 +24,7 @@ process.options = cms.untracked.PSet(
 
 # Other statements
 from Configuration.AlCa.GlobalTag_condDBv2 import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data', '')
 
 ### Track refitter specific stuff
 from RecoTracker.TkNavigation.NavigationSchoolESProducer_cff import *
@@ -35,14 +35,15 @@ process.TrackRefitter.NavigationSchool = ''
 
 process.source = cms.Source ("PoolSource",
                              fileNames=cms.untracked.vstring(
-							 'file:002C811B-80A7-E511-8C4D-0CC47A4D7644.root'
+#							 'file:3E460221-D919-E611-AE4F-02163E014142.root' #2016B
+							 'file:16858380-6F3B-E611-AE0A-02163E0118AD.root' #2016C
 							 ),
                              skipEvents=cms.untracked.uint32(0)
                             )
 process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10))
 
 
-process.Path = cms.Path(process.TrackRefitter*process.MeasurementTrackerEvent)
+#? process.Path = cms.Path(process.TrackRefitter*process.MeasurementTrackerEvent)
 
 # End of customisation functions
 #do not add changes to your config after this point (unless you know what you are doing)
@@ -61,9 +62,9 @@ process.patTriggerEvent.processName = cms.string( "*" )
 ############## Analysis Modules ###################################
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
-#process.Path = cms.Path(process.patifyMC * process.MuJetProducers  * process.cutFlowAnalyzers)
-#process.Path = cms.Path(process.patifyData * process.MuJetProducers  * process.cutFlowAnalyzers)
+
 process.Path = cms.Path(process.patifyData * process.MuJetProducers  * process.cutFlowAnalyzers)
+process.outpath.remove(process.out) #Avoid to store PAT
 # customisation of the process.
 
 process.TFileService = cms.Service("TFileService", fileName = cms.string("out_ana.root") )
