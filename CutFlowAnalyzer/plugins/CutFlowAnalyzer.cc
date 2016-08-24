@@ -415,6 +415,8 @@ private:
   Bool_t b_is2DiMuonsMassOK_ConsistentVtx;
 
   Bool_t b_isVertexOK;
+ 
+  Float_t b_Mass4Mu;
 
   // Reco branches in ROOT tree (they all start with b_)
   Int_t b_nRecoMu;
@@ -712,9 +714,6 @@ private:
   Float_t b_pixelhit_mu2_muJetF_posy[10][100];
   Float_t b_pixelhit_mu2_muJetF_errposx[10][100];
   Float_t b_pixelhit_mu2_muJetF_errposy[10][100];
-  
-  Float_t b_Mass4Mu;
-
 
   //BB estimation
   Bool_t runBBestimation_;
@@ -1085,15 +1084,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_pixelhit_mu2_muJetF_errposy[k][j]=-10000;
     }
   }
-   
   b_Mass4Mu = -1.;
-
-   
-   
-  // //BB estimation
-  // Bool_t runBBestimation_;
-
-
 
   //****************************************************************************
   //                          EVENT LEVEL                                       
@@ -3266,6 +3257,7 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);  
+  m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
 
   if(runPixelHitRecovery_){
     //pixelHitRecovery
@@ -3438,11 +3430,7 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("pixelhit_mu2_muJetF_posx",&b_pixelhit_mu2_muJetF_posx,"pixelhit_mu2_muJetF_posx[10][100]/F");
     m_ttree->Branch("pixelhit_mu2_muJetF_posy",&b_pixelhit_mu2_muJetF_posy,"pixelhit_mu2_muJetF_posy[10][100]/F");
     m_ttree->Branch("pixelhit_mu2_muJetF_errposx",&b_pixelhit_mu2_muJetF_errposx,"pixelhit_mu2_muJetF_errposx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_errposy",&b_pixelhit_mu2_muJetF_errposy,"pixelhit_mu2_muJetF_errposy[10][100]/F");
-
-    m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
-
-    
+    m_ttree->Branch("pixelhit_mu2_muJetF_errposy",&b_pixelhit_mu2_muJetF_errposy,"pixelhit_mu2_muJetF_errposy[10][100]/F");    
   }
   // Orpahn Muon
   if(runBBestimation_){
