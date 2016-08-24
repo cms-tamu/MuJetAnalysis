@@ -730,15 +730,6 @@ private:
   Bool_t  m_orphan_passOffLineSelPtEta;
   Bool_t  m_orphan_passOffLineSelPt1788;
   Bool_t  m_orphan_AllTrackerMu;
-  Bool_t  m_orphan_FiredTrig;
-  Bool_t  m_orphan_FiredTrigPt;
-  Bool_t  m_orphan_FiredTrigPtEta;
-  Bool_t  m_orphan_FiredTrig_pt;
-  Bool_t  m_orphan_FiredTrigPt_pt;
-  Bool_t  m_orphan_FiredTrigPtEta_pt;
-  Bool_t  m_orphan_FiredTrig_ptColl;
-  Bool_t  m_orphan_FiredTrigPt_ptColl;
-  Bool_t  m_orphan_FiredTrigPtEta_ptColl;
   Float_t  m_orphan_PtOrph;
   Float_t  m_orphan_EtaOrph;
   Float_t  m_orphan_PtMu0;
@@ -2806,15 +2797,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     m_orphan_passOffLineSelPtEta = false;
     m_orphan_passOffLineSelPt1788 = false;
     m_orphan_AllTrackerMu = false;
-    m_orphan_FiredTrig = false;
-    m_orphan_FiredTrigPt = false;
-    m_orphan_FiredTrigPtEta = false;
-    m_orphan_FiredTrig_pt = false;
-    m_orphan_FiredTrigPt_pt = false;
-    m_orphan_FiredTrigPtEta_pt = false;
-    m_orphan_FiredTrigPt_ptColl = false;
-    m_orphan_FiredTrigPt_ptColl = false;
-    m_orphan_FiredTrigPtEta_ptColl = false;
     m_orphan_PtOrph  = -99.;
     m_orphan_EtaOrph = -99.;
     m_orphan_PtMu0   = -99.;
@@ -2826,41 +2808,12 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
     for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
       if (muon->pt() > m_trigpt  &&  fabs(muon->eta()) < 0.9) {
-	  const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
-	  const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
-	  const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
-	  if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_trigpt)  ||
-	     (mu02 != NULL && mu02->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu02->pt() > m_trigpt)  ||
-	     (mu03 != NULL && mu03->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu03->pt() > m_trigpt)){
+	  const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu1*_DoubleTrkMu5NoFiltersNoVtx_v*");
+	  if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_trigpt)  ){
 	    hightrigmuons.push_back(muon);
 	  }
 	}
-      const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
-      const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
-      const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
-      if(  mu01 != NULL || mu02 != NULL || mu03 != NULL)                                                       m_orphan_FiredTrig      = true;
-      if( (mu01 != NULL || mu02 != NULL || mu03 != NULL) && muon->pt() > m_trigpt   )                          m_orphan_FiredTrigPt    = true;
-      if( (mu01 != NULL || mu02 != NULL || mu03 != NULL) && muon->pt() > m_trigpt && fabs(muon->eta()) < 0.9 ) m_orphan_FiredTrigPtEta = true;
-      if(  (mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt ) )                                                      m_orphan_FiredTrig_pt = true;
-      if( ((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt )) && muon->pt() > m_trigpt )                            m_orphan_FiredTrigPt_pt = true;
-      if( ((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt )) && muon->pt() > m_trigpt && fabs(muon->eta()) < 0.9 ) m_orphan_FiredTrigPtEta_pt = true;
-      if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_trigpt)  ||
-         (mu02 != NULL && mu02->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu02->pt() > m_trigpt)  ||
-         (mu03 != NULL && mu03->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu03->pt() > m_trigpt)){
-         m_orphan_FiredTrig_ptColl = true;
-      }
-      if(((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_trigpt) ||
-         (mu02 != NULL && mu02->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu02->pt() > m_trigpt)  ||
-         (mu03 != NULL && mu03->collection() == std::string("hltGlbTrkMuonCandsNoVtx:HLT") && mu03->pt() > m_trigpt)) && muon->pt() > m_trigpt ){
-         m_orphan_FiredTrigPt_ptColl = true;
-      }
-      if(((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_trigpt) ||
-         (mu02 != NULL && mu02->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu02->pt() > m_trigpt)  ||
-         (mu03 != NULL && mu03->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu03->pt() > m_trigpt)) && muon->pt() > m_trigpt && fabs(muon->eta()) < 0.9){
-         m_orphan_FiredTrigPtEta_ptColl = true;
-      }
     }
-
     //Orphan branches
     m_orphan_dimu_mass = -999.;
     m_orphan_mass = -999.;
@@ -3451,15 +3404,6 @@ CutFlowAnalyzer::beginJob() {
     m_ttree_orphan->Branch("orph_passOffLineSelPtEta", &m_orphan_passOffLineSelPtEta, "orph_passOffLineSelPtEta/O");
     m_ttree_orphan->Branch("orph_passOffLineSelPt1788", &m_orphan_passOffLineSelPt1788, "orph_passOffLineSelPt1788/O");
     m_ttree_orphan->Branch("orph_AllTrackerMu", &m_orphan_AllTrackerMu, "orph_AllTrackerMu/O");
-    m_ttree_orphan->Branch("orph_FiredTrig", &m_orphan_FiredTrig, "orph_FiredTrig/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPt", &m_orphan_FiredTrigPt, "orph_FiredTrigPt/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPtEta", &m_orphan_FiredTrigPtEta, "orph_FiredTrigPtEta/O");
-    m_ttree_orphan->Branch("orph_FiredTrig_pt", &m_orphan_FiredTrig_pt, "orph_FiredTrig_pt/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPt_pt", &m_orphan_FiredTrigPt_pt, "orph_FiredTrigPt_pt/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPtEta_pt", &m_orphan_FiredTrigPtEta_pt, "orph_FiredTrigPtEta_pt/O");
-    m_ttree_orphan->Branch("orph_FiredTrig_ptColl", &m_orphan_FiredTrig_ptColl, "orph_FiredTrig_ptColl/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPt_ptColl", &m_orphan_FiredTrigPt_ptColl, "orph_FiredTrigPt_ptColl/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPtEta_ptColl", &m_orphan_FiredTrigPtEta_ptColl, "orph_FiredTrigPtEta_ptColl/O");
     m_ttree_orphan->Branch("orph_PtOrph", &m_orphan_PtOrph, "orph_PtOrph/F");
     m_ttree_orphan->Branch("orph_EtaOrph", &m_orphan_EtaOrph, "orph_EtaOrph/F");
     m_ttree_orphan->Branch("orph_PtMu0", &m_orphan_PtMu0, "orph_PtMu0/F");

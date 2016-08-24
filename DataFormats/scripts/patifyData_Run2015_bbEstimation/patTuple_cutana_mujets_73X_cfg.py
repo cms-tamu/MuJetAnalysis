@@ -40,7 +40,7 @@ process.source = cms.Source ("PoolSource",
 							 ),
                              skipEvents=cms.untracked.uint32(0)
                             )
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
 
 
 #? process.Path = cms.Path(process.TrackRefitter*process.MeasurementTrackerEvent)
