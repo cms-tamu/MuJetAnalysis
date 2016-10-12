@@ -3,13 +3,13 @@ from TrackingTools.GeomPropagators.SmartPropagator_cff import *
 from TrackingTools.MaterialEffects.MaterialPropagator_cfi import *
 from TrackingTools.MaterialEffects.OppositeMaterialPropagator_cfi import *
 from PhysicsTools.PatAlgos.patSequences_cff import *
-from PhysicsTools.PatAlgos.triggerLayer1.triggerProducer_cfi import *
-from PhysicsTools.PatAlgos.triggerLayer1.triggerEventProducer_cfi import *
-#from PhysicsTools.PatAlgos.triggerLayer1.triggerMatcher_cfi import * -- deprecated in 73
+from PhysicsTools.PatAlgos.triggerLayer1.triggerProducer_cff import *
+from PhysicsTools.PatAlgos.slimming.unpackedPatTrigger_cfi import unpackedPatTrigger
 
 muonMatch = muonMatch.clone(
     src = cms.InputTag("slimmedMuons"),
-    resolveByMatchQuality = cms.bool(True)
+    resolveByMatchQuality = cms.bool(True),
+    matched = cms.InputTag("prunedGenParticles"),
 )
 patMuons = patMuons.clone(
     muonSource = cms.InputTag("slimmedMuons"),
@@ -31,7 +31,7 @@ patMuons = patMuons.clone(
 )
 # Tracker Muons Part
 selectedPatTrackerMuons = selectedPatMuons.clone(
-    src = cms.InputTag("patMuons"),
+    src = cms.InputTag("slimmedMuons"),
     cut = cms.string("pt > 5.0 && isTrackerMuon() && numberOfMatches() > 1 && -2.4 < eta() && eta() < 2.4")
 )
 cleanPatTrackerMuons = cleanPatMuons.clone(
@@ -42,7 +42,7 @@ countPatTrackerMuons = countPatMuons.clone(
 )
 # PF Muons Part
 selectedPatPFMuons = selectedPatMuons.clone(
-    src = cms.InputTag("patMuons"),
+    src = cms.InputTag("slimmedMuons"),
     #"Loose Muon" requirement on PF muons as recommended by Muon POG:
     #https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideMuonId#Loose_Muon
     cut = cms.string("pt > 5.0 && isPFMuon() && ( isTrackerMuon() || isGlobalMuon() ) && -2.4 < eta() && eta() < 2.4")
@@ -58,7 +58,7 @@ countPatPFMuons = countPatMuons.clone(
 # This module is derived from from https://github.com/cms-sw/cmssw/blob/CMSSW_7_3_X/PhysicsTools/PatAlgos/python/triggerLayer1/triggerMatcherExamples_cfi.py
 cleanMuonTriggerMatchHLTMu17 = cms.EDProducer("PATTriggerMatcherDRDPtLessByR", # match by DeltaR only, best match by DeltaR
     src     = cms.InputTag( "cleanPatMuons" ),
-    matched = cms.InputTag( "patTrigger" ),  # default producer label as defined in PhysicsTools/PatAlgos/python/triggerLayer1/triggerProducer_cfi.py
+    matched = cms.InputTag( "unpackedPatTrigger" ),  # default producer label as defined in PhysicsTools/PatAlgos/python/triggerLayer1/triggerProducer_cfi.py
     matchedCuts = cms.string( 'path( "HLT_Mu17_v*" )' ),
     maxDPtRel = cms.double( 0.5 ),
     maxDeltaR = cms.double( 0.5 ),
@@ -155,9 +155,10 @@ patifyPFMuon = cms.Sequence(
     cleanPatPFMuonsTriggerMatch
 )
 patifyData = cms.Sequence(
-    patMuons * 
-    patTrigger * 
-    patTriggerEvent * 
+    #patMuons * 
+    #patTrigger * 
+    #patTriggerEvent * 
+    unpackedPatTrigger *
     patifyTrackerMuon * 
     patifyPFMuon
 )
