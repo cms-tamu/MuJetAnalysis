@@ -4,7 +4,9 @@ from TrackingTools.MaterialEffects.MaterialPropagator_cfi import *
 from TrackingTools.MaterialEffects.OppositeMaterialPropagator_cfi import *
 from PhysicsTools.PatAlgos.patSequences_cff import *
 from PhysicsTools.PatAlgos.triggerLayer1.triggerProducer_cff import *
+from PhysicsTools.PatAlgos.triggerLayer1.triggerEventProducer_cfi import *
 from PhysicsTools.PatAlgos.slimming.unpackedPatTrigger_cfi import unpackedPatTrigger
+from PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi import unpackedTracksAndVertices
 
 muonMatch = muonMatch.clone(
     src = cms.InputTag("slimmedMuons"),
@@ -29,6 +31,7 @@ patMuons = patMuons.clone(
     embedCaloMETMuonCorrs = cms.bool(False),
     embedTcMETMuonCorrs = cms.bool(False),
 )
+
 # Tracker Muons Part
 selectedPatTrackerMuons = selectedPatMuons.clone(
     src = cms.InputTag("slimmedMuons"),
@@ -156,9 +159,10 @@ patifyPFMuon = cms.Sequence(
 )
 patifyData = cms.Sequence(
     #patMuons * 
-    #patTrigger * 
-    #patTriggerEvent * 
+    #patTrigger *
+    unpackedTracksAndVertices *
     unpackedPatTrigger *
+    #patTriggerEvent * 
     patifyTrackerMuon * 
     patifyPFMuon
 )
