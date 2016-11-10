@@ -557,6 +557,7 @@ private:
   Float_t b_PAT_jet_pt[100];
   Float_t b_PAT_jet_eta[100];
   Float_t b_PAT_jet_phi[100];
+  Float_t b_PAT_jet_en[100];
   Float_t b_PAT_jet_Btag1[100];
   Float_t b_PAT_jet_Btag2[100];
   Float_t b_PAT_jet_Btag3[100];
@@ -1024,6 +1025,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_PAT_jet_pt[k]=-999.;
     b_PAT_jet_eta[k]=-999.;
     b_PAT_jet_phi[k]=-999.;
+    b_PAT_jet_en[k]=-999.;
     b_PAT_jet_Btag1[k]=-999.;
     b_PAT_jet_Btag2[k]=-999.;
     b_PAT_jet_Btag3[k]=-999.;
@@ -2853,6 +2855,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         b_PAT_jet_pt[NPATJet]    = Myjet->pt();
         b_PAT_jet_eta[NPATJet]   = Myjet->eta();
         b_PAT_jet_phi[NPATJet]   = Myjet->phi();
+        b_PAT_jet_en[NPATJet]    = Myjet->energy();
         b_PAT_jet_Btag1[NPATJet] = Myjet->bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
         b_PAT_jet_Btag2[NPATJet] = Myjet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
         b_PAT_jet_Btag3[NPATJet] = Myjet->bDiscriminator("pfCombinedMVAV2BJetTags");
@@ -3484,10 +3487,11 @@ CutFlowAnalyzer::beginJob() {
     m_ttree_orphan->Branch("orph_EtaMu01", &m_orphan_EtaMu01, "orph_EtaMu01/F");
     m_ttree_orphan->Branch("orph_PhiMu01", &m_orphan_PhiMu01, "orph_PhiMu01/F");
     m_ttree_orphan->Branch("orph_DRdiMuOrph", &m_orphan_DRdiMuOrph, "orph_DRdiMuOrph/F");
-    m_ttree_orphan->Branch("NPATJet",&b_NPATJet,"NPATJet/I");
-    m_ttree_orphan->Branch("PAT_jet_pt", &b_PAT_jet_pt,"PAT_jet_pt[NPATJet]/F");
-    m_ttree_orphan->Branch("PAT_jet_eta", &b_PAT_jet_eta,"PAT_jet_eta[NPATJet]/F");
-    m_ttree_orphan->Branch("PAT_jet_phi", &b_PAT_jet_phi,"PAT_jet_phi[NPATJet]/F");
+    m_ttree_orphan->Branch("NPATJet",       &b_NPATJet,"NPATJet/I");
+    m_ttree_orphan->Branch("PAT_jet_pt",    &b_PAT_jet_pt,"PAT_jet_pt[NPATJet]/F");
+    m_ttree_orphan->Branch("PAT_jet_eta",   &b_PAT_jet_eta,"PAT_jet_eta[NPATJet]/F");
+    m_ttree_orphan->Branch("PAT_jet_phi",   &b_PAT_jet_phi,"PAT_jet_phi[NPATJet]/F");
+    m_ttree_orphan->Branch("PAT_jet_en",    &b_PAT_jet_en,"PAT_jet_en[NPATJet]/F");
     m_ttree_orphan->Branch("PAT_jet_Btag1", &b_PAT_jet_Btag1,"PAT_jet_Btag1[NPATJet]/F");
     m_ttree_orphan->Branch("PAT_jet_Btag2", &b_PAT_jet_Btag2,"PAT_jet_Btag2[NPATJet]/F");
     m_ttree_orphan->Branch("PAT_jet_Btag3", &b_PAT_jet_Btag3,"PAT_jet_Btag3[NPATJet]/F");
