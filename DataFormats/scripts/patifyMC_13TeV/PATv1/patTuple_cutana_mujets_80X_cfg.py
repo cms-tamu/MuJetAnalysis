@@ -1,22 +1,21 @@
-## import skeleton process
-from PhysicsTools.PatAlgos.patTemplate_cfg import *
+import FWCore.ParameterSet.Config as cms
+
+process = cms.Process("NUONJET")
+
+## MessageLogger
+process.load("FWCore.MessageLogger.MessageLogger_cfi")
 
 # verbose flags for the PF2PAT modules
+process.options = cms.untracked.PSet( wantSummary = cms.untracked.bool(True) )
 process.options.allowUnscheduled = cms.untracked.bool(False)
 
-### Add MuJet Dataformats
-from MuJetAnalysis.DataFormats.EventContent_version10_cff import *
-process = customizePatOutput(process)
-
+## Geometry and Detector Conditions (needed for a few patTuple production steps)
+process.load("Configuration.Geometry.GeometryRecoDB_cff")
+process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
+from Configuration.AlCa.GlobalTag import GlobalTag
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
-#process.load("MuJetAnalysis.DataFormats.RECOtoPAT_cff")
-#process.patMuons.addGenMatch = cms.bool(True)
-#process.patMuons.embedGenMatch = cms.bool(True)
-
-## pick latest HLT process
-#process.patTrigger.processName = cms.string( "*" )
-process.patTriggerEvent.processName = cms.string( "*" )
-
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
 
@@ -27,11 +26,19 @@ process.source = cms.Source("PoolSource",
     )
 )
 
-process.maxEvents.input = -1
+process.out = cms.OutputModule("PoolOutputModule",
+                               fileName = cms.untracked.string('patTuple.root')
+)
+
+### Add MuJet Dataformats
+from MuJetAnalysis.DataFormats.EventContent_version11_cff import *
+process = customizePatOutput(process)
+
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
 process.p = cms.Path(
     process.patifyMC *
-    process.MuJetProducers * 
+    process.MuJetProducers *
     process.cutFlowAnalyzers
 )
 

@@ -158,11 +158,8 @@ patifyPFMuon = cms.Sequence(
     cleanPatPFMuonsTriggerMatch
 )
 patifyData = cms.Sequence(
-    #patMuons * 
-    #patTrigger *
     unpackedTracksAndVertices *
     unpackedPatTrigger *
-    #patTriggerEvent * 
     patifyTrackerMuon * 
     patifyPFMuon
 )

@@ -142,7 +142,7 @@ public:
   ~CutFlowAnalyzer();
   
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
-  void FillTrigInfo( TH1F *h1, edm::Handle<pat::TriggerEvent> triggerEvent, std::map<int,std::string> nameAndNumb );
+  void FillTrigInfo( TH1F *h1, const edm::TriggerNames&, std::map<int,std::string> nameAndNumb );
   TH1F* triggerComposition;
   TH1F* triggerComposition_bb;
 private:
@@ -353,7 +353,6 @@ private:
   edm::EDGetTokenT<pat::MultiMuonCollection> m_muJets;       // muon jets built from reconstructed muons
   edm::EDGetTokenT<reco::BeamSpot> m_beamSpot;
   edm::EDGetTokenT<pat::MuonCollection> m_muJetOrphans; // muon orphan, not found in any group
-  edm::EDGetTokenT<pat::TriggerEvent> m_triggerEvent;
   edm::EDGetTokenT<reco::TrackCollection> m_tracks;
   edm::EDGetTokenT<reco::GenParticleCollection> m_genParticles;
   edm::EDGetTokenT<edm::TriggerResults> m_trigRes;
@@ -810,7 +809,6 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_muJets          = consumes<pat::MultiMuonCollection>(iConfig.getParameter<edm::InputTag>("muJets"));
   m_beamSpot        = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
   m_muJetOrphans    = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muJetOrphans"));
-  m_triggerEvent    = consumes<pat::TriggerEvent>(iConfig.getParameter<edm::InputTag>("triggerEvent"));
   m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
   m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genParticles"));
   m_trigRes         = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
@@ -1858,22 +1856,20 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
 
   // HLT cut
-  edm::Handle<pat::TriggerEvent> triggerEvent;
-  iEvent.getByToken(m_triggerEvent, triggerEvent);
-  
   b_isDiMuonHLTFired = false;
   b_hltPaths.clear();
-  for (auto p : allMuHltPaths_){
-    if ( !triggerEvent->path(p) ) {
-      if ( m_debug > 10 ) std::cout << p << " is not present in patTriggerEvent!" << std::endl;
-    }
-    else{
-      if ( triggerEvent->path(p)->wasAccept() ) {
-        b_hltPaths.push_back(p);
-        if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p) != signalHltPaths_.end()) {
-          b_isDiMuonHLTFired = true;
-        }
-      }
+
+  edm::Handle<edm::TriggerResults> TrResults;
+  iEvent.getByToken( m_trigRes, TrResults);
+  const TriggerResults *trRes = TrResults.product();
+  int ntrigs = trRes->size();
+  edm::TriggerNames const& triggerNames = iEvent.triggerNames(*trRes);
+  for (int itrig = 0; itrig != ntrigs; ++itrig) {
+    TString trigName = triggerNames.triggerName(itrig);
+    std::string trigNameStr(trigName.Data());
+    b_hltPaths.push_back(trigNameStr);
+    if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
+      b_isDiMuonHLTFired = true;
     }
   }
   
@@ -2791,7 +2787,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     
 
   if(runBBestimation_){
-    FillTrigInfo(triggerComposition, triggerEvent, NameAndNumb );
+    FillTrigInfo(triggerComposition, triggerNames, NameAndNumb );
     m_orphan_passOffLineSel = false;
     m_orphan_passOffLineSelPt = false;
     m_orphan_passOffLineSelPtEta = false;
@@ -2849,7 +2845,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       }
       if( mu1788==1 ) m_orphan_passOffLineSelPt1788 = true;
       if ( muJet->muon(0)->isTrackerMuon() && muJet->muon(0)->innerTrack().isNonnull() && muJet->muon(1)->isTrackerMuon() && muJet->muon(1)->innerTrack().isNonnull() && orphan->isTrackerMuon() && orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true; 
-      if( m_orphan_passOffLineSelPtEta && m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerEvent, NameAndNumb );
+      if( m_orphan_passOffLineSelPtEta && m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
 
       m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
       m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
@@ -3478,12 +3474,14 @@ CutFlowAnalyzer::endJob()
 
 }
 
-void CutFlowAnalyzer::FillTrigInfo( TH1F * h1, edm::Handle<pat::TriggerEvent> triggerEvent, std::map<int,std::string> nameAndNumb )
+void CutFlowAnalyzer::FillTrigInfo( TH1F * h1, const edm::TriggerNames& triggerNames, std::map<int,std::string> nameAndNumb )
 {
   for( unsigned int i=0; i<nameAndNumb.size(); i++ ){
-    if( triggerEvent->path(nameAndNumb[i]) ){
-	if ( triggerEvent->path(nameAndNumb[i])->wasAccept() ) {
-	  h1->Fill(i);
+    for (unsigned int itrig = 0; itrig != triggerNames.size(); ++itrig) { 
+      TString trigName = triggerNames.triggerName(itrig);
+      std::string trigNameStr(trigName.Data());
+      if (trigNameStr == nameAndNumb[i]){
+	h1->Fill(i);
       }
     }
   }
