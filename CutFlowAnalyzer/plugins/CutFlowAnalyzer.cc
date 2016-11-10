@@ -23,7 +23,6 @@
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/MuonReco/interface/MuonSegmentMatch.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
-#include "DataFormats/PatCandidates/interface/TriggerEvent.h"
 #include "DataFormats/TrackingRecHit/interface/TrackingRecHit.h"
 #include "DataFormats/TrackReco/interface/HitPattern.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
