@@ -40,7 +40,7 @@ MuJetProducer = cms.EDProducer(
     groupByCharge = cms.string("opposite"),
     
     # defines isolation variables for offline cuts
-    tracks = cms.InputTag("generalTracks"),
+    tracks = cms.InputTag("unpackedTracksAndVertices"),
     caloTowers = cms.InputTag("towerMaker"),
 
     # recommended parameters for isolation
