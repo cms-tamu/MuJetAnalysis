@@ -1763,7 +1763,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
       ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition); 
       ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
-      ConsistentVtx.SetDebug(99);      
+      ConsistentVtx.SetDebug(0);
       ConsistentVtx.setBarrelPixelLayer(m_barrelPixelLayer);
       ConsistentVtx.setEndcapPixelLayer(m_endcapPixelLayer);
 
@@ -1771,7 +1771,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
       if (runDisplacedVtxFinder_) { 
         DisplacedVertexFinder displacedVtx(transientTrackBuilder_ptr, beamSpotPosition);      
-        displacedVtx.setDebug(99);      
+        displacedVtx.setDebug(0);
         displacedVtx.findDisplacedVertex(diMuonC, diMuonF);
       }      
     } catch (...) {
@@ -1866,8 +1866,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   for (int itrig = 0; itrig != ntrigs; ++itrig) {
     TString trigName = triggerNames.triggerName(itrig);
     std::string trigNameStr(trigName.Data());
-    b_hltPaths.push_back(trigNameStr);
     if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
+      b_hltPaths.push_back(trigNameStr);
+      if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl;
       b_isDiMuonHLTFired = true;
     }
   }
