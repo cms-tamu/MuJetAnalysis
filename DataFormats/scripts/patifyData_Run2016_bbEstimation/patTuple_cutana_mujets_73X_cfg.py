@@ -35,12 +35,11 @@ process.TrackRefitter.NavigationSchool = ''
 
 process.source = cms.Source ("PoolSource",
                              fileNames=cms.untracked.vstring(
-#							 'file:3E460221-D919-E611-AE4F-02163E014142.root' #2016B
-							 'file:16858380-6F3B-E611-AE0A-02163E0118AD.root' #2016C
+							 'file:3E460221-D919-E611-AE4F-02163E014142.root' #2016B
 							 ),
                              skipEvents=cms.untracked.uint32(0)
                             )
-process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(-1))
+process.maxEvents = cms.untracked.PSet(input = cms.untracked.int32(10))
 
 
 #? process.Path = cms.Path(process.TrackRefitter*process.MeasurementTrackerEvent)
