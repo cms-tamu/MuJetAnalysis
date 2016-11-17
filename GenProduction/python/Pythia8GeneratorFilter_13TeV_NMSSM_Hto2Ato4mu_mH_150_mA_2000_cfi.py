@@ -23,7 +23,7 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
 			'HiggsBSM:all = off',    # Switch off all BSM Higgs production
 			'HiggsBSM:gg2H2 = on',   # Switch on gg->H^0(H_2^0) scattering via loop contributions primarily from top. Code 1022. 
 			'35:m0 = 150.0',         #  mass in GeV of H0 (PDG ID = 35)
-			'36:m0 = 3.55',           #  mass in GeV of A0 (PDG ID = 36)
+			'36:m0 = 2.0',           #  mass in GeV of A0 (PDG ID = 36)
 			# decays of H0 (PDG ID = 35)
 			'35:onMode = off',       # Turn off all H0 decay modes 
 			'35:onIfMatch = 36 36',  # Allow H0 decays to A0: H0 ->A0A0

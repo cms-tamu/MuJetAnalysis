@@ -1,9 +1,9 @@
-# NMSSM Hto2Ato4mu 13TeV pythia8 configuration file
+B# NMSSM Hto2Ato4mu 13TeV pythia8 configuration file
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
 from Configuration.Generator.Pythia8CUEP8M1Settings_cfi import *
-
+1;95;0c
 generator = cms.EDFilter("Pythia8GeneratorFilter",
 	pythiaHepMCVerbosity = cms.untracked.bool(False),
 	maxEventsToPrint = cms.untracked.int32(0),
@@ -22,8 +22,8 @@ generator = cms.EDFilter("Pythia8GeneratorFilter",
 			'Higgs:useBSM = on',     # Initialize and use the two-Higgs-doublet BSM states
 			'HiggsBSM:all = off',    # Switch off all BSM Higgs production
 			'HiggsBSM:gg2H2 = on',   # Switch on gg->H^0(H_2^0) scattering via loop contributions primarily from top. Code 1022. 
-			'35:m0 = 150.0',         #  mass in GeV of H0 (PDG ID = 35)
-			'36:m0 = 3.55',           #  mass in GeV of A0 (PDG ID = 36)
+			'35:m0 = 125.0',         #  mass in GeV of H0 (PDG ID = 35)
+			'36:m0 = 3.0',           #  mass in GeV of A0 (PDG ID = 36)
 			# decays of H0 (PDG ID = 35)
 			'35:onMode = off',       # Turn off all H0 decay modes 
 			'35:onIfMatch = 36 36',  # Allow H0 decays to A0: H0 ->A0A0
