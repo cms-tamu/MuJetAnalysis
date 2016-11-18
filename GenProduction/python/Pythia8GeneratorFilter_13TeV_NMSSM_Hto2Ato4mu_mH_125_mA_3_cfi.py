@@ -1,9 +1,9 @@
-B# NMSSM Hto2Ato4mu 13TeV pythia8 configuration file
+# NMSSM Hto2Ato4mu 13TeV pythia8 configuration file
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
 from Configuration.Generator.Pythia8CUEP8M1Settings_cfi import *
-1;95;0c
+
 generator = cms.EDFilter("Pythia8GeneratorFilter",
 	pythiaHepMCVerbosity = cms.untracked.bool(False),
 	maxEventsToPrint = cms.untracked.int32(0),
