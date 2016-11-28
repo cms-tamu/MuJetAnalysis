@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process("NUONJET")
+process = cms.Process("MUONJET")
 
 ## MessageLogger
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
