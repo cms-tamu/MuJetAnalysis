@@ -18,7 +18,7 @@ fourmugenfilter = cms.EDFilter("MCMultiParticleFilter",
                                        AcceptMore = cms.bool(True),
                                        ParticleID = cms.vint32(13),
                                        Status = cms.vint32(1),
-                                       PtMin = cms.vdouble(10.0),
+                                       PtMin = cms.vdouble(3.0),
                                        EtaMax = cms.vdouble(2.5),
                                        )
 
