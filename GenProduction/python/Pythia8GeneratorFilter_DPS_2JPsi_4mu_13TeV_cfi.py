@@ -1,31 +1,9 @@
 import FWCore.ParameterSet.Config as cms
 
-# Double J/psi filter
-oniagenfilter = cms.EDFilter("MCParticlePairFilter",
-    Status = cms.untracked.vint32(2, 2),
-    #MinPt = cms.untracked.vdouble(3.0, 3.0),
-    MinPt = cms.untracked.vdouble(10.0, 10.0),
-    MaxEta = cms.untracked.vdouble(2.5, 2.5),
-    MinEta = cms.untracked.vdouble(-2.5, -2.5),
-    ParticleCharge = cms.untracked.int32(0),
-    ParticleID1 = cms.untracked.vint32(443),
-    ParticleID2 = cms.untracked.vint32(443)
-)
-# Four muons filter
-fourmugenfilter = cms.EDFilter("MCMultiParticleFilter",
-                                       src = cms.InputTag("generator"),
-                                       NumRequired = cms.int32(4),
-                                       AcceptMore = cms.bool(True),
-                                       ParticleID = cms.vint32(13),
-                                       Status = cms.vint32(1),
-                                       PtMin = cms.vdouble(3.0),
-                                       EtaMax = cms.vdouble(2.5),
-                                       )
-
 from Configuration.Generator.Pythia8CommonSettings_cfi import *
 from Configuration.Generator.Pythia8CUEP8M1Settings_cfi import *
 
-generator_dps = cms.EDFilter("Pythia8GeneratorFilter",
+generator = cms.EDFilter("Pythia8GeneratorFilter",
    crossSection = cms.untracked.double(1.755e-04),  
    maxEventsToPrint = cms.untracked.int32(1),
    pythiaPylistVerbosity = cms.untracked.int32(1),
@@ -82,5 +60,3 @@ generator_dps = cms.EDFilter("Pythia8GeneratorFilter",
                                    'processParameters')
    )
 )
-
-generator = cms.Sequence(generator_dps+oniagenfilter+fourmugenfilter)
