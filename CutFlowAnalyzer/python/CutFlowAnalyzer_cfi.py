@@ -26,7 +26,7 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
     MeasurementTrackerEvent = cms.InputTag('MeasurementTrackerEvent'),
     Propagator = cms.string("RungeKuttaTrackerPropagator"),
     runBBestimation = cms.bool(True),
-    skimOutput = cms.bool(True),
+    skimOutput = cms.bool(False),
     signalHltPaths = cms.vstring(
         'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1',
         'HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2',
