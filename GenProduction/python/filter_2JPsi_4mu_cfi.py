@@ -14,7 +14,7 @@ def filter_2JPsi_Pt3_4mu(process):
                                          )
     # Four muons filter
     process.fourmugenfilter = cms.EDFilter("MCMultiParticleFilter",
-                                           src = cms.InputTag("generatorSmeared"),
+                                           src = cms.untracked.InputTag("generatorSmeared"),
                                            NumRequired = cms.int32(4),
                                            AcceptMore = cms.bool(True),
                                            ParticleID = cms.vint32(13),
@@ -42,7 +42,7 @@ def filter_2JPsi_Pt10_4mu(process):
                                          )
     # Four muons filter
     process.fourmugenfilter = cms.EDFilter("MCMultiParticleFilter",
-                                           src = cms.InputTag("generatorSmeared"),
+                                           src = cms.untracked.InputTag("generatorSmeared"),
                                            NumRequired = cms.int32(4),
                                            AcceptMore = cms.bool(True),
                                            ParticleID = cms.vint32(13),
