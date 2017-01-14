@@ -6,7 +6,7 @@ MuJetProducer = cms.EDProducer(
     # source of pat::Muons with user-specified quality cuts
     muons = cms.InputTag("cleanPatMuonsTriggerMatch"),
     primaryVertices = cms.InputTag("offlinePrimaryVertices"),
-    minPt = cms.double(8.),
+    minPt = cms.double(3.5),
     minPmag = cms.double(0.),
     maxAbsEta = cms.double(2.4),
     selectTrackerMuons = cms.bool(True),

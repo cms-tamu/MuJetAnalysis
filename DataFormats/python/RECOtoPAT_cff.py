@@ -124,13 +124,18 @@ cleanPFMuonTriggerMatchHLTTrkMu17DoubleTrkMu8 = cleanMuonTriggerMatchHLTMu17.clo
     src = cms.InputTag( "cleanPatPFMuons" ),
     matchedCuts = cms.string('path("HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx_v*")')
 )   
+cleanPFMuonTriggerMatchHLTMuOnia = cleanMuonTriggerMatchHLTMu17.clone(
+    src = cms.InputTag( "cleanPatPFMuons" ),
+    matchedCuts = cms.string('path("HLT_Dimuon0_Jpsi_Muon_v*")')
+)
 cleanPatPFMuonsTriggerMatch = cms.EDProducer("PATTriggerMatchMuonEmbedder",
     src = cms.InputTag("cleanPatPFMuons"),
     matches = cms.VInputTag("cleanPFMuonTriggerMatchHLTMu",
                             "cleanPFMuonTriggerMatchHLTIsoMu",
                             "cleanPFMuonTriggerMatchHLTDoubleMu",
                             "cleanPFMuonTriggerMatchHLTTrkMu15DoubleTrkMu5",
-                            "cleanPFMuonTriggerMatchHLTTrkMu17DoubleTrkMu8")
+                            "cleanPFMuonTriggerMatchHLTTrkMu17DoubleTrkMu8",
+                            "cleanPFMuonTriggerMatchHLTMuOnia")
 )
 patifyTrackerMuon = cms.Sequence(
     selectedPatTrackerMuons * 

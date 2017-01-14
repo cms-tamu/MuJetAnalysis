@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
     analyzerDebug = cms.int32(0),
-    fillGenLevel = cms.bool(True),
+    fillGenLevel = cms.bool(False),
 #    muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),
 #    muJets = cms.InputTag("TrackerMuJetProducer05"),
     muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
@@ -37,6 +37,13 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
         'HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx_v1',
         'HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx_v2',
         'HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx_v3',
+    ),
+    muoniaHltPaths = cms.vstring(
+        'HLT_Dimuon0_Jpsi_Muon_v1',
+        'HLT_Dimuon0_Jpsi_Muon_v2',
+        'HLT_Dimuon0_Jpsi_Muon_v3',
+        'HLT_Dimuon0_Jpsi_Muon_v4',
+        'HLT_Dimuon0_Jpsi_Muon_v5',
     ),
     otherMuHltPaths = cms.vstring(
         'HLT_DoubleMu18NoFiltersNoVtx_v3',

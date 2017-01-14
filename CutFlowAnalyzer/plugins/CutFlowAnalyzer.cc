@@ -339,6 +339,7 @@ private:
 
   std::vector<std::string> signalHltPaths_;
   std::vector<std::string> backupHltPaths_;
+  std::vector<std::string> muoniaHltPaths_;
   std::vector<std::string> otherMuHltPaths_;
   std::vector<std::string> allMuHltPaths_;
   std::vector<std::string> b_hltPaths;
@@ -801,10 +802,12 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //****************************************************************************
 
   signalHltPaths_ = iConfig.getParameter<std::vector<std::string> >("signalHltPaths");
+  muoniaHltPaths_ = iConfig.getParameter<std::vector<std::string> >("muoniaHltPaths");
   backupHltPaths_ = iConfig.getParameter<std::vector<std::string> >("backupHltPaths");
   otherMuHltPaths_ = iConfig.getParameter<std::vector<std::string> >("otherMuHltPaths");
 
   allMuHltPaths_.clear();
+  allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(muoniaHltPaths_), std::end(muoniaHltPaths_));
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(signalHltPaths_), std::end(signalHltPaths_));
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(backupHltPaths_), std::end(backupHltPaths_));
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(otherMuHltPaths_), std::end(otherMuHltPaths_));
@@ -1885,7 +1888,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     else{
       if ( triggerEvent->path(p)->wasAccept() ) {
         b_hltPaths.push_back(p);
-        if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p) != signalHltPaths_.end()) {
+	//        if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p) != signalHltPaths_.end()) {
+        if(std::find(muoniaHltPaths_.begin(), muoniaHltPaths_.end(), p) != muoniaHltPaths_.end()) {
           b_isDiMuonHLTFired = true;
         }
       }
