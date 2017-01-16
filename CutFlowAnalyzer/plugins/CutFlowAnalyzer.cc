@@ -765,9 +765,9 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //                          SET THRESHOLDS                                    
   //****************************************************************************
 
-  m_threshold_Mu17_pT  = 17.0; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
-  m_threshold_Mu17_eta =  0.9; // max eta in Barrel  //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
-  m_threshold_Mu8_pT   =  8.0; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
+  m_threshold_Mu17_pT  = 3.5; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
+  m_threshold_Mu17_eta =  2.4; // max eta in Barrel  //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
+  m_threshold_Mu8_pT   =  3.5; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
   m_threshold_Mu8_eta  =  2.4; // max eta in Endcaps //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
 
 
@@ -1644,28 +1644,21 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_is2MuJets = false;
   if ( nMuJets == 2) {
     for ( unsigned int j = 0; j < nMuJets; j++ ) {
-      bool isMuJetContainMu17 = false;
+      //      bool isMuJetContainMu17 = false;
       for ( unsigned int m = 0; m < (*muJets)[j].numberOfDaughters(); m++ ) {
         if ( (*muJets)[j].muon(m)->pt() > m_threshold_Mu17_pT && fabs( (*muJets)[j].muon(m)->eta() ) < m_threshold_Mu17_eta ) {
-          isMuJetContainMu17 = true;
+	  //          isMuJetContainMu17 = true;
           nMuJetsContainMu17++;
           break;
         }
       }
-      if ( isMuJetContainMu17 ) {
-        muJetC = &((*muJets)[j]);
-      } else {
-        muJetF = &((*muJets)[j]);
-      }
     }
-    if ( nMuJetsContainMu17 == 2 ) {
-      if (m_trandom3.Integer(2) == 0) {
-        muJetC = &((*muJets)[0]);
-        muJetF = &((*muJets)[1]);
-      } else {
-        muJetC = &((*muJets)[1]);
-        muJetF = &((*muJets)[0]);
-      }
+    if (m_trandom3.Integer(2) == 0) {
+      muJetC = &((*muJets)[0]);
+      muJetF = &((*muJets)[1]);
+    } else {
+      muJetC = &((*muJets)[1]);
+      muJetF = &((*muJets)[0]);
     }
     if ( nMuJetsContainMu17 > 0 ) b_is2MuJets = true;
   }
