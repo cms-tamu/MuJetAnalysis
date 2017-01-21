@@ -161,11 +161,8 @@ private:
   //****************************************************************************
   //                          THRESHOLDS                                        
   //****************************************************************************
-  
-  Float_t m_threshold_Mu17_pT;
-  Float_t m_threshold_Mu17_eta;
-  Float_t m_threshold_Mu8_pT;
-  Float_t m_threshold_Mu8_eta;
+  Float_t m_threshold_Mu3p5_pT;
+  Float_t m_threshold_Mu3p5_eta;
   
   Float_t m_threshold_DiMuons_Iso_dR;  
   Float_t m_threshold_DiMuons_Iso_dz;
@@ -228,18 +225,18 @@ private:
   
   // GEN Level Counters: number of events with ...
   Int_t m_events4GenMu;    // ... with 4 gen muons
-  Int_t m_events1GenMu17;  // ... with 1 gen muon:  pT > 17 GeV, |eta| < 0.9
-  Int_t m_events2GenMu8;   // ... with 2 gen muons: pT > 8 GeV,  |eta| < 2.4
-  Int_t m_events3GenMu8;   // ... with 3 gen muons: pT > 8 GeV,  |eta| < 2.4
-  Int_t m_events4GenMu8;   // ... with 4 gen muons: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events1GenMu3p5;  // ... with 1 gen muon:  pT > 17 GeV, |eta| < 0.9
+  Int_t m_events2GenMu3p5;   // ... with 2 gen muons: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events3GenMu3p5;   // ... with 3 gen muons: pT > 8 GeV,  |eta| < 2.4
+  Int_t m_events4GenMu3p5;   // ... with 4 gen muons: pT > 8 GeV,  |eta| < 2.4
   Int_t m_eventsGenALxyOK; // ... with both A bosons decay inside Lxy < 4 cm
   
   // GEN Level Selectors
   Bool_t b_is4GenMu;
-  Bool_t b_is1GenMu17;
-  Bool_t b_is2GenMu8;
-  Bool_t b_is3GenMu8;
-  Bool_t b_is4GenMu8;
+  Bool_t b_is1GenMu3p5;
+  Bool_t b_is2GenMu3p5;
+  Bool_t b_is3GenMu3p5;
+  Bool_t b_is4GenMu3p5;
   Bool_t b_isGenALxyOK;
   
   // Bosons
@@ -375,17 +372,17 @@ private:
   Float_t b_isoF_1mm;
   
   // Selectors and counters of events with ...
-  Bool_t b_is1SelMu17;
-  Int_t  m_events1SelMu17; // ... with 1 selected reco muon: pT > 17 GeV, |eta| < 0.9
+  Bool_t b_is1SelMu3p5;
+  Int_t  m_events1SelMu3p5; // ... with 1 selected reco muon: pT > 17 GeV, |eta| < 0.9
   
-  Bool_t b_is2SelMu8;
-  Int_t  m_events2SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
+  Bool_t b_is2SelMu3p5;
+  Int_t  m_events2SelMu3p5;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
   
-  Bool_t b_is3SelMu8;
-  Int_t  m_events3SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
+  Bool_t b_is3SelMu3p5;
+  Int_t  m_events3SelMu3p5;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
   
-  Bool_t b_is4SelMu8;
-  Int_t  m_events4SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
+  Bool_t b_is4SelMu3p5;
+  Int_t  m_events4SelMu3p5;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
   
   Bool_t b_is2MuJets;
   Int_t  m_events2MuJets;  // ... with 2 muon jets
@@ -765,10 +762,8 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //                          SET THRESHOLDS                                    
   //****************************************************************************
 
-  m_threshold_Mu17_pT  = 3.5; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
-  m_threshold_Mu17_eta =  2.4; // max eta in Barrel  //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
-  m_threshold_Mu8_pT   =  3.5; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
-  m_threshold_Mu8_eta  =  2.4; // max eta in Endcaps //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
+  m_threshold_Mu3p5_pT  = 3.5; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
+  m_threshold_Mu3p5_eta =  2.4; // max eta in Barrel  //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
 
 
   m_threshold_DiMuons_Iso_dR = 0.4; // Isolation cone              //There is no real way to avoid hard-coding this value
@@ -791,10 +786,10 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_fillGenLevel = iConfig.getParameter<bool>("fillGenLevel");
 
   m_events4GenMu   = 0;
-  m_events1GenMu17 = 0;
-  m_events2GenMu8  = 0;
-  m_events3GenMu8  = 0;
-  m_events4GenMu8  = 0;
+  m_events1GenMu3p5 = 0;
+  m_events2GenMu3p5  = 0;
+  m_events3GenMu3p5  = 0;
+  m_events4GenMu3p5  = 0;
 
 
   //****************************************************************************
@@ -837,10 +832,10 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_randomSeed = 1234;
   m_trandom3   = TRandom3(m_randomSeed); // Random generator 
 
-  m_events1SelMu17                     = 0;
-  m_events2SelMu8                      = 0;
-  m_events3SelMu8                      = 0;
-  m_events4SelMu8                      = 0;
+  m_events1SelMu3p5                     = 0;
+  m_events2SelMu3p5                      = 0;
+  m_events3SelMu3p5                      = 0;
+  m_events4SelMu3p5                      = 0;
   m_events2MuJets                      = 0;
   m_events2DiMuons                     = 0;
   //Fill trigger histo
@@ -1481,36 +1476,32 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_genMu3_phi = -100.0;
     }
 
-    std::vector<const reco::GenParticle*> genMuons17;
-    std::vector<const reco::GenParticle*> genMuons8;
+    std::vector<const reco::GenParticle*> genMuons3p5;
 
     for ( unsigned int i = 0; i < genMuons.size(); i++ ) {
-      if ( genMuons[i]->pt() > m_threshold_Mu17_pT && fabs( genMuons[i]->eta() ) < m_threshold_Mu17_eta ) {
-        genMuons17.push_back(genMuons[i]);
-      }
-      if ( genMuons[i]->pt() > m_threshold_Mu8_pT && fabs( genMuons[i]->eta() ) < m_threshold_Mu8_eta ) {
-        genMuons8.push_back(genMuons[i]);
+      if ( genMuons[i]->pt() > m_threshold_Mu3p5_pT && fabs( genMuons[i]->eta() ) < m_threshold_Mu3p5_eta ) {
+        genMuons3p5.push_back(genMuons[i]);
       }
     }
-    b_is1GenMu17 = false; 
-    b_is2GenMu8  = false;
-    b_is3GenMu8  = false;
-    b_is4GenMu8  = false;
+    b_is1GenMu3p5 = false; 
+    b_is2GenMu3p5 = false;
+    b_is3GenMu3p5  = false;
+    b_is4GenMu3p5  = false;
 
-    if ( genMuons17.size() >=1) {
-      m_events1GenMu17++;
-      b_is1GenMu17 = true;
-      if ( genMuons8.size() >=2 ) {
-        m_events2GenMu8++;
-        b_is2GenMu8 = true;
+    if ( genMuons3p5.size() >=1) {
+      m_events1GenMu3p5++;
+      b_is1GenMu3p5 = true;
+      if ( genMuons3p5.size() >=2 ) {
+        m_events2GenMu3p5++;
+        b_is2GenMu3p5 = true;
       }
-      if ( genMuons8.size() >=3 ) {
-        m_events3GenMu8++;
-        b_is3GenMu8 = true;
+      if ( genMuons3p5.size() >=3 ) {
+        m_events3GenMu3p5++;
+        b_is3GenMu3p5 = true;
       }
-      if ( genMuons8.size() >=4 ) {
-        m_events4GenMu8++;
-        b_is4GenMu8 = true;
+      if ( genMuons3p5.size() >=4 ) {
+        m_events4GenMu3p5++;
+        b_is4GenMu3p5 = true;
       }
     }
 
@@ -1531,17 +1522,13 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   iEvent.getByToken(m_muons, muons);
   
   std::vector<const reco::Muon*> selMuons;
-  std::vector<const reco::Muon*> selMuons8;
-  std::vector<const reco::Muon*> selMuons17;
+  std::vector<const reco::Muon*> selMuons3p5;
 
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
     if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
       selMuons.push_back( &(*iMuon) );
-      if ( iMuon->pt() > m_threshold_Mu8_pT ) {
-        selMuons8.push_back( &(*iMuon) );
-      }
-      if ( iMuon->pt() > m_threshold_Mu17_pT && fabs(iMuon->eta()) < m_threshold_Mu17_eta ) {
-        selMuons17.push_back( &(*iMuon) );
+      if ( iMuon->pt() > m_threshold_Mu3p5_pT && fabs(iMuon->eta()) < m_threshold_Mu3p5_eta ) {
+        selMuons3p5.push_back( &(*iMuon) );
       }
     }
   }
@@ -1611,24 +1598,24 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
   if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
 
-  b_is1SelMu17 = false;
-  b_is2SelMu8  = false;
-  b_is3SelMu8  = false;
-  b_is4SelMu8  = false;
-  if ( selMuons17.size() >=1 ) {
-    m_events1SelMu17++;
-    b_is1SelMu17 = true;
-    if ( selMuons8.size() >=2 ) {
-      m_events2SelMu8++;
-      b_is2SelMu8 = true;
+  b_is1SelMu3p5 = false;
+  b_is2SelMu3p5  = false;
+  b_is3SelMu3p5  = false;
+  b_is4SelMu3p5  = false;
+  if ( selMuons3p5.size() >=1 ) {
+    m_events1SelMu3p5++;
+    b_is1SelMu3p5 = true;
+    if ( selMuons3p5.size() >=2 ) {
+      m_events2SelMu3p5++;
+      b_is2SelMu3p5 = true;
     }
-    if ( selMuons8.size() >=3 ) {
-      m_events3SelMu8++;
-      b_is3SelMu8 = true;
+    if ( selMuons3p5.size() >=3 ) {
+      m_events3SelMu3p5++;
+      b_is3SelMu3p5 = true;
     }
-    if ( selMuons8.size() >=4 ) {
-      m_events4SelMu8++;
-      b_is4SelMu8 = true;
+    if ( selMuons3p5.size() >=4 ) {
+      m_events4SelMu3p5++;
+      b_is4SelMu3p5 = true;
     }
   }
 
@@ -1638,17 +1625,15 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   iEvent.getByToken(m_muJets, muJets);
   const pat::MultiMuon *muJetC = NULL;
   const pat::MultiMuon *muJetF = NULL;
-  int   nMuJetsContainMu17     = 0;
+  int   nMuJetsContainMu3p5     = 0;
   unsigned int nMuJets = muJets->size();
   b_massC = -999.; b_massF = -999.;
   b_is2MuJets = false;
   if ( nMuJets == 2) {
     for ( unsigned int j = 0; j < nMuJets; j++ ) {
-      //      bool isMuJetContainMu17 = false;
       for ( unsigned int m = 0; m < (*muJets)[j].numberOfDaughters(); m++ ) {
-        if ( (*muJets)[j].muon(m)->pt() > m_threshold_Mu17_pT && fabs( (*muJets)[j].muon(m)->eta() ) < m_threshold_Mu17_eta ) {
-	  //          isMuJetContainMu17 = true;
-          nMuJetsContainMu17++;
+        if ( (*muJets)[j].muon(m)->pt() > m_threshold_Mu3p5_pT && fabs( (*muJets)[j].muon(m)->eta() ) < m_threshold_Mu3p5_eta ) {
+          nMuJetsContainMu3p5++;
           break;
         }
       }
@@ -1660,11 +1645,11 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       muJetC = &((*muJets)[1]);
       muJetF = &((*muJets)[0]);
     }
-    if ( nMuJetsContainMu17 > 0 ) b_is2MuJets = true;
+    if ( nMuJetsContainMu3p5 > 1 ) b_is2MuJets = true;
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Check if exactly 2 muon jets are built" << std::endl;
-  if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets) m_events2MuJets++;
+  if ( b_is4SelMu3p5 && b_is2MuJets) m_events2MuJets++;
 
   b_is2DiMuons = false;
   const pat::MultiMuon *diMuonC = NULL;
@@ -1678,7 +1663,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Check if 2 muon jets are dimuons" << std::endl;
-  if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons){
+  if ( b_is4SelMu3p5 && b_is2MuJets && b_is2DiMuons){
     m_events2DiMuons++;
     b_massC = muJetC->mass();
     b_massF = muJetF->mass();
@@ -2082,7 +2067,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
   if ( m_debug > 10 ) std::cout << m_events << " Stop RECO Level" << std::endl;
   
-  if (m_debug>10 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
+  if (m_debug>10 && b_is4SelMu3p5 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
     std::cout<<"  hitpix diMuonF m1   "<<b_diMuonF_m1_FittedVtx_hitpix_l3inc<<std::endl;
     std::cout<<"  hitpix diMuonF m2   "<<b_diMuonF_m2_FittedVtx_hitpix_l3inc<<std::endl;
     std::cout<<"  hitpix diMuonC m1   "<<b_diMuonC_m1_FittedVtx_hitpix_l3inc<<std::endl;
@@ -2090,7 +2075,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
 
 /*
-  if (runPixelHitRecovery_ && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
+  if (runPixelHitRecovery_ && b_is4SelMu3p5 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
 
     Int_t indxtrkmj1[2];
     Int_t indxtrkmj2[2];
@@ -3098,10 +3083,10 @@ CutFlowAnalyzer::beginJob() {
   // GEN Level Selectors
   m_ttree->Branch("is4GenMu",    &b_is4GenMu,       "is4GenMu/O");
 
-  m_ttree->Branch("is1GenMu17",  &b_is1GenMu17,     "is1GenMu17/O");
-  m_ttree->Branch("is2GenMu8",   &b_is2GenMu8,      "is2GenMu8/O");
-  m_ttree->Branch("is3GenMu8",   &b_is3GenMu8,      "is3GenMu8/O");
-  m_ttree->Branch("is4GenMu8",   &b_is4GenMu8,      "is4GenMu8/O");
+  m_ttree->Branch("is1GenMu3p5",  &b_is1GenMu3p5,     "is1GenMu3p5/O");
+  m_ttree->Branch("is2GenMu3p5",   &b_is2GenMu3p5,      "is2GenMu3p5/O");
+  m_ttree->Branch("is3GenMu3p5",   &b_is3GenMu3p5,      "is3GenMu3p5/O");
+  m_ttree->Branch("is4GenMu3p5",   &b_is4GenMu3p5,      "is4GenMu3p5/O");
 
 
   //****************************************************************************
@@ -3238,10 +3223,10 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("isoF_1mm",                       &b_isoF_1mm,                       "isoF_1mm/F");
 
   // RECO Level Selectors
-  m_ttree->Branch("is1SelMu17",                     &b_is1SelMu17,                     "is1SelMu17/O");
-  m_ttree->Branch("is2SelMu8",                      &b_is2SelMu8,                      "is2SelMu8/O");
-  m_ttree->Branch("is3SelMu8",                      &b_is3SelMu8,                      "is3SelMu8/O");
-  m_ttree->Branch("is4SelMu8",                      &b_is4SelMu8,                      "is4SelMu8/O");
+  m_ttree->Branch("is1SelMu3p5",                     &b_is1SelMu3p5,                     "is1SelMu3p5/O");
+  m_ttree->Branch("is2SelMu3p5",                      &b_is2SelMu3p5,                      "is2SelMu3p5/O");
+  m_ttree->Branch("is3SelMu3p5",                      &b_is3SelMu3p5,                      "is3SelMu3p5/O");
+  m_ttree->Branch("is4SelMu3p5",                      &b_is4SelMu3p5,                      "is4SelMu3p5/O");
 
   m_ttree->Branch("is2MuJets",                      &b_is2MuJets,                      "is2MuJets/O");
   m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
@@ -3482,23 +3467,23 @@ CutFlowAnalyzer::endJob()
   if (m_fillGenLevel){  
     std:: cout << "********** GEN **********" << std::endl;
     std:: cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << std::endl;
-    std:: cout << "pT1>17 |eta1|<0.9:       " << m_events1GenMu17 << " \t" << (float)m_events1GenMu17/(float)m_events << " \t" << (float)m_events1GenMu17/(float)m_events << std::endl;
-    std:: cout << "pT2>8  |eta2|<2.4:       " << m_events2GenMu8  << " \t" << (float)m_events2GenMu8/(float)m_events1GenMu17  << " \t" << (float)m_events2GenMu8/(float)m_events << std::endl;
-    std:: cout << "pT3>8  |eta2|<2.4:       " << m_events3GenMu8  << " \t" << (float)m_events3GenMu8/(float)m_events2GenMu8   << " \t" << (float)m_events3GenMu8/(float)m_events << std::endl;
-    std:: cout << "pT4>8  |eta2|<2.4:       " << m_events4GenMu8  << " \t" << (float)m_events4GenMu8/(float)m_events3GenMu8   << " \t" << (float)m_events4GenMu8/(float)m_events << std::endl;
-    std:: cout << "Basic MC Acceptance:     " << (float)m_events4GenMu8/(float)m_events << std::endl;
+    std:: cout << "pT1>3.5 |eta1|<2.4:       " << m_events1GenMu3p5 << " \t" << (float)m_events1GenMu3p5/(float)m_events << " \t" << (float)m_events1GenMu3p5/(float)m_events << std::endl;
+    std:: cout << "pT2>3.5  |eta2|<2.4:       " << m_events2GenMu3p5  << " \t" << (float)m_events2GenMu3p5/(float)m_events1GenMu3p5  << " \t" << (float)m_events2GenMu3p5/(float)m_events << std::endl;
+    std:: cout << "pT3>3.5 |eta2|<2.4:       " << m_events3GenMu3p5  << " \t" << (float)m_events3GenMu3p5/(float)m_events2GenMu3p5   << " \t" << (float)m_events3GenMu3p5/(float)m_events << std::endl;
+    std:: cout << "pT4>3.5 |eta2|<2.4:       " << m_events4GenMu3p5  << " \t" << (float)m_events4GenMu3p5/(float)m_events3GenMu3p5   << " \t" << (float)m_events4GenMu3p5/(float)m_events << std::endl;
+    std:: cout << "Basic MC Acceptance:     " << (float)m_events4GenMu3p5/(float)m_events << std::endl;
   }
   std:: cout << "********** RECO **********" << std::endl;
   std:: cout << "Selection                " << "nEv"                   << " \t RelEff"                                                         << " \t Eff" << std::endl;
-  std:: cout << "m_events1SelMu17:        " << m_events1SelMu17        << " \t" << (float)m_events1SelMu17/(float)m_events                << " \t" << (float)m_events1SelMu17/(float)m_events        << std::endl;
-  std:: cout << "m_events2SelMu8:         " << m_events2SelMu8         << " \t" << (float)m_events2SelMu8/(float)m_events1SelMu17              << " \t" << (float)m_events2SelMu8/(float)m_events         << std::endl;
-  std:: cout << "m_events3SelMu8:         " << m_events3SelMu8         << " \t" << (float)m_events3SelMu8/(float)m_events2SelMu8               << " \t" << (float)m_events3SelMu8/(float)m_events         << std::endl;
-  std:: cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << std::endl;
+  std:: cout << "m_events1SelMu3p5:        " << m_events1SelMu3p5        << " \t" << (float)m_events1SelMu3p5/(float)m_events                << " \t" << (float)m_events1SelMu3p5/(float)m_events        << std::endl;
+  std:: cout << "m_events2SelMu3p5:         " << m_events2SelMu3p5         << " \t" << (float)m_events2SelMu3p5/(float)m_events1SelMu3p5              << " \t" << (float)m_events2SelMu3p5/(float)m_events         << std::endl;
+  std:: cout << "m_events3SelMu3p5:         " << m_events3SelMu3p5         << " \t" << (float)m_events3SelMu3p5/(float)m_events2SelMu3p5               << " \t" << (float)m_events3SelMu3p5/(float)m_events         << std::endl;
+  std:: cout << "m_events4SelMu3p5:         " << m_events4SelMu3p5         << " \t" << (float)m_events4SelMu3p5/(float)m_events3SelMu3p5               << " \t" << (float)m_events4SelMu3p5/(float)m_events         << std::endl;
 
-  std:: cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << std::endl;
-  if (m_fillGenLevel) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl; 
+  std:: cout << "Basic Acceptance:        " << (float)m_events4SelMu3p5/(float)m_events << std::endl;
+  if (m_fillGenLevel) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu3p5/(float)m_events << std::endl; 
 
-  std:: cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << std::endl;
+  std:: cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu3p5               << " \t" << (float)m_events2MuJets/(float)m_events         << std::endl;
   std:: cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << std::endl;
 
   std:: cout << " *** FITTED VERTEXES *** " << std::endl;
@@ -3508,27 +3493,27 @@ CutFlowAnalyzer::endJob()
 
   std:: cout << " *** FITTED VERTEXES *** " << std::endl;
   std::cout << m_events << std::endl;
-  std::cout << m_events1GenMu17                  << std::endl;
-  std::cout << m_events2GenMu8                   << std::endl;
-  std::cout << m_events3GenMu8                   << std::endl;
-  std::cout << m_events4GenMu8                   << std::endl;
-  std::cout << m_events1SelMu17                  << std::endl;
-  std::cout << m_events2SelMu8                   << std::endl;
-  std::cout << m_events3SelMu8                   << std::endl;
-  std::cout << m_events4SelMu8                   << std::endl;
+  std::cout << m_events1GenMu3p5                  << std::endl;
+  std::cout << m_events2GenMu3p5                   << std::endl;
+  std::cout << m_events3GenMu3p5                   << std::endl;
+  std::cout << m_events4GenMu3p5                   << std::endl;
+  std::cout << m_events1SelMu3p5                  << std::endl;
+  std::cout << m_events2SelMu3p5                   << std::endl;
+  std::cout << m_events3SelMu3p5                   << std::endl;
+  std::cout << m_events4SelMu3p5                   << std::endl;
   std::cout << m_events2MuJets                   << std::endl;
   std::cout << m_events2DiMuons                  << std::endl;
 
   std:: cout << " *** CONSISTENT VERTEXES *** " << std::endl;
   std::cout << m_events << std::endl;
-  std::cout << m_events1GenMu17                      << std::endl;
-  std::cout << m_events2GenMu8                       << std::endl;
-  std::cout << m_events3GenMu8                       << std::endl;
-  std::cout << m_events4GenMu8                       << std::endl;
-  std::cout << m_events1SelMu17                      << std::endl;
-  std::cout << m_events2SelMu8                       << std::endl;
-  std::cout << m_events3SelMu8                       << std::endl;
-  std::cout << m_events4SelMu8                       << std::endl;
+  std::cout << m_events1GenMu3p5                      << std::endl;
+  std::cout << m_events2GenMu3p5                       << std::endl;
+  std::cout << m_events3GenMu3p5                       << std::endl;
+  std::cout << m_events4GenMu3p5                       << std::endl;
+  std::cout << m_events1SelMu3p5                      << std::endl;
+  std::cout << m_events2SelMu3p5                       << std::endl;
+  std::cout << m_events3SelMu3p5                       << std::endl;
+  std::cout << m_events4SelMu3p5                       << std::endl;
   std::cout << m_events2MuJets                       << std::endl;
   std::cout << m_events2DiMuons                      << std::endl;
 
