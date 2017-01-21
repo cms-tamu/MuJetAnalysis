@@ -18,36 +18,57 @@ using namespace std;
 #include <TChainElement.h>
 #include "Helpers.h"
 
-Float_t counter[20][17];//samples; selections
-Float_t TotEff[20][17];
-Float_t TotEffErr[20][17];
-Float_t RelEff[20][17];
-Float_t RelEffErr[20][17];
-Float_t epsvsalph1[20]={0.0};
-Float_t Err[20]={0.0};
-Float_t epsvsalph2[20]={0.0};
-Float_t epsvsalph[20]={0.0};
-Float_t epsvalp[20]={0.0};
-Float_t epsvalp2[20]={0.0};
+// Float_t counter[20][17];//samples; selections
+// Float_t TotEff[20][17];
+// Float_t TotEffErr[20][17];
+// Float_t RelEff[20][17];
+// Float_t RelEffErr[20][17];
+// Float_t epsvsalph1[20]={0.0};
+// Float_t Err[20]={0.0};
+// Float_t epsvsalph2[20]={0.0};
+// Float_t epsvsalph[20]={0.0};
+// Float_t epsvalp[20]={0.0};
+// Float_t epsvalp2[20]={0.0};
 
-void setup(){
-for(int i=0;i<20;i++){
-  for(int j=0;j<17;j++){  
-    counter[i][j]=0;
-    TotEff[i][j]=0.0;
-    RelEff[i][j]=0.0;
-    TotEffErr[i][j]=0.0;
-    RelEffErr[i][j]=0.0;
-  }
- }
-}
+Float_t countA=0.0;
+Float_t countB=0.0;
+Float_t countC=0.0;
+Float_t countD=0.0;
 
-int k = -1;
+// void setup(){
+// for(int i=0;i<20;i++){
+//   for(int j=0;j<17;j++){  
+//     // counter[i][j]=0;
+//     // TotEff[i][j]=0.0;
+//     // RelEff[i][j]=0.0;
+//     // TotEffErr[i][j]=0.0;
+//     // RelEffErr[i][j]=0.0;
+//   }
+//  }
+// }
+
+TH1F *Mu0_pt = new TH1F("Mu0_pt_Run2016G","",100,0.0,100.0);
+TH1F *Mu1_pt = new TH1F("Mu1_pt_Run2016G","",100,0.0,100.0);
+TH1F *Mu2_pt = new TH1F("Mu2_pt_Run2016G","",100,0.0,100.0);
+TH1F *Mu3_pt = new TH1F("Mu3_pt_Run2016G","",100,0.0,100.0);
+
+  
+TH1F *diMuonC_m = new TH1F("diMuonC_m_Run2016G","",100,0.0,9.0);
+TH1F *diMuonF_m = new TH1F("diMuonF_m_Run2016G","",100,0.0,9.0);
+TH1F *diMuonC_m_aftTrig = new TH1F("diMuonC_m_aftTrig_Run2016G","",100,0.0,9.0);
+TH1F *diMuonF_m_aftTrig = new TH1F("diMuonF_m_aftTrig_Run2016G","",100,0.0,9.0);
+
+TH2F *diMuon_2D_m = new TH2F("diMuon_2D_m_Run2016G","",100,0.0,9.0,100,0.0,9.0);
+TH2F *diMuon_2D_Iso = new TH2F("diMuon_2D_Iso_Run2016G","",100,0.0,12.0,100,0.0,12.0);
+
+
+//int k = -1;
 void efficiency(const std::vector<std::string>& dirNames){
 
   TString period_string;
 
-  bool verbose(false);
+  //  bool verbose(false);
+  bool verbose(true);
   //	TString dirname(fileName);
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
@@ -60,7 +81,7 @@ void efficiency(const std::vector<std::string>& dirNames){
   cout<<" Period   "<<period<<endl;
   // add files to the chain
   addfilesMany(chain, dirNames, ext);
-  
+
   //Initialize Variables and counters
   // TFile *f[20]; //A root file is a suit of consecutive data records
   // TTree *t[20]; //comsists of a list of independent branches (Tbranch); one or multiple branches
@@ -68,16 +89,21 @@ void efficiency(const std::vector<std::string>& dirNames){
   
   Float_t diMuonC_Mass;//allows for effective use of architecture with wider formats
   Float_t diMuonF_Mass;
-  Bool_t  is1GenMu17;
-  Bool_t  is2GenMu8;
-  Bool_t  is3GenMu8;
-  Bool_t  is4GenMu8;
+  // Bool_t  is1GenMu3p5;
+  // Bool_t  is2GenMu3p5;
+  // Bool_t  is3GenMu3p5;
+  // Bool_t  is4GenMu3p5;
   
-  Bool_t  is1SelMu17;
-  Bool_t  is2SelMu8;
-  Bool_t  is3SelMu8;
-  Bool_t  is4SelMu8;
+  Bool_t  is1SelMu3p5;
+  Bool_t  is2SelMu3p5;
+  Bool_t  is3SelMu3p5;
+  Bool_t  is4SelMu3p5;
   
+  Float_t selMu0_pT;
+  Float_t selMu1_pT;
+  Float_t selMu2_pT;
+  Float_t selMu3_pT;
+
   Bool_t   is2DiMuons;
 
   Bool_t  is2DiMuonsFittedVtxOK;
@@ -115,36 +141,37 @@ void efficiency(const std::vector<std::string>& dirNames){
   TIter next(fileElements);
   TChainElement *chEl=0;
   
-  k++;
+  //  k++;
   //cout << "p: " << p << endl;
   //if(p == 0 || p%3 == 0) setup(); //reset vectors for every 4th cT for tables.
-  
+
+
   while ((chEl=(TChainElement*)next())) {  //loopforfiles
     if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
-		TFile* myfile = new TFile(chEl->GetTitle());
-		if (!myfile) {
-		  if (verbose) std::cout << "File " << chEl->GetTitle() << " does not exist" << std::endl;
-		  continue;
-		}
-		if (verbose) std::cout << "Loading directory cutFlowAnalyzerPXBL3PXFL2" << std::endl;
-		myfile->cd("cutFlowAnalyzerPXBL3PXFL2");
-		
-		TTree *t = (TTree*)myfile->Get("cutFlowAnalyzerPXBL3PXFL2/Events");
-		if (!t) {
-		  if (verbose) std::cout << "Tree cutFlowAnalyzerPXBL3PXFL2/Events does not exist" << std::endl;
-		  continue;
-		}
-		
-		if (verbose) cout<<"  Events  "<<t->GetEntries()<<endl;
-		
-       		int nentries;
-		
-		//   TFile *f[20];
-		//   TTree *t[20];
-		
+    TFile* myfile = new TFile(chEl->GetTitle());
+    if (!myfile) {
+      if (verbose) std::cout << "File " << chEl->GetTitle() << " does not exist" << std::endl;
+      continue;
+    }
+    if (verbose) std::cout << "Loading directory cutFlowAnalyzerPXBL3PXFL2" << std::endl;
+    myfile->cd("cutFlowAnalyzerPXBL3PXFL2");
+    
+    TTree *t = (TTree*)myfile->Get("cutFlowAnalyzerPXBL3PXFL2/Events");
+    if (!t) {
+      if (verbose) std::cout << "Tree cutFlowAnalyzerPXBL3PXFL2/Events does not exist" << std::endl;
+      continue;
+    }
+    
+    if (verbose) cout<<"  Events  "<<t->GetEntries()<<endl;
+    
+    int nentries;
+    
+    //   TFile *f[20];
+    //   TTree *t[20];
+    
 		//   f[0] = new TFile("DarkSUSY_mH_125_mGammaD_0700_8TeV-madgraph452_bridge224_LHE_pythia6537p4_PAT_v1_10000.root");
-//   f[1] = new TFile("DarkSUSY_mH_125_mGammaD_0700_ctauExp_02_8TeV-madgraph452_bridge224_LHE_pythia6_5374_PAT_v1_10000.root");
-		//   f[2] = new TFile("DarkSUSY_mH_125_mGammaD_0700_ctauExp_05_8TeV-madgraph452_bridge224_LHE_pythia6_537p4_PAT_v1_10000.root");
+    //   f[1] = new TFile("DarkSUSY_mH_125_mGammaD_0700_ctauExp_02_8TeV-madgraph452_bridge224_LHE_pythia6_5374_PAT_v1_10000.root");
+    //   f[2] = new TFile("DarkSUSY_mH_125_mGammaD_0700_ctauExp_05_8TeV-madgraph452_bridge224_LHE_pythia6_537p4_PAT_v1_10000.root");
 		//   f[3] = new TFile("DarkSUSY_mH_125_mGammaD_0700_ctauExp_2_8TeV-madgraph452_bridge224_LHE_pythia6_537p4_PAT_v1_10000.root");
 		//   f[4] = new TFile("DarkSUSY_mH_125_mGammaD_0700_ctauExp_5_8TeV-madgraph452_bridge224_LHE_pythia6_537p4_PAT_v1_10000.root");
 		//   f[5] = new TFile("DarkSUSY_mH_125_mGammaD_0250_8TeV-madgraph452_bridge224_LHE_pythia6_537p4_PAT_v1_10000.root");
@@ -159,21 +186,26 @@ void efficiency(const std::vector<std::string>& dirNames){
 		//   f[14] = new TFile("ana.root");
 	//   f[15] = new TFile("out_ana_reco.root");
 	// 5) allocate var to branch
-		t->SetBranchAddress("diMuonC_FittedVtx_",&diMuonC_Mass);
+		t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
 		t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
 		
 		t->SetBranchAddress("nRecoMu",&nRecoMu);
 		
-		t->SetBranchAddress("is1GenMu17",&is1GenMu17);
-		t->SetBranchAddress("is2GenMu8",&is2GenMu8);
-		t->SetBranchAddress("is3GenMu8",&is3GenMu8);
-		t->SetBranchAddress("is4GenMu8",&is4GenMu8);
+		// t->SetBranchAddress("is1GenMu3p5",&is1GenMu3p5);
+		// t->SetBranchAddress("is2GenMu3p5",&is2GenMu3p5);
+		// t->SetBranchAddress("is3GenMu3p5",&is3GenMu3p5);
+		// t->SetBranchAddress("is4GenMu3p5",&is4GenMu3p5);
 		
-		t->SetBranchAddress("is1SelMu17",&is1SelMu17);
-		t->SetBranchAddress("is2SelMu8",&is2SelMu8);
-		t->SetBranchAddress("is3SelMu8",&is3SelMu8);
-		t->SetBranchAddress("is4SelMu8",&is4SelMu8);
+		t->SetBranchAddress("is1SelMu3p5",&is1SelMu3p5);
+		t->SetBranchAddress("is2SelMu3p5",&is2SelMu3p5);
+		t->SetBranchAddress("is3SelMu3p5",&is3SelMu3p5);
+		t->SetBranchAddress("is4SelMu3p5",&is4SelMu3p5);
 		
+		t->SetBranchAddress("selMu0_pT",&selMu0_pT);
+		t->SetBranchAddress("selMu1_pT",&selMu1_pT);
+		t->SetBranchAddress("selMu2_pT",&selMu2_pT);
+		t->SetBranchAddress("selMu3_pT",&selMu3_pT);
+
 		t->SetBranchAddress("is2DiMuons",&is2DiMuons);
 		t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
 		t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
@@ -181,10 +213,10 @@ void efficiency(const std::vector<std::string>& dirNames){
 		t->SetBranchAddress("isDiMuonHLTFired",&is2DiMuonHLTFired);
 		t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
 		t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
-		t->SetBranchAddress("genA0_Lxy",&genA0_Lxy);
-		t->SetBranchAddress("genA1_Lxy",&genA1_Lxy);
-		t->SetBranchAddress("genA0_Lz",&genA0_Lz);
-		t->SetBranchAddress("genA1_Lz",&genA1_Lz);
+		// t->SetBranchAddress("genA0_Lxy",&genA0_Lxy);
+		// t->SetBranchAddress("genA1_Lxy",&genA1_Lxy);
+		// t->SetBranchAddress("genA0_Lz",&genA0_Lz);
+		// t->SetBranchAddress("genA1_Lz",&genA1_Lz);
 		
 		t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_l3inc",&diMuonC_m1_FittedVtx_hitpix_l3inc);
 		t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l3inc",&diMuonC_m2_FittedVtx_hitpix_l3inc);
@@ -199,24 +231,62 @@ void efficiency(const std::vector<std::string>& dirNames){
 		
 		for(int i=0;i<nentries;i++){ //loop for number of events
 		  t->GetEntry(i);
+
+		  diMuonC_m->Fill(diMuonC_Mass);
+		  diMuonF_m->Fill(diMuonF_Mass);
+
+
+		  if(nRecoMu>=4){
+
+		    
+		    if(is2DiMuonHLTFired){
+		    Mu0_pt->Fill(selMu0_pT);
+		    Mu1_pt->Fill(selMu1_pT);
+		    Mu2_pt->Fill(selMu2_pT);
+		    Mu3_pt->Fill(selMu3_pT);
+
+
+		      diMuonC_m_aftTrig->Fill(diMuonC_Mass);
+		      diMuonF_m_aftTrig->Fill(diMuonF_Mass);
+		      
+		      diMuon_2D_m->Fill(diMuonC_Mass,diMuonF_Mass);
+
+
+		      if( (diMuonC_Mass>2.8 && diMuonC_Mass<3.3) && (diMuonF_Mass>2.8 && diMuonF_Mass<3.3)){
+		  	diMuon_2D_Iso->Fill(diMuonC_IsoTk_FittedVtx,diMuonF_IsoTk_FittedVtx);
+
+
+		  	if( (diMuonC_IsoTk_FittedVtx>0.0 && diMuonC_IsoTk_FittedVtx<2.0) && (diMuonF_IsoTk_FittedVtx>0.0 && diMuonF_IsoTk_FittedVtx<2.0)) countA++;
+		  	if( (diMuonC_IsoTk_FittedVtx>0.0 && diMuonC_IsoTk_FittedVtx<2.0) && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<12.0)) countB++;
+		  	if( (diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<12.0) && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<12.0)) countC++;
+		  	if( (diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<12.0) && (diMuonF_IsoTk_FittedVtx>0.0 && diMuonF_IsoTk_FittedVtx<2.0)) countD++;
+
+
+		      }
+		      
+		    }
+
+		  }
+		}
+  }
 		//   counter[k][0]++;
 		//   // cout<<" dimuonC_Iso  "<<diMuonC_IsoTk_FittedVtx<<endl;
 		//   // cout<<" dimuonF_Iso  "<<diMuonF_IsoTk_FittedVtx<<endl;
 		  
 		//   counter[k][0]++; 
 		  
-		//   if(is1GenMu17)counter[k][1]++;
-		//   if(is2GenMu8) counter[k][2]++;
-		//   if(is3GenMu8) counter[k][3]++;
-		//   if(is4GenMu8){
+		//   if(is1GenMu3p5)counter[k][1]++;
+		//   if(is2GenMu3p5) counter[k][2]++;
+		//   if(is3GenMu3p5) counter[k][3]++;
+		//   if(is4GenMu3p5){
 		//     counter[k][4]++;
 		//     if( (genA0_Lxy<4.4&&abs(genA0_Lz)<34.5) && (genA1_Lxy<4.4&&abs(genA1_Lz)<34.5)) counter[k][5]++;
 		//   }
 		  
-		//   if(is1SelMu17)counter[k][6]++;
-		//   if(is2SelMu8)counter[k][7]++;
-		//   if(is3SelMu8)counter[k][8]++;
-		//   if(is4SelMu8)counter[k][9]++;
+		//   if(is1SelMu3p5)counter[k][6]++;
+		//   if(is2SelMu3p5)counter[k][7]++;
+		//   if(is3SelMu3p5)counter[k][8]++;
+		//   if(is4SelMu3p5)counter[k][9]++;
 		  
 		//   if(is2DiMuons){
 		//     counter[k][10]++;
@@ -242,73 +312,75 @@ void efficiency(const std::vector<std::string>& dirNames){
 		//     }
 		  
 		//   }	 
-		}
-  }
-		// 8)Fill Histogram with event number
-		// hdimCm->Fill(diMuonC_Mass,diMuonF_Mass);
+}
+// 		// 8)Fill Histogram with event number
+// 		// hdimCm->Fill(diMuonC_Mass,diMuonF_Mass);
 	    
 		
-		// RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
-		// for(int m=0;m<17;m++){
-		//   TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
-		//   TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
-		//   if(m>0){
-		//     if(m==6){
-		//       RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
-		//       RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
-		//     }
-		//     else{
-		//       RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
-		//       RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
-		//     }
-		//   }
-		// }
+// 		// RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
+// 		// for(int m=0;m<17;m++){
+// 		//   TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
+// 		//   TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
+// 		//   if(m>0){
+// 		//     if(m==6){
+// 		//       RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
+// 		//       RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
+// 		//     }
+// 		//     else{
+// 		//       RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
+// 		//       RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
+// 		//     }
+// 		//   }
+// 		// }
 		
 		
-		// epsvsalph[k] = counter[k][15]/(counter[k][5]*1.0);
-		// cout<<" epsvsalph[k]  "<<epsvsalph[k]<<endl;
-		// // cout<<" counter[k][5]  "<<counter[k][5]*1.0<<endl;
-		// Err[k]=   sqrt( (epsvsalph[k]*(1-epsvsalph[k]))/(counter[k][5]*1.0)); 
-		// cout<<
-		//   cout<<"begin{landscape}"<<endl;
-		// cout<<"centering"<<endl;
-		// cout<<"begin{tabular}{ c| c | c | c | c | c }"<<endl;
+// 		// epsvsalph[k] = counter[k][15]/(counter[k][5]*1.0);
+// 		// cout<<" epsvsalph[k]  "<<epsvsalph[k]<<endl;
+// 		// // cout<<" counter[k][5]  "<<counter[k][5]*1.0<<endl;
+// 		// Err[k]=   sqrt( (epsvsalph[k]*(1-epsvsalph[k]))/(counter[k][5]*1.0)); 
+// 		// cout<<
+// 		//   cout<<"begin{landscape}"<<endl;
+// 		// cout<<"centering"<<endl;
+// 		// cout<<"begin{tabular}{ c| c | c | c | c | c }"<<endl;
 		
-		// cout<<" Selection   "<<" \\# Events   "<<"Total Efficiency  "<<" Relative Efficiency     "<<"TotalEffError "<<" RelEffError    "<<" hline "<<endl; 
-		// cout<<" No cut      &    "<< counter[k][0]<<"   &   "<<fixed<< std::setprecision(3)<< TotEff[k][0]<<"  &     "<< RelEff[k][0]<<"  &   "<< TotEffErr[k][0]<<" &   "<< RelEffErr[k][0]<<" hline "<<endl;         
-		// cout<<" is1GenMu17  &   "<< counter[k][1]<<"   &   "<< TotEff[k][1]<<"  &     "<< RelEff[k][1]<<"  &    "<<fixed<<std::setprecision(3)<< TotEffErr[k][1]<<" &   "<< RelEffErr[k][1]<<" hline "<<endl;
-		// cout<<" is2GenMu8   &   "<< counter[k][2]<<"    &  "<< TotEff[k][2]<<"   &    "<< RelEff[k][2]<<"  &    "<< TotEffErr[k][2]<<" &   "<< RelEffErr[k][2]<<" hline "<<endl;
-		// cout<<" is3GenMu8   &   "<< counter[k][3]<<"    &  "<< TotEff[k][3]<<"   &    "<< RelEff[k][3]<<"  &    "<< TotEffErr[k][3]<<" &   "<< RelEffErr[k][3]<<" hline "<<endl;
-		// cout<<" is4GenMu8   &   "<< counter[k][4]<<"    &  "<< TotEff[k][4]<<"   &    "<< RelEff[k][4]<<"  &    "<< TotEffErr[k][4]<<" &   "<< RelEffErr[k][4]<<" hline "<<endl;
+// 		// cout<<" Selection   "<<" \\# Events   "<<"Total Efficiency  "<<" Relative Efficiency     "<<"TotalEffError "<<" RelEffError    "<<" hline "<<endl; 
+// 		// cout<<" No cut      &    "<< counter[k][0]<<"   &   "<<fixed<< std::setprecision(3)<< TotEff[k][0]<<"  &     "<< RelEff[k][0]<<"  &   "<< TotEffErr[k][0]<<" &   "<< RelEffErr[k][0]<<" hline "<<endl;         
+// 		// cout<<" is1GenMu3p5  &   "<< counter[k][1]<<"   &   "<< TotEff[k][1]<<"  &     "<< RelEff[k][1]<<"  &    "<<fixed<<std::setprecision(3)<< TotEffErr[k][1]<<" &   "<< RelEffErr[k][1]<<" hline "<<endl;
+// 		// cout<<" is2GenMu3p5   &   "<< counter[k][2]<<"    &  "<< TotEff[k][2]<<"   &    "<< RelEff[k][2]<<"  &    "<< TotEffErr[k][2]<<" &   "<< RelEffErr[k][2]<<" hline "<<endl;
+// 		// cout<<" is3GenMu3p5   &   "<< counter[k][3]<<"    &  "<< TotEff[k][3]<<"   &    "<< RelEff[k][3]<<"  &    "<< TotEffErr[k][3]<<" &   "<< RelEffErr[k][3]<<" hline "<<endl;
+// 		// cout<<" is4GenMu3p5   &   "<< counter[k][4]<<"    &  "<< TotEff[k][4]<<"   &    "<< RelEff[k][4]<<"  &    "<< TotEffErr[k][4]<<" &   "<< RelEffErr[k][4]<<" hline "<<endl;
 		
-		// cout<<" Lxy<4.4&& Lz<34.5 & "<< counter[k][5]<<" &  "<< TotEff[k][5]<<"   &     "<<  RelEff[k][5]<<" &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
-		// cout<<"                                                                          "<<" hline "<<endl;
+// 		// cout<<" Lxy<4.4&& Lz<34.5 & "<< counter[k][5]<<" &  "<< TotEff[k][5]<<"   &     "<<  RelEff[k][5]<<" &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
+// 		// cout<<"                                                                          "<<" hline "<<endl;
 		
-		// cout<<" is1SelMu17   &    "<< counter[k][6]<<"  &    "<< TotEff[k][6]<<"   &    "<< RelEff[k][6]<<"  &    "<< TotEffErr[k][6]<<" &  " <<  RelEffErr[k][6]<<" hline "<<endl;
-		// cout<< setprecision(3);
-		// cout<<" is2SelMu8    &    "<< counter[k][7]<<"  &    "<< TotEff[k][7]<<"   &   "<< RelEff[k][7]<<"   &   "<< TotEffErr[k][7]<<"  & "<< RelEffErr[k][7]<<" hline "<<endl;                                
-		// cout<<" is3SelMu8    &    "<< counter[k][8]<<"  &    "<< TotEff[k][8]<<"   &    "<< RelEff[k][8]<<"   &   "<< TotEffErr[k][8]<<" &  "<< RelEffErr[k][8]<<" hline "<<endl;
-		// cout<<" is4SelMu8    &    "<< counter[k][9]<<"  &    "<< TotEff[k][9]<<"   &    "<< RelEff[k][9]<<"   &   "<< TotEffErr[k][9]<<" &  "<< RelEffErr[k][9]<<" hline "<<endl;   
-		// cout<<"                                                                        "<<" hline "<<endl;
-		// cout<<" is2dimuon    &    "<< counter[k][10]<<" &    "<< TotEff[k][10]<<"  &    "<< RelEff[k][10]<<"  &   "<< TotEffErr[k][10]<<"&  "<< RelEffErr[k][10]<<" hline "<<endl;  
+// 		// cout<<" is1SelMu3p5   &    "<< counter[k][6]<<"  &    "<< TotEff[k][6]<<"   &    "<< RelEff[k][6]<<"  &    "<< TotEffErr[k][6]<<" &  " <<  RelEffErr[k][6]<<" hline "<<endl;
+// 		// cout<< setprecision(3);
+// 		// cout<<" is2SelMu3p5    &    "<< counter[k][7]<<"  &    "<< TotEff[k][7]<<"   &   "<< RelEff[k][7]<<"   &   "<< TotEffErr[k][7]<<"  & "<< RelEffErr[k][7]<<" hline "<<endl;                                
+// 		// cout<<" is3SelMu3p5    &    "<< counter[k][8]<<"  &    "<< TotEff[k][8]<<"   &    "<< RelEff[k][8]<<"   &   "<< TotEffErr[k][8]<<" &  "<< RelEffErr[k][8]<<" hline "<<endl;
+// 		// cout<<" is4SelMu3p5    &    "<< counter[k][9]<<"  &    "<< TotEff[k][9]<<"   &    "<< RelEff[k][9]<<"   &   "<< TotEffErr[k][9]<<" &  "<< RelEffErr[k][9]<<" hline "<<endl;   
+// 		// cout<<"                                                                        "<<" hline "<<endl;
+// 		// cout<<" is2dimuon    &    "<< counter[k][10]<<" &    "<< TotEff[k][10]<<"  &    "<< RelEff[k][10]<<"  &   "<< TotEffErr[k][10]<<"&  "<< RelEffErr[k][10]<<" hline "<<endl;  
 		
-		// cout<<" is2DiMuonsFittedVtx  &  "<< counter[k][11]<<" &    "<< TotEff[k][11]<<" &     "<< RelEff[k][11]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][11]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][11]<<" hline "<<endl;                                
-		// cout<<" is2DiMuonsFittedDz &  "<< counter[k][12]<<" &    "<< TotEff[k][12]<<" &     "<< RelEff[k][12]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][12]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][12]<<" hline "<<endl;                                
-		// cout<<" is2DiMuonsMassOK &  "<< counter[k][13]<<" &    "<< TotEff[k][13]<<" &     "<< RelEff[k][13]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][13]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][13]<<" hline "<<endl;                              
-		// cout<<" is2DiMuonHLTFired & "<< counter[k][14]<<" &    "<< TotEff[k][14]<<" &     "<< RelEff[k][14]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][14]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][14]<<" hline "<<endl;
-		// cout<<" is2DiMuonsIsoTkOK & "<< counter[k][15] <<" &    "<< TotEff[k][15]<<" &     "<< RelEff[k][15]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][15]<<" &   " <<fixed<<std::setprecision(3) << RelEffErr[k][15]<<" hline "<<endl;                          
-		// cout<<" is2DiMuonsPixHitOK & "<< counter[k][16] <<" &   "<< TotEff[k][16]<<" &     "<< RelEff[k][16]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][16]<<" &   " <<fixed<<std::setprecision(3) << RelEffErr[k][16]<<" hline "<<endl;                                   
+// 		// cout<<" is2DiMuonsFittedVtx  &  "<< counter[k][11]<<" &    "<< TotEff[k][11]<<" &     "<< RelEff[k][11]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][11]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][11]<<" hline "<<endl;                                
+// 		// cout<<" is2DiMuonsFittedDz &  "<< counter[k][12]<<" &    "<< TotEff[k][12]<<" &     "<< RelEff[k][12]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][12]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][12]<<" hline "<<endl;                                
+// 		// cout<<" is2DiMuonsMassOK &  "<< counter[k][13]<<" &    "<< TotEff[k][13]<<" &     "<< RelEff[k][13]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][13]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][13]<<" hline "<<endl;                              
+// 		// cout<<" is2DiMuonHLTFired & "<< counter[k][14]<<" &    "<< TotEff[k][14]<<" &     "<< RelEff[k][14]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][14]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][14]<<" hline "<<endl;
+// 		// cout<<" is2DiMuonsIsoTkOK & "<< counter[k][15] <<" &    "<< TotEff[k][15]<<" &     "<< RelEff[k][15]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][15]<<" &   " <<fixed<<std::setprecision(3) << RelEffErr[k][15]<<" hline "<<endl;                          
+// 		// cout<<" is2DiMuonsPixHitOK & "<< counter[k][16] <<" &   "<< TotEff[k][16]<<" &     "<< RelEff[k][16]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][16]<<" &   " <<fixed<<std::setprecision(3) << RelEffErr[k][16]<<" hline "<<endl;                                   
 		
-		// cout
-		//   <<"                                                           "<<" hline "<<endl;
-		// cout<<" epsilon_rec/alpha_gen  & "<< epsvsalph[k]<<"$\\pm$ "<< Err[k]<<" hline "<<endl;
+// 		// cout
+// 		//   <<"                                                           "<<" hline "<<endl;
+// 		// cout<<" epsilon_rec/alpha_gen  & "<< epsvsalph[k]<<"$\\pm$ "<< Err[k]<<" hline "<<endl;
 		
-		// cout<<"end{tabular}"<<endl;
-		// cout<<"end{landscape}"<<endl;
+// 		// cout<<"end{tabular}"<<endl;
+// 		// cout<<"end{landscape}"<<endl;
 
+
+
+
+//   //  c->SaveAs("diMuonC_m_"+period_string+".pdf","recreate");
   
-  
-}
+
 //  Float_t ctau1[15]={0,0.2,0.5,2.0,5.0};
 //   Float_t ctauerr1[15]={0.0};
   
@@ -336,7 +408,7 @@ void efficiency(const std::vector<std::string>& dirNames){
 //   leg->AddEntry(epsvsalp1,"Mass = 0.7 GeV", "pl");
 //   leg->AddEntry(epsvsalp2,"Mass = 0.25 GeV", "pl");
 
-//   TCanvas *c = new TCanvas("c","c",800,600); 
+
 //   dummy->GetYaxis()->SetTitle("#epsilon/#alpha");
 //   dummy->GetXaxis()->SetTitle("c#tau[mm]");
 //   dummy->Draw();
@@ -355,14 +427,72 @@ void efficiency(const std::vector<std::string>& dirNames){
 
 void analysis()
 {
-  setup();
+  //  setup();
   std::vector< std::vector<string> > MuOnia_v;
   // //	cout << "Vector Created" << endl;
   readTextFileWithSamples("muonia.txt", MuOnia_v);
   // //	cout << "Samples read" << endl;
   for(auto v: MuOnia_v) efficiency(v);
   // //	cout << "For Loop completes" << endl;
+
+
+
+  cout<<" Region A    "<<countA<<endl;
+  cout<<" Region B    "<<countB<<endl;
+  cout<<" Region C    "<<countC<<endl;
+  cout<<" Region D    "<<countD<<endl;
+
+
+
+  TCanvas *c = new TCanvas("c","c",800,600); 
+  c->Divide(2,2);
+  c->cd(1);
+  diMuonC_m->GetXaxis()->SetTitle("diMuonC mass [GeV]");
+  diMuonC_m->Draw();
+  c->cd(2);
+  diMuonF_m->GetXaxis()->SetTitle("diMuonF mass [GeV]");
+  diMuonF_m->Draw();
+  c->cd(3);
+  diMuonC_m_aftTrig->GetXaxis()->SetTitle("diMuonC mass [GeV]");
+  diMuonC_m_aftTrig->Draw();
+  c->cd(4);
+  diMuonF_m_aftTrig->GetXaxis()->SetTitle("diMuonF mass [GeV]");
+  diMuonF_m_aftTrig->Draw();
+  c->SaveAs("mass.pdf","recreate");
+
+  TCanvas *c2 = new TCanvas("c2","c2",800,600); 
+  c2->Divide(2,2);
+  c2->cd(1);
+  Mu0_pt->GetXaxis()->SetTitle("Muon0_pT [GeV]");
+  Mu0_pt->Draw();
+  c2->cd(2);
+  Mu1_pt->GetXaxis()->SetTitle("Muon1_pT [GeV]");
+  Mu1_pt->Draw();
+  c2->cd(3);
+  Mu2_pt->GetXaxis()->SetTitle("Muon2_pT [GeV]");
+  Mu2_pt->Draw();
+  c2->cd(4);
+  Mu3_pt->GetXaxis()->SetTitle("Muon3_pT [GeV]");
+  Mu3_pt->Draw();
+  c2->SaveAs("pT.pdf","recreate");
+
+
+  TCanvas *c1 = new TCanvas("c1","c1",800,600); 
+  diMuon_2D_m->GetXaxis()->SetTitle("diMuonC mass [GeV]");
+  diMuon_2D_m->GetYaxis()->SetTitle("diMuonF mass [GeV]");
+  diMuon_2D_m->Draw("BOX");
+  c1->SaveAs("mass2D.pdf","recreate");
   
+  TCanvas *c3 = new TCanvas("c3","c3",800,600); 
+  diMuon_2D_Iso->GetXaxis()->SetTitle("diMuonC Iso [GeV]");
+  diMuon_2D_Iso->GetYaxis()->SetTitle("diMuonF Iso [GeV]");
+  diMuon_2D_Iso->Draw("COLORZ");
+  c3->SaveAs("iso2D.pdf","recreate");
+
 }
+
+
+  
+
 
 
