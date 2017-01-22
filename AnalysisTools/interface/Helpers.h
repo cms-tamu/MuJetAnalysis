@@ -15,6 +15,7 @@ namespace tamu{
 namespace helpers{
 
 bool PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2);
+bool PtOrderReco(const reco::Muon* p1, const reco::Muon* p2);
 
 bool sameTrack(const reco::Track *one, const reco::Track *two);
 

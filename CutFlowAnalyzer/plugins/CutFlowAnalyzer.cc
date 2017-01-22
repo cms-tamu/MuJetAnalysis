@@ -1535,6 +1535,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   
   b_nRecoMu = selMuons.size();
 
+
+  if(selMuons.size()>0) std::sort(selMuons.begin(), selMuons.end(), tamu::helpers::PtOrderReco);
+
   if ( selMuons.size() > 0 ) {
     b_selMu0_px  = selMuons[0]->px();
     b_selMu0_py  = selMuons[0]->py();
