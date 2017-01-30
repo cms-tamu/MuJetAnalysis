@@ -1,7 +1,8 @@
-inside root:
+cmsenv
+root -l 
 
-.L foo.C++
+root [0] .L foo.C++
 
-analysis("XXXX.txt");
+root [0] analysis("XXXX.txt");
 
 It should produce the cutflow table
