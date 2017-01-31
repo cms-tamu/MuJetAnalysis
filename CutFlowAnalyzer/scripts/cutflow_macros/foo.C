@@ -56,6 +56,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
   
+  cout<<" dirNames  "<<dirNames[0]<<endl;
+
   decodeFileNameMany(dirNames, mass_string, cT_string);
 
   TString fileName;
@@ -124,7 +126,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   //if(p == 0 || p%3 == 0) setup(); //reset vectors for every 4th cT for tables.
   
   while ((chEl=(TChainElement*)next())) {  //loopforfiles
-    //    if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
+     if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
 		TFile* myfile = new TFile(chEl->GetTitle());
 		if (!myfile) {
 		  if (verbose) std::cout << "File " << chEl->GetTitle() << " does not exist" << std::endl;
@@ -247,7 +249,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 		    
 		  }	 
 		}
-  }		
+		myfile->Close();
+  }
 		// 8)Fill Histogram with event number
 		// hdimCm->Fill(diMuonC_Mass,diMuonF_Mass);
 	    
@@ -294,16 +297,16 @@ void efficiency(const std::vector<std::string>& dirNames)
 		cout<< setprecision(3);
 		cout<<" is2SelMu8    &    "<< counter[k][7]<<"  &    "<< TotEff[k][7] <<setw(10)<<"   &   "<< RelEff[k][7]<<"   &   "<< TotEffErr[k][7]<<"  & "<< RelEffErr[k][7]<<" hline "<<endl;                                
 		cout<<" is3SelMu8    &    "<< counter[k][8]<<"  &    "<< TotEff[k][8]<<"   &    "<< RelEff[k][8]<<"   &   "<< TotEffErr[k][8]<<" &  "<< RelEffErr[k][8]<<" hline "<<endl;
-		cout<<" is4SelMu8    & "<<setw(7)<<"   "<< counter[k][9]<<setw(10)<<" & "<< TotEff[k][9]<<"   &    "<< RelEff[k][9]<<"   &   "<< TotEffErr[k][9]<<" &  "<< RelEffErr[k][9]<<" hline "<<endl;   
+		cout<<" is4SelMu8    &    "<< counter[k][9]<<"  &    "<< TotEff[k][9]<<"   &    "<< RelEff[k][9]<<"   &   "<< TotEffErr[k][9]<<" &  "<< RelEffErr[k][9]<<" hline "<<endl;   
 		cout<<"                                                                        "<<" hline "<<endl;
-		cout<<" is2dimuon    &    "<< counter[k][10]<<" &    "<< TotEff[k][10]<<"  &    "<< RelEff[k][10]<<"  &   "<< TotEffErr[k][10]<<"&  "<< RelEffErr[k][10]<<" hline "<<endl;  
+		cout<<" is2dimuon            &  "<< counter[k][10]<<"  &    "<< TotEff[k][10]<<" &    "<< RelEff[k][10]<<"  &   "<<fixed<<std::setprecision(4) << TotEffErr[k][10]<<" &  "<< RelEffErr[k][10]<<" hline "<<endl;  
 		
-		cout<<" is2DiMuonsFittedVtx  &  "<< counter[k][11]<<" &    "<< TotEff[k][11]<<" &     "<< RelEff[k][11]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][11]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][11]<<" hline "<<endl;                                
-		cout<<" is2DiMuonsFittedDz &  "<< counter[k][12]<<" &    "<< TotEff[k][12]<<" &     "<< RelEff[k][12]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][12]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][12]<<" hline "<<endl;                                
-		cout<<" is2DiMuonsMassOK &  "<< counter[k][13]<<" &    "<< TotEff[k][13]<<" &     "<< RelEff[k][13]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][13]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][13]<<" hline "<<endl;                              
-		cout<<" is2DiMuonHLTFired & "<< counter[k][14]<<" &    "<< TotEff[k][14]<<" &     "<< RelEff[k][14]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][14]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][14]<<" hline "<<endl;
-		cout<<" is2DiMuonsIsoTkOK & "<< counter[k][15] <<" &    "<< TotEff[k][15]<<" &     "<< RelEff[k][15]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][15]<<" &   " <<fixed<<std::setprecision(3) << RelEffErr[k][15]<<" hline "<<endl;                          
-		cout<<" is2DiMuonsPixHitOK & "<< counter[k][16] <<"    &   "<< TotEff[k][16]<<"   &    "<< RelEff[k][16]<<"   &   "<<fixed<<std::setprecision(4) << TotEffErr[k][16]<<"   &   " <<fixed<<std::setprecision(3) << RelEffErr[k][16]<<" hline "<<endl;                                   
+		cout<<" is2DiMuonsFittedVtx  &  "<< counter[k][11]<<"  &    "<< TotEff[k][11]<<" &     "<< RelEff[k][11]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][11]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][11]<<" hline "<<endl;                                
+		cout<<" is2DiMuonsFittedDz   &  "<< counter[k][12]<<"  &    "<< TotEff[k][12]<<" &     "<< RelEff[k][12]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][12]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][12]<<" hline "<<endl;                                
+		cout<<" is2DiMuonsMassOK     &  "<< counter[k][13]<<"  &    "<< TotEff[k][13]<<" &     "<< RelEff[k][13]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][13]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][13]<<" hline "<<endl;                              
+		cout<<" is2DiMuonHLTFired    &  "<< counter[k][14]<<"  &    "<< TotEff[k][14]<<" &     "<< RelEff[k][14]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][14]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][14]<<" hline "<<endl;
+		cout<<" is2DiMuonsIsoTkOK    &  "<< counter[k][15] <<" &    "<< TotEff[k][15]<<" &     "<< RelEff[k][15]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][15]<<" &  " <<fixed<<std::setprecision(3) << RelEffErr[k][15]<<" hline "<<endl;                          
+		cout<<" is2DiMuonsPixHitOK   &  "<< counter[k][16] <<" &    "<< TotEff[k][16]<<" &     "<< RelEff[k][16]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][16]<<" &  " <<fixed<<std::setprecision(3) << RelEffErr[k][16]<<" hline "<<endl;                                   
  
 		cout
 		  <<"                                                           "<<" hline "<<endl;
