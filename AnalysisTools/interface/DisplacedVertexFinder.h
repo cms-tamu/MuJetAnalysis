@@ -40,16 +40,6 @@ I was thinking to first find the straight line through the recoVertex in between
 
 */
 
-double dist (GlobalPoint f, GlobalPoint s) 
-{
-  return (f-s).mag();
-}
-
-GlobalVector averageDirection(GlobalVector f, GlobalVector s)
-{
-  return GlobalVector((f.x()+s.x())/2., (f.y()+s.y())/2., (f.z()+s.z())/2.);
-}
-
 class DisplacedVertexFinder {
   public:
     DisplacedVertexFinder(const TransientTrackBuilder *transientTrackBuilder, const GlobalPoint beamSpotPosition);

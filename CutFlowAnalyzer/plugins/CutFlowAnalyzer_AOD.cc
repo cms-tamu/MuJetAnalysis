@@ -85,52 +85,6 @@
 //#include <TrackingRecHit.h>
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
 
-double cotan(double i) { return(1 / tan(i)); }
-
-bool PtOrderGen (const reco::GenParticle* p1, const reco::GenParticle* p2) { return (p1->pt() > p2->pt() ); }
-bool PtOrder (const reco::Muon* p1, const reco::Muon* p2) { return (p1->pt() > p2->pt() ); }
-bool order(Float_t v1, Float_t v2){ return (fabs(v1)<fabs(v2));}
-
-
-double My_dPhi (double phi1, double phi2) {
-  double dPhi = phi1 - phi2;
-  if (dPhi >  M_PI) dPhi -= 2.*M_PI;
-  if (dPhi < -M_PI) dPhi += 2.*M_PI;
-  return dPhi;
-}
-
-bool sameTrack(const reco::Track *one, const reco::Track *two) {
-  return (fabs(one->px() - two->px()) < 1e-10  &&
-	  fabs(one->py() - two->py()) < 1e-10  &&
-	  fabs(one->pz() - two->pz()) < 1e-10  &&
-	  fabs(one->vx() - two->vx()) < 1e-10  &&
-	  fabs(one->vy() - two->vy()) < 1e-10  &&
-	  fabs(one->vz() - two->vz()) < 1e-10);
-}
-
-
-// Refitted Track with slightly different pT than general Tracks. 
-// better using 1/pT, vertex and angular variables
-
-// bool sameTrackRF(const reco::Track *one, const reco::Track *two) {
-//   return ( fabs( 1/(one->pt()) - 1/(two->pt()) ) < 1e-6  ||       
-// 	   (fabs(one->vx() - two->vx()) < 1e-6  &&
-// 	    fabs(one->vy() - two->vy()) < 1e-6  &&
-// 	    fabs(one->vz() - two->vz()) < 1e-6 ) || 
-// 	   fabs(one->eta() - two->eta()) <1e-6);
-// }
-
-
-
-bool sameTrackRF(const reco::Track *one, const reco::Track *two) {
-  return ( fabs( one->charge() - two->charge())==0 && 
-	   fabs( cotan(one->theta()) - cotan(two->theta()) ) < 0.02  &&
-	   fabs( (1/one->pt()) - (1/two->pt()) ) < 0.02  &&
-	   fabs( one->phi() - two->phi() ) < 0.02  &&
-	   fabs( one->dxy() - two->dxy() ) < 0.1  && 
-	   fabs( one->dz() - two->dz() ) < 0.1);
-}
-
 //******************************************************************************
 //                           Class declaration                                  
 //******************************************************************************
@@ -2186,23 +2140,23 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	    temp_mu2_muJetF.first = counter_match;
 		
 		
-	    temp_mu2_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
+	    temp_mu2_muJetC.second = pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
 	      pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
+	      pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
 	      pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
 	      pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 
-	    temp_mu2_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
+	    temp_mu2_muJetF.second = pow(tamu::helpers::cotan(muJetF->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
 	      pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
+	      pow(tamu::helpers::My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
 	      pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
 	      pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 		
 		if(m_debug>10){
 			//std::cout << "Printing all information for temp_mu2_muJetC.second (chi2  muon2 muJetC)" << std::endl;
-			//std::cout << "pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2): " << pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) << std::endl;
+			//std::cout << "pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2): " << pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) << std::endl;
 			//std::cout << "pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2): " << pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) << std::endl;
-			//std::cout << "pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2): " << pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) << std::endl;
+			//std::cout << "pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2): " << pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) << std::endl;
 			//std::cout << "pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2): " << pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) << std::endl;
 			//std::cout << "pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2)" << pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2) << std::endl;
 			//std::cout << "temp_mu2_muJetC.second: " << temp_mu2_muJetC.second << std::endl;
@@ -2233,15 +2187,15 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 		
 	    temp_mu1_muJetC.first = counter_match;
 	    temp_mu1_muJetF.first = counter_match;
-	    temp_mu1_muJetC.second = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
+	    temp_mu1_muJetC.second = pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
 	      pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
+	      pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
 	      pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
 	      pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 
-	    temp_mu1_muJetF.second = pow(cotan(muJetF->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
+	    temp_mu1_muJetF.second = pow(tamu::helpers::cotan(muJetF->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
 	      pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
+	      pow(tamu::helpers::My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
 	      pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
 	      pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 
@@ -2255,9 +2209,9 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
 	    //======================
 		
-	    mintheta.push_back( cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()) );
+	    mintheta.push_back( tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()) );
 	    minqoverpt.push_back((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt())  -  (trackrf->charge()/trackrf->pt())  );
-	    minphi.push_back(  My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()) );
+	    minphi.push_back(  tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()) );
 	    mindxy.push_back(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy() );
 	    mindz.push_back( muJetC->muon(k)->innerTrack()->dz() - trackrf->dz() );
 	    mincharge.push_back( muJetC->muon(k)->innerTrack()->charge() - trackrf->charge());
@@ -2266,22 +2220,22 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 	    muJetC_muon1_track_diffpt[counter_track] = muJetC->muon(k)->innerTrack()->pt() - trackrf->pt();
 	    muJetC_muon1_track_diffcharge[counter_track] = muJetC->muon(k)->innerTrack()->charge() - trackrf->charge();
 	    muJetC_muon1_track_diffqoverp[counter_track] = (muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt());
-	    muJetC_muon1_track_difftheta[counter_track] = cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta());
-	    muJetC_muon1_track_diffphi[counter_track] =  My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi());
+	    muJetC_muon1_track_difftheta[counter_track] = tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta());
+	    muJetC_muon1_track_diffphi[counter_track] =  tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi());
 	    muJetC_muon1_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
 	    muJetC_muon1_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
 		  
-	    muJetC_muon1_track_diffchi2[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
+	    muJetC_muon1_track_diffchi2[counter_track] = pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
 	      pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
+	      pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
 	      pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
 	      pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 		
 		
 		  
-	    muJetC_muon1_track_diffchi2theta[counter_track] = pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2);
+	    muJetC_muon1_track_diffchi2theta[counter_track] = pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2);
 	    muJetC_muon1_track_diffchi2qoverpt[counter_track] = pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2);
-	    muJetC_muon1_track_diffchi2phi[counter_track] = pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2); 
+	    muJetC_muon1_track_diffchi2phi[counter_track] = pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2); 
 	    muJetC_muon1_track_diffchi2dxy[counter_track] = pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2);
 	    muJetC_muon1_track_diffchi2dz[counter_track] = pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
 		
@@ -2329,12 +2283,12 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       if(k==0) b_ntracks = counter_track;
     }
 
-    std::sort(mintheta.begin(),mintheta.end(),order);
-    std::sort(minqoverpt.begin(),minqoverpt.end(),order);
-    std::sort(minphi.begin(),minphi.end(),order);
-    std::sort(mindxy.begin(),mindxy.end(),order);
-    std::sort(mindz.begin(),mindz.end(),order);
-    std::sort(mincharge.begin(),mincharge.end(),order);
+    std::sort(mintheta.begin(),mintheta.end(),tamu::helpers::order);
+    std::sort(minqoverpt.begin(),minqoverpt.end(),tamu::helpers::order);
+    std::sort(minphi.begin(),minphi.end(),tamu::helpers::order);
+    std::sort(mindxy.begin(),mindxy.end(),tamu::helpers::order);
+    std::sort(mindz.begin(),mindz.end(),tamu::helpers::order);
+    std::sort(mincharge.begin(),mincharge.end(),tamu::helpers::order);
 	  
     muJetC_muon1_track_mincharge  = mincharge[0];
     muJetC_muon1_track_minqoverpt = minqoverpt[0];
