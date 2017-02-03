@@ -1862,7 +1862,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     TString trigName = triggerNames.triggerName(itrig);
     std::string trigNameStr(trigName.Data());
     if (trRes->accept(triggerNames.triggerIndex(trigNameStr))){
-      std::cout << "Trigger path accept: " << trigName << std::endl;
+      // std::cout << "Trigger path accept: " << trigName << std::endl;
       // if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
       b_hltPaths.push_back(trigNameStr);
       if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl;
