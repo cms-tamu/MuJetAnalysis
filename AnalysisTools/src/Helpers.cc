@@ -4,6 +4,10 @@ bool tamu::helpers::PtOrder (const reco::GenParticle* p1, const reco::GenParticl
   return (p1->pt() > p2->pt() ); 
 }
 
+bool tamu::helpers::PtOrderReco(const reco::Muon* p1, const reco::Muon* p2) { 
+  return (p1->pt() > p2->pt() ); 
+}
+
 bool tamu::helpers::sameTrack(const reco::Track *one, const reco::Track *two) {
   return (fabs(one->px() - two->px()) < 1e-10  &&
 	  fabs(one->py() - two->py()) < 1e-10  &&
