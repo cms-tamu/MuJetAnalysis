@@ -84,14 +84,27 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  is3SelMu8;
   Bool_t  is4SelMu8;
   
-  Bool_t   is2DiMuons;
+  Float_t selMu0_pT;
+  Float_t selMu1_pT;
+  Float_t selMu2_pT;
+  Float_t selMu3_pT;
+
+  Float_t massC;
+  Float_t massF;
+ 
+  Float_t selMu0_eta;
+  Float_t selMu1_eta;
+  Float_t selMu2_eta;
+  Float_t selMu3_eta;
+
+  Bool_t  is2DiMuons;
 
   Bool_t  is2DiMuonsFittedVtxOK;
   Bool_t  is2DiMuonsMassOK;
   
   Bool_t  is2DiMuonHLTFired;
   Float_t diMuonC_IsoTk_FittedVtx;
-  Float_t  diMuonF_IsoTk_FittedVtx;
+  Float_t diMuonF_IsoTk_FittedVtx;
   
   Float_t  genA0_Lxy;//A0:dark photon that contains the most energetic muon; redt: wrt detector
   Float_t  genA1_Lxy;
@@ -103,20 +116,24 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  diMuonC_m2_FittedVtx_hitpix_l3inc[2];
   Int_t  diMuonF_m1_FittedVtx_hitpix_l3inc[2];
   Int_t  diMuonF_m2_FittedVtx_hitpix_l3inc[2];
-  Int_t nRecoMu;
+  Int_t  nRecoMu;
+
+  TH1F *P_t_Mu0 = new TH1F("P_t_Mu0","",200,0.0,100.0);   
+  TH1F *P_t_Mu1 = new TH1F("P_t_Mu1","",200,0.0,100.0); 
+  TH1F *P_t_Mu2 = new TH1F("P_t_Mu2","",200,0.0,100.0); 
+  TH1F *P_t_Mu3 = new TH1F("P_t_Mu3","",200,0.0,100.0); 
   
-  //  int counter[20][17];//samples; selections
-  // Float_t TotEff[20][17];
-  // Float_t TotEffError[20][17];
-  // Float_t RelEff[20][17];
-  // Float_t RelEffError[20][17];
-  // Float_t epsvsalph1[20]={0.0};
-  // Float_t Error[20]={0.0};
-  // Float_t epsvsalph2[20]={0.0};
-  // Float_t epsvsalph[20]={0.0};
-  // Float_t epsvalp[20]={0.0};
-  // Float_t epsvalp2[20]={0.0};
-  
+  TH1F *mass_C= new TH1F("mass_C","",200,0.0,1.0);
+  TH1F *mass_F= new TH1F("mass_F","",200,0.0,1.0);
+
+  TH1F *iso_C = new TH1F("iso_C","",200,0.0,10.0);
+  TH1F *iso_F = new TH1F("iso_F","",200,0.0,10.0);
+
+  TH1F *eta_Mu0 = new TH1F("eta_Mu0","",100,-2.5,2.5);
+  TH1F *eta_Mu1 = new TH1F("eta_Mu1","",100,-2.5,2.5);
+  TH1F *eta_Mu2 = new TH1F("eta_Mu2","",100,-2.5,2.5);
+  TH1F *eta_Mu3 = new TH1F("eta_Mu3","",100,-2.5,2.5);
+
   TObjArray *fileElements=chain->GetListOfFiles();
   TIter next(fileElements);
   TChainElement *chEl=0;
@@ -179,7 +196,21 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("is2SelMu8",&is2SelMu8);
 		t->SetBranchAddress("is3SelMu8",&is3SelMu8);
 		t->SetBranchAddress("is4SelMu8",&is4SelMu8);
-		
+
+		t->SetBranchAddress("selMu0_pT",&selMu0_pT);
+		t->SetBranchAddress("selMu1_pT",&selMu1_pT);
+		t->SetBranchAddress("selMu2_pT",&selMu2_pT);
+		t->SetBranchAddress("selMu3_pT",&selMu3_pT);
+		t->SetBranchAddress("massC",&massC);
+		t->SetBranchAddress("massF",&massF);
+		t->SetBranchAddress("selMu0_eta",&selMu0_eta);
+		t->SetBranchAddress("selMu1_eta",&selMu1_eta);
+		t->SetBranchAddress("selMu2_eta",&selMu2_eta);
+		t->SetBranchAddress("selMu3_eta",&selMu3_eta);
+
+		t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
+		t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
+
 		t->SetBranchAddress("is2DiMuons",&is2DiMuons);
 		t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
 		t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
@@ -202,21 +233,38 @@ void efficiency(const std::vector<std::string>& dirNames)
 		//7)create loop
 		
 		nentries = t->GetEntries(); //no of entries
-		
+
 		for(int i=0;i<nentries;i++){ //loop for number of events
 		  t->GetEntry(i);
 		  counter[k][0]++;
 		  // cout<<" dimuonC_Iso  "<<diMuonC_IsoTk_FittedVtx<<endl;
 		  // cout<<" dimuonF_Iso  "<<diMuonF_IsoTk_FittedVtx<<endl;
 		  
-		  counter[k][0]++; 
+		  if(nRecoMu>=4){
+		    P_t_Mu0->Fill(selMu0_pT);
+		    P_t_Mu1->Fill(selMu1_pT);
+		    P_t_Mu2->Fill(selMu2_pT);
+		    P_t_Mu3->Fill(selMu3_pT);
+		    eta_Mu0->Fill(selMu0_eta);
+		    eta_Mu1->Fill(selMu1_eta);
+		    eta_Mu2->Fill(selMu2_eta);
+		    eta_Mu3->Fill(selMu3_eta);
+
+		    if(is2DiMuons){
+		      mass_C->Fill(massC);
+		      mass_F->Fill(massF);  
+		      iso_C->Fill(diMuonC_IsoTk_FittedVtx);
+		      iso_F->Fill(diMuonF_IsoTk_FittedVtx);
+		  }
+
+	  }
 		  
 		  if(is1GenMu17)counter[k][1]++;
 		  if(is2GenMu8) counter[k][2]++;
 		  if(is3GenMu8) counter[k][3]++;
 		  if(is4GenMu8){
 		    counter[k][4]++;
-		    if( (genA0_Lxy<4.4&&abs(genA0_Lz)<34.5) && (genA1_Lxy<4.4&&abs(genA1_Lz)<34.5)) counter[k][5]++;
+		    if( (genA0_Lxy<9.8&&fabs(genA0_Lz)<48.5) && (genA1_Lxy<9.8&&fabs(genA1_Lz)<48.5)) counter[k][5]++;
 		  }
 		  
 		  if(is1SelMu17)counter[k][6]++;
@@ -250,11 +298,61 @@ void efficiency(const std::vector<std::string>& dirNames)
 		  }	 
 		}
 		myfile->Close();
-  }
-		// 8)Fill Histogram with event number
-		// hdimCm->Fill(diMuonC_Mass,diMuonF_Mass);
-	    
-		
+   }
+
+  // 8)Fill Histogram with event number
+  // hdimCm->Fill(diMuonC_Mass,diMuonF_Mass);
+  cout<<"  Here is where the plotting starts  "<<endl;
+  cout<<"  Here is where the plotting starts  "<<endl;
+ 
+  TCanvas *cc = new TCanvas("cc","cc",800,600);
+  mass_C->Draw();
+  cc->SaveAs("massC.png","recreate");
+
+  TCanvas *cf = new TCanvas("cf","cf",800,600);
+  mass_F->Draw();
+  cf->SaveAs("massF.png","recreate");
+ 
+  TCanvas *e = new TCanvas("e","e",800,600);
+  eta_Mu0->Draw();
+  e->SaveAs("e0.png","recreate");
+
+  TCanvas *e1 = new TCanvas("e1","e1",800,600);
+  eta_Mu0->Draw();
+  e1->SaveAs("e1.png","recreate");
+
+  TCanvas *e2 = new TCanvas("e2","e2",800,600);
+ eta_Mu0->Draw();
+ e2->SaveAs("e2.png","recreate");
+ 
+ TCanvas *e3 = new TCanvas("e3","e3",800,600);
+ eta_Mu0->Draw();
+ e3->SaveAs("e3.png","recreate");
+
+ TCanvas *isoC = new TCanvas("isoC","isoC",800,600);
+ iso_C->Draw();
+ isoC->SaveAs("isoC.png","recreate");
+
+ TCanvas *isoF = new TCanvas("isoF","isoF",800,600);
+ iso_C->Draw();
+ isoF->SaveAs("isoF.png","recreate");
+
+ //TCanvas *c = new TCanvas("c","c",800,600);
+  // P_t_Mu0->Draw();
+  // c->SaveAs("pt_mu0.png","recreate");
+
+  // TCanvas *c1 = new TCanvas("c1","c1",800,600);
+  // P_t_Mu1->Draw();
+  // c1->SaveAs("pt_mu1x.png","recreate");
+  
+  // TCanvas *c2 = new TCanvas("c2","c2",800,600);
+  // P_t_Mu2->Draw();
+  // c2->SaveAs("pt_mu2.png","recreate");
+
+  // TCanvas *c3 = new TCanvas("c3","c3",800,600);
+  // P_t_Mu3->Draw();
+  // c3->SaveAs("pt_mu3.png","recreate");
+
 		RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
 		for(int m=0;m<17;m++){
 		  TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
@@ -272,7 +370,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 		}
 		
 	  
-		epsvsalph[k] = counter[k][15]/(counter[k][5]*1.0);
+		epsvsalph[k] = counter[k][16]/(counter[k][5]*1.0);
 		cout<<" mass  "<<mass_string<<" cT  "<<cT_string<<endl;
 		cout<<" epsvsalph[k]  "<<epsvsalph[k]<<endl;
 		// cout<<" counter[k][5]  "<<counter[k][5]*1.0<<endl;
@@ -290,7 +388,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 		cout<<" is3GenMu8   &   "<<left<< setw(7)<< counter[k][3]<<"    &    "<<left<< setw(7)<< TotEff[k][3]<<"      &        "<<left<< setw(7)<<  RelEff[k][3]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][3]<<" & "<<left<< setw(7)<<  RelEffErr[k][3]<<" hline "<<endl;
 		cout<<" is4GenMu8   &   "<<left<< setw(7)<< counter[k][4]<<"    &    "<<left<< setw(7)<< TotEff[k][4]<<"      &        "<<left<< setw(7)<<  RelEff[k][4]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][4]<<" & "<<left<< setw(7)<<  RelEffErr[k][4]<<" hline "<<endl;
 		
-		cout<<" Lxy<4.4&& Lz<34.5 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
+		cout<<" Lxy<9.8&& Lz<48.5 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
 		cout<<"                                                                          "<<" hline "<<endl;
 		
 		cout<<" is1SelMu17   &    "<<left<< setw(7)<< counter[k][6]<<"  &    "<<left<< setw(7)<< TotEff[k][6] <<setw(10)<<"   &    "<<left<< setw(7)<<  RelEff[k][6]<<"  &    "<<left<< setw(7)<<  TotEffErr[k][6]<<" &  " <<  RelEffErr[k][6]<<" hline "<<endl;
