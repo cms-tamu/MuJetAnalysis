@@ -1,37 +1,31 @@
 #include <iostream>
 using namespace std;
 #include <algorithm>    // std::max
+#include "../../AnalysisRun2/scripts/Helpers.h"
 
-void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
-{
-  TSystemDirectory dir(dirname, dirname);
-  TList *files = dir.GetListOfFiles();
-  if (files) {
-    //std::cout << "Found files" << std::endl;
-    TSystemFile *file;
-    TString fname;
-    TIter next(files);
-    while ((file=(TSystemFile*)next())) {
-      fname = file->GetName();
-      // std::cout << "found fname " << fname << std::endl;
-      if (!file->IsDirectory() && fname.BeginsWith(ext)) {
-        // std::cout << "adding fname " << fname << std::endl;
-        ch->Add(fname); // or call your function on this one file
-      }
-    }
-  }
-}
+TString neutralino_string;
+TString mass_string;
+TString cT_string;
+TString fileName;
 
-void Analysis_cutflow()
+void Analysis_cutflow_per_point(const std::vector<std::string>& dirNames)
 {
-  bool verbose(false);
+  bool verbose(true);
   TChain* chain = new TChain("dummy");
   TString dirname("/eos/uscms/store/user/dildick/DarkSUSY_mH_125_mGammaD_0850_cT_000_13TeV/Cutflow_Challenge_CRAB3_PAT_ANA/150803_155529/0000/");
   TString ext("out_ana_");
 
   // add files to the chain
-  addfiles(chain, dirname, ext);
-  
+  decodeFileDarkSUSYNameMany(dirNames, neutralino_string, mass_string, cT_string);
+
+  fileName = "DarkSUSY_mH_125_mN1_" + neutralino_string + "_mGammaD_" + mass_string + "_cT_" + cT_string;
+  cout << "Tag name " << fileName << endl;
+
+  cout << "Preparing histograms" << endl;
+
+  // add files to the chain
+  addfilesMany(chain, dirNames, ext);
+
   Int_t event;
   Int_t run;
   Int_t lumi;
@@ -96,7 +90,7 @@ void Analysis_cutflow()
   while ((chEl=(TChainElement*)next())) {
     int p=0;
     if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
-    TFile* myfile = new TFile(dirname + chEl->GetTitle());
+    TFile* myfile = new TFile(chEl->GetTitle());
     if (!myfile) {
       if (verbose) std::cout << "File " << chEl->GetTitle() << " does not exist" << std::endl;
       continue;
@@ -231,3 +225,12 @@ void Analysis_cutflow()
   std::cout<<" ratio reco/gen                 "<<ev_isDiMuonHLTFired[0]/(1.0*ev_4gmlxylzcut[0])<<" +/-  "<<sqrt( ((ev_isDiMuonHLTFired[0]/(1.0*ev_4gmlxylzcut[0]))*(1- (ev_isDiMuonHLTFired[0]/(1.0*ev_4gmlxylzcut[0])) ))/(1.0*ev_4gmlxylzcut[0]))<<std::endl;  
 }
      
+void Analysis_cutflow()
+{
+  std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
+  readTextFileWithSamples("/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/darkSUSYSamples2016Ana.txt", DarkSUSY_mH_125_mGammaD_v);
+  printFileNames(DarkSUSY_mH_125_mGammaD_v);
+
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) Analysis_cutflow_per_point(v);
+}
+

@@ -42,35 +42,83 @@ void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".
   }
 }
 
-void decodeFileName(const TString& fileName, TString& mass_string, TString& cT_string)
+struct tokens: std::ctype<char> 
+{
+ tokens(): std::ctype<char>(get_table()) {}
+
+  static std::ctype_base::mask const* get_table()
+  {
+    typedef std::ctype<char> cctype;
+    static const cctype::mask *const_rc= cctype::classic_table();
+
+    static cctype::mask rc[cctype::table_size];
+    std::memcpy(rc, const_rc, cctype::table_size * sizeof(cctype::mask));
+
+    rc['_'] = std::ctype_base::space; 
+    rc['-'] = std::ctype_base::space; 
+    return &rc[0];
+  }
+};
+
+void decodeDarkSUSYFileName(const TString& fileName,
+			    TString& neutralino_string,
+			    TString& mass_string, TString& cT_string)
 {  
-  ///Get the sample mass
-  TString str = fileName;
-  TString str2 = "DarkSUSY_mH_125_mGammaD_";
-  Ssiz_t first = str.Index(str2);
-  Ssiz_t last = str.Index("_cT_");
-  mass_string = (str(first+str2.Length(),4));
-  ///Get the sample cT
-  TString str3 = "_cT_";
-  cT_string = (str(last+str3.Length(),4));
+  // template: DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV
+  TString str1 = "DarkSUSY_mH_125_mN1_";
+  Ssiz_t loc1 = fileName.Index(str1);
+  TString substr(fileName(loc1, 100)); 
+
+  std::stringstream ss(std::string(substr.Data()));
+  ss.imbue(std::locale(std::locale(), new tokens()));
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> vstrings(begin, end);
+  
+  neutralino_string = vstrings[4];
+  mass_string = vstrings[6];
+  cT_string = vstrings[8];
+
   bool verbose(false);
-  if (verbose) cout << "mass_string " << mass_string << " cT_string " << cT_string << endl;
+  if (verbose) cout << "neutralino_string " << neutralino_string << " mass_string " << mass_string << " cT_string " << cT_string << endl;
 }
 
-void decodeFileNameMany(const std::vector<string>& v, TString& mass_string, TString& cT_string)
+void decodeNMSSMFileName(const TString& fileName, TString& mH_string, TString& mA_string)
 {  
-  ///Get the sample mass
-  TString str(v[0]);
-  TString str2 = "DarkSUSY_mH_125_mGammaD_";
-  Ssiz_t first = str.Index(str2);
-  Ssiz_t last = str.Index("_cT_");
-  mass_string = (str(first+str2.Length(),4));
-  ///Get the sample cT
-  TString str3 = "_cT_";
-  cT_string = (str(last+str3.Length(),4));
+  // template: NMSSM_HToAATo4Mu_M-XXX_M-YYYY_TuneCUETP8M1
+  TString str1 = "NMSSM_HToAATo4Mu_M-";
+  Ssiz_t loc1 = fileName.Index(str1);
+  TString substr(fileName(loc1, 100)); 
+
+  std::stringstream ss(std::string(substr.Data()));
+  ss.imbue(std::locale(std::locale(), new tokens()));
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> vstrings(begin, end);
+  
+  mH_string = vstrings[3];
+  mA_string = vstrings[5];
+
   bool verbose(false);
-  if (verbose) cout << "mass_string " << mass_string << " cT_string " << cT_string << endl;
+  if (verbose) cout << "mH_string " << mH_string << " mA_string " << mA_string << endl;
 }
+
+
+void decodeFileDarkSUSYNameMany(const std::vector<string>& v, TString& neutralino_string,
+				TString& mass_string, TString& cT_string)
+{  
+  decodeDarkSUSYFileName(v[0], neutralino_string, mass_string, cT_string);
+  bool verbose(true);
+  if (verbose) cout << "neutralino_string " << neutralino_string << " mass_string " << mass_string << " cT_string " << cT_string << endl;
+}
+
+void decodeFileNMSSMNameMany(const std::vector<string>& v, TString& mH_string, TString& mA_string)
+{  
+  decodeNMSSMFileName(v[0], mH_string, mA_string);
+  bool verbose(false);
+  if (verbose) cout << "mH_string " << mH_string << " mA_string " << mA_string << endl;
+}
+
 
 void readTextFileWithSamples(const std::string fileName, std::vector< std::vector<string> >& v)
 {
