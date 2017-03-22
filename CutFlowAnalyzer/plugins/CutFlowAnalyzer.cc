@@ -334,10 +334,10 @@ private:
   //          HLT LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
   //****************************************************************************
 
-  std::vector<std::string> signalHltPaths_;
-  std::vector<std::string> backupHltPaths_;
+  // std::vector<std::string> signalHltPaths_;
+  // std::vector<std::string> backupHltPaths_;
   std::vector<std::string> muoniaHltPaths_;
-  std::vector<std::string> otherMuHltPaths_;
+  // std::vector<std::string> otherMuHltPaths_;
   std::vector<std::string> allMuHltPaths_;
   std::vector<std::string> b_hltPaths;
   bool histo_name;
@@ -796,16 +796,16 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //                 SET HLT LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
 
-  signalHltPaths_ = iConfig.getParameter<std::vector<std::string> >("signalHltPaths");
+  // signalHltPaths_ = iConfig.getParameter<std::vector<std::string> >("signalHltPaths");
   muoniaHltPaths_ = iConfig.getParameter<std::vector<std::string> >("muoniaHltPaths");
-  backupHltPaths_ = iConfig.getParameter<std::vector<std::string> >("backupHltPaths");
-  otherMuHltPaths_ = iConfig.getParameter<std::vector<std::string> >("otherMuHltPaths");
+  // backupHltPaths_ = iConfig.getParameter<std::vector<std::string> >("backupHltPaths");
+  // otherMuHltPaths_ = iConfig.getParameter<std::vector<std::string> >("otherMuHltPaths");
 
   allMuHltPaths_.clear();
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(muoniaHltPaths_), std::end(muoniaHltPaths_));
-  allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(signalHltPaths_), std::end(signalHltPaths_));
-  allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(backupHltPaths_), std::end(backupHltPaths_));
-  allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(otherMuHltPaths_), std::end(otherMuHltPaths_));
+  // allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(signalHltPaths_), std::end(signalHltPaths_));
+  // allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(backupHltPaths_), std::end(backupHltPaths_));
+  // allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(otherMuHltPaths_), std::end(otherMuHltPaths_));
 
 
   //****************************************************************************
