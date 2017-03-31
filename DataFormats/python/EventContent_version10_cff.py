@@ -4,6 +4,7 @@ def customizePatOutput(process):
     process.out.outputCommands = cms.untracked.vstring(
         "drop *",
         "keep *_patMuons_*_*",
+        "keep *_patJets_*_*",
         "keep *_cleanPatTrackerMuons_*_*",
         "keep *_cleanPatPFMuons_*_*",
         "keep *_patTrigger_*_*",

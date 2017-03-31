@@ -29,6 +29,13 @@ patMuons = patMuons.clone(
     embedCaloMETMuonCorrs = cms.bool(False),
     embedTcMETMuonCorrs = cms.bool(False),
 )
+
+patJets.addGenPartonMatch   = cms.bool(False)
+patJets.embedGenPartonMatch = cms.bool(False)
+patJets.addGenJetMatch      = cms.bool(False)
+patJets.embedGenJetMatch    = cms.bool(False)
+patJets.addPartonJetMatch   = cms.bool(False)
+
 # Tracker Muons Part
 selectedPatTrackerMuons = selectedPatMuons.clone(
     src = cms.InputTag("patMuons"),
@@ -48,7 +55,6 @@ selectedPatPFMuons = selectedPatMuons.clone(
     cut = cms.string("pt > 5.0 && isPFMuon() && ( isTrackerMuon() || isGlobalMuon() ) && -2.4 < eta() && eta() < 2.4")
 )
 cleanPatPFMuons = cleanPatMuons.clone(
-
     src = cms.InputTag("selectedPatPFMuons")
 )
 countPatPFMuons = countPatMuons.clone(
@@ -159,8 +165,12 @@ patifyData = cms.Sequence(
     patTrigger * 
     patTriggerEvent * 
     patifyTrackerMuon * 
-    patifyPFMuon
+    patifyPFMuon *
+    patJetCorrections *
+    patJetCharge *
+    patJets
 )
+
 patifyMC = cms.Sequence(
     muonMatch * 
     patifyData
@@ -169,3 +179,12 @@ patifyMC = cms.Sequence(
 patDefaultSequence = cms.Sequence()
 patCandidates = cms.Sequence()
 makePatMuons = cms.Sequence()
+makePatJets = cms.Sequence(
+    patJetCorrections *
+    patJetCharge *
+#    patJetPartonMatch *
+#    patJetGenJetMatch *
+#    (patJetFlavourIdLegacy + patJetFlavourId) *
+    patJets
+    )
+makePatJets = cms.Sequence()
