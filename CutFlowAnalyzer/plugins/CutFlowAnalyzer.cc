@@ -47,7 +47,6 @@
 #include "TrackingTools/Records/interface/TrackingComponentsRecord.h"
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
-#include "TrackPropagation/SteppingHelixPropagator/interface/SteppingHelixPropagator.h"
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
 
 
@@ -67,6 +66,8 @@
 #include <DataFormats/SiPixelDetId/interface/PXFDetId.h>
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
+#include "DataFormats/JetReco/interface/PFJet.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
 #include "MuJetAnalysis/AnalysisTools/interface/DisplacedVertexFinder.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
@@ -75,6 +76,8 @@
 #include "TTree.h"
 #include "TRandom3.h"
 #include "TMath.h"
+#include "TVector2.h"
+#include "TLorentzVector.h"
 
 #include "DataFormats/Candidate/interface/CandMatchMap.h"
 #include "DataFormats/Candidate/interface/Particle.h"
@@ -110,7 +113,7 @@ private:
   virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
   
   edm::ParameterSet param_;
-  //edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
+  edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
   
   //****************************************************************************
   //                          THRESHOLDS                                        
@@ -314,6 +317,8 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
+  edm::EDGetTokenT<std::vector<pat::Jet> > m_PATJet;
+
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
   Int_t         m_endcapPixelLayer;
@@ -369,6 +374,8 @@ private:
   Bool_t b_is2DiMuonsMassOK_ConsistentVtx;
 
   Bool_t b_isVertexOK;
+
+  Float_t b_Mass4Mu;
 
   // Reco branches in ROOT tree (they all start with b_)
   Int_t b_nRecoMu;
@@ -501,6 +508,14 @@ private:
   bool skimOutput_; //fill only events with 2 good dimuons
 
   //PixelHitRecovery
+  Int_t b_NPATJet;
+  Float_t b_PAT_jet_pt[100];
+  Float_t b_PAT_jet_eta[100];
+  Float_t b_PAT_jet_phi[100];
+  Float_t b_PAT_jet_en[100];
+  Float_t b_PAT_jet_Btag1[100];
+  Float_t b_PAT_jet_Btag2[100];
+  Float_t b_PAT_jet_Btag3[100];
 
 
   Int_t b_ntracks;
@@ -683,21 +698,19 @@ private:
   Bool_t  m_orphan_passOffLineSelPtEta;
   Bool_t  m_orphan_passOffLineSelPt1788;
   Bool_t  m_orphan_AllTrackerMu;
-  Bool_t  m_orphan_FiredTrig;
-  Bool_t  m_orphan_FiredTrigPt;
-  Bool_t  m_orphan_FiredTrigPtEta;
-  Bool_t  m_orphan_FiredTrig_pt;
-  Bool_t  m_orphan_FiredTrigPt_pt;
-  Bool_t  m_orphan_FiredTrigPtEta_pt;
-  Bool_t  m_orphan_FiredTrig_ptColl;
-  Bool_t  m_orphan_FiredTrigPt_ptColl;
-  Bool_t  m_orphan_FiredTrigPtEta_ptColl;
   Float_t  m_orphan_PtOrph;
   Float_t  m_orphan_EtaOrph;
+  Float_t  m_orphan_PhiOrph;
   Float_t  m_orphan_PtMu0;
   Float_t  m_orphan_EtaMu0;
+  Float_t  m_orphan_PhiMu0;
   Float_t  m_orphan_PtMu1;
   Float_t  m_orphan_EtaMu1;
+  Float_t  m_orphan_PhiMu1;
+  Float_t  m_orphan_PtMu01;
+  Float_t  m_orphan_EtaMu01;
+  Float_t  m_orphan_PhiMu01;
+  Float_t  m_orphan_DRdiMuOrph;
 };
 
 //
@@ -779,6 +792,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   //m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
+  m_PATJet          = consumes<std::vector<pat::Jet> >(iConfig.getParameter<edm::InputTag>("PATJet"));
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
@@ -962,6 +976,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_mutrack_charge_mu1JetF=-100000;
   b_mutrack_charge_mu2JetF=-100000;
 
+  b_NPATJet=-10000;
+  for(int k=0;k<100;k++){
+    b_PAT_jet_pt[k]=-999.;
+    b_PAT_jet_eta[k]=-999.;
+    b_PAT_jet_phi[k]=-999.;
+    b_PAT_jet_en[k]=-999.;
+    b_PAT_jet_Btag1[k]=-999.;
+    b_PAT_jet_Btag2[k]=-999.;
+    b_PAT_jet_Btag3[k]=-999.;
+  }
+
   b_ntracks=-10000;
 
   b_innerlayers_mu1_muJetC=-10000;
@@ -1044,7 +1069,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   // //BB estimation
   // Bool_t runBBestimation_;
 
-
+  b_Mass4Mu = -1.;
 
   //****************************************************************************
   //                          EVENT LEVEL                                       
@@ -2077,7 +2102,12 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetF;
     std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetF;
 
-
+    TLorentzVector muon1; muon1.SetPtEtaPhiE(muJetC->muon(0)->pt(),muJetC->muon(0)->eta(),muJetC->muon(0)->phi(),muJetC->muon(0)->energy());
+    TLorentzVector muon2; muon2.SetPtEtaPhiE(muJetC->muon(1)->pt(),muJetC->muon(1)->eta(),muJetC->muon(1)->phi(),muJetC->muon(1)->energy());
+    TLorentzVector muon3; muon3.SetPtEtaPhiE(muJetF->muon(0)->pt(),muJetF->muon(0)->eta(),muJetF->muon(0)->phi(),muJetF->muon(0)->energy());
+    TLorentzVector muon4; muon4.SetPtEtaPhiE(muJetF->muon(1)->pt(),muJetF->muon(1)->eta(),muJetF->muon(1)->phi(),muJetF->muon(1)->energy());
+    b_Mass4Mu = (muon1+muon2+muon3+muon4).M();
+    
     //====== MATCHING selected muons to refitted tracks 
 	
     for(uint32_t k=0;k<2;k++){
@@ -2763,58 +2793,49 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     m_orphan_passOffLineSelPtEta = false;
     m_orphan_passOffLineSelPt1788 = false;
     m_orphan_AllTrackerMu = false;
-    m_orphan_FiredTrig = false;
-    m_orphan_FiredTrigPt = false;
-    m_orphan_FiredTrigPtEta = false;
-    m_orphan_FiredTrig_pt = false;
-    m_orphan_FiredTrigPt_pt = false;
-    m_orphan_FiredTrigPtEta_pt = false;
-    m_orphan_FiredTrigPt_ptColl = false;
-    m_orphan_FiredTrigPt_ptColl = false;
-    m_orphan_FiredTrigPtEta_ptColl = false;
     m_orphan_PtOrph  = -99.;
     m_orphan_EtaOrph = -99.;
+    m_orphan_PhiOrph = -99.;
     m_orphan_PtMu0   = -99.;
     m_orphan_EtaMu0  = -99.;
+    m_orphan_PhiMu0  = -99.;
     m_orphan_PtMu1   = -99.;
     m_orphan_EtaMu1  = -99.;
+    m_orphan_PhiMu1  = -99.;
+    m_orphan_PtMu01   = -99.;
+    m_orphan_EtaMu01  = -99.;
+    m_orphan_PhiMu01  = -99.;
+    m_orphan_DRdiMuOrph  = -99.;
+    // B-Jets
+    int NPATJet=0;
+    edm::Handle<std::vector<pat::Jet> > PATJet;
+    iEvent.getByToken(m_PATJet, PATJet);
+    for( auto Myjet = PATJet->begin(); Myjet != PATJet->end(); ++Myjet ){
+      if( fabs(Myjet->eta())<2.4 && Myjet->pt()>5. ){
+	// Kind of B-tags:
+	//'pfTrackCountingHighEffBJetTags', 'pfTtrackCountingHighPurBJetTags', 'pfJetProbabilityBJetTags', 'pfJetBProbabilityBJetTags', 'pfSimpleSecondaryVertexHighEffBJetTags',
+	//'pfSimpleSecondaryVertexHighPurBJetTags', 'pfCombinedSecondaryVertexV2BJetTags', 'pfCombinedInclusiveSecondaryVertexV2BJetTags', 'pfCombinedMVAV2BJetTags'
+	b_PAT_jet_pt[NPATJet]    = Myjet->pt();
+	b_PAT_jet_eta[NPATJet]   = Myjet->eta();
+	b_PAT_jet_phi[NPATJet]   = Myjet->phi();
+	b_PAT_jet_en[NPATJet]    = Myjet->energy();
+	b_PAT_jet_Btag1[NPATJet] = Myjet->bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
+	b_PAT_jet_Btag2[NPATJet] = Myjet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+	b_PAT_jet_Btag3[NPATJet] = Myjet->bDiscriminator("pfCombinedMVAV2BJetTags");
+	NPATJet++;
+      }
+    }
+    if(NPATJet>0) b_NPATJet=NPATJet;
+    
     // Trimuons
     double m_trigpt = 17.;
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
     for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
       if (muon->pt() > m_trigpt  &&  fabs(muon->eta()) < 0.9) {
-	  const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
-	  const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
-	  const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
-	  if((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt)  ||
-	     (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
-	     (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)){
-	    hightrigmuons.push_back(muon);
-	  }
+	const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu1*_DoubleTrkMu*NoFiltersNoVtx_v*");
+	if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_trigpt)  ){
+	  hightrigmuons.push_back(muon);
 	}
-const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v1");
-const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v2");
-      const pat::TriggerObjectStandAlone *mu03  = muon->triggerObjectMatchByPath("HLT_TrkMu17_DoubleTrkMu5NoFiltersNoVtx_v2");
-      if(  mu01 != NULL || mu02 != NULL || mu03 != NULL)                                                       m_orphan_FiredTrig      = true;
-      if( (mu01 != NULL || mu02 != NULL || mu03 != NULL) && muon->pt() > m_trigpt   )                          m_orphan_FiredTrigPt    = true;
-      if( (mu01 != NULL || mu02 != NULL || mu03 != NULL) && muon->pt() > m_trigpt && fabs(muon->eta()) < 0.9 ) m_orphan_FiredTrigPtEta = true;
-      if(  (mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt ) )                                                      m_orphan_FiredTrig_pt = true;
-      if( ((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt )) && muon->pt() > m_trigpt )                            m_orphan_FiredTrigPt_pt = true;
-      if( ((mu01 != NULL && mu01->pt() > m_trigpt ) || (mu02 != NULL && mu02->pt() > m_trigpt ) || (mu03 != NULL && mu03->pt() > m_trigpt )) && muon->pt() > m_trigpt && fabs(muon->eta()) < 0.9 ) m_orphan_FiredTrigPtEta_pt = true;
-      if((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt)  ||
-         (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
-         (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)){
-         m_orphan_FiredTrig_ptColl = true;
-      }
-      if(((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt) ||
-         (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
-         (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)) && muon->pt() > m_trigpt ){
-         m_orphan_FiredTrigPt_ptColl = true;
-      }
-      if(((mu01 != NULL && mu01->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu01->pt() > m_trigpt) ||
-         (mu02 != NULL && mu02->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu02->pt() > m_trigpt)  ||
-         (mu03 != NULL && mu03->collection() == std::string("hltL3NoFiltersNoVtxMuonCandidates::HLT") && mu03->pt() > m_trigpt)) && muon->pt() > m_trigpt && fabs(muon->eta()) < 0.9){
-         m_orphan_FiredTrigPtEta_ptColl = true;
       }
     }
 
@@ -2838,10 +2859,21 @@ const pat::TriggerObjectStandAlone *mu02  = muon->triggerObjectMatchByPath("HLT_
       if((muJet->muon(0)->pt() > m_trigpt && fabs(muJet->muon(0)->eta())<0.9) || (muJet->muon(1)->pt() > m_trigpt && fabs(muJet->muon(1)->eta())<0.9) || (orphan->pt() > m_trigpt && fabs(orphan->eta())<0.9)) m_orphan_passOffLineSelPtEta = true;
       m_orphan_PtOrph  = orphan->pt();
       m_orphan_EtaOrph = orphan->eta();
+      m_orphan_PhiOrph = orphan->phi();
       m_orphan_PtMu0   = muJet->muon(0)->pt();
       m_orphan_EtaMu0  = muJet->muon(0)->eta();
+      m_orphan_PhiMu0  = muJet->muon(0)->phi();
       m_orphan_PtMu1   = muJet->muon(1)->pt();
       m_orphan_EtaMu1  = muJet->muon(1)->eta();
+      m_orphan_PhiMu1  = muJet->muon(1)->phi();
+      TLorentzVector mymu0, mymu1;
+      mymu0.SetPtEtaPhiM(m_orphan_PtMu0,m_orphan_EtaMu0,m_orphan_PhiMu0,0);
+      mymu1.SetPtEtaPhiM(m_orphan_PtMu1,m_orphan_EtaMu1,m_orphan_PhiMu1,0);
+      m_orphan_PtMu01   = (mymu0+mymu1).Pt();
+      m_orphan_EtaMu01  = (mymu0+mymu1).Eta();
+      m_orphan_PhiMu01  = (mymu0+mymu1).Phi();
+      m_orphan_DRdiMuOrph  = sqrt( pow(m_orphan_EtaMu01-m_orphan_EtaOrph,2) + pow(TVector2::Phi_mpi_pi(m_orphan_PhiMu01-m_orphan_PhiOrph),2) );
+      
       double triPt[3]  = {muJet->muon(0)->pt(), muJet->muon(1)->pt(), orphan->pt()};
       double triEta[3] = {fabs(muJet->muon(0)->eta()), fabs(muJet->muon(1)->eta()), fabs(orphan->eta())};
       int Index17=-1;
@@ -3214,7 +3246,8 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);  
-
+  m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
+  
   if(runPixelHitRecovery_){
     //pixelHitRecovery
     
@@ -3386,9 +3419,7 @@ CutFlowAnalyzer::beginJob() {
     m_ttree->Branch("pixelhit_mu2_muJetF_posx",&b_pixelhit_mu2_muJetF_posx,"pixelhit_mu2_muJetF_posx[10][100]/F");
     m_ttree->Branch("pixelhit_mu2_muJetF_posy",&b_pixelhit_mu2_muJetF_posy,"pixelhit_mu2_muJetF_posy[10][100]/F");
     m_ttree->Branch("pixelhit_mu2_muJetF_errposx",&b_pixelhit_mu2_muJetF_errposx,"pixelhit_mu2_muJetF_errposx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_errposy",&b_pixelhit_mu2_muJetF_errposy,"pixelhit_mu2_muJetF_errposy[10][100]/F");
-
-    
+    m_ttree->Branch("pixelhit_mu2_muJetF_errposy",&b_pixelhit_mu2_muJetF_errposy,"pixelhit_mu2_muJetF_errposy[10][100]/F");    
   }
   // Orpahn Muon
   if(runBBestimation_){
@@ -3409,21 +3440,27 @@ CutFlowAnalyzer::beginJob() {
     m_ttree_orphan->Branch("orph_passOffLineSelPtEta", &m_orphan_passOffLineSelPtEta, "orph_passOffLineSelPtEta/O");
     m_ttree_orphan->Branch("orph_passOffLineSelPt1788", &m_orphan_passOffLineSelPt1788, "orph_passOffLineSelPt1788/O");
     m_ttree_orphan->Branch("orph_AllTrackerMu", &m_orphan_AllTrackerMu, "orph_AllTrackerMu/O");
-    m_ttree_orphan->Branch("orph_FiredTrig", &m_orphan_FiredTrig, "orph_FiredTrig/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPt", &m_orphan_FiredTrigPt, "orph_FiredTrigPt/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPtEta", &m_orphan_FiredTrigPtEta, "orph_FiredTrigPtEta/O");
-    m_ttree_orphan->Branch("orph_FiredTrig_pt", &m_orphan_FiredTrig_pt, "orph_FiredTrig_pt/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPt_pt", &m_orphan_FiredTrigPt_pt, "orph_FiredTrigPt_pt/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPtEta_pt", &m_orphan_FiredTrigPtEta_pt, "orph_FiredTrigPtEta_pt/O");
-    m_ttree_orphan->Branch("orph_FiredTrig_ptColl", &m_orphan_FiredTrig_ptColl, "orph_FiredTrig_ptColl/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPt_ptColl", &m_orphan_FiredTrigPt_ptColl, "orph_FiredTrigPt_ptColl/O");
-    m_ttree_orphan->Branch("orph_FiredTrigPtEta_ptColl", &m_orphan_FiredTrigPtEta_ptColl, "orph_FiredTrigPtEta_ptColl/O");
     m_ttree_orphan->Branch("orph_PtOrph", &m_orphan_PtOrph, "orph_PtOrph/F");
     m_ttree_orphan->Branch("orph_EtaOrph", &m_orphan_EtaOrph, "orph_EtaOrph/F");
+    m_ttree_orphan->Branch("orph_PhiOrph", &m_orphan_PhiOrph, "orph_PhiOrph/F");
     m_ttree_orphan->Branch("orph_PtMu0", &m_orphan_PtMu0, "orph_PtMu0/F");
     m_ttree_orphan->Branch("orph_EtaMu0", &m_orphan_EtaMu0, "orph_EtaMu0/F");
+    m_ttree_orphan->Branch("orph_PhiMu0", &m_orphan_PhiMu0, "orph_PhiMu0/F");
     m_ttree_orphan->Branch("orph_PtMu1", &m_orphan_PtMu1, "orph_PtMu1/F");
     m_ttree_orphan->Branch("orph_EtaMu1", &m_orphan_EtaMu1, "orph_EtaMu1/F");
+    m_ttree_orphan->Branch("orph_PhiMu1", &m_orphan_PhiMu1, "orph_PhiMu1/F");
+    m_ttree_orphan->Branch("orph_PtMu01", &m_orphan_PtMu01, "orph_PtMu01/F");
+    m_ttree_orphan->Branch("orph_EtaMu01", &m_orphan_EtaMu01, "orph_EtaMu01/F");
+    m_ttree_orphan->Branch("orph_PhiMu01", &m_orphan_PhiMu01, "orph_PhiMu01/F");
+    m_ttree_orphan->Branch("orph_DRdiMuOrph", &m_orphan_DRdiMuOrph, "orph_DRdiMuOrph/F");
+    m_ttree_orphan->Branch("NPATJet",       &b_NPATJet,"NPATJet/I");
+    m_ttree_orphan->Branch("PAT_jet_pt",    &b_PAT_jet_pt,"PAT_jet_pt[NPATJet]/F");
+    m_ttree_orphan->Branch("PAT_jet_eta",   &b_PAT_jet_eta,"PAT_jet_eta[NPATJet]/F");
+    m_ttree_orphan->Branch("PAT_jet_phi",   &b_PAT_jet_phi,"PAT_jet_phi[NPATJet]/F");
+    m_ttree_orphan->Branch("PAT_jet_en",    &b_PAT_jet_en,"PAT_jet_en[NPATJet]/F");
+    m_ttree_orphan->Branch("PAT_jet_Btag1", &b_PAT_jet_Btag1,"PAT_jet_Btag1[NPATJet]/F");
+    m_ttree_orphan->Branch("PAT_jet_Btag2", &b_PAT_jet_Btag2,"PAT_jet_Btag2[NPATJet]/F");
+    m_ttree_orphan->Branch("PAT_jet_Btag3", &b_PAT_jet_Btag3,"PAT_jet_Btag3[NPATJet]/F");
   }
 }
 
