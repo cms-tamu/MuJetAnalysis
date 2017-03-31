@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer',
+cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     analyzerDebug = cms.int32(0),
     fillGenLevel = cms.bool(True),
 #    muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),

@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-from MuJetAnalysis.MuJetProducer.MuJetProducer_cfi import *
+from MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cfi import *
 
 TrackerMuJetProducer05 = MuJetProducer.clone(
     maxMass = cms.double(22.),
