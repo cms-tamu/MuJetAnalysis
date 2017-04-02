@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <iomanip>
 using namespace std;
@@ -88,6 +89,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t diMuonC_Mass;//allows for effective use of architecture with wider formats
   Float_t diMuonF_Mass;
 
+  Float_t diMuonC_FittedVtx_Lxy;
+  Float_t diMuonF_FittedVtx_Lxy;
+  
   Bool_t  is1SelMu3p5;
   Bool_t  is2SelMu3p5;
   Bool_t  is3SelMu3p5;
@@ -164,6 +168,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *eta_Mu2_aftTrig = new TH1F("eta_Mu2_aftTrig","",100,-2.5,2.5);
   TH1F *eta_Mu3_aftTrig = new TH1F("eta_Mu3_aftTrig","",100,-2.5,2.5);
 
+  TH1F *diMuonC_Lxy_RegionA = new TH1F("diMuonC_Lxy_RegionA","",100,-0.5,2.0);
+  TH1F *diMuonF_Lxy_RegionA = new TH1F("diMuonF_Lxy_RegionA","",100,-0.5,2.0);
+
+  TH1F *diMuonC_Lxy_RegionC = new TH1F("diMuonC_Lxy_RegionC","",100,-0.5,2.0);
+  TH1F *diMuonF_Lxy_RegionC = new TH1F("diMuonF_Lxy_RegionC","",100,-0.5,2.0);
+  
   TH2F *Iso_dim1_vs_dim2 = new TH2F("Iso_dim1_vs_dim2","",100,0.0,12.0,100,0.0,12.0);
   TH2F *Iso_dim1_vs_dim2_aftmasscut = new TH2F("Iso_dim1_vs_dim2_aftmasscut","",100,0.0,12.0,100,0.0,12.0);
   TH2F *mass_dim1_vs_dim2 = new TH2F("mass_dim1_vs_dim2","",100,0.0,5.0,100,0.0,5.0);
@@ -299,6 +309,18 @@ void efficiency(const std::vector<std::string>& dirNames)
 	    if(diMuonC_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx>2.0)  ev_regionC++;
 	    if(diMuonC_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<2.0)  ev_regionD++;
 
+	    if(diMuonC_IsoTk_FittedVtx<2.0 && diMuonF_IsoTk_FittedVtx<2.0){
+	      diMuonC_Lyx_RegionA++;
+	      diMuonF_Lyx_RegionA++;
+	    }
+	    if(diMuonC_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx>2.0){
+	      diMuonC_Lxy_RegionC++;
+	      diMuonF_Lxy_RegionC++;
+	    }
+
+
+	    
+	    
 	  }
 	}
       }
@@ -399,6 +421,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
 
   TCanvas *tcc = new TCanvas("tcc","tcc",800,600);
+  mass_C_aftTrig->Write();
   mass_C_aftTrig->Draw();
   tcc->SaveAs("jpsi/massC_aftTrig_"+Run_period+".png","recreate");
 
@@ -446,7 +469,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   P_t_Mu3_aftTrig->Draw();
   tc3->SaveAs("jpsi/pt_mu3_aftTrig_"+Run_period+".png","recreate");
 
-
   TCanvas *c2d = new TCanvas("c2d","c2d",800,600);
   Iso_dim1_vs_dim2->Draw("COLORZ");
   c2d->SaveAs("jpsi/Iso_dim1_vs_dim2_"+Run_period+".png","recreate");
@@ -461,7 +483,28 @@ void efficiency(const std::vector<std::string>& dirNames)
   Iso_dim1_vs_dim2_aftmasscut->Draw("COLORZ");
   c222->SaveAs("jpsi/mass_dim1_vs_dim2_aftmasscut"+Run_period+".png","recreate");
 
-  savehist->Write();
+  diMuonC_Lxy_regionA->Write();
+  diMuonF_Lxy_regionA->Write();
+  diMuonC_Lxy_regionC->Write();
+  diMuonF_Lxy_regionC->Write();
+
+  TCanvas *c2221 = new TCanvas("c2221","c2221",800,600);
+  diMuonC_Lxy_regionA->Draw();
+  c2221->SaveAs("jpsi/diMuonC_Lxy_regionA"+Run_period+".png","recreate");
+
+  TCanvas *c2222 = new TCanvas("c2222","c2222",800,600);
+  diMuonF_Lxy_regionA->Draw();
+  c2222->SaveAs("jpsi/diMuonF_Lxy_regionA"+Run_period+".png","recreate");
+
+  TCanvas *c2223 = new TCanvas("c2223","c2223",800,600);
+  diMuonC_Lxy_regionC->Draw();
+  c2223->SaveAs("jpsi/diMuonC_Lxy_regionC"+Run_period+".png","recreate");
+
+  TCanvas *c2224 = new TCanvas("c2224","c2224",800,600);
+  diMuonF_Lxy_regionC->Draw();
+  c2224->SaveAs("jpsi/diMuonF_Lxy_regionC"+Run_period+".png","recreate");
+  
+  delete savehist;
   
   /* RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0); */
   /* for(int m=6;m<17;m++){ */
