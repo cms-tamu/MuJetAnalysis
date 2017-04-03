@@ -1,0 +1,1 @@
+/fdata/hepx/store/user/wshi/DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_20_13TeV_79k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_20_13TeV_79k_PAT_ANA/170203_231106/0000
