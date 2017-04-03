@@ -1,6 +1,5 @@
 // system include files
 #include <memory>
-
 // user include files
 #include "FWCore/Framework/interface/EDAnalyzer.h"
 #include "FWCore/Framework/interface/ESHandle.h"
@@ -48,8 +47,6 @@
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
-
-
 #include "TrackingTools/TrajectoryState/interface/FreeTrajectoryState.h"
 #include "TrackingTools/TrajectoryState/interface/TrajectoryStateOnSurface.h"
 #include "TrackingTools/PatternTools/interface/Trajectory.h"
@@ -64,26 +61,22 @@
 #include "TrackingTools/DetLayers/interface/DetLayer.h"
 #include <DataFormats/SiPixelDetId/interface/PXBDetId.h>
 #include <DataFormats/SiPixelDetId/interface/PXFDetId.h>
-
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 #include "DataFormats/JetReco/interface/PFJet.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
 #include "MuJetAnalysis/AnalysisTools/interface/DisplacedVertexFinder.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
-
 // user include files
 #include "TTree.h"
 #include "TRandom3.h"
 #include "TMath.h"
 #include "TVector2.h"
 #include "TLorentzVector.h"
-
 #include "DataFormats/Candidate/interface/CandMatchMap.h"
 #include "DataFormats/Candidate/interface/Particle.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-
 //Added for Vertex Finding sanity checks
 //#include <TrackingRecHit.h>
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
@@ -517,7 +510,6 @@ private:
   Float_t b_PAT_jet_Btag2[100];
   Float_t b_PAT_jet_Btag3[100];
 
-
   Int_t b_ntracks;
   
   Float_t b_track_pt[1000];
@@ -682,7 +674,6 @@ private:
   Float_t b_pixelhit_mu2_muJetF_errposx[10][100];
   Float_t b_pixelhit_mu2_muJetF_errposy[10][100];
 
-
   //BB estimation
   Bool_t runBBestimation_;
   Float_t m_orphan_dimu_mass;
@@ -713,19 +704,7 @@ private:
   Float_t  m_orphan_DRdiMuOrph;
 };
 
-//
-// constants, enums and typedefs
-//
-
-//
-// static data member definitions
-//
-
-//
-// constructors and destructor
-//
 CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
-
 {
   //****************************************************************************
   //                          SET THRESHOLDS                                    
@@ -762,7 +741,6 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_events3GenMu8  = 0;
   m_events4GenMu8  = 0;
 
-
   //****************************************************************************
   //                 SET HLT LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
@@ -775,7 +753,6 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(signalHltPaths_), std::end(signalHltPaths_));
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(backupHltPaths_), std::end(backupHltPaths_));
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(otherMuHltPaths_), std::end(otherMuHltPaths_));
-
 
   //****************************************************************************
   //                 SET RECO LEVEL VARIABLES AND COUNTERS                       
@@ -817,8 +794,6 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
 
   param_ = iConfig;
   //measurementTrkToken_ = consumes<MeasurementTrackerEvent>(iConfig.getParameter<edm::InputTag>("MeasurementTrackerEvent"));
-
-
 }
 
 
@@ -828,7 +803,6 @@ CutFlowAnalyzer::~CutFlowAnalyzer()
   triggerComposition_bb->Write();
   // do anything here that needs to be done at desctruction time
   // (e.g. close files, deallocate resources etc.)
-
 }
 
 //
@@ -1062,13 +1036,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_pixelhit_mu2_muJetF_errposy[k][j]=-10000;
     }
   }
-   
-
-   
-   
-  // //BB estimation
-  // Bool_t runBBestimation_;
-
   b_Mass4Mu = -1.;
 
   //****************************************************************************
@@ -2107,11 +2074,10 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     TLorentzVector muon3; muon3.SetPtEtaPhiE(muJetF->muon(0)->pt(),muJetF->muon(0)->eta(),muJetF->muon(0)->phi(),muJetF->muon(0)->energy());
     TLorentzVector muon4; muon4.SetPtEtaPhiE(muJetF->muon(1)->pt(),muJetF->muon(1)->eta(),muJetF->muon(1)->phi(),muJetF->muon(1)->energy());
     b_Mass4Mu = (muon1+muon2+muon3+muon4).M();
-    
+
     //====== MATCHING selected muons to refitted tracks 
-	
     for(uint32_t k=0;k<2;k++){
-	  
+
       mtrack_pt[k] = muJetC->muon(k)->innerTrack()->pt();
       mtrack_charge[k] = muJetC->muon(k)->innerTrack()->charge();
 
@@ -2783,8 +2749,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       }
       }
   }
-*/
-    
+*/   
 
   if(runBBestimation_){
     FillTrigInfo(triggerComposition, triggerEvent, NameAndNumb );
@@ -2812,7 +2777,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     iEvent.getByToken(m_PATJet, PATJet);
     for( auto Myjet = PATJet->begin(); Myjet != PATJet->end(); ++Myjet ){
       if( fabs(Myjet->eta())<2.4 && Myjet->pt()>5. ){
-	// Kind of B-tags:
+	// B-tags available:
 	//'pfTrackCountingHighEffBJetTags', 'pfTtrackCountingHighPurBJetTags', 'pfJetProbabilityBJetTags', 'pfJetBProbabilityBJetTags', 'pfSimpleSecondaryVertexHighEffBJetTags',
 	//'pfSimpleSecondaryVertexHighPurBJetTags', 'pfCombinedSecondaryVertexV2BJetTags', 'pfCombinedInclusiveSecondaryVertexV2BJetTags', 'pfCombinedMVAV2BJetTags'
 	b_PAT_jet_pt[NPATJet]    = Myjet->pt();
@@ -2826,19 +2791,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       }
     }
     if(NPATJet>0) b_NPATJet=NPATJet;
-    
-    // Trimuons
-    double m_trigpt = 17.;
-    std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
-    for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
-      if (muon->pt() > m_trigpt  &&  fabs(muon->eta()) < 0.9) {
-	const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu1*_DoubleTrkMu*NoFiltersNoVtx_v*");
-	if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_trigpt)  ){
-	  hightrigmuons.push_back(muon);
-	}
-      }
-    }
 
+    // Trimuons
+    std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
+    for (pat::MuonCollection::const_iterator muon = muons->begin(); muon != muons->end(); ++muon) {
+      if (muon->pt() > m_threshold_Mu17_pT  &&  fabs(muon->eta()) < m_threshold_Mu17_eta) {
+	  const pat::TriggerObjectStandAlone *mu01 = muon->triggerObjectMatchByPath("HLT_TrkMu1*_DoubleTrkMu*NoFiltersNoVtx_v*");
+	  if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_threshold_Mu17_pT)  ){
+	    hightrigmuons.push_back(muon);
+	  }
+	}
+    }
     //Orphan branches
     m_orphan_dimu_mass = -999.;
     m_orphan_mass = -999.;
@@ -2851,12 +2814,12 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     edm::Handle<pat::MuonCollection> orphans;
     iEvent.getByToken(m_muJetOrphans, orphans);
     float mu1788 = 0;
-    if (muJets->size() == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
+    if (muJets->size() == 1 && (*muJets)[0].numberOfDaughters() == 2 && orphans->size() == 1 ) {
       m_orphan_passOffLineSel = true;
       pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
       pat::MuonCollection::const_iterator orphan = orphans->begin();
-      if( muJet->muon(0)->pt() > m_trigpt || muJet->muon(1)->pt() > m_trigpt || orphan->pt() > m_trigpt ) m_orphan_passOffLineSelPt = true;
-      if((muJet->muon(0)->pt() > m_trigpt && fabs(muJet->muon(0)->eta())<0.9) || (muJet->muon(1)->pt() > m_trigpt && fabs(muJet->muon(1)->eta())<0.9) || (orphan->pt() > m_trigpt && fabs(orphan->eta())<0.9)) m_orphan_passOffLineSelPtEta = true;
+      if( muJet->muon(0)->pt() > m_threshold_Mu17_pT || muJet->muon(1)->pt() > m_threshold_Mu17_pT || orphan->pt() > m_threshold_Mu17_pT ) m_orphan_passOffLineSelPt = true;
+      if((muJet->muon(0)->pt() > m_threshold_Mu17_pT && fabs(muJet->muon(0)->eta())<m_threshold_Mu17_eta) || (muJet->muon(1)->pt() > m_threshold_Mu17_pT && fabs(muJet->muon(1)->eta())<m_threshold_Mu17_eta) || (orphan->pt() > m_threshold_Mu17_pT && fabs(orphan->eta())<m_threshold_Mu17_eta)) m_orphan_passOffLineSelPtEta = true;
       m_orphan_PtOrph  = orphan->pt();
       m_orphan_EtaOrph = orphan->eta();
       m_orphan_PhiOrph = orphan->phi();
@@ -2873,12 +2836,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       m_orphan_EtaMu01  = (mymu0+mymu1).Eta();
       m_orphan_PhiMu01  = (mymu0+mymu1).Phi();
       m_orphan_DRdiMuOrph  = sqrt( pow(m_orphan_EtaMu01-m_orphan_EtaOrph,2) + pow(TVector2::Phi_mpi_pi(m_orphan_PhiMu01-m_orphan_PhiOrph),2) );
-      
+      m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
+      m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
       double triPt[3]  = {muJet->muon(0)->pt(), muJet->muon(1)->pt(), orphan->pt()};
       double triEta[3] = {fabs(muJet->muon(0)->eta()), fabs(muJet->muon(1)->eta()), fabs(orphan->eta())};
-      int Index17=-1;
+      int Index17=-1; bool found=false;
       for(int i=0; i<3; i++){
-        if(triPt[i]>m_trigpt && triEta[i]<0.9) Index17 = i;
+        if( found ) continue;
+        if(triPt[i]>m_threshold_Mu17_pT && triEta[i]<m_threshold_Mu17_eta){ Index17 = i; found=true; }
       }
       if(Index17>-1){
          for(int i=0; i<3; i++){ if(i!=Index17 && triPt[i]>8) mu1788+=0.5; }
@@ -2887,8 +2852,6 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       if ( muJet->muon(0)->isTrackerMuon() && muJet->muon(0)->innerTrack().isNonnull() && muJet->muon(1)->isTrackerMuon() && muJet->muon(1)->innerTrack().isNonnull() && orphan->isTrackerMuon() && orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true; 
       if( m_orphan_passOffLineSelPtEta && m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerEvent, NameAndNumb );
 
-      m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
-      m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
       for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
         if( orphan->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() &&  tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
            m_dimuorphan_containstrig++;
@@ -3247,7 +3210,7 @@ CutFlowAnalyzer::beginJob() {
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);  
   m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
-  
+
   if(runPixelHitRecovery_){
     //pixelHitRecovery
     
