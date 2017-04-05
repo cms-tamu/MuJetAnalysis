@@ -451,6 +451,7 @@ private:
   Float_t b_diMuonC_FittedVtx_px;
   Float_t b_diMuonC_FittedVtx_py;
   Float_t b_diMuonC_FittedVtx_pz;
+  Float_t b_diMuonC_FittedVtx_Rapidity;
   Float_t b_diMuonC_FittedVtx_eta;
   Float_t b_diMuonC_FittedVtx_phi;
   Float_t b_diMuonC_FittedVtx_vx;
@@ -495,6 +496,7 @@ private:
   Float_t b_diMuonF_FittedVtx_py;
   Float_t b_diMuonF_FittedVtx_pz;
   Float_t b_diMuonF_FittedVtx_eta;
+  Float_t b_diMuonF_FittedVtx_Rapidity;
   Float_t b_diMuonF_FittedVtx_phi;
   Float_t b_diMuonF_FittedVtx_vx;
   Float_t b_diMuonF_FittedVtx_vy;
@@ -1698,6 +1700,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonC_FittedVtx_py  = diMuonC->vertexMomentum().y();
     b_diMuonC_FittedVtx_pz  = diMuonC->vertexMomentum().z();
     b_diMuonC_FittedVtx_eta = diMuonC->vertexMomentum().eta();
+    b_diMuonC_FittedVtx_Rapidity = diMuonC->vertexRapidity();
     b_diMuonC_FittedVtx_phi = diMuonC->vertexMomentum().phi();
     b_diMuonC_FittedVtx_vx  = diMuonC->vertexPoint().x();
     b_diMuonC_FittedVtx_vy  = diMuonC->vertexPoint().y();
@@ -1712,6 +1715,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonF_FittedVtx_py  = diMuonF->vertexMomentum().y();
     b_diMuonF_FittedVtx_pz  = diMuonF->vertexMomentum().z();
     b_diMuonF_FittedVtx_eta = diMuonF->vertexMomentum().eta();
+    b_diMuonC_FittedVtx_Rapidity = diMuonC->vertexRapidity();
     b_diMuonF_FittedVtx_phi = diMuonF->vertexMomentum().phi();
     b_diMuonF_FittedVtx_vx  = diMuonF->vertexPoint().x();
     b_diMuonF_FittedVtx_vy  = diMuonF->vertexPoint().y();
@@ -1729,6 +1733,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonC_FittedVtx_py  = -1000.0;
     b_diMuonC_FittedVtx_pz  = -1000.0;
     b_diMuonC_FittedVtx_eta = -1000.0;
+    b_diMuonC_FittedVtx_Rapidity = -1000.0;
     b_diMuonC_FittedVtx_phi = -1000.0;
     b_diMuonC_FittedVtx_vx  = -1000.0;
     b_diMuonC_FittedVtx_vy  = -1000.0;
@@ -1743,6 +1748,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonF_FittedVtx_py  = -1000.0;
     b_diMuonF_FittedVtx_pz  = -1000.0;
     b_diMuonF_FittedVtx_eta = -1000.0;
+    b_diMuonF_FittedVtx_Rapidity= -1000.0;
     b_diMuonF_FittedVtx_phi = -1000.0;
     b_diMuonF_FittedVtx_vx  = -1000.0;
     b_diMuonF_FittedVtx_vy  = -1000.0;
@@ -3135,6 +3141,7 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonC_FittedVtx_py",  &b_diMuonC_FittedVtx_py,  "diMuonC_FittedVtx_py/F");
   m_ttree->Branch("diMuonC_FittedVtx_pz",  &b_diMuonC_FittedVtx_pz,  "diMuonC_FittedVtx_pz/F");
   m_ttree->Branch("diMuonC_FittedVtx_eta", &b_diMuonC_FittedVtx_eta, "diMuonC_FittedVtx_eta/F");
+  m_ttree->Branch("diMuonC_FittedVtx_Rapidity", &b_diMuonC_FittedVtx_Rapidity, "diMuonC_FittedVtx_Rapidity/F");
   m_ttree->Branch("diMuonC_FittedVtx_phi", &b_diMuonC_FittedVtx_phi, "diMuonC_FittedVtx_phi/F");
   m_ttree->Branch("diMuonC_FittedVtx_vx",  &b_diMuonC_FittedVtx_vx,  "diMuonC_FittedVtx_vx/F");
   m_ttree->Branch("diMuonC_FittedVtx_vy",  &b_diMuonC_FittedVtx_vy,  "diMuonC_FittedVtx_vy/F");
@@ -3149,6 +3156,7 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonF_FittedVtx_py",  &b_diMuonF_FittedVtx_py,  "diMuonF_FittedVtx_py/F");
   m_ttree->Branch("diMuonF_FittedVtx_pz",  &b_diMuonF_FittedVtx_pz,  "diMuonF_FittedVtx_pz/F");
   m_ttree->Branch("diMuonF_FittedVtx_eta", &b_diMuonF_FittedVtx_eta, "diMuonF_FittedVtx_eta/F");
+  m_ttree->Branch("diMuonF_FittedVtx_Rapidity", &b_diMuonF_FittedVtx_Rapidity, "diMuonF_FittedVtx_Rapidity/F");
   m_ttree->Branch("diMuonF_FittedVtx_phi", &b_diMuonF_FittedVtx_phi, "diMuonF_FittedVtx_phi/F");
   m_ttree->Branch("diMuonF_FittedVtx_vx",  &b_diMuonF_FittedVtx_vx,  "diMuonF_FittedVtx_vx/F");
   m_ttree->Branch("diMuonF_FittedVtx_vy",  &b_diMuonF_FittedVtx_vy,  "diMuonF_FittedVtx_vy/F");
