@@ -224,6 +224,7 @@ namespace pat {
     }
     GlobalVector  vertexMomentum() const { LorentzVector v = vertexP4();  return GlobalVector(v.x(), v.y(), v.z()); }
     double       vertexMass()     const { return vertexP4().mass(); }
+    double       vertexRapidity()     const { return vertexP4().Rapidity(); }
 
     double vertexDz(const Point& myBeamSpot) const {
       if (vertexValid()) {
