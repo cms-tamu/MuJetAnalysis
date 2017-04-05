@@ -168,11 +168,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *eta_Mu2_aftTrig = new TH1F("eta_Mu2_aftTrig","",100,-2.5,2.5);
   TH1F *eta_Mu3_aftTrig = new TH1F("eta_Mu3_aftTrig","",100,-2.5,2.5);
 
-  TH1F *diMuonC_Lxy_RegionA = new TH1F("diMuonC_Lxy_RegionA","",100,-0.5,2.0);
-  TH1F *diMuonF_Lxy_RegionA = new TH1F("diMuonF_Lxy_RegionA","",100,-0.5,2.0);
+  TH1F *diMuonC_Lxy_RegionA = new TH1F("diMuonC_Lxy_RegionA","",100,-0.3,2.0);
+  TH1F *diMuonF_Lxy_RegionA = new TH1F("diMuonF_Lxy_RegionA","",100,-0.3,2.0);
 
-  TH1F *diMuonC_Lxy_RegionC = new TH1F("diMuonC_Lxy_RegionC","",100,-0.5,2.0);
-  TH1F *diMuonF_Lxy_RegionC = new TH1F("diMuonF_Lxy_RegionC","",100,-0.5,2.0);
+  TH1F *diMuonC_Lxy_RegionC = new TH1F("diMuonC_Lxy_RegionC","",100,-0.3,2.0);
+  TH1F *diMuonF_Lxy_RegionC = new TH1F("diMuonF_Lxy_RegionC","",100,-0.3,2.0);
   
   TH2F *Iso_dim1_vs_dim2 = new TH2F("Iso_dim1_vs_dim2","",100,0.0,12.0,100,0.0,12.0);
   TH2F *Iso_dim1_vs_dim2_aftmasscut = new TH2F("Iso_dim1_vs_dim2_aftmasscut","",100,0.0,12.0,100,0.0,12.0);
@@ -215,8 +215,8 @@ void efficiency(const std::vector<std::string>& dirNames)
     t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
     t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
 
-    t->SetBranchAddress("diMuonC_FittedVtx_Lxy",diMuonC_FittedVtx_Lxy);
-    t->SetBranchAddress("diMuonF_FittedVtx_Lxy",diMuonF_FittedVtx_Lxy);
+    t->SetBranchAddress("diMuonC_FittedVtx_Lxy",&diMuonC_FittedVtx_Lxy);
+    t->SetBranchAddress("diMuonF_FittedVtx_Lxy",&diMuonF_FittedVtx_Lxy);
     
     t->SetBranchAddress("isVertexOK",&isVtxOK);
     t->SetBranchAddress("nRecoMu",&nRecoMu);
@@ -310,12 +310,12 @@ void efficiency(const std::vector<std::string>& dirNames)
 	    if(diMuonC_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<2.0)  ev_regionD++;
 
 	    if(diMuonC_IsoTk_FittedVtx<2.0 && diMuonF_IsoTk_FittedVtx<2.0){
-	      diMuonC_Lyx_RegionA++;
-	      diMuonF_Lyx_RegionA++;
+	      diMuonC_Lxy_RegionA->Fill(diMuonC_FittedVtx_Lxy);
+	      diMuonF_Lxy_RegionA->Fill(diMuonF_FittedVtx_Lxy);
 	    }
 	    if(diMuonC_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx>2.0){
-	      diMuonC_Lxy_RegionC++;
-	      diMuonF_Lxy_RegionC++;
+	      diMuonC_Lxy_RegionC->Fill(diMuonC_FittedVtx_Lxy);
+	      diMuonF_Lxy_RegionC->Fill(diMuonF_FittedVtx_Lxy);
 	    }
 
 
@@ -367,142 +367,142 @@ void efficiency(const std::vector<std::string>& dirNames)
   
   TCanvas *cevt = new TCanvas("cevt","cevt",800,600);
   evt_number->Draw();
-  cevt->SaveAs("jpsi/event_"+Run_period+".png","recreate");
+  cevt->SaveAs("plots/event_"+Run_period+".png","recreate");
 
 
   //    TCanvas *cc = new TCanvas("cc","cc",800,600);
   //   mass_C->Draw();
-  //   cc->SaveAs("jpsi/massC_"+Run_period+".png","recreate");
+  //   cc->SaveAs("plots/massC_"+Run_period+".png","recreate");
 
   //   TCanvas *cf = new TCanvas("cf","cf",800,600);
   //   mass_F->Draw();
-  //   cf->SaveAs("jpsi/massF_"+Run_period+".png","recreate");
+  //   cf->SaveAs("plots/massF_"+Run_period+".png","recreate");
 
   //   TCanvas *e = new TCanvas("e","e",800,600);
   //  eta_Mu0->Draw();
-  //  e->SaveAs("jpsi/e0_"+Run_period+".png","recreate");
+  //  e->SaveAs("plots/e0_"+Run_period+".png","recreate");
 
   //  TCanvas *e1 = new TCanvas("e1","e1",800,600);
   //  eta_Mu0->Draw();
-  //  e1->SaveAs("jpsi/e1_"+Run_period+".png","recreate");
+  //  e1->SaveAs("plots/e1_"+Run_period+".png","recreate");
 
   //  TCanvas *e2 = new TCanvas("e2","e2",800,600);
   // eta_Mu0->Draw();
-  // e2->SaveAs("jpsi/e2_"+Run_period+".png","recreate");
+  // e2->SaveAs("plots/e2_"+Run_period+".png","recreate");
 
   // TCanvas *e3 = new TCanvas("e3","e3",800,600);
   // eta_Mu0->Draw();
-  // e3->SaveAs("jpsi/e3_"+Run_period+".png","recreate");
+  // e3->SaveAs("plots/e3_"+Run_period+".png","recreate");
 
   // TCanvas *isoC = new TCanvas("isoC","isoC",800,600);
   // iso_C->Draw();
-  // isoC->SaveAs("jpsi/isoC_"+Run_period+".png","recreate");
+  // isoC->SaveAs("plots/isoC_"+Run_period+".png","recreate");
 
   // TCanvas *isoF = new TCanvas("isoF","isoF",800,600);
   // iso_C->Draw();
-  // isoF->SaveAs("jpsi/isoF_"+Run_period+".png","recreate");
+  // isoF->SaveAs("plots/isoF_"+Run_period+".png","recreate");
 
   // TCanvas *c = new TCanvas("c","c",800,600);
   //  P_t_Mu0->Draw();
-  //  c->SaveAs("jpsi/pt_mu0_"+Run_period+".png","recreate");
+  //  c->SaveAs("plots/pt_mu0_"+Run_period+".png","recreate");
 
   //  TCanvas *c1 = new TCanvas("c1","c1",800,600);
   //  P_t_Mu1->Draw();
-  //  c1->SaveAs("jpsi/pt_mu1_"+Run_period+".png","recreate");
+  //  c1->SaveAs("plots/pt_mu1_"+Run_period+".png","recreate");
 
   //  TCanvas *c2 = new TCanvas("c2","c2",800,600);
   //  P_t_Mu2->Draw();
-  //  c2->SaveAs("jpsi/pt_mu2_"+Run_period+".png","recreate");
+  //  c2->SaveAs("plots/pt_mu2_"+Run_period+".png","recreate");
 
   //  TCanvas *c3 = new TCanvas("c3","c3",800,600);
   //  P_t_Mu3->Draw();
-  //  c3->SaveAs("jpsi/pt_mu3_"+Run_period+".png","recreate");
+  //  c3->SaveAs("plots/pt_mu3_"+Run_period+".png","recreate");
 
 
 
   TCanvas *tcc = new TCanvas("tcc","tcc",800,600);
   mass_C_aftTrig->Write();
   mass_C_aftTrig->Draw();
-  tcc->SaveAs("jpsi/massC_aftTrig_"+Run_period+".png","recreate");
+  tcc->SaveAs("plots/massC_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *tcf = new TCanvas("tcf","tcf",800,600);
   mass_F_aftTrig->Draw();
-  tcf->SaveAs("jpsi/massF_aftTrig_"+Run_period+".png","recreate");
+  tcf->SaveAs("plots/massF_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *te = new TCanvas("te","te",800,600);
   eta_Mu0_aftTrig->Draw();
-  te->SaveAs("jpsi/eta0_aftTrig_"+Run_period+".png","recreate");
+  te->SaveAs("plots/eta0_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *te1 = new TCanvas("te1","te1",800,600);
   eta_Mu0_aftTrig->Draw();
-  te1->SaveAs("jpsi/eta1_aftTrig_"+Run_period+".png","recreate");
+  te1->SaveAs("plots/eta1_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *te2 = new TCanvas("te2","te2",800,600);
   eta_Mu0_aftTrig->Draw();
-  te2->SaveAs("jpsi/eta2_aftTrig_"+Run_period+".png","recreate");
+  te2->SaveAs("plots/eta2_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *te3 = new TCanvas("te3","te3",800,600);
   eta_Mu0_aftTrig->Draw();
-  te3->SaveAs("jpsi/eta3_aftTrig_"+Run_period+".png","recreate");
+  te3->SaveAs("plots/eta3_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *tisoC = new TCanvas("tisoC","tisoC",800,600);
   iso_C_aftTrig->Draw();
-  tisoC->SaveAs("jpsi/isoC_aftTrig_"+Run_period+".png","recreate");
+  tisoC->SaveAs("plots/isoC_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *tisoF = new TCanvas("tisoF","tisoF",800,600);
   iso_F_aftTrig->Draw();
-  tisoF->SaveAs("jpsi/isoF_aftTrig_"+Run_period+".png","recreate");
+  tisoF->SaveAs("plots/isoF_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *tc = new TCanvas("tc","tc",800,600);
   P_t_Mu0_aftTrig->Draw();
-  tc->SaveAs("jpsi/pt_mu0_aftTrig_"+Run_period+".png","recreate");
+  tc->SaveAs("plots/pt_mu0_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *tc1 = new TCanvas("tc1","tc1",800,600);
   P_t_Mu1_aftTrig->Draw();
-  tc1->SaveAs("jpsi/pt_mu1_aftTrig_"+Run_period+".png","recreate");
+  tc1->SaveAs("plots/pt_mu1_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *tc2 = new TCanvas("tc2","tc2",800,600);
   P_t_Mu2_aftTrig->Draw();
-  tc2->SaveAs("jpsi/pt_mu2_aftTrig_"+Run_period+".png","recreate");
+  tc2->SaveAs("plots/pt_mu2_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *tc3 = new TCanvas("tc3","tc3",800,600);
   P_t_Mu3_aftTrig->Draw();
-  tc3->SaveAs("jpsi/pt_mu3_aftTrig_"+Run_period+".png","recreate");
+  tc3->SaveAs("plots/pt_mu3_aftTrig_"+Run_period+".png","recreate");
 
   TCanvas *c2d = new TCanvas("c2d","c2d",800,600);
   Iso_dim1_vs_dim2->Draw("COLORZ");
-  c2d->SaveAs("jpsi/Iso_dim1_vs_dim2_"+Run_period+".png","recreate");
+  c2d->SaveAs("plots/Iso_dim1_vs_dim2_"+Run_period+".png","recreate");
 
   TCanvas *c2d1 = new TCanvas("c2d1","c2d1",800,600);
   mass_dim1_vs_dim2->Draw("COLORZ");
-  c2d1->SaveAs("jpsi/mass_dim1_vs_dim2_"+Run_period+".png","recreate");
+  c2d1->SaveAs("plots/mass_dim1_vs_dim2_"+Run_period+".png","recreate");
 
   TCanvas *c222 = new TCanvas("c222","c222",800,600);
   Iso_dim1_vs_dim2_aftmasscut->GetXaxis()->SetTitle("Iso di-#mu_{1} [GeV]");
   Iso_dim1_vs_dim2_aftmasscut->GetYaxis()->SetTitle("Iso di-#mu_{2} [GeV]");
   Iso_dim1_vs_dim2_aftmasscut->Draw("COLORZ");
-  c222->SaveAs("jpsi/mass_dim1_vs_dim2_aftmasscut"+Run_period+".png","recreate");
+  c222->SaveAs("plots/mass_dim1_vs_dim2_aftmasscut"+Run_period+".png","recreate");
 
-  diMuonC_Lxy_regionA->Write();
-  diMuonF_Lxy_regionA->Write();
-  diMuonC_Lxy_regionC->Write();
-  diMuonF_Lxy_regionC->Write();
+  diMuonC_Lxy_RegionA->Write();
+  diMuonF_Lxy_RegionA->Write();
+  diMuonC_Lxy_RegionC->Write();
+  diMuonF_Lxy_RegionC->Write();
 
   TCanvas *c2221 = new TCanvas("c2221","c2221",800,600);
-  diMuonC_Lxy_regionA->Draw();
-  c2221->SaveAs("jpsi/diMuonC_Lxy_regionA"+Run_period+".png","recreate");
+  diMuonC_Lxy_RegionA->Draw();
+  c2221->SaveAs("plots/diMuonC_Lxy_regionA"+Run_period+".png","recreate");
 
   TCanvas *c2222 = new TCanvas("c2222","c2222",800,600);
-  diMuonF_Lxy_regionA->Draw();
-  c2222->SaveAs("jpsi/diMuonF_Lxy_regionA"+Run_period+".png","recreate");
+  diMuonF_Lxy_RegionA->Draw();
+  c2222->SaveAs("plots/diMuonF_Lxy_regionA"+Run_period+".png","recreate");
 
   TCanvas *c2223 = new TCanvas("c2223","c2223",800,600);
-  diMuonC_Lxy_regionC->Draw();
-  c2223->SaveAs("jpsi/diMuonC_Lxy_regionC"+Run_period+".png","recreate");
+  diMuonC_Lxy_RegionC->Draw();
+  c2223->SaveAs("plots/diMuonC_Lxy_regionC"+Run_period+".png","recreate");
 
   TCanvas *c2224 = new TCanvas("c2224","c2224",800,600);
-  diMuonF_Lxy_regionC->Draw();
-  c2224->SaveAs("jpsi/diMuonF_Lxy_regionC"+Run_period+".png","recreate");
+  diMuonF_Lxy_RegionC->Draw();
+  c2224->SaveAs("plots/diMuonF_Lxy_regionC"+Run_period+".png","recreate");
   
   delete savehist;
   
