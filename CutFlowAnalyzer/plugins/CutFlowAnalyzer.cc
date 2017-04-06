@@ -1715,7 +1715,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonF_FittedVtx_py  = diMuonF->vertexMomentum().y();
     b_diMuonF_FittedVtx_pz  = diMuonF->vertexMomentum().z();
     b_diMuonF_FittedVtx_eta = diMuonF->vertexMomentum().eta();
-    b_diMuonC_FittedVtx_Rapidity = diMuonC->vertexRapidity();
+    b_diMuonF_FittedVtx_Rapidity = diMuonF->vertexRapidity();
     b_diMuonF_FittedVtx_phi = diMuonF->vertexMomentum().phi();
     b_diMuonF_FittedVtx_vx  = diMuonF->vertexPoint().x();
     b_diMuonF_FittedVtx_vy  = diMuonF->vertexPoint().y();
