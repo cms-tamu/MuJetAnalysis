@@ -66,10 +66,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   if(verbose) cout<<" dirNames  "<<dirNames[0]<<endl;
 
 
-  //  bool alldata=false;
-  bool alldata=true;
-  //  bool mcsps=true;
-  bool mcsps=false;
+    bool alldata=false;
+    //  bool alldata=true;
+   bool mcsps=true;
+  //  bool mcsps=false;
   if(alldata) Run_period = "all";
   if(mcsps) Run_period = "SPS";
   if(!alldata && !mcsps)  decodeFileNameManyData(dirNames, Run_period);
