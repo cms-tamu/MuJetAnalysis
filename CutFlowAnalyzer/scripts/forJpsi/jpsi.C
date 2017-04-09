@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <iomanip>
 using namespace std;
@@ -62,18 +61,18 @@ void efficiency(const std::vector<std::string>& dirNames)
   //	TString dirname(fileName);
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
-
+  
   if(verbose) cout<<" dirNames  "<<dirNames[0]<<endl;
-
-
-    bool alldata=false;
-    //  bool alldata=true;
-   bool mcsps=true;
-  //  bool mcsps=false;
+  
+  
+  bool alldata=false;
+  //  bool alldata=true;
+  //  bool mcsps=true;
+  bool mcsps=false;
   if(alldata) Run_period = "all";
   if(mcsps) Run_period = "SPS";
   if(!alldata && !mcsps)  decodeFileNameManyData(dirNames, Run_period);
-
+  
   TString fileName;
   fileName = "MuOnia dataset Run2016" + Run_period;
 
@@ -91,6 +90,9 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   Float_t diMuonC_FittedVtx_Lxy;
   Float_t diMuonF_FittedVtx_Lxy;
+
+  Float_t diMuonC_FittedVtx_Rapidity;
+  Float_t diMuonF_FittedVtx_Rapidity;
   
   Bool_t  is1SelMu3p5;
   Bool_t  is2SelMu3p5;
@@ -173,6 +175,12 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   TH1F *diMuonC_Lxy_RegionC = new TH1F("diMuonC_Lxy_RegionC","",100,-0.3,2.0);
   TH1F *diMuonF_Lxy_RegionC = new TH1F("diMuonF_Lxy_RegionC","",100,-0.3,2.0);
+
+  TH1F *diMuonC_Rapidity_RegionA = new TH1F("diMuonC_Rapidity_RegionA","",100,-0.3,2.0);
+  TH1F *diMuonF_Rapidity_RegionA = new TH1F("diMuonF_Rapidity_RegionA","",100,-0.3,2.0);
+
+  TH1F *diMuonC_Rapidity_RegionC = new TH1F("diMuonC_Rapidity_RegionC","",100,-0.3,2.0);
+  TH1F *diMuonF_Rapidity_RegionC = new TH1F("diMuonF_Rapidity_RegionC","",100,-0.3,2.0);
   
   TH2F *Iso_dim1_vs_dim2 = new TH2F("Iso_dim1_vs_dim2","",100,0.0,12.0,100,0.0,12.0);
   TH2F *Iso_dim1_vs_dim2_aftmasscut = new TH2F("Iso_dim1_vs_dim2_aftmasscut","",100,0.0,12.0,100,0.0,12.0);
@@ -187,7 +195,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   //if(p == 0 || p%3 == 0) setup(); //reset vectors for every 4th cT for tables.
 
 
-  TFile *savehist = new TFile("savehist.root","RECREATE");
+  TFile *savehist = new TFile("plots/savehist_"+Run_period+".root","RECREATE");
   
   
   while ((chEl=(TChainElement*)next())) {  //loopforfiles
@@ -217,6 +225,9 @@ void efficiency(const std::vector<std::string>& dirNames)
 
     t->SetBranchAddress("diMuonC_FittedVtx_Lxy",&diMuonC_FittedVtx_Lxy);
     t->SetBranchAddress("diMuonF_FittedVtx_Lxy",&diMuonF_FittedVtx_Lxy);
+
+    t->SetBranchAddress("diMuonC_FittedVtx_Rapidity",&diMuonC_FittedVtx_Rapidity);
+    t->SetBranchAddress("diMuonF_FittedVtx_Rapidity",&diMuonF_FittedVtx_Rapidity);
     
     t->SetBranchAddress("isVertexOK",&isVtxOK);
     t->SetBranchAddress("nRecoMu",&nRecoMu);
@@ -312,10 +323,16 @@ void efficiency(const std::vector<std::string>& dirNames)
 	    if(diMuonC_IsoTk_FittedVtx<2.0 && diMuonF_IsoTk_FittedVtx<2.0){
 	      diMuonC_Lxy_RegionA->Fill(diMuonC_FittedVtx_Lxy);
 	      diMuonF_Lxy_RegionA->Fill(diMuonF_FittedVtx_Lxy);
+
+	      diMuonC_Rapidity_RegionA->Fill(diMuonC_FittedVtx_Rapidity);
+	      diMuonF_Rapidity_RegionA->Fill(diMuonF_FittedVtx_Rapidity);
 	    }
 	    if(diMuonC_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx>2.0){
 	      diMuonC_Lxy_RegionC->Fill(diMuonC_FittedVtx_Lxy);
 	      diMuonF_Lxy_RegionC->Fill(diMuonF_FittedVtx_Lxy);
+
+	      diMuonC_Rapidity_RegionC->Fill(diMuonC_FittedVtx_Rapidity);
+	      diMuonF_Rapidity_RegionC->Fill(diMuonF_FittedVtx_Rapidity);
 	    }
 
 
@@ -488,21 +505,44 @@ void efficiency(const std::vector<std::string>& dirNames)
   diMuonC_Lxy_RegionC->Write();
   diMuonF_Lxy_RegionC->Write();
 
+  diMuonC_Rapidity_RegionA->Write();
+  diMuonF_Rapidity_RegionA->Write();
+  diMuonC_Rapidity_RegionC->Write();
+  diMuonF_Rapidity_RegionC->Write();
+
   TCanvas *c2221 = new TCanvas("c2221","c2221",800,600);
   diMuonC_Lxy_RegionA->Draw();
-  c2221->SaveAs("plots/diMuonC_Lxy_regionA"+Run_period+".png","recreate");
+  c2221->SaveAs("plots/diMuonC_Lxy_regionA_"+Run_period+".png","recreate");
 
   TCanvas *c2222 = new TCanvas("c2222","c2222",800,600);
   diMuonF_Lxy_RegionA->Draw();
-  c2222->SaveAs("plots/diMuonF_Lxy_regionA"+Run_period+".png","recreate");
+  c2222->SaveAs("plots/diMuonF_Lxy_regionA_"+Run_period+".png","recreate");
 
   TCanvas *c2223 = new TCanvas("c2223","c2223",800,600);
   diMuonC_Lxy_RegionC->Draw();
-  c2223->SaveAs("plots/diMuonC_Lxy_regionC"+Run_period+".png","recreate");
+  c2223->SaveAs("plots/diMuonC_Lxy_regionC_"+Run_period+".png","recreate");
 
   TCanvas *c2224 = new TCanvas("c2224","c2224",800,600);
   diMuonF_Lxy_RegionC->Draw();
-  c2224->SaveAs("plots/diMuonF_Lxy_regionC"+Run_period+".png","recreate");
+  c2224->SaveAs("plots/diMuonF_Lxy_regionC_"+Run_period+".png","recreate");
+
+
+
+  TCanvas *c22221 = new TCanvas("c22221","c22221",800,600);
+  diMuonC_Rapidity_RegionA->Draw();
+  c22221->SaveAs("plots/diMuonC_Rapidity_regionA_"+Run_period+".png","recreate");
+
+  TCanvas *c22222 = new TCanvas("c22222","c22222",800,600);
+  diMuonF_Rapidity_RegionA->Draw();
+  c22222->SaveAs("plots/diMuonF_Rapidity_regionA_"+Run_period+".png","recreate");
+
+  TCanvas *c22223 = new TCanvas("c22223","c22223",800,600);
+  diMuonC_Rapidity_RegionC->Draw();
+  c22223->SaveAs("plots/diMuonC_Rapidity_regionC_"+Run_period+".png","recreate");
+
+  TCanvas *c22224 = new TCanvas("c22224","c22224",800,600);
+  diMuonF_Rapidity_RegionC->Draw();
+  c22224->SaveAs("plots/diMuonF_Rapidity_regionC_"+Run_period+".png","recreate");
   
   delete savehist;
   
