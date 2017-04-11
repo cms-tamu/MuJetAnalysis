@@ -51,48 +51,10 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_AOD',
         'HLT_PFMET500_v1',
         'HLT_PFMET600_v1',
         'HLT_PFMET90_PFMHT90_IDTight_v2',
+        'HLT_PFMET90_PFMHT90_IDTight_v3',
                                  
-        ##/dev/CMSSW_8_0_0/HLT/V185
-        ##/dev/CMSSW_8_0_0/HLT/V187
-        ##/dev/CMSSW_8_0_0/HLT/V188
-        
-        ##/dev/CMSSW_8_0_0/HLT/V298
-        ##/dev/CMSSW_8_0_0/HLT/V299
-        ##/dev/CMSSW_8_0_0/HLT/V300
-        
-        ##/dev/CMSSW_8_0_0/HLT/V326
-        ##/dev/CMSSW_8_0_0/HLT/V327
-        ##/dev/CMSSW_8_0_0/HLT/V328
-        
-        ##/dev/CMSSW_8_0_0/HLT/V365
-        ##/dev/CMSSW_8_0_0/HLT/V381
-        ##/dev/CMSSW_8_0_0/HLT/V385
-        
-        ##/dev/CMSSW_8_0_0/HLT/V420
-        ##/dev/CMSSW_8_0_0/HLT/V421
-        
-        ##/dev/CMSSW_8_0_0/HLT/V448
-        ##/dev/CMSSW_8_0_0/HLT/V450
-        ##/dev/CMSSW_8_0_0/HLT/V453
-        
-        ##/dev/CMSSW_8_0_0/HLT/V519
-        ##/dev/CMSSW_8_0_0/HLT/V531
-        ##/dev/CMSSW_8_0_0/HLT/V532
-        ##/dev/CMSSW_8_0_0/HLT/V533
-        ##/dev/CMSSW_8_0_0/HLT/V536
-        ##/dev/CMSSW_8_0_0/HLT/V548
-        
-        ##/dev/CMSSW_8_0_0/HLT/V538
-        ##/dev/CMSSW_8_0_0/HLT/V539
-        ##/dev/CMSSW_8_0_0/HLT/V549
-        ##/dev/CMSSW_8_0_0/HLT/V550
-        ##/dev/CMSSW_8_0_0/HLT/V551
-        ##/dev/CMSSW_8_0_0/HLT/V564
-        
-        ##/dev/CMSSW_8_0_0/HLT/V609
-        ##/dev/CMSSW_8_0_0/HLT/V611
-        ##/dev/CMSSW_8_0_0/HLT/V613
-        ##/dev/CMSSW_8_0_0/HLT/V615
+        ##/dev/CMSSW_8_0_0/HLT/V615 + fill in the gaps
+        'HLT_MET100_v2',
         'HLT_MET100_v3',
         'HLT_MET150_v3',
         'HLT_MET200_v5',
@@ -100,15 +62,39 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_AOD',
         'HLT_MET300_v5',
         'HLT_MET600_v5',
         'HLT_MET700_v5',
+        'HLT_PFMET110_PFMHT110_IDTight_v3',
+        'HLT_PFMET110_PFMHT110_IDTight_v4',
+        'HLT_PFMET110_PFMHT110_IDTight_v5',
+        'HLT_PFMET110_PFMHT110_IDTight_v6',
+        'HLT_PFMET110_PFMHT110_IDTight_v7',
         'HLT_PFMET110_PFMHT110_IDTight_v8',
+        
+        'HLT_PFMET120_PFMHT120_IDTight_v3',
+        'HLT_PFMET120_PFMHT120_IDTight_v4',
+        'HLT_PFMET120_PFMHT120_IDTight_v5',
+        'HLT_PFMET120_PFMHT120_IDTight_v6',
+        'HLT_PFMET120_PFMHT120_IDTight_v7',
         'HLT_PFMET120_PFMHT120_IDTight_v8',
         'HLT_PFMET170_BeamHaloCleaned_v7',
         'HLT_PFMET170_HBHECleaned_v9',
         'HLT_PFMET170_HBHE_BeamHaloCleaned_v5',
         'HLT_PFMET170_JetIdCleaned_v8',
         'HLT_PFMET170_NoiseCleaned_v9',
+        'HLT_PFMET170_NotCleaned_v2',
+        'HLT_PFMET170_NotCleaned_v3',
+        'HLT_PFMET170_NotCleaned_v4',
+        'HLT_PFMET170_NotCleaned_v5',
+        'HLT_PFMET170_NotCleaned_v6',
+        'HLT_PFMET170_NotCleaned_v7',
         'HLT_PFMET170_NotCleaned_v8',
+        
+        'HLT_PFMET300_v2',
+        'HLT_PFMET300_v3',
+        'HLT_PFMET300_v4',
+        'HLT_PFMET300_v5',
+        'HLT_PFMET300_v6',
         'HLT_PFMET300_v7',
+        'HLT_PFMET300_v8',
         'HLT_PFMET400_v7',
         'HLT_PFMET500_v7',
         'HLT_PFMET600_v7',
