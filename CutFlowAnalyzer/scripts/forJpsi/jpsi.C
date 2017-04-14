@@ -65,9 +65,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   if(verbose) cout<<" dirNames  "<<dirNames[0]<<endl;
   
   
-  bool alldata=false;
-  //  bool alldata=true;
-  //  bool mcsps=true;
+  //  bool alldata=false;
+  bool alldata=true;
+  //    bool mcsps=true;
   bool mcsps=false;
   if(alldata) Run_period = "all";
   if(mcsps) Run_period = "SPS";
@@ -170,11 +170,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *eta_Mu2_aftTrig = new TH1F("eta_Mu2_aftTrig","",100,-2.5,2.5);
   TH1F *eta_Mu3_aftTrig = new TH1F("eta_Mu3_aftTrig","",100,-2.5,2.5);
 
-  TH1F *diMuonC_Lxy_RegionA = new TH1F("diMuonC_Lxy_RegionA","",100,-0.3,2.0);
-  TH1F *diMuonF_Lxy_RegionA = new TH1F("diMuonF_Lxy_RegionA","",100,-0.3,2.0);
+  TH1F *diMuonC_Lxy_RegionA = new TH1F("diMuonC_Lxy_RegionA","",100,-0.3,1.0);
+  TH1F *diMuonF_Lxy_RegionA = new TH1F("diMuonF_Lxy_RegionA","",100,-0.3,1.0);
 
-  TH1F *diMuonC_Lxy_RegionC = new TH1F("diMuonC_Lxy_RegionC","",100,-0.3,2.0);
-  TH1F *diMuonF_Lxy_RegionC = new TH1F("diMuonF_Lxy_RegionC","",100,-0.3,2.0);
+  TH1F *diMuonC_Lxy_RegionC = new TH1F("diMuonC_Lxy_RegionC","",100,-0.3,1.0);
+  TH1F *diMuonF_Lxy_RegionC = new TH1F("diMuonF_Lxy_RegionC","",100,-0.3,1.0);
 
   TH1F *diMuonC_Rapidity_RegionA = new TH1F("diMuonC_Rapidity_RegionA","",100,-0.3,2.0);
   TH1F *diMuonF_Rapidity_RegionA = new TH1F("diMuonF_Rapidity_RegionA","",100,-0.3,2.0);
