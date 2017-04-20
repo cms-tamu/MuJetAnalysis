@@ -1,0 +1,6 @@
+*/python/*.pyc
+*/python/*/*.pyc
+*/python/__*__.py*
+*/python/*/__*__.py*
+*/python/*/*/*.pyc
+*/python/*/*/__*__.py*
