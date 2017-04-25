@@ -443,6 +443,7 @@ private:
   Int_t b_diMuonF_m2_FittedVtx_MHAV;
 
   Float_t b_diMuonC_FittedVtx_Lxy;
+  Float_t b_diMuonC_FittedVtx_Lxy_rclstvtx;
   Float_t b_diMuonC_FittedVtx_L;
   Float_t b_diMuonC_FittedVtx_dz;
 
@@ -457,6 +458,7 @@ private:
   Float_t b_diMuonF_FittedVtx_vz;
 
   Float_t b_diMuonF_FittedVtx_Lxy;
+  Float_t b_diMuonF_FittedVtx_Lxy_rclstvtx; // respect to closest vertex
   Float_t b_diMuonF_FittedVtx_L;
   Float_t b_diMuonF_FittedVtx_dz;
 
@@ -1653,6 +1655,36 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_is2DiMuonsFittedVtxOK_VS = true;
     }
   }
+
+
+
+  // Cut on primary vertex in event
+  edm::Handle<reco::VertexCollection> primaryVertices;
+  iEvent.getByToken(m_primaryVertices, primaryVertices);
+
+
+  reco::VertexCollection::const_iterator closestPrimaryVertex = primaryVertices->end();
+  if (muJets->size() > 0) {
+    pat::MultiMuonCollection::const_iterator muJet0 = muJets->end();
+    for (pat::MultiMuonCollection::const_iterator muJet = muJets->begin();  muJet != muJets->end();  ++muJet) {
+      if (muJet->vertexValid()) {
+        muJet0 = muJet;
+        break;
+      }
+    }
+
+    if (muJet0 != muJets->end()) {
+      for (reco::VertexCollection::const_iterator vertex = primaryVertices->begin();  vertex != primaryVertices->end();  ++vertex) {
+        if (vertex->isValid()  &&  !vertex->isFake()  &&  vertex->tracksSize() > 3  &&  fabs(vertex->z()) < 24.) {
+          if (closestPrimaryVertex == primaryVertices->end()  ||  fabs(vertex->z() - muJet0->vertexPoint().z()) < fabs(closestPrimaryVertex->z() - muJet0->vertexPoint().z())) {
+            closestPrimaryVertex = vertex;
+          }
+        } // end vertex quality cuts                                                                                                                                    
+      } // end loop over primary vertices                                                                                                                               
+    } // end if muJet0 exists                                                                                                                                           
+  } // end if muJets->size > 0      
+
+
   // Fill branches with variables calculated with "old" fitted vertexes
   if ( b_is2DiMuonsFittedVtxOK ) {
     b_diMuonC_FittedVtx_m   = diMuonC->vertexMass();
@@ -1666,6 +1698,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonC_FittedVtx_vz  = diMuonC->vertexPoint().z();
 
     b_diMuonC_FittedVtx_Lxy = diMuonC->vertexLxy(beamSpotPosition);
+    b_diMuonC_FittedVtx_Lxy_rclstvtx = diMuonC->vertexLxy(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
     b_diMuonC_FittedVtx_L   = diMuonC->vertexL(beamSpotPosition);
     b_diMuonC_FittedVtx_dz  = diMuonC->vertexDz(beamSpot->position());
 
@@ -1680,6 +1713,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonF_FittedVtx_vz  = diMuonF->vertexPoint().z();
 
     b_diMuonF_FittedVtx_Lxy = diMuonF->vertexLxy(beamSpotPosition);
+    b_diMuonF_FittedVtx_Lxy_rclstvtx = diMuonF->vertexLxy(GlobalPoint(closestPrimaryVertex->x(), closestPrimaryVertex->y(), closestPrimaryVertex->z()));
     b_diMuonF_FittedVtx_L   = diMuonF->vertexL(beamSpotPosition);
     b_diMuonF_FittedVtx_dz  = diMuonF->vertexDz(beamSpot->position());
 
@@ -1697,6 +1731,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonC_FittedVtx_vz  = -1000.0;
 
     b_diMuonC_FittedVtx_Lxy = -1000.0;
+    b_diMuonC_FittedVtx_Lxy_rclstvtx = -1000.0;
     b_diMuonC_FittedVtx_L   = -1000.0;
     b_diMuonC_FittedVtx_dz  = -1000.0;
 
@@ -1711,6 +1746,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonF_FittedVtx_vz  = -1000.0;
 
     b_diMuonF_FittedVtx_Lxy = -1000.0;
+    b_diMuonF_FittedVtx_Lxy_rclstvtx = -1000.0;
     b_diMuonF_FittedVtx_L   = -1000.0;
     b_diMuonF_FittedVtx_dz  = -1000.0;
   }
@@ -2018,10 +2054,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     }
   }
 
-  // Cut on primary vertex in event
-  edm::Handle<reco::VertexCollection> primaryVertices;
-  iEvent.getByToken(m_primaryVertices, primaryVertices);
 
+  // Cut on primary vertex in event
   b_isVertexOK = false;
   for (reco::VertexCollection::const_iterator vertex = primaryVertices->begin();  vertex != primaryVertices->end();  ++vertex) {
     if (vertex->isValid() && !vertex->isFake() && vertex->tracksSize() >= 4 && fabs(vertex->z()) < 24.) {
@@ -3105,6 +3139,7 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonC_FittedVtx_vz",  &b_diMuonC_FittedVtx_vz,  "diMuonC_FittedVtx_vz/F");
 
   m_ttree->Branch("diMuonC_FittedVtx_Lxy", &b_diMuonC_FittedVtx_Lxy, "diMuonC_FittedVtx_Lxy/F");
+  m_ttree->Branch("diMuonC_FittedVtx_Lxy_rclstvtx", &b_diMuonC_FittedVtx_Lxy_rclstvtx, "diMuonC_FittedVtx_Lxy_rclstvtx/F");
   m_ttree->Branch("diMuonC_FittedVtx_L",   &b_diMuonC_FittedVtx_L,   "diMuonC_FittedVtx_L/F");
   m_ttree->Branch("diMuonC_FittedVtx_dz",  &b_diMuonC_FittedVtx_dz,  "diMuonC_FittedVtx_dz/F");
 
@@ -3119,6 +3154,7 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonF_FittedVtx_vz",  &b_diMuonF_FittedVtx_vz,  "diMuonF_FittedVtx_vz/F");
 
   m_ttree->Branch("diMuonF_FittedVtx_Lxy", &b_diMuonF_FittedVtx_Lxy, "diMuonF_FittedVtx_Lxy/F");
+  m_ttree->Branch("diMuonF_FittedVtx_Lxy_rclstvtx", &b_diMuonF_FittedVtx_Lxy_rclstvtx, "diMuonF_FittedVtx_Lxy_rclstvtx/F");
   m_ttree->Branch("diMuonF_FittedVtx_L",   &b_diMuonF_FittedVtx_L,   "diMuonF_FittedVtx_L/F");
   m_ttree->Branch("diMuonF_FittedVtx_dz",  &b_diMuonF_FittedVtx_dz,  "diMuonF_FittedVtx_dz/F");
 
