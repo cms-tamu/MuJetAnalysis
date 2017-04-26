@@ -13,7 +13,7 @@ process.options.allowUnscheduled = cms.untracked.bool(False)
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.AODtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
