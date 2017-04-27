@@ -2002,18 +2002,18 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
           if(k==1) b_diMuonC_m2_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
           if(k==1) b_diMuonC_m2_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
 
-          if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
             if(k==0) b_diMuonC_m1_FittedVtx_hitpix = 1;
             if(k==1) b_diMuonC_m2_FittedVtx_hitpix = 1;
           }
-          if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
-	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
             if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l2inc = 1;
             if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l2inc = 1;
           }
-          if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
-	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel() ||
-	     p.hasValidHitInThirdPixelBarrel()){
+          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
             if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l3inc = 1;
             if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l3inc = 1;
           }
@@ -2031,18 +2031,18 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
           if(k==1) b_diMuonF_m2_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
           if(k==1) b_diMuonF_m2_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
 
-          if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
             if(k==0) b_diMuonF_m1_FittedVtx_hitpix = 1;
             if(k==1) b_diMuonF_m2_FittedVtx_hitpix = 1;
           }
-          if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
-	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
             if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l2inc = 1;
             if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l2inc = 1;
           }
-          if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel() ||
-	     p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel() ||
-	     p.hasValidHitInThirdPixelBarrel()){
+          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
             if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l3inc = 1;
             if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l3inc = 1;
           }
