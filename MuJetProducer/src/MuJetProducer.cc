@@ -380,7 +380,7 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   }
 
   // output #1: a collection of pairs of muons
-  std::auto_ptr<pat::MultiMuonCollection> Pairs(new pat::MultiMuonCollection);
+  std::unique_ptr<pat::MultiMuonCollection> Pairs(new pat::MultiMuonCollection);
 
   // set of jets and intermediate jets (pairs are all intermediate jets)
   // true means active (can be merged), false means inactive (already merged: data is in the merged jet)
@@ -458,7 +458,7 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   }
 
   // output #2: a collection of muons not belonging to any surviving pair
-  std::auto_ptr<pat::MuonCollection> Orphans(new pat::MuonCollection);
+  std::unique_ptr<pat::MuonCollection> Orphans(new pat::MuonCollection);
   for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
     if (muonOkay(*muon)) {
       bool isUsed = false;
@@ -517,14 +517,14 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   } while (newjets_size > 0);
 
   // output #3: a collection of equivalence classes of shared daughters
-  std::auto_ptr<pat::MultiMuonCollection> EquivalenceClasses(new pat::MultiMuonCollection);
+  std::unique_ptr<pat::MultiMuonCollection> EquivalenceClasses(new pat::MultiMuonCollection);
   for (unsigned int i = 0;  i < jets.size();  i++) {
     if (active[i]) EquivalenceClasses->push_back(jets[i]);
   }
 
-  iEvent.put(Pairs, "Pairs"); 
-  iEvent.put(Orphans, "Orphans");
-  iEvent.put(EquivalenceClasses); 
+  iEvent.put(std::move(Pairs), "Pairs"); 
+  iEvent.put(std::move(Orphans), "Orphans");
+  iEvent.put(std::move(EquivalenceClasses)); 
 }
 
 // ------------ method called once each job just before starting event loop  ------------

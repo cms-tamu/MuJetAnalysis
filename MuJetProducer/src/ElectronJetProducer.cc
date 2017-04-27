@@ -347,7 +347,7 @@ void ElectronJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
   }
 
   // output #1: a collection of pairs of electrons
-  std::auto_ptr<pat::MultiElectronCollection> Pairs(new pat::MultiElectronCollection);
+  std::unique_ptr<pat::MultiElectronCollection> Pairs(new pat::MultiElectronCollection);
 
   // set of jets and intermediate jets (pairs are all intermediate jets)
   // true means active (can be merged), false means inactive (already merged: data is in the merged jet)
@@ -422,7 +422,7 @@ void ElectronJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
   }
 
   // output #2: a collection of electrons not belonging to any surviving pair
-  std::auto_ptr<pat::ElectronCollection> Orphans(new pat::ElectronCollection);
+  std::unique_ptr<pat::ElectronCollection> Orphans(new pat::ElectronCollection);
   for (pat::ElectronCollection::const_iterator electron = electrons->begin();  electron != electrons->end();  ++electron) {
     if (electronOkay(*electron)) {
       bool isUsed = false;
@@ -481,14 +481,14 @@ void ElectronJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSe
   } while (newjets_size > 0);
 
   // output #3: a collection of equivalence classes of shared daughters
-  std::auto_ptr<pat::MultiElectronCollection> EquivalenceClasses(new pat::MultiElectronCollection);
+  std::unique_ptr<pat::MultiElectronCollection> EquivalenceClasses(new pat::MultiElectronCollection);
   for (unsigned int i = 0;  i < jets.size();  i++) {
     if (active[i]) EquivalenceClasses->push_back(jets[i]);
   }
 
-  iEvent.put(Pairs, "Pairs"); 
-  iEvent.put(Orphans, "Orphans");
-  iEvent.put(EquivalenceClasses); 
+  iEvent.put(std::move(Pairs), "Pairs"); 
+  iEvent.put(std::move(Orphans), "Orphans");
+  iEvent.put(std::move(EquivalenceClasses)); 
 }
 
 // ------------ method called once each job just before starting event loop  ------------

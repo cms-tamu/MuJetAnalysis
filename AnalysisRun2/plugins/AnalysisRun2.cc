@@ -1735,17 +1735,17 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		if(k==1) std::cout<<"  matching   gt  mu2 muJetC  "<<counter_gt<<std::endl;
 	      }
 	      const reco::HitPattern& p = track->hitPattern();
-	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
 		b_muJetC_hitpix_genTrk[k] = 1;
 		if(m_debug>10){
 		  if(k==0) std::cout<<"  hit   gt  mu1 muJetC  "<<counter_gt<<std::endl;
 		  if(k==1) std::cout<<"  hit   gt  mu2 muJetC  "<<counter_gt<<std::endl;
 		}
 	      }
-	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
 		b_muJetC_hitpix_2ndlay_genTrk[k] = 1;
 	      }
-	      if(p.hasValidHitInThirdPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
 		b_muJetC_hitpix_3rdlay_genTrk[k] = 1;
 	      }
 	    }
@@ -1758,17 +1758,17 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		if(k==1) std::cout<<"  matching   gt  mu2 muJetF  "<<counter_gt<<std::endl;
 	      }
 	      const reco::HitPattern& p = track->hitPattern();
-	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
 		b_muJetF_hitpix_genTrk[k] = 1;
 		if(m_debug>10){
 		  if(k==0) std::cout<<"  hit   gt  mu1 muJetF  "<<counter_gt<<std::endl;
 		  if(k==1) std::cout<<"  hit   gt  mu2 muJetF  "<<counter_gt<<std::endl;
 		}
 	      }
-	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
 	      	b_muJetF_hitpix_2ndlay_genTrk[k] = 1;
 	      }
-	      if(p.hasValidHitInThirdPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
 	      	b_muJetF_hitpix_3rdlay_genTrk[k] = 1;
 	      }
 	    }
@@ -2053,7 +2053,7 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  	  }
 
       	  	  // const reco::HitPattern& p = trackrf->hitPattern();
-      	  	  // if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  	  // if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
       	  	  // 	//		dim1_hit=true;
       	  	  // 	indxtrkmj1_validhit[k] = 1;
       	  	  // 	b_muJetC_hitpix[k] = 1;
@@ -2072,7 +2072,7 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 		    }
 
 		    // const reco::HitPattern& p = trackrf->hitPattern();
-		    // if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+		    // if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
 		    //   //		dim2_hit=true;
 		    //   indxtrkmj2_validhit[k] = 1;
 		    //   b_muJetF_hitpix[k] = 1;
@@ -2171,16 +2171,16 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	      if(m_debug>10) std::cout<<" match refitted  id mj1_0  "<<counter_track_hit<<std::endl;
       	      const reco::HitPattern& p = trackrf->hitPattern();
-      	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
 		if(m_debug>10) std::cout<<" match refitted  hit "<<std::endl;
       	  	//		dim1_hit=true;
       	  	indxtrkmj1_validhit[0] = 1;
       	  	b_muJetC_hitpix[0] = 1;
       	      }
-	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
 	      	b_muJetC_hitpix_2ndlay[0] = 1;
 	      }
-	      if(p.hasValidHitInThirdPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
 	      	b_muJetC_hitpix_3rdlay[0] = 1;
 	      }
 	      
@@ -2190,16 +2190,16 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	      if(m_debug>10) std::cout<<" match refitted  id mj1_1 "<<counter_track_hit<<std::endl;
       	      const reco::HitPattern& p = trackrf->hitPattern();
-      	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
 		if(m_debug>10) std::cout<<" match refitted  hit      "<<std::endl;
       	  	//		dim1_hit=true;
       	  	indxtrkmj1_validhit[1] = 1;
       	  	b_muJetC_hitpix[1] = 1;
       	      }
-	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
 	      	b_muJetC_hitpix_2ndlay[1] = 1;
 	      }
-	      if(p.hasValidHitInThirdPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
 	      	b_muJetC_hitpix_3rdlay[1] = 1;
 	      }
 
@@ -2210,16 +2210,16 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	      if(m_debug>10) std::cout<<" match refitted  id mj2_0 "<<counter_track_hit<<std::endl;
       	      const reco::HitPattern& p = trackrf->hitPattern();
-      	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
 		if(m_debug>10) std::cout<<" match refitted  hit      "<<std::endl;
       	  	//		dim1_hit=true;
       	  	indxtrkmj2_validhit[0] = 1;
       	  	b_muJetF_hitpix[0] = 1;
       	      }
-	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
 	      	b_muJetF_hitpix_2ndlay[0] = 1;
 	      }
-	      if(p.hasValidHitInThirdPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
 	      	b_muJetF_hitpix_3rdlay[0] = 1;
 	      }
 
@@ -2229,16 +2229,16 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	      if(m_debug>10) std::cout<<" match refitted  id mj2_1 "<<counter_track_hit<<std::endl;
       	      const reco::HitPattern& p = trackrf->hitPattern();
-      	      if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
 		if(m_debug>10) std::cout<<" match refitted  hit      "<<std::endl;
       	  	//		dim1_hit=true;
       	  	indxtrkmj2_validhit[1] = 1;
       	  	b_muJetF_hitpix[1] = 1;
       	      }
-	      if(p.hasValidHitInSecondPixelEndcap() || p.hasValidHitInSecondPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
 	      	b_muJetF_hitpix_2ndlay[1] = 1;
 	      }
-	      if(p.hasValidHitInThirdPixelBarrel()){
+	      if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
 	      	b_muJetF_hitpix_3rdlay[1] = 1;
 	      }
 	    }
@@ -2261,7 +2261,7 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  // 	if(k==1) std::cout<<"  match mj1m1 muon track with indx gentrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
       	  //       }
       	  //       const reco::HitPattern& p = track->hitPattern();
-      	  //       if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  //       if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
       	  // 	//		dim1_hit=true;
 	  // 	  //      	  	indxtrkmj1_validhit_gt[k] = 1;
       	  // 	b_muJetC_hitpix_gt[k] = 1;
@@ -2279,7 +2279,7 @@ AnalysisRun2::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
       	  // 	if(k==1) std::cout<<"  match mj2m1 muon track with indx genTrk  "<<counter_match<<" track pT  "<<track->pt()<<std::endl;
       	  //       }
       	  //       const reco::HitPattern& p = track->hitPattern();
-      	  //       if(p.hasValidHitInFirstPixelEndcap() || p.hasValidHitInFirstPixelBarrel()){
+      	  //       if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
       	  // 	//		dim2_hit_gt=true;
 	  // 	  //      	  	indxtrkmj2_validhit_gt[k] = 1;
       	  // 	b_muJetF_hitpix_gt[k] = 1;
