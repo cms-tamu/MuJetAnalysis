@@ -13,6 +13,7 @@
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/DetId/interface/DetId.h"
 #include "DataFormats/GeometrySurface/interface/Cylinder.h"
 #include "DataFormats/GeometrySurface/interface/Plane.h"
