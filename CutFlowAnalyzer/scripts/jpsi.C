@@ -188,6 +188,41 @@ void efficiency(const std::vector<std::string>& dirNames)
     int nentries;
     
     
+    t->SetBranchStatus("*",0);
+    t->SetBranchStatus("event",1);
+    t->SetBranchStatus("diMuonC_FittedVtx_m",1);
+    t->SetBranchStatus("diMuonC_FittedVtx_m",1);
+    t->SetBranchStatus("diMuonF_FittedVtx_m",1);
+    t->SetBranchStatus("nRecoMu",1);
+    t->SetBranchStatus("is1SelMu3p5",1);
+    t->SetBranchStatus("is2SelMu3p5",1);
+    t->SetBranchStatus("is3SelMu3p5",1);
+    t->SetBranchStatus("is4SelMu3p5",1);
+    t->SetBranchStatus("selMu0_pT",1);
+    t->SetBranchStatus("selMu1_pT",1);
+    t->SetBranchStatus("selMu2_pT",1);
+    t->SetBranchStatus("selMu3_pT",1);
+    t->SetBranchStatus("massC",1);
+    t->SetBranchStatus("massF",1);
+    t->SetBranchStatus("selMu0_eta",1);
+    t->SetBranchStatus("selMu1_eta",1);
+    t->SetBranchStatus("selMu2_eta",1);
+    t->SetBranchStatus("selMu3_eta",1);
+    t->SetBranchStatus("diMuonC_IsoTk_FittedVtx",1);
+    t->SetBranchStatus("diMuonF_IsoTk_FittedVtx",1);
+    t->SetBranchStatus("is2DiMuons",1);
+    t->SetBranchStatus("is2DiMuonsFittedVtxOK",1);
+    t->SetBranchStatus("diMuons_dz_FittedVtx",1);
+    t->SetBranchStatus("is2DiMuonsMassOK_FittedVtx",1);
+    t->SetBranchStatus("isDiMuonHLTFired",1);
+    t->SetBranchStatus("diMuonC_IsoTk_FittedVtx",1);
+    t->SetBranchStatus("diMuonF_IsoTk_FittedVtx",1);
+    t->SetBranchStatus("diMuonC_m1_FittedVtx_hitpix_l3inc",1);
+    t->SetBranchStatus("diMuonC_m2_FittedVtx_hitpix_l3inc",1);
+    t->SetBranchStatus("diMuonF_m1_FittedVtx_hitpix_l3inc",1);
+    t->SetBranchStatus("diMuonF_m2_FittedVtx_hitpix_l3inc",1);
+    
+    
     t->SetBranchAddress("event",&event);
     t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
     t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
