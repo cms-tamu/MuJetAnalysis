@@ -1,0 +1,9 @@
+cp eff_2D_LxyLz_A0.pdf                 eff_2D_LxyLz_A0_nofid.pdf             
+cp eff_2D_LxyLz_A1.pdf		    eff_2D_LxyLz_A1_nofid.pdf             
+cp Efficiency_1D_LXY.pdf		    Efficiency_1D_LXY_nofid.pdf           
+cp Efficiency_1D_Lz.pdf		    Efficiency_1D_Lz_nofid.pdf            
+cp EfficiencyByEta_vs_Lxy.pdf	    EfficiencyByEta_vs_Lxy_nofid.pdf      
+cp EfficiencyByEta_vs_Lxy_Trig.pdf	    EfficiencyByEta_vs_Lxy_Trig_nofid.pdf 
+cp EfficiencyByEta_vs_Lz.pdf	    EfficiencyByEta_vs_Lz_nofid.pdf       
+cp EfficiencyByEta_vs_Lz_Trig.pdf	    EfficiencyByEta_vs_Lz_Trig_nofid.pdf  
+cp Efficiency_vs_Gen_pT.pdf            Efficiency_vs_Gen_pT_nofid.pdf        
