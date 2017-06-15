@@ -1,5 +1,4 @@
 import FWCore.ParameterSet.Config as cms
-from PhysicsTools.PatAlgos.tools.helpers import getPatAlgosToolsTask
 
 process = cms.Process("MUONJET")
 
@@ -21,7 +20,7 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:/fdata/hepx/store/user/dildick/DarkSusy/DarkSusy_m1_ct20_RAWRECO_03/170609_191712/0000/out_hlt.root'
+        'file:/afs/cern.ch/user/d/dildick/public/darkSUSYPat92X/out_hlt.root'
     )
 )
 
