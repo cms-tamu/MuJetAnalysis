@@ -3,32 +3,30 @@ from TrackingTools.GeomPropagators.SmartPropagator_cff import *
 from TrackingTools.MaterialEffects.MaterialPropagator_cfi import *
 from TrackingTools.MaterialEffects.OppositeMaterialPropagator_cfi import *
 from PhysicsTools.PatAlgos.patSequences_cff import *
-from PhysicsTools.PatAlgos.triggerLayer1.triggerProducer_cfi import *
-from PhysicsTools.PatAlgos.triggerLayer1.triggerEventProducer_cfi import *
-#from PhysicsTools.PatAlgos.triggerLayer1.triggerMatcher_cfi import * -- deprecated in 73
+from PhysicsTools.PatAlgos.triggerLayer1.triggerProducer_cff import *
 
-muonMatch = muonMatch.clone(
-    src = cms.InputTag("muons"),
-    resolveByMatchQuality = cms.bool(True)
-)
-patMuons = patMuons.clone(
-    muonSource = cms.InputTag("muons"),
-    genParticleMatch = cms.InputTag("muonMatch"),
-    addTeVRefits = cms.bool(False),
-    embedTrack = cms.bool(True),
-    embedCombinedMuon = cms.bool(True),
-    embedStandAloneMuon = cms.bool(True),
-    embedPickyMuon = cms.bool(False),
-    embedTpfmsMuon = cms.bool(False),
-    embedHighLevelSelection = cms.bool(True),
-    usePV = cms.bool(True),
-    beamLineSrc = cms.InputTag("offlineBeamSpot"),
-    pvSrc = cms.InputTag("offlinePrimaryVertices"),
-    isolation = cms.PSet(),
-    isoDeposits = cms.PSet(),
-    embedCaloMETMuonCorrs = cms.bool(False),
-    embedTcMETMuonCorrs = cms.bool(False),
-)
+## muon matcher
+muonMatch.src = cms.InputTag("muons")
+muonMatch.resolveByMatchQuality = cms.bool(True)
+
+## pat muon
+patMuons.muonSource = cms.InputTag("muons")
+patMuons.genParticleMatch = cms.InputTag("muonMatch")
+patMuons.addTeVRefits = cms.bool(False)
+patMuons.embedTrack = cms.bool(True)
+patMuons.embedCombinedMuon = cms.bool(True)
+patMuons.embedStandAloneMuon = cms.bool(True)
+patMuons.embedPickyMuon = cms.bool(False)
+patMuons.embedTpfmsMuon = cms.bool(False)
+patMuons.embedHighLevelSelection = cms.bool(True)
+patMuons.usePV = cms.bool(True)
+patMuons.beamLineSrc = cms.InputTag("offlineBeamSpot")
+patMuons.pvSrc = cms.InputTag("offlinePrimaryVertices")
+patMuons.isolation = cms.PSet()
+patMuons.isoDeposits = cms.PSet()
+patMuons.embedCaloMETMuonCorrs = cms.bool(False)
+patMuons.embedTcMETMuonCorrs = cms.bool(False)
+
 # Tracker Muons Part
 selectedPatTrackerMuons = selectedPatMuons.clone(
     src = cms.InputTag("patMuons"),
@@ -154,20 +152,27 @@ patifyPFMuon = cms.Sequence(
     cleanPFMuonTriggerMatchHLTTrkMu17DoubleTrkMu8 *
     cleanPatPFMuonsTriggerMatch
 )
-patifyData = cms.Sequence(
+
+patifyProducers = cms.Sequence(
+    patTrigger*
+    patTriggerEvent*
     pfParticleSelectionForIsoSequence *
     muonPFIsolationPATSequence *
-    patMuons * 
-    patTrigger * 
-    patTriggerEvent * 
+    patMuons
+)
+
+patifyFilters = cms.Sequence(
     patifyTrackerMuon * 
     patifyPFMuon
 )
-patifyMC = cms.Sequence(
-    muonMatch * 
-    patifyData
+
+patifyData = cms.Sequence(
+    patifyProducers *
+    patifyFilters
 )
 
-patDefaultSequence = cms.Sequence()
-patCandidates = cms.Sequence()
-makePatMuons = cms.Sequence()
+patifyMC = cms.Sequence(
+    muonMatch *
+    patifyProducers *
+    patifyFilters
+)
