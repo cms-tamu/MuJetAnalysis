@@ -153,12 +153,16 @@ patifyPFMuon = cms.Sequence(
     cleanPatPFMuonsTriggerMatch
 )
 
+patTriggerTask = cms.Task(
+    patTrigger,
+    patTriggerEvent
+)
+
 patifyProducers = cms.Sequence(
-    patTrigger*
-    patTriggerEvent*
-    pfParticleSelectionForIsoSequence *
-    muonPFIsolationPATSequence *
-    patMuons
+    pfParticleSelectionForIsoSequence*
+    muonPFIsolationPATSequence*
+    patMuons,
+    patTriggerTask
 )
 
 patifyFilters = cms.Sequence(
