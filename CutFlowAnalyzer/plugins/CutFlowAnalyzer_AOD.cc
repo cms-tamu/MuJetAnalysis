@@ -20,6 +20,7 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/Math/interface/LorentzVector.h"
+#include "DataFormats/L1Trigger/interface/Muon.h"
 #include "DataFormats/MuonReco/interface/MuonChamberMatch.h"
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/MuonReco/interface/MuonSegmentMatch.h"
@@ -304,6 +305,7 @@ private:
   //****************************************************************************
   
   // Labels to access
+  edm::EDGetTokenT<l1t::MuonBxCollection> ugmtMuonToken;
   edm::EDGetTokenT<pat::MuonCollection> m_muons;        // reconstructed muons
   edm::EDGetTokenT<pat::MultiMuonCollection> m_muJets;       // muon jets built from reconstructed muons
   edm::EDGetTokenT<reco::BeamSpot> m_beamSpot;
@@ -362,6 +364,8 @@ private:
   Int_t missingHitsAfterVertex_diMuonF_FittedVTX;
   Int_t missingHitsAfterVertex_diMuonC_ConsistentVTX;
   Int_t missingHitsAfterVertex_diMuonF_ConsistentVTX;
+
+  Bool_t b_isL1Fired;
 
   Bool_t b_isDiMuonHLTFired;
 
@@ -761,6 +765,7 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
   //                 SET RECO LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
 
+  ugmtMuonToken     = consumes<l1t::MuonBxCollection>(iConfig.getParameter<edm::InputTag>("muonProducer"));
   m_muons           = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"));
   m_muJets          = consumes<pat::MultiMuonCollection>(iConfig.getParameter<edm::InputTag>("muJets"));
   m_beamSpot        = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
@@ -1814,9 +1819,47 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
 
   // HLT cut
+  b_isL1Fired = false;
   b_isDiMuonHLTFired = false;
   b_hltPaths.clear();
 
+  edm::Handle<l1t::MuonBxCollection> MuonBxCollection;
+  iEvent.getByToken(ugmtMuonToken, MuonBxCollection);
+  int nMu_15_5 = 0;
+  int nMu_4_4_4 = 0;
+
+  std::vector<float> l1mu_pt;
+  // for (int itBX = MuonBxCollection->getFirstBX(); itBX <= MuonBxCollection->getLastBX(); ++itBX) {
+  //   std::cout << "BX " << itBX << std::endl
+  int iL1Mu = 0;
+  int iL1MuPt4 = 0;
+  int iL1MuPt5 = 0;
+  for (l1t::MuonBxCollection::const_iterator Muon = MuonBxCollection->begin(0); Muon != MuonBxCollection->end(0); ++Muon) {
+    std::cout << "pt " << Muon->pt() << " eta " << Muon->eta() << " phi " << Muon->phi() << " charge " << Muon->charge() << std::endl;
+    l1mu_pt.push_back(Muon->pt());
+    iL1Mu++;
+    if (Muon->pt()>=4) iL1MuPt4++;
+    if (Muon->pt()>=5) iL1MuPt5++;
+    // ugmtMuonPt->Fill(Muon->pt());
+    // ugmtMuonEta->Fill(Muon->eta());
+    // ugmtMuonPhi->Fill(Muon->phi());
+    // ugmtMuonEtaAtVtx->Fill(Muon->etaAtVtx());
+    // ugmtMuonPhiAtVtx->Fill(Muon->phiAtVtx());
+    // ugmtMuonCharge->Fill(Muon->charge());
+  }
+  if (iL1MuPt5>=2){
+    for (float& n : l1mu_pt) {
+      std::cout << "\tpt " << n << std::endl;
+      if (n>=15) nMu_15_5 = 1;
+    }
+  }
+  // }
+  if (iL1MuPt4>=3) nMu_4_4_4=1;
+  
+  if (nMu_15_5==1 or nMu_4_4_4==1) {
+    b_isL1Fired = true;
+    std::cout << "Pass L1 cut!" << std::endl;
+  }
   // HLT cut
   edm::Handle<pat::TriggerEvent> triggerEvent;
   iEvent.getByToken(m_triggerEvent, triggerEvent);
@@ -3200,6 +3243,7 @@ CutFlowAnalyzer_AOD::beginJob() {
 
   m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
   m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
+  m_ttree->Branch("isL1Fired",               &b_isL1Fired,               "isL1Fired/O");
   m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
   m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");

@@ -20,12 +20,12 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:/afs/cern.ch/user/d/dildick/public/darkSUSYPat92X/out_hlt.root'
+        'file:out_hlt_1.root'
     )
 )
 
 process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string('patTuple.root')
+                               fileName = cms.untracked.string('out_pat.root')
 )
 
 ### Add MuJet Dataformats
@@ -36,14 +36,13 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 
 process.p = cms.Path(
-    process.patifyFilters+
+    process.patifyMC*
+    process.MuJetProducers* 
     process.cutFlowAnalyzers
     )
 
-process.patifyProducersEndPath = cms.EndPath(
-    process.muonMatch *
-    process.patifyProducers *
-    process.MuJetProducers 
+process.ep = cms.EndPath(
+    process.out
 )
 
 process.TFileService = cms.Service("TFileService",
