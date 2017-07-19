@@ -775,9 +775,9 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
-  runBBestimation_ = iConfig.getParameter<bool>("runBBestimation");
+  runBBestimation_ = true;//iConfig.getParameter<bool>("runBBestimation");
   skimOutput_ = iConfig.getParameter<bool>("skimOutput");
-
+  skimOutput_ = true;
   m_randomSeed = 1234;
   m_trandom3   = TRandom3(m_randomSeed); // Random generator 
 

@@ -3,7 +3,8 @@ config = config()
 
 config.section_("General")
 config.General.workArea = 'crab_projects'
-config.General.transferLogs = True
+config.General.transferLogs = False
+config.General.instance = 'preprod' #! Autom-splitting
 
 config.section_("JobType")
 config.JobType.pluginName = 'Analysis'
@@ -12,8 +13,11 @@ config.JobType.outputFiles = ['out_ana.root']
 
 config.section_("Data")
 config.Data.inputDBS = 'global'
-config.Data.splitting = 'LumiBased'
-config.Data.unitsPerJob = 10
+#config.Data.splitting = 'LumiBased' #! Old splitting
+#config.Data.unitsPerJob = 15 #! Old splitting
+config.Data.splitting = 'Automatic' #! Autom-splitting
+hour = 60 ** 2
+config.Data.unitsPerJob = 6 * hour #! Autom-splitting
 config.Data.lumiMask = 'Cert_271036-284044_13TeV_PromptReco_Collisions16_JSON.txt'
 #config.Data.outLFNDirBase = '/store/group/alca_muonalign/lpernie/DoubleMuonRun2015D_PromptReco_AOD246908-258750_7412p4_patch1_patTuple_cutana_mujets'
 #config.Data.outLFNDirBase = '/store/group/lpcdarksusy/'
@@ -28,5 +32,6 @@ if __name__ == '__main__':
     from CRABAPI.RawCommand import crabCommand
     for dataset in ['/DoubleMuon/Run2016B-23Sep2016-v1/AOD','/DoubleMuon/Run2016B-23Sep2016-v3/AOD','/DoubleMuon/Run2016C-23Sep2016-v1/AOD','/DoubleMuon/Run2016D-23Sep2016-v1/AOD','/DoubleMuon/Run2016E-23Sep2016-v1/AOD','/DoubleMuon/Run2016F-23Sep2016-v1/AOD','/DoubleMuon/Run2016G-23Sep2016-v1/AOD','/DoubleMuon/Run2016H-PromptReco-v1/AOD','/DoubleMuon/Run2016H-PromptReco-v2/AOD','/DoubleMuon/Run2016H-PromptReco-v3/AOD']:
         config.Data.inputDataset = dataset
+#        config.General.requestName = "M60_" + dataset.split('/')[2]
         config.General.requestName = dataset.split('/')[2]
         crabCommand('submit', config = config)

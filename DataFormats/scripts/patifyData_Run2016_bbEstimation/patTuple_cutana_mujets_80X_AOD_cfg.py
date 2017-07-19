@@ -36,6 +36,9 @@ from MuJetAnalysis.DataFormats.EventContent_version10_cff import *
 process = customizePatOutput(process)
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.cutFlowAnalyzer_Data.skimOutput = cms.bool(True)
+
+process.cutFlowAnalyzer_Data.runBBestimation = cms.bool(True)
 
 process.p = cms.Path(
     process.patifyData *
