@@ -21,8 +21,9 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 
 void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root")
 {
-  bool verbose(false);
-  for(std::string dirname : v) {
+  int nEvents = 0;
+  bool verbose(true);
+  for(const std::string& dirname : v) {
     TSystemDirectory dir(dirname.c_str(), dirname.c_str());
     TList *files = dir.GetListOfFiles();
     if (files) {
@@ -36,6 +37,7 @@ void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".
 	if (!file->IsDirectory() && fname.BeginsWith(ext)) {
 	  if (verbose) std::cout << "adding fname " << dirname + fname << std::endl;
 	  ch->Add(dirname + fname);
+	  std::cout << "Number of files " << ch->GetListOfFiles()->GetEntries() << std::endl;
 	}
       }
     }
