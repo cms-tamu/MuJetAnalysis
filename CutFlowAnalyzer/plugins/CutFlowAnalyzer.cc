@@ -288,6 +288,7 @@ private:
   //          HLT LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
   //****************************************************************************
 
+  std::vector<std::string> controlHltPaths_;
   std::vector<std::string> signalHltPaths_;
   std::vector<std::string> backupHltPaths_;
   std::vector<std::string> otherMuHltPaths_;
@@ -748,11 +749,13 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //                 SET HLT LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
 
+  controlHltPaths_ = iConfig.getParameter<std::vector<std::string> >("controlHltPaths");
   signalHltPaths_ = iConfig.getParameter<std::vector<std::string> >("signalHltPaths");
   backupHltPaths_ = iConfig.getParameter<std::vector<std::string> >("backupHltPaths");
   otherMuHltPaths_ = iConfig.getParameter<std::vector<std::string> >("otherMuHltPaths");
 
   allMuHltPaths_.clear();
+  allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(controlHltPaths_), std::end(controlHltPaths_));
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(signalHltPaths_), std::end(signalHltPaths_));
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(backupHltPaths_), std::end(backupHltPaths_));
   allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(otherMuHltPaths_), std::end(otherMuHltPaths_));
@@ -1859,21 +1862,40 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   edm::Handle<pat::TriggerEvent> triggerEvent;
   iEvent.getByToken(m_triggerEvent, triggerEvent);
   
+  // b_isDiMuonHLTFired = false;
+  // b_hltPaths.clear();
+  // for (auto p : allMuHltPaths_){
+  //   if ( !triggerEvent->path(p) ) {
+  //     if ( m_debug > 10 ) std::cout << p << " is not present in patTriggerEvent!" << std::endl;
+  //   }
+  //   else{
+  //     if ( triggerEvent->path(p)->wasAccept() ) {
+  //       b_hltPaths.push_back(p);
+  //       if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p) != signalHltPaths_.end()) {
+  //         b_isDiMuonHLTFired = true;
+  //       }
+  //     }
+  //   }
+  // }
+
   b_isDiMuonHLTFired = false;
   b_hltPaths.clear();
-  for (auto p : allMuHltPaths_){
-    if ( !triggerEvent->path(p) ) {
-      if ( m_debug > 10 ) std::cout << p << " is not present in patTriggerEvent!" << std::endl;
-    }
-    else{
-      if ( triggerEvent->path(p)->wasAccept() ) {
-        b_hltPaths.push_back(p);
-        if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p) != signalHltPaths_.end()) {
-          b_isDiMuonHLTFired = true;
-        }
-      }
+
+  edm::Handle<edm::TriggerResults> TrResults;
+  iEvent.getByToken( m_trigRes, TrResults);
+  const TriggerResults *trRes = TrResults.product();
+  int ntrigs = trRes->size();
+  edm::TriggerNames const& triggerNames = iEvent.triggerNames(*trRes);
+  for (int itrig = 0; itrig != ntrigs; ++itrig) {
+    TString trigName = triggerNames.triggerName(itrig);
+    std::string trigNameStr(trigName.Data());
+    if (trRes->accept(triggerNames.triggerIndex(trigNameStr))){
+      std::cout << "triggered by path " << trigNameStr << std::endl;
+      b_hltPaths.push_back(trigNameStr);
+      b_isDiMuonHLTFired = true;
     }
   }
+
   
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on HLT" << std::endl;
 
