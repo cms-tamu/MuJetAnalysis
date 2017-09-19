@@ -18,14 +18,16 @@ process.load("MuJetAnalysis.DataFormats.AODtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
 
-process.source = cms.Source("PoolSource",
+process.source = cms.Source(
+    "PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:/afs/cern.ch/user/d/dildick/public/darkSUSYPat92X/out_hlt.root'
+        'file:/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_1000_cT_020_14TeV/DarkSUSY_mH_125_mGammaD_1000_cT_020_13TeV_RECO_v4/170917_042120/0000/out_reco_262.root'
     )
 )
 
-process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string('patTuple.root')
+process.out = cms.OutputModule(
+    "PoolOutputModule",
+    fileName = cms.untracked.string('patTuple.root')
 )
 
 ### Add MuJet Dataformats
@@ -36,14 +38,9 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 
 process.p = cms.Path(
-    process.patifyFilters+
+    process.patifyMC *
+    process.MuJetProducers *
     process.cutFlowAnalyzers
-    )
-
-process.patifyProducersEndPath = cms.EndPath(
-    process.muonMatch *
-    process.patifyProducers *
-    process.MuJetProducers 
 )
 
 process.TFileService = cms.Service("TFileService",

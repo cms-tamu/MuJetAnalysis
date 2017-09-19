@@ -1829,47 +1829,22 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   b_isDiMuonHLTFired = false;
   b_hltPaths.clear();
 
-  // for (auto p : allMuHltPaths_){
-  //   if ( !triggerEvent->path(p) ) {
-  //     if ( m_debug > 10 ) std::cout << p << " is not present in patTriggerEvent!" << std::endl;
-  //   }
-  //   else{
-  //     if ( triggerEvent->path(p)->wasAccept() ) {
-  //       b_hltPaths.push_back(p);
-  //       if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p) != signalHltPaths_.end()) {
-  //         b_isDiMuonHLTFired = true;
-  //       }
-  //     }
-  //   }
-  // }
-
-  // for(UInt_t iPath = 0 ; iPath < isoTriggerNames_.size() ; ++iPath)
-  //   {
-  //     if(passesSingleMuonFlag==1) continue;
-  //     std::string pathName=isoTriggerNames_.at(iPath);
-
-  //     bool passTrig=false;
-  //     //cout<<"testing pathName                         = "<<pathName<<endl;
-  //     //cout<<"trigNames.triggerIndex(pathName) = "<<trigNames.triggerIndex(pathName)<<endl;
-  //     // cout<<"trigNames.triggerIndex(pathName)<trigNames.size()= "<<(trigNames.triggerIndex(pathName)<trigNames.size())<<endl;
-          
-  //     if(trigNames.triggerIndex(pathName)<trigNames.size()) passTrig=triggerResults->accept(trigNames.triggerIndex(pathName));
-  //     // cout<<"pass = "<<passTrig<<endl;
-  //     if(passTrig) passesSingleMuonFlag=1;
-  //   }   
-
   int ntrigs = trRes->size();
   for (int itrig = 0; itrig != ntrigs; ++itrig) {
     TString trigName = triggerNames.triggerName(itrig);
     std::string trigNameStr(trigName.Data());
     if (trRes->accept(triggerNames.triggerIndex(trigNameStr))){
-      // std::cout << "Trigger path accept: " << trigName << std::endl;
-      // if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
+
       b_hltPaths.push_back(trigNameStr);
-      if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl;
+
+      if ( m_debug > 10 ) std::cout << "Event triggered " << trigNameStr << std::endl;
+      
+      if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
+	
+      if ( m_debug > 10 ) std::cout << "Event triggered signal path: " << trigName << std::endl;
       b_isDiMuonHLTFired = true;
+      }
     }
-    // }
   }
   
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on HLT" << std::endl;
