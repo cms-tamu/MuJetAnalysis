@@ -1,38 +1,19 @@
-# Run quiet mode
-import sys
-sys.argv.append( '-b' )
-import ROOT
-ROOT.gROOT.SetBatch(1)
-ROOT.gErrorIgnoreLevel=1001
-from ROOT import *
-import random
-import numpy
-import math
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 ## user packages
-import Helpers
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from Helpers import *
+from ROOT import *
 
-M_PI = 4*math.atan(1)
+## open the file with locations to MC files
+readTextFileWithSamples("../DarkSUSY_All_2016.txt")
 
-#______________________________________________________________________________
-def deltaPhi2(phi1, phi2):
-  result = phi1 - phi2;
-  while (result > M_PI):
-    result -= 2*M_PI;
-  while (result <= -M_PI):
-    result += 2*M_PI;
-  return result;
+chain = TChain("Events")
 
+location = "/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_3_13TeV_pythia8/DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_3_13TeV_pythia8_PATANA_v1/170716_080047/0000/"
 
-#______________________________________________________________________________
-def deltaR(eta1, phi1, eta2, phi2):
-    dEta = eta1 - eta2
-    dPhi = deltaPhi2(phi1, phi2)
-    dR = math.sqrt(dEta*dEta + dPhi*dPhi)
-    return dR
+## files = addfiles(chain, location)
 
+print decodeDarkSUSYFileName(location)
 
 exit(1)
 ## 

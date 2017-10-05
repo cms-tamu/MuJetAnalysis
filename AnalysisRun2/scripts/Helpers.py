@@ -1,148 +1,146 @@
-"""
-def addfiles(ch, dirname=".", ext=".root")
-{
-  verbose = False
-  dir = TSystemDirectory(dirname, dirname);
-  files = dir.GetListOfFiles();
-  if (files) {
-    if (verbose) std::cout << "Found files" << std::endl;
-    TSystemFile *file;
-    TString fname;
-    TIter next(files);
-    while ((file=(TSystemFile*)next())) {
-      fname = file->GetName();
-      if (verbose) std::cout << "found fname " << fname << std::endl;
-      if (!file->IsDirectory() && fname.BeginsWith(ext)) {
-        if (verbose) std::cout << "adding fname " << fname << std::endl;
-        ch->Add(fname);
-      }
-    }
-  }
-}
+# Run quiet mode
+import sys
+sys.argv.append( '-b' )
+import ROOT
+ROOT.gROOT.SetBatch(1)
+ROOT.gErrorIgnoreLevel=1001
+from ROOT import *
+import random
+import numpy
+import math
 
-void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root")
-{
-  bool verbose(false);
-  for(std::string dirname : v) {
-    TSystemDirectory dir(dirname.c_str(), dirname.c_str());
-    TList *files = dir.GetListOfFiles();
-    if (files) {
-      if (verbose) std::cout << "Found files" << std::endl;
-      TSystemFile *file;
-      TString fname;
-      TIter next(files);
-      while ((file=(TSystemFile*)next())) {
-	fname = file->GetName();
-	if (verbose) std::cout << "found fname " << dirname + fname << std::endl;
-	if (!file->IsDirectory() && fname.BeginsWith(ext)) {
-	  if (verbose) std::cout << "adding fname " << dirname + fname << std::endl;
-	  ch->Add(dirname + fname);
-	}
-      }
-    }
-  }
-}
+M_PI = 4*math.atan(1)
 
-struct tokens: std::ctype<char> 
-{
- tokens(): std::ctype<char>(get_table()) {}
-
-  static std::ctype_base::mask const* get_table()
-  {
-    typedef std::ctype<char> cctype;
-    static const cctype::mask *const_rc= cctype::classic_table();
-
-    static cctype::mask rc[cctype::table_size];
-    std::memcpy(rc, const_rc, cctype::table_size * sizeof(cctype::mask));
-
-    rc['_'] = std::ctype_base::space; 
-    rc['-'] = std::ctype_base::space; 
-    return &rc[0];
-  }
-};
-
-void decodeDarkSUSYFileName(const TString& fileName,
-			    TString& neutralino_string,
-			    TString& mass_string, TString& cT_string)
-{  
-  // template: DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV
-  TString str1 = "DarkSUSY_mH_125_mN1_";
-  Ssiz_t loc1 = fileName.Index(str1);
-  TString substr(fileName(loc1, 100)); 
-
-  std::stringstream ss(std::string(substr.Data()));
-  ss.imbue(std::locale(std::locale(), new tokens()));
-  std::istream_iterator<std::string> begin(ss);
-  std::istream_iterator<std::string> end;
-  std::vector<std::string> vstrings(begin, end);
-  
-  neutralino_string = vstrings[4];
-  mass_string = vstrings[6];
-  cT_string = vstrings[8];
-
-  bool verbose(false);
-  if (verbose) cout << "neutralino_string " << neutralino_string << " mass_string " << mass_string << " cT_string " << cT_string << endl;
-}
-
-void decodeNMSSMFileName(const TString& fileName, TString& mH_string, TString& mA_string)
-{  
-  // template: NMSSM_HToAATo4Mu_M-XXX_M-YYYY_TuneCUETP8M1
-  TString str1 = "NMSSM_HToAATo4Mu_M-";
-  Ssiz_t loc1 = fileName.Index(str1);
-  TString substr(fileName(loc1, 100)); 
-
-  std::stringstream ss(std::string(substr.Data()));
-  ss.imbue(std::locale(std::locale(), new tokens()));
-  std::istream_iterator<std::string> begin(ss);
-  std::istream_iterator<std::string> end;
-  std::vector<std::string> vstrings(begin, end);
-  
-  mH_string = vstrings[3];
-  mA_string = vstrings[5];
-
-  bool verbose(false);
-  if (verbose) cout << "mH_string " << mH_string << " mA_string " << mA_string << endl;
-}
+#______________________________________________________________________________
+def deltaPhi(phi1, phi2):
+  result = phi1 - phi2;
+  while (result > M_PI):
+    result -= 2*M_PI;
+  while (result <= -M_PI):
+    result += 2*M_PI;
+  return result;
 
 
-void decodeFileDarkSUSYNameMany(const std::vector<string>& v, TString& neutralino_string,
-				TString& mass_string, TString& cT_string)
-{  
-  decodeDarkSUSYFileName(v[0], neutralino_string, mass_string, cT_string);
-  bool verbose(true);
-  if (verbose) cout << "neutralino_string " << neutralino_string << " mass_string " << mass_string << " cT_string " << cT_string << endl;
-}
+#______________________________________________________________________________
+def deltaR(eta1, phi1, eta2, phi2):
+    dEta = eta1 - eta2
+    dPhi = deltaPhi2(phi1, phi2)
+    dR = math.sqrt(dEta*dEta + dPhi*dPhi)
+    return dR
 
-void decodeFileNMSSMNameMany(const std::vector<string>& v, TString& mH_string, TString& mA_string)
-{  
-  decodeNMSSMFileName(v[0], mH_string, mA_string);
-  bool verbose(false);
-  if (verbose) cout << "mH_string " << mH_string << " mA_string " << mA_string << endl;
-}
-
-
-void readTextFileWithSamples(const std::string fileName, std::vector< std::vector<string> >& v)
-{
-  ifstream infile(fileName);
-  string line;
-  std::vector<string> vv;
-  while (std::getline(infile, line)) {
-    if (line.empty()) {
-      v.push_back(vv);
-      vv.clear();
-    }
-    else {
-      if (line.back() != '/') 
-	line += '/';
-	vv.push_back(line);
-    }
-  }
-  v.push_back(vv);
-  infile.close();
-}
-
-"""
+#______________________________________________________________________________
 def printFileNames(listWithFiles):
     for p in listWithFiles:
         for q in p:
             print q
+
+#______________________________________________________________________________
+## this function puts the list of MC samples in a 2D vector
+## the first dimension determines the mass/ctau
+## the second dimension is the list of associated directories
+def readTextFileWithSamples(fileName):
+  all_samples = []
+  sample = []
+
+  debug = False
+
+  f = open(fileName, 'r')
+  for line in f:
+    if debug:
+      print line
+    ## if line is empty add the sample to the list
+    if not line.strip():
+      if debug:
+        print ">> add file to list"
+      all_samples.append(sample)
+      sample = []
+    else:
+      if debug:
+        print ">> append sample"
+      ## add a slash if it is not done yet
+      if not line.endswith("/"):
+        line += '/'
+      ## removing trailing \n/
+      if line.endswith("\n/"):
+        line = line.replace("\n/","")
+      ## add file to the list
+      sample.append(line)
+
+  f.close()
+
+  return all_samples
+
+
+#______________________________________________________________________________
+## add ROOT files to a chain
+def addfiles(ch, dirname=".", ext="out_ana"):
+  verbose = False
+  dir = TSystemDirectory(dirname, dirname);
+  files = dir.GetListOfFiles();
+
+  debug = False
+
+  ## print file pointer
+  if debug:
+    print files
+
+  ## check if list is not empty
+  if not files.First():
+    print "file list is empty"
+  else:
+    for pp in files:
+      fname = pp.GetName()
+      ## check if file is not a directory
+      if (not pp.IsDirectory() and ext in fname):
+        ch.Add(dirname + fname)
+        ## print "Adding", dirname + fname
+
+
+#______________________________________________________________________________
+## add many ROOT files to a chain
+def addfilesMany(ch, dirnames, ext="out_ana"):
+  for dirname in dirnames:
+    addfiles(ch, dirname, ext)
+
+
+#______________________________________________________________________________
+def decodeDarkSUSYFileName(fileName):
+  ## DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV
+
+  ## only take the part that starts with the substring above
+  substring_index = fileName.find("DarkSUSY_mH_125_mN1_")
+  substring = fileName[substring_index:]
+
+  ## split up the string in substrings
+  fileName_array = substring.split("_")
+
+  neutralino_string = fileName_array[4];
+  mass_string = fileName_array[6];
+  cT_string = fileName_array[8];
+  return neutralino_string, mass_string, cT_string
+
+
+#______________________________________________________________________________
+def decodeNMSSMFileName(fileName):
+  ## NMSSM_HToAATo4Mu_M-XXX_M-YYYY_TuneCUETP8M1
+
+  ## only take the part that starts with the substring above
+  substring_index = fileName.find("NMSSM_HToAATo4Mu_M-")
+  substring = fileName[substring_index:]
+
+  ## split up the string in substrings
+  fileName_array = substring.split("_")
+
+  mH_string = fileName_array[3];
+  mA_string = fileName_array[5];
+  return mH, mA
+
+
+#______________________________________________________________________________
+def decodeDarkSUSYFileNameMany(fileNames):
+  return decodeDarkSUSYFileName(fileNames[0])
+
+
+#______________________________________________________________________________
+def decodeNMSSMFileNameMany(fileNames):
+  return decodeNMSSMFileName(fileNames[0])
