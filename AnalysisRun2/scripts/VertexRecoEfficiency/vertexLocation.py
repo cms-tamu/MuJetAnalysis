@@ -5,24 +5,33 @@ from Helpers import *
 from ROOT import *
 
 ## open the file with locations to MC files
-readTextFileWithSamples("../DarkSUSY_All_2016.txt")
+mcSamples = readTextFileWithSamples("../DarkSUSY_All_2016.txt")
 
-chain = TChain("Events")
+print mcSamples
 
-location = "/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_3_13TeV_pythia8/DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_3_13TeV_pythia8_PATANA_v1/170716_080047/0000/"
+for sample in mcSamples:
+    chain = TChain("cutFlowAnalyzerPXBL3PXFL2/Events")
+    chain = addfilesMany(chain, sample)
+    n1, ma, ctau = decodeDarkSUSYFileNameMany(sample)
+    print n1, ma, ctau, chain.GetEntries() 
+    
+    lxy_pointer = TH1F("lxy", "Lxy distribution", 150, 0, 300);
+    chain.Draw("genA0_Lxy>>lxy_pointer");        
+    
+    c1 = TCanvas("c1","test",800,600);
+    c1.cd()
+    lxy_pointer.Draw();
+    canvasName = getDarkSUSYFileName(n1, ma, ctau)
+    c1.SaveAs(canvasName + "_temp" + ".png")
 
-## files = addfiles(chain, location)
+    break
 
-print decodeDarkSUSYFileName(location)
-
+    #for event in range(0,chain.GetEntries()):
+    #    chain.GetEntry(event)
+    #    print "Processing event", event
+   
+   
 exit(1)
-## 
-file = TFile("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_PAT_ANA_V2_v1/170124_224445/0000/out_ana_1.root")
-
-#file = TFile("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p05_13TeV_pythia8/DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p05_13TeV_pythia8_PATANA_v1/170716_075345/0000/out_ana_1.root")
-
-dirAna = file.Open("cutFlowAnalyzerPXBL3PXFL2")
-tree = file.Get("cutFlowAnalyzerPXBL3PXFL2/Events") 
 
 for k in range(0,tree.GetEntries()):
     tree.GetEntry(k)

@@ -94,6 +94,7 @@ def addfiles(ch, dirname=".", ext="out_ana"):
       if (not pp.IsDirectory() and ext in fname):
         ch.Add(dirname + fname)
         ## print "Adding", dirname + fname
+  return ch
 
 
 #______________________________________________________________________________
@@ -101,7 +102,7 @@ def addfiles(ch, dirname=".", ext="out_ana"):
 def addfilesMany(ch, dirnames, ext="out_ana"):
   for dirname in dirnames:
     addfiles(ch, dirname, ext)
-
+  return ch
 
 #______________________________________________________________________________
 def decodeDarkSUSYFileName(fileName):
@@ -118,6 +119,11 @@ def decodeDarkSUSYFileName(fileName):
   mass_string = fileName_array[6];
   cT_string = fileName_array[8];
   return neutralino_string, mass_string, cT_string
+
+
+#______________________________________________________________________________
+def getDarkSUSYFileName(neutralino_string, mass_string, cT_string):
+  return "DarkSUSY_mH_125_mN1_" + neutralino_string + "_mGammaD_" + mass_string + "_cT_" + cT_string + "_13TeV"
 
 
 #______________________________________________________________________________
