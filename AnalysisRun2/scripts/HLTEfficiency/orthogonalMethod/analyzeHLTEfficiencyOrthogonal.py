@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
   verbose = False
 
-  newFile = TFile.Open("out_ana_selected_3mu.root"); 
+  newFile = TFile.Open("out_ana_selected_170213_161713.root"); 
   treeHits = newFile.Get("Events");
 
   n3Mu = 0
@@ -118,20 +118,13 @@ if __name__ == "__main__":
     'HLT_PFMETTypeOne190_HBHE_BeamHaloCleaned_v'
     ]
 
-  draw_1D(treeHits, "0.1056583745*0.1056583745-selMu0_px*selMu1_px-selMu0_py*selMu1_py-selMu0_pz*selMu1_pz", "diMuonMass01", "", "(150,0,150)", cut="", opt = "")
-  draw_1D(treeHits, "0.1056583745*0.1056583745-selMu0_px*selMu2_px-selMu0_py*selMu2_py-selMu0_pz*selMu2_pz", "diMuonMass02", "", "(150,0,150)", cut="", opt = "")
-  draw_1D(treeHits, "0.1056583745*0.1056583745-selMu0_px*selMu3_px-selMu0_py*selMu3_py-selMu0_pz*selMu3_pz", "diMuonMass03", "", "(150,0,150)", cut="", opt = "")
-  draw_1D(treeHits, "0.1056583745*0.1056583745-selMu1_px*selMu2_px-selMu1_py*selMu2_py-selMu1_pz*selMu2_pz", "diMuonMass12", "", "(150,0,150)", cut="", opt = "")
-  draw_1D(treeHits, "0.1056583745*0.1056583745-selMu1_px*selMu3_px-selMu1_py*selMu3_py-selMu1_pz*selMu3_pz", "diMuonMass13", "", "(150,0,150)", cut="", opt = "")
-  draw_1D(treeHits, "0.1056583745*0.1056583745-selMu2_px*selMu3_px-selMu2_py*selMu3_py-selMu2_pz*selMu3_pz", "diMuonMass23", "", "(150,0,150)", cut="", opt = "")
-  """
-  draw_1D(treeHits, "selMu0_pT", "selMu0_pT", "title", "(50,0,100)", cut="", opt = "")
-  draw_1D(treeHits, "diMuonC_FittedVtx_m", "diMuonC_FittedVtx_m", "title", "(50,0,100)", cut="", opt = "")
-  """
+  draw_1D(treeHits, "diMuonC_FittedVtx_m", "diMuonMass01", ";Invariant mass (#mu_{0}, #mu_{1});Events", "(150,0,150)", cut="", opt = "")
+  draw_1D(treeHits, "diMuonF_FittedVtx_m", "diMuonMass02", ";Invariant mass (#mu_{0}, #mu_{1});Events", "(150,0,150)", cut="", opt = "")
 
   exit(1)
+
   ## ranges
-  for k in range(0,30000): #treeHits.GetEntries()
+  for k in range(0,100000): #treeHits.GetEntries()
       treeHits.GetEntry(k)
       
       if k%1000==0:
@@ -163,16 +156,19 @@ if __name__ == "__main__":
       if treeHits.selMu2_pT >= 15: nMuPt15 += 1
       if treeHits.selMu3_pT >= 15: nMuPt15 += 1
 
-      if treeHits.selMu0_pT >= 17: nMuPt17 += 1
-      if treeHits.selMu1_pT >= 17: nMuPt17 += 1
-      if treeHits.selMu2_pT >= 17: nMuPt17 += 1
-      if treeHits.selMu3_pT >= 17: nMuPt17 += 1
+      if treeHits.selMu0_pT >= 17 and abs(treeHits.selMu0_eta)<0.9: nMuPt17 += 1
+      if treeHits.selMu1_pT >= 17 and abs(treeHits.selMu1_eta)<0.9: nMuPt17 += 1
+      if treeHits.selMu2_pT >= 17 and abs(treeHits.selMu2_eta)<0.9: nMuPt17 += 1
+      if treeHits.selMu3_pT >= 17 and abs(treeHits.selMu3_eta)<0.9: nMuPt17 += 1
 
       if nMuPt5 >= 3: n3MuPt5 += 1
       if nMuPt5 >= 3 and nMuPt15 >= 1: n3MuPt5MuPt15 += 1
 
       if nMuPt8 >= 3: n4MuPt8 += 1
       if nMuPt8 >= 3 and nMuPt17 >= 1: n4MuPt8MuPt17 += 1
+
+      diMuonC_FittedVtx_m
+      diMuonF_FittedVtx_m
 
       ## calculate the dimuon invariant masses
       if treeHits.nRecoMu >=3:
@@ -201,19 +197,21 @@ if __name__ == "__main__":
         v1_v3 = v1.Dot(v3)
         v2_v3 = v2.Dot(v3)
         
-      print treeHits.selMu0_px, treeHits.selMu0_py, treeHits.selMu0_pz
-      print treeHits.selMu1_px, treeHits.selMu1_py, treeHits.selMu1_pz
-      print treeHits.selMu2_px, treeHits.selMu2_py, treeHits.selMu2_pz
-      print treeHits.selMu3_px, treeHits.selMu3_py, treeHits.selMu3_pz
-      print
-      print "invariant masses"
-      print v0_v1, v0_v2, v0_v3, v1_v2, v1_v3, v2_v3
-      print 
+      verbose = False
+      if verbose: 
+        print treeHits.selMu0_px, treeHits.selMu0_py, treeHits.selMu0_pz
+        print treeHits.selMu1_px, treeHits.selMu1_py, treeHits.selMu1_pz
+        print treeHits.selMu2_px, treeHits.selMu2_py, treeHits.selMu2_pz
+        print treeHits.selMu3_px, treeHits.selMu3_py, treeHits.selMu3_pz
+        print
+        print "invariant masses"
+        print v0_v1, v0_v2, v0_v3, v1_v2, v1_v3, v2_v3
+        print 
 
       def checkZMassConsistency(invM):
         return invM < 110 and invM > 70
 
-      def atLeastOneGoodDiMuon(v0_v1, v0_v2, v0_v3, v1_v2, v1_v3, v2_v3):
+      def atLeastOneGoodDiMuonZ(v0_v1, v0_v2, v0_v3, v1_v2, v1_v3, v2_v3):
         return (checkZMassConsistency(v0_v1) or 
                 checkZMassConsistency(v0_v2) or
                 checkZMassConsistency(v0_v3) or
@@ -221,11 +219,47 @@ if __name__ == "__main__":
                 checkZMassConsistency(v1_v3) or
                 checkZMassConsistency(v2_v3))
 
-      passZSelection = atLeastOneGoodDiMuon(v0_v1, v0_v2, v0_v3, v1_v2, v1_v3, v2_v3)
-      print "Passes Z mass", passZSelection
-      print
+      def checkJPsiMassConsistency(invM):
+        return invM < 3.2 and invM > 2.8
+
+      def atLeastOneGoodDiMuonJPsi(v0_v1, v0_v2, v0_v3, v1_v2, v1_v3, v2_v3):
+        return (checkJPsiMassConsistency(v0_v1) or 
+                checkJPsiMassConsistency(v0_v2) or
+                checkJPsiMassConsistency(v0_v3) or
+                checkJPsiMassConsistency(v1_v2) or
+                checkJPsiMassConsistency(v1_v3) or
+                checkJPsiMassConsistency(v2_v3))
+
+      goodDiMuonZ_01 = checkZMassConsistency(v0_v1)
+      goodDiMuonZ_02 = checkZMassConsistency(v0_v2)
+      goodDiMuonZ_03 = checkZMassConsistency(v0_v3)
+      goodDiMuonZ_12 = checkZMassConsistency(v1_v2)
+      goodDiMuonZ_13 = checkZMassConsistency(v1_v2)
+      goodDiMuonZ_23 = checkZMassConsistency(v2_v3)
+
+      minPt = 40
+      atLeastOneGoodDiMuonZ_v2 = (
+        ( checkZMassConsistency(v0_v1) and (treeHits.selMu2_pT > minPt or treeHits.selMu3_pT > minPt) ) or
+        ( checkZMassConsistency(v0_v2) and (treeHits.selMu1_pT > minPt or treeHits.selMu3_pT > minPt) ) or
+        ( checkZMassConsistency(v0_v3) and (treeHits.selMu1_pT > minPt or treeHits.selMu2_pT > minPt) ) or
+        ( checkZMassConsistency(v1_v2) and (treeHits.selMu0_pT > minPt or treeHits.selMu3_pT > minPt) ) or
+        ( checkZMassConsistency(v1_v3) and (treeHits.selMu0_pT > minPt or treeHits.selMu2_pT > minPt) ) or
+        ( checkZMassConsistency(v2_v3) and (treeHits.selMu0_pT > minPt or treeHits.selMu1_pT > minPt) )
+      )
+
+      passZSelection = atLeastOneGoodDiMuonZ(v0_v1, v0_v2, v0_v3, v1_v2, v1_v3, v2_v3)
+      passJPsiSelection = atLeastOneGoodDiMuonJPsi(v0_v1, v0_v2, v0_v3, v1_v2, v1_v3, v2_v3)
+
+      #extraSelection = treeHits.selMu0_pT > 20 and treeHits.selMu1_pT > 20 and (treeHits.selMu2_pT > 20 or treeHits.selMu3_pT > 20)
+      #passZSelection = passZSelection and extraSelection
+      #passZSelection_v2 = atLeastOneGoodDiMuonZ_v2
+
+      passZSelection_v2 = (checkZMassConsistency(treeHits.diMuonF_FittedVtx_m) or checkZMassConsistency(treeHits.diMuonC_FittedVtx_m)) and treeHits.orphan_PtOrph > 8
+
       
-      verbose = False
+      if verbose: print "Passes Z mass", passZSelection
+      if verbose: print
+      
       if treeHits.nRecoMu >= 3:
         n3Mu += 1
 
@@ -245,14 +279,21 @@ if __name__ == "__main__":
       if nMETTrigger2016 >= 1:
         nEvent_METTrigger2016 += 1
 
-        if nMuPt5 >= 3 and nMuPt15 >= 1 and passZSelection: 
+        if nMuPt8 >= 3 and nMuPt17 >= 1:# and passZSelection_v2: 
           denominator5 +=1 
+          print treeHits.diMuonF_FittedVtx_m, treeHits.diMuonC_FittedVtx_m
+          #print treeHits.selMu0_pT, treeHits.selMu0_eta, treeHits.selMu0_phi
+          #print treeHits.selMu1_pT, treeHits.selMu1_eta, treeHits.selMu1_phi
+          #print treeHits.selMu2_pT, treeHits.selMu2_eta, treeHits.selMu2_phi
+          #print treeHits.selMu3_pT, treeHits.selMu3_eta, treeHits.selMu3_phi
           #print treeHits.selMu0_pT, treeHits.selMu1_pT, treeHits.selMu2_pT, treeHits.selMu3_pT
-          #          for p in treeHits.hltPaths:
-          #            print p
+          #print
+          #for p in treeHits.hltPaths:
+          #  print p
           if isTripleMuTriggered: 
             numerator5 +=1
-
+            #print "\tPasses signal trigger" 
+            
         if nMuPt8 >= 4 and nMuPt17 >= 1: 
           denominator8 +=1 
           if isTripleMuTriggered: numerator8 +=1

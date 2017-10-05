@@ -8,6 +8,11 @@ from ROOT import *
 import random
 import numpy
 import math
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+## user packages
+import Helpers
 
 M_PI = 4*math.atan(1)
 
@@ -28,10 +33,12 @@ def deltaR(eta1, phi1, eta2, phi2):
     dR = math.sqrt(dEta*dEta + dPhi*dPhi)
     return dR
 
+
+exit(1)
 ## 
 file = TFile("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_PAT_ANA_V2_v1/170124_224445/0000/out_ana_1.root")
 
-file = TFile("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p05_13TeV_pythia8/DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p05_13TeV_pythia8_PATANA_v1/170716_075345/0000/out_ana_1.root")
+#file = TFile("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p05_13TeV_pythia8/DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p05_13TeV_pythia8_PATANA_v1/170716_075345/0000/out_ana_1.root")
 
 dirAna = file.Open("cutFlowAnalyzerPXBL3PXFL2")
 tree = file.Get("cutFlowAnalyzerPXBL3PXFL2/Events") 

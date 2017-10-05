@@ -34,7 +34,7 @@ process.out = cms.OutputModule("PoolOutputModule",
 from MuJetAnalysis.DataFormats.EventContent_version10_cff import *
 process = customizePatOutput(process)
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(250) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 process.p = cms.Path(
     process.patifyData *
@@ -42,7 +42,7 @@ process.p = cms.Path(
     process.cutFlowAnalyzers_Data
 )
 
-process.outpath = cms.EndPath(process.out)
+#process.outpath = cms.EndPath(process.out)
 
 process.TFileService = cms.Service("TFileService",
     fileName = cms.string("out_ana.root")
