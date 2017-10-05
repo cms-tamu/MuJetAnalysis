@@ -7,29 +7,52 @@ from ROOT import *
 ## open the file with locations to MC files
 mcSamples = readTextFileWithSamples("../DarkSUSY_All_2016.txt")
 
-print mcSamples
+
+Lxy_histos = {}
+Lxy_histos["0p25"] = {}
 
 for sample in mcSamples:
     chain = TChain("cutFlowAnalyzerPXBL3PXFL2/Events")
-    chain = addfilesMany(chain, sample)
-    n1, ma, ctau = decodeDarkSUSYFileNameMany(sample)
-    print n1, ma, ctau, chain.GetEntries() 
-    
-    lxy_pointer = TH1F("lxy", "Lxy distribution", 150, 0, 300);
-    chain.Draw("genA0_Lxy>>lxy_pointer");        
-    
-    c1 = TCanvas("c1","test",800,600);
-    c1.cd()
-    lxy_pointer.Draw();
-    canvasName = getDarkSUSYFileName(n1, ma, ctau)
-    c1.SaveAs(canvasName + "_temp" + ".png")
 
+    n1, ma, ctau = decodeDarkSUSYFileNameMany(sample)
+    print "Checking", "mN1", n1, "mA", ma, "cT", ctau
+
+    ## only process the low mass samples now
+    if ma != '0p25':
+        continue
+    
+    chain = addfilesMany(chain, sample)    
+    print "Processing", n1, ma, ctau, chain.GetEntries()
+
+    lxy_hist = TH1F("lxy_hist", "Lxy distribution", 150, 0, 300);
+    chain.Draw("genA0_Lxy>>lxy_hist");
+    Lxy_histos[ma][ctau] = lxy_hist
+    
+    """
     break
 
-    #for event in range(0,chain.GetEntries()):
-    #    chain.GetEntry(event)
-    #    print "Processing event", event
+    for event in range(0,chain.GetEntries()):
+        chain.GetEntry(event)
+        print "Processing event", event
+        print chain.genA0_Lxy
+
+    break
+    """
    
+c1 = TCanvas("c1","test",800,600);
+c1.cd()
+
+first = True
+for histo in Lxy_histos["0p25"]:
+    if first: 
+        lxy_hist.Draw();
+        first = False
+    else:
+        lxy_hist.Draw("same");
+    
+canvasName = getDarkSUSYFileName(n1, ma, ctau)
+c1.SaveAs(canvasName + "_temp" + ".png")
+
    
 exit(1)
 
