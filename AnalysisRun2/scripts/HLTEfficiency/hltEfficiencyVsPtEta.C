@@ -31,7 +31,9 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, const std::str
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
 
-  decodeFileDarkSUSYNameMany(dirNames, mass_string, cT_string);
+  mass_string = "0400";
+  cT_string = "000";
+  // decodeFileDarkSUSYNameMany(dirNames, mass_string, cT_string);
   fileName = "DarkSUSY_mH_125_mGammaD_" + mass_string + "_cT_" + cT_string;
   cout << "Tag name " << fileName << endl;
 
@@ -198,7 +200,7 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, const std::str
       if (selMu2_px!=-100 and selMu2_py!=-100) nMu++;
       if (selMu3_px!=-100 and selMu3_py!=-100) nMu++;
       
-      if (nMu>=4) {
+      if (nMu>=3) {
 	Float_t selMu0_pT = TMath::Sqrt(selMu0_px*selMu0_px + selMu0_py*selMu0_py);
 	Float_t selMu1_pT = TMath::Sqrt(selMu1_px*selMu1_px + selMu1_py*selMu1_py);
 	Float_t selMu2_pT = TMath::Sqrt(selMu2_px*selMu2_px + selMu2_py*selMu2_py);
@@ -251,7 +253,7 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, const std::str
   // Plots
   struct MyEfficiencyPlot
   {
-    static void plot(enum Variable v, TEfficiency* eff, TString cTitle) { 
+    static void plot(enum Variable v, TEfficiency* eff, const TString& cTitle, const TString& triggerName ) { 
 
       TCanvas *c = new TCanvas("c","c",700,500);
       gStyle->SetOptStat(0);
@@ -302,14 +304,14 @@ void efficiency_trigger(const std::vector<std::string>& dirNames, const std::str
       leg->AddEntry(eff,"m_{#gamma D}= " + mass_strings[mass_string] +  " GeV, " + "c#tau_{#gamma D}= " + cT_strings2[cT_string] + " mm", "PL");      
       leg->Draw("same");
 
-      c->SaveAs(TString("trigger_efficiency_plots_pt_eta_phi_20170919/" + cTitle + "_" + fileName + ".png"),"recreate");
+      c->SaveAs(TString("trigger_efficiency_plots_pt_eta_phi_20170920/" + cTitle + "_" + fileName + ".png"),"recreate");
       c->Clear();
     }
   };
 
-  MyEfficiencyPlot::plot(Variable::Pt,  eff_hlt_RECO_leading_pt_fid, "eff_hlt_RECO_vs_leading_pT");
-  MyEfficiencyPlot::plot(Variable::Eta, eff_hlt_RECO_leading_eta_fid, "eff_hlt_RECO_vs_leading_eta");
-  MyEfficiencyPlot::plot(Variable::Phi, eff_hlt_RECO_leading_phi_fid, "eff_hlt_RECO_vs_leading_phi");
+  MyEfficiencyPlot::plot(Variable::Pt,  eff_hlt_RECO_leading_pt_fid, "eff_hlt_RECO_vs_leading_pT", TString(triggerName));
+  MyEfficiencyPlot::plot(Variable::Eta, eff_hlt_RECO_leading_eta_fid, "eff_hlt_RECO_vs_leading_eta", TString(triggerName));
+  MyEfficiencyPlot::plot(Variable::Phi, eff_hlt_RECO_leading_phi_fid, "eff_hlt_RECO_vs_leading_phi", TString(triggerName));
 }
 
 void hltEfficiencyVsPtEta()
@@ -317,10 +319,12 @@ void hltEfficiencyVsPtEta()
   std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
   readTextFileWithSamples("ANASamplesSven4.txt", DarkSUSY_mH_125_mGammaD_v);
   // printFileNames(DarkSUSY_mH_125_mGammaD_v);
-
+  
   // this is the base name of the trigger
   // usually a number _v1,_v2,... is added for each iteration
-  std::string triggerName = "HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx";
-  for(const auto& v: DarkSUSY_mH_125_mGammaD_v) efficiency_trigger(v, triggerName);
+  std::string triggerName = "HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx";
+  for(const auto& v: DarkSUSY_mH_125_mGammaD_v) {
+    efficiency_trigger(v, triggerName);
+  }
 }
 

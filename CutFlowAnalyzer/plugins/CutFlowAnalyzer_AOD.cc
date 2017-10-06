@@ -1837,11 +1837,13 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
       b_hltPaths.push_back(trigNameStr);
 
-      if ( m_debug > 10 ) std::cout << "Event triggered " << trigNameStr << std::endl;
+      //if ( m_debug > 10 ) 
+      std::cout << "Event triggered " << trigNameStr << std::endl;
       
       if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
 	
-      if ( m_debug > 10 ) std::cout << "Event triggered signal path: " << trigName << std::endl;
+	//if ( m_debug > 10 ) 
+	std::cout << "Event triggered signal path: " << trigName << std::endl;
       b_isDiMuonHLTFired = true;
       }
     }

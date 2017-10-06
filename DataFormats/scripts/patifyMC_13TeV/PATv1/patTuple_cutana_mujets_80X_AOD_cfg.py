@@ -21,7 +21,7 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_1000_cT_020_14TeV/DarkSUSY_mH_125_mGammaD_1000_cT_020_13TeV_RECO_v4/170917_042120/0000/out_reco_262.root'
+        'file:/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_1000_cT_020_14TeV/DarkSUSY_mH_125_mGammaD_1000_cT_020_13TeV_RECO_v2/170919_201313/0000/out_reco_1.root'
     )
 )
 
