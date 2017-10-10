@@ -659,7 +659,7 @@ class HepPlotter(object):
             
         coords = {'top left':{'x':[0.0]*3,'y':[1.05,0.90,0.83]},\
                   'top right':{'x':[1.0]*3,'y':[1.05,0.90,0.83]},\
-                  'outer':{'x':[0.0,1,1],'y':[1.05,1.05,1.05]}}
+                  'outer':{'x':[0.0,1,1],'y':[1.01,1.01,1.01]}}
         text = coords[self.CMSlabel]
 
         energy = r"13 TeV"
@@ -667,17 +667,20 @@ class HepPlotter(object):
 
         if self.CMSlabel == 'top right':
             text_args['ha'] = 'right'
-        if self.dimensions==2:
+        if self.dimensions==2 or self.CMSlabel=='outer':
             text_args['va'] = 'bottom' # change alignment for 2d labels
 
         ## CMS Label
-        self.ax1.text(text['x'][0],text['y'][0],r"\textbf{CMS} "+ r"\textit{%s}"%(self.CMSlabelStatus),**text_args)
+        self.ax1.text(text['x'][0],text['y'][0],r"\textbf{CMS} "+ r"{\Large \textit{%s}}"%(self.CMSlabelStatus),**text_args)
 
         ## Luminosity & Energy
+        if self.dimensions==2 or self.CMSlabel=='outer':
+            text_args['ha'] = 'right' # change alignment for energy label
         if self.dimensions==2:
             text_args['ha'] = 'left' # change alignment for energy label
+
         if self.plotLUMI:
-            self.ax1.text(text['x'][1],text['y'][1],lumi + ", (" + energy + ")",**text_args)
+            self.ax1.text(text['x'][1],text['y'][1],lumi + " (" + energy + ")",**text_args)
         else:
             self.ax1.text(text['x'][1],text['y'][1],energy,**text_args)
 

@@ -143,12 +143,12 @@ def makePlot(effTuple, triggerPath):
     hist.format      = 'png'       # file format for saving image
     hist.saveAs      = "eff_" + triggerPath + "_" + effTuple[2] # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
-    hist.CMSlabelStatus = 'Simulation Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
+    hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
     #triggerPath.replace('_','\_')
     hist.extra_text.Add(r"\mathrm{" + triggerPath.replace('_','\_') + r"}",coords=[0.05,0.80])
     hist.drawStatUncertainty   = True
-
+    
     hist.Add(effTuple[0], draw='errorbar', color='blue', linecolor='blue')
     
     plot = hist.execute()
@@ -161,7 +161,7 @@ eff_hlt_RECO_leading_pt_fid = MyFile.Get("RECO_leading_pt_fid_clone")
 eff_hlt_RECO_leading_eta_fid = MyFile.Get("RECO_leading_eta_fid_clone")
 eff_hlt_RECO_leading_phi_fid = MyFile.Get("RECO_leading_phi_fid_clone")
 
-eff_pt = (eff_hlt_RECO_leading_pt_fid, r"Leading muon $p_\mathrm{T}$ [$\mathrm{GeV}$]", "pt")
+eff_pt = (eff_hlt_RECO_leading_pt_fid, r"Leading muon $p_\mathrm{T}$ [GeV]", "pt")
 eff_eta = (eff_hlt_RECO_leading_eta_fid, r"Leading muon #eta", "eta")
 eff_phi = (eff_hlt_RECO_leading_phi_fid, r"Leading muon #phi", "phi")
 
