@@ -125,6 +125,9 @@ def decodeDarkSUSYFileName(fileName):
 def getDarkSUSYFileName(neutralino_string, mass_string, cT_string):
   return "DarkSUSY_mH_125_mN1_" + neutralino_string + "_mGammaD_" + mass_string + "_cT_" + cT_string + "_13TeV"
 
+#______________________________________________________________________________
+def getDarkSUSYFileNameNoCT(neutralino_string, mass_string):
+  return "DarkSUSY_mH_125_mN1_" + neutralino_string + "_mGammaD_" + mass_string + "_13TeV"
 
 #______________________________________________________________________________
 def decodeNMSSMFileName(fileName):
@@ -150,3 +153,25 @@ def decodeDarkSUSYFileNameMany(fileNames):
 #______________________________________________________________________________
 def decodeNMSSMFileNameMany(fileNames):
   return decodeNMSSMFileName(fileNames[0])
+
+
+#______________________________________________________________________________
+## in a list with files, pick the ones associated to the dark boson mass
+def getDarkSUSYFileMaMass(all_samples, neutralino_string, mass_string):
+  return_list = []
+  for sample in all_samples:
+    decodedFileName = decodeDarkSUSYFileNameMany(sample)
+
+    ## must have correct neutralino mass
+    if decodedFileName[0] != neutralino_string:
+      continue
+
+    ## must have correct dark boson mass
+    if decodedFileName[1] != mass_string:
+      continue
+    
+    return_list.append(sample)
+    ## print decodedFileName
+  
+  ## print return_list
+  return return_list
