@@ -99,12 +99,15 @@ class HepPlotter(object):
         self.CMSlabel       = 'top left'     # 'top left', 'top right' & 'outer' for 2D
         self.CMSlabelStatus = 'Internal'  # ('Simulation')+'Internal' || 'Preliminary'
         self.format         = 'png'          # file format for saving image
+        self.saveDir        = './'
         self.saveAs         = "plot_{0}d_{1}".format(self.dimensions,self.CMSlabelStatus) # save figure with name
         self.numLegendColumns = 2
         self.legendLoc        = 1
         self.drawStatUncertainty   = False
         self.drawUncertaintyTopFig = False  # draw uncertainties in the top frame
         self.uncertaintyHistType   = 'step'
+        self.x_relative_size = 10
+        self.y_relative_size = 6
 
         return
 
@@ -280,7 +283,7 @@ class HepPlotter(object):
                                  'significance':self.ax2.get_yticks()[::2]}
 
         else:
-            fig,self.ax1 = plt.subplots(figsize=(10,6))
+            fig,self.ax1 = plt.subplots(figsize=(self.x_relative_size,self.y_relative_size))
 
 
         if self.typeOfPlot=="efficiency":
@@ -734,7 +737,7 @@ class HepPlotter(object):
 
     def savefig(self):
         """Save the figure"""
-        plt.savefig(self.saveAs+'.'+self.format,format=self.format,dpi=300,bbox_inches='tight')
+        plt.savefig(self.saveDir + self.saveAs+'.'+self.format,format=self.format,dpi=300,bbox_inches='tight')
         plt.close()
 
         return
