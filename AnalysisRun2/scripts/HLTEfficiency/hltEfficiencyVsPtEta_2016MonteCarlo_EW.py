@@ -13,7 +13,7 @@ from Helpers import *
 ##____________________________________________________________
 def efficiency_trigger(dirNames, triggerPaths):
 
-    verbose = False
+    verbose = True
 
     chain = ROOT.TChain("Events")
 
@@ -53,7 +53,7 @@ def efficiency_trigger(dirNames, triggerPaths):
         hlt_RECO_leading_phi_full[trigger] = ROOT.TH1D("hlt_RECO_leading_phi_full_" + trigger,"",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi())
 
     print "Adding files to the chain"
-    addfilesMany(chain, dirNames, "out_ana_selected_MET_2016BH_20171006.root")
+    addfilesMany(chain, dirNames, "out_ana")
 
     print "Loop over the chain"
     for rootFile in chain.GetListOfFiles():
@@ -71,11 +71,10 @@ def efficiency_trigger(dirNames, triggerPaths):
 
         if (verbose): print "Loading directory cutFlowAnalyzer_Data"
         
-        tree = myfile.Get("cutFlowAnalyzer_Data/Events")
-        tree = myfile.Get("Events")
+        tree = myfile.Get("cutFlowAnalyzerPXBL3PXFL2/Events")
 
         if not tree: 
-            if (verbose): print "Tree cutFlowAnalyzer_Data/Events does not exist"
+            if (verbose): print "Tree cutFlowAnalyzerPXBL3PXFL2/Events does not exist"
             continue
 
         if (verbose): print "  Events  ", tree.GetEntries()
@@ -108,7 +107,7 @@ def efficiency_trigger(dirNames, triggerPaths):
                 ## check each trigger
                 for trigger in triggerPaths:
 
-                    ## print list(tree.hltPaths)
+                    print list(tree.hltPaths)
                     if any(trigger in s for s in list(tree.hltPaths)):
                         if (verbose): print trigger, "is available"
 
@@ -163,7 +162,7 @@ def efficiency_trigger(dirNames, triggerPaths):
         eff_hlt_RECO_leading_eta_full[trigger] = ROOT.TEfficiency(hlt_RECO_leading_eta_full[trigger], RECO_leading_eta_full)
         eff_hlt_RECO_leading_phi_full[trigger] = ROOT.TEfficiency(hlt_RECO_leading_phi_full[trigger], RECO_leading_phi_full)
 
-    MyFile = TFile("HLT_efficiency_signal_backup_2016BH_13TeV.root","RECREATE");
+    MyFile = TFile("HLT_efficiency_signal_backup_2016MonteCarlo_EW_13TeV.root","RECREATE");
 
     for trigger in triggerPaths:
         eff_hlt_RECO_leading_pt[trigger].Write("eff_hlt_RECO_leading_pt_" + trigger)
@@ -178,9 +177,10 @@ def efficiency_trigger(dirNames, triggerPaths):
     
 
 
-dirNames = ['/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/']
+dirNames = ['/fdata/hepx/store/user/jrorie/EWK_13TeV_CALCHEP_50K_batch1_GEN_SIM_v1_TAMU/EWK_13TeV_CALCHEP_50K_batch1_PAT_ANA_v1/170208_165546/0000/']
 triggerPaths = ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx", "HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx"]
-efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx", "HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx"])
+
+#efficiency_trigger(dirNames, triggerPaths)
 
 def makePlot(effTuple, triggerPath, format='pdf'):
 
@@ -193,21 +193,24 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016METB-H_20171011/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_EW_20171011/'
     if 'full' in effTuple[0].GetName():
-        hist.saveAs      = "eff_" + triggerPath + "_2016BH_MuJetVtxDzIso_" + effTuple[2] # save figure with name
+        hist.saveAs      = "eff_" + triggerPath + "_2016MonteCarlo_EW_MuJetVtxDzIso_" + effTuple[2] # save figure with name
     else:
-        hist.saveAs      = "eff_" + triggerPath + "_2016BH_" + effTuple[2] # save figure with name
+        hist.saveAs      = "eff_" + triggerPath + "_2016MonteCarlo_EW_" + effTuple[2] # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
-    hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
+    hist.CMSlabelStatus = 'Simulation Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
-    hist.lumi = '2016 B-H, 37'
+    hist.plotLUMI = False
     hist.drawStatUncertainty = True    
     hist.Add(effTuple[0], draw='errorbar', color='blue', linecolor='blue', label=triggerPath.replace('_','\_'))
+
+    hist.extra_text.Add(r"$WZ+ZZ \rightarrow 4\mu$", coords=[0.1,0.4])
+
     plot = hist.execute()
     hist.savefig()
 
-MyFile = TFile("HLT_efficiency_signal_backup_2016BH_13TeV.root");
+MyFile = TFile("HLT_efficiency_signal_backup_2016MonteCarlo_EW_13TeV.root");
 
 eff_hlt_RECO_leading_pt = {}
 eff_hlt_RECO_leading_eta = {}
