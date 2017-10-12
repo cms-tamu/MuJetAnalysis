@@ -13,7 +13,7 @@ from Helpers import *
 ##____________________________________________________________
 def efficiency_trigger(dirNames, triggerPaths):
 
-    verbose = False
+    verbose = True
 
     chain = ROOT.TChain("Events")
 
@@ -195,7 +195,7 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2017METC_20171012/'
+    hist.saveDir     = 'trigger_efficiency_plots_2017CMET_20171012/'
     if 'full' in effTuple[0].GetName():
         hist.saveAs      = "eff_" + triggerPath + "_2017C_MuJetVtxDzIso_" + effTuple[2] # save figure with name
     else:
