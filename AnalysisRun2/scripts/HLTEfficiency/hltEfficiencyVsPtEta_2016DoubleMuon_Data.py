@@ -53,7 +53,8 @@ def efficiency_trigger(dirNames, triggerPaths):
         hlt_RECO_leading_phi_full[trigger] = ROOT.TH1D("hlt_RECO_leading_phi_full_" + trigger,"",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi())
 
     print "Adding files to the chain"
-    addfilesMany(chain, dirNames, "out_ana_selected_MET_2016BH_20171006.root")
+    for p in dirNames:
+        addfile(chain, p)
 
     print "Loop over the chain"
     for rootFile in chain.GetListOfFiles():
@@ -71,11 +72,10 @@ def efficiency_trigger(dirNames, triggerPaths):
 
         if (verbose): print "Loading directory cutFlowAnalyzer_Data"
         
-        tree = myfile.Get("cutFlowAnalyzer_Data/Events")
-        tree = myfile.Get("Events")
+        tree = myfile.Get("cutFlowAnalyzerPXBL3PXFL2_Data/Events")
 
         if not tree: 
-            if (verbose): print "Tree cutFlowAnalyzer_Data/Events does not exist"
+            if (verbose): print "Tree cutFlowAnalyzerPXBL3PXFL2_Data/Events does not exist"
             continue
 
         if (verbose): print "  Events  ", tree.GetEntries()
@@ -163,7 +163,7 @@ def efficiency_trigger(dirNames, triggerPaths):
         eff_hlt_RECO_leading_eta_full[trigger] = ROOT.TEfficiency(hlt_RECO_leading_eta_full[trigger], RECO_leading_eta_full)
         eff_hlt_RECO_leading_phi_full[trigger] = ROOT.TEfficiency(hlt_RECO_leading_phi_full[trigger], RECO_leading_phi_full)
 
-    MyFile = TFile("HLT_efficiency_signal_backup_2016BH_13TeV.root","RECREATE");
+    MyFile = TFile("HLT_efficiency_signal_backup_2016DoubleMuon_BCDEFGH_13TeV.root","RECREATE");
 
     for trigger in triggerPaths:
         eff_hlt_RECO_leading_pt[trigger].Write("eff_hlt_RECO_leading_pt_" + trigger)
@@ -177,10 +177,21 @@ def efficiency_trigger(dirNames, triggerPaths):
     MyFile.Close();
     
 
+dirNames = ['/fdata/hepx/store/user/lpernie/DoubleMuon/']
+triggerPaths = ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx", 
+                "HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx"]
 
-dirNames = ['/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/']
-triggerPaths = ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx", "HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx"]
-efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx", "HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx"])
+dirNames = [
+'/fdata/hepx/store/user/lpernie/DoubleMuon/crab_Run2016B-23Sep2016-v3_FINAL.root',
+'/fdata/hepx/store/user/lpernie/DoubleMuon/crab_Run2016C-23Sep2016-v1_FINAL.root',
+'/fdata/hepx/store/user/lpernie/DoubleMuon/crab_Run2016D-23Sep2016-v1_v2_FINAL.root',
+'/fdata/hepx/store/user/lpernie/DoubleMuon/crab_Run2016E-23Sep2016-v1_v2_FINAL.root',
+'/fdata/hepx/store/user/lpernie/DoubleMuon/crab_Run2016F-23Sep2016-v1_v2_FINAL.root',
+'/fdata/hepx/store/user/lpernie/DoubleMuon/crab_Run2016G-23Sep2016-v1_v2_FINAL.root',
+'/fdata/hepx/store/user/lpernie/DoubleMuon/crab_Run2016H-PromptReco-v3_v2_FINAL.root'
+]
+
+efficiency_trigger(dirNames, triggerPaths)
 
 def makePlot(effTuple, triggerPath, format='pdf'):
 
@@ -193,21 +204,21 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016METB-H_20171011/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016DoubleMuon_BCDEFGH_20171012/'
     if 'full' in effTuple[0].GetName():
-        hist.saveAs      = "eff_" + triggerPath + "_2016BH_MuJetVtxDzIso_" + effTuple[2] # save figure with name
+        hist.saveAs      = "eff_" + triggerPath + "_2016BCDEFGH_MuJetVtxDzIso_" + effTuple[2] # save figure with name
     else:
-        hist.saveAs      = "eff_" + triggerPath + "_2016BH_" + effTuple[2] # save figure with name
+        hist.saveAs      = "eff_" + triggerPath + "_2016BCDEFGH_" + effTuple[2] # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
-    hist.lumi = '2016 B-H, 37'
+    hist.lumi = '2016 DoubleMuon B-H, 37'
     hist.drawStatUncertainty = True    
     hist.Add(effTuple[0], draw='errorbar', color='blue', linecolor='blue', label=triggerPath.replace('_','\_'))
     plot = hist.execute()
     hist.savefig()
 
-MyFile = TFile("HLT_efficiency_signal_backup_2016BH_13TeV.root");
+MyFile = TFile("HLT_efficiency_signal_backup_2016DoubleMuon_BCDEFGH_13TeV.root");
 
 eff_hlt_RECO_leading_pt = {}
 eff_hlt_RECO_leading_eta = {}

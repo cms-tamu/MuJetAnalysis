@@ -13,7 +13,7 @@ from Helpers import *
 ##____________________________________________________________
 def efficiency_trigger(dirNames, triggerPaths):
 
-    verbose = True
+    verbose = False
 
     chain = ROOT.TChain("Events")
 
@@ -82,7 +82,7 @@ def efficiency_trigger(dirNames, triggerPaths):
 
         for k in range(0, tree.GetEntries()):
 
-            if k%100000==0: print "Processing event ", k 
+            if k%10000==0: print "Processing event ", k 
             tree.GetEntry(k)
 
             ## check for 4 reco muons 
@@ -110,7 +110,6 @@ def efficiency_trigger(dirNames, triggerPaths):
 
                     ## print list(tree.hltPaths)
                     if any(trigger in s for s in list(tree.hltPaths)):
-                        if (verbose): print trigger, "is available"
 
                         ## print "\tPass num"
                         hlt_RECO_leading_pt[trigger].Fill(tree.selMu0_pT)
