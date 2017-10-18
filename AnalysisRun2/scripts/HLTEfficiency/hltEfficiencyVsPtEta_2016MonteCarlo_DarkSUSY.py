@@ -49,22 +49,38 @@ def efficiency_trigger(dirNames, triggerPaths):
 
     darkSUSY = getDarkSUSYFileName(n1,ma,ctau)
 
-    RECO_leading_pt_fid = ROOT.TH1D("RECO_leading_pt_fid","",50,0.,50.);
-    RECO_leading_eta_fid = ROOT.TH1D("RECO_leading_eta_fid","",50,-2.5,2.5);
-    RECO_leading_phi_fid = ROOT.TH1D("RECO_leading_phi_fid","",60,-ROOT.TMath.Pi(),ROOT.TMath.Pi());
+    RECO_leading_pt = ROOT.TH1D("RECO_leading_pt","",25,0.,50.);
+    RECO_leading_eta = ROOT.TH1D("RECO_leading_eta","",25,-2.5,2.5);
+    RECO_leading_phi = ROOT.TH1D("RECO_leading_phi","",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi());
 
-    hlt_RECO_leading_pt_fid = {}
-    hlt_RECO_leading_eta_fid = {}
-    hlt_RECO_leading_phi_fid = {}
+    hlt_RECO_leading_pt = {}
+    hlt_RECO_leading_eta = {}
+    hlt_RECO_leading_phi = {}
     
-    eff_hlt_RECO_leading_pt_fid = {}
-    eff_hlt_RECO_leading_eta_fid = {}
-    eff_hlt_RECO_leading_phi_fid = {}
+    eff_hlt_RECO_leading_pt = {}
+    eff_hlt_RECO_leading_eta = {}
+    eff_hlt_RECO_leading_phi = {}
+
+    RECO_leading_pt_full = ROOT.TH1D("RECO_leading_pt_full","",25,0.,50.);
+    RECO_leading_eta_full = ROOT.TH1D("RECO_leading_eta_full","",25,-2.5,2.5);
+    RECO_leading_phi_full = ROOT.TH1D("RECO_leading_phi_full","",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi());
+
+    hlt_RECO_leading_pt_full = {}
+    hlt_RECO_leading_eta_full = {}
+    hlt_RECO_leading_phi_full = {}
+    
+    eff_hlt_RECO_leading_pt_full = {}
+    eff_hlt_RECO_leading_eta_full = {}
+    eff_hlt_RECO_leading_phi_full = {}
 
     for trigger in triggerPaths:
-        hlt_RECO_leading_pt_fid[trigger] = ROOT.TH1D(darkSUSY + "hlt_RECO_leading_pt_fid_" + trigger,"",50,0.,50.)
-        hlt_RECO_leading_eta_fid[trigger] = ROOT.TH1D(darkSUSY + "hlt_RECO_leading_eta_fid_" + trigger,"",50,-2.5,2.5)
-        hlt_RECO_leading_phi_fid[trigger] = ROOT.TH1D(darkSUSY + "hlt_RECO_leading_phi_fid_" + trigger,"",60,-ROOT.TMath.Pi(),ROOT.TMath.Pi())
+        hlt_RECO_leading_pt[darkSUSY + "_" + trigger] = ROOT.TH1D("hlt_RECO_leading_pt_" + trigger,"",25,0.,50.)
+        hlt_RECO_leading_eta[darkSUSY + "_" + trigger] = ROOT.TH1D("hlt_RECO_leading_eta_" + trigger,"",25,-2.5,2.5)
+        hlt_RECO_leading_phi[darkSUSY + "_" + trigger] = ROOT.TH1D("hlt_RECO_leading_phi_" + trigger,"",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi())
+
+        hlt_RECO_leading_pt_full[darkSUSY + "_" + trigger] = ROOT.TH1D("hlt_RECO_leading_pt_full_" + trigger,"",25,0.,50.)
+        hlt_RECO_leading_eta_full[darkSUSY + "_" + trigger] = ROOT.TH1D("hlt_RECO_leading_eta_full_" + trigger,"",25,-2.5,2.5)
+        hlt_RECO_leading_phi_full[darkSUSY + "_" + trigger] = ROOT.TH1D("hlt_RECO_leading_phi_full_" + trigger,"",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi())
         
     if verbose: print "Adding files to the chain"
     addfilesMany(chain, dirNames)
@@ -127,28 +143,58 @@ def efficiency_trigger(dirNames, triggerPaths):
                         if (verbose): print trigger, "is available"
 
                         ## print "\tPass num"
-                        hlt_RECO_leading_pt_fid[trigger].Fill(tree.selMu0_pT)
-                        hlt_RECO_leading_eta_fid[trigger].Fill(tree.selMu0_eta)
-                        hlt_RECO_leading_phi_fid[trigger].Fill(tree.selMu0_phi)
+                        hlt_RECO_leading_pt[darkSUSY + "_" + trigger].Fill(tree.selMu0_pT)
+                        hlt_RECO_leading_eta[darkSUSY + "_" + trigger].Fill(tree.selMu0_eta)
+                        hlt_RECO_leading_phi[darkSUSY + "_" + trigger].Fill(tree.selMu0_phi)
+
+                is2DiMuonsDzOK_FittedVtx = abs(tree.diMuonC_FittedVtx_dz - tree.diMuonF_FittedVtx_dz) < 0.1
+                is2DiMuonsIsoTkOK_FittedVtx = (tree.diMuonC_IsoTk_FittedVtx < 2 and tree.diMuonF_IsoTk_FittedVtx < 2)
+                is2DiMuonsPixelOk = ( (tree.diMuonC_m1_FittedVtx_hitpix_l3inc==1 or 
+                                       tree.diMuonC_m2_FittedVtx_hitpix_l3inc==1) and 
+                                      (tree.diMuonF_m1_FittedVtx_hitpix_l3inc==1 or 
+                                       tree.diMuonF_m2_FittedVtx_hitpix_l3inc==1) )
+
+
+                ## require additional selections
+                if (tree.isVertexOK and 
+                    tree.is2MuJets and 
+                    tree.is2DiMuons and
+                    tree.is2DiMuonsFittedVtxOK and
+#                    is2DiMuonsPixelOk and 
+                    is2DiMuonsDzOK_FittedVtx and
+#                    tree.is2DiMuonsMassOK_FittedVtx and
+                    is2DiMuonsIsoTkOK_FittedVtx):
+                    
+                    RECO_leading_pt_full.Fill(tree.selMu0_pT)
+                    RECO_leading_eta_full.Fill(tree.selMu0_eta)
+                    RECO_leading_phi_full.Fill(tree.selMu0_phi)
 
     ### make the efficiency plots
     for trigger in triggerPaths:
-        eff_hlt_RECO_leading_pt_fid[trigger] = ROOT.TEfficiency(hlt_RECO_leading_pt_fid[trigger], RECO_leading_pt_fid)
-        eff_hlt_RECO_leading_eta_fid[trigger] = ROOT.TEfficiency(hlt_RECO_leading_eta_fid[trigger], RECO_leading_eta_fid)
-        eff_hlt_RECO_leading_phi_fid[trigger] = ROOT.TEfficiency(hlt_RECO_leading_phi_fid[trigger], RECO_leading_phi_fid)
+        eff_hlt_RECO_leading_pt[darkSUSY + "_" + trigger] = ROOT.TEfficiency(hlt_RECO_leading_pt[darkSUSY + "_" + trigger], RECO_leading_pt)
+        eff_hlt_RECO_leading_eta[darkSUSY + "_" + trigger] = ROOT.TEfficiency(hlt_RECO_leading_eta[darkSUSY + "_" + trigger], RECO_leading_eta)
+        eff_hlt_RECO_leading_phi[darkSUSY + "_" + trigger] = ROOT.TEfficiency(hlt_RECO_leading_phi[darkSUSY + "_" + trigger], RECO_leading_phi)
+
+        eff_hlt_RECO_leading_pt_full[darkSUSY + "_" + trigger] = ROOT.TEfficiency(hlt_RECO_leading_pt_full[darkSUSY + "_" + trigger], RECO_leading_pt_full)
+        eff_hlt_RECO_leading_eta_full[darkSUSY + "_" + trigger] = ROOT.TEfficiency(hlt_RECO_leading_eta_full[darkSUSY + "_" + trigger], RECO_leading_eta_full)
+        eff_hlt_RECO_leading_phi_full[darkSUSY + "_" + trigger] = ROOT.TEfficiency(hlt_RECO_leading_phi_full[darkSUSY + "_" + trigger], RECO_leading_phi_full)
 
         ## because ROOT is fucking retarded...
-        eff_hlt_RECO_leading_pt_fid[trigger].SetName(darkSUSY + "_eff_hlt_RECO_leading_pt_fid_" + trigger)
-        eff_hlt_RECO_leading_eta_fid[trigger].SetName(darkSUSY + "_eff_hlt_RECO_leading_eta_fid_" + trigger)
-        eff_hlt_RECO_leading_phi_fid[trigger].SetName(darkSUSY + "_eff_hlt_RECO_leading_phi_fid_" + trigger)
+        eff_hlt_RECO_leading_pt_fid[darkSUSY + "_" + trigger].SetName(darkSUSY + "_eff_hlt_RECO_leading_pt_fid_" + trigger)
+        eff_hlt_RECO_leading_eta_fid[darkSUSY + "_" + trigger].SetName(darkSUSY + "_eff_hlt_RECO_leading_eta_fid_" + trigger)
+        eff_hlt_RECO_leading_phi_fid[darkSUSY + "_" + trigger].SetName(darkSUSY + "_eff_hlt_RECO_leading_phi_fid_" + trigger)
         
     ## save per mass point and per ctau point!!
     MyFile = TFile("HLT_efficiency_trigger_2016_DarkSUSY_13TeV.root","UPDATE");
 
     for trigger in triggerPaths:
-        eff_hlt_RECO_leading_pt_fid[trigger].Write(darkSUSY + "_eff_hlt_RECO_leading_pt_fid_" + trigger)
-        eff_hlt_RECO_leading_eta_fid[trigger].Write(darkSUSY + "_eff_hlt_RECO_leading_eta_fid_" + trigger)
-        eff_hlt_RECO_leading_phi_fid[trigger].Write(darkSUSY + "_eff_hlt_RECO_leading_phi_fid_" + trigger)
+        eff_hlt_RECO_leading_pt[darkSUSY + "_" + trigger].Write(darkSUSY + "_eff_hlt_RECO_leading_pt_" + trigger)
+        eff_hlt_RECO_leading_eta[darkSUSY + "_" + trigger].Write(darkSUSY + "_eff_hlt_RECO_leading_eta_" + trigger)
+        eff_hlt_RECO_leading_phi[darkSUSY + "_" + trigger].Write(darkSUSY + "_eff_hlt_RECO_leading_phi_" + trigger)
+
+        eff_hlt_RECO_leading_pt_full[darkSUSY + "_" + trigger].Write(darkSUSY + "_eff_hlt_RECO_leading_pt_full_" + trigger)
+        eff_hlt_RECO_leading_eta_full[darkSUSY + "_" + trigger].Write(darkSUSY + "_eff_hlt_RECO_leading_eta_full_" + trigger)
+        eff_hlt_RECO_leading_phi_full[darkSUSY + "_" + trigger].Write(darkSUSY + "_eff_hlt_RECO_leading_phi_full_" + trigger)
 
     MyFile.Close();
     
@@ -213,9 +259,14 @@ dirList = gDirectory.GetListOfKeys()
 ## open the file with locations to MC files
 mcSamples = readTextFileWithSamples("../DarkSUSY_All_2016.txt")
 
-eff_hlt_RECO_leading_pt_fid = {}
-eff_hlt_RECO_leading_eta_fid = {}
-eff_hlt_RECO_leading_phi_fid = {}
+eff_hlt_RECO_leading_pt = {}
+eff_hlt_RECO_leading_eta = {}
+eff_hlt_RECO_leading_phi = {}
+
+eff_hlt_RECO_leading_pt_full = {}
+eff_hlt_RECO_leading_eta_full = {}
+eff_hlt_RECO_leading_phi_full = {}
+
 
 for sample in mcSamples:
 
@@ -232,22 +283,42 @@ for sample in mcSamples:
             h1 = k1.ReadObj()
             print h1.GetName()
 
-        eff_hlt_RECO_leading_pt_fid[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_pt_fid_" + trigger)
-        eff_hlt_RECO_leading_eta_fid[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_eta_fid_" + trigger)
-        eff_hlt_RECO_leading_phi_fid[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_phi_fid_" + trigger)
+            eff_hlt_RECO_leading_pt[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_pt_" + trigger)
+            eff_hlt_RECO_leading_eta[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_eta_" + trigger)
+            eff_hlt_RECO_leading_phi[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_phi_" + trigger)
+            
+            eff_pt = (eff_hlt_RECO_leading_pt[darkSUSY + "_" + trigger], r"Leading muon $p_\mathrm{T}$ [GeV]", "pt")
+            eff_eta = (eff_hlt_RECO_leading_eta[darkSUSY + "_" + trigger], r"Leading muon $\eta$", "eta")
+            eff_phi = (eff_hlt_RECO_leading_phi[darkSUSY + "_" + trigger], r"Leading muon $\phi$", "phi")
+
+            eff_hlt_RECO_list = [eff_pt, eff_eta, eff_phi]
+            
+            makePlot(eff_pt, trigger, format='png')
+            makePlot(eff_eta, trigger, format='png')
+            makePlot(eff_phi, trigger, format='png')
+            
+            makePlot(eff_pt, trigger, format='pdf')
+            makePlot(eff_eta, trigger, format='pdf')
+            makePlot(eff_phi, trigger, format='pdf')
+
     
-        eff_pt = (eff_hlt_RECO_leading_pt_fid[darkSUSY + "_" + trigger], r"Leading muon $p_\mathrm{T}$ [GeV]", "pt")
-        eff_eta = (eff_hlt_RECO_leading_eta_fid[darkSUSY + "_" + trigger], r"Leading muon $\eta$", "eta")
-        eff_phi = (eff_hlt_RECO_leading_phi_fid[darkSUSY + "_" + trigger], r"Leading muon $\phi$", "phi")
+            eff_hlt_RECO_leading_pt_full[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_pt_full_" + trigger)
+            eff_hlt_RECO_leading_eta_full[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_eta_full_" + trigger)
+            eff_hlt_RECO_leading_phi_full[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_phi_full_" + trigger)
+    
+            eff_pt = (eff_hlt_RECO_leading_pt_full[darkSUSY + "_" + trigger], r"Leading muon $p_\mathrm{T}$ [GeV]", "pt")
+            eff_eta = (eff_hlt_RECO_leading_eta_full[darkSUSY + "_" + trigger], r"Leading muon $\eta$", "eta")
+            eff_phi = (eff_hlt_RECO_leading_phi_full[darkSUSY + "_" + trigger], r"Leading muon $\phi$", "phi")
 
-        eff_hlt_RECO_list = [eff_pt, eff_eta, eff_phi]
+            eff_hlt_RECO_list = [eff_pt, eff_eta, eff_phi]
 
-        makePlot(eff_pt, darkSUSY, trigger, format='png')
-        makePlot(eff_eta, darkSUSY, trigger, format='png')
-        makePlot(eff_phi, darkSUSY, trigger, format='png')
+            makePlot(eff_pt, trigger, format='png')
+            makePlot(eff_eta, trigger, format='png')
+            makePlot(eff_phi, trigger, format='png')
 
-        makePlot(eff_pt, darkSUSY, trigger, format='pdf')
-        makePlot(eff_eta, darkSUSY, trigger, format='pdf')
-        makePlot(eff_phi, darkSUSY, trigger, format='pdf')
+            makePlot(eff_pt, trigger, format='pdf')
+            makePlot(eff_eta, trigger, format='pdf')
+            makePlot(eff_phi, trigger, format='pdf')
+    
         
 MyFile.Close()

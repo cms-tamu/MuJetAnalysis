@@ -207,7 +207,7 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.drawStatUncertainty = True    
     hist.Add(effTuple[0], draw='errorbar', color='blue', linecolor='blue', label=triggerPath.replace('_','\_'))
 
-    hist.extra_text.Add(r"$EWK pp \rightarrow 4\mu$", coords=[0.1,0.4])
+    hist.extra_text.Add(r"$EWK~pp \rightarrow 4\mu$", coords=[0.1,0.4])
 
     plot = hist.execute()
     hist.savefig()
