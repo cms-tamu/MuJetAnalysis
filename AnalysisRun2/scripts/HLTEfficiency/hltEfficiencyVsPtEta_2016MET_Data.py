@@ -53,8 +53,8 @@ def efficiency_trigger(dirNames, triggerPaths):
         hlt_RECO_leading_phi_full[trigger] = ROOT.TH1D("hlt_RECO_leading_phi_full_" + trigger,"",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi())
 
     print "Adding files to the chain"
-    addfilesMany(chain, dirNames, "out_ana_selected_MET_2016MET_BH_20171006.root")
-
+    addfilesMany(chain, dirNames, "out_ana_selected_MET_2016BH_20171006.root")
+                                   
     print "Loop over the chain"
     for rootFile in chain.GetListOfFiles():
         
@@ -193,7 +193,7 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016METB-H_20171011/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016METB-H_20171018/'
     if 'full' in effTuple[0].GetName():
         hist.saveAs      = "eff_" + triggerPath + "_2016MET_BH_MuJetVtxDzIso_" + effTuple[2] # save figure with name
     else:

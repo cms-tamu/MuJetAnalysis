@@ -13,7 +13,7 @@ from Helpers import *
 ##____________________________________________________________
 def efficiency_trigger(dirNames, triggerPaths):
 
-    verbose = False
+    verbose = True
 
     chain = ROOT.TChain("Events")
 
@@ -31,6 +31,18 @@ def efficiency_trigger(dirNames, triggerPaths):
     eff_hlt_RECO_leading_eta = {}
     eff_hlt_RECO_leading_phi = {}
 
+    RECO_leading_pt_barrel = ROOT.TH1D("RECO_leading_pt_barrel","",25,0.,50.);
+    RECO_leading_eta_barrel = ROOT.TH1D("RECO_leading_eta_barrel","",25,-2.5,2.5);
+    RECO_leading_phi_barrel = ROOT.TH1D("RECO_leading_phi_barrel","",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi());
+
+    hlt_RECO_leading_pt_barrel = {}
+    hlt_RECO_leading_eta_barrel = {}
+    hlt_RECO_leading_phi_barrel = {}
+    
+    eff_hlt_RECO_leading_pt_barrel = {}
+    eff_hlt_RECO_leading_eta_barrel = {}
+    eff_hlt_RECO_leading_phi_barrel = {}
+
     RECO_leading_pt_full = ROOT.TH1D("RECO_leading_pt_full","",25,0.,50.);
     RECO_leading_eta_full = ROOT.TH1D("RECO_leading_eta_full","",25,-2.5,2.5);
     RECO_leading_phi_full = ROOT.TH1D("RECO_leading_phi_full","",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi());
@@ -47,6 +59,10 @@ def efficiency_trigger(dirNames, triggerPaths):
         hlt_RECO_leading_pt[trigger] = ROOT.TH1D("hlt_RECO_leading_pt_" + trigger,"",25,0.,50.)
         hlt_RECO_leading_eta[trigger] = ROOT.TH1D("hlt_RECO_leading_eta_" + trigger,"",25,-2.5,2.5)
         hlt_RECO_leading_phi[trigger] = ROOT.TH1D("hlt_RECO_leading_phi_" + trigger,"",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi())
+
+        hlt_RECO_leading_pt_barrel[trigger] = ROOT.TH1D("hlt_RECO_leading_pt_barrel_" + trigger,"",25,0.,50.)
+        hlt_RECO_leading_eta_barrel[trigger] = ROOT.TH1D("hlt_RECO_leading_eta_barrel_" + trigger,"",25,-2.5,2.5)
+        hlt_RECO_leading_phi_barrel[trigger] = ROOT.TH1D("hlt_RECO_leading_phi_barrel_" + trigger,"",30,-ROOT.TMath.Pi(),ROOT.TMath.Pi())
 
         hlt_RECO_leading_pt_full[trigger] = ROOT.TH1D("hlt_RECO_leading_pt_full_" + trigger,"",25,0.,50.)
         hlt_RECO_leading_eta_full[trigger] = ROOT.TH1D("hlt_RECO_leading_eta_full_" + trigger,"",25,-2.5,2.5)
@@ -86,18 +102,20 @@ def efficiency_trigger(dirNames, triggerPaths):
             tree.GetEntry(k)
 
             ## check for 4 reco muons 
-            nMu = 0
-            
-            if tree.selMu0_pT != -100: nMu += 1
-            if tree.selMu1_pT != -100: nMu += 1
-            if tree.selMu2_pT != -100: nMu += 1
-            if tree.selMu3_pT != -100: nMu += 1
-      
+            nMu = int(tree.selMu0_pT != -100) + int(tree.selMu1_pT != -100) + int(tree.selMu2_pT != -100) + int(tree.selMu3_pT != -100) 
+
             if (nMu<4):
                 continue
 
+            nMuPt8 = int(tree.selMu0_pT >= 8) + int(tree.selMu1_pT >= 8) + int(tree.selMu2_pT >= 8) + int(tree.selMu3_pT >= 8)
+            nMuPt17 = int(tree.selMu0_pT >= 17) + int(tree.selMu1_pT >= 17) + int(tree.selMu2_pT >= 17) + int(tree.selMu3_pT >= 17)
+            nMuPt17Barrel = (int(tree.selMu0_pT >= 17 and abs(tree.selMu0_eta)<=0.9) + 
+                             int(tree.selMu1_pT >= 17 and abs(tree.selMu1_eta)<=0.9) + 
+                             int(tree.selMu2_pT >= 17 and abs(tree.selMu2_eta)<=0.9) + 
+                             int(tree.selMu3_pT >= 17 and abs(tree.selMu3_eta)<=0.9))
+
             ## require baseline selection!!!
-            if (tree.is4SelMu8 and tree.is1SelMu17):
+            if (nMuPt8>=4 and nMuPt17>=1):
 
                 if (verbose): print "Pass denom"
                 RECO_leading_pt.Fill(tree.selMu0_pT)
@@ -117,13 +135,34 @@ def efficiency_trigger(dirNames, triggerPaths):
                         hlt_RECO_leading_eta[trigger].Fill(tree.selMu0_eta)
                         hlt_RECO_leading_phi[trigger].Fill(tree.selMu0_phi)
 
+
+            ## require baseline selection!!!
+            if (nMuPt8>=4 and nMuPt17Barrel>=1):
+
+                if (verbose): print "Pass denom"
+                RECO_leading_pt_barrel.Fill(tree.selMu0_pT)
+                RECO_leading_eta_barrel.Fill(tree.selMu0_eta)
+                RECO_leading_phi_barrel.Fill(tree.selMu0_phi)
+                
+                ## check if triggerPath is in the list
+                ## check each trigger
+                for trigger in triggerPaths:
+
+                    ## print list(tree.hltPaths)
+                    if any(trigger in s for s in list(tree.hltPaths)):
+                        if (verbose): print trigger, "is available"
+
+                        ## print "\tPass num"
+                        hlt_RECO_leading_pt_barrel[trigger].Fill(tree.selMu0_pT)
+                        hlt_RECO_leading_eta_barrel[trigger].Fill(tree.selMu0_eta)
+                        hlt_RECO_leading_phi_barrel[trigger].Fill(tree.selMu0_phi)
+
                 is2DiMuonsDzOK_FittedVtx = abs(tree.diMuonC_FittedVtx_dz - tree.diMuonF_FittedVtx_dz) < 0.1
                 is2DiMuonsIsoTkOK_FittedVtx = (tree.diMuonC_IsoTk_FittedVtx < 2 and tree.diMuonF_IsoTk_FittedVtx < 2)
                 is2DiMuonsPixelOk = ( (tree.diMuonC_m1_FittedVtx_hitpix_l3inc==1 or 
                                        tree.diMuonC_m2_FittedVtx_hitpix_l3inc==1) and 
                                       (tree.diMuonF_m1_FittedVtx_hitpix_l3inc==1 or 
                                        tree.diMuonF_m2_FittedVtx_hitpix_l3inc==1) )
-
 
                 ## require additional selections
                 if (tree.isVertexOK and 
@@ -138,7 +177,7 @@ def efficiency_trigger(dirNames, triggerPaths):
                     RECO_leading_pt_full.Fill(tree.selMu0_pT)
                     RECO_leading_eta_full.Fill(tree.selMu0_eta)
                     RECO_leading_phi_full.Fill(tree.selMu0_phi)
-                    
+
                     ## check if triggerPath is in the list
                     ## check each trigger
                     for trigger in triggerPaths:
@@ -159,6 +198,10 @@ def efficiency_trigger(dirNames, triggerPaths):
         eff_hlt_RECO_leading_eta[trigger] = ROOT.TEfficiency(hlt_RECO_leading_eta[trigger], RECO_leading_eta)
         eff_hlt_RECO_leading_phi[trigger] = ROOT.TEfficiency(hlt_RECO_leading_phi[trigger], RECO_leading_phi)
 
+        eff_hlt_RECO_leading_pt_barrel[trigger] = ROOT.TEfficiency(hlt_RECO_leading_pt_barrel[trigger], RECO_leading_pt_barrel)
+        eff_hlt_RECO_leading_eta_barrel[trigger] = ROOT.TEfficiency(hlt_RECO_leading_eta_barrel[trigger], RECO_leading_eta_barrel)
+        eff_hlt_RECO_leading_phi_barrel[trigger] = ROOT.TEfficiency(hlt_RECO_leading_phi_barrel[trigger], RECO_leading_phi_barrel)
+
         eff_hlt_RECO_leading_pt_full[trigger] = ROOT.TEfficiency(hlt_RECO_leading_pt_full[trigger], RECO_leading_pt_full)
         eff_hlt_RECO_leading_eta_full[trigger] = ROOT.TEfficiency(hlt_RECO_leading_eta_full[trigger], RECO_leading_eta_full)
         eff_hlt_RECO_leading_phi_full[trigger] = ROOT.TEfficiency(hlt_RECO_leading_phi_full[trigger], RECO_leading_phi_full)
@@ -169,6 +212,10 @@ def efficiency_trigger(dirNames, triggerPaths):
         eff_hlt_RECO_leading_pt[trigger].Write("eff_hlt_RECO_leading_pt_" + trigger)
         eff_hlt_RECO_leading_eta[trigger].Write("eff_hlt_RECO_leading_eta_" + trigger)
         eff_hlt_RECO_leading_phi[trigger].Write("eff_hlt_RECO_leading_phi_" + trigger)
+
+        eff_hlt_RECO_leading_pt_barrel[trigger].Write("eff_hlt_RECO_leading_pt_barrel_" + trigger)
+        eff_hlt_RECO_leading_eta_barrel[trigger].Write("eff_hlt_RECO_leading_eta_barrel_" + trigger)
+        eff_hlt_RECO_leading_phi_barrel[trigger].Write("eff_hlt_RECO_leading_phi_barrel_" + trigger)
 
         eff_hlt_RECO_leading_pt_full[trigger].Write("eff_hlt_RECO_leading_pt_full_" + trigger)
         eff_hlt_RECO_leading_eta_full[trigger].Write("eff_hlt_RECO_leading_eta_full_" + trigger)
@@ -191,7 +238,7 @@ dirNames = [
 '/fdata/hepx/store/user/lpernie/DoubleMuon/crab_Run2016H-PromptReco-v3_v2_FINAL.root'
 ]
 
-efficiency_trigger(dirNames, triggerPaths)
+#efficiency_trigger(dirNames, triggerPaths)
 
 def makePlot(effTuple, triggerPath, format='pdf'):
 
@@ -204,15 +251,17 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016DoubleMuon_BCDEFGH_20171012/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016DoubleMuon_BCDEFGH_20171024/'
     if 'full' in effTuple[0].GetName():
         hist.saveAs      = "eff_" + triggerPath + "_2016BCDEFGH_MuJetVtxDzIso_" + effTuple[2] # save figure with name
+    elif 'barrel' in effTuple[0].GetName():
+        hist.saveAs      = "eff_" + triggerPath + "_2016BCDEFGH_barrel_" + effTuple[2] # save figure with name
     else:
         hist.saveAs      = "eff_" + triggerPath + "_2016BCDEFGH_" + effTuple[2] # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
-    hist.lumi = '2016 DoubleMuon B-H, 37'
+    hist.lumi = '2016 DoubleMuon B-H, 35.9'
     hist.drawStatUncertainty = True    
     hist.Add(effTuple[0], draw='errorbar', color='blue', linecolor='blue', label=triggerPath.replace('_','\_'))
     plot = hist.execute()
@@ -223,6 +272,10 @@ MyFile = TFile("HLT_efficiency_signal_backup_2016DoubleMuon_BCDEFGH_13TeV.root")
 eff_hlt_RECO_leading_pt = {}
 eff_hlt_RECO_leading_eta = {}
 eff_hlt_RECO_leading_phi = {}
+
+eff_hlt_RECO_leading_pt_barrel = {}
+eff_hlt_RECO_leading_eta_barrel = {}
+eff_hlt_RECO_leading_phi_barrel = {}
 
 eff_hlt_RECO_leading_pt_full = {}
 eff_hlt_RECO_leading_eta_full = {}
@@ -249,6 +302,25 @@ for trigger in triggerPaths:
     makePlot(eff_phi, trigger, format='pdf')
 
     
+    eff_hlt_RECO_leading_pt_barrel[trigger] = MyFile.Get("eff_hlt_RECO_leading_pt_barrel_" + trigger)
+    eff_hlt_RECO_leading_eta_barrel[trigger] = MyFile.Get("eff_hlt_RECO_leading_eta_barrel_" + trigger)
+    eff_hlt_RECO_leading_phi_barrel[trigger] = MyFile.Get("eff_hlt_RECO_leading_phi_barrel_" + trigger)
+    
+    eff_pt = (eff_hlt_RECO_leading_pt_barrel[trigger], r"Leading muon $p_\mathrm{T}$ [GeV]", "pt")
+    eff_eta = (eff_hlt_RECO_leading_eta_barrel[trigger], r"Leading muon $\eta$", "eta")
+    eff_phi = (eff_hlt_RECO_leading_phi_barrel[trigger], r"Leading muon $\phi$", "phi")
+
+    eff_hlt_RECO_list = [eff_pt, eff_eta, eff_phi]
+
+    makePlot(eff_pt, trigger, format='png')
+    makePlot(eff_eta, trigger, format='png')
+    makePlot(eff_phi, trigger, format='png')
+
+    makePlot(eff_pt, trigger, format='pdf')
+    makePlot(eff_eta, trigger, format='pdf')
+    makePlot(eff_phi, trigger, format='pdf')
+
+
     eff_hlt_RECO_leading_pt_full[trigger] = MyFile.Get("eff_hlt_RECO_leading_pt_full_" + trigger)
     eff_hlt_RECO_leading_eta_full[trigger] = MyFile.Get("eff_hlt_RECO_leading_eta_full_" + trigger)
     eff_hlt_RECO_leading_phi_full[trigger] = MyFile.Get("eff_hlt_RECO_leading_phi_full_" + trigger)
