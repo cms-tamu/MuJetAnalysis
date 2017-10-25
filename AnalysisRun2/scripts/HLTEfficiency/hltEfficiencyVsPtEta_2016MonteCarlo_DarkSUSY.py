@@ -19,8 +19,7 @@ mass_strings = {
 }
 
 mass_indices = {
-    "0p25": 0, "0p3": 1, "0p4" : 2, "0p7" : 4, 
-    "1" : 5, "1p5" : 6, "2" : 7, "5" : 8, "8p5" : 9
+    "0p25": 0, "0p3": 1, "0p4" : 2, "0p7" : 3, "1" : 4, "1p5" : 5, "2" : 6, "5" : 7, "8p5" : 8
 }
 
 cT_strings = {
@@ -34,8 +33,8 @@ cT_strings2 = {
 }
 
 cT_indices = {
-  "0" : 1, "0p05" : 2, "0p1" : 3, "0p2" : 4, "0p5" : 5, "1" : 6, 
-  "2" : 7 ,  "3" : 8, "5" : 9, "10" : 10, "20" : 11, "50" : 12, "100" : 13
+  "0" : 0, "0p05" : 1, "0p1" : 2, "0p2" : 3, "0p5" : 4, "1" : 5, 
+  "2" : 6 ,  "3" : 7, "5" : 8, "10" : 9, "20" : 10, "50" : 11, "100" : 12
 };
 
 mass_colors = {
@@ -569,18 +568,18 @@ def getAverageEfficiency(myEff):
   return myEff.GetPassedHistogram().GetEntries() / myEff.GetTotalHistogram().GetEntries();
 
 def getAverageEfficiencyError(myEff):
-  double num = myEff.GetPassedHistogram().GetEntries();
-  double denom = myEff.GetTotalHistogram().GetEntries();
-  double eff_uncert = sqrt( ((num/(1.0*denom))*(1-(num/(1.0*denom)) ))/(1.0*denom) );
+  num = myEff.GetPassedHistogram().GetEntries();
+  denom = myEff.GetTotalHistogram().GetEntries();
+  eff_uncert = sqrt( ((num/(1.0*denom))*(1-(num/(1.0*denom)) ))/(1.0*denom) );
   return eff_uncert;
 
 
 def make_2D_plot(selection, trigger):
 
-    if selection = '': selStr = ""
-    elif selection = '': selStr = "_barrel"
-    elif selection = '': selStr = "_full"
-    else: selStr = ""
+    if selection == '': selStr = ""
+    elif selection == 'barrel': selStr = "_barrel"
+    elif selection == 'full': selStr = "_full"
+    else: selStr == ""
 
     c = TCanvas("c","c",800,600);
     gStyle.SetOptStat(0);
@@ -594,14 +593,14 @@ def make_2D_plot(selection, trigger):
     gStyle.SetTitleBorderSize( 0 );
   
     gStyle.SetPadLeftMargin(0.126);
-    gStyle.SetPadRightMargin(0.04);
+    gStyle.SetPadRightMargin(0.15);
     gStyle.SetPadTopMargin(0.06);
     gStyle.SetPadBottomMargin(0.13);
     gStyle.SetOptStat( 0 );
     gStyle.SetMarkerStyle(1);
     gStyle.SetTitleFontSize(0.07);
   
-    base = TH2F("","           #scale[1.4]{#font[61]{CMS}} #font[52]{Simulation preliminary}                                                           13 TeV", 9, 1, 10, 13, 1, 14);
+    base = TH2F("","#scale[1.4]{#font[61]{CMS}} #font[52]{Simulation preliminary}                       13 TeV", 9, 1, 10, 13, 1, 14);
     base.GetXaxis().SetTitle("m_{#gamma_{D}} [Gev]");
     base.GetYaxis().SetTitle("c#tau_{#gamma_{D}} [mm]");
     base.GetZaxis().SetRangeUser(0.7,1.0);
@@ -627,17 +626,24 @@ def make_2D_plot(selection, trigger):
         mass_index = get_mass_index(ma) + 1;
         cT_index = get_cT_index(ctau) + 1;
 
-        eff_hlt_RECO_leading_pt[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO" + selStr + "_pt_" + trigger)
-        eff_hlt_RECO_leading_eta[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO" + selStr + "_eta_" + trigger)
-        eff_hlt_RECO_leading_phi[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO" + selStr + "_phi_" + trigger)
+        eff_hlt_RECO_leading_pt[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_pt" + selStr + "_" + trigger)
+        eff_hlt_RECO_leading_eta[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_eta" + selStr + "_" + trigger)
+        eff_hlt_RECO_leading_phi[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_phi" + selStr + "_" + trigger)
         
-        base.SetBinContent( mass_index , cT_index, getAverageEfficiency(myEff));
-        base.GetXaxis().SetBinLabel(mass_index, mass_strings[mass_string].Data());
-        base.GetYaxis().SetBinLabel(cT_index, cT_strings2[cT_string].Data());
+        base.SetBinContent( mass_index , cT_index, getAverageEfficiency(eff_hlt_RECO_leading_eta[darkSUSY + "_" + trigger]));
+        base.GetXaxis().SetBinLabel(mass_index, mass_strings[ma]);
+        base.GetYaxis().SetBinLabel(cT_index, cT_strings2[ctau]);
 
     base.Draw("COLZ TEXT");
 
-    c.SaveAs("DarkSUSY_GammaD_cT_trigger_efficiency_barrelMuon_TEST.pdf","recreate");
+    c.SaveAs("DarkSUSY_GammaD_cT_2016MonteCarlo_efficiency" + selStr + "_" + trigger + ".pdf","recreate");
 
 
-make_2D_plot("", "HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx")
+## make trigger efficiencies for each trigger path
+for trigger in triggerPaths:
+    print trigger
+
+    make_2D_plot("", trigger)
+    make_2D_plot("", trigger)
+    make_2D_plot("barrel", trigger)
+    make_2D_plot("full", trigger)

@@ -193,7 +193,7 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016METB-H_20171018/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016METB-H_20171024/'
     if 'full' in effTuple[0].GetName():
         hist.saveAs      = "eff_" + triggerPath + "_2016MET_BH_MuJetVtxDzIso_" + effTuple[2] # save figure with name
     else:
@@ -201,7 +201,7 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
-    hist.lumi = '2016 MET B-H, 37'
+    hist.lumi = '2016 MET B-H, 35.9'
     hist.drawStatUncertainty = True    
     hist.Add(effTuple[0], draw='errorbar', color='blue', linecolor='blue', label=triggerPath.replace('_','\_'))
     plot = hist.execute()
