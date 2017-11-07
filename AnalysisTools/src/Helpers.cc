@@ -1,5 +1,9 @@
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
+double tamu::helpers::cotan(double i) { 
+  return(1 / tan(i)); 
+}
+
 bool tamu::helpers::PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2) { 
   return (p1->pt() > p2->pt() ); 
 }
@@ -14,8 +18,21 @@ bool tamu::helpers::sameTrack(const reco::Track *one, const reco::Track *two) {
 }
 
 
+bool tamu::helpers::sameTrackRF(const reco::Track *one, const reco::Track *two) {
+  return ( fabs( one->charge() - two->charge())==0 && 
+	   fabs( cotan(one->theta()) - cotan(two->theta()) ) < 0.02  &&
+	   fabs( (1/one->pt()) - (1/two->pt()) ) < 0.02  &&
+	   fabs( one->phi() - two->phi() ) < 0.02  &&
+	   fabs( one->dxy() - two->dxy() ) < 0.1  && 
+	   fabs( one->dz() - two->dz() ) < 0.1);
+}
+
 bool tamu::helpers::matchorder(const std::pair<Int_t,Float_t>  &v1, const std::pair<Int_t,Float_t> &v2) { return (fabs(v1.second) < fabs(v2.second) ); }
 
+
+bool tamu::helpers::order(Float_t v1, Float_t v2){ 
+  return (fabs(v1)<fabs(v2));
+}
 
 //******************************************************************************
 // Auxiliary function: Calculate difference between two angles: -PI < phi < PI  

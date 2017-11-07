@@ -1,0 +1,19 @@
+crab submit -c crab_eos.py
+crab status
+
+Add to current Ntuplizer:
+../../../../MuJetAnalysis/CutFlowAnalyzer/plugins/CutFlowAnalyzer.cc
+the Ntuples you need in the bb estimation:
+https://github.com/cms-tamu/MuJetAnalysis_bbBarEstimation/blob/master/FitAndSave.C
+that before you created with:
+https://github.com/cms-tamu/OldUsercode/blob/master/AnalysisTools/FitNtuple/src/FitNtuple.cc
+
+JSON: https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions15/13TeV/
+or:   /afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions15/13TeV/
+
+tuple used:
+mass
+massC 
+massF
+isoF_1mm -> not in FitNtuple.cc
+isoC_1mm -> not in FitNtuple.cc
