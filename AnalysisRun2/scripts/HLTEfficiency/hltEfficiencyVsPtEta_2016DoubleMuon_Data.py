@@ -107,15 +107,33 @@ def efficiency_trigger(dirNames, triggerPaths):
             if (nMu<4):
                 continue
 
-            nMuPt8 = int(tree.selMu0_pT >= 8) + int(tree.selMu1_pT >= 8) + int(tree.selMu2_pT >= 8) + int(tree.selMu3_pT >= 8)
-            nMuPt17 = int(tree.selMu0_pT >= 17) + int(tree.selMu1_pT >= 17) + int(tree.selMu2_pT >= 17) + int(tree.selMu3_pT >= 17)
-            nMuPt17Barrel = (int(tree.selMu0_pT >= 17 and abs(tree.selMu0_eta)<=0.9) + 
-                             int(tree.selMu1_pT >= 17 and abs(tree.selMu1_eta)<=0.9) + 
-                             int(tree.selMu2_pT >= 17 and abs(tree.selMu2_eta)<=0.9) + 
-                             int(tree.selMu3_pT >= 17 and abs(tree.selMu3_eta)<=0.9))
+            nMuPt8 = 0
+            if tree.selMu0_pT >= 8: nMuPt8 += 1
+            if tree.selMu1_pT >= 8: nMuPt8 += 1
+            if tree.selMu2_pT >= 8: nMuPt8 += 1
+            if tree.selMu3_pT >= 8: nMuPt8 += 1
 
+            nMuPt17 = 0
+            if tree.selMu0_pT >= 17: nMuPt17 += 1
+            if tree.selMu1_pT >= 17: nMuPt17 += 1
+            if tree.selMu2_pT >= 17: nMuPt17 += 1
+            if tree.selMu3_pT >= 17: nMuPt17 += 1
+
+
+            nMuPt17Barrel = 0
+            if (tree.selMu0_pT>=17 and abs(tree.selMu0_eta)<=0.9): nMuPt17Barrel += 1
+            if (tree.selMu1_pT>=17 and abs(tree.selMu1_eta)<=0.9): nMuPt17Barrel += 1
+            if (tree.selMu2_pT>=17 and abs(tree.selMu2_eta)<=0.9): nMuPt17Barrel += 1
+            if (tree.selMu3_pT>=17 and abs(tree.selMu3_eta)<=0.9): nMuPt17Barrel += 1
+ 
+            print nMuPt8, nMuPt17, nMuPt17Barrel
+            print tree.selMu0_pT, tree.selMu0_eta
+            print tree.selMu1_pT, tree.selMu1_eta
+            print tree.selMu2_pT, tree.selMu2_eta
+            print tree.selMu3_pT, tree.selMu3_eta
+            
             ## require baseline selection!!!
-            if (nMuPt8>=4 and nMuPt17>=1):
+            if (nMuPt8>=4 and nMuPt17 >=1):
 
                 if (verbose): print "Pass denom"
                 RECO_leading_pt.Fill(tree.selMu0_pT)
@@ -238,7 +256,7 @@ dirNames = [
 '/fdata/hepx/store/user/lpernie/DoubleMuon/crab_Run2016H-PromptReco-v3_v2_FINAL.root'
 ]
 
-#efficiency_trigger(dirNames, triggerPaths)
+efficiency_trigger(dirNames, triggerPaths)
 
 def makePlot(effTuple, triggerPath, format='pdf'):
 

@@ -195,7 +195,7 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_EW_100k_20171012/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_EW_100k_20171024/'
     if 'full' in effTuple[0].GetName():
         hist.saveAs      = "eff_" + triggerPath + "_2016MonteCarlo_EW_MuJetVtxDzIso_" + effTuple[2] # save figure with name
     else:

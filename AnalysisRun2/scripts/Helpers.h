@@ -21,7 +21,7 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 
 void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root")
 {
-  bool verbose(false);
+  bool verbose(true);
   for(std::string dirname : v) {
     TSystemDirectory dir(dirname.c_str(), dirname.c_str());
     TList *files = dir.GetListOfFiles();
@@ -33,7 +33,7 @@ void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".
       while ((file=(TSystemFile*)next())) {
 	fname = file->GetName();
 	if (verbose) std::cout << "found fname " << dirname + fname << std::endl;
-	if (!file->IsDirectory() && fname.BeginsWith(ext)) {
+	if (!file->IsDirectory() && fname.EndsWith(ext)) {
 	  if (verbose) std::cout << "adding fname " << dirname + fname << std::endl;
 	  ch->Add(dirname + fname);
 	}

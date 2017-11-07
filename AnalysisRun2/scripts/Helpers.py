@@ -72,6 +72,17 @@ def readTextFileWithSamples(fileName):
 
 
 #______________________________________________________________________________
+## add single ROOT file to a chain
+def addfile(ch, fileName):
+  verbose = False
+  tempFile = ROOT.TFile(fileName)
+  if (not tempFile.IsZombie()):
+    ch.Add(fileName)
+  else: 
+    print "No such file", fileName
+  return ch
+
+#______________________________________________________________________________
 ## add ROOT files to a chain
 def addfiles(ch, dirname=".", ext="out_ana"):
   verbose = False

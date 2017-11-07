@@ -300,8 +300,13 @@ def makePlot(effTuple, darkSUSY, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016_DarkSUSY_13TeV_20171024/'
-    hist.saveAs      = "eff_" + triggerPath + "_" + darkSUSY + "_" + effTuple[2] # save figure with name
+    hist.saveDir     = 'trigger_efficiency_plots_2016_DarkSUSY_13TeV_20171101/'
+    if 'full' in effTuple[0].GetName():
+        hist.saveAs      = "eff_" + triggerPath + "_" + darkSUSY + "_MuJetVtxDzIso_" + effTuple[2] # save figure with name
+    elif 'barrel' in effTuple[0].GetName():
+        hist.saveAs      = "eff_" + triggerPath + "_" + darkSUSY + "_barrel_" + effTuple[2] # save figure with name
+    else:
+        hist.saveAs      = "eff_" + triggerPath + "_" + darkSUSY + "_" + effTuple[2] # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Simulation Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
@@ -498,7 +503,6 @@ darkSUSY_HLT_Samples = [
 for sample in darkSUSY_HLT_Samples:
 
     ## do not process
-    continue
     
     MyFile = TFile(sample);
 
@@ -507,7 +511,7 @@ for sample in darkSUSY_HLT_Samples:
     darkSUSY = getDarkSUSYFileName(n1,ma,ctau)
 
     print "Checking", "mN1", n1, "mA", ma, "cT", ctau
-    if not ma == "8p5":
+    if not ma == "1p5":
         continue
 
 
@@ -535,6 +539,25 @@ for sample in darkSUSY_HLT_Samples:
         makePlot(eff_phi, darkSUSY, trigger, format='pdf')
 
     
+        eff_hlt_RECO_leading_pt_barrel[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_pt_barrel_" + trigger)
+        eff_hlt_RECO_leading_eta_barrel[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_eta_barrel_" + trigger)
+        eff_hlt_RECO_leading_phi_barrel[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_phi_barrel_" + trigger)
+    
+        eff_pt = (eff_hlt_RECO_leading_pt_barrel[darkSUSY + "_" + trigger], r"Leading muon $p_\mathrm{T}$ [GeV]", "pt")
+        eff_eta = (eff_hlt_RECO_leading_eta_barrel[darkSUSY + "_" + trigger], r"Leading muon $\eta$", "eta")
+        eff_phi = (eff_hlt_RECO_leading_phi_barrel[darkSUSY + "_" + trigger], r"Leading muon $\phi$", "phi")
+
+        eff_hlt_RECO_list = [eff_pt, eff_eta, eff_phi]
+
+        makePlot(eff_pt, darkSUSY, trigger, format='png')
+        makePlot(eff_eta, darkSUSY, trigger, format='png')
+        makePlot(eff_phi, darkSUSY, trigger, format='png')
+
+        makePlot(eff_pt, darkSUSY, trigger, format='pdf')
+        makePlot(eff_eta, darkSUSY, trigger, format='pdf')
+        makePlot(eff_phi, darkSUSY, trigger, format='pdf')
+
+
         eff_hlt_RECO_leading_pt_full[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_pt_full_" + trigger)
         eff_hlt_RECO_leading_eta_full[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_eta_full_" + trigger)
         eff_hlt_RECO_leading_phi_full[darkSUSY + "_" + trigger] = MyFile.Get(darkSUSY + "_eff_hlt_RECO_leading_phi_full_" + trigger)
@@ -556,6 +579,7 @@ for sample in darkSUSY_HLT_Samples:
     MyFile.Close();
     
         
+exit(1)
 
 ## make a 2D efficiency plot
 def get_mass_index(massStr):
@@ -636,7 +660,7 @@ def make_2D_plot(selection, trigger):
 
     base.Draw("COLZ TEXT");
 
-    c.SaveAs("DarkSUSY_GammaD_cT_2016MonteCarlo_efficiency" + selStr + "_" + trigger + ".pdf","recreate");
+    c.SaveAs("DarkSUSY_GammaD_cT_2016MonteCarlo_2D_efficiency_plots/DarkSUSY_GammaD_cT_2016MonteCarlo_efficiency" + selStr + "_" + trigger + ".pdf","recreate");
 
 
 ## make trigger efficiencies for each trigger path

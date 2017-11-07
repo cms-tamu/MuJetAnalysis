@@ -7,282 +7,171 @@ from ROOT import *
 ## open the file with locations to MC files
 mcSamples = readTextFileWithSamples("../DarkSUSY_All_2016.txt")
 
+## print the properties of each sample
+print "Printing properties"
+for sample in mcSamples:
+    print decodeDarkSUSYFileNameMany(sample)
 
+
+mass_strings = {
+    "0p25": "0.25", 
+    "0p275" : "0.275", "0p3": "0.3", "0p4" : "0.4", "0700" : "0.7", 
+    "1" : "1.0", "1500" : "1.5", "2000" : "2.0", "8500" : "8.5"
+}
+cT_strings = {
+  "0" : 0.0, "0p05" :  0.05, "0p1" :  0.10, "0p2" :  0.20, "0p5" :  0.50, "1" :  1.00, 
+  "200" :  2.00, "300" :  3.00, "500" :  5.00, "1000" :  10.0, "2000" :  20.0, "8500" :  85.0
+}
+
+cT_strings2 = {
+  "0" : "0", "0p05" : "0.05", "0p1" : "0.1", "0p2" : "0.2", "0p5" : "0.50", "1" : "1", 
+  "2" : "2", "3" : "3", "5" : "5", "10" : "10", "20" : "20", "50" : "50", "100" : "100"
+}
+
+
+## prepare dictionaries of histograms
 A0Lxy_histos = {}
 A0Lxy_histos["0p25"] = {}
+A0Lxy_histos["0p3"] = {}
+A0Lxy_histos["0p4"] = {}
+A0Lxy_histos["0p7"] = {}
+A0Lxy_histos["1"] = {}
+A0Lxy_histos["1p5"] = {}
+A0Lxy_histos["2"] = {}
+A0Lxy_histos["5"] = {}
+A0Lxy_histos["8p5"] = {}
 
 A1Lxy_histos = {}
 A1Lxy_histos["0p25"] = {}
+A1Lxy_histos["0p3"] = {}
+A1Lxy_histos["0p4"] = {}
+A1Lxy_histos["0p7"] = {}
+A1Lxy_histos["1"] = {}
+A1Lxy_histos["1p5"] = {}
+A1Lxy_histos["2"] = {}
+A1Lxy_histos["5"] = {}
+A1Lxy_histos["8p5"] = {}
 
-for sample in mcSamples:
-    chain = TChain("cutFlowAnalyzerPXBL3PXFL2/Events")
 
-    n1, ma, ctau = decodeDarkSUSYFileNameMany(sample)
-    print "Checking", "mN1", n1, "mA", ma, "cT", ctau
+## pick a certain dark boson mass ma value
+def getA0A1LxyValuesMaMass(neutralino_string, mass_string):
 
-    ## only process the low mass samples now
-    if ma != '0p25':
-        continue
+    cT_samples =  getDarkSUSYFileMaMass(mcSamples, neutralino_string, mass_string)
+
+    for cT_sample in cT_samples:
+
+        ## define a new tree
+        chain = TChain("cutFlowAnalyzerPXBL3PXFL2/Events")
+
+        ## check the n1 mass, ma mass and cT displacement
+        n1, ma, ctau = decodeDarkSUSYFileNameMany(cT_sample)
+
+        ## place a cut-off if need be!!
+        ## if ctau == '1':
+        ##    break
+
+        ## check the number of events!
+        print "Processing", n1, ma, ctau, 
+        chain = addfilesMany(chain, cT_sample)    
+        print "Events", chain.GetEntries()
+
+        lxy_hist = TH1F("lxy_hist", "A0Lxy distribution; A0 Lxy [cm]; Events", 150, 0.1, 300);
+        chain.Draw("genA0_Lxy>>lxy_hist");
+        A0Lxy_histos[ma][ctau] = lxy_hist
+        
+        lxy_hist = TH1F("lxy_hist", "A1Lxy distribution; A1 Lxy [cm]; Events", 150, 0.1, 300);
+        chain.Draw("genA1_Lxy>>lxy_hist");
+        A1Lxy_histos[ma][ctau] = lxy_hist
+
+
+## process all samples
+def getA0A1LxyValues():
+    for mass in A0Lxy_histos:
+        print mass
+        getA0A1LxyValuesMaMass('10', mass)
+
+
+## plot the dark boson lxy values
+def makePlotDarkBosonLxyMaMassAllCtau(darkBoson, mass_string):
+
+    if   darkBoson == 'A0':
+        DarkBosonLxy_histos = A0Lxy_histos
+    elif darkBoson == 'A1':
+        DarkBosonLxy_histos = A1Lxy_histos
+    else:
+        print "Not a valid dark boson choice"
+        return
     
-    if ctau == '1':
-        break
+
+    cT_colors = [1,2,3,4,5,kOrange,7,8,9]
+
+    c1 = TCanvas("c1","test",800,600);
+    c1.cd()
     
-    chain = addfilesMany(chain, sample)    
-    print "Processing", n1, ma, ctau, chain.GetEntries()
+    gPad.SetTickx(1)
+    gPad.SetTicky(1)
+    gPad.SetLogx(1)
+    gPad.SetLogy(1)
 
-    lxy_hist = TH1F("lxy_hist", "A0Lxy distribution; A0 Lxy [cm]; Events", 150, 0, 300);
-    chain.Draw("genA0_Lxy>>lxy_hist");
-    A0Lxy_histos[ma][ctau] = lxy_hist
+    c1.SetGridx()
+    c1.SetGridy()
 
-    lxy_hist = TH1F("lxy_hist", "A1Lxy distribution; A1 Lxy [cm]; Events", 150, 0, 300);
-    chain.Draw("genA1_Lxy>>lxy_hist");
-    A1Lxy_histos[ma][ctau] = lxy_hist
+    gStyle.SetStatStyle(0)
+    gStyle.SetOptStat(0)
 
-
-    """
-    break
-
-    for event in range(0,chain.GetEntries()):
-        chain.GetEntry(event)
-        print "Processing event", event
-        print chain.genA0_Lxy
-
-    break
-    """
-   
-cT_colors = [1,2,3,4,5,kOrange,7,8,9]
-
-c1 = TCanvas("c1","test",800,600);
-c1.cd()
-
-gPad.SetTickx(1)
-gPad.SetTicky(1)
-c1.SetGridx()
-c1.SetGridy()
-
-gStyle.SetStatStyle(0)
-gStyle.SetOptStat(0)
-
-gStyle.SetTitleStyle( 0 )
-gStyle.SetTitleAlign(13) ##// coord in top left
-gStyle.SetTitleX(0.)
-gStyle.SetTitleY(1.)
-gStyle.SetTitleW(1)
-gStyle.SetTitleH(0.058)
-gStyle.SetTitleBorderSize( 0 )
-
-gStyle.SetPadLeftMargin(3*0.126);
-gStyle.SetPadRightMargin(0.04);
-gStyle.SetPadTopMargin(0.06);
-gStyle.SetPadBottomMargin(3*0.13);
-
-b1 = TH1F("b1","b1", 150,0,300)
-b1.GetYaxis().SetTitleOffset(1.2)
-b1.SetMinimum(0.0)
-#b1.GetYaxis().SetNdivisions(520)
-b1.GetXaxis().SetTitle("A0 Lxy [cm]")
-b1.GetYaxis().SetTitle("Events")
-b1.GetXaxis().SetTitleOffset(1.2)
-b1.GetYaxis().SetTitleOffset(1.2)
-b1.GetXaxis().SetTitleSize(0.05)
-b1.GetYaxis().SetTitleSize(0.05)
-b1.GetXaxis().SetLabelSize(0.05)
-b1.GetYaxis().SetLabelSize(0.05)
-b1.SetTitle("           #scale[1.4]{#font[61]{CMS}} #font[52]{Simulation preliminary}                                                          13 TeV")
-b1.Draw();
-
-newmax = 0
-for cT,cT_color in zip(A0Lxy_histos["0p25"], cT_colors):
-
-    ## define the histogram
-    histo = A0Lxy_histos["0p25"][cT]
-    histo.SetLineWidth(2)
-    histo.SetLineColor(cT_color)
-
-    ## draw the histogram
-    histo.Draw("same");
-
-    ## adjust the maximum
-    newmax = max(newmax, histo.GetMaximum())
-    b1.SetMaximum(newmax)
+    gStyle.SetTitleStyle( 0 )
+    gStyle.SetTitleAlign(13) ##// coord in top left
+    gStyle.SetTitleX(0.)
+    gStyle.SetTitleY(1.)
+    gStyle.SetTitleW(1)
+    gStyle.SetTitleH(0.058)
+    gStyle.SetTitleBorderSize( 0 )
     
-canvasName = getDarkSUSYFileNameNoCT(n1, ma)
-c1.SaveAs("DarkBosonLxyPlots/" + canvasName + "_A0_Lxy" + ".png")
-c1.SaveAs("DarkBosonLxyPlots/" + canvasName + "_A0_Lxy" + ".C")
-c1.SaveAs("DarkBosonLxyPlots/" + canvasName + "_A0_Lxy" + ".py")
-
-
-
-
-
-
-   
-c1 = TCanvas("c1","test",800,600);
-c1.cd()
-
-gPad.SetTickx(1)
-gPad.SetTicky(1)
-c1.SetGridx()
-c1.SetGridy()
-
-gStyle.SetStatStyle(0)
-gStyle.SetOptStat(0)
-
-gStyle.SetTitleStyle( 0 )
-gStyle.SetTitleAlign(13) ##// coord in top left
-gStyle.SetTitleX(0.)
-gStyle.SetTitleY(1.)
-gStyle.SetTitleW(1)
-gStyle.SetTitleH(0.058)
-gStyle.SetTitleBorderSize( 0 )
-
-gStyle.SetPadLeftMargin(3*0.126);
-gStyle.SetPadRightMargin(0.04);
-gStyle.SetPadTopMargin(0.06);
-gStyle.SetPadBottomMargin(3*0.13);
-
-b1 = TH1F("b1","b1", 150,0,300)
-b1.GetYaxis().SetTitleOffset(1.2)
-b1.SetMinimum(0.0)
-#b1.GetYaxis().SetNdivisions(520)
-b1.GetXaxis().SetTitle("A1 Lxy [cm]")
-b1.GetYaxis().SetTitle("Events")
-b1.GetXaxis().SetTitleOffset(1.2)
-b1.GetYaxis().SetTitleOffset(1.2)
-b1.GetXaxis().SetTitleSize(0.05)
-b1.GetYaxis().SetTitleSize(0.05)
-b1.GetXaxis().SetLabelSize(0.05)
-b1.GetYaxis().SetLabelSize(0.05)
-b1.SetTitle("           #scale[1.4]{#font[61]{CMS}} #font[52]{Simulation preliminary}                                                          13 TeV")
-b1.Draw();
-
-newmax = 0
-for cT,cT_color in zip(A1Lxy_histos["0p25"], cT_colors):
-
-    ## define the histogram
-    histo = A1Lxy_histos["0p25"][cT]
-    histo.SetLineWidth(2)
-    histo.SetLineColor(cT_color)
-
-    ## draw the histogram
-    histo.Draw("same");
-
-    ## adjust the maximum
-    newmax = max(newmax, histo.GetMaximum())
-    b1.SetMaximum(newmax)
+    gStyle.SetPadLeftMargin(0.126);
+    gStyle.SetPadRightMargin(0.04);
+    gStyle.SetPadTopMargin(0.06);
+    gStyle.SetPadBottomMargin(0.13);
     
-canvasName = getDarkSUSYFileNameNoCT(n1, ma)
-c1.SaveAs("DarkBosonLxyPlots/" + canvasName + "_A1_Lxy" + ".png")
-c1.SaveAs("DarkBosonLxyPlots/" + canvasName + "_A1_Lxy" + ".C")
-c1.SaveAs("DarkBosonLxyPlots/" + canvasName + "_A1_Lxy" + ".py")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-exit(1)
-
-for k in range(0,tree.GetEntries()):
-    tree.GetEntry(k)
-
-    print 
-    print "Processing event", k
-
-    ## ignore all irrelevant cases
-    if not (tree.is4GenMu8 and
-            abs(tree.genA0_Lxy) < 9.8 and
-            abs(tree.genA1_Lxy) < 9.8 and
-            abs(tree.genA0_Lz) < 46.5 and
-            abs(tree.genA1_Lz) < 46.5
-            and tree.is4SelMu8
-            and tree.isVertexOK
-            and tree.is2MuJets
-            and tree.is2DiMuons
-            and tree.is2DiMuonsFittedVtxOK
-            ): continue
+    b1 = TH1F("b1","b1", 150,0,300)
+    b1.GetYaxis().SetTitleOffset(1.2)
+    b1.SetMinimum(0.0)
+    #b1.GetYaxis().SetNdivisions(520)
+    b1.GetXaxis().SetTitle(darkBoson + " Lxy [cm]")
+    b1.GetYaxis().SetTitle("Events")
+    b1.GetXaxis().SetTitleOffset(1.2)
+    b1.GetYaxis().SetTitleOffset(1.2)
+    b1.GetXaxis().SetTitleSize(0.05)
+    b1.GetYaxis().SetTitleSize(0.05)
+    b1.GetXaxis().SetLabelSize(0.05)
+    b1.GetYaxis().SetLabelSize(0.05)
+    b1.SetTitle("           #scale[1.4]{#font[61]{CMS}} #font[52]{Simulation preliminary}                                                          13 TeV")
+    b1.Draw();
     
-    print "Generator level"
-    print "Vertex location"
-    print tree.genA0Mu0_vx, tree.genA0Mu0_vy
-    print tree.genA0Mu1_vx, tree.genA0Mu1_vy
-    print tree.genA1Mu0_vx, tree.genA1Mu0_vy
-    print tree.genA1Mu1_vx, tree.genA1Mu1_vy
+    newmax = 0
+    for cT,cT_color in zip(DarkBosonLxy_histos[mass_string], cT_colors):
 
-    print "Lxy"
-    print tree.genA0_Lxy
-    print tree.genA1_Lxy
+        ## define the histogram
+        histo = DarkBosonLxy_histos[mass_string][cT]
+        histo.SetLineWidth(2)
+        histo.SetLineColor(cT_color)
+        
+        ## draw the histogram
+        histo.Draw("same");
+
+        ## adjust the maximum
+        newmax = max(newmax, histo.GetMaximum())
+        b1.SetMaximum(newmax)
     
-    print "RECO level"
-    print tree.diMuonF_FittedVtx_vx, tree.diMuonF_FittedVtx_vy, tree.diMuonF_FittedVtx_vz
-    print tree.diMuonF_FittedVtx_px, tree.diMuonF_FittedVtx_py
-    print tree.diMuonF_FittedVtx_vx * tree.diMuonF_FittedVtx_px + tree.diMuonF_FittedVtx_vy * tree.diMuonF_FittedVtx_py
+    canvasName = getDarkSUSYFileNameNoCT(n1, ma)
+    c1.SaveAs("DarkBosonLxyPlots/" + canvasName + "_" + darkBoson + "_Lxy" + ".png")
+    c1.SaveAs("DarkBosonLxyPlots/" + canvasName + "_" + darkBoson + "_Lxy" + ".C")
 
-    print tree.diMuonC_FittedVtx_vx, tree.diMuonC_FittedVtx_vy, tree.diMuonC_FittedVtx_vz
-    print tree.diMuonC_FittedVtx_px, tree.diMuonC_FittedVtx_py
-    print tree.diMuonC_FittedVtx_vx * tree.diMuonC_FittedVtx_px + tree.diMuonC_FittedVtx_vy * tree.diMuonC_FittedVtx_py
+    ## clear the canvas
+    c1.Clear()
 
-    print "Lxy"
-    print tree.diMuonF_FittedVtx_Lxy
-    print tree.diMuonC_FittedVtx_Lxy
 
-    print
-    print "Check if the displaced vertex is outside the fiducial region"
-    if tree.diMuonF_FittedVtx_Lxy > 9.8:
-      print "diMuonF_vtx outside pixel"
-    if tree.diMuonC_FittedVtx_Lxy > 9.8:
-      print "diMuonC_vtx outside pixel"
 
-    ## match the correct GEN level muon to RECO level muon
-    deltaR_GenA0_diMuonF = deltaR(tree.genA0_eta, tree.genA0_phi, tree.diMuonF_FittedVtx_eta, tree.diMuonF_FittedVtx_phi)
-    deltaR_GenA1_diMuonF = deltaR(tree.genA1_eta, tree.genA1_phi, tree.diMuonF_FittedVtx_eta, tree.diMuonF_FittedVtx_phi)
-    deltaR_GenA0_diMuonC = deltaR(tree.genA0_eta, tree.genA0_phi, tree.diMuonC_FittedVtx_eta, tree.diMuonC_FittedVtx_phi)
-    deltaR_GenA1_diMuonC = deltaR(tree.genA1_eta, tree.genA1_phi, tree.diMuonC_FittedVtx_eta, tree.diMuonC_FittedVtx_phi)
+getA0A1LxyValues()
 
-    print 
-    print "DeltaR(GEN,RECO)"
-    print "F", deltaR_GenA0_diMuonF, deltaR_GenA1_diMuonF
-    print "C", deltaR_GenA0_diMuonC, deltaR_GenA1_diMuonC
-
-    ## associated the reco dimuon to the gen dimuon
-    is_dR_A0_diMuonF_smaller = deltaR_GenA0_diMuonF < deltaR_GenA1_diMuonF
-    genRecoCase = -1
-    
-    if is_dR_A0_diMuonF_smaller: genRecoCase = 1
-    else:                        genRecoCase = 2
-
-    
-    
+makePlotDarkBosonLxyMaMassAllCtau('A0')
+makePlotDarkBosonLxyMaMassAllCtau('A1')

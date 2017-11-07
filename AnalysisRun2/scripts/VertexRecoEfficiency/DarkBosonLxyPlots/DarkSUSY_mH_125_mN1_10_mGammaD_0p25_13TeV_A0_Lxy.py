@@ -1,7 +1,7 @@
 %!PS-Adobe-2.0
 %%Title: DarkBosonLxyPlots/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_13TeV_A0_Lxy.py: test
 %%Creator: ROOT Version 6.06/01
-%%CreationDate: Thu Oct  5 13:29:38 2017
+%%CreationDate: Thu Oct  5 13:37:05 2017
 %%Orientation: Landscape
 %%DocumentNeededResources: ProcSet (FontSetInit)
 %%EndComments
@@ -88,9 +88,11 @@ newpath  gsave  90 r 0 -594 t  28 20 t .25 .25 scale  gsave
  gsave  2948 2118 0 0 C 3.70356 1829.56 t 0 r /Helvetica findfont 99.996 sf 0 0 m (70000) show NC gr  2653 212 m 1695 Y s 2582 212 m 71 X s 2618 259 m 35 X s 2618 306 m 35 X s 2618 353 m 35 X s 2618 401 m 35 X s 2582 448 m 71 X s 2618 495 m 35 X s
  2618 542 m 35 X s 2618 589 m 35 X s 2618 637 m 35 X s 2582 684 m 71 X s 2618 731 m 35 X s 2618 778 m 35 X s 2618 825 m 35 X s 2618 873 m 35 X s 2582 920 m 71 X s 2618 967 m 35 X s 2618 1014 m 35 X s 2618 1061 m 35 X s 2618 1109 m 35 X s 2582 1156 m
  71 X s 2618 1203 m 35 X s 2618 1250 m 35 X s 2618 1297 m 35 X s 2618 1345 m 35 X s 2582 1392 m 71 X s 2618 1439 m 35 X s 2618 1486 m 35 X s 2618 1533 m 35 X s 2618 1580 m 35 X s 2582 1628 m 71 X s 2618 1675 m 35 X s 2618 1722 m 35 X s 2618 1769 m 35
- X s 2618 1816 m 35 X s 2582 1864 m 71 X s 2582 1864 m 71 X s 6 lw 1 1 1 c black 295 670 m 16 X -458 Y 2342 X s 1 0 0 c 1 1 1 c black 1 0 0 c 295 1907 m 16 X -1312 Y 15 X -256 Y 16 X -76 Y 16 X -26 Y 15 X -14 Y 16 X -5 Y 16 X -2 Y 16 X -2 Y 15 X -1 Y
- 32 X -1 Y 2185 X s 0 1 0 c 1 1 1 c black 0 1 0 c 295 861 m 16 X -243 Y 15 X -122 Y 16 X -80 Y 16 X -52 Y 15 X -35 Y 16 X -26 Y 16 X -19 Y 16 X -14 Y 15 X -12 Y 16 X -11 Y 16 X -4 Y 15 X -6 Y 16 X -4 Y 16 X -4 Y 16 X -2 Y 15 X -4 Y 16 X -1 Y 16 X -2
- Y 16 X -1 Y 15 X -1 Y 16 X -1 Y 16 X -1 Y 31 X -1 Y 47 X -1 Y 47 X -1 Y 111 X -1 Y 15 X 1 Y 16 X -1 Y 1745 X s 0 0 1 c 1 1 1 c black 0 0 1 c 295 620 m 16 X -373 Y 15 X -29 Y 16 X -4 Y 16 X -1 Y 15 X -1 Y 2280 X s 1 1 1 c black
+ X s 2618 1816 m 35 X s 2582 1864 m 71 X s 2582 1864 m 71 X s 6 lw 1 1 1 c black 295 408 m 16 X -49 Y 15 X -25 Y 16 X -31 Y 16 X -9 Y 15 X -14 Y 16 X -11 Y 16 X -7 Y 16 X -6 Y 15 X -6 Y 16 X -4 Y 16 X -6 Y 15 X -4 Y 16 X -1 Y 16 X -1 Y 16 X -4 Y 15 X
+ -2 Y 16 X -3 Y 16 X 1 Y 16 X -1 Y 15 X -2 Y 16 X -2 Y 16 X -1 Y 31 X -1 Y 16 X -1 Y 31 X -1 Y 32 X -1 Y 47 X -1 Y 31 X -1 Y 110 X -1 Y 221 X -1 Y 1493 X s 1 0 0 c 1 1 1 c black 1 0 0 c 295 670 m 16 X -458 Y 2342 X s 0 1 0 c 1 1 1 c black 0 1 0 c 295
+ 1907 m 16 X -1312 Y 15 X -256 Y 16 X -76 Y 16 X -26 Y 15 X -14 Y 16 X -5 Y 16 X -2 Y 16 X -2 Y 15 X -1 Y 32 X -1 Y 2185 X s 0 0 1 c 1 1 1 c black 0 0 1 c 295 861 m 16 X -243 Y 15 X -122 Y 16 X -80 Y 16 X -52 Y 15 X -35 Y 16 X -26 Y 16 X -19 Y 16 X
+ -14 Y 15 X -12 Y 16 X -11 Y 16 X -4 Y 15 X -6 Y 16 X -4 Y 16 X -4 Y 16 X -2 Y 15 X -4 Y 16 X -1 Y 16 X -2 Y 16 X -1 Y 15 X -1 Y 16 X -1 Y 16 X -1 Y 31 X -1 Y 47 X -1 Y 47 X -1 Y 111 X -1 Y 15 X 1 Y 16 X -1 Y 1745 X s 1 1 0 c 1 1 1 c black 1 1 0 c
+ 295 620 m 16 X -373 Y 15 X -29 Y 16 X -4 Y 16 X -1 Y 15 X -1 Y 2280 X s 1 1 1 c black
  gsave  2948 2118 0 0 C 1396.24 2025.85 t 0 r /Helvetica findfont 74.0711 sf 0 0 m (                                                          13 TeV) show NC gr 
  gsave  2948 2118 0 0 C 659.233 2025.85 t 0 r /Helvetica-Oblique findfont 74.0711 sf 0 0 m (Simulation preliminary) show NC gr 
  gsave  2948 2118 0 0 C 633.308 2025.85 t 0 r /Helvetica findfont 74.0711 sf 0 0 m ( ) show NC gr 

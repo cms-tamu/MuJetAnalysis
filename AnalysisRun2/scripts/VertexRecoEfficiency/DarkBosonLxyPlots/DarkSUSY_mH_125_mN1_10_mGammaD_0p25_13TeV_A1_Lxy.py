@@ -1,7 +1,7 @@
 %!PS-Adobe-2.0
 %%Title: DarkBosonLxyPlots/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_13TeV_A1_Lxy.py: test
 %%Creator: ROOT Version 6.06/01
-%%CreationDate: Thu Oct  5 13:29:39 2017
+%%CreationDate: Thu Oct  5 13:37:05 2017
 %%Orientation: Landscape
 %%DocumentNeededResources: ProcSet (FontSetInit)
 %%EndComments
@@ -93,8 +93,9 @@ newpath  gsave  90 r 0 -594 t  28 20 t .25 .25 scale  gsave
  2806 1007 m 24 X s 2806 1033 m 24 X s 2806 1059 m 24 X s 2781 1085 m 49 X s 2806 1111 m 24 X s 2806 1136 m 24 X s 2806 1162 m 24 X s 2806 1188 m 24 X s 2781 1214 m 49 X s 2806 1240 m 24 X s 2806 1266 m 24 X s 2806 1292 m 24 X s 2806 1317 m 24 X s
  2781 1343 m 49 X s 2806 1369 m 24 X s 2806 1395 m 24 X s 2806 1421 m 24 X s 2806 1447 m 24 X s 2781 1473 m 49 X s 2806 1498 m 24 X s 2806 1524 m 24 X s 2806 1550 m 24 X s 2806 1576 m 24 X s 2781 1602 m 49 X s 2806 1628 m 24 X s 2806 1654 m 24 X s
  2806 1679 m 24 X s 2806 1705 m 24 X s 2781 1731 m 49 X s 2806 1757 m 24 X s 2806 1783 m 24 X s 2806 1809 m 24 X s 2806 1835 m 24 X s 2781 1860 m 49 X s 2806 1886 m 24 X s 2806 1912 m 24 X s 2806 1938 m 24 X s 2806 1964 m 24 X s 2781 1990 m 49 X s
- 2781 1990 m 49 X s 6 lw 1 1 1 c black 1114 1077 m 12 X -251 Y 1704 X s 1 0 0 c 1 1 1 c black 1 0 0 c 1114 1991 m 12 X -1087 Y 11 X -62 Y 12 X -11 Y 11 X -3 Y 12 X -1 Y 11 X -1 Y 1647 X s 0 1 0 c 1 1 1 c black 0 1 0 c 1114 1541 m 12 X -490 Y 11 X
- -110 Y 12 X -46 Y 11 X -24 Y 12 X -16 Y 11 X -9 Y 11 X -7 Y 12 X -3 Y 11 X -3 Y 12 X -2 Y 11 X -1 Y 12 X -1 Y 11 X -1 Y 23 X -1 Y 69 X -1 Y 1475 X s 0 0 1 c 1 1 1 c black 0 0 1 c 1114 1070 m 12 X -240 Y 11 X -3 Y 12 X -1 Y 1681 X s 1 1 1 c black
+ 2781 1990 m 49 X s 6 lw 1 1 1 c black 1114 1092 m 12 X -152 Y 11 X -42 Y 12 X -24 Y 11 X -13 Y 12 X -9 Y 11 X -5 Y 11 X -5 Y 12 X -3 Y 11 X -3 Y 12 X -1 Y 11 X -2 Y 12 X -1 Y 11 X -1 Y 11 X -1 Y 12 X -1 Y 34 X -1 Y 23 X -1 Y 12 X 1 Y 11 X -1 Y 103 X
+ -1 Y 1361 X s 1 0 0 c 1 1 1 c black 1 0 0 c 1114 1077 m 12 X -251 Y 1704 X s 0 1 0 c 1 1 1 c black 0 1 0 c 1114 1991 m 12 X -1087 Y 11 X -62 Y 12 X -11 Y 11 X -3 Y 12 X -1 Y 11 X -1 Y 1647 X s 0 0 1 c 1 1 1 c black 0 0 1 c 1114 1541 m 12 X -490 Y 11
+ X -110 Y 12 X -46 Y 11 X -24 Y 12 X -16 Y 11 X -9 Y 11 X -7 Y 12 X -3 Y 11 X -3 Y 12 X -2 Y 11 X -1 Y 12 X -1 Y 11 X -1 Y 23 X -1 Y 69 X -1 Y 1475 X s 1 1 0 c 1 1 1 c black 1 1 0 c 1114 1070 m 12 X -240 Y 11 X -3 Y 12 X -1 Y 1681 X s 1 1 1 c black
  gsave  2948 2118 0 0 C 1396.24 2025.85 t 0 r /Helvetica findfont 74.0711 sf 0 0 m (                                                          13 TeV) show NC gr 
  gsave  2948 2118 0 0 C 659.233 2025.85 t 0 r /Helvetica-Oblique findfont 74.0711 sf 0 0 m (Simulation preliminary) show NC gr 
  gsave  2948 2118 0 0 C 633.308 2025.85 t 0 r /Helvetica findfont 74.0711 sf 0 0 m ( ) show NC gr 
