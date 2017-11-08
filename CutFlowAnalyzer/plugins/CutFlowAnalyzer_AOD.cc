@@ -22,12 +22,15 @@
 #include "DataFormats/MuonReco/interface/MuonChamberMatch.h"
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/MuonReco/interface/MuonSegmentMatch.h"
+#include "DataFormats/MuonReco/interface/MuonSelectors.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/TriggerEvent.h"
 #include "DataFormats/TrackingRecHit/interface/TrackingRecHit.h"
 #include "DataFormats/TrackReco/interface/HitPattern.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/TrackReco/interface/Track.h"
+#include "DataFormats/METReco/interface/PFMETFwd.h"
+#include "DataFormats/METReco/interface/PFMET.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
@@ -314,6 +317,8 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
+  edm::EDGetTokenT<reco::PFMETCollection> m_pfMET;
+
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
   Int_t         m_endcapPixelLayer;
@@ -404,7 +409,56 @@ private:
   Float_t b_selMu1_pT;
   Float_t b_selMu2_pT;
   Float_t b_selMu3_pT;
+ 
+  Float_t b_selMu0_q;
+  Float_t b_selMu1_q;
+  Float_t b_selMu2_q;
+  Float_t b_selMu3_q;
+  
+  Bool_t b_selMu0_isMedium;
+  Bool_t b_selMu1_isMedium;
+  Bool_t b_selMu2_isMedium;
+  Bool_t b_selMu3_isMedium;
+  
+  Bool_t b_selMu0_isTight;
+  Bool_t b_selMu1_isTight;
+  Bool_t b_selMu2_isTight;
+  Bool_t b_selMu3_isTight;
 
+  Float_t b_selMu0_GlobalTrackChi2;
+  Float_t b_selMu1_GlobalTrackChi2;
+  Float_t b_selMu2_GlobalTrackChi2;
+  Float_t b_selMu3_GlobalTrackChi2;
+
+  Float_t b_selMu0_dxy;
+  Float_t b_selMu1_dxy;
+  Float_t b_selMu2_dxy;
+  Float_t b_selMu3_dxy;
+
+  Float_t b_selMu0_dz;
+  Float_t b_selMu1_dz;
+  Float_t b_selMu2_dz;
+  Float_t b_selMu3_dz;
+
+  // number of valid muon hits
+  Int_t b_selMu0_NVMH;
+  Int_t b_selMu1_NVMH;
+  Int_t b_selMu2_NVMH;
+  Int_t b_selMu3_NVMH;
+  
+  // number of valid pixel hits
+  Int_t b_selMu0_NVPH;
+  Int_t b_selMu1_NVPH;
+  Int_t b_selMu2_NVPH;
+  Int_t b_selMu3_NVPH;
+  
+  // number of valid tracker layers
+  Int_t b_selMu0_NVTL;
+  Int_t b_selMu1_NVTL;
+  Int_t b_selMu2_NVTL;
+  Int_t b_selMu3_NVTL;
+
+  // dimuon properties
   Float_t b_diMuonC_FittedVtx_m;
   Float_t b_diMuonC_FittedVtx_px;
   Float_t b_diMuonC_FittedVtx_py;
@@ -414,7 +468,6 @@ private:
   Float_t b_diMuonC_FittedVtx_vx;
   Float_t b_diMuonC_FittedVtx_vy;
   Float_t b_diMuonC_FittedVtx_vz;
-
 
   Int_t b_diMuonC_m1_FittedVtx_hitpix;
   Int_t b_diMuonC_m2_FittedVtx_hitpix;
@@ -501,6 +554,8 @@ private:
   bool runDisplacedVtxFinder_;
   bool runPixelHitRecovery_;
   bool skimOutput_; //fill only events with 2 good dimuons
+
+  Float_t b_pfMET;
 
   //PixelHitRecovery
 
@@ -771,6 +826,8 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
   m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
+  m_pfMET           = consumes<reco::PFMETCollection>(iConfig.getParameter<edm::InputTag>("pfMET"));
+
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
@@ -817,6 +874,8 @@ CutFlowAnalyzer_AOD::~CutFlowAnalyzer_AOD()
 void
 CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+  m_fillGenLevel = !iEvent.eventAuxiliary().isRealData();
+
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
 
@@ -1102,7 +1161,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   //                          GEN LEVEL ANALYSIS START                          
   //****************************************************************************
 
-  if (m_fillGenLevel){  
+  if (m_fillGenLevel) {  
 
     if ( m_debug > 10 ) std::cout << m_events << " Start GEN Level" << std::endl;
 
@@ -1464,12 +1523,19 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
   if ( m_debug > 10 ) std::cout << m_events << " Start RECO Level" << std::endl;
 
+  edm::Handle<reco::PFMETCollection> pfMETH;
+  iEvent.getByToken(m_pfMET, pfMETH);
+  const reco::PFMET& pfMET = pfMETH.product()->front(); 
+  b_pfMET = pfMET.sumEt();
+
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
   
   std::vector<const reco::Muon*> selMuons;
   std::vector<const reco::Muon*> selMuons8;
   std::vector<const reco::Muon*> selMuons17;
+
+  if ( m_debug > 10 ) std::cout << m_events << " Fetch RECO muons" << std::endl;
 
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
     if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
@@ -1485,20 +1551,72 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   
   b_nRecoMu = selMuons.size();
 
+
+  // Cut on primary vertex in event
+  if ( m_debug > 10 ) std::cout << m_events << " Cut on primary vertex" << std::endl;
+  edm::Handle<reco::VertexCollection> primaryVertices;
+  iEvent.getByToken(m_primaryVertices, primaryVertices);
+
+  b_isVertexOK = false;
+  for (reco::VertexCollection::const_iterator vertex = primaryVertices->begin();  vertex != primaryVertices->end();  ++vertex) {
+    if (vertex->isValid() && !vertex->isFake() && vertex->tracksSize() >= 4 && fabs(vertex->z()) < 24.) {
+      b_isVertexOK = true;
+    }
+  }
+
+  // the primary vertex of a WZ event is defined as the first vertex 
+  // that appears in the list of vertices that satisfies:
+  // 1: isValid
+  // 2: not fake
+  // 3: at least 3 associated tracks
+  // 4: z position < 24 cm
+  // the first one vertex has the highest pT tracks associated to it
+  // this is only needed for signal trigger scale factor studies
+
+  if ( m_debug > 10 ) std::cout << m_events << " Get WZ primary vertex" << std::endl;
+  reco::Vertex WZVertex;
+  for (const auto& vertex : *primaryVertices.product()) {
+    if (vertex.isValid() && !vertex.isFake() && vertex.tracksSize() >= 3 && fabs(vertex.z()) < 24.) {
+      WZVertex = vertex;
+      break;
+    }
+  }
+  
   if ( selMuons.size() > 0 ) {
     b_selMu0_px  = selMuons[0]->px();
     b_selMu0_py  = selMuons[0]->py();
     b_selMu0_pz  = selMuons[0]->pz();
     b_selMu0_pT  = selMuons[0]->pt();
     b_selMu0_eta = selMuons[0]->eta();
-    b_selMu0_phi = selMuons[0]->phi();
-  } else {
+    b_selMu0_phi = selMuons[0]->phi(); 
+    b_selMu0_q = selMuons[0]->charge();
+    b_selMu0_isMedium = muon::isMediumMuon(*selMuons[0]);
+    b_selMu0_NVMH = selMuons[0]->innerTrack()->hitPattern().numberOfValidMuonHits();
+    b_selMu0_NVPH = selMuons[0]->innerTrack()->hitPattern().numberOfValidPixelHits();
+    b_selMu0_NVTL = selMuons[0]->innerTrack()->hitPattern().trackerLayersWithMeasurement(); 
+    // these variables only make sense if you consider WZ events
+    b_selMu0_isTight = muon::isTightMuon(*selMuons[0], WZVertex);
+    if (!selMuons[0]->globalTrack().isNull())
+      b_selMu0_GlobalTrackChi2 = selMuons[0]->globalTrack()->normalizedChi2();
+    b_selMu0_dxy = selMuons[0]->muonBestTrack()->dxy(WZVertex.position());
+    b_selMu0_dz = selMuons[0]->muonBestTrack()->dz(WZVertex.position());
+ } else {
     b_selMu0_px  = -100.0;
     b_selMu0_py  = -100.0;
     b_selMu0_pz  = -100.0;
     b_selMu0_pT  = -100.0;
     b_selMu0_eta = -100.0;
     b_selMu0_phi = -100.0;
+    b_selMu0_q = - 100;
+    b_selMu0_isMedium = false;
+    b_selMu0_NVMH = -1;
+    b_selMu0_NVPH = -1;
+    b_selMu0_NVTL = -1;
+    // these variables only make sense if you consider WZ events
+    b_selMu0_isTight = false;
+    b_selMu0_GlobalTrackChi2 = -1;
+    b_selMu0_dxy = -9999;
+    b_selMu0_dz = -9999;
   }
   if ( selMuons.size() > 1 ) {
     b_selMu1_px  = selMuons[1]->px();
@@ -1507,6 +1625,17 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu1_pT  = selMuons[1]->pt();
     b_selMu1_eta = selMuons[1]->eta();
     b_selMu1_phi = selMuons[1]->phi();
+    b_selMu1_q = selMuons[1]->charge();
+    b_selMu1_isMedium = muon::isMediumMuon(*selMuons[1]);
+    b_selMu1_NVMH = selMuons[1]->innerTrack()->hitPattern().numberOfValidMuonHits();
+    b_selMu1_NVPH = selMuons[1]->innerTrack()->hitPattern().numberOfValidPixelHits();
+    b_selMu1_NVTL = selMuons[1]->innerTrack()->hitPattern().trackerLayersWithMeasurement(); 
+    // these variables only make sense if you consider WZ events
+    b_selMu1_isTight = muon::isTightMuon(*selMuons[1], WZVertex);
+    if (!selMuons[1]->globalTrack().isNull())
+      b_selMu1_GlobalTrackChi2 = selMuons[1]->globalTrack()->normalizedChi2();
+    b_selMu1_dxy = selMuons[1]->muonBestTrack()->dxy(WZVertex.position());
+    b_selMu1_dz = selMuons[1]->muonBestTrack()->dz(WZVertex.position());
   } else {
     b_selMu1_px  = -100.0;
     b_selMu1_py  = -100.0;
@@ -1514,6 +1643,16 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu1_pT  = -100.0;
     b_selMu1_eta = -100.0;
     b_selMu1_phi = -100.0;
+    b_selMu1_q = - 100;
+    b_selMu1_isMedium = false;
+    b_selMu1_NVMH = -1;
+    b_selMu1_NVPH = -1;
+    b_selMu1_NVTL = -1;
+    // these variables only make sense if you consider WZ events
+    b_selMu1_isTight = false;
+    b_selMu1_GlobalTrackChi2 = -1;
+    b_selMu1_dxy = -9999;
+    b_selMu1_dz = -9999;
   }
   if ( selMuons.size() > 2 ) {
     b_selMu2_px  = selMuons[2]->px();
@@ -1522,6 +1661,17 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu2_pT  = selMuons[2]->pt();
     b_selMu2_eta = selMuons[2]->eta();
     b_selMu2_phi = selMuons[2]->phi();
+    b_selMu2_q = selMuons[2]->charge();
+    b_selMu2_isMedium = muon::isMediumMuon(*selMuons[2]);
+    b_selMu2_NVMH = selMuons[2]->innerTrack()->hitPattern().numberOfValidMuonHits();
+    b_selMu2_NVPH = selMuons[2]->innerTrack()->hitPattern().numberOfValidPixelHits();
+    b_selMu2_NVTL = selMuons[2]->innerTrack()->hitPattern().trackerLayersWithMeasurement(); 
+    // these variables only make sense if you consider WZ events
+    b_selMu2_isTight = muon::isTightMuon(*selMuons[2], WZVertex);
+    if (!selMuons[2]->globalTrack().isNull())
+      b_selMu2_GlobalTrackChi2 = selMuons[2]->globalTrack()->normalizedChi2();
+    b_selMu2_dxy = selMuons[2]->muonBestTrack()->dxy(WZVertex.position());
+    b_selMu2_dz = selMuons[2]->muonBestTrack()->dz(WZVertex.position());
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
@@ -1529,6 +1679,16 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu2_pT  = -100.0;
     b_selMu2_eta = -100.0;
     b_selMu2_phi = -100.0;
+    b_selMu2_q = - 100;
+    b_selMu2_isMedium = false;
+    b_selMu2_NVMH = -1;
+    b_selMu2_NVPH = -1;
+    b_selMu2_NVTL = -1;
+    // these variables only make sense if you consider WZ events
+    b_selMu2_isTight = false;
+    b_selMu2_GlobalTrackChi2 = -1;
+    b_selMu2_dxy = -9999;
+    b_selMu2_dz = -9999;
   }
   if ( selMuons.size() > 3 ) {
     b_selMu3_px  = selMuons[3]->px();
@@ -1537,6 +1697,17 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu3_pT  = selMuons[3]->pt();
     b_selMu3_eta = selMuons[3]->eta();
     b_selMu3_phi = selMuons[3]->phi();
+    b_selMu3_q = selMuons[3]->charge();
+    b_selMu3_isMedium = muon::isMediumMuon(*selMuons[0]);
+    b_selMu3_NVMH = selMuons[3]->innerTrack()->hitPattern().numberOfValidMuonHits();
+    b_selMu3_NVPH = selMuons[3]->innerTrack()->hitPattern().numberOfValidPixelHits();
+    b_selMu3_NVTL = selMuons[3]->innerTrack()->hitPattern().trackerLayersWithMeasurement(); 
+    // these variables only make sense if you consider WZ events
+    b_selMu3_isTight = muon::isTightMuon(*selMuons[3], WZVertex);
+    if (!selMuons[3]->globalTrack().isNull())
+      b_selMu3_GlobalTrackChi2 = selMuons[3]->globalTrack()->normalizedChi2();
+    b_selMu3_dxy = selMuons[3]->muonBestTrack()->dxy(WZVertex.position());
+    b_selMu3_dz = selMuons[3]->muonBestTrack()->dz(WZVertex.position());
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1544,6 +1715,16 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu3_pT  = -100.0;
     b_selMu3_eta = -100.0;
     b_selMu3_phi = -100.0;
+    b_selMu3_q = - 100;
+    b_selMu3_isMedium = false;
+    b_selMu3_NVMH = -1;
+    b_selMu3_NVPH = -1;
+    b_selMu3_NVTL = -1;
+    // these variables only make sense if you consider WZ events
+    b_selMu3_isTight = false;
+    b_selMu3_GlobalTrackChi2 = -1;
+    b_selMu3_dxy = -9999;
+    b_selMu3_dz = -9999;
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
@@ -1895,6 +2076,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(m_tracks, tracks);
 
+
   // Cut on isolation - use fitted vertexes
   b_diMuonC_IsoTk_FittedVtx = -1.;
   b_diMuonF_IsoTk_FittedVtx = -1.;
@@ -2048,17 +2230,6 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
           }
         }
       }
-    }
-  }
-
-  // Cut on primary vertex in event
-  edm::Handle<reco::VertexCollection> primaryVertices;
-  iEvent.getByToken(m_primaryVertices, primaryVertices);
-
-  b_isVertexOK = false;
-  for (reco::VertexCollection::const_iterator vertex = primaryVertices->begin();  vertex != primaryVertices->end();  ++vertex) {
-    if (vertex->isValid() && !vertex->isFake() && vertex->tracksSize() >= 4 && fabs(vertex->z()) < 24.) {
-      b_isVertexOK = true;
     }
   }
 
@@ -3088,6 +3259,51 @@ CutFlowAnalyzer_AOD::beginJob() {
   m_ttree->Branch("selMu2_phi", &b_selMu2_phi, "selMu2_phi/F");
   m_ttree->Branch("selMu3_phi", &b_selMu3_phi, "selMu3_phi/F");
 
+  m_ttree->Branch("selMu0_q", &b_selMu0_q, "selMu0_q/F");
+  m_ttree->Branch("selMu1_q", &b_selMu1_q, "selMu1_q/F");
+  m_ttree->Branch("selMu2_q", &b_selMu2_q, "selMu2_q/F");
+  m_ttree->Branch("selMu3_q", &b_selMu3_q, "selMu3_q/F");
+
+  m_ttree->Branch("selMu0_isMedium", &b_selMu0_isMedium, "selMu0_isMedium/O");
+  m_ttree->Branch("selMu1_isMedium", &b_selMu1_isMedium, "selMu1_isMedium/O");
+  m_ttree->Branch("selMu2_isMedium", &b_selMu2_isMedium, "selMu2_isMedium/O");
+  m_ttree->Branch("selMu3_isMedium", &b_selMu3_isMedium, "selMu3_isMedium/O");
+
+  m_ttree->Branch("selMu0_isTight", &b_selMu0_isTight, "selMu0_isTight/O");
+  m_ttree->Branch("selMu1_isTight", &b_selMu1_isTight, "selMu1_isTight/O");
+  m_ttree->Branch("selMu2_isTight", &b_selMu2_isTight, "selMu2_isTight/O");
+  m_ttree->Branch("selMu3_isTight", &b_selMu3_isTight, "selMu3_isTight/O");
+
+  m_ttree->Branch("selMu0_NVMH", &b_selMu0_NVMH, "selMu0_NVMH/I");
+  m_ttree->Branch("selMu1_NVMH", &b_selMu1_NVMH, "selMu1_NVMH/I");
+  m_ttree->Branch("selMu2_NVMH", &b_selMu2_NVMH, "selMu2_NVMH/I");
+  m_ttree->Branch("selMu3_NVMH", &b_selMu3_NVMH, "selMu3_NVMH/I");
+
+  m_ttree->Branch("selMu0_NVPH", &b_selMu0_NVPH, "selMu0_NVPH/I");
+  m_ttree->Branch("selMu1_NVPH", &b_selMu1_NVPH, "selMu1_NVPH/I");
+  m_ttree->Branch("selMu2_NVPH", &b_selMu2_NVPH, "selMu2_NVPH/I");
+  m_ttree->Branch("selMu3_NVPH", &b_selMu3_NVPH, "selMu3_NVPH/I");
+
+  m_ttree->Branch("selMu0_NVTL", &b_selMu0_NVTL, "selMu0_NVTL/I");
+  m_ttree->Branch("selMu1_NVTL", &b_selMu1_NVTL, "selMu1_NVTL/I");
+  m_ttree->Branch("selMu2_NVTL", &b_selMu2_NVTL, "selMu2_NVTL/I");
+  m_ttree->Branch("selMu3_NVTL", &b_selMu3_NVTL, "selMu3_NVTL/I");
+
+  m_ttree->Branch("selMu0_GlobalTrackChi2", &b_selMu0_GlobalTrackChi2, "selMu0_GlobalTrackChi2/F");
+  m_ttree->Branch("selMu1_GlobalTrackChi2", &b_selMu1_GlobalTrackChi2, "selMu1_GlobalTrackChi2/F");
+  m_ttree->Branch("selMu2_GlobalTrackChi2", &b_selMu2_GlobalTrackChi2, "selMu2_GlobalTrackChi2/F");
+  m_ttree->Branch("selMu3_GlobalTrackChi2", &b_selMu3_GlobalTrackChi2, "selMu3_GlobalTrackChi2/F");
+
+  m_ttree->Branch("selMu0_dxy", &b_selMu0_dxy, "selMu0_dxy/F");
+  m_ttree->Branch("selMu1_dxy", &b_selMu1_dxy, "selMu1_dxy/F");
+  m_ttree->Branch("selMu2_dxy", &b_selMu2_dxy, "selMu2_dxy/F");
+  m_ttree->Branch("selMu3_dxy", &b_selMu3_dxy, "selMu3_dxy/F");
+
+  m_ttree->Branch("selMu0_dz", &b_selMu0_dz, "selMu0_dz/F");
+  m_ttree->Branch("selMu1_dz", &b_selMu1_dz, "selMu1_dz/F");
+  m_ttree->Branch("selMu2_dz", &b_selMu2_dz, "selMu2_dz/F");
+  m_ttree->Branch("selMu3_dz", &b_selMu3_dz, "selMu3_dz/F");
+
   // RECO DiMuons
   m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
   m_ttree->Branch("diMuonC_FittedVtx_px",  &b_diMuonC_FittedVtx_px,  "diMuonC_FittedVtx_px/F");
@@ -3205,6 +3421,7 @@ CutFlowAnalyzer_AOD::beginJob() {
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);  
   m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
+  m_ttree->Branch("pfMET",&b_pfMET,"pfMET/F");
 
   if(runPixelHitRecovery_){
     //pixelHitRecovery
