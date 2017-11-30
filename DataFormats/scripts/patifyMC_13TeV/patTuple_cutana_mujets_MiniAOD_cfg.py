@@ -17,7 +17,7 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
-process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
+process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_MiniAOD_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.FilterSample3RecoMu_MiniAOD_cfi")
 
 process.source = cms.Source("PoolSource",

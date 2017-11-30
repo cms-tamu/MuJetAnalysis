@@ -10,6 +10,7 @@ from PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi import unpacke
 
 ## unpacker
 unpackedPatTrigger.unpackFilterLabels = cms.bool(False)
+unpackedPatTrigger.patTriggerObjectsStandAlone = cms.InputTag("slimmedPatTrigger")
 
 ## muon matcher
 muonMatch.src = cms.InputTag("slimmedMuons")
