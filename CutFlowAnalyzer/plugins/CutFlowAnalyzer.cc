@@ -487,7 +487,7 @@ private:
   Float_t b_PAT_jet_Btag3[100];
 
   Int_t b_ntracks;
-  
+
   Float_t b_track_pt[1000];
   Float_t b_track_charge[1000];
   Float_t b_track_qoverp[1000];
@@ -495,7 +495,7 @@ private:
   Float_t b_track_phi[1000];
   Float_t b_track_dxy[1000];
   Float_t b_track_dz[1000];
-  
+
   Float_t b_track_errpt[1000];
   Float_t b_track_errcharge[1000];
   Float_t b_track_errqoverp[1000];
@@ -588,7 +588,7 @@ private:
   Float_t b_mutrack_charge_mu2JetC;
   Float_t b_mutrack_charge_mu1JetF;
   Float_t b_mutrack_charge_mu2JetF;
-  
+
   Int_t b_innerlayers_mu1_muJetC;
   Int_t b_innerlayers_mu2_muJetC;
   Int_t b_innerlayers_mu1_muJetF;
@@ -631,7 +631,7 @@ private:
   Float_t  b_mj2m1posy[10][10];
   Float_t  b_mj2m1posx_err[10][10];
   Float_t  b_mj2m1posy_err[10][10];
-  
+
   Float_t b_pixelhit_mu1_muJetC_posx[10][100];
   Float_t b_pixelhit_mu1_muJetC_posy[10][100];
   Float_t b_pixelhit_mu1_muJetC_errposx[10][100];
@@ -683,13 +683,13 @@ private:
 CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
 {
   //****************************************************************************
-  //                          SET THRESHOLDS                                    
+  //                          SET THRESHOLDS
   //****************************************************************************
 
-  m_threshold_Mu17_pT  = 17.0; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
-  m_threshold_Mu17_eta =  0.9; // max eta in Barrel  //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
-  m_threshold_Mu8_pT   =  8.0; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
-  m_threshold_Mu8_eta  =  2.4; // max eta in Endcaps //These values are set by trigger efficiencies and detector geometry so may be left hard-coded 
+  m_threshold_Mu17_pT  = 17.0; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded
+  m_threshold_Mu17_eta =  0.9; // max eta in Barrel  //These values are set by trigger efficiencies and detector geometry so may be left hard-coded
+  m_threshold_Mu8_pT   =  8.0; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded
+  m_threshold_Mu8_eta  =  2.4; // max eta in Endcaps //These values are set by trigger efficiencies and detector geometry so may be left hard-coded
 
 
   m_threshold_DiMuons_Iso_dR = 0.4; // Isolation cone              //There is no real way to avoid hard-coding this value
@@ -697,16 +697,16 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_threshold_DiMuons_Iso_pT = 0.5; // Track pT [GeV]              //There is no real way to avoid hard-coding this value
 
   //****************************************************************************
-  //               SET EVENT LEVEL VARIABLES AND COUNTERS                       
+  //               SET EVENT LEVEL VARIABLES AND COUNTERS
   //****************************************************************************
 
   m_debug = iConfig.getParameter<int>("analyzerDebug");
   m_ttree  = NULL;
   m_ttree_orphan = NULL;
-  m_events = 0;    
+  m_events = 0;
 
   //****************************************************************************
-  //                 SET GEN LEVEL VARIABLES AND COUNTERS                       
+  //                 SET GEN LEVEL VARIABLES AND COUNTERS
   //****************************************************************************
 
   m_fillGenLevel = iConfig.getParameter<bool>("fillGenLevel");
@@ -874,7 +874,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_track_errdz[k]=-10000000;
   }
 
-  
+
   for(int k=0;k<10;k++){
     mtrack_pt[k]=-10000000;
     mtrack_charge[k]=-10000000;
@@ -962,24 +962,24 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_PXBID_mu2muJetF[k][j]=-10000;
       b_PXFID_mu2muJetF[k][j]=-10000;
 
-      b_mj1m0posx[k][j]=-10000;    
-      b_mj1m0posy[k][j]=-10000;    
+      b_mj1m0posx[k][j]=-10000;
+      b_mj1m0posy[k][j]=-10000;
       b_mj1m0posx_err[k][j]=-10000;
       b_mj1m0posy_err[k][j]=-10000;
-      b_mj1m1posx[k][j]=-10000;    
-      b_mj1m1posy[k][j]=-10000;    
+      b_mj1m1posx[k][j]=-10000;
+      b_mj1m1posy[k][j]=-10000;
       b_mj1m1posx_err[k][j]=-10000;
       b_mj1m1posy_err[k][j]=-10000;
 
-      b_mj2m0posx[k][j]=-10000;    
-      b_mj2m0posy[k][j]=-10000;    
+      b_mj2m0posx[k][j]=-10000;
+      b_mj2m0posy[k][j]=-10000;
       b_mj2m0posx_err[k][j]=-10000;
       b_mj2m0posy_err[k][j]=-10000;
-      b_mj2m1posx[k][j]=-10000;    
-      b_mj2m1posy[k][j]=-10000;    
+      b_mj2m1posx[k][j]=-10000;
+      b_mj2m1posy[k][j]=-10000;
       b_mj2m1posx_err[k][j]=-10000;
       b_mj2m1posy_err[k][j]=-10000;
-      
+
     }
   }
 
@@ -993,7 +993,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_pixelhit_mu2_muJetC_posy[k][j]=-10000;
       b_pixelhit_mu2_muJetC_errposx[k][j]=-10000;
       b_pixelhit_mu2_muJetC_errposy[k][j]=-10000;
-      
+
       b_pixelhit_mu1_muJetF_posx[k][j]=-10000;
       b_pixelhit_mu1_muJetF_posy[k][j]=-10000;
       b_pixelhit_mu1_muJetF_errposx[k][j]=-10000;
@@ -1007,7 +1007,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_Mass4Mu = -1.;
 
   //****************************************************************************
-  //                          EVENT LEVEL                                       
+  //                          EVENT LEVEL
   //****************************************************************************
 
   // Count number of analyzed events
@@ -1042,7 +1042,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
 
   GlobalPoint beamSpotPosition(beamSpot->position().x(), beamSpot->position().y(), beamSpot->position().z());
-  //Trigger names 
+  //Trigger names
   if( histo_name ){
     edm::Handle<edm::TriggerResults> TrResults;
     iEvent.getByToken( m_trigRes, TrResults);
@@ -1073,16 +1073,16 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
 
   //****************************************************************************
-  //                          GEN LEVEL ANALYSIS START                          
+  //                          GEN LEVEL ANALYSIS START
   //****************************************************************************
 
-  if (m_fillGenLevel){  
+  if (m_fillGenLevel){
 
     if ( m_debug > 10 ) std::cout << m_events << " Start GEN Level" << std::endl;
 
     edm::Handle<reco::GenParticleCollection> genParticles;
     iEvent.getByToken(m_genParticles, genParticles);
-  
+
     // Loop over all genParticles and save prompt muons from particles with codes 36 (a1) or 3000022 (gammaD) in vector genMuons
     std::vector<const reco::GenParticle*> genH;
     std::vector<const reco::GenParticle*> genA_unsorted;
@@ -1113,7 +1113,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         // Loop over all real (non-muon) mothers of the muon (here we use genMuonCand)
         for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
           // Check if mother is CP-odd Higgs (PdgId = 36) or gamma_Dark (PdgId = 3000022)
-          //        if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 || genMuonCand->mother(iMother)->pdgId() == 443 ) 
+          //        if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 || genMuonCand->mother(iMother)->pdgId() == 443 )
           if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 ) {
             // Store the muon (stable, first in chain) into vector
             genMuons.push_back(&(*iGenParticle));
@@ -1403,7 +1403,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         genMuons8.push_back(genMuons[i]);
       }
     }
-    b_is1GenMu17 = false; 
+    b_is1GenMu17 = false;
     b_is2GenMu8  = false;
     b_is3GenMu8  = false;
     b_is4GenMu8  = false;
@@ -1429,18 +1429,18 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
 
   //****************************************************************************
-  //                          GEN LEVEL ANALYSIS FINISH                         
+  //                          GEN LEVEL ANALYSIS FINISH
   //****************************************************************************
 
   //****************************************************************************
-  //                          RECO LEVEL ANALYSIS START                         
+  //                          RECO LEVEL ANALYSIS START
   //****************************************************************************
 
   if ( m_debug > 10 ) std::cout << m_events << " Start RECO Level" << std::endl;
 
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
-  
+
   std::vector<const reco::Muon*> selMuons;
   std::vector<const reco::Muon*> selMuons8;
   std::vector<const reco::Muon*> selMuons17;
@@ -1456,7 +1456,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       }
     }
   }
-  
+
   b_nRecoMu = selMuons.size();
 
   if ( selMuons.size() > 0 ) {
@@ -1608,7 +1608,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       b_is2DiMuonsFittedVtxOK = true;
     }
   }
-  
+
   b_is2DiMuonsFittedVtxOK_KF = false;
   if ( diMuonC != NULL && diMuonF != NULL ) {
     if ( diMuonC->vertexValid_fitted() && diMuonF->vertexValid_fitted() ) {
@@ -1645,10 +1645,10 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
           if (closestPrimaryVertex == primaryVertices->end()  ||  fabs(vertex->z() - muJet0->vertexPoint().z()) < fabs(closestPrimaryVertex->z() - muJet0->vertexPoint().z())) {
             closestPrimaryVertex = vertex;
           }
-        } // end vertex quality cuts                                                                                                                                    
-      } // end loop over primary vertices                                                                                                                               
-    } // end if muJet0 exists                                                                                                                                           
-  } // end if muJets->size > 0      
+        } // end vertex quality cuts
+      } // end loop over primary vertices
+    } // end if muJet0 exists
+  } // end if muJets->size > 0
 
 
   // Fill branches with variables calculated with "old" fitted vertexes
@@ -1727,22 +1727,22 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
       transientTrackBuilder_ptr = &*transientTrackBuilder;
 
-      ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition); 
+      ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition);
       ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
-      ConsistentVtx.SetDebug(99);      
+      ConsistentVtx.SetDebug(99);
       ConsistentVtx.setBarrelPixelLayer(m_barrelPixelLayer);
       ConsistentVtx.setEndcapPixelLayer(m_endcapPixelLayer);
 
       b_is2DiMuonsConsistentVtxOK = ConsistentVtx.Calculate(diMuonC, diMuonF);
 
-      if (runDisplacedVtxFinder_) { 
-        DisplacedVertexFinder displacedVtx(transientTrackBuilder_ptr, beamSpotPosition);      
-        displacedVtx.setDebug(99);      
+      if (runDisplacedVtxFinder_) {
+        DisplacedVertexFinder displacedVtx(transientTrackBuilder_ptr, beamSpotPosition);
+        displacedVtx.setDebug(99);
         displacedVtx.findDisplacedVertex(diMuonC, diMuonF);
-      }      
+      }
     } catch (...) {
       std::cout << ">>>> WARNING!!! TransientTrackRecord is not available!!! <<<<" << std::endl;
-    }    
+    }
   }
   // Fill branches with variables calculated with "new" consistent vertexes
   if ( b_is2DiMuonsConsistentVtxOK ) {
@@ -1831,15 +1831,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
   int ntrigs = trRes->size();
   for (int itrig = 0; itrig != ntrigs; ++itrig) {
-    TString trigName = triggerNames.triggerName(itrig);
-    std::string trigNameStr(trigName.Data());
-    if (trRes->accept(triggerNames.triggerIndex(trigNameStr))){
+    const TString& trigName = triggerNames.triggerName(itrig);
+    const std::string& trigNameStr(trigName.Data());
 
+    if (trRes->accept(triggerNames.triggerIndex(trigNameStr))){
       b_hltPaths.push_back(trigNameStr);
 
-      if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
-
-      b_isDiMuonHLTFired = true;
+      // check if this event was fired by the signal trigger!
+      for (const auto& p: signalHltPaths_){
+        if (trigNameStr.find(p) != std::string::npos) {
+          b_isDiMuonHLTFired = true;
+        }
       }
     }
   }
@@ -1879,7 +1881,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     double diMuonF_IsoTk_FittedVtx = 0.0;
 
     const pat::MultiMuon *diMuonTmp = NULL;
-    for ( unsigned int i = 1; i <= 2; i++ ) { 
+    for ( unsigned int i = 1; i <= 2; i++ ) {
       double diMuonTmp_IsoTk_FittedVtx = 0.0;
       if ( i == 1 ) diMuonTmp = diMuonC;
       if ( i == 2 ) diMuonTmp = diMuonF;
@@ -1891,13 +1893,13 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         if ( trackIsMuon == false ) {
           double dPhi = tamu::helpers::My_dPhi( diMuonTmp->vertexMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->vertexMomentum().eta() - track->eta();
-          double dR   = sqrt( dPhi*dPhi + dEta*dEta ); 
+          double dR   = sqrt( dPhi*dPhi + dEta*dEta );
           double dz   = diMuonTmp->vertexDz(beamSpot->position()) - track->dz(beamSpot->position());
           if (    dR          < m_threshold_DiMuons_Iso_dR
 		  && track->pt() > m_threshold_DiMuons_Iso_pT
 		  && fabs( dz )  < m_threshold_DiMuons_Iso_dz ) {
             diMuonTmp_IsoTk_FittedVtx += track->pt();
-          }    
+          }
         }
       }
       if ( i == 1 ) {
@@ -1922,7 +1924,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     double diMuonF_IsoTk_ConsistentVtx = 0.0;
 
     const pat::MultiMuon *diMuonTmp = NULL;
-    for ( unsigned int i = 1; i <= 2; i++ ) { 
+    for ( unsigned int i = 1; i <= 2; i++ ) {
       double diMuonTmp_IsoTk_ConsistentVtx = 0.0;
       if ( i == 1 ) diMuonTmp = diMuonC;
       if ( i == 2 ) diMuonTmp = diMuonF;
@@ -1934,13 +1936,13 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         if ( trackIsMuon == false ) {
           double dPhi = tamu::helpers::My_dPhi( diMuonTmp->consistentVtxMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->consistentVtxMomentum().eta() - track->eta();
-          double dR   = sqrt( dPhi*dPhi + dEta*dEta ); 
+          double dR   = sqrt( dPhi*dPhi + dEta*dEta );
           double dz   = diMuonTmp->consistentVtxDz(beamSpotPosition) - track->dz(beamSpot->position());
           if (    dR          < m_threshold_DiMuons_Iso_dR
 		  && track->pt() > m_threshold_DiMuons_Iso_pT
 		  && fabs( dz )  < m_threshold_DiMuons_Iso_dz ) {
             diMuonTmp_IsoTk_ConsistentVtx += track->pt();
-          }    
+          }
         }
       }
       if ( i == 1 ) {
@@ -2035,7 +2037,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Stop RECO Level" << std::endl;
-  
+
   if (m_debug>10 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
     std::cout<<"  hitpix diMuonF m1   "<<b_diMuonF_m1_FittedVtx_hitpix_l3inc<<std::endl;
     std::cout<<"  hitpix diMuonF m2   "<<b_diMuonF_m2_FittedVtx_hitpix_l3inc<<std::endl;
@@ -2200,21 +2202,21 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
            if (dphi > M_PI) dphi -= 2.*M_PI;
            if (dphi < -M_PI) dphi += 2.*M_PI;
            double deta = muJet->eta() - track->eta();
-           double dR   = sqrt(pow(dphi, 2) + pow(deta, 2)); 
+           double dR   = sqrt(pow(dphi, 2) + pow(deta, 2));
            if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
              double dz = fabs(track->dz(beamSpot->position())-muJet->vertexDz(beamSpot->position()));
              if (dz < 0.1){ m_orphan_dimu_isoTk += track->pt(); }
            }
-         }    
+         }
        }
      }
    }
   //****************************************************************************
-  //                          RECO LEVEL ANALYSIS FINISH                        
+  //                          RECO LEVEL ANALYSIS FINISH
   //****************************************************************************
 
   //****************************************************************************
-  //                            FILL BRANCHES TO TREE                           
+  //                            FILL BRANCHES TO TREE
   //****************************************************************************
 
   if(skimOutput_) { if (b_massC>-1. && b_massF>-1.) m_ttree->Fill(); }
@@ -2225,14 +2227,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
 
 // ------------ method called once each job just before starting event loop  ------------
-void 
+void
 CutFlowAnalyzer::beginJob() {
   std::cout << "BEGIN JOB" << std::endl;
 
   edm::Service<TFileService> tFileService;
   m_ttree = tFileService->make<TTree>("Events", "Events");
   //****************************************************************************
-  //                          EVENT LEVEL BRANCHES                              
+  //                          EVENT LEVEL BRANCHES
   //****************************************************************************
 
   // Event info
@@ -2246,7 +2248,7 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("beamSpot_z", &b_beamSpot_z, "beamSpot_z/F");
 
   //****************************************************************************
-  //                          GEN LEVEL BRANCHES                                
+  //                          GEN LEVEL BRANCHES
   //****************************************************************************
 
   // Bosons
@@ -2364,7 +2366,7 @@ CutFlowAnalyzer::beginJob() {
 
 
   //****************************************************************************
-  //                          RECO LEVEL BRANCHES                               
+  //                          RECO LEVEL BRANCHES
   //****************************************************************************
 
   // Reco Muons
@@ -2384,7 +2386,7 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("selMu1_pz",  &b_selMu1_pz,  "selMu1_pz/F");
   m_ttree->Branch("selMu2_pz",  &b_selMu2_pz,  "selMu2_pz/F");
   m_ttree->Branch("selMu3_pz",  &b_selMu3_pz,  "selMu3_pz/F");
-  
+
   m_ttree->Branch("selMu0_pT",  &b_selMu0_pT,  "selMu0_pT/F");
   m_ttree->Branch("selMu1_pT",  &b_selMu1_pT,  "selMu1_pT/F");
   m_ttree->Branch("selMu2_pT",  &b_selMu2_pT,  "selMu2_pT/F");
@@ -2575,15 +2577,15 @@ CutFlowAnalyzer::beginJob() {
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
-void 
-CutFlowAnalyzer::endJob() 
+void
+CutFlowAnalyzer::endJob()
 {
   std::cout << "END JOB" << std::endl;
 
   std:: cout << "Total number of events:          " << m_events << std::endl;
   std:: cout << "Total number of events with 4mu: " << m_events4GenMu << " fraction: " <<  m_events4GenMu/m_events << std::endl;
 
-  if (m_fillGenLevel){  
+  if (m_fillGenLevel){
     std:: cout << "********** GEN **********" << std::endl;
     std:: cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << std::endl;
     std:: cout << "pT1>17 |eta1|<0.9:       " << m_events1GenMu17 << " \t" << (float)m_events1GenMu17/(float)m_events << " \t" << (float)m_events1GenMu17/(float)m_events << std::endl;
@@ -2600,7 +2602,7 @@ CutFlowAnalyzer::endJob()
   std:: cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << std::endl;
 
   std:: cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << std::endl;
-  if (m_fillGenLevel) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl; 
+  if (m_fillGenLevel) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl;
 
   std:: cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << std::endl;
   std:: cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << std::endl;
