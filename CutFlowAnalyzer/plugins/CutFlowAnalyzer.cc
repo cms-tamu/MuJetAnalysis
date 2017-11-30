@@ -2067,27 +2067,27 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     iEvent.getByToken(m_PATJet, PATJet);
     for( auto Myjet = PATJet->begin(); Myjet != PATJet->end(); ++Myjet ){
       if( fabs(Myjet->eta())<2.4 && Myjet->pt()>5. ){
-	// B-tags available:
-	//'pfTrackCountingHighEffBJetTags', 'pfTtrackCountingHighPurBJetTags', 'pfJetProbabilityBJetTags', 'pfJetBProbabilityBJetTags', 'pfSimpleSecondaryVertexHighEffBJetTags',
-	//'pfSimpleSecondaryVertexHighPurBJetTags', 'pfCombinedSecondaryVertexV2BJetTags', 'pfCombinedInclusiveSecondaryVertexV2BJetTags', 'pfCombinedMVAV2BJetTags'
-	b_PAT_jet_pt[NPATJet]    = Myjet->pt();
-	b_PAT_jet_eta[NPATJet]   = Myjet->eta();
-	b_PAT_jet_phi[NPATJet]   = Myjet->phi();
-	b_PAT_jet_en[NPATJet]    = Myjet->energy();
-	b_PAT_jet_Btag1[NPATJet] = Myjet->bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
-	b_PAT_jet_Btag2[NPATJet] = Myjet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
-	b_PAT_jet_Btag3[NPATJet] = Myjet->bDiscriminator("pfCombinedMVAV2BJetTags");
-	NPATJet++;
+        // B-tags available:
+        //'pfTrackCountingHighEffBJetTags', 'pfTtrackCountingHighPurBJetTags', 'pfJetProbabilityBJetTags', 'pfJetBProbabilityBJetTags', 'pfSimpleSecondaryVertexHighEffBJetTags',
+        //'pfSimpleSecondaryVertexHighPurBJetTags', 'pfCombinedSecondaryVertexV2BJetTags', 'pfCombinedInclusiveSecondaryVertexV2BJetTags', 'pfCombinedMVAV2BJetTags'
+        b_PAT_jet_pt[NPATJet]    = Myjet->pt();
+        b_PAT_jet_eta[NPATJet]   = Myjet->eta();
+        b_PAT_jet_phi[NPATJet]   = Myjet->phi();
+        b_PAT_jet_en[NPATJet]    = Myjet->energy();
+        b_PAT_jet_Btag1[NPATJet] = Myjet->bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
+        b_PAT_jet_Btag2[NPATJet] = Myjet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+        b_PAT_jet_Btag3[NPATJet] = Myjet->bDiscriminator("pfCombinedMVAV2BJetTags");
+        NPATJet++;
       }
     }
     if(NPATJet>0) b_NPATJet=NPATJet;
 
     // Trimuons
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
-    for (pat::MuonCollection::const_iterator muon = muons->begin(); muon != muons->end(); ++muon) {
+    for (auto muon = muons->begin(); muon != muons->end(); ++muon) {
 
       if (muon->pt() > m_threshold_Mu17_pT  &&  fabs(muon->eta()) < m_threshold_Mu17_eta) {
-        const pat::TriggerObjectStandAlone *mu01 = muon->triggerObjectMatchByPath("HLT_TrkMu1*_DoubleTrkMu*NoFiltersNoVtx_v*");
+        const pat::TriggerObjectStandAlone *mu01 = muon->triggerObjectMatchByPath("HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx_v*");
 
         if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_threshold_Mu17_pT)  ){
           hightrigmuons.push_back(muon);

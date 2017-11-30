@@ -51,6 +51,7 @@ public:
   void FillTrigInfo( TH1F *h1, const edm::TriggerNames&, std::map<int,std::string> nameAndNumb );
   TH1F* triggerComposition;
   TH1F* triggerComposition_bb;
+
 private:
   virtual void beginJob() ;
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
@@ -60,6 +61,8 @@ private:
   virtual void endRun(edm::Run const&, edm::EventSetup const&);
   virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
   virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
+
+  bool wasRecoMuonTriggerMatched(const pat::Muon* mu, const std::string& name, const float pt);
 
   edm::ParameterSet param_;
   edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
@@ -262,6 +265,8 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
+  edm::EDGetTokenT<std::vector<pat::Jet> > m_PATJet;
+
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
   Int_t         m_endcapPixelLayer;
@@ -352,6 +357,16 @@ private:
   Float_t b_selMu1_pT;
   Float_t b_selMu2_pT;
   Float_t b_selMu3_pT;
+
+  Bool_t b_selMu0_trigHLT16;
+  Bool_t b_selMu1_trigHLT16;
+  Bool_t b_selMu2_trigHLT16;
+  Bool_t b_selMu3_trigHLT16;
+
+  Bool_t b_selMu0_trigHLT6;
+  Bool_t b_selMu1_trigHLT6;
+  Bool_t b_selMu2_trigHLT6;
+  Bool_t b_selMu3_trigHLT6;
 
   Float_t b_diMuonC_FittedVtx_m;
   Float_t b_diMuonC_FittedVtx_px;
@@ -450,7 +465,14 @@ private:
   bool skimOutput_; //fill only events with 2 good dimuons
 
   //PixelHitRecovery
-
+  Int_t b_NPATJet;
+  Float_t b_PAT_jet_pt[100];
+  Float_t b_PAT_jet_eta[100];
+  Float_t b_PAT_jet_phi[100];
+  Float_t b_PAT_jet_en[100];
+  Float_t b_PAT_jet_Btag1[100];
+  Float_t b_PAT_jet_Btag2[100];
+  Float_t b_PAT_jet_Btag3[100];
 
   Int_t b_ntracks;
 
@@ -633,23 +655,19 @@ private:
   Bool_t  m_orphan_AllTrackerMu;
   Float_t  m_orphan_PtOrph;
   Float_t  m_orphan_EtaOrph;
+  Float_t  m_orphan_PhiOrph;
   Float_t  m_orphan_PtMu0;
   Float_t  m_orphan_EtaMu0;
+  Float_t  m_orphan_PhiMu0;
   Float_t  m_orphan_PtMu1;
   Float_t  m_orphan_EtaMu1;
+  Float_t  m_orphan_PhiMu1;
+  Float_t  m_orphan_PtMu01;
+  Float_t  m_orphan_EtaMu01;
+  Float_t  m_orphan_PhiMu01;
+  Float_t  m_orphan_DRdiMuOrph;
 };
 
-//
-// constants, enums and typedefs
-//
-
-//
-// static data member definitions
-//
-
-//
-// constructors and destructor
-//
 CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfig)
 
 {
@@ -1404,9 +1422,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
 
-  std::vector<const reco::Muon*> selMuons;
-  std::vector<const reco::Muon*> selMuons8;
-  std::vector<const reco::Muon*> selMuons17;
+  std::vector<const pat::Muon*> selMuons;
+  std::vector<const pat::Muon*> selMuons8;
+  std::vector<const pat::Muon*> selMuons17;
 
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
     if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
@@ -1429,6 +1447,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_pT  = selMuons[0]->pt();
     b_selMu0_eta = selMuons[0]->eta();
     b_selMu0_phi = selMuons[0]->phi();
+    b_selMu0_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[0], signalHltPaths_[0] + "_v*", 16.);
+    b_selMu0_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[0], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu0_px  = -100.0;
     b_selMu0_py  = -100.0;
@@ -1436,6 +1456,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_pT  = -100.0;
     b_selMu0_eta = -100.0;
     b_selMu0_phi = -100.0;
+    b_selMu0_trigHLT16 = false;
+    b_selMu0_trigHLT6 = false;
   }
   if ( selMuons.size() > 1 ) {
     b_selMu1_px  = selMuons[1]->px();
@@ -1444,6 +1466,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_pT  = selMuons[1]->pt();
     b_selMu1_eta = selMuons[1]->eta();
     b_selMu1_phi = selMuons[1]->phi();
+    b_selMu1_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[1], signalHltPaths_[0] + "_v*", 16.);
+    b_selMu1_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[1], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu1_px  = -100.0;
     b_selMu1_py  = -100.0;
@@ -1451,6 +1475,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_pT  = -100.0;
     b_selMu1_eta = -100.0;
     b_selMu1_phi = -100.0;
+    b_selMu1_trigHLT16 = false;
+    b_selMu1_trigHLT6 = false;
   }
   if ( selMuons.size() > 2 ) {
     b_selMu2_px  = selMuons[2]->px();
@@ -1459,6 +1485,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_pT  = selMuons[2]->pt();
     b_selMu2_eta = selMuons[2]->eta();
     b_selMu2_phi = selMuons[2]->phi();
+    b_selMu2_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[2], signalHltPaths_[0] + "_v*", 16.);
+    b_selMu2_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[2], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
@@ -1466,6 +1494,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_pT  = -100.0;
     b_selMu2_eta = -100.0;
     b_selMu2_phi = -100.0;
+    b_selMu2_trigHLT16 = false;
+    b_selMu2_trigHLT6 = false;
   }
   if ( selMuons.size() > 3 ) {
     b_selMu3_px  = selMuons[3]->px();
@@ -1474,6 +1504,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_pT  = selMuons[3]->pt();
     b_selMu3_eta = selMuons[3]->eta();
     b_selMu3_phi = selMuons[3]->phi();
+    b_selMu3_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[3], signalHltPaths_[0] + "_v*", 16.);
+    b_selMu3_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[3], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1481,7 +1513,25 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_pT  = -100.0;
     b_selMu3_eta = -100.0;
     b_selMu3_phi = -100.0;
+    b_selMu3_trigHLT16 = false;
+    b_selMu3_trigHLT6 = false;
   }
+
+
+
+  // Trimuons
+  std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
+  for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
+
+    if (muon->pt() > m_threshold_Mu17_pT  &&  fabs(muon->eta()) < m_threshold_Mu17_eta) {
+      const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx_v*");
+
+      if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_threshold_Mu17_pT)  ){
+        hightrigmuons.push_back(muon);
+      }
+    }
+  }
+
 
   if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
 
@@ -1981,16 +2031,39 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     m_orphan_EtaMu0  = -99.;
     m_orphan_PtMu1   = -99.;
     m_orphan_EtaMu1  = -99.;
+
+    // B-Jets
+    int NPATJet=0;
+    edm::Handle<std::vector<pat::Jet> > PATJet;
+    iEvent.getByToken(m_PATJet, PATJet);
+    for( auto Myjet = PATJet->begin(); Myjet != PATJet->end(); ++Myjet ){
+      if( fabs(Myjet->eta())<2.4 && Myjet->pt()>5. ){
+        // B-tags available:
+        //'pfTrackCountingHighEffBJetTags', 'pfTtrackCountingHighPurBJetTags', 'pfJetProbabilityBJetTags', 'pfJetBProbabilityBJetTags', 'pfSimpleSecondaryVertexHighEffBJetTags',
+        //'pfSimpleSecondaryVertexHighPurBJetTags', 'pfCombinedSecondaryVertexV2BJetTags', 'pfCombinedInclusiveSecondaryVertexV2BJetTags', 'pfCombinedMVAV2BJetTags'
+        b_PAT_jet_pt[NPATJet]    = Myjet->pt();
+        b_PAT_jet_eta[NPATJet]   = Myjet->eta();
+        b_PAT_jet_phi[NPATJet]   = Myjet->phi();
+        b_PAT_jet_en[NPATJet]    = Myjet->energy();
+        b_PAT_jet_Btag1[NPATJet] = Myjet->bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
+        b_PAT_jet_Btag2[NPATJet] = Myjet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+        b_PAT_jet_Btag3[NPATJet] = Myjet->bDiscriminator("pfCombinedMVAV2BJetTags");
+        NPATJet++;
+      }
+    }
+    if(NPATJet>0) b_NPATJet=NPATJet;
+
     // Trimuons
-    double m_trigpt = 17.;
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
     for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
-      if (muon->pt() > m_trigpt  &&  fabs(muon->eta()) < 0.9) {
-	  const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu1*_DoubleTrkMu5NoFiltersNoVtx_v*");
-	  if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_trigpt)  ){
-	    hightrigmuons.push_back(muon);
-	  }
-	}
+
+      if (muon->pt() > m_threshold_Mu17_pT  &&  fabs(muon->eta()) < m_threshold_Mu17_eta) {
+        const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu1*_DoubleTrkMu*NoFiltersNoVtx_v*");
+
+        if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_threshold_Mu17_pT)  ){
+          hightrigmuons.push_back(muon);
+        }
+      }
     }
     //Orphan branches
     m_orphan_dimu_mass = -999.;
@@ -2008,39 +2081,71 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       m_orphan_passOffLineSel = true;
       pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
       pat::MuonCollection::const_iterator orphan = orphans->begin();
-      if( muJet->muon(0)->pt() > m_trigpt || muJet->muon(1)->pt() > m_trigpt || orphan->pt() > m_trigpt ) m_orphan_passOffLineSelPt = true;
-      if((muJet->muon(0)->pt() > m_trigpt && fabs(muJet->muon(0)->eta())<0.9) || (muJet->muon(1)->pt() > m_trigpt && fabs(muJet->muon(1)->eta())<0.9) || (orphan->pt() > m_trigpt && fabs(orphan->eta())<0.9)) m_orphan_passOffLineSelPtEta = true;
+      if( muJet->muon(0)->pt() > m_threshold_Mu17_pT ||
+          muJet->muon(1)->pt() > m_threshold_Mu17_pT ||
+          orphan->pt() > m_threshold_Mu17_pT )
+        m_orphan_passOffLineSelPt = true;
+
+      if((muJet->muon(0)->pt() > m_threshold_Mu17_pT && fabs(muJet->muon(0)->eta())<0.9) ||
+         (muJet->muon(1)->pt() > m_threshold_Mu17_pT && fabs(muJet->muon(1)->eta())<0.9) ||
+         (orphan->pt() > m_threshold_Mu17_pT && fabs(orphan->eta())<0.9))
+        m_orphan_passOffLineSelPtEta = true;
+
       m_orphan_PtOrph  = orphan->pt();
       m_orphan_EtaOrph = orphan->eta();
       m_orphan_PtMu0   = muJet->muon(0)->pt();
       m_orphan_EtaMu0  = muJet->muon(0)->eta();
       m_orphan_PtMu1   = muJet->muon(1)->pt();
       m_orphan_EtaMu1  = muJet->muon(1)->eta();
+      m_orphan_PhiMu1  = muJet->muon(1)->phi();
+
+      TLorentzVector mymu0, mymu1;
+      mymu0.SetPtEtaPhiM(m_orphan_PtMu0,m_orphan_EtaMu0,m_orphan_PhiMu0,0);
+      mymu1.SetPtEtaPhiM(m_orphan_PtMu1,m_orphan_EtaMu1,m_orphan_PhiMu1,0);
+      m_orphan_PtMu01   = (mymu0+mymu1).Pt();
+      m_orphan_EtaMu01  = (mymu0+mymu1).Eta();
+      m_orphan_PhiMu01  = (mymu0+mymu1).Phi();
+      m_orphan_DRdiMuOrph  = sqrt( pow(m_orphan_EtaMu01-m_orphan_EtaOrph,2) + pow(TVector2::Phi_mpi_pi(m_orphan_PhiMu01-m_orphan_PhiOrph),2) );
+      m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
+      m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
+
       double triPt[3]  = {muJet->muon(0)->pt(), muJet->muon(1)->pt(), orphan->pt()};
       double triEta[3] = {fabs(muJet->muon(0)->eta()), fabs(muJet->muon(1)->eta()), fabs(orphan->eta())};
       int Index17=-1;
       for(int i=0; i<3; i++){
-        if(triPt[i]>m_trigpt && triEta[i]<0.9) Index17 = i;
+        if(triPt[i]>m_threshold_Mu17_pT && triEta[i]<0.9) Index17 = i;
       }
       if(Index17>-1){
          for(int i=0; i<3; i++){ if(i!=Index17 && triPt[i]>8) mu1788+=0.5; }
       }
       if( mu1788==1 ) m_orphan_passOffLineSelPt1788 = true;
-      if ( muJet->muon(0)->isTrackerMuon() && muJet->muon(0)->innerTrack().isNonnull() && muJet->muon(1)->isTrackerMuon() && muJet->muon(1)->innerTrack().isNonnull() && orphan->isTrackerMuon() && orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true;
-      if( m_orphan_passOffLineSelPtEta && m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
+      if ( muJet->muon(0)->isTrackerMuon() &&
+           muJet->muon(0)->innerTrack().isNonnull() &&
+           muJet->muon(1)->isTrackerMuon() &&
+           muJet->muon(1)->innerTrack().isNonnull() &&
+           orphan->isTrackerMuon() &&
+           orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true;
+      if( m_orphan_passOffLineSelPtEta &&
+          m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
 
       m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
       m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
-      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-        if( orphan->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() &&  tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
+      for (auto iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+        if( orphan->innerTrack().isAvailable() &&
+            (*iter)->innerTrack().isAvailable() &&
+            tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
            m_dimuorphan_containstrig++;
         }
       }
-      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-        if( muJet->muon(0)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
+      for (auto iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+        if( muJet->muon(0)->innerTrack().isAvailable() &&
+            (*iter)->innerTrack().isAvailable() &&
+            tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
           m_dimuorphan_containstrig2++;
         }
-        if( muJet->muon(1)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
+        if( muJet->muon(1)->innerTrack().isAvailable() &&
+            (*iter)->innerTrack().isAvailable() &&
+            tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
           m_dimuorphan_containstrig2++;
         }
       }
@@ -2272,6 +2377,16 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("selMu2_phi", &b_selMu2_phi, "selMu2_phi/F");
   m_ttree->Branch("selMu3_phi", &b_selMu3_phi, "selMu3_phi/F");
 
+  m_ttree->Branch("selMu0_trigHLT16", &b_selMu0_trigHLT16, "selMu0_trigHLT16/O");
+  m_ttree->Branch("selMu1_trigHLT16", &b_selMu1_trigHLT16, "selMu1_trigHLT16/O");
+  m_ttree->Branch("selMu2_trigHLT16", &b_selMu2_trigHLT16, "selMu2_trigHLT16/O");
+  m_ttree->Branch("selMu3_trigHLT16", &b_selMu3_trigHLT16, "selMu3_trigHLT16/O");
+
+  m_ttree->Branch("selMu0_trigHLT6", &b_selMu0_trigHLT6, "selMu0_trigHLT6/O");
+  m_ttree->Branch("selMu1_trigHLT6", &b_selMu1_trigHLT6, "selMu1_trigHLT6/O");
+  m_ttree->Branch("selMu2_trigHLT6", &b_selMu2_trigHLT6, "selMu2_trigHLT6/O");
+  m_ttree->Branch("selMu3_trigHLT6", &b_selMu3_trigHLT6, "selMu3_trigHLT6/O");
+
   // RECO DiMuons
   m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
   m_ttree->Branch("diMuonC_FittedVtx_px",  &b_diMuonC_FittedVtx_px,  "diMuonC_FittedVtx_px/F");
@@ -2492,11 +2607,22 @@ void CutFlowAnalyzer_MiniAOD::FillTrigInfo( TH1F * h1, const edm::TriggerNames& 
       TString trigName = triggerNames.triggerName(itrig);
       std::string trigNameStr(trigName.Data());
       if (trigNameStr == nameAndNumb[i]){
-	h1->Fill(i);
+        h1->Fill(i);
       }
     }
   }
 }
+
+bool CutFlowAnalyzer_MiniAOD::wasRecoMuonTriggerMatched(const pat::Muon* muon,
+                                                        const std::string& name, const float pt)
+{
+  const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath(name);
+
+  return (mu01 != NULL &&
+          mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") &&
+          mu01->pt() >= pt);
+}
+
 
 // ------------ method called when starting to processes a run  ------------
 void
