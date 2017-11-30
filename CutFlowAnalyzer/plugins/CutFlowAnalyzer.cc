@@ -64,6 +64,8 @@ private:
   virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
   virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
 
+  bool wasRecoMuonTriggerMatched(const pat::Muon* mu, const std::string& name, const float pt);
+
   edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
 
   //****************************************************************************
@@ -1437,9 +1439,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
 
-  std::vector<const reco::Muon*> selMuons;
-  std::vector<const reco::Muon*> selMuons8;
-  std::vector<const reco::Muon*> selMuons17;
+  std::vector<const pat::Muon*> selMuons;
+  std::vector<const pat::Muon*> selMuons8;
+  std::vector<const pat::Muon*> selMuons17;
 
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
     if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
@@ -1462,6 +1464,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu0_pT  = selMuons[0]->pt();
     b_selMu0_eta = selMuons[0]->eta();
     b_selMu0_phi = selMuons[0]->phi();
+    b_selMu0_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[0], signalHltPaths_[0] + "_v*", 16.);
+    b_selMu0_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[0], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu0_px  = -100.0;
     b_selMu0_py  = -100.0;
@@ -1469,6 +1473,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu0_pT  = -100.0;
     b_selMu0_eta = -100.0;
     b_selMu0_phi = -100.0;
+    b_selMu0_trigHLT16 = false;
+    b_selMu0_trigHLT6 = false;
   }
   if ( selMuons.size() > 1 ) {
     b_selMu1_px  = selMuons[1]->px();
@@ -1477,6 +1483,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu1_pT  = selMuons[1]->pt();
     b_selMu1_eta = selMuons[1]->eta();
     b_selMu1_phi = selMuons[1]->phi();
+    b_selMu1_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[1], signalHltPaths_[0] + "_v*", 16.);
+    b_selMu1_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[1], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu1_px  = -100.0;
     b_selMu1_py  = -100.0;
@@ -1484,6 +1492,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu1_pT  = -100.0;
     b_selMu1_eta = -100.0;
     b_selMu1_phi = -100.0;
+    b_selMu1_trigHLT16 = false;
+    b_selMu1_trigHLT6 = false;
   }
   if ( selMuons.size() > 2 ) {
     b_selMu2_px  = selMuons[2]->px();
@@ -1492,6 +1502,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu2_pT  = selMuons[2]->pt();
     b_selMu2_eta = selMuons[2]->eta();
     b_selMu2_phi = selMuons[2]->phi();
+    b_selMu2_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[2], signalHltPaths_[0] + "_v*", 16.);
+    b_selMu2_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[2], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
@@ -1499,6 +1511,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu2_pT  = -100.0;
     b_selMu2_eta = -100.0;
     b_selMu2_phi = -100.0;
+    b_selMu2_trigHLT16 = false;
+    b_selMu2_trigHLT6 = false;
   }
   if ( selMuons.size() > 3 ) {
     b_selMu3_px  = selMuons[3]->px();
@@ -1507,6 +1521,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu3_pT  = selMuons[3]->pt();
     b_selMu3_eta = selMuons[3]->eta();
     b_selMu3_phi = selMuons[3]->phi();
+    b_selMu3_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[3], signalHltPaths_[0] + "_v*", 16.);
+    b_selMu3_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[3], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1514,6 +1530,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_selMu3_pT  = -100.0;
     b_selMu3_eta = -100.0;
     b_selMu3_phi = -100.0;
+    b_selMu3_trigHLT16 = false;
+    b_selMu3_trigHLT6 = false;
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
@@ -2653,6 +2671,17 @@ void CutFlowAnalyzer::FillTrigInfo( TH1F * h1, const edm::TriggerNames& triggerN
     }
   }
 }
+
+bool CutFlowAnalyzer::wasRecoMuonTriggerMatched(const pat::Muon* muon,
+                                                const std::string& name, const float pt)
+{
+  const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath(name);
+
+  return (mu01 != NULL &&
+          mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") &&
+          mu01->pt() >= pt);
+}
+
 
 // ------------ method called when starting to processes a run  ------------
 void

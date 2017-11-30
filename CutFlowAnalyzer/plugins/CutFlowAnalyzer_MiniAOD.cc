@@ -725,6 +725,7 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
+  m_PATJet          = consumes<std::vector<pat::Jet> >(iConfig.getParameter<edm::InputTag>("PATJet"));
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
