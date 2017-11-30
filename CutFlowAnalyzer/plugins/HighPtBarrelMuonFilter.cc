@@ -1,23 +1,3 @@
-// -*- C++ -*-
-//
-// Package:    HighPtBarrelMuonFilter
-// Class:      HighPtBarrelMuonFilter
-// 
-/**\class HighPtBarrelMuonFilter HighPtBarrelMuonFilter.cc MuJetAnalysis/HighPtBarrelMuonFilter/src/HighPtBarrelMuonFilter.cc
-
- Description: [one line class summary]
-
- Implementation:
-     [Notes on implementation]
-*/
-//
-// Original Author:  Aysen Tatarinov
-//         Created:  Mon Oct 31 19:42:14 CDT 2011
-// $Id: HighPtBarrelMuonFilter.cc,v 1.7 2013/01/25 22:32:44 pakhotin Exp $
-//
-//
-
-
 // system include files
 #include <memory>
 
@@ -50,7 +30,7 @@ class HighPtBarrelMuonFilter : public edm::EDFilter {
       virtual void beginJob() ;
       virtual bool filter(edm::Event&, const edm::EventSetup&);
       virtual void endJob() ;
-      
+
       virtual bool beginRun(edm::Run&, edm::EventSetup const&);
       virtual bool endRun(edm::Run&, edm::EventSetup const&);
       virtual bool beginLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&);
@@ -79,7 +59,7 @@ HighPtBarrelMuonFilter::HighPtBarrelMuonFilter(const edm::ParameterSet& iConfig)
 
 HighPtBarrelMuonFilter::~HighPtBarrelMuonFilter()
 {
- 
+
    // do anything here that needs to be done at desctruction time
    // (e.g. close files, deallocate resources etc.)
 
@@ -96,7 +76,7 @@ HighPtBarrelMuonFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup
 {
   int nMuonsInBarrelPt17;
 	int nMuonsPt8;
-  
+
   edm::Handle<reco::MuonCollection> muons;
 	iEvent.getByLabel("muons", muons);
 
@@ -106,7 +86,7 @@ HighPtBarrelMuonFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup
   nMuonsInBarrelPt17 = 0;
 	nMuonsPt8 = 0;
   for (reco::MuonCollection::const_iterator muon = muons->begin(); muon != muons->end(); ++muon) {
-		if (    muon->isTrackerMuon() 
+		if (    muon->isTrackerMuon()
 		     && muon->numberOfMatches(reco::Muon::SegmentAndTrackArbitration) >= 2
          && muon->innerTrack().isNonnull()
 		     && muon->innerTrack()->numberOfValidHits() >= 8
@@ -128,7 +108,7 @@ HighPtBarrelMuonFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup
   nMuonsInBarrelPt17 = 0;
 	nMuonsPt8 = 0;
   for (reco::MuonCollection::const_iterator muon = muons->begin(); muon != muons->end(); ++muon) {
-		if (    muon->isPFMuon() 
+		if (    muon->isPFMuon()
 		     && ( muon->isGlobalMuon() || muon->isTrackerMuon() ) ) {
 			if ( muon->pt() > 8.  && fabs(muon->eta()) < 2.4 ) nMuonsPt8++;
 			if ( muon->pt() > 17. && fabs(muon->eta()) < 0.9 ) nMuonsInBarrelPt17++;
@@ -143,39 +123,39 @@ HighPtBarrelMuonFilter::filter(edm::Event& iEvent, const edm::EventSetup& iSetup
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void 
+void
 HighPtBarrelMuonFilter::beginJob()
 {
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
-void 
+void
 HighPtBarrelMuonFilter::endJob() {
 }
 
 // ------------ method called when starting to processes a run  ------------
-bool 
+bool
 HighPtBarrelMuonFilter::beginRun(edm::Run&, edm::EventSetup const&)
-{ 
+{
   return true;
 }
 
 // ------------ method called when ending the processing of a run  ------------
-bool 
+bool
 HighPtBarrelMuonFilter::endRun(edm::Run&, edm::EventSetup const&)
 {
   return true;
 }
 
 // ------------ method called when starting to processes a luminosity block  ------------
-bool 
+bool
 HighPtBarrelMuonFilter::beginLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&)
 {
   return true;
 }
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-bool 
+bool
 HighPtBarrelMuonFilter::endLuminosityBlock(edm::LuminosityBlock&, edm::EventSetup const&)
 {
   return true;
