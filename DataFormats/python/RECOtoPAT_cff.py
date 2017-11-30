@@ -170,6 +170,8 @@ patifyPFMuon = cms.Sequence(
 )
 
 patifyData = cms.Sequence(
+    pfParticleSelectionForIsoSequence *
+    muonPFIsolationPATSequence *
     patMuons *
     patTrigger *
     patTriggerEvent *
@@ -181,8 +183,6 @@ patifyData = cms.Sequence(
 )
 
 patifyMC = cms.Sequence(
-    pfParticleSelectionForIsoSequence *
-    muonPFIsolationPATSequence *
     muonMatch *
     patifyData
 )

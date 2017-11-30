@@ -16,11 +16,11 @@
 //                           Class declaration
 //******************************************************************************
 
-class FilterSample3RecoMu : public edm::EDFilter
+class FilterSample3RecoMu_MiniAOD : public edm::EDFilter
 {
 public:
-  explicit FilterSample3RecoMu(const edm::ParameterSet&);
-  ~FilterSample3RecoMu();
+  explicit FilterSample3RecoMu_MiniAOD(const edm::ParameterSet&);
+  ~FilterSample3RecoMu_MiniAOD();
 
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
@@ -39,7 +39,7 @@ private:
   //****************************************************************************
 
   // Labels to access
-  edm::EDGetTokenT<reco::MuonCollection > m_muons;
+  edm::EDGetTokenT<std::vector<pat::Muon> > m_muons;
 };
 
 //
@@ -53,13 +53,13 @@ private:
 //
 // constructors and destructor
 //
-FilterSample3RecoMu::FilterSample3RecoMu(const edm::ParameterSet& iConfig)
+FilterSample3RecoMu_MiniAOD::FilterSample3RecoMu_MiniAOD(const edm::ParameterSet& iConfig)
 {
-  m_muons           = consumes<reco::MuonCollection >(edm::InputTag("muons"));
+  m_muons           = consumes<std::vector<pat::Muon> >(edm::InputTag("slimmedMuons"));
 }
 
 
-FilterSample3RecoMu::~FilterSample3RecoMu()
+FilterSample3RecoMu_MiniAOD::~FilterSample3RecoMu_MiniAOD()
 {
 }
 
@@ -69,7 +69,7 @@ FilterSample3RecoMu::~FilterSample3RecoMu()
 
 // ------------ method called for each event  ------------
 bool
-FilterSample3RecoMu::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
+FilterSample3RecoMu_MiniAOD::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
   using namespace edm;
 
@@ -77,9 +77,9 @@ FilterSample3RecoMu::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
   //                          RECO LEVEL ANALYSIS START
   //****************************************************************************
 
-  edm::Handle<reco::MuonCollection > muons;
+  edm::Handle<std::vector<pat::Muon> > muons;
   iEvent.getByToken(m_muons, muons);
-  const reco::MuonCollection& muonC = *muons.product();
+  const std::vector<pat::Muon>& muonC = *muons.product();
 
   // require at least 3 muons
   int nMu = 0;
@@ -95,43 +95,43 @@ FilterSample3RecoMu::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 // ------------ method called once each job just before starting event loop  ------------
 void
-FilterSample3RecoMu::beginJob()
+FilterSample3RecoMu_MiniAOD::beginJob()
 {
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
 void
-FilterSample3RecoMu::endJob()
+FilterSample3RecoMu_MiniAOD::endJob()
 {
 }
 
 // ------------ method called when starting to processes a run  ------------
 void
-FilterSample3RecoMu::beginRun(edm::Run const&, edm::EventSetup const&)
+FilterSample3RecoMu_MiniAOD::beginRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when ending the processing of a run  ------------
 void
-FilterSample3RecoMu::endRun(edm::Run const&, edm::EventSetup const&)
+FilterSample3RecoMu_MiniAOD::endRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when starting to processes a luminosity block  ------------
 void
-FilterSample3RecoMu::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+FilterSample3RecoMu_MiniAOD::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when ending the processing of a luminosity block  ------------
 void
-FilterSample3RecoMu::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+FilterSample3RecoMu_MiniAOD::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
-FilterSample3RecoMu::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+FilterSample3RecoMu_MiniAOD::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;
@@ -140,4 +140,4 @@ FilterSample3RecoMu::fillDescriptions(edm::ConfigurationDescriptions& descriptio
 }
 //Indentation change
 //define this as a plug-in
-DEFINE_FWK_MODULE(FilterSample3RecoMu);
+DEFINE_FWK_MODULE(FilterSample3RecoMu_MiniAOD);

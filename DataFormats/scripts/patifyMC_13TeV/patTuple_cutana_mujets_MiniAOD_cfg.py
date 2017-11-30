@@ -13,36 +13,44 @@ process.options.allowUnscheduled = cms.untracked.bool(False)
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_data')
+process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 process.load("Configuration.StandardSequences.MagneticField_cff")
-process.load("MuJetAnalysis.DataFormats.AODtoPAT_cff")
+process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
-process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_2016MET_cff")
+process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
+process.load("MuJetAnalysis.CutFlowAnalyzer.FilterSample3RecoMu_MiniAOD_cfi")
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-#        "file:out_reco.root"
-        'file:/fdata/hepx/store/user/dildick/Run2016B_MET_AOD_23Sep2016_v3/00A94E9A-0F99-E611-8F0F-0CC47A4D76B8.root'
+        'file:708FA0FE-A770-E711-B738-02163E011E1A.root'
     )
 )
 
-process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string('patTuple.root')
+process.out = cms.OutputModule(
+"PoolOutputModule",
+fileName = cms.untracked.string('patTuple.root')
 )
 
 ### Add MuJet Dataformats
-from MuJetAnalysis.DataFormats.EventContent_version10_cff import *
+from MuJetAnalysis.DataFormats.EventContent_version11_cff import *
 process = customizePatOutput(process)
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
-process.p = cms.Path(
-    process.patifyData *
-    process.MuJetProducers *
-    process.cutFlowAnalyzers_Data
-)
+runOnData = True
+if runOnData: process.patifySelect = cms.Sequence(process.patifyData)
+else:         process.patifySelect = cms.Sequence(process.patifyMC)
 
-#process.outpath = cms.EndPath(process.out)
+process.p = cms.Path(
+    ## before PAT-ANA step, require events to have at least
+    ## 3 muons with 5 GeV pT in |eta|<2.4
+    process.tripleRecoMuFilter *
+    process.patifySelect *
+    process.MuJetProducers *
+    process.cutFlowAnalyzers
+    )
+
+process.outpath = cms.EndPath(process.out)
 
 process.TFileService = cms.Service("TFileService",
     fileName = cms.string("out_ana.root")

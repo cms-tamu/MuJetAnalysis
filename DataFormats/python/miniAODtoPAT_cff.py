@@ -8,29 +8,31 @@ from PhysicsTools.PatAlgos.triggerLayer1.triggerEventProducer_cfi import *
 from PhysicsTools.PatAlgos.slimming.unpackedPatTrigger_cfi import unpackedPatTrigger
 from PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi import unpackedTracksAndVertices
 
-muonMatch = muonMatch.clone(
-    src = cms.InputTag("slimmedMuons"),
-    resolveByMatchQuality = cms.bool(True),
-    matched = cms.InputTag("prunedGenParticles"),
-)
-patMuons = patMuons.clone(
-    muonSource = cms.InputTag("slimmedMuons"),
-    genParticleMatch = cms.InputTag("muonMatch"),
-    addTeVRefits = cms.bool(False),
-    embedTrack = cms.bool(True),
-    embedCombinedMuon = cms.bool(True),
-    embedStandAloneMuon = cms.bool(True),
-    embedPickyMuon = cms.bool(False),
-    embedTpfmsMuon = cms.bool(False),
-    embedHighLevelSelection = cms.bool(True),
-    usePV = cms.bool(True),
-    beamLineSrc = cms.InputTag("offlineBeamSpot"),
-    pvSrc = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    isolation = cms.PSet(),
-    isoDeposits = cms.PSet(),
-    embedCaloMETMuonCorrs = cms.bool(False),
-    embedTcMETMuonCorrs = cms.bool(False),
-)
+## unpacker
+unpackedPatTrigger.unpackFilterLabels = cms.bool(False)
+
+## muon matcher
+muonMatch.src = cms.InputTag("slimmedMuons")
+muonMatch.resolveByMatchQuality = cms.bool(True)
+muonMatch.matched = cms.InputTag("prunedGenParticles")
+
+## pat muon
+patMuons.muonSource = cms.InputTag("slimmedMuons")
+patMuons.genParticleMatch = cms.InputTag("muonMatch")
+patMuons.addTeVRefits = cms.bool(False)
+patMuons.embedTrack = cms.bool(True)
+patMuons.embedCombinedMuon = cms.bool(True)
+patMuons.embedStandAloneMuon = cms.bool(True)
+patMuons.embedPickyMuon = cms.bool(False)
+patMuons.embedTpfmsMuon = cms.bool(False)
+patMuons.embedHighLevelSelection = cms.bool(True)
+patMuons.usePV = cms.bool(True)
+patMuons.beamLineSrc = cms.InputTag("offlineBeamSpot")
+patMuons.pvSrc = cms.InputTag("offlineSlimmedPrimaryVertices")
+patMuons.isolation = cms.PSet()
+patMuons.isoDeposits = cms.PSet()
+patMuons.embedCaloMETMuonCorrs = cms.bool(False)
+patMuons.embedTcMETMuonCorrs = cms.bool(False)
 
 # Tracker Muons Part
 selectedPatTrackerMuons = selectedPatMuons.clone(
@@ -87,9 +89,13 @@ cleanTrackerMuonTriggerMatchHLTDoubleMu = cleanMuonTriggerMatchHLTMu17.clone(
     src = cms.InputTag( "cleanPatTrackerMuons" ),
     matchedCuts = cms.string('path("HLT_DoubleMu*_v*")')
 )
-cleanTrackerMuonTriggerMatchHLTTrkMu15DoubleTrkMu5 = cleanMuonTriggerMatchHLTMu17.clone(
+cleanTrackerMuonTriggerMatchHLTTrkMu12DoubleTrkMu5 = cleanMuonTriggerMatchHLTMu17.clone(
     src = cms.InputTag( "cleanPatTrackerMuons" ),
-    matchedCuts = cms.string('path("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v*")')
+    matchedCuts = cms.string('path("HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx_v*")')
+)
+cleanTrackerMuonTriggerMatchHLTTrkMu16DoubleTrkMu6 = cleanMuonTriggerMatchHLTMu17.clone(
+    src = cms.InputTag( "cleanPatTrackerMuons" ),
+    matchedCuts = cms.string('path("HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx_v*")')
 )
 cleanTrackerMuonTriggerMatchHLTTrkMu17DoubleTrkMu8 = cleanMuonTriggerMatchHLTMu17.clone(
     src = cms.InputTag( "cleanPatTrackerMuons" ),
@@ -97,11 +103,14 @@ cleanTrackerMuonTriggerMatchHLTTrkMu17DoubleTrkMu8 = cleanMuonTriggerMatchHLTMu1
 )
 cleanPatTrackerMuonsTriggerMatch = cms.EDProducer("PATTriggerMatchMuonEmbedder",
     src = cms.InputTag("cleanPatTrackerMuons"),
-    matches = cms.VInputTag("cleanTrackerMuonTriggerMatchHLTMu",
-                            "cleanTrackerMuonTriggerMatchHLTIsoMu",
-                            "cleanTrackerMuonTriggerMatchHLTDoubleMu",
-                            "cleanTrackerMuonTriggerMatchHLTTrkMu15DoubleTrkMu5",
-                            "cleanTrackerMuonTriggerMatchHLTTrkMu17DoubleTrkMu8")
+    matches = cms.VInputTag(
+        "cleanTrackerMuonTriggerMatchHLTMu",
+        "cleanTrackerMuonTriggerMatchHLTIsoMu",
+        "cleanTrackerMuonTriggerMatchHLTDoubleMu",
+        "cleanTrackerMuonTriggerMatchHLTTrkMu12DoubleTrkMu5",
+        "cleanTrackerMuonTriggerMatchHLTTrkMu16DoubleTrkMu6",
+        "cleanTrackerMuonTriggerMatchHLTTrkMu17DoubleTrkMu8"
+    )
 )
 
 
@@ -110,7 +119,7 @@ cleanPatTrackerMuonsTriggerMatch = cms.EDProducer("PATTriggerMatchMuonEmbedder",
 cleanPFMuonTriggerMatchHLTMu = cleanMuonTriggerMatchHLTMu17.clone(
     src = cms.InputTag( "cleanPatPFMuons" ),
     matchedCuts = cms.string('path("HLT_Mu*")')
-) 
+)
 cleanPFMuonTriggerMatchHLTIsoMu = cleanMuonTriggerMatchHLTMu17.clone(
     src = cms.InputTag( "cleanPatPFMuons" ),
     matchedCuts = cms.string('path("HLT_IsoMu*")')
@@ -119,52 +128,62 @@ cleanPFMuonTriggerMatchHLTDoubleMu = cleanMuonTriggerMatchHLTMu17.clone(
     src = cms.InputTag( "cleanPatPFMuons" ),
     matchedCuts = cms.string('path("HLT_DoubleMu*_v*")')
 )
-cleanPFMuonTriggerMatchHLTTrkMu15DoubleTrkMu5 = cleanMuonTriggerMatchHLTMu17.clone(
+cleanPFMuonTriggerMatchHLTTrkMu12DoubleTrkMu5 = cleanMuonTriggerMatchHLTMu17.clone(
     src = cms.InputTag( "cleanPatPFMuons" ),
-    matchedCuts = cms.string('path("HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx_v*")')
-)   
+    matchedCuts = cms.string('path("HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx_v*")')
+)
+cleanPFMuonTriggerMatchHLTTrkMu16DoubleTrkMu6 = cleanMuonTriggerMatchHLTMu17.clone(
+    src = cms.InputTag( "cleanPatPFMuons" ),
+    matchedCuts = cms.string('path("HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx_v*")')
+)
 cleanPFMuonTriggerMatchHLTTrkMu17DoubleTrkMu8 = cleanMuonTriggerMatchHLTMu17.clone(
     src = cms.InputTag( "cleanPatPFMuons" ),
     matchedCuts = cms.string('path("HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx_v*")')
-)   
+)
 cleanPatPFMuonsTriggerMatch = cms.EDProducer("PATTriggerMatchMuonEmbedder",
     src = cms.InputTag("cleanPatPFMuons"),
-    matches = cms.VInputTag("cleanPFMuonTriggerMatchHLTMu",
-                            "cleanPFMuonTriggerMatchHLTIsoMu",
-                            "cleanPFMuonTriggerMatchHLTDoubleMu",
-                            "cleanPFMuonTriggerMatchHLTTrkMu15DoubleTrkMu5",
-                            "cleanPFMuonTriggerMatchHLTTrkMu17DoubleTrkMu8")
+    matches = cms.VInputTag(
+        "cleanPFMuonTriggerMatchHLTMu",
+        "cleanPFMuonTriggerMatchHLTIsoMu",
+        "cleanPFMuonTriggerMatchHLTDoubleMu",
+        "cleanPFMuonTriggerMatchHLTTrkMu12DoubleTrkMu5",
+        "cleanPFMuonTriggerMatchHLTTrkMu16DoubleTrkMu6",
+        "cleanPFMuonTriggerMatchHLTTrkMu17DoubleTrkMu8"
+    )
 )
+
 patifyTrackerMuon = cms.Sequence(
-    selectedPatTrackerMuons * 
-    cleanPatTrackerMuons * 
-    countPatTrackerMuons * 
-    cleanTrackerMuonTriggerMatchHLTMu * 
-    cleanTrackerMuonTriggerMatchHLTIsoMu * 
-    cleanTrackerMuonTriggerMatchHLTDoubleMu * 
-    cleanTrackerMuonTriggerMatchHLTTrkMu15DoubleTrkMu5 *
+    selectedPatTrackerMuons *
+    cleanPatTrackerMuons *
+    countPatTrackerMuons *
+    cleanTrackerMuonTriggerMatchHLTMu *
+    cleanTrackerMuonTriggerMatchHLTIsoMu *
+    cleanTrackerMuonTriggerMatchHLTDoubleMu *
+    cleanTrackerMuonTriggerMatchHLTTrkMu12DoubleTrkMu5 *
+    cleanTrackerMuonTriggerMatchHLTTrkMu16DoubleTrkMu6 *
     cleanTrackerMuonTriggerMatchHLTTrkMu17DoubleTrkMu8 *
     cleanPatTrackerMuonsTriggerMatch
 )
 patifyPFMuon = cms.Sequence(
-    selectedPatPFMuons * 
-    cleanPatPFMuons * 
-    countPatPFMuons * 
-    cleanPFMuonTriggerMatchHLTMu * 
-    cleanPFMuonTriggerMatchHLTIsoMu * 
-    cleanPFMuonTriggerMatchHLTDoubleMu * 
-    cleanPFMuonTriggerMatchHLTTrkMu15DoubleTrkMu5 *
+    selectedPatPFMuons *
+    cleanPatPFMuons *
+    countPatPFMuons *
+    cleanPFMuonTriggerMatchHLTMu *
+    cleanPFMuonTriggerMatchHLTIsoMu *
+    cleanPFMuonTriggerMatchHLTDoubleMu *
+    cleanPFMuonTriggerMatchHLTTrkMu12DoubleTrkMu5 *
+    cleanPFMuonTriggerMatchHLTTrkMu16DoubleTrkMu6 *
     cleanPFMuonTriggerMatchHLTTrkMu17DoubleTrkMu8 *
     cleanPatPFMuonsTriggerMatch
 )
 patifyData = cms.Sequence(
     unpackedTracksAndVertices *
     unpackedPatTrigger *
-    patifyTrackerMuon * 
+    patifyTrackerMuon *
     patifyPFMuon
 )
 patifyMC = cms.Sequence(
-    muonMatch * 
+    muonMatch *
     patifyData
 )
 

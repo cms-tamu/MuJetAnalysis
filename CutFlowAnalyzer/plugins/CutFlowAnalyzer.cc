@@ -64,7 +64,6 @@ private:
   virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
   virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
 
-  edm::ParameterSet param_;
   edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
 
   //****************************************************************************
@@ -473,7 +472,6 @@ private:
   Float_t b_diMuonF_IsoTk_ConsistentVtx;
 
   bool runDisplacedVtxFinder_;
-  bool runPixelHitRecovery_;
   bool skimOutput_; //fill only events with 2 good dimuons
 
   //PixelHitRecovery
@@ -709,8 +707,6 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //                 SET GEN LEVEL VARIABLES AND COUNTERS
   //****************************************************************************
 
-  m_fillGenLevel = iConfig.getParameter<bool>("fillGenLevel");
-
   m_events4GenMu   = 0;
   m_events1GenMu17 = 0;
   m_events2GenMu8  = 0;
@@ -758,15 +754,13 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   NameAndNumb.clear();
 
   runDisplacedVtxFinder_ = iConfig.getParameter<bool>("runDisplacedVtxFinder");
-  runPixelHitRecovery_ = iConfig.getParameter<bool>("runPixelHitRecovery");
-
-  param_ = iConfig;
   //measurementTrkToken_ = consumes<MeasurementTrackerEvent>(iConfig.getParameter<edm::InputTag>("MeasurementTrackerEvent"));
 }
 
 
 CutFlowAnalyzer::~CutFlowAnalyzer()
 {
+  if (m_events==0) return;
   triggerComposition->Write();
   triggerComposition_bb->Write();
   // do anything here that needs to be done at desctruction time
@@ -781,6 +775,8 @@ CutFlowAnalyzer::~CutFlowAnalyzer()
 void
 CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+  m_fillGenLevel = !iEvent.eventAuxiliary().isRealData();
+
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
 
@@ -2580,65 +2576,69 @@ CutFlowAnalyzer::beginJob() {
 void
 CutFlowAnalyzer::endJob()
 {
-  std::cout << "END JOB" << std::endl;
+  using namespace std;
 
-  std:: cout << "Total number of events:          " << m_events << std::endl;
-  std:: cout << "Total number of events with 4mu: " << m_events4GenMu << " fraction: " <<  m_events4GenMu/m_events << std::endl;
+  cout << "END JOB" << endl;
+
+   cout << "Total number of events:          " << m_events << endl;
+
+  // do not analyzer in case when there are no events!
+  if (m_events==0) return;
+
+   cout << "Total number of events with 4mu: " << m_events4GenMu << " fraction: " <<  m_events4GenMu/m_events << endl;
 
   if (m_fillGenLevel){
-    std:: cout << "********** GEN **********" << std::endl;
-    std:: cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << std::endl;
-    std:: cout << "pT1>17 |eta1|<0.9:       " << m_events1GenMu17 << " \t" << (float)m_events1GenMu17/(float)m_events << " \t" << (float)m_events1GenMu17/(float)m_events << std::endl;
-    std:: cout << "pT2>8  |eta2|<2.4:       " << m_events2GenMu8  << " \t" << (float)m_events2GenMu8/(float)m_events1GenMu17  << " \t" << (float)m_events2GenMu8/(float)m_events << std::endl;
-    std:: cout << "pT3>8  |eta2|<2.4:       " << m_events3GenMu8  << " \t" << (float)m_events3GenMu8/(float)m_events2GenMu8   << " \t" << (float)m_events3GenMu8/(float)m_events << std::endl;
-    std:: cout << "pT4>8  |eta2|<2.4:       " << m_events4GenMu8  << " \t" << (float)m_events4GenMu8/(float)m_events3GenMu8   << " \t" << (float)m_events4GenMu8/(float)m_events << std::endl;
-    std:: cout << "Basic MC Acceptance:     " << (float)m_events4GenMu8/(float)m_events << std::endl;
+     cout << "********** GEN **********" << endl;
+     cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << endl;
+     cout << "pT1>17 |eta1|<0.9:       " << m_events1GenMu17 << " \t" << (float)m_events1GenMu17/(float)m_events << " \t" << (float)m_events1GenMu17/(float)m_events << endl;
+     cout << "pT2>8  |eta2|<2.4:       " << m_events2GenMu8  << " \t" << (float)m_events2GenMu8/(float)m_events1GenMu17  << " \t" << (float)m_events2GenMu8/(float)m_events << endl;
+     cout << "pT3>8  |eta2|<2.4:       " << m_events3GenMu8  << " \t" << (float)m_events3GenMu8/(float)m_events2GenMu8   << " \t" << (float)m_events3GenMu8/(float)m_events << endl;
+     cout << "pT4>8  |eta2|<2.4:       " << m_events4GenMu8  << " \t" << (float)m_events4GenMu8/(float)m_events3GenMu8   << " \t" << (float)m_events4GenMu8/(float)m_events << endl;
+     cout << "Basic MC Acceptance:     " << (float)m_events4GenMu8/(float)m_events << endl;
   }
-  std:: cout << "********** RECO **********" << std::endl;
-  std:: cout << "Selection                " << "nEv"                   << " \t RelEff"                                                         << " \t Eff" << std::endl;
-  std:: cout << "m_events1SelMu17:        " << m_events1SelMu17        << " \t" << (float)m_events1SelMu17/(float)m_events                << " \t" << (float)m_events1SelMu17/(float)m_events        << std::endl;
-  std:: cout << "m_events2SelMu8:         " << m_events2SelMu8         << " \t" << (float)m_events2SelMu8/(float)m_events1SelMu17              << " \t" << (float)m_events2SelMu8/(float)m_events         << std::endl;
-  std:: cout << "m_events3SelMu8:         " << m_events3SelMu8         << " \t" << (float)m_events3SelMu8/(float)m_events2SelMu8               << " \t" << (float)m_events3SelMu8/(float)m_events         << std::endl;
-  std:: cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << std::endl;
+   cout << "********** RECO **********" << endl;
+   cout << "Selection                " << "nEv"                   << " \t RelEff"                                                         << " \t Eff" << endl;
+   cout << "m_events1SelMu17:        " << m_events1SelMu17        << " \t" << (float)m_events1SelMu17/(float)m_events                << " \t" << (float)m_events1SelMu17/(float)m_events        << endl;
+   cout << "m_events2SelMu8:         " << m_events2SelMu8         << " \t" << (float)m_events2SelMu8/(float)m_events1SelMu17              << " \t" << (float)m_events2SelMu8/(float)m_events         << endl;
+   cout << "m_events3SelMu8:         " << m_events3SelMu8         << " \t" << (float)m_events3SelMu8/(float)m_events2SelMu8               << " \t" << (float)m_events3SelMu8/(float)m_events         << endl;
+   cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << endl;
 
-  std:: cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << std::endl;
-  if (m_fillGenLevel) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl;
+   cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << endl;
+  if (m_fillGenLevel)  cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << endl;
 
-  std:: cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << std::endl;
-  std:: cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << std::endl;
+   cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << endl;
+   cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << endl;
 
-  std:: cout << " *** FITTED VERTEXES *** " << std::endl;
-
-
-  std:: cout << " *** CONSISTENT VERTEXES *** " << std::endl;
-
-  std:: cout << " *** FITTED VERTEXES *** " << std::endl;
-  std::cout << m_events << std::endl;
-  std::cout << m_events1GenMu17                  << std::endl;
-  std::cout << m_events2GenMu8                   << std::endl;
-  std::cout << m_events3GenMu8                   << std::endl;
-  std::cout << m_events4GenMu8                   << std::endl;
-  std::cout << m_events1SelMu17                  << std::endl;
-  std::cout << m_events2SelMu8                   << std::endl;
-  std::cout << m_events3SelMu8                   << std::endl;
-  std::cout << m_events4SelMu8                   << std::endl;
-  std::cout << m_events2MuJets                   << std::endl;
-  std::cout << m_events2DiMuons                  << std::endl;
-
-  std:: cout << " *** CONSISTENT VERTEXES *** " << std::endl;
-  std::cout << m_events << std::endl;
-  std::cout << m_events1GenMu17                      << std::endl;
-  std::cout << m_events2GenMu8                       << std::endl;
-  std::cout << m_events3GenMu8                       << std::endl;
-  std::cout << m_events4GenMu8                       << std::endl;
-  std::cout << m_events1SelMu17                      << std::endl;
-  std::cout << m_events2SelMu8                       << std::endl;
-  std::cout << m_events3SelMu8                       << std::endl;
-  std::cout << m_events4SelMu8                       << std::endl;
-  std::cout << m_events2MuJets                       << std::endl;
-  std::cout << m_events2DiMuons                      << std::endl;
+   cout << " *** FITTED VERTEXES *** " << endl;
 
 
+   cout << " *** CONSISTENT VERTEXES *** " << endl;
+
+   cout << " *** FITTED VERTEXES *** " << endl;
+  cout << m_events << endl;
+  cout << m_events1GenMu17                  << endl;
+  cout << m_events2GenMu8                   << endl;
+  cout << m_events3GenMu8                   << endl;
+  cout << m_events4GenMu8                   << endl;
+  cout << m_events1SelMu17                  << endl;
+  cout << m_events2SelMu8                   << endl;
+  cout << m_events3SelMu8                   << endl;
+  cout << m_events4SelMu8                   << endl;
+  cout << m_events2MuJets                   << endl;
+  cout << m_events2DiMuons                  << endl;
+
+   cout << " *** CONSISTENT VERTEXES *** " << endl;
+  cout << m_events << endl;
+  cout << m_events1GenMu17                      << endl;
+  cout << m_events2GenMu8                       << endl;
+  cout << m_events3GenMu8                       << endl;
+  cout << m_events4GenMu8                       << endl;
+  cout << m_events1SelMu17                      << endl;
+  cout << m_events2SelMu8                       << endl;
+  cout << m_events3SelMu8                       << endl;
+  cout << m_events4SelMu8                       << endl;
+  cout << m_events2MuJets                       << endl;
+  cout << m_events2DiMuons                      << endl;
 }
 
 void CutFlowAnalyzer::FillTrigInfo( TH1F * h1, const edm::TriggerNames& triggerNames, std::map<int,std::string> nameAndNumb )
