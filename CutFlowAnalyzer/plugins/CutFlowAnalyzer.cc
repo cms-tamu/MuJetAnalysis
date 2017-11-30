@@ -1,8 +1,8 @@
 // system include files
 #include <memory>
+
 // user include files
 #include "FWCore/Framework/interface/EDAnalyzer.h"
-#include "DataFormats/Common/interface/TriggerResults.h"
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -12,171 +12,129 @@
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
-#include "DataFormats/Candidate/interface/Candidate.h"
-#include "DataFormats/DetId/interface/DetId.h"
-#include "DataFormats/GeometrySurface/interface/Cylinder.h"
-#include "DataFormats/GeometrySurface/interface/Plane.h"
+
+#include "DataFormats/Candidate/interface/CandMatchMap.h"
+#include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-#include "DataFormats/Math/interface/LorentzVector.h"
-#include "DataFormats/MuonReco/interface/MuonChamberMatch.h"
-#include "DataFormats/MuonReco/interface/Muon.h"
-#include "DataFormats/MuonReco/interface/MuonSegmentMatch.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
-#include "DataFormats/PatCandidates/interface/TriggerEvent.h"
-#include "DataFormats/TrackingRecHit/interface/TrackingRecHit.h"
-#include "DataFormats/TrackReco/interface/HitPattern.h"
-#include "DataFormats/TrackReco/interface/TrackFwd.h"
-#include "DataFormats/TrackReco/interface/Track.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
-#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
-#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerObjectMapRecord.h"
-#include "Geometry/CommonDetUnit/interface/GlobalTrackingGeometry.h"
-#include "Geometry/CommonTopologies/interface/PixelTopology.h"
-#include "Geometry/Records/interface/GlobalTrackingGeometryRecord.h"
-#include "Geometry/Records/interface/TrackerDigiGeometryRecord.h"
-#include "Geometry/TrackerGeometryBuilder/interface/PixelGeomDetUnit.h"
-#include "Geometry/TrackerGeometryBuilder/interface/TrackerGeometry.h"
-#include "MagneticField/Engine/interface/MagneticField.h"
-#include "MagneticField/Records/interface/IdealMagneticFieldRecord.h"
-#include "RecoTracker/MeasurementDet/interface/MeasurementTracker.h"
-//#include "RecoTracker/MeasurementDet/interface/MeasurementTrackerEvent.h"
-#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
-#include "TrackingTools/GeomPropagators/interface/Propagator.h"
-#include "TrackingTools/Records/interface/TrackingComponentsRecord.h"
-#include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
-#include "TrackingTools/Records/interface/TransientTrackRecord.h"
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
-#include "TrackingTools/TrajectoryState/interface/FreeTrajectoryState.h"
-#include "TrackingTools/TrajectoryState/interface/TrajectoryStateOnSurface.h"
+#include "RecoTracker/MeasurementDet/interface/MeasurementTrackerEvent.h"
 #include "TrackingTools/PatternTools/interface/Trajectory.h"
-#include "TrackingTools/PatternTools/interface/TrajectoryMeasurement.h"
-#include "RecoTracker/Record/interface/CkfComponentsRecord.h"
-#include "RecoTracker/Record/interface/NavigationSchoolRecord.h"
-#include "TrackingTools/DetLayers/interface/NavigationSchool.h"
-#include "RecoMuon/Navigation/interface/MuonNavigableLayer.h"
-#include <TrackingTools/KalmanUpdators/interface/Chi2MeasurementEstimator.h>
-#include <TrackingTools/DetLayers/interface/GeometricSearchDet.h> 
-#include <TrackingTools/MeasurementDet/interface/MeasurementDet.h>
-#include "TrackingTools/DetLayers/interface/DetLayer.h"
-#include <DataFormats/SiPixelDetId/interface/PXBDetId.h>
-#include <DataFormats/SiPixelDetId/interface/PXFDetId.h>
+
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
-#include "DataFormats/JetReco/interface/PFJet.h"
-#include "DataFormats/PatCandidates/interface/Jet.h"
 #include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
 #include "MuJetAnalysis/AnalysisTools/interface/DisplacedVertexFinder.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
+
 // user include files
 #include "TTree.h"
 #include "TRandom3.h"
 #include "TMath.h"
 #include "TVector2.h"
 #include "TLorentzVector.h"
-#include "DataFormats/Candidate/interface/CandMatchMap.h"
-#include "DataFormats/Candidate/interface/Particle.h"
-#include "DataFormats/Candidate/interface/Candidate.h"
-#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-//Added for Vertex Finding sanity checks
-//#include <TrackingRecHit.h>
-#include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
 
 //******************************************************************************
-//                           Class declaration                                  
+//                           Class declaration
 //******************************************************************************
 
-class CutFlowAnalyzer : public edm::EDAnalyzer 
+const unsigned int MAX_MUONS = 4;
+
+class CutFlowAnalyzer : public edm::EDAnalyzer
 {
 public:
   explicit CutFlowAnalyzer(const edm::ParameterSet&);
   ~CutFlowAnalyzer();
-  
+
   static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
-  void FillTrigInfo( TH1F *h1, edm::Handle<pat::TriggerEvent> triggerEvent, std::map<int,std::string> nameAndNumb );
+  void FillTrigInfo( TH1F *h1, const edm::TriggerNames&, std::map<int,std::string> nameAndNumb );
   TH1F* triggerComposition;
   TH1F* triggerComposition_bb;
+
 private:
   virtual void beginJob() ;
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
   virtual void endJob() ;
-  
+
   virtual void beginRun(edm::Run const&, edm::EventSetup const&);
   virtual void endRun(edm::Run const&, edm::EventSetup const&);
   virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
   virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
-  
+
   edm::ParameterSet param_;
   edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
-  
+
   //****************************************************************************
-  //                          THRESHOLDS                                        
+  //                          THRESHOLDS
   //****************************************************************************
-  
+
   Float_t m_threshold_Mu17_pT;
   Float_t m_threshold_Mu17_eta;
   Float_t m_threshold_Mu8_pT;
   Float_t m_threshold_Mu8_eta;
-  
-  Float_t m_threshold_DiMuons_Iso_dR;  
+
+  Float_t m_threshold_DiMuons_Iso_dR;
   Float_t m_threshold_DiMuons_Iso_dz;
   Float_t m_threshold_DiMuons_Iso_pT;
-  
+
   //****************************************************************************
-  //          EVENT LEVEL VARIABLES, COUNTERS, BRANCHES AND SELECTORS           
+  //          EVENT LEVEL VARIABLES, COUNTERS, BRANCHES AND SELECTORS
   //****************************************************************************
-  
+
   Int_t   m_debug;         // Debug level
   TTree * m_ttree;         // Store variables in branches of this tree for later access
   TTree * m_ttree_orphan;  // Store variables in branches of this tree for later access
   Int_t   m_events;        // Counter: number of analyzed events
-  
+
   // Branches in ROOT tree (they all start with b_)
   Int_t b_run;   // run number   | these three numbers required to extract event
-  Int_t b_lumi;  // lumi number  | from sample (data or MC) and examine it in   
-  Int_t b_event; // event number | event display                                
-  
+  Int_t b_lumi;  // lumi number  | from sample (data or MC) and examine it in
+  Int_t b_event; // event number | event display
+
   Float_t b_beamSpot_x;
   Float_t b_beamSpot_y;
   Float_t b_beamSpot_z;
 
   //****************************************************************************
-  //                GEN LEVEL BRANCHES, COUNTERS AND SELECTORS                  
+  //                GEN LEVEL BRANCHES, COUNTERS AND SELECTORS
   //****************************************************************************
-  
+
   bool m_fillGenLevel; // TRUE for simulation, FALSE for data
-  
+
   // GEN Level Muon Branches: with this analyzer we search for events with 4 muons!
   Float_t b_genMu0_px;
   Float_t b_genMu1_px;
   Float_t b_genMu2_px;
   Float_t b_genMu3_px;
-  
+
   Float_t b_genMu0_py;
   Float_t b_genMu1_py;
   Float_t b_genMu2_py;
   Float_t b_genMu3_py;
-  
+
   Float_t b_genMu0_pz;
   Float_t b_genMu1_pz;
   Float_t b_genMu2_pz;
   Float_t b_genMu3_pz;
-  
+
   Float_t b_genMu0_pT;
   Float_t b_genMu1_pT;
   Float_t b_genMu2_pT;
   Float_t b_genMu3_pT;
-  
+
   Float_t b_genMu0_eta;
   Float_t b_genMu1_eta;
   Float_t b_genMu2_eta;
   Float_t b_genMu3_eta;
-  
+
   Float_t b_genMu0_phi;
   Float_t b_genMu1_phi;
   Float_t b_genMu2_phi;
   Float_t b_genMu3_phi;
-  
+
   // GEN Level Counters: number of events with ...
   Int_t m_events4GenMu;    // ... with 4 gen muons
   Int_t m_events1GenMu17;  // ... with 1 gen muon:  pT > 17 GeV, |eta| < 0.9
@@ -184,7 +142,7 @@ private:
   Int_t m_events3GenMu8;   // ... with 3 gen muons: pT > 8 GeV,  |eta| < 2.4
   Int_t m_events4GenMu8;   // ... with 4 gen muons: pT > 8 GeV,  |eta| < 2.4
   Int_t m_eventsGenALxyOK; // ... with both A bosons decay inside Lxy < 4 cm
-  
+
   // GEN Level Selectors
   Bool_t b_is4GenMu;
   Bool_t b_is1GenMu17;
@@ -192,7 +150,7 @@ private:
   Bool_t b_is3GenMu8;
   Bool_t b_is4GenMu8;
   Bool_t b_isGenALxyOK;
-  
+
   // Bosons
   Float_t b_genH_m;
   Float_t b_genH_px;
@@ -203,7 +161,7 @@ private:
   Float_t b_genH_vx;
   Float_t b_genH_vy;
   Float_t b_genH_vz;
-  
+
   Float_t b_genA0_m;
   Float_t b_genA0_px;
   Float_t b_genA0_py;
@@ -213,13 +171,13 @@ private:
   Float_t b_genA0_vx;
   Float_t b_genA0_vy;
   Float_t b_genA0_vz;
-  
+
   Float_t b_genA0_Lx;
   Float_t b_genA0_Ly;
   Float_t b_genA0_Lz;
   Float_t b_genA0_Lxy;
   Float_t b_genA0_L;
-  
+
   Float_t b_genA1_m;
   Float_t b_genA1_px;
   Float_t b_genA1_py;
@@ -229,83 +187,78 @@ private:
   Float_t b_genA1_vx;
   Float_t b_genA1_vy;
   Float_t b_genA1_vz;
-  
+
   Float_t b_genA1_Lx;
   Float_t b_genA1_Ly;
   Float_t b_genA1_Lz;
   Float_t b_genA1_Lxy;
   Float_t b_genA1_L;
-  
+
   // Muons accossiated with A-bosons
   Float_t b_genA0Mu0_px;
   Float_t b_genA0Mu1_px;
   Float_t b_genA1Mu0_px;
   Float_t b_genA1Mu1_px;
-  
+
   Float_t b_genA0Mu0_py;
   Float_t b_genA0Mu1_py;
   Float_t b_genA1Mu0_py;
   Float_t b_genA1Mu1_py;
-  
+
   Float_t b_genA0Mu0_pz;
   Float_t b_genA0Mu1_pz;
   Float_t b_genA1Mu0_pz;
   Float_t b_genA1Mu1_pz;
-  
+
   Float_t b_genA0Mu0_eta;
   Float_t b_genA0Mu1_eta;
   Float_t b_genA1Mu0_eta;
   Float_t b_genA1Mu1_eta;
-  
+
   Float_t b_genA0Mu0_phi;
   Float_t b_genA0Mu1_phi;
   Float_t b_genA1Mu0_phi;
   Float_t b_genA1Mu1_phi;
-  
+
   Float_t b_genA0Mu0_vx;
   Float_t b_genA0Mu1_vx;
   Float_t b_genA1Mu0_vx;
   Float_t b_genA1Mu1_vx;
-  
+
   Float_t b_genA0Mu0_vy;
   Float_t b_genA0Mu1_vy;
   Float_t b_genA1Mu0_vy;
   Float_t b_genA1Mu1_vy;
-  
+
   Float_t b_genA0Mu0_vz;
   Float_t b_genA0Mu1_vz;
   Float_t b_genA1Mu0_vz;
   Float_t b_genA1Mu1_vz;
-  
+
   Float_t b_genA0Mu_dEta;
   Float_t b_genA1Mu_dEta;
   Float_t b_genA0Mu_dPhi;
   Float_t b_genA1Mu_dPhi;
   Float_t b_genA0Mu_dR;
   Float_t b_genA1Mu_dR;
-  
+
   //****************************************************************************
-  //          HLT LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
+  //          HLT LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS
   //****************************************************************************
 
-  std::vector<std::string> controlHltPaths_;
   std::vector<std::string> signalHltPaths_;
-  std::vector<std::string> backupHltPaths_;
-  std::vector<std::string> otherMuHltPaths_;
-  std::vector<std::string> allMuHltPaths_;
   std::vector<std::string> b_hltPaths;
   bool histo_name;
   std::map<int,std::string> NameAndNumb;
   //****************************************************************************
-  //          RECO LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS            
+  //          RECO LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS
   //****************************************************************************
-  
+
   // Labels to access
   edm::EDGetTokenT<pat::MuonCollection> m_muons;        // reconstructed muons
   edm::EDGetTokenT<pat::MultiMuonCollection> m_muJets;       // muon jets built from reconstructed muons
   edm::EDGetTokenT<reco::BeamSpot> m_beamSpot;
   edm::EDGetTokenT<pat::MuonCollection> m_muJetOrphans; // muon orphan, not found in any group
-  edm::EDGetTokenT<pat::TriggerEvent> m_triggerEvent;
   edm::EDGetTokenT<reco::TrackCollection> m_tracks;
   edm::EDGetTokenT<reco::GenParticleCollection> m_genParticles;
   edm::EDGetTokenT<edm::TriggerResults> m_trigRes;
@@ -317,40 +270,40 @@ private:
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
   Int_t         m_endcapPixelLayer;
-  
+
   unsigned int  m_randomSeed;
   TRandom3      m_trandom3;
-  
+
   // bb Estimation
   Float_t b_massC;
   Float_t b_massF;
   Float_t b_isoC_1mm;
   Float_t b_isoF_1mm;
-  
+
   // Selectors and counters of events with ...
   Bool_t b_is1SelMu17;
   Int_t  m_events1SelMu17; // ... with 1 selected reco muon: pT > 17 GeV, |eta| < 0.9
-  
+
   Bool_t b_is2SelMu8;
   Int_t  m_events2SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
-  
+
   Bool_t b_is3SelMu8;
   Int_t  m_events3SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
-  
+
   Bool_t b_is4SelMu8;
   Int_t  m_events4SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
-  
+
   Bool_t b_is2MuJets;
   Int_t  m_events2MuJets;  // ... with 2 muon jets
-  
+
   Bool_t b_is2DiMuons;
   Int_t  m_events2DiMuons; // ... with 2 dimuons (dimuon = muon jet with 2 muons)
-  
+
   Bool_t b_is2DiMuonsFittedVtxOK;
   Bool_t b_is2DiMuonsFittedVtxOK_KF;
   Bool_t b_is2DiMuonsFittedVtxOK_VS;
   Bool_t b_is2DiMuonsConsistentVtxOK;
-  
+
   //BAM: added for vertex finding sanity checks
   Int_t hitsBeforeVertex_diMuonC_FittedVTX;
   Int_t hitsBeforeVertex_diMuonF_FittedVTX;
@@ -374,7 +327,16 @@ private:
 
   // Reco branches in ROOT tree (they all start with b_)
   Int_t b_nRecoMu;
-  
+
+  Float_t b_selMu_px[MAX_MUONS];
+  Float_t b_selMu_py[MAX_MUONS];
+  Float_t b_selMu_pz[MAX_MUONS];
+  Float_t b_selMu_pT[MAX_MUONS];
+  Float_t b_selMu_eta[MAX_MUONS];
+  Float_t b_selMu_phi[MAX_MUONS];
+  Bool_t b_selMu_trigHLT16[MAX_MUONS];
+  Bool_t b_selMu_trigHLT6[MAX_MUONS];
+
   Float_t b_selMu0_px;
   Float_t b_selMu1_px;
   Float_t b_selMu2_px;
@@ -404,6 +366,16 @@ private:
   Float_t b_selMu1_pT;
   Float_t b_selMu2_pT;
   Float_t b_selMu3_pT;
+
+  Bool_t b_selMu0_trigHLT16;
+  Bool_t b_selMu1_trigHLT16;
+  Bool_t b_selMu2_trigHLT16;
+  Bool_t b_selMu3_trigHLT16;
+
+  Bool_t b_selMu0_trigHLT6;
+  Bool_t b_selMu1_trigHLT6;
+  Bool_t b_selMu2_trigHLT6;
+  Bool_t b_selMu3_trigHLT6;
 
   Float_t b_diMuonC_FittedVtx_m;
   Float_t b_diMuonC_FittedVtx_px;
@@ -746,29 +718,19 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_events4GenMu8  = 0;
 
   //****************************************************************************
-  //                 SET HLT LEVEL VARIABLES AND COUNTERS                       
+  //                 SET HLT LEVEL VARIABLES AND COUNTERS
   //****************************************************************************
 
-  controlHltPaths_ = iConfig.getParameter<std::vector<std::string> >("controlHltPaths");
   signalHltPaths_ = iConfig.getParameter<std::vector<std::string> >("signalHltPaths");
-  backupHltPaths_ = iConfig.getParameter<std::vector<std::string> >("backupHltPaths");
-  otherMuHltPaths_ = iConfig.getParameter<std::vector<std::string> >("otherMuHltPaths");
-
-  allMuHltPaths_.clear();
-  allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(controlHltPaths_), std::end(controlHltPaths_));
-  allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(signalHltPaths_), std::end(signalHltPaths_));
-  allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(backupHltPaths_), std::end(backupHltPaths_));
-  allMuHltPaths_.insert(std::end(allMuHltPaths_), std::begin(otherMuHltPaths_), std::end(otherMuHltPaths_));
 
   //****************************************************************************
-  //                 SET RECO LEVEL VARIABLES AND COUNTERS                       
+  //                 SET RECO LEVEL VARIABLES AND COUNTERS
   //****************************************************************************
 
   m_muons           = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"));
   m_muJets          = consumes<pat::MultiMuonCollection>(iConfig.getParameter<edm::InputTag>("muJets"));
   m_beamSpot        = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
   m_muJetOrphans    = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muJetOrphans"));
-  m_triggerEvent    = consumes<pat::TriggerEvent>(iConfig.getParameter<edm::InputTag>("triggerEvent"));
   m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
   m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genParticles"));
   m_trigRes         = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
@@ -783,7 +745,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   skimOutput_ = iConfig.getParameter<bool>("skimOutput");
 
   m_randomSeed = 1234;
-  m_trandom3   = TRandom3(m_randomSeed); // Random generator 
+  m_trandom3   = TRandom3(m_randomSeed); // Random generator
 
   m_events1SelMu17                     = 0;
   m_events2SelMu8                      = 0;
@@ -826,7 +788,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_diMuonC_m2_FittedVtx_hitpix=-1000;
   b_diMuonF_m1_FittedVtx_hitpix=-1000;
   b_diMuonF_m2_FittedVtx_hitpix=-1000;
-  
+
   b_diMuonC_m1_FittedVtx_hitpix_l2inc=-1000;
   b_diMuonC_m2_FittedVtx_hitpix_l2inc=-1000;
   b_diMuonF_m1_FittedVtx_hitpix_l2inc=-1000;
@@ -1859,44 +1821,30 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
 
   // HLT cut
-  edm::Handle<pat::TriggerEvent> triggerEvent;
-  iEvent.getByToken(m_triggerEvent, triggerEvent);
-  
-  // b_isDiMuonHLTFired = false;
-  // b_hltPaths.clear();
-  // for (auto p : allMuHltPaths_){
-  //   if ( !triggerEvent->path(p) ) {
-  //     if ( m_debug > 10 ) std::cout << p << " is not present in patTriggerEvent!" << std::endl;
-  //   }
-  //   else{
-  //     if ( triggerEvent->path(p)->wasAccept() ) {
-  //       b_hltPaths.push_back(p);
-  //       if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p) != signalHltPaths_.end()) {
-  //         b_isDiMuonHLTFired = true;
-  //       }
-  //     }
-  //   }
-  // }
-
   b_isDiMuonHLTFired = false;
   b_hltPaths.clear();
 
   edm::Handle<edm::TriggerResults> TrResults;
   iEvent.getByToken( m_trigRes, TrResults);
   const TriggerResults *trRes = TrResults.product();
-  int ntrigs = trRes->size();
   edm::TriggerNames const& triggerNames = iEvent.triggerNames(*trRes);
+
+  int ntrigs = trRes->size();
   for (int itrig = 0; itrig != ntrigs; ++itrig) {
     TString trigName = triggerNames.triggerName(itrig);
     std::string trigNameStr(trigName.Data());
     if (trRes->accept(triggerNames.triggerIndex(trigNameStr))){
-      std::cout << "triggered by path " << trigNameStr << std::endl;
+
       b_hltPaths.push_back(trigNameStr);
+
+      if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
+
       b_isDiMuonHLTFired = true;
+      }
     }
   }
 
-  
+
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on HLT" << std::endl;
 
   // Cut on dimuon masses - use fitted vertexes
@@ -2095,721 +2043,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     std::cout<<"  hitpix diMuonC m2   "<<b_diMuonC_m2_FittedVtx_hitpix_l3inc<<std::endl;
   }
 
-/*
-  if (runPixelHitRecovery_ && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
-
-    Int_t indxtrkmj1[2];
-    Int_t indxtrkmj2[2];
-    
-    indxtrkmj1[0]=-100000;
-    indxtrkmj1[1]=-100000;
-    
-    indxtrkmj2[0]=-100000;
-    indxtrkmj2[1]=-100000;
-    
-
-    //============== Refitted collection of tracks =============================//
-    Handle<reco::TrackCollection> tracksrf;  
-    iEvent.getByToken(m_trackRef,tracksrf); 
-
-    if(m_debug>10) std::cout<<" number of refitted traks  "<<tracksrf->size()<<std::endl;
-    
-    std::vector<Float_t> mincharge;
-    std::vector<Float_t> mintheta;
-    std::vector<Float_t> minqoverpt;
-    std::vector<Float_t> minphi;
-    std::vector<Float_t> mindxy;
-    std::vector<Float_t> mindz;
-    
-    std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetC;
-    std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetC;
-    std::vector<std::pair<Int_t,Float_t> > minchi2_mu1_muJetF;
-    std::vector<std::pair<Int_t,Float_t> > minchi2_mu2_muJetF;
-
-    TLorentzVector muon1; muon1.SetPtEtaPhiE(muJetC->muon(0)->pt(),muJetC->muon(0)->eta(),muJetC->muon(0)->phi(),muJetC->muon(0)->energy());
-    TLorentzVector muon2; muon2.SetPtEtaPhiE(muJetC->muon(1)->pt(),muJetC->muon(1)->eta(),muJetC->muon(1)->phi(),muJetC->muon(1)->energy());
-    TLorentzVector muon3; muon3.SetPtEtaPhiE(muJetF->muon(0)->pt(),muJetF->muon(0)->eta(),muJetF->muon(0)->phi(),muJetF->muon(0)->energy());
-    TLorentzVector muon4; muon4.SetPtEtaPhiE(muJetF->muon(1)->pt(),muJetF->muon(1)->eta(),muJetF->muon(1)->phi(),muJetF->muon(1)->energy());
-    b_Mass4Mu = (muon1+muon2+muon3+muon4).M();
-
-    //====== MATCHING selected muons to refitted tracks 
-    for(uint32_t k=0;k<2;k++){
-
-      mtrack_pt[k] = muJetC->muon(k)->innerTrack()->pt();
-      mtrack_charge[k] = muJetC->muon(k)->innerTrack()->charge();
-
-      mtrack_theta[k] = muJetC->muon(k)->innerTrack()->theta();
-      mtrack_phi[k] = muJetC->muon(k)->innerTrack()->phi();
-      mtrack_dxy[k] = muJetC->muon(k)->innerTrack()->dxy();
-      mtrack_dz[k] = muJetC->muon(k)->innerTrack()->dz();
-	  
-      mtrack_errpt[k] = muJetC->muon(k)->innerTrack()->ptError();
-      mtrack_errcharge[k] = muJetC->muon(k)->innerTrack()->charge();
-      mtrack_errqoverp[k] = muJetC->muon(k)->innerTrack()->qoverpError();
-      mtrack_errtheta[k] = muJetC->muon(k)->innerTrack()->thetaError();
-      mtrack_errphi[k] = muJetC->muon(k)->innerTrack()->phiError();
-      mtrack_errdxy[k] = muJetC->muon(k)->innerTrack()->dxyError();
-      mtrack_errdz[k] = muJetC->muon(k)->innerTrack()->dzError();
-
-      Int_t counter_match=0;
-      Int_t counter_track=0;
-
-      for (reco::TrackCollection::const_iterator trackrf = tracksrf->begin(); trackrf != tracksrf->end(); ++trackrf) {
-	    
-	if(trackrf->pt()>3.0 && fabs(trackrf->eta())<2.5){
-	      
-	  if(k==1){
-	    std::pair<Int_t,Float_t> temp_mu2_muJetC;
-	    std::pair<Int_t,Float_t> temp_mu2_muJetF;
-		
-	    temp_mu2_muJetC.first = counter_match;
-	    temp_mu2_muJetF.first = counter_match;
-		
-		
-	    temp_mu2_muJetC.second = pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-	      pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-	      pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-	      pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-
-	    temp_mu2_muJetF.second = pow(tamu::helpers::cotan(muJetF->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-	      pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(tamu::helpers::My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-	      pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-	      pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-		
-		if(m_debug>10){
-			//std::cout << "Printing all information for temp_mu2_muJetC.second (chi2  muon2 muJetC)" << std::endl;
-			//std::cout << "pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2): " << pow(cotan(muJetC->muon(k)->innerTrack()->theta()) - cotan(trackrf->theta()),2)/pow(6.515e-07,2) << std::endl;
-			//std::cout << "pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2): " << pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) << std::endl;
-			//std::cout << "pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2): " << pow(My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) << std::endl;
-			//std::cout << "pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2): " << pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) << std::endl;
-			//std::cout << "pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2)" << pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2) << std::endl;
-			//std::cout << "temp_mu2_muJetC.second: " << temp_mu2_muJetC.second << std::endl;
-
-
-	      std::cout<<" track    "<<counter_match<<"    chi2  muon2 muJetC   "<< temp_mu2_muJetC.second <<std::endl;
-	      std::cout<<" track    "<<counter_match<<"    chi2  muon2 muJetF   "<< temp_mu2_muJetF.second <<std::endl;
-	      std::cout<<" muJetC mu2   minchi2  "<<temp_mu2_muJetC.second<<std::endl;
-	    }
-
-	    minchi2_mu2_muJetC.push_back(temp_mu2_muJetC);
-	    minchi2_mu2_muJetF.push_back(temp_mu2_muJetF);
-
-	    muJetC_muon2_track_diffcharge[counter_track] = muJetC->muon(k)->innerTrack()->charge() - trackrf->charge();
-	    muJetC_muon2_track_diffpt[counter_track] = muJetC->muon(k)->innerTrack()->pt() - trackrf->pt();
-	    muJetC_muon2_track_diffqoverp[counter_track] = muJetC->muon(k)->innerTrack()->qoverp() - trackrf->qoverp();
-	    muJetC_muon2_track_difftheta[counter_track] = muJetC->muon(k)->innerTrack()->theta() - trackrf->theta();
-	    muJetC_muon2_track_diffphi[counter_track] = muJetC->muon(k)->innerTrack()->phi() - trackrf->phi();
-	    muJetC_muon2_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
-	    muJetC_muon2_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
-	  }
-	      
-	      
-	  if(k==0){
-		
-	    std::pair<Int_t,Float_t> temp_mu1_muJetC;
-	    std::pair<Int_t,Float_t> temp_mu1_muJetF;
-		
-	    temp_mu1_muJetC.first = counter_match;
-	    temp_mu1_muJetF.first = counter_match;
-	    temp_mu1_muJetC.second = pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-	      pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-	      pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-	      pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-
-	    temp_mu1_muJetF.second = pow(tamu::helpers::cotan(muJetF->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-	      pow((muJetF->muon(k)->innerTrack()->charge()/muJetF->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(tamu::helpers::My_dPhi(muJetF->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-	      pow(muJetF->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-	      pow(muJetF->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-
-	    if(m_debug>10){
-	      std::cout<<" track    "<<counter_match<<"    chi2  muon1 muJetC   "<< temp_mu1_muJetC.second <<std::endl;
-	      std::cout<<" track    "<<counter_match<<"    chi2  muon1 muJetF   "<< temp_mu1_muJetF.second <<std::endl;
-	    }
-
-	    minchi2_mu1_muJetC.push_back(temp_mu1_muJetC);
-	    minchi2_mu1_muJetF.push_back(temp_mu1_muJetF);
-
-	    //======================
-		
-	    mintheta.push_back(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()) );
-	    minqoverpt.push_back((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt())  -  (trackrf->charge()/trackrf->pt())  );
-	    minphi.push_back(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()) );
-	    mindxy.push_back(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy() );
-	    mindz.push_back( muJetC->muon(k)->innerTrack()->dz() - trackrf->dz() );
-	    mincharge.push_back( muJetC->muon(k)->innerTrack()->charge() - trackrf->charge());
-		
-		
-	    muJetC_muon1_track_diffpt[counter_track] = muJetC->muon(k)->innerTrack()->pt() - trackrf->pt();
-	    muJetC_muon1_track_diffcharge[counter_track] = muJetC->muon(k)->innerTrack()->charge() - trackrf->charge();
-	    muJetC_muon1_track_diffqoverp[counter_track] = (muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt());
-	    muJetC_muon1_track_difftheta[counter_track] = tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta());
-	    muJetC_muon1_track_diffphi[counter_track] =  tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi());
-	    muJetC_muon1_track_diffdxy[counter_track] = muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy();
-	    muJetC_muon1_track_diffdz[counter_track] = muJetC->muon(k)->innerTrack()->dz() - trackrf->dz();
-		  
-	    muJetC_muon1_track_diffchi2[counter_track] = pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2) + 
-	      pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2) +
-	      pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2) + 
-	      pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2) + 
-	      pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-		
-		
-		  
-	    muJetC_muon1_track_diffchi2theta[counter_track] = pow(tamu::helpers::cotan(muJetC->muon(k)->innerTrack()->theta()) - tamu::helpers::cotan(trackrf->theta()),2)/pow(6.515e-07,2);
-	    muJetC_muon1_track_diffchi2qoverpt[counter_track] = pow((muJetC->muon(k)->innerTrack()->charge()/muJetC->muon(k)->innerTrack()->pt()) - (trackrf->charge()/trackrf->pt()),2)/pow(5.847e-07,2);
-	    muJetC_muon1_track_diffchi2phi[counter_track] = pow(tamu::helpers::My_dPhi(muJetC->muon(k)->innerTrack()->phi(),trackrf->phi()),2)/pow(5.34e-07,2); 
-	    muJetC_muon1_track_diffchi2dxy[counter_track] = pow(muJetC->muon(k)->innerTrack()->dxy() - trackrf->dxy(),2)/pow(3.6e-06,2);
-	    muJetC_muon1_track_diffchi2dz[counter_track] = pow(muJetC->muon(k)->innerTrack()->dz() - trackrf->dz(),2)/pow(3.703e-06,2);
-		
-	    b_track_pt[counter_track] = trackrf->pt();
-	    b_track_charge[counter_track] = trackrf->charge();
-	    b_track_qoverp[counter_track] = trackrf->qoverp();
-	    b_track_theta[counter_track] = trackrf->theta();
-	    b_track_phi[counter_track] = trackrf->phi();
-	    b_track_dxy[counter_track] = trackrf->dxy();
-	    b_track_dz[counter_track] = trackrf->dz();
-		
-	    b_track_errpt[counter_track] = trackrf->ptError();
-	    b_track_errcharge[counter_track] = trackrf->charge();
-	    b_track_errqoverp[counter_track] = trackrf->qoverpError();
-	    b_track_errtheta[counter_track] = trackrf->thetaError();
-	    b_track_errphi[counter_track] = trackrf->phiError();
-	    b_track_errdxy[counter_track] = trackrf->dxyError();
-	    b_track_errdz[counter_track] = trackrf->dzError();
-	  }
-	      
-	  if(m_debug>10){
-	    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-	    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track pT  "<<trackrf->pt()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-		    
-	    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-	    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track 1/pT  "<<1/trackrf->pt()<<" muon track 1/pT  "<<1/muJetC->muon(k)->innerTrack()->pt()<<std::endl;
-		    
-	    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
-	    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track eta  "<<trackrf->eta()<<" muon track pT  "<<muJetC->muon(k)->innerTrack()->eta()<<std::endl;
-		    
-		    
-	    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
-	    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vx()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vx()<<std::endl;
-		    
-	    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
-	    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vy()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vy()<<std::endl;
-		    
-	    if(k==0) std::cout<<"  match mj1m0 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
-	    if(k==1) std::cout<<"  match mj1m1 muon track with indx   "<<counter_match<<" track vx  "<<trackrf->vz()<<" muon track vx  "<<muJetC->muon(k)->innerTrack()->vz()<<std::endl;
-	  }
-	  counter_track++;
-	}
-	counter_match++;
-      }
-      if(k==0) b_ntracks = counter_track;
-    }
-
-    std::sort(mintheta.begin(),mintheta.end(),tamu::helpers::order);
-    std::sort(minqoverpt.begin(),minqoverpt.end(),tamu::helpers::order);
-    std::sort(minphi.begin(),minphi.end(),tamu::helpers::order);
-    std::sort(mindxy.begin(),mindxy.end(),tamu::helpers::order);
-    std::sort(mindz.begin(),mindz.end(),tamu::helpers::order);
-    std::sort(mincharge.begin(),mincharge.end(),tamu::helpers::order);
-	  
-    muJetC_muon1_track_mincharge  = mincharge[0];
-    muJetC_muon1_track_minqoverpt = minqoverpt[0];
-    muJetC_muon1_track_mintheta   = mintheta[0];
-    muJetC_muon1_track_minphi     = minphi[0];
-    muJetC_muon1_track_mindxy     = mindxy[0];
-    muJetC_muon1_track_mindz      = mindz[0];
-
-    muJetC_muon1_track_minchi2theta   = pow(mintheta[0],2)/pow(6.515e-07,2);
-    muJetC_muon1_track_minchi2qoverpt = pow(minqoverpt[0],2)/pow(5.847e-07,2);
-    muJetC_muon1_track_minchi2phi     = pow(minphi[0],2)/pow(5.34e-07,2);
-    muJetC_muon1_track_minchi2dxy     =  pow(mindxy[0],2)/pow(3.6e-06,2);
-    muJetC_muon1_track_minchi2dz      = pow(mindz[0],2)/pow(3.703e-06,2);
-
-    mintheta.clear();
-    minqoverpt.clear();
-    minphi.clear();
-    mindxy.clear();
-    mindz.clear();
-    mincharge.clear();
-
-    //==================================================================================================
-	
-    std::sort(minchi2_mu1_muJetC.begin(),minchi2_mu1_muJetC.end(),tamu::helpers::matchorder);
-    std::sort(minchi2_mu2_muJetC.begin(),minchi2_mu2_muJetC.end(),tamu::helpers::matchorder);
-    std::sort(minchi2_mu1_muJetF.begin(),minchi2_mu1_muJetF.end(),tamu::helpers::matchorder);
-    std::sort(minchi2_mu2_muJetF.begin(),minchi2_mu2_muJetF.end(),tamu::helpers::matchorder);
-
-    if(m_debug>10){
-      std::cout<<" after sorting  "<<std::endl;
-      std::cout<<" minchi2_mu2_muJetC 0 "<<minchi2_mu1_muJetC[0].second<<std::endl;
-      std::cout<<" minchi2_mu2_muJetC 1 "<<minchi2_mu1_muJetC[1].second<<std::endl;
-      std::cout<<" minchi2_mu2_muJetC 2 "<<minchi2_mu1_muJetC[2].second<<std::endl;
-    }
-
-    muJetC_muon1_track_minchi2 = minchi2_mu1_muJetC[0].second;
-    muJetC_muon2_track_minchi2 = minchi2_mu2_muJetC[0].second;
-    muJetF_muon1_track_minchi2 = minchi2_mu1_muJetF[0].second;
-    muJetF_muon2_track_minchi2 = minchi2_mu2_muJetF[0].second;
-
-    if(minchi2_mu1_muJetC[0].second<100000.0){
-      b_match_mu1track_muJetC=1;
-      indxtrkmj1[0] = minchi2_mu1_muJetC[0].first;
-    }
-    if(minchi2_mu2_muJetC[0].second<100000.0){
-      b_match_mu2track_muJetC=1;
-      indxtrkmj1[1] = minchi2_mu2_muJetC[0].first;
-    }
-    if(minchi2_mu1_muJetF[0].second<100000.0){
-      b_match_mu1track_muJetF=1;
-      indxtrkmj2[0] = minchi2_mu1_muJetF[0].first;
-    }
-    if(minchi2_mu2_muJetF[0].second<100000.0){
-      b_match_mu2track_muJetF=1;
-      indxtrkmj2[1] = minchi2_mu2_muJetF[0].first;
-    }
-
-
-    if(m_debug>10){
-      std::cout<<"  matching   chi2  mu1 muJetC  "<<minchi2_mu1_muJetC[0].first<<std::endl;
-      std::cout<<"  matching   chi2  mu2 muJetC  "<<minchi2_mu2_muJetC[0].first<<std::endl;
-      std::cout<<"  matching   chi2  mu1 muJetF  "<<minchi2_mu1_muJetF[0].first<<std::endl;
-      std::cout<<"  matching   chi2  mu2 muJetF  "<<minchi2_mu2_muJetF[0].first<<std::endl;
-    }
-    
-    minchi2_mu1_muJetC.clear();
-    minchi2_mu2_muJetC.clear();
-    minchi2_mu1_muJetF.clear();
-    minchi2_mu2_muJetF.clear();
-    
-
-      //===================== Initializing navigation school, propagator, etc..======================//
-    
-      edm::ESHandle<NavigationSchool> theSchool;
-      edm::ESHandle<MeasurementTracker> theMeasTk;
-      edm::Handle<MeasurementTrackerEvent> theMeasTkEventHandle;
-      iEvent.getByToken(measurementTrkToken_, theMeasTkEventHandle);
-      const MeasurementTrackerEvent *theMeasTkEvent = theMeasTkEventHandle.product();
-    
-      std::string theNavigationSchool ="";
-      if (param_.exists("NavigationSchool")) theNavigationSchool= param_.getParameter<std::string>("NavigationSchool");
-      else edm::LogWarning("TrackProducerBase")<<"NavigationSchool parameter not set. secondary hit pattern will not be filled.";
-    
-      if (theNavigationSchool!=""){
-	iSetup.get<NavigationSchoolRecord>().get(theNavigationSchool, theSchool);
-	LogDebug("TrackProducer") << "get also the measTk" << "\n";
-	std::string measTkName = param_.getParameter<std::string>("MeasurementTracker");
-	iSetup.get<CkfComponentsRecord>().get(measTkName,theMeasTk);
-      }
-      else{
-	theSchool = edm::ESHandle<NavigationSchool>(); //put an invalid handle
-	theMeasTk = edm::ESHandle<MeasurementTracker>(); //put an invalid handle
-      }
-    
-      if (!theSchool.isValid()) 
-	edm::LogWarning("NavigationSchool")<<"NavigationSchool is invalid!";
-    
-      edm::ESHandle<Propagator> thePropagator;
-      std::string propagatorName = param_.getParameter<std::string>("Propagator");
-      iSetup.get<TrackingComponentsRecord>().get(propagatorName,thePropagator);
-    
-      Chi2MeasurementEstimator estimator(1.e10,100.);  // very very relaxed cuts to capture all nearby hits
-      Chi2MeasurementEstimator estimator2(30,10.);  // to find compatible layers
-
-      
-  
-      // Collection of Trajectories from Refitted Tracks
-      Handle< std::vector<Trajectory> > trajCollectionHandle;
-      iEvent.getByToken(m_traj,trajCollectionHandle);
-    
-      if(m_debug>10){
-	std::cout<<"   genTrack collection: " <<tracks->size()<<std::endl;
-	std::cout<<"   Refitted trajectoryColl->size(): " << trajCollectionHandle->size()<<std::endl;
-      }
-
-
-      for(uint32_t km=0;km<2;km++){  // loop for muJetC muon trajectories
-      
-	if(m_debug>10){
-	  std::cout<<"  muon-track indx   "<<indxtrkmj1[km]<<"  muon pT   "<<muJetC->muon(km)->pt()<<"  muon eta  "
-		   <<muJetC->muon(km)->eta()<<std::endl;
-	}
-
-	//===================   Information for the muon-tracks ===================================//
-	if(km==0)  b_mutrack_pT_mu1JetC = muJetC->muon(km)->pt();
-	if(km==1)  b_mutrack_pT_mu2JetC = muJetC->muon(km)->pt();
-      
-	if(km==0)  b_mutrack_phi_mu1JetC = muJetC->muon(km)->phi();
-	if(km==1)  b_mutrack_phi_mu2JetC = muJetC->muon(km)->phi();
-      
-	if(km==0)  b_mutrack_charge_mu1JetC = muJetC->muon(km)->charge();
-	if(km==1)  b_mutrack_charge_mu2JetC = muJetC->muon(km)->charge();
-      
-	if(km==0)  b_mutrack_eta_mu1JetC = muJetC->muon(km)->eta();
-	if(km==1)  b_mutrack_eta_mu2JetC = muJetC->muon(km)->eta();
-      
-	//====================== Loop for Trajectories from TrackRefitter  =================================//
-	Int_t counter_traj=0;
-	for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
-      
-	  if(counter_traj==indxtrkmj1[km]){
-	
-	    if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
-				    << "isValid: " << it->isValid()<<std::endl;
-	    }
-	
-	    if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
-	  
-	      const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
-	      const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
-	      TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
-	      TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
-	  
-	      if (!outerState || !innerState){
-		std::cout << "No outer layer or no inner layer!" << std::endl;
-	      }
-
-	      const DetLayer* outerLayer = it->firstMeasurement().layer();
-	      const DetLayer* innerLayer = it->lastMeasurement().layer();
-
-	      if (!outerLayer || !innerLayer){
-		//means  that the trajectory was fit/smoothed in a special case: not setting those pointers
-		if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
-					<<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
-	      }
-	  
-	      //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
-	      PropagationDirection dirForInnerLayers = oppositeToMomentum;
-	      PropagationDirection dirForOuterLayers = alongMomentum;
-	      if(it->direction() != oppositeToMomentum){
-		dirForInnerLayers = alongMomentum;
-		dirForOuterLayers = oppositeToMomentum;
-		//throw cms::Exception("TrackProducer") 
-	      }
-		  
-	      std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-	      std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
-	  
-	      if(m_debug>10){
-		std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
-		std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
-	      }
-
-	      if(m_debug>10){
-		std::cout<<"========================================================"<<std::endl;
-		std::cout<< "inner DetLayer  sub: " 
-			 << innerLayer->subDetector() <<"\n"
-			 << "outer DetLayer  sub: " 
-			 << outerLayer->subDetector() << "\n"
-			 <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
-			 <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
-			 <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
-			 <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
-		std::cout<<"========================================================"<<std::endl;
-	      }
-	  
-	      if(km==0) b_innerlayers_mu1_muJetC = innerCompLayers.size();
-	      if(km==1) b_innerlayers_mu2_muJetC = innerCompLayers.size();
-
-	      Int_t count_numlay=0;
-	      for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
-	      
-		if ((*dd)->basicComponents().empty()) {
-		  //	this should never happen. but better protect for it
-		  if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
-		  continue;
-		}
-	    
-		Propagator* localProp = thePropagator->clone();
-		localProp->setPropagationDirection(oppositeToMomentum);
-	    
-		if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
-		std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
-	    
-		if(km==0) b_compdet_mu1_muJetC[count_numlay] = detWithState.size();
-		if(km==1) b_compdet_mu2_muJetC[count_numlay] = detWithState.size();
-	    
-		if(!detWithState.size()) continue;
-	    
-		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
-				 detWithState.size()<<std::endl;
-	      
-		Int_t counter_hit=0;
-		Int_t count_numdet=0;
-		for(uint32_t k=0;k<detWithState.size();k++){
-		    
-		  DetId id = detWithState[k].first->geographicalId();
-		  MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
-	      
-		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
-
-		    // std::cout<<" Detector element in pixels"<<std::endl;
-		    // std::cout<<" Detector element in pixels"<<std::endl;
-		    // std::cout<<" Detector element in pixels"<<std::endl;
-
-		    if(km==0){
-		      b_PXBID_mu1muJetC[count_numlay][count_numdet] = PXBDetId(id).layer();
-		      b_PXFID_mu1muJetC[count_numlay][count_numdet] = PXFDetId(id).disk();
-		      b_mj1m0posx[count_numlay][count_numdet] = detWithState[k].second.localPosition().x();
-		      b_mj1m0posy[count_numlay][count_numdet] = detWithState[k].second.localPosition().y();
-		      b_mj1m0posx_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      b_mj1m0posy_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    }		      
-		    if(km==1){
-		      b_PXBID_mu2muJetC[count_numlay][count_numdet] = PXBDetId(id).layer();
-		      b_PXFID_mu2muJetC[count_numlay][count_numdet] = PXFDetId(id).disk();
-		      b_mj1m1posx[count_numlay][count_numdet] = detWithState[k].second.localPosition().x();
-		      b_mj1m1posy[count_numlay][count_numdet] = detWithState[k].second.localPosition().y();
-		      b_mj1m1posx_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      b_mj1m1posy_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    }		      
-		
-					    
-		    TrajectoryStateOnSurface ts; //dummy
-		
-		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
-		
-		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
-			
-		
-		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
-			  
-		      if(tmpIt->recHit()->getType()==0){ // valid hit
-			    
-		    	if(m_debug>10){
-		    	  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-		    	  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-		    	  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-		    	  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-		    	}
-
-
-		    	if(km==0){
-			  b_pixelhit_mu1_muJetC_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu1_muJetC_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu1_muJetC_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu1_muJetC_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    	}
-
-			if(km==1){
-			  b_pixelhit_mu2_muJetC_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu2_muJetC_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu2_muJetC_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu2_muJetC_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    	}
-		    
-		      }
-		      counter_hit++;
-		    }
-		    if(km==0) b_numhit_mu1_muJetC[count_numlay] = counter_hit;
-		    if(km==1) b_numhit_mu2_muJetC[count_numlay] = counter_hit;
-		  }
-		count_numdet++;
-		}
-		delete localProp;
-		count_numlay++;
-	      }
-	    }
-	  }
-	counter_traj++;
-	}
-      }
-      
-      for(uint32_t km=0;km<2;km++){  // loop for muJetF muon trajectories
-      
-	if(m_debug>10){
-	  std::cout<<"  muon-track indx   "<<indxtrkmj1[km]<<"  muon pT   "<<muJetC->muon(km)->pt()<<"  muon eta  "
-		   <<muJetC->muon(km)->eta()<<std::endl;
-	}
-
-	//===================   Information for the muon-tracks ===================================//
-	if(km==0)  b_mutrack_pT_mu1JetF = muJetF->muon(km)->pt();
-	if(km==1)  b_mutrack_pT_mu2JetF = muJetF->muon(km)->pt();
-      
-	if(km==0)  b_mutrack_phi_mu1JetF = muJetF->muon(km)->phi();
-	if(km==1)  b_mutrack_phi_mu2JetF = muJetF->muon(km)->phi();
-      
-	if(km==0)  b_mutrack_charge_mu1JetF = muJetF->muon(km)->charge();
-	if(km==1)  b_mutrack_charge_mu2JetF = muJetF->muon(km)->charge();
-      
-	if(km==0)  b_mutrack_eta_mu1JetF = muJetF->muon(km)->eta();
-	if(km==1)  b_mutrack_eta_mu2JetF = muJetF->muon(km)->eta();
-      
-	//====================== Loop for Trajectories from TrackRefitter  =================================//
-	Int_t counter_traj=0;
-	for(std::vector<Trajectory>::const_iterator it = trajCollectionHandle->begin(); it!=trajCollectionHandle->end();it++){
-      
-	  if(counter_traj==indxtrkmj2[km]){
-	
-	    if(m_debug>10){std::cout<<"  track   "<<counter_traj<<  "    this traj has " << it->foundHits() << " valid hits"  << " , "
-				    << "isValid: " << it->isValid()<<std::endl;
-	    }
-	
-	    if(it->lastMeasurement().updatedState().isValid()){  // lastMeasurement correspond to the innerLayer assuming direction oppositetoMomentu
-	  
-	      const FreeTrajectoryState*  outerState = it->firstMeasurement().updatedState().freeState();    
-	      const FreeTrajectoryState*  innerState = it->lastMeasurement().updatedState().freeState(); 
-	      TrajectoryStateOnSurface outerTSOS = it->firstMeasurement().updatedState();
-	      TrajectoryStateOnSurface innerTSOS = it->lastMeasurement().updatedState();
-	  
-	      if (!outerState || !innerState){
-		std::cout << "No outer layer or no inner layer!" << std::endl;
-	      }
-
-	      const DetLayer* outerLayer = it->firstMeasurement().layer();
-	      const DetLayer* innerLayer = it->lastMeasurement().layer();
-
-	      if (!outerLayer || !innerLayer){
-		//means  that the trajectory was fit/smoothed in a special case: not setting those pointers
-		if(m_debug>10) std::cout<<"the trajectory was fit/smoothed in a special case: not setting those pointers.\n"
-					<<" Filling the secondary hit patterns was requested. So I will bail out."<<std::endl;
-	      }
-	  
-	      //WARNING: we are assuming that the hits were originally sorted along momentum (and therefore oppositeToMomentum after smoothing)
-	      PropagationDirection dirForInnerLayers = oppositeToMomentum;
-	      PropagationDirection dirForOuterLayers = alongMomentum;
-	      if(it->direction() != oppositeToMomentum){
-		dirForInnerLayers = alongMomentum;
-		dirForOuterLayers = oppositeToMomentum;
-		//throw cms::Exception("TrackProducer") 
-	      }
-		  
-	      std::vector< const DetLayer * > innerCompLayers = (*theSchool).compatibleLayers(*innerLayer,*innerState,dirForInnerLayers);
-	      std::vector< const DetLayer * > outerCompLayers = (*theSchool).compatibleLayers(*outerLayer,*outerState,dirForOuterLayers);
-	  
-	      if(m_debug>10){
-		std::cout<<"innercompatlbleLayers: " << innerCompLayers.size() <<std::endl;
-		std::cout<<"outercompatibleLayers: " << outerCompLayers.size() << std::endl;
-	      }
-
-	      if(m_debug>10){
-		std::cout<<"========================================================"<<std::endl;
-		std::cout<< "inner DetLayer  sub: " 
-			 << innerLayer->subDetector() <<"\n"
-			 << "outer DetLayer  sub: " 
-			 << outerLayer->subDetector() << "\n"
-			 <<" innerstate local position x "<< it->firstMeasurement().updatedState().localPosition().x()<< "\n"
-			 <<" innerstate local position y "<< it->firstMeasurement().updatedState().localPosition().y()<< "\n"
-			 <<" innerstate local position lastmeas x "<< it->lastMeasurement().updatedState().localPosition().x()<<"\n"
-			 <<" innerstate local position lastmeas y "<< it->lastMeasurement().updatedState().localPosition().y()<<std::endl; //"\n"
-		std::cout<<"========================================================"<<std::endl;
-	      }
-	  
-	      if(km==0) b_innerlayers_mu1_muJetF = innerCompLayers.size();
-	      if(km==1) b_innerlayers_mu2_muJetF = innerCompLayers.size();
-
-	      Int_t count_numlay=0;
-	      for(std::vector<const DetLayer *>::const_iterator dd=innerCompLayers.begin(); dd!=innerCompLayers.end();++dd){
-	      
-		if ((*dd)->basicComponents().empty()) {
-		  //	this should never happen. but better protect for it
-		  if(m_debug>10) std::cout<<" a detlayer with no components: I cannot figure out a DetId from this layer. please investigate."<<std::endl;
-		  continue;
-		}
-	    
-		Propagator* localProp = thePropagator->clone();
-		localProp->setPropagationDirection(oppositeToMomentum);
-	    
-		if(m_debug>10) std::cout<<" propagation to compatible detwithstate using estimator2  "<<std::endl;
-		std::vector< GeometricSearchDet::DetWithState > detWithState = (*dd)->compatibleDets(innerTSOS,*localProp,estimator2);
-	    
-		if(km==0) b_compdet_mu1_muJetF[count_numlay] = detWithState.size();
-		if(km==1) b_compdet_mu2_muJetF[count_numlay] = detWithState.size();
-
-	    
-		if(!detWithState.size()) continue;
-	    
-		if(m_debug>10) std::cout<<" Dets compatible with a trajectoryState according to estimator)  "<<
-				 detWithState.size()<<std::endl;
-	      
-		Int_t counter_hit=0;
-		Int_t count_numdet=0;
-		for(uint32_t k=0;k<detWithState.size();k++){
-		    
-		  DetId id = detWithState[k].first->geographicalId();
-		  MeasurementDetWithData measDet = theMeasTkEvent->idToDet(id);
-	      
-		  if( ( (*dd)->subDetector() == GeomDetEnumerators::PixelBarrel || (*dd)->subDetector()  == GeomDetEnumerators::PixelEndcap)  && measDet.isActive() ){
-
-		    // std::cout<<" Detector element in pixels"<<std::endl;
-		    // std::cout<<" Detector element in pixels"<<std::endl;
-		    // std::cout<<" Detector element in pixels"<<std::endl;
-
-		    if(km==0){
-		      b_PXBID_mu1muJetF[count_numlay][count_numdet] = PXBDetId(id).layer();
-		      b_PXFID_mu1muJetF[count_numlay][count_numdet] = PXFDetId(id).disk();
-		      b_mj2m0posx[count_numlay][count_numdet] = detWithState[k].second.localPosition().x();
-		      b_mj2m0posy[count_numlay][count_numdet] = detWithState[k].second.localPosition().y();
-		      b_mj2m0posx_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      b_mj2m0posy_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    }		      
-		    if(km==1){
-		      b_PXBID_mu2muJetF[count_numlay][count_numdet] = PXBDetId(id).layer();
-		      b_PXFID_mu2muJetF[count_numlay][count_numdet] = PXFDetId(id).disk();
-		      b_mj2m1posx[count_numlay][count_numdet] = detWithState[k].second.localPosition().x();
-		      b_mj2m1posy[count_numlay][count_numdet] = detWithState[k].second.localPosition().y();
-		      b_mj2m1posx_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().xx());
-		      b_mj2m1posy_err[count_numlay][count_numdet] = sqrt(detWithState[k].second.localError().positionError().yy());
-		    }		      
-		
-					    
-		    TrajectoryStateOnSurface ts; //dummy
-		
-		    std::vector<TrajectoryMeasurement> tmp = measDet.fastMeasurements(detWithState[k].second,ts,*localProp,estimator);
-		
-		    if(m_debug>10) std::cout<<" number of hits  "<<tmp.size()<<std::endl;
-			
-		
-		    for(std::vector<TrajectoryMeasurement>::iterator tmpIt=tmp.begin();tmpIt!=tmp.end();tmpIt++){
-			  
-		      if(tmpIt->recHit()->getType()==0){ // valid hit
-			    
-		    	if(m_debug>10){
-		    	  std::cout<<"   status of rechit       "<<tmpIt->recHit()->getType()<<std::endl;
-		    	  std::cout<<"   local position rho:   "<<tmpIt->recHit()->localPosition().perp()<<std::endl;
-		    	  std::cout<<"   local position x:     "<<tmpIt->recHit()->localPosition().x()<<std::endl;
-		    	  std::cout<<"   local position y:     "<<tmpIt->recHit()->localPosition().y()<<std::endl;
-		    	}
-
-
-		    	if(km==0){
-			  b_pixelhit_mu1_muJetF_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu1_muJetF_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu1_muJetF_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu1_muJetF_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    	}
-
-			if(km==1){
-			  b_pixelhit_mu2_muJetF_posx[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().x();
-			  b_pixelhit_mu2_muJetF_posy[count_numlay][counter_hit] = tmpIt->recHit()->localPosition().y();
-			  b_pixelhit_mu2_muJetF_errposx[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().xx());
-			  b_pixelhit_mu2_muJetF_errposy[count_numlay][counter_hit] = sqrt(tmpIt->recHit()->localPositionError().yy());
-		    	}
-		    
-		      }
-		      counter_hit++;
-		    }
-		    if(km==0) b_numhit_mu1_muJetF[count_numlay] = counter_hit;
-		    if(km==1) b_numhit_mu2_muJetF[count_numlay] = counter_hit;
-		  }
-		  count_numdet++;
-		}
-	      delete localProp;
-	      count_numlay++;
-	      }
-	    }
-	  }
-	counter_traj++;
-      }
-      }
-  }
-*/   
-
   if(runBBestimation_){
-    FillTrigInfo(triggerComposition, triggerEvent, NameAndNumb );
+    FillTrigInfo(triggerComposition, triggerNames, NameAndNumb );
     m_orphan_passOffLineSel = false;
     m_orphan_passOffLineSelPt = false;
     m_orphan_passOffLineSelPtEta = false;
@@ -2852,12 +2087,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     // Trimuons
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
     for (pat::MuonCollection::const_iterator muon = muons->begin(); muon != muons->end(); ++muon) {
+
       if (muon->pt() > m_threshold_Mu17_pT  &&  fabs(muon->eta()) < m_threshold_Mu17_eta) {
-	  const pat::TriggerObjectStandAlone *mu01 = muon->triggerObjectMatchByPath("HLT_TrkMu1*_DoubleTrkMu*NoFiltersNoVtx_v*");
-	  if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_threshold_Mu17_pT)  ){
-	    hightrigmuons.push_back(muon);
-	  }
-	}
+        const pat::TriggerObjectStandAlone *mu01 = muon->triggerObjectMatchByPath("HLT_TrkMu1*_DoubleTrkMu*NoFiltersNoVtx_v*");
+
+        if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_threshold_Mu17_pT)  ){
+          hightrigmuons.push_back(muon);
+        }
+      }
     }
     //Orphan branches
     m_orphan_dimu_mass = -999.;
@@ -2906,19 +2143,32 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
          for(int i=0; i<3; i++){ if(i!=Index17 && triPt[i]>8) mu1788+=0.5; }
       }
       if( mu1788==1 ) m_orphan_passOffLineSelPt1788 = true;
-      if ( muJet->muon(0)->isTrackerMuon() && muJet->muon(0)->innerTrack().isNonnull() && muJet->muon(1)->isTrackerMuon() && muJet->muon(1)->innerTrack().isNonnull() && orphan->isTrackerMuon() && orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true; 
-      if( m_orphan_passOffLineSelPtEta && m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerEvent, NameAndNumb );
+      if ( muJet->muon(0)->isTrackerMuon() &&
+           muJet->muon(0)->innerTrack().isNonnull() &&
+           muJet->muon(1)->isTrackerMuon() &&
+           muJet->muon(1)->innerTrack().isNonnull() &&
+           orphan->isTrackerMuon() &&
+           orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true;
 
-      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-        if( orphan->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() &&  tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
-           m_dimuorphan_containstrig++;
+      if( m_orphan_passOffLineSelPtEta &&
+          m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
+
+      for (auto iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+        if( orphan->innerTrack().isAvailable() &&
+            (*iter)->innerTrack().isAvailable() &&
+            tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
+          m_dimuorphan_containstrig++;
         }
       }
-      for (std::vector<pat::MuonCollection::const_iterator>::const_iterator iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-        if( muJet->muon(0)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
+      for (auto iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
+        if( muJet->muon(0)->innerTrack().isAvailable() &&
+            (*iter)->innerTrack().isAvailable() &&
+            tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack()))) {
           m_dimuorphan_containstrig2++;
         }
-        if( muJet->muon(1)->innerTrack().isAvailable() && (*iter)->innerTrack().isAvailable() && tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
+        if( muJet->muon(1)->innerTrack().isAvailable() &&
+            (*iter)->innerTrack().isAvailable() &&
+            tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
           m_dimuorphan_containstrig2++;
         }
       }
@@ -3150,6 +2400,16 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("selMu2_phi", &b_selMu2_phi, "selMu2_phi/F");
   m_ttree->Branch("selMu3_phi", &b_selMu3_phi, "selMu3_phi/F");
 
+  m_ttree->Branch("selMu0_trigHLT16", &b_selMu0_trigHLT16, "selMu0_trigHLT16/O");
+  m_ttree->Branch("selMu1_trigHLT16", &b_selMu1_trigHLT16, "selMu1_trigHLT16/O");
+  m_ttree->Branch("selMu2_trigHLT16", &b_selMu2_trigHLT16, "selMu2_trigHLT16/O");
+  m_ttree->Branch("selMu3_trigHLT16", &b_selMu3_trigHLT16, "selMu3_trigHLT16/O");
+
+  m_ttree->Branch("selMu0_trigHLT6", &b_selMu0_trigHLT6, "selMu0_trigHLT6/O");
+  m_ttree->Branch("selMu1_trigHLT6", &b_selMu1_trigHLT6, "selMu1_trigHLT6/O");
+  m_ttree->Branch("selMu2_trigHLT6", &b_selMu2_trigHLT6, "selMu2_trigHLT6/O");
+  m_ttree->Branch("selMu3_trigHLT6", &b_selMu3_trigHLT6, "selMu3_trigHLT6/O");
+
   // RECO DiMuons
   m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
   m_ttree->Branch("diMuonC_FittedVtx_px",  &b_diMuonC_FittedVtx_px,  "diMuonC_FittedVtx_px/F");
@@ -3267,182 +2527,10 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
 
-  m_ttree->Branch("hltPaths",  &b_hltPaths);  
+  m_ttree->Branch("hltPaths",  &b_hltPaths);
   m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
 
-  if(runPixelHitRecovery_){
-    //pixelHitRecovery
-    
-    m_ttree->Branch("ntracks",&b_ntracks,"ntracks/I");
-    m_ttree->Branch("track_pt", &b_track_pt,"track_pt[ntracks]/F");
-    m_ttree->Branch("track_charge", &b_track_charge,"track_charge[ntracks]/F");
-    m_ttree->Branch("track_qoverp", &b_track_qoverp,"track_qoverp[ntracks]/F");
-    m_ttree->Branch("track_theta", &b_track_theta,"track_theta[ntracks]/F");
-    m_ttree->Branch("track_phi", &b_track_phi,"track_phi[ntracks]/F");
-    m_ttree->Branch("track_dxy", &b_track_dxy,"track_dxy[ntracks]/F");
-    m_ttree->Branch("track_dz", &b_track_dz,"track_dz[ntracks]/F");
 
-    m_ttree->Branch("track_errpt", &b_track_errpt,"track_errpt[ntracks]/F");
-    m_ttree->Branch("track_errcharge", &b_track_errcharge,"track_errcharge[ntracks]/F");
-    m_ttree->Branch("track_errqoverp", &b_track_errqoverp,"track_errqoverp[ntracks]/F");
-    m_ttree->Branch("track_errtheta", &b_track_errtheta,"track_errtheta[ntracks]/F");
-    m_ttree->Branch("track_errphi", &b_track_errphi,"track_errphi[ntracks]/F");
-    m_ttree->Branch("track_errdxy", &b_track_errdxy,"track_errdxy[ntracks]/F");
-    m_ttree->Branch("track_errdz", &b_track_errdz,"track_errdz[ntracks]/F");
-
-
-    m_ttree->Branch("mtrack_pt", &mtrack_pt,"mtrack_pt[2]/F");
-    m_ttree->Branch("mtrack_charge", &mtrack_charge,"mtrack_charge[2]/F");
-    m_ttree->Branch("mtrack_qoverp", &mtrack_qoverp,"mtrack_qoverp[2]/F");
-    m_ttree->Branch("mtrack_theta", &mtrack_theta,"mtrack_theta[2]/F");
-    m_ttree->Branch("mtrack_phi", &mtrack_phi,"mtrack_phi[2]/F");
-    m_ttree->Branch("mtrack_dxy", &mtrack_dxy,"mtrack_dxy[2]/F");
-    m_ttree->Branch("mtrack_dz", &mtrack_dz,"mtrack_dz[2]/F");
-
-    m_ttree->Branch("mtrack_errpt", &mtrack_errpt,"mtrack_errpt[2]/F");
-    m_ttree->Branch("mtrack_errcharge", &mtrack_errcharge,"mtrack_errcharge[2]/F");
-    m_ttree->Branch("mtrack_errqoverp", &mtrack_errqoverp,"mtrack_errqoverp[2]/F");
-    m_ttree->Branch("mtrack_errtheta", &mtrack_errtheta,"mtrack_errtheta[2]/F");
-    m_ttree->Branch("mtrack_errphi", &mtrack_errphi,"mtrack_errphi[2]/F");
-    m_ttree->Branch("mtrack_errdxy", &mtrack_errdxy,"mtrack_errdxy[2]/F");
-    m_ttree->Branch("mtrack_errdz", &mtrack_errdz,"mtrack_errdz[2]/F");
-
-
-    m_ttree->Branch("muJetC_muon1_track_minchi2", &muJetC_muon1_track_minchi2,"muJetC_muon1_track_minchi2/F");
-    m_ttree->Branch("muJetC_muon2_track_minchi2", &muJetC_muon2_track_minchi2,"muJetC_muon2_track_minchi2/F");
-    m_ttree->Branch("muJetF_muon1_track_minchi2", &muJetF_muon1_track_minchi2,"muJetF_muon1_track_minchi2/F");
-    m_ttree->Branch("muJetF_muon2_track_minchi2", &muJetF_muon2_track_minchi2,"muJetF_muon2_track_minchi2/F");
-
-
-
-    m_ttree->Branch("muJetC_muon1_track_minchi2theta", &muJetC_muon1_track_minchi2theta,"muJetC_muon1_track_minchi2theta/F");
-    m_ttree->Branch("muJetC_muon1_track_minchi2qoverpt", &muJetC_muon1_track_minchi2qoverpt,"muJetC_muon1_track_minchi2qoverpt/F");
-    m_ttree->Branch("muJetC_muon1_track_minchi2phi", &muJetC_muon1_track_minchi2phi,"muJetC_muon1_track_minchi2phi/F");
-    m_ttree->Branch("muJetC_muon1_track_minchi2dxy", &muJetC_muon1_track_minchi2dxy,"muJetC_muon1_track_minchi2dxy/F");
-    m_ttree->Branch("muJetC_muon1_track_minchi2dz", &muJetC_muon1_track_minchi2dz,"muJetC_muon1_track_minchi2dz/F");
-
-
-    m_ttree->Branch("muJetC_muon1_track_mincharge", &muJetC_muon1_track_mincharge,"muJetC_muon1_track_mincharge/F");
-    m_ttree->Branch("muJetC_muon1_track_minqoverpt", &muJetC_muon1_track_minqoverpt,"muJetC_muon1_track_minqoverpt/F");
-    m_ttree->Branch("muJetC_muon1_track_mintheta", &muJetC_muon1_track_mintheta,"muJetC_muon1_track_mintheta/F");
-    m_ttree->Branch("muJetC_muon1_track_minphi", &muJetC_muon1_track_minphi,"muJetC_muon1_track_minphi/F");
-    m_ttree->Branch("muJetC_muon1_track_mindxy", &muJetC_muon1_track_mindxy,"muJetC_muon1_track_mindxy/F");
-    m_ttree->Branch("muJetC_muon1_track_mindz", &muJetC_muon1_track_mindz,"muJetC_muon1_track_mindz/F");
-
-
-    m_ttree->Branch("muJetC_muon1_track_diffchi2", &muJetC_muon1_track_diffchi2,"muJetC_muon1_track_diffchi2[ntracks]/F");
-
-    m_ttree->Branch("muJetC_muon1_track_diffchi2theta", &muJetC_muon1_track_diffchi2theta,"muJetC_muon1_track_diffchi2theta[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_diffchi2qoverpt", &muJetC_muon1_track_diffchi2qoverpt,"muJetC_muon1_track_diffchi2qoverpt[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_diffchi2phi", &muJetC_muon1_track_diffchi2phi,"muJetC_muon1_track_diffchi2phi[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_diffchi2dxy", &muJetC_muon1_track_diffchi2dxy,"muJetC_muon1_track_diffchi2dxy[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_diffchi2dz", &muJetC_muon1_track_diffchi2dz,"muJetC_muon1_track_diffchi2dz[ntracks]/F");
-
-
-
-    m_ttree->Branch("muJetC_muon1_track_diffcharge", &muJetC_muon1_track_diffcharge,"muJetC_muon1_track_diffcharge[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_diffpt", &muJetC_muon1_track_diffpt,"muJetC_muon1_track_diffpt[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_diffqoverp", &muJetC_muon1_track_diffqoverp,"muJetC_muon1_track_diffqoverp[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_difftheta", &muJetC_muon1_track_difftheta,"muJetC_muon1_track_difftheta[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_diffphi", &muJetC_muon1_track_diffphi,"muJetC_muon1_track_diffphi[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_diffdxy", &muJetC_muon1_track_diffdxy,"muJetC_muon1_track_diffdxy[ntracks]/F");
-    m_ttree->Branch("muJetC_muon1_track_diffdz", &muJetC_muon1_track_diffdz,"muJetC_muon1_track_diffdz[ntracks]/F");
-
-    m_ttree->Branch("muJetC_muon2_track_diffcharge", &muJetC_muon2_track_diffcharge,"muJetC_muon2_track_diffcharge[ntracks]/F");
-    m_ttree->Branch("muJetC_muon2_track_diffpt", &muJetC_muon2_track_diffpt,"muJetC_muon2_track_diffpt[ntracks]/F");
-    m_ttree->Branch("muJetC_muon2_track_diffqoverp", &muJetC_muon2_track_diffqoverp,"muJetC_muon2_track_diffqoverp[ntracks]/F");
-    m_ttree->Branch("muJetC_muon2_track_difftheta", &muJetC_muon2_track_difftheta,"muJetC_muon2_track_difftheta[ntracks]/F");
-    m_ttree->Branch("muJetC_muon2_track_diffphi", &muJetC_muon2_track_diffphi,"muJetC_muon2_track_diffphi[ntracks]/F");
-    m_ttree->Branch("muJetC_muon2_track_diffdxy", &muJetC_muon2_track_diffdxy,"muJetC_muon2_track_diffdxy[ntracks]/F");
-    m_ttree->Branch("muJetC_muon2_track_diffdz", &muJetC_muon2_track_diffdz,"muJetC_muon2_track_diffdz[ntracks]/F");
-
-    m_ttree->Branch("mutrack_pT_mu1JetC", &b_mutrack_pT_mu1JetC, "mutrack_pT_mu1JetC/F");
-    m_ttree->Branch("mutrack_pT_mu2JetC", &b_mutrack_pT_mu2JetC, "mutrack_pT_mu2JetC/F");
-    m_ttree->Branch("mutrack_eta_mu1JetC", &b_mutrack_eta_mu1JetC, "mutrack_eta_mu1JetC/F");
-    m_ttree->Branch("mutrack_eta_mu2JetC", &b_mutrack_eta_mu2JetC, "mutrack_eta_mu2JetC/F");
-
-    m_ttree->Branch("mutrack_phi_mu1JetC", &b_mutrack_phi_mu1JetC, "mutrack_phi_mu1JetC/F");
-    m_ttree->Branch("mutrack_phi_mu2JetC", &b_mutrack_phi_mu2JetC, "mutrack_phi_mu2JetC/F");
-    m_ttree->Branch("mutrack_phi_mu1JetF", &b_mutrack_phi_mu1JetF, "mutrack_phi_mu1JetF/F");
-    m_ttree->Branch("mutrack_phi_mu2JetF", &b_mutrack_phi_mu2JetF, "mutrack_phi_mu2JetF/F");
-
-    m_ttree->Branch("mutrack_pT_mu1JetF", &b_mutrack_pT_mu1JetF, "mutrack_pT_mu1JetF/F");
-    m_ttree->Branch("mutrack_pT_mu2JetF", &b_mutrack_pT_mu2JetF, "mutrack_pT_mu2JetF/F");
-    m_ttree->Branch("mutrack_eta_mu1JetF", &b_mutrack_eta_mu1JetF, "mutrack_eta_mu1JetF/F");
-    m_ttree->Branch("mutrack_eta_mu2JetF", &b_mutrack_eta_mu2JetF, "mutrack_eta_mu2JetF/F");
-
-    m_ttree->Branch("mutrack_charge_mu1JetC", &b_mutrack_charge_mu1JetC, "mutrack_charge_mu1JetC/F");
-    m_ttree->Branch("mutrack_charge_mu2JetC", &b_mutrack_charge_mu2JetC, "mutrack_charge_mu2JetC/F");
-    m_ttree->Branch("mutrack_charge_mu1JetF", &b_mutrack_charge_mu1JetF, "mutrack_charge_mu1JetF/F");
-    m_ttree->Branch("mutrack_charge_mu2JetF", &b_mutrack_charge_mu2JetF, "mutrack_charge_mu2JetF/F");
-
-    m_ttree->Branch("match_mu1track_muJetC",&b_match_mu1track_muJetC,"match_mu1track_muJetC/I");
-    m_ttree->Branch("match_mu2track_muJetC",&b_match_mu2track_muJetC,"match_mu2track_muJetC/I");
-    m_ttree->Branch("match_mu1track_muJetF",&b_match_mu1track_muJetF,"match_mu1track_muJetF/I");
-    m_ttree->Branch("match_mu2track_muJetF",&b_match_mu2track_muJetF,"match_mu2track_muJetF/I");
-
-
-
-    m_ttree->Branch("innerlayers_mu1_muJetC",&b_innerlayers_mu1_muJetC,"innerlayers_mu1_muJetC/I");
-    m_ttree->Branch("innerlayers_mu2_muJetC",&b_innerlayers_mu2_muJetC,"innerlayers_mu2_muJetC/I");
-    m_ttree->Branch("innerlayers_mu1_muJetF",&b_innerlayers_mu1_muJetF,"innerlayers_mu1_muJetF/I");
-    m_ttree->Branch("innerlayers_mu2_muJetF",&b_innerlayers_mu2_muJetF,"innerlayers_mu2_muJetF/I");
-
-    m_ttree->Branch("compdet_mu1_muJetC",&b_compdet_mu1_muJetC,"compdet_mu1_muJetC[10]/I");
-    m_ttree->Branch("compdet_mu2_muJetC",&b_compdet_mu2_muJetC,"compdet_mu2_muJetC[10]/I");
-    m_ttree->Branch("compdet_mu1_muJetF",&b_compdet_mu1_muJetF,"compdet_mu1_muJetF[10]/I");
-    m_ttree->Branch("compdet_mu2_muJetF",&b_compdet_mu2_muJetF,"compdet_mu2_muJetF[10]/I");
-
-    m_ttree->Branch("PXBID_mu1muJetC",&b_PXBID_mu1muJetC,"PXBID_mu1muJetC[10][10]/I");
-    m_ttree->Branch("PXFID_mu1muJetC",&b_PXFID_mu1muJetC,"PXFID_mu1muJetC[10][10]/I");
-    m_ttree->Branch("PXBID_mu2muJetC",&b_PXBID_mu2muJetC,"PXBID_mu2muJetC[10][10]/I");
-    m_ttree->Branch("PXFID_mu2muJetC",&b_PXFID_mu2muJetC,"PXFID_mu2muJetC[10][10]/I");
-
-    m_ttree->Branch("mj1m0posx",b_mj1m0posx,"mj1m0posx[10][10]/F");
-    m_ttree->Branch("mj1m0posy",b_mj1m0posy,"mj1m0posy[10][10]/F");
-    m_ttree->Branch("mj1m0posx_err",b_mj1m0posx_err,"mj1m0posx_err[10][10]/F");
-    m_ttree->Branch("mj1m0posy_err",b_mj1m0posy_err,"mj1m0posy_err[10][10]/F");
-    
-    m_ttree->Branch("mj1m1posx",b_mj1m1posx,"mj1m1posx[10][10]/F");
-    m_ttree->Branch("mj1m1posy",b_mj1m1posy,"mj1m1posy[10][10]/F");
-    m_ttree->Branch("mj1m1posx_err",b_mj1m1posx_err,"mj1m1posx_err[10][10]/F");
-    m_ttree->Branch("mj1m1posy_err",b_mj1m1posy_err,"mj1m1posy_err[10][10]/F");
-
-    m_ttree->Branch("mj2m0posx",b_mj2m0posx,"mj2m0posx[10][10]/F");
-    m_ttree->Branch("mj2m0posy",b_mj2m0posy,"mj2m0posy[10][10]/F");
-    m_ttree->Branch("mj2m0posx_err",b_mj2m0posx_err,"mj2m0posx_err[10][10]/F");
-    m_ttree->Branch("mj2m0posy_err",b_mj2m0posy_err,"mj2m0posy_err[10][10]/F");
-
-    m_ttree->Branch("mj2m1posx",b_mj2m1posx,"mj2m1posx[10][10]/F");
-    m_ttree->Branch("mj2m1posy",b_mj2m1posy,"mj2m1posy[10][10]/F");
-    m_ttree->Branch("mj2m1posx_err",b_mj2m1posx_err,"mj2m1posx_err[10][10]/F");
-    m_ttree->Branch("mj2m1posy_err",b_mj2m1posy_err,"mj2m1posy_err[10][10]/F");
-
-    m_ttree->Branch("numhit_mu1_muJetC",&b_numhit_mu1_muJetC,"numhit_mu1_muJetC[100]/I");
-    m_ttree->Branch("numhit_mu2_muJetC",&b_numhit_mu2_muJetC,"numhit_mu2_muJetC[100]/I");
-    m_ttree->Branch("numhit_mu1_muJetF",&b_numhit_mu1_muJetF,"numhit_mu1_muJetF[100]/I");
-    m_ttree->Branch("numhit_mu2_muJetF",&b_numhit_mu2_muJetF,"numhit_mu2_muJetF[100]/I");
-    
-    m_ttree->Branch("pixelhit_mu1_muJetC_posx",&b_pixelhit_mu1_muJetC_posx,"pixelhit_mu1_muJetC_posx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_posy",&b_pixelhit_mu1_muJetC_posy,"pixelhit_mu1_muJetC_posy[10][100]/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_errposx",&b_pixelhit_mu1_muJetC_errposx,"pixelhit_mu1_muJetC_errposx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu1_muJetC_errposy",&b_pixelhit_mu1_muJetC_errposy,"pixelhit_mu1_muJetC_errposy[10][100]/F");
-
-    m_ttree->Branch("pixelhit_mu2_muJetC_posx",&b_pixelhit_mu2_muJetC_posx,"pixelhit_mu2_muJetC_posx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_posy",&b_pixelhit_mu2_muJetC_posy,"pixelhit_mu2_muJetC_posy[10][100]/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_errposx",&b_pixelhit_mu2_muJetC_errposx,"pixelhit_mu2_muJetC_errposx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu2_muJetC_errposy",&b_pixelhit_mu2_muJetC_errposy,"pixelhit_mu2_muJetC_errposy[10][100]/F");
-
-    m_ttree->Branch("pixelhit_mu1_muJetF_posx",&b_pixelhit_mu1_muJetF_posx,"pixelhit_mu1_muJetF_posx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_posy",&b_pixelhit_mu1_muJetF_posy,"pixelhit_mu1_muJetF_posy[10][100]/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_errposx",&b_pixelhit_mu1_muJetF_errposx,"pixelhit_mu1_muJetF_errposx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu1_muJetF_errposy",&b_pixelhit_mu1_muJetF_errposy,"pixelhit_mu1_muJetF_errposy[10][100]/F");
-
-    m_ttree->Branch("pixelhit_mu2_muJetF_posx",&b_pixelhit_mu2_muJetF_posx,"pixelhit_mu2_muJetF_posx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_posy",&b_pixelhit_mu2_muJetF_posy,"pixelhit_mu2_muJetF_posy[10][100]/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_errposx",&b_pixelhit_mu2_muJetF_errposx,"pixelhit_mu2_muJetF_errposx[10][100]/F");
-    m_ttree->Branch("pixelhit_mu2_muJetF_errposy",&b_pixelhit_mu2_muJetF_errposy,"pixelhit_mu2_muJetF_errposy[10][100]/F");    
-  }
   // Orpahn Muon
   if(runBBestimation_){
     m_ttree_orphan = tFileService->make<TTree>("Events_orphan", "Events_orphan");
@@ -3551,37 +2639,39 @@ CutFlowAnalyzer::endJob()
 
 }
 
-void CutFlowAnalyzer::FillTrigInfo( TH1F * h1, edm::Handle<pat::TriggerEvent> triggerEvent, std::map<int,std::string> nameAndNumb )
+void CutFlowAnalyzer::FillTrigInfo( TH1F * h1, const edm::TriggerNames& triggerNames, std::map<int,std::string> nameAndNumb )
 {
   for( unsigned int i=0; i<nameAndNumb.size(); i++ ){
-    if( triggerEvent->path(nameAndNumb[i]) ){
-	if ( triggerEvent->path(nameAndNumb[i])->wasAccept() ) {
-	  h1->Fill(i);
+    for (unsigned int itrig = 0; itrig != triggerNames.size(); ++itrig) {
+      TString trigName = triggerNames.triggerName(itrig);
+      std::string trigNameStr(trigName.Data());
+      if (trigNameStr == nameAndNumb[i]){
+	h1->Fill(i);
       }
     }
   }
 }
 
 // ------------ method called when starting to processes a run  ------------
-void 
+void
 CutFlowAnalyzer::beginRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when ending the processing of a run  ------------
-void 
+void
 CutFlowAnalyzer::endRun(edm::Run const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when starting to processes a luminosity block  ------------
-void 
+void
 CutFlowAnalyzer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
 
 // ------------ method called when ending the processing of a luminosity block  ------------
-void 
+void
 CutFlowAnalyzer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
