@@ -9,7 +9,7 @@ process.source = cms.Source("PoolSource",
 )
 process.maxEvents = cms.untracked.PSet ( input = cms.untracked.int32 ( 1000 ) )
 
-process.myfilter = cms.EDFilter("FilterSample3RecoMu")
+process.myfilter = cms.EDFilter("FilterSample3RecoMu_MiniAOD")
 
 process.filterPath = cms.Path(process.myfilter)
 
