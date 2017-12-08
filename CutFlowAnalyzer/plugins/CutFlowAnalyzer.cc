@@ -19,6 +19,7 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
+#include "DataFormats/PatCandidates/interface/TriggerEvent.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
@@ -263,6 +264,7 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_tracks;
   edm::EDGetTokenT<reco::GenParticleCollection> m_genParticles;
   edm::EDGetTokenT<edm::TriggerResults> m_trigRes;
+  edm::EDGetTokenT<pat::TriggerEvent> m_triggerEvent;
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
@@ -732,6 +734,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
   m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genParticles"));
   m_trigRes         = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
+  m_triggerEvent    = consumes<pat::TriggerEvent>(iConfig.getParameter<edm::InputTag>("triggerEvent"));
   //m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   //m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
@@ -1843,18 +1846,28 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   const TriggerResults *trRes = TrResults.product();
   edm::TriggerNames const& triggerNames = iEvent.triggerNames(*trRes);
 
+  // HLT cut
+  edm::Handle<pat::TriggerEvent> triggerEvent;
+  iEvent.getByToken(m_triggerEvent, triggerEvent);
+
   int ntrigs = trRes->size();
   for (int itrig = 0; itrig != ntrigs; ++itrig) {
     const TString& trigName = triggerNames.triggerName(itrig);
     const std::string& trigNameStr(trigName.Data());
 
+    if ( triggerEvent->path(trigNameStr)->wasAccept() ) {
+      if ( m_debug > 10 ) std::cout << trigNameStr << " is present in patTriggerEvent!" << std::endl;
+    }
+    
     if (trRes->accept(triggerNames.triggerIndex(trigNameStr))){
       b_hltPaths.push_back(trigNameStr);
+      if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl;
 
       // check if this event was fired by the signal trigger!
       for (const auto& p: signalHltPaths_){
         if (trigNameStr.find(p) != std::string::npos) {
           b_isDiMuonHLTFired = true;
+        if ( m_debug > 10 ) std::cout << trigNameStr << " signal trigger!" << std::endl;
         }
       }
     }

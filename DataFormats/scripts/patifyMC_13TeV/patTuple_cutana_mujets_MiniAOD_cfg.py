@@ -13,23 +13,27 @@ process.options.allowUnscheduled = cms.untracked.bool(False)
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
+process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_Prompt_v11')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_MiniAOD_cff")
-process.load("MuJetAnalysis.CutFlowAnalyzer.FilterSample3RecoMu_MiniAOD_cfi")
+process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_MiniAOD_cfi")
 
-process.source = cms.Source("PoolSource",
+process.source = cms.Source(
+    "PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:708FA0FE-A770-E711-B738-02163E011E1A.root'
-    )
+        #'file:/fdata/hepx/store/user/dildick/DoubleMuon/crab_DoubleMuon-Run2017C-PromptReco-v1-SKIM-20171206/171206_225208/0000/Filter_135.root',
+        #'file:/fdata/hepx/store/user/dildick/MET/crab_MET-Run2017C-PromptReco-v1-SKIM-20171129/171130_025209/0000/Filter_135.root'
+        #'file:/fdata/hepx/store/user/dildick/MET/crab_MET-Run2017F-PromptReco-v1-SKIM-20171129/171130_025541/0000/Filter_102.root'
+        'file:/fdata/hepx/store/user/dildick/DoubleMuon/crab_DoubleMuon-Run2017D-PromptReco-v1-SKIM-20171206/171206_225345/0000/Filter_1.root'
+        )
 )
 
 process.out = cms.OutputModule(
-"PoolOutputModule",
-fileName = cms.untracked.string('patTuple.root')
-)
+    "PoolOutputModule",
+    fileName = cms.untracked.string('patTuple.root')
+    )
 
 ### Add MuJet Dataformats
 from MuJetAnalysis.DataFormats.EventContent_version11_cff import *
@@ -41,16 +45,17 @@ runOnData = True
 if runOnData: process.patifySelect = cms.Sequence(process.patifyData)
 else:         process.patifySelect = cms.Sequence(process.patifyMC)
 
+process.dump=cms.EDAnalyzer('EventContentAnalyzer')
+
 process.p = cms.Path(
-    ## before PAT-ANA step, require events to have at least
-    ## 3 muons with 5 GeV pT in |eta|<2.4
-    process.tripleRecoMuFilter *
+    process.baseLineSelectionFilter *
     process.patifySelect *
     process.MuJetProducers *
+#    process.dump *
     process.cutFlowAnalyzers
     )
 
-process.outpath = cms.EndPath(process.out)
+#process.outpath = cms.EndPath(process.out)
 
 process.TFileService = cms.Service("TFileService",
     fileName = cms.string("out_ana.root")

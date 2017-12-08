@@ -44,12 +44,21 @@ PFMuJetProducer05PXBL3PXFL2 = PFMuJetProducer05.clone(
     barrelPixelLayer = cms.int32(3),
     endcapPixelLayer = cms.int32(2),
 )
-
+TrackerMuJetProducer05PXBL4PXFL2 = TrackerMuJetProducer05.clone(
+    barrelPixelLayer = cms.int32(4),
+    endcapPixelLayer = cms.int32(2),
+)
+PFMuJetProducer05PXBL4PXFL2 = PFMuJetProducer05.clone(
+    barrelPixelLayer = cms.int32(4),
+    endcapPixelLayer = cms.int32(2),
+)
 MuJetProducers = cms.Sequence(
     TrackerMuJetProducer05 * 
     PFMuJetProducer05 *
     TrackerMuJetProducer05PXBL2PXFL2 *
     PFMuJetProducer05PXBL2PXFL2 *
     TrackerMuJetProducer05PXBL3PXFL2 *
-    PFMuJetProducer05PXBL3PXFL2
+    PFMuJetProducer05PXBL3PXFL2 *
+    TrackerMuJetProducer05PXBL4PXFL2 *
+    PFMuJetProducer05PXBL4PXFL2
 )

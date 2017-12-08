@@ -15,8 +15,15 @@ cutFlowAnalyzerPXBL3PXFL2 = cutFlowAnalyzer.clone(
     muJets = cms.InputTag("PFMuJetProducer05PXBL3PXFL2"),
     muJetOrphans = cms.InputTag("PFMuJetProducer05PXBL3PXFL2", "Orphans"),
 )
+cutFlowAnalyzerPXBL4PXFL2 = cutFlowAnalyzer.clone(
+    barrelPixelLayer = cms.int32(4),
+    endcapPixelLayer = cms.int32(2),
+    muJets = cms.InputTag("PFMuJetProducer05PXBL4PXFL2"),
+    muJetOrphans = cms.InputTag("PFMuJetProducer05PXBL4PXFL2", "Orphans"),
+)
 cutFlowAnalyzers = cms.Sequence(
     cutFlowAnalyzer *
     cutFlowAnalyzerPXBL2PXFL2 *
-    cutFlowAnalyzerPXBL3PXFL2
+    cutFlowAnalyzerPXBL3PXFL2 *
+    cutFlowAnalyzerPXBL4PXFL2
 )
