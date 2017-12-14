@@ -80,6 +80,7 @@
 //Added for Vertex Finding sanity checks
 //#include <TrackingRecHit.h>
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
 
 //******************************************************************************
 //                           Class declaration                                  
@@ -138,6 +139,9 @@ private:
   Float_t b_beamSpot_x;
   Float_t b_beamSpot_y;
   Float_t b_beamSpot_z;
+
+  Int_t b_numVertex;
+  Int_t b_npv =-1;
 
   //****************************************************************************
   //                GEN LEVEL BRANCHES, COUNTERS AND SELECTORS                  
@@ -310,6 +314,7 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
+  edm::EDGetTokenT<std::vector<PileupSummaryInfo> > m_pileupCollection;
   edm::EDGetTokenT<std::vector<pat::Jet> > m_PATJet;
 
   Int_t         m_nThrowsConsistentVertexesCalculator;
@@ -771,6 +776,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   //m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
+  m_pileupCollection = consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("pileupCollection"));
   m_PATJet          = consumes<std::vector<pat::Jet> >(iConfig.getParameter<edm::InputTag>("PATJet"));
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
@@ -1661,7 +1667,31 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   // Cut on primary vertex in event
   edm::Handle<reco::VertexCollection> primaryVertices;
   iEvent.getByToken(m_primaryVertices, primaryVertices);
+  b_numVertex = primaryVertices->size();
 
+
+  // Pulling number of primary vertex from PileupSummaryInfo
+  // Code taken from https://twiki.cern.ch/twiki/bin/viewauth/CMS/PileupSystematicErrors
+  std::cout<<"Define PupInfo"<<std::endl;
+  edm::Handle<std::vector<PileupSummaryInfo> > PupInfo;
+  std::cout<<"Get by token"<<std::endl;
+  iEvent.getByToken(m_pileupCollection, PupInfo);
+  std::cout<<"Define iterator"<<std::endl;
+  std::vector<PileupSummaryInfo>::const_iterator PVI;
+  std::cout<<"Enter loop"<<std::endl;
+  for(PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI)
+  {
+        int BX = PVI->getBunchCrossing();
+        std::cout<<"BX is "<<BX<<std::endl;
+        if(BX == 0)
+        {
+                std::cout<<"BX should be 0. BX is "<<BX<<std::endl;
+                b_npv = PVI->getTrueNumInteractions();
+                std::cout<<"b_npv is "<<b_npv<<std::endl;
+                continue;
+        }
+
+  }
 
   reco::VertexCollection::const_iterator closestPrimaryVertex = primaryVertices->end();
   if (muJets->size() > 0) {
@@ -2971,6 +3001,10 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("beamSpot_x", &b_beamSpot_x, "beamSpot_x/F");
   m_ttree->Branch("beamSpot_y", &b_beamSpot_y, "beamSpot_y/F");
   m_ttree->Branch("beamSpot_z", &b_beamSpot_z, "beamSpot_z/F");
+
+  // Vertex info
+  m_ttree->Branch("numVertex", &b_numVertex, "numVertex/I");
+  m_ttree->Branch("npv",       &b_npv,       "npv/I");
 
   //****************************************************************************
   //                          GEN LEVEL BRANCHES                                
