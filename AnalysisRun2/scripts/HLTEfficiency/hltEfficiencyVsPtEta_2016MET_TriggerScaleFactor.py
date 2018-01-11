@@ -19,7 +19,7 @@ def efficiency_trigger(dirNames, triggerPaths):
 
     print "Preparing histograms"
 
-    Invariant_Mass12 = ROOT.TH1D("Invariant_Mass12","",5,0.,150);
+    Invariant_Mass12 = ROOT.TH1D("Invariant_Mass12","",60,75,105);
 
 
     print "Adding files to the chain"
@@ -65,7 +65,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             if tree.selMu2_pT != -100: nMu += 1
             if tree.selMu3_pT != -100: nMu += 1
       
-            if (nMu!=3):
+            if (nMu<3):
                 continue
 
             ## mass of the muon in GeV
@@ -89,11 +89,23 @@ def efficiency_trigger(dirNames, triggerPaths):
                 return m.sqrt(mmu*mmu + px*px + py*py + pz*pz)
 
             ## dimuon invariant mass
-            def invmass(m1, m2):
+            def inner(m1, m2):
                 return m1[0] * m2[0] - m1[1] * m2[1] - m1[2] * m2[2] - m1[3] * m2[3]
 
+            def invmass(m1, m2):
+                a = inner(m1,m1)
+                b = inner(m2,m2)
+                c = 2*inner(m1,m2)
+                return m.sqrt(a+b+c)
+                
             def isMassInZPeak(m):
-                return abs(m-mZ)<10
+                return abs(m-mZ)<15
+
+            def bestMassInZPeak(m1, m2, m3):
+                masses = [m1, m2, m3]
+                massdiffs = [abs(m1-mZ), abs(m2-mZ), abs(m3-mZ)]
+                index = massdiffs.index(min(massdiffs))
+                return masses[index]
 
             ## calculate the energies
             E0 = energy(mmu, px0, py0, pz0) 
@@ -112,8 +124,11 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             nMassesInZPeak = int(isMassInZPeak(mass01)) + int(isMassInZPeak(mass02)) + int(isMassInZPeak(mass12))
 
-            if nMassesInZPeak>1: nEventsWith2MassInZPeak += 1
-            if nMassesInZPeak>0:
+            bestMass = bestMassInZPeak(mass01, mass12, mass02)
+
+            Invariant_Mass12.Fill(bestMass)
+                #nEventsWith2MassInZPeak += 1
+            if False:
                 print "Muons"
                 print mu0
                 print mu1
@@ -123,14 +138,52 @@ def efficiency_trigger(dirNames, triggerPaths):
                 print "mass01", mass01, isMassInZPeak(mass01)
                 print "mass12", mass12, isMassInZPeak(mass12)
                 print "mass02", mass02, isMassInZPeak(mass02)
+                print "best mass", bestMass
                 print
                 print "nEventsWith2MassInZPeak", nEventsWith2MassInZPeak
                 print 
-            #Invariant_Mass12.Fill()
 
+    ## save histogram in a root file
+    MyFile = TFile("HLT_Z_peak_signal_2016MET_BH_13TeV.root","RECREATE");
+
+    Invariant_Mass12.Write("Invariant_Mass12")
+
+    MyFile.Close();
 
 dirNames = [
     '/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/'
 ]
 efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
+
+
+def makePlot(histogram, format='pdf'):
+
+    ## setup histogram
+    hist = HepPlotter("histogram",1)
+    hist.x_relative_size = 10
+    hist.y_relative_size = 7
+    hist.drawEffDist = False    # draw the physics distribution for efficiency (jet_pt for jet trigger)
+    #hist.rebin       = 1
+    hist.x_label     = "Dimuon invariant mass"
+    hist.y_label     = "Entries"
+    hist.format      = format      # file format for saving image
+    hist.saveDir     = 'trigger_efficiency_plots_2016METB-H_20171107/'
+    hist.saveAs      = "Z_peak_2016MET_BH_" # save figure with name
+    hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
+    hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
+    hist.initialize()
+    hist.lumi = '2016 MET B-H, 35.9'
+    hist.drawStatUncertainty = True    
+    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label='Data')
+    plot = hist.execute()
+    hist.savefig()
+
+
+MyFile = TFile("HLT_Z_peak_signal_2016MET_BH_13TeV.root")
+
+Invariant_Mass12 = MyFile.Get("Invariant_Mass12")
+
+makePlot(Invariant_Mass12, format='pdf')
+
+MyFile.Close()
 
