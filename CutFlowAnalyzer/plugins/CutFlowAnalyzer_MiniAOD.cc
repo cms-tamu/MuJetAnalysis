@@ -731,8 +731,6 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   //                 SET GEN LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
 
-  m_fillGenLevel = iConfig.getParameter<bool>("fillGenLevel");
-
   m_events4GenMu   = 0;
   m_events1GenMu17 = 0;
   m_events2GenMu8  = 0;
@@ -814,6 +812,9 @@ CutFlowAnalyzer_MiniAOD::~CutFlowAnalyzer_MiniAOD()
 void
 CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+  // only fill Gen level even information when you run on Monte Carlo!
+  m_fillGenLevel = !iEvent.eventAuxiliary().isRealData();
+
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
 

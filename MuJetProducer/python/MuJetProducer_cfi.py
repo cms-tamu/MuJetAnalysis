@@ -7,6 +7,7 @@ MuJetProducer = cms.EDProducer(
     muons = cms.InputTag("cleanPatMuonsTriggerMatch"),
     primaryVertices = cms.InputTag("offlinePrimaryVertices"),
     minPt = cms.double(8.),
+    ptShift = cms.double(1.0),
     minPmag = cms.double(0.),
     maxAbsEta = cms.double(2.4),
     selectTrackerMuons = cms.bool(True),

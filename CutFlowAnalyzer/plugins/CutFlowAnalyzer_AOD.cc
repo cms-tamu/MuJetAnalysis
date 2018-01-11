@@ -556,6 +556,7 @@ private:
   bool skimOutput_; //fill only events with 2 good dimuons
 
   Float_t b_pfMET;
+  Float_t b_pfMET_phi;
 
   //PixelHitRecovery
 
@@ -788,8 +789,6 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
   //                 SET GEN LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
 
-  m_fillGenLevel = iConfig.getParameter<bool>("fillGenLevel");
-
   m_events4GenMu   = 0;
   m_events1GenMu17 = 0;
   m_events2GenMu8  = 0;
@@ -821,7 +820,7 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
   m_muJetOrphans    = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muJetOrphans"));
   m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
   m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("genParticles"));
-  m_trigRes         = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
+  m_trigRes         = mayConsume<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
   m_triggerEvent    = consumes<pat::TriggerEvent>(iConfig.getParameter<edm::InputTag>("triggerEvent"));
   m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
@@ -844,7 +843,7 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
   m_events2MuJets                      = 0;
   m_events2DiMuons                     = 0;
   //Fill trigger histo
-  histo_name = true;
+  histo_name = false;
   NameAndNumb.clear();
 
   runDisplacedVtxFinder_ = iConfig.getParameter<bool>("runDisplacedVtxFinder");
@@ -874,6 +873,7 @@ CutFlowAnalyzer_AOD::~CutFlowAnalyzer_AOD()
 void
 CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+  // only fill Gen level even information when you run on Monte Carlo!
   m_fillGenLevel = !iEvent.eventAuxiliary().isRealData();
 
   using namespace edm;
@@ -1161,6 +1161,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   //                          GEN LEVEL ANALYSIS START                          
   //****************************************************************************
 
+  // only fill GEN level event information when you run on Monte Carlo
   if (m_fillGenLevel) {  
 
     if ( m_debug > 10 ) std::cout << m_events << " Start GEN Level" << std::endl;
@@ -1527,6 +1528,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   iEvent.getByToken(m_pfMET, pfMETH);
   const reco::PFMET& pfMET = pfMETH.product()->front(); 
   b_pfMET = pfMET.sumEt();
+  b_pfMET_phi = pfMET.phi();
 
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
@@ -2001,55 +2003,20 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   edm::Handle<pat::TriggerEvent> triggerEvent;
   iEvent.getByToken(m_triggerEvent, triggerEvent);
 
-  edm::Handle<edm::TriggerResults> TrResults;
-  iEvent.getByToken( m_trigRes, TrResults);
-  const TriggerResults *trRes = TrResults.product();
-  edm::TriggerNames const& triggerNames = iEvent.triggerNames(*trRes);
-
-  b_isDiMuonHLTFired = false;
-  b_hltPaths.clear();
-
-  // for (auto p : allMuHltPaths_){
-  //   if ( !triggerEvent->path(p) ) {
-  //     if ( m_debug > 10 ) std::cout << p << " is not present in patTriggerEvent!" << std::endl;
-  //   }
-  //   else{
-  //     if ( triggerEvent->path(p)->wasAccept() ) {
-  //       b_hltPaths.push_back(p);
-  //       if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p) != signalHltPaths_.end()) {
-  //         b_isDiMuonHLTFired = true;
-  //       }
-  //     }
-  //   }
-  // }
-
-  // for(UInt_t iPath = 0 ; iPath < isoTriggerNames_.size() ; ++iPath)
-  //   {
-  //     if(passesSingleMuonFlag==1) continue;
-  //     std::string pathName=isoTriggerNames_.at(iPath);
-
-  //     bool passTrig=false;
-  //     //cout<<"testing pathName                         = "<<pathName<<endl;
-  //     //cout<<"trigNames.triggerIndex(pathName) = "<<trigNames.triggerIndex(pathName)<<endl;
-  //     // cout<<"trigNames.triggerIndex(pathName)<trigNames.size()= "<<(trigNames.triggerIndex(pathName)<trigNames.size())<<endl;
-          
-  //     if(trigNames.triggerIndex(pathName)<trigNames.size()) passTrig=triggerResults->accept(trigNames.triggerIndex(pathName));
-  //     // cout<<"pass = "<<passTrig<<endl;
-  //     if(passTrig) passesSingleMuonFlag=1;
-  //   }   
-
-  int ntrigs = trRes->size();
-  for (int itrig = 0; itrig != ntrigs; ++itrig) {
-    TString trigName = triggerNames.triggerName(itrig);
-    std::string trigNameStr(trigName.Data());
-    if (trRes->accept(triggerNames.triggerIndex(trigNameStr))){
-      // std::cout << "Trigger path accept: " << trigName << std::endl;
-      // if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
-      b_hltPaths.push_back(trigNameStr);
-      if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl;
-      b_isDiMuonHLTFired = true;
+  // link to all trigger paths in this triggerEvent
+  auto triggerPaths = triggerEvent->paths();
+  for (const auto& p : *triggerPaths) {
+    std::cout << p.name();;
+    if (p.wasAccept()) {
+      b_hltPaths.push_back(p.name());
+      std::cout << "Trigger path accept: " <<  p.name() << std::endl;
+      if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p.name()) != signalHltPaths_.end()) {
+	b_isDiMuonHLTFired = true;
+      }
     }
-    // }
+    else {
+      std::cout << std::endl;
+    }
   }
   
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on HLT" << std::endl;
@@ -2956,6 +2923,11 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     
 
   if(runBBestimation_){
+    edm::Handle<edm::TriggerResults> TrResults;
+    iEvent.getByToken( m_trigRes, TrResults);
+    const TriggerResults *trRes = TrResults.product();
+
+    edm::TriggerNames const& triggerNames = iEvent.triggerNames(*trRes);
     FillTrigInfo(triggerComposition, triggerNames, NameAndNumb );
     m_orphan_passOffLineSel = false;
     m_orphan_passOffLineSelPt = false;
@@ -3422,6 +3394,7 @@ CutFlowAnalyzer_AOD::beginJob() {
   m_ttree->Branch("hltPaths",  &b_hltPaths);  
   m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
   m_ttree->Branch("pfMET",&b_pfMET,"pfMET/F");
+  m_ttree->Branch("pfMET_phi",&b_pfMET_phi,"pfMET_phi/F");
 
   if(runPixelHitRecovery_){
     //pixelHitRecovery
@@ -3633,6 +3606,7 @@ CutFlowAnalyzer_AOD::endJob()
   std:: cout << "Total number of events:          " << m_events << std::endl;
   std:: cout << "Total number of events with 4mu: " << m_events4GenMu << " fraction: " <<  m_events4GenMu/m_events << std::endl;
 
+  // only fill GEN level event information when you run on Monte Carlo
   if (m_fillGenLevel){  
     std:: cout << "********** GEN **********" << std::endl;
     std:: cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << std::endl;
@@ -3650,6 +3624,7 @@ CutFlowAnalyzer_AOD::endJob()
   std:: cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << std::endl;
 
   std:: cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << std::endl;
+  // only fill GEN level event information when you run on Monte Carlo
   if (m_fillGenLevel) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl; 
 
   std:: cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << std::endl;
