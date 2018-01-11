@@ -789,8 +789,6 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
   //                 SET GEN LEVEL VARIABLES AND COUNTERS                       
   //****************************************************************************
 
-  m_fillGenLevel = iConfig.getParameter<bool>("fillGenLevel");
-
   m_events4GenMu   = 0;
   m_events1GenMu17 = 0;
   m_events2GenMu8  = 0;
@@ -875,6 +873,7 @@ CutFlowAnalyzer_AOD::~CutFlowAnalyzer_AOD()
 void
 CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
+  // only fill Gen level even information when you run on Monte Carlo!
   m_fillGenLevel = !iEvent.eventAuxiliary().isRealData();
 
   using namespace edm;
@@ -1162,6 +1161,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   //                          GEN LEVEL ANALYSIS START                          
   //****************************************************************************
 
+  // only fill GEN level event information when you run on Monte Carlo
   if (m_fillGenLevel) {  
 
     if ( m_debug > 10 ) std::cout << m_events << " Start GEN Level" << std::endl;
@@ -3606,6 +3606,7 @@ CutFlowAnalyzer_AOD::endJob()
   std:: cout << "Total number of events:          " << m_events << std::endl;
   std:: cout << "Total number of events with 4mu: " << m_events4GenMu << " fraction: " <<  m_events4GenMu/m_events << std::endl;
 
+  // only fill GEN level event information when you run on Monte Carlo
   if (m_fillGenLevel){  
     std:: cout << "********** GEN **********" << std::endl;
     std:: cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << std::endl;
@@ -3623,6 +3624,7 @@ CutFlowAnalyzer_AOD::endJob()
   std:: cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << std::endl;
 
   std:: cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << std::endl;
+  // only fill GEN level event information when you run on Monte Carlo
   if (m_fillGenLevel) std:: cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << std::endl; 
 
   std:: cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << std::endl;
