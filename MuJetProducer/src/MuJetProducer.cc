@@ -21,6 +21,7 @@ Implementation:
 
 // system include files
 #include <memory>
+#include <iostream>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -77,6 +78,7 @@ class MuJetProducer : public edm::EDProducer {
   edm::InputTag m_tracks;
   edm::InputTag m_caloTowers;
   double m_minPt;
+  double m_ptShift;
   double m_minPmag;
   double m_maxAbsEta;
   bool m_selectTrackerMuons;
@@ -148,6 +150,7 @@ MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
    , m_tracks(                          iConfig.getParameter<edm::InputTag>("tracks"))
    , m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
    , m_minPt(                           iConfig.getParameter<double>("minPt"))
+   , m_ptShift(                           iConfig.getParameter<double>("ptShift"))
    , m_minPmag(                         iConfig.getParameter<double>("minPmag"))
    , m_maxAbsEta(                       iConfig.getParameter<double>("maxAbsEta"))
    , m_selectTrackerMuons(              iConfig.getParameter<bool>("selectTrackerMuons"))
@@ -260,7 +263,7 @@ MuJetProducer::~MuJetProducer()
 //
 
 bool MuJetProducer::muonOkay(const pat::Muon &muon) {
-  if (muon.pt() < m_minPt  ||  muon.p() < m_minPmag  ||  fabs(muon.eta()) > m_maxAbsEta) return false;
+  if (muon.pt() < m_minPt * m_ptShift  ||  muon.p() < m_minPmag  ||  fabs(muon.eta()) > m_maxAbsEta) return false;
 
   if (m_selectTrackerMuons  &&  !muon.isTrackerMuon() ) return false;
   if (m_selectGlobalMuons   &&  !muon.isGlobalMuon()  ) return false;
@@ -391,17 +394,69 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   iEvent.getByToken(m_primaryVertices, primaryVertices);
 
   //  const reco::Vertex* vtx = &((*primaryVertices)[0]);
+  const bool debug = false;
 
   std::map<const pat::Muon*,bool> used;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {
-	    for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
-	      if (one != two  &&  muonOkay(*two)) {
-
+      for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
+	if (one != two  &&  muonOkay(*two)) {
+	  
           std::vector<const pat::Muon*> pairOfMuons;
-          pairOfMuons.push_back(&*one);
-          pairOfMuons.push_back(&*two);
-//Checkpoint
+	  
+	  // allow for muons to have slightly higher or lower pT
+	  const auto& one_p4 = one->p4();
+	  const auto& two_p4 = two->p4();
+	  if (debug) {
+	    std::cout << "Px1 " << one_p4.Px()
+		      << " Py1 " << one_p4.Py()
+		      << " Pz1 " << one_p4.Pz()
+		      << " M1 " << one_p4.M() << std::endl;
+	    std::cout << "Px2 " << two_p4.Px()
+		      << " Py2 " << two_p4.Py()
+		      << " Pz2 " << two_p4.Pz()
+		      << " M2 " << two_p4.M() << std::endl;
+	  }
+	  auto one_p4_corrected = math::XYZTLorentzVector(one_p4.Px() * m_ptShift,
+							  one_p4.Py() * m_ptShift,
+							  one_p4.Pz() * m_ptShift,
+							  sqrt(one_p4.M()*one_p4.M() + 
+							       one_p4.Px() * m_ptShift * one_p4.Px() * m_ptShift +
+							       one_p4.Py() * m_ptShift * one_p4.Py() * m_ptShift +
+							       one_p4.Pz() * m_ptShift * one_p4.Pz() * m_ptShift
+							       )
+							  );
+	  
+	  auto two_p4_corrected = math::XYZTLorentzVector(two_p4.Px() * m_ptShift,
+							  two_p4.Py() * m_ptShift,
+							  two_p4.Pz() * m_ptShift,
+							  sqrt(two_p4.M()*two_p4.M() + 
+							       two_p4.Px() * m_ptShift * two_p4.Px() * m_ptShift +
+							       two_p4.Py() * m_ptShift * two_p4.Py() * m_ptShift +
+							       two_p4.Pz() * m_ptShift * two_p4.Pz() * m_ptShift
+							       )
+							  );
+	  if (debug) {
+	    std::cout << "Px1' " << one_p4_corrected.Px()
+		      << " Py1' " << one_p4_corrected.Py()
+		      << " Pz1' " << one_p4_corrected.Pz()
+		      << " M1' " << one_p4_corrected.M() << std::endl;
+	    std::cout << "Px2' " << two_p4_corrected.Px()
+		      << " Py2' " << two_p4_corrected.Py()
+		      << " Pz2' " << two_p4_corrected.Pz()
+		      << " M2' " << two_p4_corrected.M() << std::endl;
+	  }
+	  // update the muon momenta now!
+	  pat::Muon* one_corrected = one->clone(); 
+	  pat::Muon* two_corrected = two->clone(); 
+
+	  one_corrected->setP4(one_p4_corrected);
+	  two_corrected->setP4(two_p4_corrected);
+	  
+          pairOfMuons.push_back(&*one_corrected);
+          pairOfMuons.push_back(&*two_corrected);
+
+	  //Checkpoint
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
                                    tracks_ptr,
@@ -449,11 +504,11 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
             jets.push_back(muonPair);
             active.push_back(true);
 
-            used[&*one] = true;
-            used[&*two] = true;
+            used[&*one_corrected] = true;
+            used[&*two_corrected] = true;
           }
-	      }
-	    }
+	}
+      }
     }
   }
 
