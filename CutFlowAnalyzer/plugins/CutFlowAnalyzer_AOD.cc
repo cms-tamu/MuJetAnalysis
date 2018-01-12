@@ -96,7 +96,12 @@ namespace{
 
 float recoMuonPFIso(const pat::Muon* mu)
 {
-  return (mu->pfIsolationR04().sumChargedHadronPt + std::max(0., mu->pfIsolationR04().sumNeutralHadronEt + mu->pfIsolationR04().sumPhotonEt - 0.5*mu->pfIsolationR04().sumPUPt))/mu->pt();
+  const float chargedHadronPV = mu->pfIsolationR04().sumChargedHadronPt;
+  const float neutralHadron = mu->pfIsolationR04().sumNeutralHadronEt;
+  const float photon = mu->pfIsolationR04().sumPhotonEt;
+  const float chargedHadronPU = mu->pfIsolationR04().sumPUPt;
+
+  return ( chargedHadronPV + std::max(0.,neutralHadron + photon - 0.5 * chargedHadronPU) ) / mu->pt();
 }
 
 }
