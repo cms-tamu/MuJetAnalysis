@@ -92,6 +92,15 @@
 //                           Class declaration                                  
 //******************************************************************************
 
+namespace{
+
+float recoMuonPFIso(const pat::Muon* mu)
+{
+  return (mu->pfIsolationR04().sumChargedHadronPt + std::max(0., mu->pfIsolationR04().sumNeutralHadronEt + mu->pfIsolationR04().sumPhotonEt - 0.5*mu->pfIsolationR04().sumPUPt))/mu->pt();
+}
+
+}
+
 class CutFlowAnalyzer_AOD : public edm::EDAnalyzer 
 {
 public:
@@ -439,6 +448,11 @@ private:
   Float_t b_selMu1_dz;
   Float_t b_selMu2_dz;
   Float_t b_selMu3_dz;
+
+  Float_t b_selMu0_PFIso;
+  Float_t b_selMu1_PFIso;
+  Float_t b_selMu2_PFIso;
+  Float_t b_selMu3_PFIso;
 
   // number of valid muon hits
   Int_t b_selMu0_NVMH;
@@ -858,11 +872,10 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
 
 CutFlowAnalyzer_AOD::~CutFlowAnalyzer_AOD()
 {
-  triggerComposition->Write();
-  triggerComposition_bb->Write();
-  // do anything here that needs to be done at desctruction time
-  // (e.g. close files, deallocate resources etc.)
-
+  if(runBBestimation_) {
+    triggerComposition->Write();
+    triggerComposition_bb->Write();
+  }
 }
 
 //
@@ -1533,9 +1546,9 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
   
-  std::vector<const reco::Muon*> selMuons;
-  std::vector<const reco::Muon*> selMuons8;
-  std::vector<const reco::Muon*> selMuons17;
+  std::vector<const pat::Muon*> selMuons;
+  std::vector<const pat::Muon*> selMuons8;
+  std::vector<const pat::Muon*> selMuons17;
 
   if ( m_debug > 10 ) std::cout << m_events << " Fetch RECO muons" << std::endl;
 
@@ -1602,6 +1615,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       b_selMu0_GlobalTrackChi2 = selMuons[0]->globalTrack()->normalizedChi2();
     b_selMu0_dxy = selMuons[0]->muonBestTrack()->dxy(WZVertex.position());
     b_selMu0_dz = selMuons[0]->muonBestTrack()->dz(WZVertex.position());
+    b_selMu0_PFIso = recoMuonPFIso(selMuons[0]);
  } else {
     b_selMu0_px  = -100.0;
     b_selMu0_py  = -100.0;
@@ -1619,6 +1633,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu0_GlobalTrackChi2 = -1;
     b_selMu0_dxy = -9999;
     b_selMu0_dz = -9999;
+    b_selMu0_PFIso = -999;
   }
   if ( selMuons.size() > 1 ) {
     b_selMu1_px  = selMuons[1]->px();
@@ -1638,6 +1653,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       b_selMu1_GlobalTrackChi2 = selMuons[1]->globalTrack()->normalizedChi2();
     b_selMu1_dxy = selMuons[1]->muonBestTrack()->dxy(WZVertex.position());
     b_selMu1_dz = selMuons[1]->muonBestTrack()->dz(WZVertex.position());
+    b_selMu1_PFIso = recoMuonPFIso(selMuons[1]);
   } else {
     b_selMu1_px  = -100.0;
     b_selMu1_py  = -100.0;
@@ -1655,6 +1671,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu1_GlobalTrackChi2 = -1;
     b_selMu1_dxy = -9999;
     b_selMu1_dz = -9999;
+    b_selMu1_PFIso = -999;
   }
   if ( selMuons.size() > 2 ) {
     b_selMu2_px  = selMuons[2]->px();
@@ -1674,6 +1691,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       b_selMu2_GlobalTrackChi2 = selMuons[2]->globalTrack()->normalizedChi2();
     b_selMu2_dxy = selMuons[2]->muonBestTrack()->dxy(WZVertex.position());
     b_selMu2_dz = selMuons[2]->muonBestTrack()->dz(WZVertex.position());
+    b_selMu2_PFIso = recoMuonPFIso(selMuons[2]);
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
@@ -1691,6 +1709,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu2_GlobalTrackChi2 = -1;
     b_selMu2_dxy = -9999;
     b_selMu2_dz = -9999;
+    b_selMu2_PFIso = -999;
   }
   if ( selMuons.size() > 3 ) {
     b_selMu3_px  = selMuons[3]->px();
@@ -1710,6 +1729,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       b_selMu3_GlobalTrackChi2 = selMuons[3]->globalTrack()->normalizedChi2();
     b_selMu3_dxy = selMuons[3]->muonBestTrack()->dxy(WZVertex.position());
     b_selMu3_dz = selMuons[3]->muonBestTrack()->dz(WZVertex.position());
+    b_selMu3_PFIso = recoMuonPFIso(selMuons[3]);
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1727,6 +1747,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     b_selMu3_GlobalTrackChi2 = -1;
     b_selMu3_dxy = -9999;
     b_selMu3_dz = -9999;
+    b_selMu3_PFIso = -999;
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
@@ -2006,16 +2027,16 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   // link to all trigger paths in this triggerEvent
   auto triggerPaths = triggerEvent->paths();
   for (const auto& p : *triggerPaths) {
-    std::cout << p.name();;
+    if ( m_debug > 10 ) std::cout << p.name();;
     if (p.wasAccept()) {
       b_hltPaths.push_back(p.name());
-      std::cout << "Trigger path accept: " <<  p.name() << std::endl;
+      if ( m_debug > 10 ) std::cout << "Trigger path accept: " <<  p.name() << std::endl;
       if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p.name()) != signalHltPaths_.end()) {
 	b_isDiMuonHLTFired = true;
       }
     }
     else {
-      std::cout << std::endl;
+      if ( m_debug > 10 ) std::cout << std::endl;
     }
   }
   
@@ -3275,6 +3296,11 @@ CutFlowAnalyzer_AOD::beginJob() {
   m_ttree->Branch("selMu1_dz", &b_selMu1_dz, "selMu1_dz/F");
   m_ttree->Branch("selMu2_dz", &b_selMu2_dz, "selMu2_dz/F");
   m_ttree->Branch("selMu3_dz", &b_selMu3_dz, "selMu3_dz/F");
+
+  m_ttree->Branch("selMu0_PFIso", &b_selMu0_PFIso, "selMu0_PFIso/F");
+  m_ttree->Branch("selMu1_PFIso", &b_selMu1_PFIso, "selMu1_PFIso/F");
+  m_ttree->Branch("selMu2_PFIso", &b_selMu2_PFIso, "selMu2_PFIso/F");
+  m_ttree->Branch("selMu3_PFIso", &b_selMu3_PFIso, "selMu3_PFIso/F");
 
   // RECO DiMuons
   m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
