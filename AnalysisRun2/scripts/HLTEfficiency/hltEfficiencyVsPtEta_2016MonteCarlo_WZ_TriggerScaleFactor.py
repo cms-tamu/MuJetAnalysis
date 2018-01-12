@@ -299,7 +299,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             Invariant_Mass12.Fill(bestMass)
             leading_muon_eta.Fill(abs(tree.selMu0_eta))
             leading_muon_phi.Fill(tree.selMu0_phi)
-            leading_muon_phi.Fill(tree.selMu0_pT)
+            leading_muon_pt.Fill(tree.selMu0_pT)
 
             ## was triggered?
             isTriggered = False
@@ -341,8 +341,10 @@ def efficiency_trigger(dirNames, triggerPaths):
     MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_WZ_13TeV.root","RECREATE");
 
     Invariant_Mass12.Write("Invariant_Mass12")
+
     eff_trig_leading_muon_eta = TEfficiency(trig_leading_muon_eta, leading_muon_eta)
     eff_trig_leading_muon_phi = TEfficiency(trig_leading_muon_phi, leading_muon_phi)
+    eff_trig_leading_muon_pt = TEfficiency(trig_leading_muon_pt, leading_muon_pt)
     eff_trig_leading_muon_eta.Write("eff_trig_leading_muon_eta")
     eff_trig_leading_muon_phi.Write("eff_trig_leading_muon_phi")
     eff_trig_leading_muon_pt.Write("eff_trig_leading_muon_pt")
@@ -386,6 +388,10 @@ Invariant_Mass12 = MyFile.Get("Invariant_Mass12")
 makePlot(Invariant_Mass12, "histogram", 
          r"Dimuon invariant mass [GeV]", "Entries", "Z_peak_2016MonteCarlo_WZ", format='pdf')
 
+eff_trig_leading_muon_pt = MyFile.Get("eff_trig_leading_muon_pt")
+makePlot(eff_trig_leading_muon_pt, "efficiency", 
+         r"Leading muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_leading_pt_2016MonteCarlo_WZ", format='pdf')
+
 eff_trig_leading_muon_eta = MyFile.Get("eff_trig_leading_muon_eta")
 makePlot(eff_trig_leading_muon_eta, "efficiency", 
          r"Leading muon $\eta$", "Trigger efficiency", "Trigger_efficiency_leading_eta_2016MonteCarlo_WZ", format='pdf')
@@ -393,10 +399,6 @@ makePlot(eff_trig_leading_muon_eta, "efficiency",
 eff_trig_leading_muon_phi = MyFile.Get("eff_trig_leading_muon_phi")
 makePlot(eff_trig_leading_muon_phi, "efficiency", 
          r"Leading muon $\phi$", "Trigger efficiency", "Trigger_efficiency_leading_phi_2016MonteCarlo_WZ", format='pdf')
-
-eff_trig_leading_muon_pt = MyFile.Get("eff_trig_leading_muon_pt")
-makePlot(eff_trig_leading_muon_pt, "efficiency", 
-         r"Leading muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_leading_pt_2016MonteCarlo_WZ", format='pdf')
 
 MyFile.Close()
 
