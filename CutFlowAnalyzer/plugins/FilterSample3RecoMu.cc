@@ -83,12 +83,12 @@ FilterSample3RecoMu::filter(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
   // require at least 3 muons
   int nMu = 0;
-  for (const auto& p : muonC){
-    std::cout << p.pt() << " " << p.eta() << " " << p.phi() << std::endl;
+  for (const auto& p : muonC) {
+    // std::cout << p.pt() << " " << p.eta() << " " << p.phi() << std::endl;
     if (p.pt() >= 5) nMu++;
   }
-  if (nMu >= 3)
-    std::cout << "Pass" << std::endl;
+  // if (nMu >= 3)
+  //   std::cout << "Pass" << std::endl;
   return nMu >= 3;
 }
 
