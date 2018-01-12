@@ -18,7 +18,13 @@ def getPT(m1):
     px = m1[1]
     py = m1[2]
     return m.sqrt(px*px + py*py)
+
+def getPhi(m1):
+    px = m1[1]
+    py = m1[2]
+    return m.atan(py/px)
     
+
 ## total energy of the muon
 def energy(mmu, px, py, pz):
     return m.sqrt(mmu*mmu + px*px + py*py + pz*pz)
@@ -60,14 +66,26 @@ def efficiency_trigger(dirNames, triggerPaths):
 
     print "Preparing histograms"
 
-    Invariant_Mass12 = ROOT.TH1D("Invariant_Mass12","",60,76,106);
-
+    Invariant_Mass12 = ROOT.TH1D("Invariant_Mass12","",60,76,106)
+    leading_muon_eta = ROOT.TH1D("leading_muon_eta","",24,0,2.4)
+    trig_leading_muon_eta = ROOT.TH1D("trig_leading_muon_eta","",24,0,2.4)
+    leading_muon_phi = ROOT.TH1D("leading_muon_phi","",32,-3.2,3.2)
+    trig_leading_muon_phi = ROOT.TH1D("trig_leading_muon_phi","",32,-3.2,3.2)
+    leading_muon_pt = ROOT.TH1D("leading_muon_pt","",40,10,110)
+    trig_leading_muon_pt = ROOT.TH1D("trig_leading_muon_pt","",40,10,110)
 
     print "Adding files to the chain"
     addfilesMany(chain, dirNames, "out_ana")
                                    
     print "Loop over the chain"
     nEventsWith2MassInZPeak = 0
+
+    nTotalEvents = 0
+    nTotalEvents4Mu = 0
+    nEventsPreSelected = 0
+    nEventsSelected = 0
+    nEventsTriggered = 0
+
     for rootFile in chain.GetListOfFiles():
         
         ## loop on events in the ROOT file
@@ -77,9 +95,6 @@ def efficiency_trigger(dirNames, triggerPaths):
         if (not myfile):
             if (verbose): print "File ", rootFile.GetTitle(), " does not exist"
             continue
-
-        #myfile.cd("cutFlowAnalyzer_Data")  
-        #myfile.cd("Events")
 
         if (verbose): print "Loading directory cutFlowAnalyzer"
        
@@ -94,7 +109,9 @@ def efficiency_trigger(dirNames, triggerPaths):
         nTriggers = 0
         for k in range(0, tree.GetEntries()):
 
-            if k%100000==0: print "Processing event ", k 
+            nTotalEvents += 1
+
+            if nTotalEvents%1000==0: print "Processing event ", nTotalEvents  
             tree.GetEntry(k)
 
             ## check for 4 reco muons 
@@ -105,10 +122,18 @@ def efficiency_trigger(dirNames, triggerPaths):
             if tree.selMu2_pT != -100: nMu += 1
             if tree.selMu3_pT != -100: nMu += 1
       
+            if (nMu==4):
+                nTotalEvents4Mu += 1
+
             if (nMu!=3):
                 continue
 
-            
+            nEventsPreSelected += 1
+        
+            pt0 = tree.selMu0_pT
+            pt1 = tree.selMu1_pT
+            pt2 = tree.selMu2_pT
+
             px0 = tree.selMu0_px
             px1 = tree.selMu1_px
             px2 = tree.selMu2_px
@@ -125,9 +150,17 @@ def efficiency_trigger(dirNames, triggerPaths):
             phi1 = tree.selMu1_phi
             phi2 = tree.selMu2_phi
 
+            eta0 = tree.selMu0_eta
+            eta1 = tree.selMu1_eta
+            eta2 = tree.selMu2_eta
+
             q0 = tree.selMu0_q
             q1 = tree.selMu1_q
             q2 = tree.selMu2_q
+            
+            ## two muons should have same charge, one muon should have opposite charge (-++, --+)
+            ## other options --- and +++ are not allowed!
+            if q0 == q1 == q2: continue
 
             isMedium0 = tree.selMu0_isMedium
             isMedium1 = tree.selMu1_isMedium
@@ -137,24 +170,49 @@ def efficiency_trigger(dirNames, triggerPaths):
             isTight1 = tree.selMu1_isTight
             isTight2 = tree.selMu2_isTight
 
+            ## high quality muons
+            if not isTight0: continue
+            if not isTight1: continue
+            if not isTight2: continue
+
             dxy0 = tree.selMu0_dxy
             dxy1 = tree.selMu1_dxy
             dxy2 = tree.selMu2_dxy
+
+            ## prom1pt muons!
+            if dxy0 > 0.01: continue
+            if dxy1 > 0.01: continue
+            if dxy2 > 0.01: continue
 
             dz0 = tree.selMu0_dz
             dz1 = tree.selMu1_dz
             dz2 = tree.selMu2_dz
 
+            if dz0 > 0.1: continue
+            if dz1 > 0.1: continue
+            if dz2 > 0.1: continue
+
+            PFIso0 = tree.selMu0_PFIso
+            PFIso1 = tree.selMu1_PFIso
+            PFIso2 = tree.selMu2_PFIso
+
+            ## require tight isolation on all muons
+            #if PFIso0 > 0.15: continue
+            #if PFIso1 > 0.15: continue
+            #if PFIso2 > 0.15: continue
+
             pfMET = tree.pfMET
+            pfMET_phi = tree.pfMET_phi
 
             ## calculate the energies
             E0 = energy(mmu, px0, py0, pz0) 
             E1 = energy(mmu, px1, py1, pz1)
             E2 = energy(mmu, px2, py2, pz2)
 
-            print E0, px0, py0, pz0, q0, phi0
-            print E1, px1, py1, pz1, q1, phi1
-            print E2, px2, py2, pz2, q2, phi2
+            if (verbose):
+                print E0, px0, py0, pz0, q0, phi0
+                print E1, px1, py1, pz1, q1, phi1
+                print E2, px2, py2, pz2, q2, phi2
 
             ## declare the four vectors
             mu0 = [E0, px0, py0, pz0]
@@ -166,28 +224,28 @@ def efficiency_trigger(dirNames, triggerPaths):
             if q1 * q2 < 0: numberOfMuonPairs += 1
             if q0 * q2 < 0: numberOfMuonPairs += 1
 
-            print "numberOfMuonPairs", numberOfMuonPairs
+            if (verbose):
+                print "numberOfMuonPairs", numberOfMuonPairs
 
             ## calculate invariant masses
-            if q0 * q1 < 0: 
-                mass01 = invmass(mu0, mu1)
-            else:
-                mass01 = 0
+            if q0 * q1 < 0: mass01 = invmass(mu0, mu1)
+            else:           mass01 = 0
 
-            if q2 * q1 < 0: 
-                mass12 = invmass(mu1, mu2)
-            else:
-                mass12 = 0
+            if q2 * q1 < 0: mass12 = invmass(mu1, mu2)
+            else:           mass12 = 0
 
-            if q0 * q2 < 0: 
-                mass02 = invmass(mu0, mu2)
-            else:
-                mass02 = 0
+            if q0 * q2 < 0: mass02 = invmass(mu0, mu2)
+            else:           mass02 = 0
 
-            print mass01, mass12, mass02
-            print
+            ## The invariant mass of any same-flavor dimuon pair must be greater than 4 GeV
+            if q0 * q1 > 0 and invmass(mu0, mu1) < 4: continue
+            if q0 * q2 > 0 and invmass(mu0, mu2) < 4: continue
+            if q1 * q2 > 0 and invmass(mu1, mu2) < 4: continue
 
             nMassesInZPeak = int(isMassInZPeak(mass01)) + int(isMassInZPeak(mass02)) + int(isMassInZPeak(mass12))
+
+            ## require at least one dimuon pair to be consistent with the Z pole mass 
+            if nMassesInZPeak==0: continue
 
             bestMass = bestMassInZPeak(mass01, mass12, mass02)
             
@@ -214,34 +272,50 @@ def efficiency_trigger(dirNames, triggerPaths):
             if Zmu1_pT<10: continue
             if Wmu_pT<10: continue
             
-            if not isTight0: continue
-            if not isTight1: continue
-            if not isTight2: continue
-
-            if dxy0 > 0.01: continue
-            if dxy1 > 0.01: continue
-            if dxy2 > 0.01: continue
-
-            if dz0 > 0.1: continue
-            if dz1 > 0.1: continue
-            if dz2 > 0.1: continue
-
             ## require 30 GeV MET from W decay
             if pfMET < 30: continue
 
-            if Zmu0_pT < 20 or Zmu1_pT < 20: continue
+            ## require one of the Z boson muons to have at least 20 GeV pT
+            if not (Zmu0_pT > 20 or Zmu1_pT > 20): continue
 
+            ## require the W boson muon to have at least 20 GeV pT
             if Wmu_pT < 20: continue
 
             ## 3-lep inv mass
             invm3 = inv3mass(mu0, mu1, mu2)
-
             if invm3 < 100: continue
+            
+            ## apply a quality criterium on the transverse mass cut
+            Wmu_phi = getPhi(Wmu)
+            Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, pfMET_phi)
+            transverseWbosonMass = m.sqrt(2*Wmu_pT*pfMET*(1-m.cos(Wmu_nu_deltaPhi)))
+            if (verbose):
+                print "transverseWbosonMass", transverseWbosonMass
+            ## remove the contamination from W+jets in the sample!
+            #if transverseWbosonMass > 20: continue
+
+            nEventsSelected += 1
 
             Invariant_Mass12.Fill(bestMass)
-            #if nMassesInZPeak>0: 
-            #    #nEventsWith2MassInZPeak += 1
-            if nMassesInZPeak>0 and True:
+            leading_muon_eta.Fill(abs(tree.selMu0_eta))
+            leading_muon_phi.Fill(tree.selMu0_phi)
+            leading_muon_phi.Fill(tree.selMu0_pT)
+
+            ## was triggered?
+            isTriggered = False
+            for trigger in triggerPaths:
+                if (verbose): print list(tree.hltPaths)
+                if any(trigger in s for s in list(tree.hltPaths)):
+                    if (verbose): print trigger, "is available"
+                    nEventsTriggered += 1
+                    isTriggered = True
+
+            if isTriggered:
+                trig_leading_muon_eta.Fill(abs(tree.selMu0_eta))
+                trig_leading_muon_phi.Fill(tree.selMu0_phi)
+                trig_leading_muon_pt.Fill(tree.selMu0_pT)
+                
+            if nMassesInZPeak>0 and verbose:
                 print "Muons"
                 print mu0
                 print mu1
@@ -256,50 +330,73 @@ def efficiency_trigger(dirNames, triggerPaths):
                 print "nEventsWith2MassInZPeak", nEventsWith2MassInZPeak
                 print 
 
+
+    print "n Total events analyzed", nTotalEvents
+    print "nTotalEvents4Mu", nTotalEvents4Mu
+    print "nEvents with 3 muons", nEventsPreSelected
+    print "nEvents selected after all quality cuts ", nEventsSelected
+    print "nEventsTriggered", nEventsTriggered
+
     ## save histogram in a root file
     MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_WZ_13TeV.root","RECREATE");
 
     Invariant_Mass12.Write("Invariant_Mass12")
-
+    eff_trig_leading_muon_eta = TEfficiency(trig_leading_muon_eta, leading_muon_eta)
+    eff_trig_leading_muon_phi = TEfficiency(trig_leading_muon_phi, leading_muon_phi)
+    eff_trig_leading_muon_eta.Write("eff_trig_leading_muon_eta")
+    eff_trig_leading_muon_phi.Write("eff_trig_leading_muon_phi")
+    eff_trig_leading_muon_pt.Write("eff_trig_leading_muon_pt")
+    
     MyFile.Close();
 
 dirNames = [
-    '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZ_RunIISummer16DR80Premix-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1-20171108_v2/171108_153358/0000/'
+    '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v3/180112_055907/0000/'
 ]
 
 efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
 
 #exit(1)
 
-def makePlot(histogram, format='pdf'):
+def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
 
     ## setup histogram
-    hist = HepPlotter("histogram",1)
+    hist = HepPlotter(plotType,1)#"histogram"
     hist.x_relative_size = 10
     hist.y_relative_size = 7
     hist.drawEffDist = False    # draw the physics distribution for efficiency (jet_pt for jet trigger)
     #hist.rebin       = 1
-    hist.x_label     = "Dimuon invariant mass"
-    hist.y_label     = "Entries"
+    hist.x_label     = x_label# "Dimuon invariant mass"
+    hist.y_label     = y_label
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_WZ_20171108/'
-    hist.saveAs      = "Z_peak_2016MonteCarlo_WZ" # save figure with name
+    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_WZ_20181012/'
+    hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary Simulation'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
     hist.lumi = '2016 MET B-H, 35.9'
     hist.plotLUMI = False
     hist.drawStatUncertainty = True    
-    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label='WZ MonteCarlo')
+    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label=r'WZ \rightarrow 3\mu\nu')
     plot = hist.execute()
     hist.savefig()
-
 
 MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_WZ_13TeV.root")
 
 Invariant_Mass12 = MyFile.Get("Invariant_Mass12")
+makePlot(Invariant_Mass12, "histogram", 
+         r"Dimuon invariant mass [GeV]", "Entries", "Z_peak_2016MonteCarlo_WZ", format='pdf')
 
-makePlot(Invariant_Mass12, format='pdf')
+eff_trig_leading_muon_eta = MyFile.Get("eff_trig_leading_muon_eta")
+makePlot(eff_trig_leading_muon_eta, "efficiency", 
+         r"Leading muon $\eta$", "Trigger efficiency", "Trigger_efficiency_leading_eta_2016MonteCarlo_WZ", format='pdf')
+
+eff_trig_leading_muon_phi = MyFile.Get("eff_trig_leading_muon_phi")
+makePlot(eff_trig_leading_muon_phi, "efficiency", 
+         r"Leading muon $\phi$", "Trigger efficiency", "Trigger_efficiency_leading_phi_2016MonteCarlo_WZ", format='pdf')
+
+eff_trig_leading_muon_pt = MyFile.Get("eff_trig_leading_muon_pt")
+makePlot(eff_trig_leading_muon_pt, "efficiency", 
+         r"Leading muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_leading_pt_2016MonteCarlo_WZ", format='pdf')
 
 MyFile.Close()
 
