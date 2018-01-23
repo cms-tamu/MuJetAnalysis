@@ -120,6 +120,7 @@ def decodeDarkSUSYFileName(fileName):
   ## DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV
 
   ## only take the part that starts with the substring above
+  print "decoding", fileName
   substring_index = fileName.find("DarkSUSY_mH_125_mN1_")
   substring = fileName[substring_index:]
 
@@ -158,6 +159,7 @@ def decodeNMSSMFileName(fileName):
 
 #______________________________________________________________________________
 def decodeDarkSUSYFileNameMany(fileNames):
+  print "docoding many", fileNames
   return decodeDarkSUSYFileName(fileNames[0])
 
 

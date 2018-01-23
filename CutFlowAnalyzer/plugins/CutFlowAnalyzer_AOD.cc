@@ -31,6 +31,7 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/METReco/interface/PFMETFwd.h"
 #include "DataFormats/METReco/interface/PFMET.h"
+#include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
@@ -51,7 +52,8 @@
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
-
+#include "CommonTools/Utils/interface/InvariantMass.h"
+#include "Math/GenVector/VectorUtil.h"
 
 #include "TrackingTools/TrajectoryState/interface/FreeTrajectoryState.h"
 #include "TrackingTools/TrajectoryState/interface/TrajectoryStateOnSurface.h"
@@ -167,6 +169,10 @@ private:
   bool m_fillGenLevel; // TRUE for simulation, FALSE for data
   
   // GEN Level Muon Branches: with this analyzer we search for events with 4 muons!
+  Float_t b_genMET_sumET;
+  Float_t b_genMET_muonET;
+  Float_t b_genMET_phi;
+
   Float_t b_genMu0_px;
   Float_t b_genMu1_px;
   Float_t b_genMu2_px;
@@ -332,6 +338,7 @@ private:
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
   edm::EDGetTokenT<reco::PFMETCollection> m_pfMET;
+  edm::EDGetTokenT<pat::METCollection> m_patMET;
 
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
@@ -576,6 +583,8 @@ private:
 
   Float_t b_pfMET;
   Float_t b_pfMET_phi;
+  Float_t b_patMET;
+  Float_t b_patMET_phi;
 
   //PixelHitRecovery
 
@@ -845,6 +854,7 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
   m_pfMET           = consumes<reco::PFMETCollection>(iConfig.getParameter<edm::InputTag>("pfMET"));
+  m_patMET          = consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("patMET"));
 
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
@@ -1187,6 +1197,76 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     edm::Handle<reco::GenParticleCollection> genParticles;
     iEvent.getByToken(m_genParticles, genParticles);
   
+    // get the W boson in the event
+    bool hasWboson = false;
+    for(auto iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
+      // W boson with 2 daughter particles
+      if ( fabs( iGenParticle->pdgId() ) == 24) {
+	std::cout << iGenParticle->status() << " " 
+		  << iGenParticle->pdgId() << " " 
+		  << iGenParticle->vx() << " " 
+		  << iGenParticle->vy() << " " 
+		  << iGenParticle->vz() << " daughters "
+		  << iGenParticle->numberOfDaughters() << std::endl;	
+
+	if ( iGenParticle->numberOfDaughters()==2) {
+	  
+	  // check type of daughters
+	  if (std::abs(iGenParticle->daughter(0)->pdgId()) == 11 or std::abs(iGenParticle->daughter(1)->pdgId()) == 11) std::cout << "One daughter is electron" << std::endl;
+	  if (std::abs(iGenParticle->daughter(0)->pdgId()) == 13 or std::abs(iGenParticle->daughter(1)->pdgId()) == 13) std::cout << "One daughter is muon" << std::endl;
+	  if (std::abs(iGenParticle->daughter(0)->pdgId()) == 15 or std::abs(iGenParticle->daughter(1)->pdgId()) == 15) std::cout << "One daughter is tau" << std::endl;
+
+	  if (std::abs(iGenParticle->daughter(0)->pdgId()) == 12 or std::abs(iGenParticle->daughter(1)->pdgId()) == 12) std::cout << "One daughter is electron neutrino" << std::endl;
+	  if (std::abs(iGenParticle->daughter(0)->pdgId()) == 14 or std::abs(iGenParticle->daughter(1)->pdgId()) == 14) std::cout << "One daughter is muon neutrino" << std::endl;
+	  if (std::abs(iGenParticle->daughter(0)->pdgId()) == 16 or std::abs(iGenParticle->daughter(1)->pdgId()) == 16) std::cout << "One daughter is tau neutrino" << std::endl;
+
+	  if (iGenParticle->daughter(0) and iGenParticle->daughter(1)) {
+	    if ( ( std::abs(iGenParticle->daughter(0)->pdgId()) == 13 and std::abs(iGenParticle->daughter(1)->pdgId()) == 14 ) or 
+		 ( std::abs(iGenParticle->daughter(1)->pdgId()) == 13 and std::abs(iGenParticle->daughter(0)->pdgId()) == 14 ) ) {
+	      hasWboson = true;
+	      std::cout << "genW status " << iGenParticle->status() << std::endl; 
+	      // const reco::Candidate *genMuonCand = &(*iGenParticle);
+	      if (std::abs(iGenParticle->daughter(1)->pdgId()) == 14) {
+		b_genMET_sumET = iGenParticle->daughter(1)->pt();
+		b_genMET_phi = iGenParticle->daughter(1)->phi();
+		std::cout << "genMET neutrino pT " << b_genMET_sumET << std::endl; 
+		std::cout << "genMET neutrino phi " << b_genMET_phi << std::endl; 
+		double mT = sqrt(2*iGenParticle->daughter(1)->pt()*iGenParticle->daughter(0)->pt()*
+				 cos(reco::deltaPhi(iGenParticle->daughter(1)->phi(), iGenParticle->daughter(0)->phi()))
+				 );
+		std::cout << "mT " << mT << " mInv " << ROOT::Math::VectorUtil::InvariantMass(iGenParticle->daughter(0)->p4(), 
+											      iGenParticle->daughter(1)->p4()) << std::endl;
+	      }
+	      else if (std::abs(iGenParticle->daughter(0)->pdgId()) == 14) {
+		b_genMET_sumET = iGenParticle->daughter(0)->pt();
+		b_genMET_phi = iGenParticle->daughter(0)->phi();
+		std::cout << "genMET neutrino pT " << b_genMET_sumET << std::endl; 
+		std::cout << "genMET neutrino phi " << b_genMET_phi << std::endl; 
+		double mT = sqrt(2*iGenParticle->daughter(1)->pt()*iGenParticle->daughter(0)->pt()*
+				 cos(reco::deltaPhi(iGenParticle->daughter(1)->phi(), iGenParticle->daughter(0)->phi()))
+				 );
+		std::cout << "mT " << mT << " mInv " << ROOT::Math::VectorUtil::InvariantMass(iGenParticle->daughter(0)->p4(), 
+											      iGenParticle->daughter(1)->p4()) << std::endl;
+	      }
+	      else{
+		std::cout << "W boson without 2 correct daughter particles" << std::endl;
+	      }
+	    }
+	    else {
+	      std::cout << "No muon or no neutrino as daughter" << std::endl;
+	    }
+	  } else {
+	    std::cout << "no two pointers to daugthers" << std::endl;
+	  }
+	} else {
+	  std::cout << "no two daughters" << std::endl;
+	}
+      } 
+    }
+	  
+    if (not hasWboson) 
+      std::cout << "No W boson" << std::endl;
+
     // Loop over all genParticles and save prompt muons from particles with codes 36 (a1) or 3000022 (gammaD) in vector genMuons
     std::vector<const reco::GenParticle*> genH;
     std::vector<const reco::GenParticle*> genA_unsorted;
@@ -1195,7 +1275,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     std::vector<const reco::Candidate*>   genMuonMothers;
     // Loop over all gen particles
     int counterGenParticle = 0;
-    for(reco::GenParticleCollection::const_iterator iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
+    for(auto iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
       counterGenParticle++;
       //    std::cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << std::endl;
       // Check if gen particle is muon (pdgId = +/-13) and stable (status = 1)
@@ -1545,8 +1625,23 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   edm::Handle<reco::PFMETCollection> pfMETH;
   iEvent.getByToken(m_pfMET, pfMETH);
   const reco::PFMET& pfMET = pfMETH.product()->front(); 
-  b_pfMET = pfMET.sumEt();
-  b_pfMET_phi = pfMET.phi();
+
+  edm::Handle<pat::METCollection> patMETH;
+  iEvent.getByToken(m_patMET, patMETH);
+  const pat::MET& patMET = patMETH.product()->front(); 
+
+  b_pfMET = patMET.pt(); // muon ET fraction!
+  b_pfMET_phi = patMET.phi();
+  // std::cout << "b_pfMET " << b_pfMET << std::endl;
+  // std::cout << "b_pfMET_phi " << b_pfMET_phi << std::endl;
+
+  // std::cout << "b_patMET_muon " << patMET.MuonEtFraction() * patMET.sumEt() << std::endl;
+  // std::cout << "b_patMET " << patMET.pt() << std::endl;
+  // std::cout << "b_patMET_phi " << patMET.phi() << std::endl;
+
+  // std::cout << "b_patMET_genMET " << patMET.pt() << std::endl;
+  // std::cout << "b_patMET_genMET_muon " << patMET.genMET()->MuonEt() << std::endl;
+  // std::cout << "b_patMET_genMET_phi " << patMET.genMET()->phi() << std::endl;
 
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
@@ -3210,6 +3305,10 @@ CutFlowAnalyzer_AOD::beginJob() {
   m_ttree->Branch("genMu1_phi", &b_genMu1_phi, "genMu1_phi/F");
   m_ttree->Branch("genMu2_phi", &b_genMu2_phi, "genMu2_phi/F");
   m_ttree->Branch("genMu3_phi", &b_genMu3_phi, "genMu3_phi/F");
+
+  m_ttree->Branch("b_genMET_sumET", &b_genMET_sumET, "genMET_sumET/F");
+  m_ttree->Branch("b_genMET_muonET", &b_genMET_muonET, "genMET_muonET/F");
+  m_ttree->Branch("b_genMET_phi", &b_genMET_phi, "genMET_phi/F");
 
   // GEN Level Selectors
   m_ttree->Branch("is4GenMu",    &b_is4GenMu,       "is4GenMu/O");

@@ -30,6 +30,7 @@ patMuons = patMuons.clone(
     embedTcMETMuonCorrs = cms.bool(False),
 )
 
+## MET
 patJets.addGenPartonMatch   = cms.bool(False)
 patJets.embedGenPartonMatch = cms.bool(False)
 patJets.addGenJetMatch      = cms.bool(False)
@@ -167,7 +168,10 @@ patifyData = cms.Sequence(
     patTrigger * 
     patTriggerEvent * 
     patifyTrackerMuon * 
-    patifyPFMuon
+    patifyPFMuon *
+    makePatMETs
+    #patMETCorrectionsTask *
+    #patMETs
     #patJetCorrections *
     #patJetCharge *
     #patJets
