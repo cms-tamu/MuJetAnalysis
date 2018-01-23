@@ -15,7 +15,7 @@ cutFlowAnalyzerPXBL3PXFL2 = cutFlowAnalyzer.clone(
     muJetOrphans = cms.InputTag("PFMuJetProducer05PXBL3PXFL2", "Orphans"),
 )
 cutFlowAnalyzers = cms.Sequence(
-#    cutFlowAnalyzer * 
-#    cutFlowAnalyzerPXBL2PXFL2 * 
+    cutFlowAnalyzer * 
+    cutFlowAnalyzerPXBL2PXFL2 * 
     cutFlowAnalyzerPXBL3PXFL2
 )
