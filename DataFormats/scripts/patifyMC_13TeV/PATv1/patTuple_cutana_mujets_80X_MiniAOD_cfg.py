@@ -20,15 +20,17 @@ process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_MiniAOD_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.FilterSample3RecoMu_MiniAOD_cfi")
 
-process.source = cms.Source("PoolSource",
+process.source = cms.Source(
+    "PoolSource",
     fileNames = cms.untracked.vstring(
         'file:/fdata/hepx/store/mc/RunIISummer16DR80Premix/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/AODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/120000/0CFEE63A-7AD0-E611-A9DF-C81F66B7EBF5.root'
         #'file:/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_PAT_ANA_V2_v1/170124_224445/0000/out_pat_17.root'
     )
 )
 
-process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string('patTuple.root')
+process.out = cms.OutputModule(
+    "PoolOutputModule",
+    fileName = cms.untracked.string('patTuple.root')
 )
 
 ### Add MuJet Dataformats
@@ -46,7 +48,8 @@ process.p = cms.Path(
 
 #process.outpath = cms.EndPath(process.out)
 
-process.TFileService = cms.Service("TFileService",
+process.TFileService = cms.Service(
+    "TFileService",
     fileName = cms.string("out_ana.root")
 )
 
