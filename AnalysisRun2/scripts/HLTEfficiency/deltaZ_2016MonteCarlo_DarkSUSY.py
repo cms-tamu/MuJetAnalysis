@@ -71,7 +71,7 @@ def deltaZ(dirNames):
 
     chain = ROOT.TChain("cutFlowAnalyzerPXBL3PXFL2/Events")
 
-    deltaZ_DiMuonC_DiMuonF = ROOT.TH1D("deltaZ_DiMuonC_DiMuonF","",200,-0.1,0.1);
+    deltaZ_DiMuonC_DiMuonF = ROOT.TH1D("deltaZ_DiMuonC_DiMuonF","",1000,-0.5,0.5);
 
     n1, ma, ctau = decodeDarkSUSYFileNameMany(dirNames)
 
