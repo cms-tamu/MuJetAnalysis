@@ -44,7 +44,7 @@ mass_colors = {
 
 
 ##____________________________________________________________
-def merge_darkSUSY_files(dirNames, triggerPaths):
+def merge_darkSUSY_files(dirNames):
 
     verbose = True
 
@@ -63,7 +63,7 @@ def merge_darkSUSY_files(dirNames, triggerPaths):
 
 
 ##____________________________________________________________
-def deltaZ(dirNames, triggerPaths):
+def deltaZ(dirNames):
 
     verbose = False
 
@@ -71,7 +71,7 @@ def deltaZ(dirNames, triggerPaths):
 
     chain = ROOT.TChain("cutFlowAnalyzerPXBL3PXFL2/Events")
 
-    deltaZ_DiMuonC_DiMuonF = ROOT.TH1D("deltaZ_DiMuonC_DiMuonF","",1000,-1,1.);
+    deltaZ_DiMuonC_DiMuonF = ROOT.TH1D("deltaZ_DiMuonC_DiMuonF","",200,-0.1,0.1);
 
     n1, ma, ctau = decodeDarkSUSYFileNameMany(dirNames)
 
@@ -81,27 +81,10 @@ def deltaZ(dirNames, triggerPaths):
 
     addfilesMany(chain, dirNames, "out_ana")
 
-    #tree = chain
-    
-    #entries = tree.GetEntries()
     chain.Draw("diMuons_dz_FittedVtx>>deltaZ_DiMuonC_DiMuonF","is4SelMu8 && isVertexOK && is2MuJets && is2DiMuons && (diMuonF_m1_FittedVtx_hitpix_l3inc==1 || diMuonF_m2_FittedVtx_hitpix_l3inc==1) && (diMuonC_m1_FittedVtx_hitpix_l3inc==1 || diMuonC_m2_FittedVtx_hitpix_l3inc==1)")
 
-    #if (verbose): print "  Events  ", entries
-    #for k in range(0, entries):
-    #if k%10000==0: print "Processing event ", k, "/", entries
-    #tree.GetEntry(k)
-    #if(tree.is4SelMu8 and 
-    #   tree.isVertexOK and 
-    #   tree.is2MuJets and 
-    #   tree.is2DiMuons and 
-    #   (tree.diMuonF_m1_FittedVtx_hitpix_l3inc==1 or tree.diMuonF_m2_FittedVtx_hitpix_l3inc==1) and
-    #   (tree.diMuonC_m1_FittedVtx_hitpix_l3inc==1 or tree.diMuonC_m2_FittedVtx_hitpix_l3inc==1) ):
-    
-    #print tree.diMuonC_FittedVtx_vz - tree.diMuonF_FittedVtx_vz
-    #deltaZ_DiMuonC_DiMuonF.Fill(tree.diMuons_dz_FittedVtx)
-
     ## save per mass point and per ctau point!!
-    MyFile = TFile("HLT_deltaZ_DiMuonC_DiMuonF_2016.root","UPDATE");
+    MyFile = TFile("deltaZ_DiMuonC_DiMuonF_2016.root","UPDATE");
     deltaZ_DiMuonC_DiMuonF.Write(darkSUSY + "_deltaZ_DiMuonC_DiMuonF")
     MyFile.Close();
     del deltaZ_DiMuonC_DiMuonF
@@ -119,6 +102,6 @@ def calculateDeltaZs():
         if ma == '8p5' or True:
         
             print "Processing", iSample, "mN1", n1, "mA", ma, "cT", ctau
-            deltaZ(sample, triggerPaths)
+            deltaZ(sample)
 
 calculateDeltaZs()

@@ -53,7 +53,13 @@ def makePlot(effTuple, format='pdf'):
     hist.y_label     = "Entries"
     hist.format      = format      # file format for saving image
     hist.saveDir     = 'deltaZ_plots_2016DarkSUSY_20180124/'
-    hist.saveAs      = "deltaZ_2016MonteCarlo_" + effTuple[2] # save figure with name
+
+    n1, ma, ctau  = decodeDarkSUSYFileName(effTuple[2])
+    #print n1, ma, ctau
+    modified_darkSUSY = getDarkSUSYFileNameNoCT(n1, ma)
+
+    #hist.saveAs      = effTuple[2].replace('_13TeV_deltaZ_DiMuonC_DiMuonF','') # save figure with name
+    hist.saveAs      = modified_darkSUSY + '_13TeV_deltaZ_DiMuonC_DiMuonF' # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Simulation Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
@@ -62,9 +68,6 @@ def makePlot(effTuple, format='pdf'):
     hist.drawStatUncertainty = True    
     hist.Add(effTuple[0], draw='step', color='blue', 
              linecolor='blue', linestyle='solid',label='')
-
-    n1, ma, ctau  = decodeDarkSUSYFileName(effTuple[2])
-    #print n1, ma, ctau
 
     hist.extra_text.Add(r"\textbf{Dark SUSY}", coords=[0.1,0.4])
     hist.extra_text.Add(r"$m_{N1} = %s~\mathrm{GeV}$"%n1, coords=[0.1,0.35])
@@ -90,23 +93,109 @@ DarkSUSY_mH_125_mN1_10_mGammaD_0p25 = [
     'DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_50_13TeV_deltaZ_DiMuonC_DiMuonF',
     'DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_deltaZ_DiMuonC_DiMuonF',
 ]
+DarkSUSY_mH_125_mN1_10_mGammaD_0p3 = [
+    'DarkSUSY_mH_125_mN1_10_mGammaD_0p3_cT_0p05_13TeV_deltaZ_DiMuonC_DiMuonF',
+    'DarkSUSY_mH_125_mN1_10_mGammaD_0p3_cT_0p2_13TeV_deltaZ_DiMuonC_DiMuonF',
+    'DarkSUSY_mH_125_mN1_10_mGammaD_0p3_cT_3_13TeV_deltaZ_DiMuonC_DiMuonF',
+    'DarkSUSY_mH_125_mN1_10_mGammaD_0p3_cT_50_13TeV_deltaZ_DiMuonC_DiMuonF',
+]
+DarkSUSY_mH_125_mN1_10_mGammaD_0p4 = [
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_0_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_0p05_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_0p1_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_0p5_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_1_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_2_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_3_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_10_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_20_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_50_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_100_13TeV_deltaZ_DiMuonC_DiMuonF',
+]
+DarkSUSY_mH_125_mN1_10_mGammaD_0p7 = [
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p05_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p1_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p2_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_0p5_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_1_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_3_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_10_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_20_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_50_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_0p7_cT_100_13TeV_deltaZ_DiMuonC_DiMuonF',
+]
+DarkSUSY_mH_125_mN1_10_mGammaD_1 = [
+'DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_0_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_3_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_5_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_10_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_20_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_50_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_100_13TeV_deltaZ_DiMuonC_DiMuonF',
+]
+DarkSUSY_mH_125_mN1_10_mGammaD_1p5 = [
+'DarkSUSY_mH_125_mN1_10_mGammaD_1p5_cT_3_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_1p5_cT_10_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_1p5_cT_50_13TeV_deltaZ_DiMuonC_DiMuonF',
+]
+DarkSUSY_mH_125_mN1_10_mGammaD_2 = [
+'DarkSUSY_mH_125_mN1_10_mGammaD_2_cT_10_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_2_cT_50_13TeV_deltaZ_DiMuonC_DiMuonF',
+]
+DarkSUSY_mH_125_mN1_10_mGammaD_5 = [
+'DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_0_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_3_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_10_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_20_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_50_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_100_13TeV_deltaZ_DiMuonC_DiMuonF',
+]
+DarkSUSY_mH_125_mN1_10_mGammaD_8p5 = [
+'DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_0_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_2_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_3_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_10_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_20_13TeV_deltaZ_DiMuonC_DiMuonF',
+'DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_50_13TeV_deltaZ_DiMuonC_DiMuonF',
+]
 
+DarkSUSY_mH_125_mN1_10 = {
+    'DarkSUSY_mH_125_mN1_10_mGammaD_0p25' : DarkSUSY_mH_125_mN1_10_mGammaD_0p25,
+    'DarkSUSY_mH_125_mN1_10_mGammaD_0p3' :  DarkSUSY_mH_125_mN1_10_mGammaD_0p3,
+    'DarkSUSY_mH_125_mN1_10_mGammaD_0p4' :  DarkSUSY_mH_125_mN1_10_mGammaD_0p4,
+    'DarkSUSY_mH_125_mN1_10_mGammaD_0p7' :  DarkSUSY_mH_125_mN1_10_mGammaD_0p7,
+    'DarkSUSY_mH_125_mN1_10_mGammaD_1' :    DarkSUSY_mH_125_mN1_10_mGammaD_1,
+    'DarkSUSY_mH_125_mN1_10_mGammaD_1p5' :  DarkSUSY_mH_125_mN1_10_mGammaD_1p5,
+    'DarkSUSY_mH_125_mN1_10_mGammaD_2' :    DarkSUSY_mH_125_mN1_10_mGammaD_2,
+    'DarkSUSY_mH_125_mN1_10_mGammaD_5' :    DarkSUSY_mH_125_mN1_10_mGammaD_5,
+    'DarkSUSY_mH_125_mN1_10_mGammaD_8p5' :  DarkSUSY_mH_125_mN1_10_mGammaD_8p5,
+    }
 
-MyFile = TFile("HLT_deltaZ_DiMuonC_DiMuonF_2016.root");
+MyFile = TFile("deltaZ_DiMuonC_DiMuonF_2016.root");
 
-first = True
-for p in DarkSUSY_mH_125_mN1_10_mGammaD_0p25:
-    deltaZ_2016MonteCarlo[p] =  MyFile.Get(p)
-    if first:
-        deltaZ_2016MonteCarlo["DarkSUSY_mH_125_mN1_10_mGammaD_0p25"] = deltaZ_2016MonteCarlo[p]
-        first = False
-    else:
-        print "adding", p
-        deltaZ_2016MonteCarlo["DarkSUSY_mH_125_mN1_10_mGammaD_0p25"].Add(deltaZ_2016MonteCarlo[p])
+for p in DarkSUSY_mH_125_mN1_10:
+    print "Checking", p
+    first = True
+
+    for q in DarkSUSY_mH_125_mN1_10[p]:
+        print "\tChecking", q
+        deltaZ_2016MonteCarlo[q] = MyFile.Get(q)
+        
+        if first:
+            deltaZ_2016MonteCarlo[p] = deltaZ_2016MonteCarlo[q]
+            first = False
+        else:
+            deltaZ_2016MonteCarlo[p].Add(deltaZ_2016MonteCarlo[q])
+
+    print deltaZ_2016MonteCarlo[p], p[0]
+    makePlot((deltaZ_2016MonteCarlo[p], 
+              r"$\Delta z(\mu\mu_1,\mu\mu_2)$", DarkSUSY_mH_125_mN1_10[p][0]), format='pdf')
+
+#for p in DarkSUSY_mH_125_mN1_10_mGammaD_0p25:
+#    deltaZ_2016MonteCarlo[p] =  MyFile.Get(p)
 
 ## need ctau to make the deocde function work!
 # even though it is not used to make the plot
-makePlot((deltaZ_2016MonteCarlo["DarkSUSY_mH_125_mN1_10_mGammaD_0p25"], 
-          r"$\Delta Z(\mu\mu)$", "DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0"), format='pdf')
 
 MyFile.Close()
