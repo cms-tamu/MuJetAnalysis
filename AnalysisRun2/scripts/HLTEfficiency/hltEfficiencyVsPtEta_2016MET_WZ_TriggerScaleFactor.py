@@ -153,7 +153,7 @@ def efficiency_trigger(dirNames, triggerPaths):
                 #print s, "is available"
                 if 'PFMET' in s: 
                     isMETTriggered = True
-                    print "\t", s, "was MET triggered"
+                    #print "\t", s, "was MET triggered"
                 
             if not isMETTriggered:
                 continue

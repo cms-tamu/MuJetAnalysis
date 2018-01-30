@@ -162,6 +162,7 @@ patifyData = cms.Sequence(
     unpackedPatTrigger *
     patifyTrackerMuon * 
     patifyPFMuon
+    #makePatMETs
 )
 patifyMC = cms.Sequence(
     muonMatch * 

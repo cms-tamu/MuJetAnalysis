@@ -87,7 +87,8 @@ def efficiency_trigger(dirNames, triggerPaths):
     trig_leading_muon_pt = ROOT.TH1D("trig_leading_muon_pt","",40,10,110)
 
     print "Adding files to the chain"
-    addfilesMany(chain, dirNames, "out_ana")
+    dirNames = ['/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/']
+    addfilesMany(chain, dirNames, "out_ana.root")
                                    
     print "Loop over the chain"
     nEventsWith2MassInZPeak = 0
@@ -397,7 +398,7 @@ def efficiency_trigger(dirNames, triggerPaths):
     MyFile.Close();
 
 dirNames = [
-    '/fdata/hepx/store/user/dildick/DYJetsToLL_M-500to700_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_ZplusJets_ANA_v3/180129_222757/0000/'
+    '/fdata/hepx/store/user/dildick/DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_ZplusJets_ANA_v5/180130_055650/0000/'
 ]
 
 efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
