@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
-    analyzerDebug = cms.int32(0),
+    analyzerDebug = cms.int32(100),
     fillGenLevel = cms.bool(True),
 #    muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),
 #    muJets = cms.InputTag("TrackerMuJetProducer05"),

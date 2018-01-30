@@ -1821,13 +1821,19 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   for (int itrig = 0; itrig != ntrigs; ++itrig) {
     TString trigName = triggerNames.triggerName(itrig);
     std::string trigNameStr(trigName.Data());
-    if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), trigNameStr) != signalHltPaths_.end()) {
+    if(trRes->accept(itrig)){
       b_hltPaths.push_back(trigNameStr);
-      if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl;
-      b_isDiMuonHLTFired = true;
+      if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl; 
+
+      // check if this event was fired by the signal trigger!
+      for (const auto& p: signalHltPaths_){
+        if (trigNameStr.find(p) != std::string::npos) {
+	  if ( m_debug > 10 ) std::cout << trigNameStr << " signal trigger!" << std::endl;
+	  b_isDiMuonHLTFired = true;
+	}
+      }
     }
   }
-  
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on HLT" << std::endl;
 
   // Cut on dimuon masses - use fitted vertexes

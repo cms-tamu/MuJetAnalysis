@@ -95,6 +95,7 @@ def efficiency_trigger(dirNames, triggerPaths):
     nTotalEvents = 0
     nTotalEvents4Mu = 0
     nEventsPreSelected = 0
+    nEventsMETTriggered = 0
     nEventsSelected = 0
     nEventsTriggered = 0
 
@@ -123,7 +124,7 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             nTotalEvents += 1
 
-            if nTotalEvents%1000==0: print "Processing event ", nTotalEvents  
+            if nTotalEvents%1==0: print "Processing event ", nTotalEvents  
             tree.GetEntry(k)
 
             ## check for 4 reco muons 
@@ -141,6 +142,19 @@ def efficiency_trigger(dirNames, triggerPaths):
                 continue
 
             nEventsPreSelected += 1
+
+            isMETTriggered = False
+            for s in list(tree.hltPaths):
+                #print s, "is available"
+                if 'PFMET' in s: 
+                    isMETTriggered = True
+                    print "\t", s, "was MET triggered"
+                
+            if not isMETTriggered:
+                continue
+
+            nEventsMETTriggered += 1
+
         
             pt0 = tree.selMu0_pT
             pt1 = tree.selMu1_pT
@@ -357,6 +371,7 @@ def efficiency_trigger(dirNames, triggerPaths):
     print "n Total events analyzed", nTotalEvents
     print "nTotalEvents4Mu", nTotalEvents4Mu
     print "nEvents with 3 muons", nEventsPreSelected
+    print "nEvents triggered by PFMET", nEventsMETTriggered
     print "nEvents selected after all quality cuts ", nEventsSelected
     print "nEventsTriggered", nEventsTriggered
 
@@ -382,7 +397,7 @@ def efficiency_trigger(dirNames, triggerPaths):
     MyFile.Close();
 
 dirNames = [
-    '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v3/180112_055907/0000/'
+    '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v7/180123_053309/0000/'
 ]
 
 efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
