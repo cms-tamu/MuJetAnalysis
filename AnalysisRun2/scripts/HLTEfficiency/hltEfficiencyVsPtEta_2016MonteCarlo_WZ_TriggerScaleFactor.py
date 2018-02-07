@@ -70,8 +70,8 @@ def efficiency_trigger(dirNames, triggerPaths):
 
     print "Preparing histograms"
 
-    Invariant_Mass12 = ROOT.TH1D("Invariant_Mass12","",60,76,106)
-    Transverse_Mass = ROOT.TH1D("Transverse_Mass","",250,0,500)
+    Invariant_Mass12 = ROOT.TH1D("Invariant_Mass12","",32,83,99)
+    Transverse_Mass = ROOT.TH1D("Transverse_Mass","",25,0,100)
     Invariant_Mass123 = ROOT.TH1D("Invariant_Mass123","",25,50,250)
     PFMET = ROOT.TH1D("PFMET","",100,0,2500)
     WmupT = ROOT.TH1D("WmupT","",50,0,1000)
@@ -415,7 +415,7 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
     hist.x_label     = x_label# "Dimuon invariant mass"
     hist.y_label     = y_label
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_WZ_20181012/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_WZ_20181030/'
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary Simulation'  # ('Simulation')+'Internal' || 'Preliminary' 

@@ -87,18 +87,30 @@ def efficiency_trigger(dirNames, triggerPaths):
     trig_leading_muon_pt = ROOT.TH1D("trig_leading_muon_pt","",40,10,110)
 
     print "Adding files to the chain"
-    dirNames = ['/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/']
-    addfilesMany(chain, dirNames, "out_ana.root")
+    addfilesMany(chain, dirNames, "out_ana")
                                    
     print "Loop over the chain"
     nEventsWith2MassInZPeak = 0
 
-    nTotalEvents = 0
-    nTotalEvents4Mu = 0
-    nEventsPreSelected = 0
-    nEventsMETTriggered = 0
-    nEventsSelected = 0
-    nEventsTriggered = 0
+    ## counters
+    nEvents = [0] * 20
+    nEventsComments = [None] * 20
+    nEventsComments[0] = "all events"
+    nEventsComments[1] = " events with at least 4 muons"
+    nEventsComments[2] = " events with exactly 3 muons"
+    nEventsComments[3] = " events triggered by a PFMET trigger"
+    nEventsComments[4] = " events passing the -++ or --+ "
+    nEventsComments[5] = " events with 3 tight muons"
+    nEventsComments[6] = " events with 3 tight muons (dxy)"
+    nEventsComments[7] = " events with 3 tight muons (dxy, dz)"
+    nEventsComments[8] = " events with 3 tight muons (dxy, dz, PF ISO)"
+    nEventsComments[9] = " events with 3 good muon pairs"
+    nEventsComments[10] = " events with at least one good muon pair in the Z peak"
+    nEventsComments[11] = " events with pT cuts on the W/Z muons"
+    nEventsComments[12] = " events passing MET cut from W decay"
+    nEventsComments[13] = " events with additional pT cuts on W/Z bosons"
+    nEventsComments[14] = " events passing invariant mass cut"
+    nEventsComments[14] = " events passing signal trigger cut"
 
     for rootFile in chain.GetListOfFiles():
         
@@ -123,9 +135,9 @@ def efficiency_trigger(dirNames, triggerPaths):
         nTriggers = 0
         for k in range(0, tree.GetEntries()):
 
-            nTotalEvents += 1
+            nEvents[0] += 1
 
-            if nTotalEvents%1==0: print "Processing event ", nTotalEvents  
+            if nEvents[0]%1000==0: print "Processing event ", nEvents[0]  
             tree.GetEntry(k)
 
             ## check for 4 reco muons 
@@ -137,24 +149,24 @@ def efficiency_trigger(dirNames, triggerPaths):
             if tree.selMu3_pT != -100: nMu += 1
       
             if (nMu==4):
-                nTotalEvents4Mu += 1
+                nEvents[1] += 1
 
             if (nMu!=3):
                 continue
 
-            nEventsPreSelected += 1
+            nEvents[2] += 1
 
             isMETTriggered = False
             for s in list(tree.hltPaths):
-                print s, "is available"
+                #print s, "is available"
                 if 'PFMET' in s: 
                     isMETTriggered = True
-                    print "\t", s, "was MET triggered"
+                    #print "\t", s, "was MET triggered"
                 
             if not isMETTriggered:
                 continue
 
-            nEventsMETTriggered += 1
+            nEvents[3] += 1
 
             pt0 = tree.selMu0_pT
             pt1 = tree.selMu1_pT
@@ -188,6 +200,8 @@ def efficiency_trigger(dirNames, triggerPaths):
             ## other options --- and +++ are not allowed!
             if q0 == q1 == q2: continue
 
+            nEvents[4] += 1
+
             isMedium0 = tree.selMu0_isMedium
             isMedium1 = tree.selMu1_isMedium
             isMedium2 = tree.selMu2_isMedium
@@ -201,6 +215,8 @@ def efficiency_trigger(dirNames, triggerPaths):
             if not isTight1: continue
             if not isTight2: continue
 
+            nEvents[5] += 1
+
             dxy0 = tree.selMu0_dxy
             dxy1 = tree.selMu1_dxy
             dxy2 = tree.selMu2_dxy
@@ -210,6 +226,8 @@ def efficiency_trigger(dirNames, triggerPaths):
             if dxy1 > 0.01: continue
             if dxy2 > 0.01: continue
 
+            nEvents[6] += 1
+
             dz0 = tree.selMu0_dz
             dz1 = tree.selMu1_dz
             dz2 = tree.selMu2_dz
@@ -217,6 +235,8 @@ def efficiency_trigger(dirNames, triggerPaths):
             if dz0 > 0.1: continue
             if dz1 > 0.1: continue
             if dz2 > 0.1: continue
+
+            nEvents[7] += 1
 
             PFIso0 = tree.selMu0_PFIso
             PFIso1 = tree.selMu1_PFIso
@@ -226,6 +246,8 @@ def efficiency_trigger(dirNames, triggerPaths):
             if PFIso0 > 0.15: continue
             if PFIso1 > 0.15: continue
             if PFIso2 > 0.15: continue
+
+            nEvents[8] += 1
 
             pfMET = tree.pfMET
             pfMET_phi = tree.pfMET_phi
@@ -270,10 +292,14 @@ def efficiency_trigger(dirNames, triggerPaths):
             if q0 * q2 > 0 and invmass(mu0, mu2) < 4: continue
             if q1 * q2 > 0 and invmass(mu1, mu2) < 4: continue
 
+            nEvents[9] += 1
+
             nMassesInZPeak = int(isMassInZPeak(mass01)) + int(isMassInZPeak(mass02)) + int(isMassInZPeak(mass12))
 
             ## require at least one dimuon pair to be consistent with the Z pole mass 
             if nMassesInZPeak==0: continue
+
+            nEvents[10] += 1
 
             bestMass = bestMassInZPeak(mass01, mass12, mass02)
             
@@ -301,8 +327,12 @@ def efficiency_trigger(dirNames, triggerPaths):
             if Zmu1_pT<10: continue
             if Wmu_pT<10: continue
             
+            nEvents[11] += 1
+
             ## require 30 GeV MET from W decay
             if pfMET < 30: continue
+
+            nEvents[12] += 1
 
             ## require one of the Z boson muons to have at least 20 GeV pT
             if not (Zmu0_pT > 20 or Zmu1_pT > 20): continue
@@ -310,10 +340,14 @@ def efficiency_trigger(dirNames, triggerPaths):
             ## require the W boson muon to have at least 20 GeV pT
             if Wmu_pT < 20: continue
 
+            nEvents[13] += 1
+
             ## 3-lep inv mass
             invm3 = inv3mass(mu0, mu1, mu2)
             if invm3 < 100: continue
             
+            nEvents[14] += 1
+
             ## apply a quality criterium on the transverse mass cut
             Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(pfMET_phi))
             #print "Wmu_nu_deltaPhi", Wmu_nu_deltaPhi, Wmu_phi - pfMET_phi
@@ -324,7 +358,6 @@ def efficiency_trigger(dirNames, triggerPaths):
             #if transverseWbosonMass > 20: continue
 
             print "Event passes full selection"
-            nEventsSelected += 1
 
             Invariant_Mass12.Fill(bestMass)
             Transverse_Mass.Fill(transverseWbosonMass)
@@ -345,8 +378,8 @@ def efficiency_trigger(dirNames, triggerPaths):
                 if (verbose): print list(tree.hltPaths)
                 if any(trigger in s for s in list(tree.hltPaths)):
                     if (verbose): print trigger, "is available"
-                    nEventsTriggered += 1
                     isTriggered = True
+                    nEvents[15] += 1
 
             if isTriggered:
                 trig_leading_muon_eta.Fill(abs(tree.selMu0_eta))
@@ -368,13 +401,8 @@ def efficiency_trigger(dirNames, triggerPaths):
                 print "nEventsWith2MassInZPeak", nEventsWith2MassInZPeak
                 print 
 
-
-    print "n Total events analyzed", nTotalEvents
-    print "nTotalEvents4Mu", nTotalEvents4Mu
-    print "nEvents with 3 muons", nEventsPreSelected
-    print "nEvents triggered by PFMET", nEventsMETTriggered
-    print "nEvents selected after all quality cuts ", nEventsSelected
-    print "nEventsTriggered", nEventsTriggered
+    for number, explanation in zip(nEvents, nEventsComments):
+        print number, explanation
 
     ## save histogram in a root file
     MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_Zjetsto4L_13TeV.root","RECREATE");
@@ -398,7 +426,7 @@ def efficiency_trigger(dirNames, triggerPaths):
     MyFile.Close();
 
 dirNames = [
-    '/fdata/hepx/store/user/dildick/DYJetsToLL_M-100to200_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_ZplusJets_ANA_v5/180130_055650/0000/'
+    '/fdata/hepx/store/user/dildick/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/crab_ZplusJets_ANA_v2/180130_160659/0000/'
 ]
 
 efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])

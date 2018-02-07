@@ -169,7 +169,8 @@ patifyData = cms.Sequence(
     patTriggerEvent * 
     patifyTrackerMuon * 
     patifyPFMuon *
-    makePatMETs
+    makePatMETs *
+    makePatJets
     #patMETCorrectionsTask *
     #patMETs
     #patJetCorrections *

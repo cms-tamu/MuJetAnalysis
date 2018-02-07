@@ -54,6 +54,7 @@
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
 #include "CommonTools/Utils/interface/InvariantMass.h"
 #include "Math/GenVector/VectorUtil.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
 
 #include "TrackingTools/TrajectoryState/interface/FreeTrajectoryState.h"
 #include "TrackingTools/TrajectoryState/interface/TrajectoryStateOnSurface.h"
@@ -337,8 +338,8 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
-  edm::EDGetTokenT<reco::PFMETCollection> m_pfMET;
   edm::EDGetTokenT<pat::METCollection> m_patMET;
+  edm::EDGetTokenT<pat::JetCollection> m_patJet;
 
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
@@ -581,10 +582,12 @@ private:
   bool runPixelHitRecovery_;
   bool skimOutput_; //fill only events with 2 good dimuons
 
-  Float_t b_pfMET;
-  Float_t b_pfMET_phi;
+  // MET
   Float_t b_patMET;
   Float_t b_patMET_phi;
+
+  // BJETs
+  Int_t b_nBJet_20; // number of bjets with at least 20 GeV
 
   //PixelHitRecovery
 
@@ -853,8 +856,8 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
   m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
-  m_pfMET           = consumes<reco::PFMETCollection>(iConfig.getParameter<edm::InputTag>("pfMET"));
   m_patMET          = consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("patMET"));
+  m_patJet          = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("patJet"));
 
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
@@ -1622,26 +1625,29 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
 
   if ( m_debug > 10 ) std::cout << m_events << " Start RECO Level" << std::endl;
 
-  edm::Handle<reco::PFMETCollection> pfMETH;
-  iEvent.getByToken(m_pfMET, pfMETH);
-  const reco::PFMET& pfMET = pfMETH.product()->front(); 
-
   edm::Handle<pat::METCollection> patMETH;
   iEvent.getByToken(m_patMET, patMETH);
   const pat::MET& patMET = patMETH.product()->front(); 
 
-  b_pfMET = patMET.pt(); // muon ET fraction!
-  b_pfMET_phi = patMET.phi();
-  // std::cout << "b_pfMET " << b_pfMET << std::endl;
-  // std::cout << "b_pfMET_phi " << b_pfMET_phi << std::endl;
+  b_patMET = patMET.pt(); // muon ET fraction!
+  b_patMET_phi = patMET.phi();
 
-  // std::cout << "b_patMET_muon " << patMET.MuonEtFraction() * patMET.sumEt() << std::endl;
-  // std::cout << "b_patMET " << patMET.pt() << std::endl;
-  // std::cout << "b_patMET_phi " << patMET.phi() << std::endl;
+  edm::Handle<pat::JetCollection> patJetH;
+  iEvent.getByToken(m_patJet, patJetH);
+  const std::vector<pat::Jet>& patJets = *patJetH.product(); 
 
-  // std::cout << "b_patMET_genMET " << patMET.pt() << std::endl;
-  // std::cout << "b_patMET_genMET_muon " << patMET.genMET()->MuonEt() << std::endl;
-  // std::cout << "b_patMET_genMET_phi " << patMET.genMET()->phi() << std::endl;
+  /*
+   * https://twiki.cern.ch/twiki/bin/view/CMSPublic/BTV13TeVICHEP2016
+    CSVv2: Combined Secondary Vertex version 2 algorithm, based on secondary vertex and track-based lifetime informations, it is an updated version of the CSV algorithm used in Run 1 combining the variables with a neural network instead of a likelihood ratio and the secondary vertex information is obtained with the Inclusive Vertex Finder algorithm. The operating point values for the loose, medium and tight tagging criteria are set to 0.460, 0.800, 0.935, respectively.
+   */
+
+  for (auto iJet = patJets.begin();  iJet != patJets.end();  ++iJet) {
+    // number of tight b-jets with at least 20 GeV pT
+    if (iJet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags")>0.935 and iJet->pt()>20) {
+      std::cout << "B-jet with at least 20 GeV pt" << std::endl;
+      b_nBJet_20++;
+    }
+  }
 
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
@@ -3523,9 +3529,11 @@ CutFlowAnalyzer_AOD::beginJob() {
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);  
   m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
-  m_ttree->Branch("pfMET",&b_pfMET,"pfMET/F");
-  m_ttree->Branch("pfMET_phi",&b_pfMET_phi,"pfMET_phi/F");
+  m_ttree->Branch("patMET",&b_patMET,"patMET/F");
+  m_ttree->Branch("patMET_phi",&b_patMET_phi,"patMET_phi/F");
 
+  m_ttree->Branch("b_nBJet_20",&b_nBJet_20,"nBJet_20/I");
+  
   if(runPixelHitRecovery_){
     //pixelHitRecovery
     

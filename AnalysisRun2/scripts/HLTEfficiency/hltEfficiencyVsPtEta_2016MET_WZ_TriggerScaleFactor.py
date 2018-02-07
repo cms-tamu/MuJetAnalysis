@@ -73,9 +73,9 @@ def efficiency_trigger(dirNames, triggerPaths):
 
     print "Preparing histograms"
 
-    Invariant_Mass12 = ROOT.TH1D("Invariant_Mass12","",16,83,99)
-    Transverse_Mass = ROOT.TH1D("Transverse_Mass","",25,0,50)
-    Invariant_Mass123 = ROOT.TH1D("Invariant_Mass123","",25,50,150)
+    Invariant_Mass12 = ROOT.TH1D("Invariant_Mass12","",32,83,99)
+    Transverse_Mass = ROOT.TH1D("Transverse_Mass","",25,0,100)
+    Invariant_Mass123 = ROOT.TH1D("Invariant_Mass123","",25,50,250)
     PFMET = ROOT.TH1D("PFMET","",50,0,200)
 
     leading_muon_eta = ROOT.TH1D("leading_muon_eta","",6,0,2.4)
