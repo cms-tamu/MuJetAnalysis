@@ -16,7 +16,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_miniAODv2_v1')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.RECOtoPAT_cff")
-process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
+process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_10PercentDown_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.FilterSample3RecoMu_cfi")
 

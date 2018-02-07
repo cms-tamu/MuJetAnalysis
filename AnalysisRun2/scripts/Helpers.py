@@ -158,6 +158,7 @@ def decodeNMSSMFileName(fileName):
 
 #______________________________________________________________________________
 def decodeDarkSUSYFileNameMany(fileNames):
+  print "docoding many", fileNames
   return decodeDarkSUSYFileName(fileNames[0])
 
 

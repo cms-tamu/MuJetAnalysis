@@ -5,6 +5,7 @@
 <use   name="FWCore/ServiceRegistry"/>
 <use   name="FWCore/Utilities"/>
 <use   name="CommonTools/UtilAlgos"/>
+<use   name="CommonTools/Utils"/>
 <use   name="DataFormats/Candidate"/>
 <use   name="DataFormats/DetId"/>
 <use   name="DataFormats/HepMCCandidate"/>
@@ -25,5 +26,6 @@
 <use   name="PhysicsTools/RecoUtils"/>
 <use   name="RecoTracker/MeasurementDet"/>
 <use   name="RecoTracker/TransientTrackingRecHit"/>
+<use   name="Math/GenVector"/>
 <use   name="root"/>
 </library>

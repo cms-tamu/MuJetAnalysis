@@ -124,7 +124,7 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             nTotalEvents += 1
 
-            if nTotalEvents%1==0: print "Processing event ", nTotalEvents  
+            if nTotalEvents%1000==0: print "Processing event ", nTotalEvents  
             tree.GetEntry(k)
 
             ## check for 4 reco muons 
@@ -148,14 +148,13 @@ def efficiency_trigger(dirNames, triggerPaths):
                 #print s, "is available"
                 if 'PFMET' in s: 
                     isMETTriggered = True
-                    print "\t", s, "was MET triggered"
+                    #print "\t", s, "was MET triggered"
                 
             if not isMETTriggered:
                 continue
 
             nEventsMETTriggered += 1
 
-        
             pt0 = tree.selMu0_pT
             pt1 = tree.selMu1_pT
             pt2 = tree.selMu2_pT
@@ -323,6 +322,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             ## remove the contamination from W+jets in the sample!
             #if transverseWbosonMass > 20: continue
 
+            print "Event passes full selection"
             nEventsSelected += 1
 
             Invariant_Mass12.Fill(bestMass)
@@ -376,7 +376,7 @@ def efficiency_trigger(dirNames, triggerPaths):
     print "nEventsTriggered", nEventsTriggered
 
     ## save histogram in a root file
-    MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_WZ_13TeV.root","RECREATE");
+    MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_ZZto4L_13TeV.root","RECREATE");
 
     Invariant_Mass12.Write("Invariant_Mass12")
     Transverse_Mass.Write("Transverse_Mass")
@@ -397,7 +397,8 @@ def efficiency_trigger(dirNames, triggerPaths):
     MyFile.Close();
 
 dirNames = [
-    '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v7/180123_053309/0000/'
+    '/fdata/hepx/store/user/dildick/EWK_13TeV_CALCHEP_50K_batch1_GEN_SIM_v1_TAMU/crab_ZZTo4L_ANA_v4/180123_053149/0000/',
+    '/fdata/hepx/store/user/dildick/EWK_13TeV_CALCHEP_50K_batch2_GEN_SIM_v3_TAMU/crab_ZZTo4L_ANA_v4_PartTwo/180123_053222/0000/'
 ]
 
 efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
@@ -415,46 +416,46 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
     hist.x_label     = x_label# "Dimuon invariant mass"
     hist.y_label     = y_label
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_WZ_20181030/'
-    hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
+    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_ZZto4L_20180129/'
+    hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_ZZto4L" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary Simulation'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
     hist.lumi = '2016 MET B-H, 35.9'
     hist.plotLUMI = False
     hist.drawStatUncertainty = True    
-    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label=r'$WZ \rightarrow 3\mu\nu$')
+    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label=r'$ZZ \rightarrow 4\mu$')
     plot = hist.execute()
     hist.savefig()
 
-MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_WZ_13TeV.root")
+MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_ZZto4L_13TeV.root")
 
 Invariant_Mass12 = MyFile.Get("Invariant_Mass12")
 makePlot(Invariant_Mass12, "histogram", 
-         r"Dimuon invariant mass [GeV]", "Entries", "Z_peak_2016MonteCarlo_WZ", format='pdf')
+         r"Dimuon invariant mass [GeV]", "Entries", "Z_peak_2016MonteCarlo_ZZto4L", format='pdf')
 
 Invariant_Mass123 = MyFile.Get("Invariant_Mass123")
 makePlot(Invariant_Mass123, "histogram", 
-         r"Trimuon invariant mass [GeV]", "Entries", "Trimuon_invariant_mass_2016MonteCarlo_WZ", format='pdf')
+         r"Trimuon invariant mass [GeV]", "Entries", "Trimuon_invariant_mass_2016MonteCarlo_ZZto4L", format='pdf')
 
 Transverse_Mass = MyFile.Get("Transverse_Mass")
 makePlot(Transverse_Mass, "histogram", 
-         r"Transverse mass m_\mathrm{T} [GeV]", "Entries", "Transverse_mass_2016MonteCarlo_WZ", format='pdf')
+         r"Transverse mass m_\mathrm{T} [GeV]", "Entries", "Transverse_mass_2016MonteCarlo_ZZto4L", format='pdf')
 
 PFMET = MyFile.Get("PFMET")
 makePlot(PFMET, "histogram", 
-         r"PFMET [GeV]", "Entries", "PFMET_2016MonteCarlo_WZ", format='pdf')
+         r"PFMET [GeV]", "Entries", "PFMET_2016MonteCarlo_ZZto4L", format='pdf')
 
 eff_trig_leading_muon_pt = MyFile.Get("eff_trig_leading_muon_pt")
 makePlot(eff_trig_leading_muon_pt, "efficiency", 
-         r"Leading muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_leading_pt_2016MonteCarlo_WZ", format='pdf')
+         r"Leading muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_leading_pt_2016MonteCarlo_ZZto4L", format='pdf')
 
 eff_trig_leading_muon_eta = MyFile.Get("eff_trig_leading_muon_eta")
 makePlot(eff_trig_leading_muon_eta, "efficiency", 
-         r"Leading muon $\eta$", "Trigger efficiency", "Trigger_efficiency_leading_eta_2016MonteCarlo_WZ", format='pdf')
+         r"Leading muon $\eta$", "Trigger efficiency", "Trigger_efficiency_leading_eta_2016MonteCarlo_ZZto4L", format='pdf')
 
 eff_trig_leading_muon_phi = MyFile.Get("eff_trig_leading_muon_phi")
 makePlot(eff_trig_leading_muon_phi, "efficiency", 
-         r"Leading muon $\phi$", "Trigger efficiency", "Trigger_efficiency_leading_phi_2016MonteCarlo_WZ", format='pdf')
+         r"Leading muon $\phi$", "Trigger efficiency", "Trigger_efficiency_leading_phi_2016MonteCarlo_ZZto4L", format='pdf')
 
 MyFile.Close()
