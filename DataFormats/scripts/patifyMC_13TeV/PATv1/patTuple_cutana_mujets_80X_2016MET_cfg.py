@@ -21,16 +21,17 @@ process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_2016MET_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.FilterSample3RecoMu_cfi")
 
-process.source = cms.Source("PoolSource",
+process.source = cms.Source(
+    "PoolSource",
     fileNames = cms.untracked.vstring(
-#        "file:out_reco.root"
-#        'file:/fdata/hepx/store/user/dildick/Run2016B_MET_AOD_23Sep2016_v3/00A94E9A-0F99-E611-8F0F-0CC47A4D76B8.root'
+        #'file:/fdata/hepx/store/user/dildick/Run2016B_MET_AOD_23Sep2016_v3/00A94E9A-0F99-E611-8F0F-0CC47A4D76B8.root'
         'file:/fdata/hepx/store/user/dildick/MET/2016C/AOD/07Aug17/1CC7F855-2BAF-E711-B898-0CC47A4D766C.root'
     )
 )
 
-process.out = cms.OutputModule("PoolOutputModule",
-                               fileName = cms.untracked.string('patTuple.root')
+process.out = cms.OutputModule(
+    "PoolOutputModule",
+    fileName = cms.untracked.string('patTuple.root')
 )
 
 ### Add MuJet Dataformats
