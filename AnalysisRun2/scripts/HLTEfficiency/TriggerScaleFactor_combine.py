@@ -24,7 +24,7 @@ def makePlot(histogram1,
     hist.x_label     = x_label# "Dimuon invariant mass"
     hist.y_label     = y_label
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016Combined_WZ_20180207/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016Combined_WZ_20180208/'
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
@@ -49,7 +49,7 @@ Invariant_Mass12_WZ = MyFile1.Get("Invariant_Mass12")
 Invariant_Mass12_ZZ = MyFile2.Get("Invariant_Mass12")
 Invariant_Mass12_MET = MyFile3.Get("Invariant_Mass12")
 
-lumi = 35.9
+lumi = 35.9*0.99 #data processing penalty
 WZ_xsec = 575.4#fb
 ZZ_xsec = 55.884#fb
 WZ_events = 496684.
@@ -78,7 +78,7 @@ Invariant_Mass12_WZ.Draw()
 Invariant_Mass12_ZZ.Draw("same")
 Invariant_Mass12_MET.Draw("samep")
 
-c.SaveAs("trigger_efficiency_plots_2016Combined_WZ_20180207/Z_peak_2016MonteCarlo_WZ.pdf")
+c.SaveAs("trigger_efficiency_plots_2016Combined_WZ_20180208/Z_peak_2016MonteCarlo_WZ.pdf")
 #makePlot(Invariant_Mass12_WZ,
 #         Invariant_Mass12_ZZ,
  #        Invariant_Mass12_MET,

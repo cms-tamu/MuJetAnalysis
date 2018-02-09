@@ -1640,6 +1640,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
    * https://twiki.cern.ch/twiki/bin/view/CMSPublic/BTV13TeVICHEP2016
     CSVv2: Combined Secondary Vertex version 2 algorithm, based on secondary vertex and track-based lifetime informations, it is an updated version of the CSV algorithm used in Run 1 combining the variables with a neural network instead of a likelihood ratio and the secondary vertex information is obtained with the Inclusive Vertex Finder algorithm. The operating point values for the loose, medium and tight tagging criteria are set to 0.460, 0.800, 0.935, respectively.
    */
+  b_nBJet_20 = 0;
 
   for (auto iJet = patJets.begin();  iJet != patJets.end();  ++iJet) {
     // number of tight b-jets with at least 20 GeV pT

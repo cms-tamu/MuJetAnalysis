@@ -56,7 +56,7 @@ def inv3mass(m1, m2, m3):
     return m.sqrt(a+b+c+d+e+f)
 
 def isMassInZPeak(m):
-    return abs(m-mZ)<7
+    return abs(m-mZ)<15
 
 def bestMassInZPeak(m1, m2, m3):
     masses = [m1, m2, m3]
@@ -109,7 +109,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             if (verbose): print "File ", rootFile.GetTitle(), " does not exist"
             continue
 
-        if not 'out_ana_selected_MET_2016BH_20180112' in rootFile.GetTitle():
+        if not 'out_ana_selected_MET_2016BH_20180208' in rootFile.GetTitle():
             continue
 
         if (verbose): print "Loading directory cutFlowAnalyzerPXBL3PXFL2"
@@ -231,8 +231,8 @@ def efficiency_trigger(dirNames, triggerPaths):
             if PFIso1 > 0.15: continue
             if PFIso2 > 0.15: continue
 
-            pfMET = tree.pfMET
-            pfMET_phi = tree.pfMET_phi
+            patMET = tree.patMET
+            patMET_phi = tree.patMET_phi
 
             ## calculate the energies
             E0 = energy(mmu, px0, py0, pz0) 
@@ -303,7 +303,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             if Wmu_pT<10: continue
             
             ## require 30 GeV MET from W decay
-            if pfMET < 30: continue
+            if patMET < 30: continue
 
             ## require one of the Z boson muons to have at least 20 GeV pT
             if not (Zmu0_pT > 20 or Zmu1_pT > 20): continue
@@ -314,11 +314,15 @@ def efficiency_trigger(dirNames, triggerPaths):
             ## 3-lep inv mass
             invm3 = inv3mass(mu0, mu1, mu2)
             if invm3 < 100: continue
+
+            ## no b-jets with more than 20 GeV pT
+            nBJets_20 = tree.nBJet_20
+            print "nBJets_20", nBJets_20
             
             ## apply a quality criterium on the transverse mass cut
             Wmu_phi = normalizePhi(getPhi(Wmu))
-            Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(pfMET_phi))
-            transverseWbosonMass = m.sqrt(2*Wmu_pT*pfMET*(1-m.cos(Wmu_nu_deltaPhi)))
+            Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(patMET_phi))
+            transverseWbosonMass = m.sqrt(2*Wmu_pT*patMET*(1-m.cos(Wmu_nu_deltaPhi)))
             if (verbose):
                 print "transverseWbosonMass", transverseWbosonMass
             ## remove the contamination from W+jets in the sample!
@@ -329,7 +333,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             Invariant_Mass12.Fill(bestMass)
             Transverse_Mass.Fill(transverseWbosonMass)
             Invariant_Mass123.Fill(invm3)
-            PFMET.Fill(pfMET)
+            PFMET.Fill(patMET)
 
             leading_muon_eta.Fill(abs(tree.selMu0_eta))
             leading_muon_phi.Fill(tree.selMu0_phi)

@@ -145,7 +145,7 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             isMETTriggered = False
             for s in list(tree.hltPaths):
-                #print s, "is available"
+                print s, "is available"
                 if 'PFMET' in s: 
                     isMETTriggered = True
                     print "\t", s, "was MET triggered"
@@ -227,10 +227,10 @@ def efficiency_trigger(dirNames, triggerPaths):
             if PFIso1 > 0.15: continue
             if PFIso2 > 0.15: continue
 
-            pfMET = tree.pfMET
-            pfMET_phi = tree.pfMET_phi
-            #print "pfMET", pfMET
-            #print "pfMET_phi", pfMET_phi
+            patMET = tree.patMET
+            patMET_phi = tree.patMET_phi
+            print "patMET",    patMET
+            print "patMET_phi", patMET_phi
             
             ## calculate the energies
             E0 = energy(mmu, px0, py0, pz0) 
@@ -302,7 +302,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             if Wmu_pT<10: continue
             
             ## require 30 GeV MET from W decay
-            if pfMET < 30: continue
+            if patMET < 30: continue
 
             ## require one of the Z boson muons to have at least 20 GeV pT
             if not (Zmu0_pT > 20 or Zmu1_pT > 20): continue
@@ -313,11 +313,15 @@ def efficiency_trigger(dirNames, triggerPaths):
             ## 3-lep inv mass
             invm3 = inv3mass(mu0, mu1, mu2)
             if invm3 < 100: continue
+
+            ## no b-jets with more than 20 GeV pT
+            nBJets_20 = tree.nBJet_20
+            print "nBJets_20", nBJets_20
             
             ## apply a quality criterium on the transverse mass cut
-            Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(pfMET_phi))
-            #print "Wmu_nu_deltaPhi", Wmu_nu_deltaPhi, Wmu_phi - pfMET_phi
-            transverseWbosonMass = m.sqrt(2 * Wmu_pT * pfMET * (1-m.cos(Wmu_nu_deltaPhi)))
+            Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(patMET_phi))
+            #print "Wmu_nu_deltaPhi", Wmu_nu_deltaPhi, Wmu_phi - patMET_phi
+            transverseWbosonMass = m.sqrt(2 * Wmu_pT * patMET * (1-m.cos(Wmu_nu_deltaPhi)))
             if (verbose):
                 print "transverseWbosonMass", transverseWbosonMass
             ## remove the contamination from W+jets in the sample!
@@ -328,10 +332,10 @@ def efficiency_trigger(dirNames, triggerPaths):
             Invariant_Mass12.Fill(bestMass)
             Transverse_Mass.Fill(transverseWbosonMass)
             Invariant_Mass123.Fill(invm3)
-            PFMET.Fill(pfMET)
+            PFMET.Fill(patMET)
             WmupT.Fill(Wmu_pT)
             WmuPhi.Fill(Wmu_phi)
-            METPhi.Fill(pfMET_phi)
+            METPhi.Fill(patMET_phi)
             WmNuDeltaPhi.Fill(Wmu_nu_deltaPhi)
 
             leading_muon_eta.Fill(abs(tree.selMu0_eta))
@@ -397,7 +401,8 @@ def efficiency_trigger(dirNames, triggerPaths):
     MyFile.Close();
 
 dirNames = [
-    '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v7/180123_053309/0000/'
+    #'/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v7/180123_053309/0000/'
+    '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v9/180208_061027/0000/'
 ]
 
 efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
@@ -415,7 +420,7 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
     hist.x_label     = x_label# "Dimuon invariant mass"
     hist.y_label     = y_label
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_WZ_20181030/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_WZ_20180208/'
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary Simulation'  # ('Simulation')+'Internal' || 'Preliminary' 
