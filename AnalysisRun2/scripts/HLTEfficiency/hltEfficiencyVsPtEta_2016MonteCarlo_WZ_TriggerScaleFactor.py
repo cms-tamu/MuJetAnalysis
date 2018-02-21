@@ -124,7 +124,7 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             nTotalEvents += 1
 
-            if nTotalEvents%1==0: print "Processing event ", nTotalEvents  
+            if nTotalEvents%1000==0: print "Processing event ", nTotalEvents  
             tree.GetEntry(k)
 
             ## check for 4 reco muons 
@@ -145,10 +145,10 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             isMETTriggered = False
             for s in list(tree.hltPaths):
-                print s, "is available"
+                #print s, "is available"
                 if 'PFMET' in s: 
                     isMETTriggered = True
-                    print "\t", s, "was MET triggered"
+                    #print "\t", s, "was MET triggered"
                 
             if not isMETTriggered:
                 continue
@@ -229,8 +229,8 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             patMET = tree.patMET
             patMET_phi = tree.patMET_phi
-            print "patMET",    patMET
-            print "patMET_phi", patMET_phi
+            #print "patMET",    patMET
+            #print "patMET_phi", patMET_phi
             
             ## calculate the energies
             E0 = energy(mmu, px0, py0, pz0) 
@@ -316,7 +316,8 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             ## no b-jets with more than 20 GeV pT
             nBJets_20 = tree.nBJet_20
-            print "nBJets_20", nBJets_20
+            if nBJets_20 >=1: continue;
+            #print "nBJets_20", nBJets_20
             
             ## apply a quality criterium on the transverse mass cut
             Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(patMET_phi))
@@ -380,7 +381,7 @@ def efficiency_trigger(dirNames, triggerPaths):
     print "nEventsTriggered", nEventsTriggered
 
     ## save histogram in a root file
-    MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_WZ_13TeV.root","RECREATE");
+    MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_WZJets_13TeV.root","RECREATE");
 
     Invariant_Mass12.Write("Invariant_Mass12")
     Transverse_Mass.Write("Transverse_Mass")
@@ -402,7 +403,9 @@ def efficiency_trigger(dirNames, triggerPaths):
 
 dirNames = [
     #'/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v7/180123_053309/0000/'
-    '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v9/180208_061027/0000/'
+    #'/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v9/180208_061027/0000/'
+    '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v1/180216_034648/0000/',
+    '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v1/180216_034648/0001/'
 ]
 
 efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
@@ -420,7 +423,7 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
     hist.x_label     = x_label# "Dimuon invariant mass"
     hist.y_label     = y_label
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_WZ_20180208/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_WZJets_20180220/'
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary Simulation'  # ('Simulation')+'Internal' || 'Preliminary' 
@@ -432,7 +435,7 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
     plot = hist.execute()
     hist.savefig()
 
-MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_WZ_13TeV.root")
+MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_WZJets_13TeV.root")
 
 Invariant_Mass12 = MyFile.Get("Invariant_Mass12")
 makePlot(Invariant_Mass12, "histogram", 

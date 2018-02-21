@@ -316,6 +316,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             ## no b-jets with more than 20 GeV pT
             nBJets_20 = tree.nBJet_20
             print "nBJets_20", nBJets_20
+            #if nBJets_20 >=1: continue;
             
             ## apply a quality criterium on the transverse mass cut
             Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(patMET_phi))
