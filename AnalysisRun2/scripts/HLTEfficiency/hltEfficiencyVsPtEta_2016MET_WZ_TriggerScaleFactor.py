@@ -20,9 +20,7 @@ def getPT(m1):
     return m.sqrt(px*px + py*py)
 
 def getPhi(m1):
-    px = m1[1]
-    py = m1[2]
-    return m.atan(py/px)
+    return m1[4]
 
 def normalizePhi(result):
     while (result > M_PI):
@@ -240,6 +238,7 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             patMET = tree.patMET
             patMET_phi = tree.patMET_phi
+            print patMET, patMET_phi
 
             ## calculate the energies
             E0 = energy(mmu, px0, py0, pz0) 
@@ -252,9 +251,9 @@ def efficiency_trigger(dirNames, triggerPaths):
                 print E2, px2, py2, pz2, q2, phi2
 
             ## declare the four vectors
-            mu0 = [E0, px0, py0, pz0]
-            mu1 = [E1, px1, py1, pz1]
-            mu2 = [E2, px2, py2, pz2]
+            mu0 = [E0, px0, py0, pz0, phi0, eta0]
+            mu1 = [E1, px1, py1, pz1, phi1, eta1]
+            mu2 = [E2, px2, py2, pz2, phi2, eta2]
 
             numberOfMuonPairs = 0
             if q0 * q1 < 0: numberOfMuonPairs += 1
@@ -265,7 +264,7 @@ def efficiency_trigger(dirNames, triggerPaths):
                 print "numberOfMuonPairs", numberOfMuonPairs
 
             ## require 30 GeV MET from W decay
-            if patMET < 30: continue
+            if patMET < 100: continue
 
             ## 3-lep inv mass
             invm3 = inv3mass(mu0, mu1, mu2)
@@ -437,7 +436,7 @@ dirNames = [
     '/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/'
 ]
 
-#efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
+efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
 
 #exit(1)
 

@@ -301,7 +301,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             if Wmu_pT<10: continue
             
             ## require 30 GeV MET from W decay
-            if patMET < 30: continue
+            if patMET < 100: continue
 
             ## require one of the Z boson muons to have at least 20 GeV pT
             if not (Zmu0_pT > 20 or Zmu1_pT > 20): continue
@@ -316,7 +316,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             ## no b-jets with more than 20 GeV pT
             nBJets_20 = tree.nBJet_20
             print "nBJets_20", nBJets_20
-            #if nBJets_20 >=1: continue;
+            if nBJets_20 >=1: continue;
             
             ## apply a quality criterium on the transverse mass cut
             Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(patMET_phi))

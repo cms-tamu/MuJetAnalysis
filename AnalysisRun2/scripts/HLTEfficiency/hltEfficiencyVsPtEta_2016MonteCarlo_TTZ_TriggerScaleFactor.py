@@ -302,7 +302,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             if Wmu_pT<10: continue
             
             ## require 30 GeV MET from W decay
-            if patMET < 30: continue
+            if patMET < 100: continue
 
             ## require one of the Z boson muons to have at least 20 GeV pT
             if not (Zmu0_pT > 20 or Zmu1_pT > 20): continue

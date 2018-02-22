@@ -302,7 +302,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             if Wmu_pT<10: continue
             
             ## require 30 GeV MET from W decay
-            if patMET < 30: continue
+            if patMET < 100: continue
 
             ## require one of the Z boson muons to have at least 20 GeV pT
             if not (Zmu0_pT > 20 or Zmu1_pT > 20): continue
@@ -323,8 +323,8 @@ def efficiency_trigger(dirNames, triggerPaths):
             Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(patMET_phi))
             #print "Wmu_nu_deltaPhi", Wmu_nu_deltaPhi, Wmu_phi - patMET_phi
             transverseWbosonMass = m.sqrt(2 * Wmu_pT * patMET * (1-m.cos(Wmu_nu_deltaPhi)))
-            if (verbose):
-                print "transverseWbosonMass", transverseWbosonMass
+            #if (verbose):
+            #print "transverseWbosonMass", transverseWbosonMass
             ## remove the contamination from W+jets in the sample!
             #if transverseWbosonMass > 20: continue
 
@@ -403,9 +403,9 @@ def efficiency_trigger(dirNames, triggerPaths):
 
 dirNames = [
     #'/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v7/180123_053309/0000/'
-    #'/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v9/180208_061027/0000/'
-    '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v1/180216_034648/0000/',
-    '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v1/180216_034648/0001/'
+    '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v9/180208_061027/0000/'
+    #'/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v1/180216_034648/0000/',
+    #'/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v1/180216_034648/0001/'
 ]
 
 efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
