@@ -13,6 +13,7 @@ from Helpers import *
 ## mass of the muon in GeV
 mmu = 105.6583745 * 0.001
 mZ = 91.1876
+verbose = True
 
 def getPT(m1):
     px = m1[1]
@@ -110,9 +111,11 @@ for sample in dataFiles:
 
     chain = ROOT.TChain("Events")
 
+    
     print "Adding files to the chain"
     addfilesMany(chain, dataFiles[sample], "out_ana")
-
+    
+    nTotalEvents = 0
     for rootFile in chain.GetListOfFiles():
         
         ## loop on events in the ROOT file
@@ -123,9 +126,16 @@ for sample in dataFiles:
             if (verbose): print "File ", rootFile.GetTitle(), " does not exist"
             continue
 
-        if (verbose): print "Loading directory cutFlowAnalyzerPXBL3PXFL2"
-       
-        tree = myfile.Get("cutFlowAnalyzerPXBL3PXFL2/Events")
+        if sample == 'METData':
+
+            if not 'out_ana_selected_MET_2016BH_20180208' in rootFile.GetTitle():
+                continue
+            else: 
+                if (verbose): print "Loading tree Events"
+                tree = myfile.Get("Events")
+        else:                
+            if (verbose): print "Loading directory cutFlowAnalyzerPXBL3PXFL2"           
+            tree = myfile.Get("cutFlowAnalyzerPXBL3PXFL2/Events")
 
         if not tree: 
             if (verbose): print "Tree cutFlowAnalyzerPXBL3PXFL2/Events does not exist"
@@ -134,8 +144,12 @@ for sample in dataFiles:
         if (verbose): print "  Events  ", tree.GetEntries()
 
         nTriggers = 0
+        if nTotalEvents > 1000: 
+            break
+
         for k in range(0, tree.GetEntries()):
             nTotalEvents += 1
 
             if nTotalEvents%1000==0: print "Processing event ", nTotalEvents  
             tree.GetEntry(k)
+            
