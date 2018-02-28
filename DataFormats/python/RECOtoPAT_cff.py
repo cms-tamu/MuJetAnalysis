@@ -30,7 +30,7 @@ patMuons = patMuons.clone(
     embedTcMETMuonCorrs = cms.bool(False),
 )
 
-## MET
+## JET
 patJets.addGenPartonMatch   = cms.bool(False)
 patJets.embedGenPartonMatch = cms.bool(False)
 patJets.addGenJetMatch      = cms.bool(False)
@@ -161,6 +161,16 @@ patifyPFMuon = cms.Sequence(
     cleanPFMuonTriggerMatchHLTTrkMu17DoubleTrkMu8 *
     cleanPatPFMuonsTriggerMatch
 )
+
+patMETsData = patMETs.clone(
+    addGenMET = cms.bool(False)
+)
+
+makePatMETsData = cms.Sequence(
+    patMETCorrections *
+    patMETsData
+)
+
 patifyData = cms.Sequence(
     pfParticleSelectionForIsoSequence *
     muonPFIsolationPATSequence *
@@ -169,18 +179,16 @@ patifyData = cms.Sequence(
     patTriggerEvent * 
     patifyTrackerMuon * 
     patifyPFMuon *
-    makePatMETs *
-    makePatJets
-    #patMETCorrectionsTask *
-    #patMETs
-    #patJetCorrections *
-    #patJetCharge *
-    #patJets
+    makePatMETsData *
+    patJetCorrections *
+    patJetCharge *
+    patJets
 )
 
 patifyMC = cms.Sequence(
     muonMatch * 
-    patifyData
+    patifyData *
+    makePatMETs
 )
 
 patDefaultSequence = cms.Sequence()
