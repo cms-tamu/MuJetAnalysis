@@ -2131,19 +2131,29 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   edm::Handle<pat::TriggerEvent> triggerEvent;
   iEvent.getByToken(m_triggerEvent, triggerEvent);
 
+  
+  edm::Handle<edm::TriggerResults> TrResults;
+  iEvent.getByToken( m_trigRes, TrResults);
+  const TriggerResults *trRes = TrResults.product();
+  edm::TriggerNames const& triggerNames = iEvent.triggerNames(*trRes);
+  for (unsigned int itrig = 0; itrig != triggerNames.size(); ++itrig) { 
+    const TString& trigName = triggerNames.triggerName(itrig);
+    const std::string& trigNameStr(trigName.Data());
+    if (trRes->accept(triggerNames.triggerIndex(trigNameStr)))
+      std::cout << "Trigger name " << trigNameStr << " accepted!" << std::endl;
+  }
+
   // link to all trigger paths in this triggerEvent
   auto triggerPaths = triggerEvent->paths();
   for (const auto& p : *triggerPaths) {
-    if ( m_debug > 10 ) std::cout << p.name();;
+    // if ( m_debug > 10 ) std::cout << p.name();;
     if (p.wasAccept()) {
       b_hltPaths.push_back(p.name());
       if ( m_debug > 10 ) std::cout << "Trigger path accept: " <<  p.name() << std::endl;
-      if(std::find(signalHltPaths_.begin(), signalHltPaths_.end(), p.name()) != signalHltPaths_.end()) {
+      if(std::find(signalHltPaths_.begin(), 
+		   signalHltPaths_.end(), p.name()) != signalHltPaths_.end()) {
 	b_isDiMuonHLTFired = true;
       }
-    }
-    else {
-      if ( m_debug > 10 ) std::cout << std::endl;
     }
   }
   

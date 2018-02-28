@@ -69,6 +69,7 @@ def bestMassInZPeak(m1, m2):
     return masses[index]
 
 dataFiles = {}
+"""
 dataFiles['WZTo3LNu'] = [
     '/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v10/180227_231545/0000/'
     #    '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v1/180216_034648/0000/',
@@ -84,6 +85,7 @@ dataFiles['TTWJetsToLNu'] = [
 dataFiles['TTZJetsToLNu'] = [
     '/fdata/hepx/store/user/dildick/TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8/crab_TTbarZ_ANA_v2/180221_004015/0000/'
 ]
+"""
 dataFiles['METData'] = [
     '/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/'
 ]
@@ -93,42 +95,42 @@ histograms = {}
 for sample in dataFiles:
 
     ## register histograms
-    histograms[sample + '_mu_pT0'] = ROOT.TH1D(sample + "_mu_pT0","",150,0,300)
-    histograms[sample + '_mu_pT1'] = ROOT.TH1D(sample + "_mu_pT1","",150,0,300)
-    histograms[sample + '_mu_pT2'] = ROOT.TH1D(sample + "_mu_pT2","",150,0,300)
-    
-    histograms[sample + '_mu_eta0'] = ROOT.TH1D(sample + "_mu_eta0","",25,-2.5,2.5)
-    histograms[sample + '_mu_eta1'] = ROOT.TH1D(sample + "_mu_eta1","",25,-2.5,2.5)
-    histograms[sample + '_mu_eta2'] = ROOT.TH1D(sample + "_mu_eta2","",25,-2.5,2.5)
-    
-    histograms[sample + '_mu_phi0'] = ROOT.TH1D(sample + "_mu_phi0","",16,-3.2,3.2)
-    histograms[sample + '_mu_phi1'] = ROOT.TH1D(sample + "_mu_phi1","",16,-3.2,3.2)
-    histograms[sample + '_mu_phi2'] = ROOT.TH1D(sample + "_mu_phi2","",16,-3.2,3.2)
-    
-    histograms[sample + '_HLT_mu_pT0'] = ROOT.TH1D(sample + "_HLT_mu_pT0","",150,0,300)
-    histograms[sample + '_HLT_mu_pT1'] = ROOT.TH1D(sample + "_HLT_mu_pT1","",150,0,300)
-    histograms[sample + '_HLT_mu_pT2'] = ROOT.TH1D(sample + "_HLT_mu_pT2","",150,0,300)
-    
-    histograms[sample + '_HLT_mu_eta0'] = ROOT.TH1D(sample + "_HLT_mu_eta0","",25,-2.5,2.5)
-    histograms[sample + '_HLT_mu_eta1'] = ROOT.TH1D(sample + "_HLT_mu_eta1","",25,-2.5,2.5)
-    histograms[sample + '_HLT_mu_eta2'] = ROOT.TH1D(sample + "_HLT_mu_eta2","",25,-2.5,2.5)
-    
-    histograms[sample + '_HLT_mu_phi0'] = ROOT.TH1D(sample + "_HLT_mu_phi0","",16,-3.2,3.2)
-    histograms[sample + '_HLT_mu_phi1'] = ROOT.TH1D(sample + "_HLT_mu_phi1","",16,-3.2,3.2)
-    histograms[sample + '_HLT_mu_phi2'] = ROOT.TH1D(sample + "_HLT_mu_phi2","",16,-3.2,3.2)
-    
-    histograms[sample + '_Mass12_OS'] = ROOT.TH1D(sample + "_Mass12_OS","",32,83,99)
-    histograms[sample + '_Mass12_SS'] = ROOT.TH1D(sample + "_Mass12_SS","",32,83,99)
-    histograms[sample + '_mT'] = ROOT.TH1D(sample + "_mT","",25,0,100)
-    histograms[sample + '_m123'] = ROOT.TH1D(sample + "_m123","",25,50,250)
-    
-    histograms[sample + '_WmupT'] = ROOT.TH1D(sample + "_WmupT","",50,0,1000)
-    histograms[sample + '_WmuPhi'] = ROOT.TH1D(sample + "_WmuPhi","",80,-4,4)
-    
-    histograms[sample + '_WmNuDeltaPhi'] = ROOT.TH1D(sample + "_WmNuDeltaPhi","",80,-4,4)
-    histograms[sample + '_MET'] = ROOT.TH1D(sample + "_PFMET","",100,0,2500)
-    histograms[sample + '_METPhi'] = ROOT.TH1D(sample + "_METPhi","",80,-4,4)
-    
+    for SS in ['SS','OS']:
+        histograms[sample + "_" + p + "_mu_pT0"] = ROOT.TH1D(sample + "_" + p + "_mu_pT0","",150,0,300)
+        histograms[sample + "_" + p + "_mu_pT1"] = ROOT.TH1D(sample + "_" + p + "_mu_pT1","",150,0,300)
+        histograms[sample + "_" + p + "_mu_pT2"] = ROOT.TH1D(sample + "_" + p + "_mu_pT2","",150,0,300)
+
+        histograms[sample + "_" + p + "_mu_eta0"] = ROOT.TH1D(sample + "_" + p + "_mu_eta0","",25,-2.5,2.5)
+        histograms[sample + "_" + p + "_mu_eta1"] = ROOT.TH1D(sample + "_" + p + "_mu_eta1","",25,-2.5,2.5)
+        histograms[sample + "_" + p + "_mu_eta2"] = ROOT.TH1D(sample + "_" + p + "_mu_eta2","",25,-2.5,2.5)
+        
+        histograms[sample + "_" + p + "_mu_phi0"] = ROOT.TH1D(sample + "_" + p + "_mu_phi0","",16,-3.2,3.2)
+        histograms[sample + "_" + p + "_mu_phi1"] = ROOT.TH1D(sample + "_" + p + "_mu_phi1","",16,-3.2,3.2)
+        histograms[sample + "_" + p + "_mu_phi2"] = ROOT.TH1D(sample + "_" + p + "_mu_phi2","",16,-3.2,3.2)
+
+        histograms[sample + "_" + p + "_HLT_mu_pT0"] = ROOT.TH1D(sample + "_" + p + "_HLT_mu_pT0","",150,0,300)
+        histograms[sample + "_" + p + "_HLT_mu_pT1"] = ROOT.TH1D(sample + "_" + p + "_HLT_mu_pT1","",150,0,300)
+        histograms[sample + "_" + p + "_HLT_mu_pT2"] = ROOT.TH1D(sample + "_" + p + "_HLT_mu_pT2","",150,0,300)
+        
+        histograms[sample + "_" + p + "_HLT_mu_eta0"] = ROOT.TH1D(sample + "_" + p + "_HLT_mu_eta0","",25,-2.5,2.5)
+        histograms[sample + "_" + p + "_HLT_mu_eta1"] = ROOT.TH1D(sample + "_" + p + "_HLT_mu_eta1","",25,-2.5,2.5)
+        histograms[sample + "_" + p + "_HLT_mu_eta2"] = ROOT.TH1D(sample + "_" + p + "_HLT_mu_eta2","",25,-2.5,2.5)
+        
+        histograms[sample + "_" + p + "_HLT_mu_phi0"] = ROOT.TH1D(sample + "_" + p + "_HLT_mu_phi0","",16,-3.2,3.2)
+        histograms[sample + "_" + p + "_HLT_mu_phi1"] = ROOT.TH1D(sample + "_" + p + "_HLT_mu_phi1","",16,-3.2,3.2)
+        histograms[sample + "_" + p + "_HLT_mu_phi2"] = ROOT.TH1D(sample + "_" + p + "_HLT_mu_phi2","",16,-3.2,3.2)
+        
+        histograms[sample + "_" + p + "_Mass12"] = ROOT.TH1D(sample + "_" + p + "_Mass12","",32,83,99)
+        histograms[sample + "_" + p + "_mT"] = ROOT.TH1D(sample + "_" + p + "_mT","",25,0,100)
+        histograms[sample + "_" + p + "_m123"] = ROOT.TH1D(sample + "_" + p + "_m123","",25,50,250)
+        
+        histograms[sample + "_" + p + "_WmupT"] = ROOT.TH1D(sample + "_" + p + "_WmupT","",50,0,1000)
+        histograms[sample + "_" + p + "_WmuPhi"] = ROOT.TH1D(sample + "_" + p + "_WmuPhi","",80,-4,4)
+        
+        histograms[sample + "_" + p + "_WmNuDeltaPhi"] = ROOT.TH1D(sample + "_" + p + "_WmNuDeltaPhi","",80,-4,4)
+        histograms[sample + "_" + p + "_MET"] = ROOT.TH1D(sample + "_" + p + "_PFMET","",100,0,2500)
+        histograms[sample + "_" + p + "_METPhi"] = ROOT.TH1D(sample + "_" + p + "_METPhi","",80,-4,4)
+        
 
     print "Running on sample", sample
     chain = ROOT.TChain("Events")
@@ -255,6 +257,12 @@ for sample in dataFiles:
             q1 = tree.selMu1_q
             q2 = tree.selMu2_q
             
+            ## case 1: opposite sign muons
+            
+            
+            ## case 2: same sign muons
+            
+
             ## two muons should have same charge, one muon should have opposite charge (-++, --+)
             ## other options --- and +++ are not allowed!
             if q0 == q1 == q2: continue
@@ -463,8 +471,7 @@ for sample in dataFiles:
             histograms[sample + '_mu_phi1'].Fill(phi1)
             histograms[sample + '_mu_phi2'].Fill(phi2)
 
-            histograms[sample + '_Mass12_OS'].Fill(OS_dimuon_mass)
-            histograms[sample + '_Mass12_SS'].Fill(SS_dimuon_mass)
+            histograms[sample + '_Mass12'].Fill(OS_dimuon_mass)
             histograms[sample + '_mT'].Fill(transverseWbosonMass)
             histograms[sample + '_m123'].Fill(invm3)
             
@@ -499,7 +506,7 @@ for sample in dataFiles:
                 histograms[sample + '_HLT_mu_phi2'].Fill(phi2)
 
     ## save histogram in a root file
-    MyFile = TFile("HLT_Z_peak_combined_dataVsMC_MET_WZ_ZZ_ttZ_ttW_13TeV.root","RECREATE");
+    MyFile = TFile("HLT_Z_peak_combined_dataVsMC_MET_WZ_ZZ_ttZ_ttW_13TeV.root","UPDATE");
 
     histograms[sample + '_Eff_HLT_mu_pT0'] = TEfficiency(histograms[sample + '_HLT_mu_pT0'], histograms[sample + '_mu_pT0'])
     histograms[sample + '_Eff_HLT_mu_pT1'] = TEfficiency(histograms[sample + '_HLT_mu_pT1'], histograms[sample + '_mu_pT1'])
