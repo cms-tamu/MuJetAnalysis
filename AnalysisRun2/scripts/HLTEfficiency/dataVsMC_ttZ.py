@@ -69,21 +69,56 @@ def bestMassInZPeak(m1, m2):
     index = massdiffs.index(min(massdiffs))
     return masses[index]
 
+MET_Triger_Patterns = [
+    'HLT_PFHT300_PFMET100',
+    'HLT_PFHT300_PFMET110',
+    'HLT_PFMET120_BTagCSV_p067',
+    'HLT_PFMETTypeOne190_HBHE_BeamHaloCleaned',
+    'HLT_PFMET90_PFMHT90_IDTight',
+    'HLT_PFMET100_PFMHT100_IDTight',
+    'HLT_PFMET100_PFMHT100_IDTight_BeamHaloCleaned'
+    'HLT_PFMET110_PFMHT110_IDTight',
+    'HLT_PFMET120_PFMHT120_IDTight',
+    'HLT_CaloMHTNoPU90_PFMET90_PFMHT90_IDTight_BTagCSV_p067',
+    'HLT_CaloMHTNoPU90_PFMET90_PFMHT90_IDTight',
+    'HLT_PFMETNoMu90_PFMHTNoMu90_IDTight',
+    'HLT_PFMETNoMu100_PFMHTNoMu100_IDTight',
+    'HLT_PFMETNoMu110_PFMHTNoMu110_IDTight',
+    'HLT_PFMETNoMu120_PFMHTNoMu120_IDTight',
+    'HLT_MonoCentralPFJet80_PFMETNoMu90_PFMHTNoMu90_IDTight',
+    'HLT_MonoCentralPFJet80_PFMETNoMu100_PFMHTNoMu100_IDTight',
+    'HLT_MonoCentralPFJet80_PFMETNoMu110_PFMHTNoMu110_IDTight',
+    'HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight',
+    'HLT_DiPFJet40_DEta3p5_MJJ600_PFMETNoMu140',
+    'HLT_DiPFJet40_DEta3p5_MJJ600_PFMETNoMu80',
+    'HLT_PFMET170_NotCleaned',
+    'HLT_PFMET170_NoiseCleaned',
+    'HLT_PFMET170_HBHECleaned',
+    'HLT_PFMET170_JetIdCleaned',
+    'HLT_PFMET170_BeamHaloCleaned',
+    'HLT_PFMET170_HBHE_BeamHaloCleaned',
+    'HLT_PFMET300',
+    'HLT_PFMET400',
+    ]
+
+
 datasets = ['WZTo3LNu', 'ZZTo4Nu','TTWJetsToLNu', 'TTZJetsToLNu', 'METData']
 
 dataFiles = {}
+"""
 dataFiles['WZTo3LNu'] = [
     #'/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v10/180227_231545/0000/'
     '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v2/180227_231243/0000/',
     '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v2/180227_231243/0001/'
 ]
-"""
 dataFiles['TTWJetsToLNu'] = [
     '/fdata/hepx/store/user/dildick/TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8/crab_TTbarW_ANA_v1/180216_032728/0000/'
 ]
+"""
 dataFiles['TTZJetsToLNu'] = [
     '/fdata/hepx/store/user/dildick/TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8/crab_TTbarZ_ANA_v2/180221_004015/0000/'
 ]
+"""
 dataFiles['ZZTo4Nu'] = [
     '/fdata/hepx/store/user/dildick/EWK_13TeV_CALCHEP_50K_batch1_GEN_SIM_v1_TAMU/crab_ZZTo4L_ANA_v6/180208_060822/0000/',
     '/fdata/hepx/store/user/dildick/EWK_13TeV_CALCHEP_50K_batch2_GEN_SIM_v3_TAMU/crab_ZZTo4L_ANA_v6_PartTwo/180208_060940/0000/'
@@ -165,9 +200,12 @@ for sample in dataFiles:
 
     print "Making subtree"
     testFile = TFile(chain.GetListOfFiles()[0].GetTitle())
-    newfile = TFile("/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v2/180227_231243/" + 
-                    sample + "_small_1100k.root","recreate");
-    newtree = testFile.Get("cutFlowAnalyzerPXBL3PXFL2/Events").CloneTree(0);
+    oldTree = testFile.Get("cutFlowAnalyzerPXBL3PXFL2/Events")
+
+    newfile = TFile("/fdata/hepx/store/user/dildick/TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8/crab_TTbarZ_ANA_v2/180221_004015/" + 
+                    sample + "_small_200k.root","recreate");
+    newfile.cd()
+    newtree = oldTree.CloneTree(0);
     
     nTotalEvents = 0
     nTotalEvents4Mu = 0
@@ -204,16 +242,16 @@ for sample in dataFiles:
         if (verbose): print "  Events  ", tree.GetEntries()
 
         nTriggers = 0
-        if nTotalEvents > 1100000: 
+        if nTotalEvents > 1000: 
             break
 
         for k in range(0, tree.GetEntries()):
             nTotalEvents += 1
 
-            if nTotalEvents < 1000000: 
-                continue
+            #if nTotalEvents > 1200: 
+            #    continue
 
-            if nTotalEvents%10000==0: print "Processing event ", nTotalEvents  
+            if nTotalEvents%100==0: print "Processing event ", nTotalEvents  
             tree.GetEntry(k)
             
                         ## check for 4 reco muons 
@@ -229,38 +267,6 @@ for sample in dataFiles:
 
             if (nMu!=3):
                 continue
-
-            MET_Triger_Patterns = [
-                'HLT_PFHT300_PFMET100',
-                'HLT_PFHT300_PFMET110',
-                'HLT_PFMET120_BTagCSV_p067',
-                'HLT_PFMETTypeOne190_HBHE_BeamHaloCleaned',
-                'HLT_PFMET90_PFMHT90_IDTight',
-                'HLT_PFMET100_PFMHT100_IDTight',
-                'HLT_PFMET100_PFMHT100_IDTight_BeamHaloCleaned'
-                'HLT_PFMET110_PFMHT110_IDTight',
-                'HLT_PFMET120_PFMHT120_IDTight',
-                'HLT_CaloMHTNoPU90_PFMET90_PFMHT90_IDTight_BTagCSV_p067',
-                'HLT_CaloMHTNoPU90_PFMET90_PFMHT90_IDTight',
-                'HLT_PFMETNoMu90_PFMHTNoMu90_IDTight',
-                'HLT_PFMETNoMu100_PFMHTNoMu100_IDTight',
-                'HLT_PFMETNoMu110_PFMHTNoMu110_IDTight',
-                'HLT_PFMETNoMu120_PFMHTNoMu120_IDTight',
-                'HLT_MonoCentralPFJet80_PFMETNoMu90_PFMHTNoMu90_IDTight',
-                'HLT_MonoCentralPFJet80_PFMETNoMu100_PFMHTNoMu100_IDTight',
-                'HLT_MonoCentralPFJet80_PFMETNoMu110_PFMHTNoMu110_IDTight',
-                'HLT_MonoCentralPFJet80_PFMETNoMu120_PFMHTNoMu120_IDTight',
-                'HLT_DiPFJet40_DEta3p5_MJJ600_PFMETNoMu140',
-                'HLT_DiPFJet40_DEta3p5_MJJ600_PFMETNoMu80',
-                'HLT_PFMET170_NotCleaned',
-                'HLT_PFMET170_NoiseCleaned',
-                'HLT_PFMET170_HBHECleaned',
-                'HLT_PFMET170_JetIdCleaned',
-                'HLT_PFMET170_BeamHaloCleaned',
-                'HLT_PFMET170_HBHE_BeamHaloCleaned',
-                'HLT_PFMET300',
-                'HLT_PFMET400',
-                ]
 
             if sample is not 'METData':
                 isMETTriggered = False
@@ -598,9 +604,13 @@ for sample in dataFiles:
                 histograms[sample + '_HLT_mu_phi1'].Fill(phi1)
                 histograms[sample + '_HLT_mu_phi2'].Fill(phi2)
 
-    newtree.Print();
-    newtree.AutoSave();
+    #newtree.Print();
+    print "Write to file"
+    newfile.Write()
+    newfile.Save()
+    newfile.Close()
     #delete newfile;
+    exit(1)
 
     ## save histogram in a root file
     MyFile = TFile(sample + "_kinematics_13TeV.root","RECREATE");
