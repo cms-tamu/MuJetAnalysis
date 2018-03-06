@@ -72,12 +72,12 @@ def bestMassInZPeak(m1, m2):
 datasets = ['WZTo3LNu', 'ZZTo4Nu','TTWJetsToLNu', 'TTZJetsToLNu', 'METData']
 
 dataFiles = {}
+"""
 dataFiles['WZTo3LNu'] = [
     #'/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v10/180227_231545/0000/'
     '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v2/180227_231243/0000/',
     '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v2/180227_231243/0001/'
 ]
-"""
 dataFiles['TTWJetsToLNu'] = [
     '/fdata/hepx/store/user/dildick/TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8/crab_TTbarW_ANA_v1/180216_032728/0000/'
 ]
@@ -649,7 +649,7 @@ def makePlot(histogram1,
     hist.x_label     = x_label# "Dimuon invariant mass"
     hist.y_label     = y_label
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016Combined_WZ_20180301/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016Combined_WZ_20180305/'
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
@@ -671,11 +671,11 @@ def makePlot(histogram1,
     plot = hist.execute()
     hist.savefig()
 
-MyFile0 = TFile("WZTo3LNu_kinematics_13TeV.root","READ")
-MyFile1 = TFile("ZZTo4Nu_kinematics_13TeV.root","READ")
+MyFile0 = TFile("WZTo3LNu_kinematics_13TeV.lpc.root","READ")
+MyFile1 = TFile("ZZTo4Nu_kinematics_13TeV.lpc.root","READ")
 MyFile2 = TFile("TTWJetsToLNu_kinematics_13TeV.root","READ")
-MyFile3 = TFile("TTZJetsToLNu_kinematics_13TeV.root","READ")
-MyFile4 = TFile("METData_kinematics_13TeV.root","READ")
+MyFile3 = TFile("TTZJetsToLNu_kinematics_13TeV.lpc.root","READ")
+MyFile4 = TFile("METData_kinematics_13TeV.lpc.root","READ")
 
 lumi = 35.9 #data processing penalty
 
@@ -743,7 +743,7 @@ mylist = ['mu_pT0',
           "METPhi"]
 
 for histo in mylist:
-    for SS in ['OS']:
+    for SS in ['OS','SS']:
 
         print SS + '_' + histo
         ## get each plot from file
@@ -753,17 +753,17 @@ for histo in mylist:
         h3 = MyFile3.Get(datasets[3] + '_' + SS + '_' + histo)
         h4 = MyFile4.Get(datasets[4] + '_' + SS + '_' + histo)
 
-        print h0.GetMinimum(), h0.GetMaximum()
-        print h1.GetMinimum(), h1.GetMaximum()
-        print h2.GetMinimum(), h2.GetMaximum()
-        print h3.GetMinimum(), h3.GetMaximum()
-        print h4.GetMinimum(), h4.GetMaximum()
+        #print h0.GetMinimum(), h0.GetMaximum()
+        #print h1.GetMinimum(), h1.GetMaximum()
+        #print h2.GetMinimum(), h2.GetMaximum()
+        #print h3.GetMinimum(), h3.GetMaximum()
+        #print h4.GetMinimum(), h4.GetMaximum()
 
-        print type(h0)
-        print type(h1)
-        print type(h2)
-        print type(h3)
-        print type(h4)
+        #print type(h0)
+        #print type(h1)
+        #print type(h2)
+        #print type(h3)
+        #print type(h4)
 
         ## scale each histo
         scaleWZ(h0)
@@ -774,7 +774,7 @@ for histo in mylist:
 
         print h0.GetMinimum(), h0.GetMaximum()
 
-        makePlot(h0, h1, h2, h3, h4, r"Plot", "Entries", "Combine_" + histo, format='pdf')
+        makePlot(h0, h1, h2, h3, h4, r"Plot", "Entries", "Combine_" + SS + '_' + histo, format='pdf')
         
 MyFile0.Close()
 MyFile2.Close()
