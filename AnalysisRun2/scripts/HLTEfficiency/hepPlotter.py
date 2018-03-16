@@ -89,8 +89,8 @@ class HepPlotter(object):
         self.bin_yields = False       # print bin yields inside histogram
         self.bin_yields_color = None  # array of text colors for each bin
         self.drawEffDist    = False    # draw the physics distribution for efficiency (jet_pt for jet trigger)
-        self.x_label        = 'x'
-        self.y_label        = 'y'
+        self.x_label        = ''
+        self.y_label        = ''
         self.y_ratio_label  = 'y ratio'
         self.extra_text     = PlotText()
         self.minor_ticks    = True

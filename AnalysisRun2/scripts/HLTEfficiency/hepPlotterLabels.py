@@ -148,8 +148,8 @@ def text_dicts():
     samples['zjets']     = {'label':r'Z+jets','color':'darkorange'}
     samples['data']      = {'label':r'Data','color':'black'}
 
-    samples['WZto3Mu']      = {'label':r'$WZ \rightarrow 3\mu\nu$','color':'blue'}
-    samples['ZZto4Mu']      = {'label':r'$ZZ \rightarrow 4\mu$','color':'red'}
+    samples['WZto3Mu']      = {'label':r'$WZ$','color':'blue'}
+    samples['ZZto4Mu']      = {'label':r'$ZZ$','color':'red'}
     samples['ttW']      = {'label':r'$t\bar{t}W$','color':'orange'}
     samples['ttZ']      = {'label':r'$t\bar{t}Z$','color':'green'}
 

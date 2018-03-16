@@ -51,7 +51,7 @@ Samples_2016_BH_MET = {
   }
 
 
-def makeSkim(era, date="20180208"):
+def makeSkim(era, date="20180307"):
 
   chain = TChain("cutFlowAnalyzerPXBL3PXFL2/Events");
 

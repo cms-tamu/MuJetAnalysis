@@ -11,7 +11,64 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Helpers import *
 
+## mass of the muon in GeV
+mmu = 105.6583745 * 0.001
+mZ = 91.1876
+
 verbose = True
+
+def getPT(m1):
+    px = m1[1]
+    py = m1[2]
+    return m.sqrt(px*px + py*py)
+
+def getPhi(m1):
+    return m1[4]
+    
+def normalizePhi(result):
+    while (result > M_PI):
+        result -= 2*M_PI;
+    while (result <= -M_PI):
+        result += 2*M_PI;
+    return result
+
+## total energy of the muon
+def energy(mmu, px, py, pz):
+    return m.sqrt(mmu*mmu + px*px + py*py + pz*pz)
+
+## dimuon invariant mass
+def inner(m1, m2):
+    return m1[0] * m2[0] - m1[1] * m2[1] - m1[2] * m2[2] - m1[3] * m2[3]
+
+def invmass(m1, m2):
+    a = inner(m1,m1)
+    b = inner(m2,m2)
+    c = 2*inner(m1,m2)
+    return m.sqrt(a+b+c)
+
+def inv3mass(m1, m2, m3):
+    a = inner(m1,m1)
+    b = inner(m2,m2)
+    c = inner(m3,m3)
+    d = 2*inner(m1,m2)
+    e = 2*inner(m1,m3)
+    f = 2*inner(m2,m3)
+    return m.sqrt(a+b+c+d+e+f)
+
+def isMassInZPeak(m):
+    return abs(m-mZ)<15
+
+def bestMassInZPeak(m1, m2, m3):
+    masses = [m1, m2, m3]
+    massdiffs = [abs(m1-mZ), abs(m2-mZ), abs(m3-mZ)]
+    index = massdiffs.index(min(massdiffs))
+    return masses[index]
+
+def bestMassInZPeak(m1, m2):
+    masses = [m1, m2]
+    massdiffs = [abs(m1-mZ), abs(m2-mZ)]
+    index = massdiffs.index(min(massdiffs))
+    return masses[index]
 
 def wasTriggered(tree):
     ## was triggered?
@@ -103,12 +160,13 @@ dataFiles['ZZTo4Nu'] = [
     '/fdata/hepx/store/user/dildick/EWK_13TeV_CALCHEP_50K_batch1_GEN_SIM_v1_TAMU/crab_ZZTo4L_ANA_v6/180208_060822/0000/',
     '/fdata/hepx/store/user/dildick/EWK_13TeV_CALCHEP_50K_batch2_GEN_SIM_v3_TAMU/crab_ZZTo4L_ANA_v6_PartTwo/180208_060940/0000/'
 ]
+"""
 dataFiles['METData'] = [
     '/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/'
 ]
-"""
 
-sample  = 'TTZJetsToLNu'
+
+sample  = 'METData'
 
 print "Running on sample", sample
 chain = ROOT.TChain("Events")
@@ -123,7 +181,7 @@ for rootFile in chain.GetListOfFiles():
     ## loop on events in the ROOT file
     if (verbose): print "running on file ", rootFile.GetTitle()
     
-    myfile = ROOT.TFile(rootFile.GetTitle(), "UPDATE")
+    myfile = ROOT.TFile(rootFile.GetTitle())
 
     if (not myfile):
         if (verbose): print "File ", rootFile.GetTitle(), " does not exist"
@@ -131,7 +189,7 @@ for rootFile in chain.GetListOfFiles():
 
     if sample == 'METData':
         
-        if not 'out_ana_selected_MET_2016BH_20180208' in rootFile.GetTitle():
+        if not 'out_ana_selected_MET_2016BH_20180307.root' in rootFile.GetTitle():
             continue
         else: 
             if (verbose): print "Loading tree Events"
@@ -146,16 +204,91 @@ for rootFile in chain.GetListOfFiles():
 
     #gDirectory.Cd("cutFlowAnalyzerPXBL3PXFL2")
 
+
+    newTitle = rootFile.GetTitle()
+    newTitle = newTitle.replace('root','dimuonMass.root')
+    newfile = ROOT.TFile(newTitle,  "RECREATE")
+
     newtree = tree.CloneTree(0)
     OK_MET = numpy.zeros(1, dtype=int)
     OK_Signal = numpy.zeros(1, dtype=int)
-    newtree.Branch( 'OK_MET', OK_MET, 'OK_MET/I' )
-    newtree.Branch( 'OK_Signal', OK_Signal, 'OK_Signal/I' )
+    best_OS_dimuon_mass = numpy.zeros(1, dtype=float)
+    best_SS_dimuon_mass = numpy.zeros(1, dtype=float)
+    m123 = numpy.zeros(1, dtype=float)
+
+    newtree.Branch( 'OK_MET', OK_MET, 'OK_MET/I')
+    newtree.Branch( 'OK_Signal', OK_Signal, 'OK_Signal/I')
+    newtree.Branch( 'best_OS_dimuon_mass', best_OS_dimuon_mass, 'best_OS_dimuon_mass/D')
+    newtree.Branch( 'best_SS_dimuon_mass', best_SS_dimuon_mass, 'best_SS_dimuon_mass/D')
+    newtree.Branch( 'm123', m123, 'm123/D')
 
     for k in range(0, tree.GetEntries()):
 
         tree.GetEntry(k)
         if k%1000==0: print "Processing event ", k, "/",tree.GetEntries()
+
+        q0 = tree.selMu0_q
+        q1 = tree.selMu1_q
+        q2 = tree.selMu2_q
+
+        px0 = tree.selMu0_px
+        px1 = tree.selMu1_px
+        px2 = tree.selMu2_px
+        
+        py0 = tree.selMu0_py
+        py1 = tree.selMu1_py
+        py2 = tree.selMu2_py
+        
+        pz0 = tree.selMu0_pz
+        pz1 = tree.selMu1_pz
+        pz2 = tree.selMu2_pz
+
+        E0 = energy(mmu, px0, py0, pz0) 
+        E1 = energy(mmu, px1, py1, pz1)
+        E2 = energy(mmu, px2, py2, pz2)
+
+        mu0 = [E0, px0, py0, pz0]
+        mu1 = [E1, px1, py1, pz1]
+        mu2 = [E2, px2, py2, pz2]
+
+        invm3 = inv3mass(mu0, mu1, mu2)
+        m123[0] = invm3
+        #print m123[0], type(invm3)
+
+        SS_dimuon_mass = 0
+        OS_dimuon_mass1 = 0
+        OS_dimuon_mass2 = 0
+
+        if q0 * q1 > 0: 
+            SS_dimuon_mass = invmass(mu0, mu1)
+            OS_dimuon_mass1 = invmass(mu1, mu2)
+            OS_dimuon_mass2 = invmass(mu0, mu2)
+            OS_dimuon_mass = bestMassInZPeak(OS_dimuon_mass1, OS_dimuon_mass2)
+                
+        elif q0 * q2 > 0: 
+            SS_dimuon_mass = invmass(mu0, mu2)
+            OS_dimuon_mass1 = invmass(mu0, mu1)
+            OS_dimuon_mass2 = invmass(mu1, mu2)
+            OS_dimuon_mass = bestMassInZPeak(OS_dimuon_mass1, OS_dimuon_mass2)
+                
+        elif q1 * q2 > 0: 
+            SS_dimuon_mass = invmass(mu1, mu2)
+            OS_dimuon_mass1 = invmass(mu0, mu1)
+            OS_dimuon_mass2 = invmass(mu0, mu2)
+            OS_dimuon_mass = bestMassInZPeak(OS_dimuon_mass1, OS_dimuon_mass2)
+                
+        else: 
+            SS_dimuon_mass = 0
+            OS_dimuon_mass1 = 0
+            OS_dimuon_mass2 = 0
+            OS_dimuon_mass = 0
+
+        best_OS_dimuon_mass[0] = 0 
+        best_SS_dimuon_mass[0] = 0
+        best_OS_dimuon_mass[0] = OS_dimuon_mass 
+        best_SS_dimuon_mass[0] = SS_dimuon_mass
+
+        #print  best_OS_dimuon_mass[0], best_SS_dimuon_mass[0]
 
         OK_MET[0] = 0
         if wasMETTriggered(sample, MET_Triger_Patterns, tree):
@@ -169,6 +302,7 @@ for rootFile in chain.GetListOfFiles():
 
     rootFile.Write()
     print "Saved tree with %d"  % ( tree.GetEntries() )
+    newfile.Close()
 
     """
     newTitle = rootFile.GetTitle()
