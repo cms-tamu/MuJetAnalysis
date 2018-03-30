@@ -260,16 +260,16 @@ variables["m123"] = (50,0,500)
 
 
 def makePlotDataVsMC(histogram1,
-             histogram2,
-             histogram3, 
-             histogram4,
-             histogram5,
-             x_label, y_label, saveAs, format='pdf'):
+                     histogram2,
+                     histogram3, 
+                     histogram4,
+                     histogram5,
+                     x_label, y_label, saveAs, format='pdf'):
 
     ## setup histogram
     hist = HepPlotterDataMC()#"histogram"
     hist.x_relative_size = 10
-    hist.y_relative_size = 10
+    hist.y_relative_size = 7
     hist.drawEffDist = False    # draw the physics distribution for efficiency (jet_pt for jet trigger)
     #hist.rebin       = 1
     hist.x_label     = x_label# "Dimuon invariant mass"
@@ -288,7 +288,6 @@ def makePlotDataVsMC(histogram1,
     hist.Add(histogram2, name='ZZto4Mu', sampleType='background')
     hist.Add(histogram1, name='WZto3Mu', sampleType='background')
     hist.Add(histogram5, name='data', sampleType='data')
-    hist.drawStatUncertainty = True      # draw stat uncertainty separately
     hist.drawSystUncertainty = False     # draw syst uncertainty separately
     hist.drawStatSystUncertainty = False  # draw stat+syst uncertainty
     hist.blind       = False
