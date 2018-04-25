@@ -155,8 +155,6 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
   m_vertexValid_mindist = aMultiMuon.m_vertexValid_mindist;
   m_chi2 = aMultiMuon.m_chi2;
   m_ndof = aMultiMuon.m_ndof;
-  std::cout << "m_chi2 " << m_chi2 << std::endl; 
-  std::cout << "m_ndof " << m_ndof << std::endl; 
   m_mindisttrack = aMultiMuon.m_mindisttrack;
   m_mindisttrack = aMultiMuon.m_mindisttrack;
   m_mindisttrack_scan = aMultiMuon.m_mindisttrack_scan;
@@ -243,8 +241,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     }; // YP: FIXME! Check if this definition is correct
     m_chi2 = fittedVertex.totalChiSquared();
     m_ndof = fittedVertex.degreesOfFreedom();
-    std::cout << "m_chi2 " << m_chi2 << std::endl; 
-    std::cout << "m_ndof " << m_ndof << std::endl; 
     m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
     m_vertexValid_fitted = true;
     

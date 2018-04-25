@@ -21,7 +21,6 @@ Implementation:
 
 // system include files
 #include <memory>
-#include <iostream>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -261,7 +260,7 @@ MuJetProducer::~MuJetProducer()
 //
 
 bool MuJetProducer::muonOkay(const pat::Muon &muon) {
-  if (muon.pt() < m_minPt ||  muon.p() < m_minPmag  ||  fabs(muon.eta()) > m_maxAbsEta) return false;
+  if (muon.pt() < m_minPt  ||  muon.p() < m_minPmag  ||  fabs(muon.eta()) > m_maxAbsEta) return false;
 
   if (m_selectTrackerMuons  &&  !muon.isTrackerMuon() ) return false;
   if (m_selectGlobalMuons   &&  !muon.isGlobalMuon()  ) return false;
@@ -392,19 +391,17 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   iEvent.getByToken(m_primaryVertices, primaryVertices);
 
   //  const reco::Vertex* vtx = &((*primaryVertices)[0]);
-  const bool debug = false;
 
   std::map<const pat::Muon*,bool> used;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {
-      for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
-	if (one != two  &&  muonOkay(*two)) {
-	  
-          std::vector<const pat::Muon*> pairOfMuons;	  
+	    for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
+	      if (one != two  &&  muonOkay(*two)) {
+
+          std::vector<const pat::Muon*> pairOfMuons;
           pairOfMuons.push_back(&*one);
           pairOfMuons.push_back(&*two);
-
-	  //Checkpoint
+//Checkpoint
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
                                    tracks_ptr,
@@ -424,14 +421,13 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 								   m_endcapPixelLayer);
 
           bool satisfied_deltaR = (muonPair.dR(0, 1, muonPair.vertexValid()) < m_maxDeltaR);
-	  std::cout << "satisfied_deltaR " << muonPair.dR(0, 1, muonPair.vertexValid()) << " " << m_maxDeltaR << std::endl;
+
           bool satisfied_mass = (muonPair.mass() < m_maxMass);
-	  std::cout << "dimuon mass " << muonPair.mass() << " " << m_maxMass << " GeV" << std::endl;
+
           bool satisfied_vertexProb = (muonPair.vertexValid()  &&  muonPair.vertexProb() > m_minVertexProb);
-	  std::cout << "dimuon vertex " << muonPair.vertexValid() << " " << muonPair.vertexProb() << " " << m_minVertexProb << " " << satisfied_vertexProb << std::endl;
 
           bool satisfied = false;
-          if      (m_groupingMode == kGroupByDeltaR                   ) satisfied = satisfied_deltaR;
+          if       (m_groupingMode == kGroupByDeltaR                  ) satisfied = satisfied_deltaR;
           else if (m_groupingMode == kGroupByMass                     ) satisfied = satisfied_mass;
           else if (m_groupingMode == kGroupByVertexProb               ) satisfied = satisfied_vertexProb;
           else if (m_groupingMode == kGroupByDeltaRAndVertexProb      ) satisfied = satisfied_deltaR  &&  satisfied_vertexProb;
@@ -455,12 +451,9 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
             used[&*one] = true;
             used[&*two] = true;
-          } 
-	  else {
-	    std::cout << "failed to build muon-jet" << std::endl;
-	  }
-	}
-      }
+          }
+	      }
+	    }
     }
   }
 

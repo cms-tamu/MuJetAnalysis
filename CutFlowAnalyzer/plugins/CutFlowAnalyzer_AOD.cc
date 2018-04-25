@@ -339,7 +339,7 @@ private:
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
   edm::EDGetTokenT<pat::METCollection> m_patMET;
-  edm::EDGetTokenT<pat::JetCollection> m_patJet;
+  // edm::EDGetTokenT<pat::JetCollection> m_patJet;
 
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
@@ -857,7 +857,7 @@ CutFlowAnalyzer_AOD::CutFlowAnalyzer_AOD(const edm::ParameterSet& iConfig)
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
   m_patMET          = consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("patMET"));
-  m_patJet          = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("patJet"));
+  // m_patJet          = consumes<pat::JetCollection>(iConfig.getParameter<edm::InputTag>("patJet"));
 
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
@@ -1280,9 +1280,19 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     int counterGenParticle = 0;
     for(auto iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
       counterGenParticle++;
-      //    std::cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << std::endl;
+      // std::cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() << " " << iGenParticle->mass() << std::endl;
+      // if (iGenParticle->pdgId()==36){
+      // 	std::cout << "<<<<<<<<<<<ALERT>>>>>>>>>>>>>" << std::endl;
+      // }
+      // if (fabs(iGenParticle->mass()-4)<0.001){
+      // 	std::cout << "dark photon ?" << std::endl;
+      // }
       // Check if gen particle is muon (pdgId = +/-13) and stable (status = 1)
-      if ( fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1 ) {
+      if ( (fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1) 
+	   || 
+	   (fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 91) // only for mA= 0.25 GeV mass samples 
+	   ) {
+	// std::cout << "      <<<<<<<<<<<MUON>>>>>>>>>>>>>" << std::endl;
         // Mother of the muon can be muon. Find the last muon in this chain: genMuonCand
         // Example: a1 -> mu+ (status = 3) mu- (status = 3)
         //          mu- (status = 3) -> mu- (status = 2) -> mu- (status = 1)
@@ -1301,7 +1311,9 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
         for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
           // Check if mother is CP-odd Higgs (PdgId = 36) or gamma_Dark (PdgId = 3000022)
           //        if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 || genMuonCand->mother(iMother)->pdgId() == 443 ) 
-          if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 ) {
+          if ( genMuonCand->mother(iMother)->pdgId() == 36 ||
+	       genMuonCand->mother(iMother)->pdgId() == 54 || 
+	       genMuonCand->mother(iMother)->pdgId() == 3000022 ) {
             // Store the muon (stable, first in chain) into vector
             genMuons.push_back(&(*iGenParticle));
             // Store mother of the muon into vector. We need this to group muons into dimuons later
@@ -1317,6 +1329,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       }
       // Check if gen particle is
       if (    ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36      ) // decaying (status = 3) CP-odd Higgs (pdgId = 36)
+	      || ( iGenParticle->status() == 23 && iGenParticle->pdgId() == 54 ) // decaying (status = 3) gamma_Dark (pdgId = 3000022)
 	      || ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 3000022 ) // decaying (status = 3) gamma_Dark (pdgId = 3000022)
 	      //         || ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 443   ) // decaying (status = 2) J/psi (pdgId = 443)
 	      ) {
@@ -1335,7 +1348,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       b_genH_vy  = genH[0]->vy() - b_beamSpot_y;
       b_genH_vz  = genH[0]->vz() - b_beamSpot_z;
     } else {
-      //    std::cout << "WARNING! genH.size() != 1" << std::endl;
+      std::cout << "WARNING! genH.size() != 1" << std::endl;
     }
 
     if ( genA_unsorted.size() >= 2 ) {
@@ -1346,7 +1359,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     genA = genA_unsorted;
 
     if ( genA.size() >= 2 ) {
-      b_genA0_m   = genA[0]->mass();
+      b_genA0_m   = genA[0]->mass();      
       b_genA0_px  = genA[0]->px();
       b_genA0_py  = genA[0]->py();
       b_genA0_pz  = genA[0]->pz();
@@ -1365,6 +1378,8 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       b_genA1_vx  = genA[1]->vx() - b_beamSpot_x;
       b_genA1_vy  = genA[1]->vy() - b_beamSpot_y;
       b_genA1_vz  = genA[1]->vz() - b_beamSpot_z;
+
+      std::cout << "a boson masses "  << b_genA0_m << " " << b_genA1_m << std::endl;
     } else {
       std::cout << "WARNING! genA.size() < 2" << std::endl;
     }
@@ -1518,6 +1533,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       b_is4GenMu = true;
     }
 
+
     if ( genMuons.size() > 0 ) {
       b_genMu0_px  = genMuons[0]->px();
       b_genMu0_py  = genMuons[0]->py();
@@ -1579,6 +1595,13 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       b_genMu3_phi = -100.0;
     }
 
+    std::cout << "Muon pts " 
+	      << b_genMu0_pT << " " 
+	      << b_genMu1_pT << " " 
+	      << b_genMu2_pT << " " 
+	      << b_genMu3_pT << " " 
+	      << std::endl;
+
     std::vector<const reco::GenParticle*> genMuons17;
     std::vector<const reco::GenParticle*> genMuons8;
 
@@ -1632,23 +1655,23 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   b_patMET = patMET.pt(); // muon ET fraction!
   b_patMET_phi = patMET.phi();
 
-  edm::Handle<pat::JetCollection> patJetH;
-  iEvent.getByToken(m_patJet, patJetH);
-  const std::vector<pat::Jet>& patJets = *patJetH.product(); 
+  // edm::Handle<pat::JetCollection> patJetH;
+  // iEvent.getByToken(m_patJet, patJetH);
+  // const std::vector<pat::Jet>& patJets = *patJetH.product(); 
 
   /*
    * https://twiki.cern.ch/twiki/bin/view/CMSPublic/BTV13TeVICHEP2016
     CSVv2: Combined Secondary Vertex version 2 algorithm, based on secondary vertex and track-based lifetime informations, it is an updated version of the CSV algorithm used in Run 1 combining the variables with a neural network instead of a likelihood ratio and the secondary vertex information is obtained with the Inclusive Vertex Finder algorithm. The operating point values for the loose, medium and tight tagging criteria are set to 0.460, 0.800, 0.935, respectively.
    */
-  b_nBJet_20 = 0;
+  // b_nBJet_20 = 0;
 
-  for (auto iJet = patJets.begin();  iJet != patJets.end();  ++iJet) {
-    // number of tight b-jets with at least 20 GeV pT
-    if (iJet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags")>0.935 and iJet->pt()>20) {
-      std::cout << "B-jet with at least 20 GeV pt" << std::endl;
-      b_nBJet_20++;
-    }
-  }
+  // for (auto iJet = patJets.begin();  iJet != patJets.end();  ++iJet) {
+  //   // number of tight b-jets with at least 20 GeV pT
+  //   if (iJet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags")>0.935 and iJet->pt()>20) {
+  //     std::cout << "B-jet with at least 20 GeV pt" << std::endl;
+  //     b_nBJet_20++;
+  //   }
+  // }
 
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
@@ -1880,6 +1903,10 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     }
   }
 
+  if (b_is1SelMu17 and b_is4SelMu8){
+    std::cout << "Event passes RECO level selections" << std::endl;
+  }
+  
   if ( m_debug > 10 ) std::cout << m_events << " Build RECO muon jets" << std::endl;
 
   edm::Handle<pat::MultiMuonCollection> muJets;
@@ -1916,6 +1943,9 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
       }
     }
     if ( nMuJetsContainMu17 > 0 ) b_is2MuJets = true;
+  } 
+  else {
+    std::cout << "Event has " << nMuJets << " muon jets" << std::endl;
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Check if exactly 2 muon jets are built" << std::endl;
@@ -2139,8 +2169,8 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
   for (unsigned int itrig = 0; itrig != triggerNames.size(); ++itrig) { 
     const TString& trigName = triggerNames.triggerName(itrig);
     const std::string& trigNameStr(trigName.Data());
-    if (trRes->accept(triggerNames.triggerIndex(trigNameStr)))
-      std::cout << "Trigger name " << trigNameStr << " accepted!" << std::endl;
+    // if (trRes->accept(triggerNames.triggerIndex(trigNameStr)))
+    //   std::cout << "Trigger name " << trigNameStr << " accepted!" << std::endl;
   }
 
   // link to all trigger paths in this triggerEvent
@@ -2149,7 +2179,7 @@ CutFlowAnalyzer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iS
     // if ( m_debug > 10 ) std::cout << p.name();;
     if (p.wasAccept()) {
       b_hltPaths.push_back(p.name());
-      if ( m_debug > 10 ) std::cout << "Trigger path accept: " <<  p.name() << std::endl;
+      if ( m_debug > 1000 ) std::cout << "Trigger path accept: " <<  p.name() << std::endl;
       if(std::find(signalHltPaths_.begin(), 
 		   signalHltPaths_.end(), p.name()) != signalHltPaths_.end()) {
 	b_isDiMuonHLTFired = true;

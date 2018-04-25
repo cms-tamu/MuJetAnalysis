@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 from MuJetAnalysis.MuJetProducer.MuJetProducer_cfi import *
 
 TrackerMuJetProducer05 = MuJetProducer.clone(
-    maxMass = cms.double(22.),
+    maxMass = cms.double(9.),
 #    maxMass = cms.double(60.),
     muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),
     selectTrackerMuons = cms.bool(True),
@@ -13,11 +13,10 @@ TrackerMuJetProducer05 = MuJetProducer.clone(
     minSegmentMatches = cms.int32(2),
     minTrackerHits = cms.int32(8),
     maxTrackerNormChi2 = cms.double(4.0),
-    ptShift = cms.double(1.0)
 )
 
 PFMuJetProducer05 = MuJetProducer.clone(
-    maxMass = cms.double(22.),
+    maxMass = cms.double(9.),
 #    maxMass = cms.double(60.),
     muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
     selectTrackerMuons = cms.bool(False),
@@ -28,7 +27,6 @@ PFMuJetProducer05 = MuJetProducer.clone(
     minSegmentMatches = cms.int32(-1),
     minTrackerHits = cms.int32(-1),
     maxTrackerNormChi2 = cms.double(-1.0),
-    ptShift = cms.double(1.0)
 )
 
 TrackerMuJetProducer05PXBL2PXFL2 = TrackerMuJetProducer05.clone(
@@ -50,10 +48,10 @@ PFMuJetProducer05PXBL3PXFL2 = PFMuJetProducer05.clone(
 )
 
 MuJetProducers = cms.Sequence(
-    TrackerMuJetProducer05 * 
-    PFMuJetProducer05 *
-    TrackerMuJetProducer05PXBL2PXFL2 *
-    PFMuJetProducer05PXBL2PXFL2 *
+#    TrackerMuJetProducer05 * 
+#    PFMuJetProducer05 *
+#    TrackerMuJetProducer05PXBL2PXFL2 *
+#    PFMuJetProducer05PXBL2PXFL2 *
     TrackerMuJetProducer05PXBL3PXFL2 *
     PFMuJetProducer05PXBL3PXFL2
 )

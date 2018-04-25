@@ -130,7 +130,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
   
-  if (dirNames.size()==0) return;
+  if (dirNames.size()==0) {
+    cout << "No dirnames" << endl;
+    return;
+  }
 
   cout<<" dirNames  "<<dirNames[0]<<endl;
   decodeFileNMSSMNameMany(dirNames, mH_string, mA_string);
@@ -159,6 +162,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  is3SelMu8;
   Bool_t  is4SelMu8;
   
+  Float_t genMu0_pT;
+  Float_t genMu1_pT;
+  Float_t genMu2_pT;
+  Float_t genMu3_pT;
+
   Float_t selMu0_pT;
   Float_t selMu1_pT;
   Float_t selMu2_pT;
@@ -277,6 +285,10 @@ void efficiency(const std::vector<std::string>& dirNames)
      t->SetBranchAddress("selMu1_pT",&selMu1_pT);
      t->SetBranchAddress("selMu2_pT",&selMu2_pT);
      t->SetBranchAddress("selMu3_pT",&selMu3_pT);
+     t->SetBranchAddress("genMu0_pT",&genMu0_pT);
+     t->SetBranchAddress("genMu1_pT",&genMu1_pT);
+     t->SetBranchAddress("genMu2_pT",&genMu2_pT);
+     t->SetBranchAddress("genMu3_pT",&genMu3_pT);
      t->SetBranchAddress("massC",&massC);
      t->SetBranchAddress("massF",&massF);
      t->SetBranchAddress("selMu0_eta",&selMu0_eta);
@@ -310,6 +322,7 @@ void efficiency(const std::vector<std::string>& dirNames)
      nentries = t->GetEntries(); //no of entries
      
      for(int i=0;i<nentries;i++){ //loop for number of events
+       // cout << "Running on entry " << counter[k][0] << endl;
        t->GetEntry(i);
        counter[k][0]++;
        // cout<<" dimuonC_Iso  "<<diMuonC_IsoTk_FittedVtx<<endl;
@@ -333,6 +346,11 @@ void efficiency(const std::vector<std::string>& dirNames)
 	 }
        }
        
+       // cout << genMu0_pT << endl;
+       // cout << genMu1_pT << endl;
+       // cout << genMu2_pT << endl;
+       // cout << genMu3_pT << endl;
+
        if(is1GenMu17)counter[k][1]++;
        if(is2GenMu8) counter[k][2]++;
        if(is3GenMu8) counter[k][3]++;
@@ -342,9 +360,12 @@ void efficiency(const std::vector<std::string>& dirNames)
 	 //if( (genA0_Lxy<9.8&&fabs(genA0_Lz)<48.5) && (genA1_Lxy<9.8&&fabs(genA1_Lz)<48.5)) counter[k][5]++;
        }
        
-       if(is1SelMu17)counter[k][6]++;
-       if(is2SelMu8)counter[k][7]++;
-       if(is3SelMu8)counter[k][8]++;
+       if(is1SelMu17)
+	 counter[k][6]++;
+       if(is2SelMu8)
+	 counter[k][7]++;
+       if(is3SelMu8)
+	 counter[k][8]++;
        if(is4SelMu8){
 	 counter[k][9]++;
 	 
@@ -356,15 +377,20 @@ void efficiency(const std::vector<std::string>& dirNames)
 
 	       diMuons_dz->Fill(diMuons_dz_FittedVtx);
 	       counter[k][12]++;
+
 	       if( (diMuonC_m1_FittedVtx_hitpix_l3inc==1||diMuonC_m2_FittedVtx_hitpix_l3inc==1) &&
 		   (diMuonF_m1_FittedVtx_hitpix_l3inc==1||diMuonF_m2_FittedVtx_hitpix_l3inc==1)){
 		 counter[k][13]++;
+
 		 if( fabs(diMuons_dz_FittedVtx)<0.1){
 		   counter[k][14]++;
+
 		   if(is2DiMuonsMassOK){
 		     counter[k][15]++;
+
 		     if(diMuonC_IsoTk_FittedVtx<2.0 && diMuonF_IsoTk_FittedVtx<2.0){
 		       counter[k][16]++;
+
 		       if(is2DiMuonHLTFired){
 			 counter[k][17]++;
 		       }
@@ -572,60 +598,14 @@ void efficiency(const std::vector<std::string>& dirNames)
 void foo_modified_NMSSM()
 {
   setup();
-  std::string samples[] = { 
-    "NMSSM_mH_90_mA_0p25.txt",
-    "NMSSM_mH_90_mA_0p5.txt",
-    "NMSSM_mH_90_mA_0p75.txt",
-    "NMSSM_mH_90_mA_1.txt",
-    "NMSSM_mH_90_mA_2.txt",
-    "NMSSM_mH_90_mA_3.txt",
-    "NMSSM_mH_90_mA_3p55.txt",
-    "NMSSM_mH_90_mA_4.txt",
-    "NMSSM_mH_100_mA_0p25.txt",
-    "NMSSM_mH_100_mA_0p5.txt",
-    "NMSSM_mH_100_mA_0p75.txt",
-    "NMSSM_mH_100_mA_1.txt",
-    "NMSSM_mH_100_mA_2.txt",
-    "NMSSM_mH_100_mA_3.txt",
-    "NMSSM_mH_100_mA_3p55.txt",
-    "NMSSM_mH_100_mA_4.txt",
-    "NMSSM_mH_110_mA_0p25.txt",
-    "NMSSM_mH_110_mA_0p5.txt",
-    "NMSSM_mH_110_mA_0p75.txt",
-    "NMSSM_mH_110_mA_1.txt",
-    "NMSSM_mH_110_mA_2.txt",
-    "NMSSM_mH_110_mA_3.txt",
-    "NMSSM_mH_110_mA_3p55.txt",
-    "NMSSM_mH_110_mA_4.txt",
-    "NMSSM_mH_125_mA_0p25.txt",
-    "NMSSM_mH_125_mA_0p5.txt",
-    "NMSSM_mH_125_mA_0p75.txt",
-    "NMSSM_mH_125_mA_1.txt",
-    "NMSSM_mH_125_mA_2.txt",
-    "NMSSM_mH_125_mA_3.txt",
-    "NMSSM_mH_125_mA_3p55.txt",
-    "NMSSM_mH_125_mA_4.txt",
-    "NMSSM_mH_150_mA_0p25.txt",
-    "NMSSM_mH_150_mA_0p5.txt",
-    "NMSSM_mH_150_mA_0p75.txt",
-    "NMSSM_mH_150_mA_1.txt",
-    "NMSSM_mH_150_mA_2.txt",
-    "NMSSM_mH_150_mA_3.txt",
-    "NMSSM_mH_150_mA_3550.txt",
-    "NMSSM_mH_150_mA_3p55.txt",
-    "NMSSM_mH_150_mA_4.txt"
-  };
-  int i =0;
-  std::vector< std::vector<string> > NMSSM_v;
-  for (const auto& p : samples){
-    // if (i==6)
-    readTextFileWithSamples(p, NMSSM_v);
-    i++;
-  }
 
-  // // cout << "Vector Created" << endl;                                                
-  // readTextFileWithSamples("DarkSUSY_m5_cT_20.txt", NMSSM_v);
-  // // cout << "Samples read" << endl;                                                  
-  for(const auto& v: NMSSM_v) efficiency(v);
-  // // cout << "For Loop completes" << endl;        
+  std::vector< std::vector<string> > NMSSM_v;
+  readTextFileWithSamples("NMSSM_3p55.txt", NMSSM_v);
+
+  for(const auto& v: NMSSM_v) {
+    for (const auto& p: v){
+      cout << p << endl;
+    }
+    efficiency(v);
+  }
 }

@@ -179,11 +179,13 @@ patifyData = cms.Sequence(
     patTriggerEvent * 
     patifyTrackerMuon * 
     patifyPFMuon *
-    makePatMETsData *
-    patJetCorrections *
-    patJetCharge *
-    patJets
+    makePatMETsData
 )
+""" *
+patJetCorrections *
+patJetCharge *
+patJets
+"""
 
 patifyMC = cms.Sequence(
     muonMatch * 

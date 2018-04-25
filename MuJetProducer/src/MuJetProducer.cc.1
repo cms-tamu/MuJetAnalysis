@@ -21,7 +21,6 @@ Implementation:
 
 // system include files
 #include <memory>
-#include <iostream>
 
 // user include files
 #include "FWCore/Framework/interface/Frameworkfwd.h"
@@ -38,7 +37,7 @@ Implementation:
 
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
-#include "FWCore/Framework/interface/ConsumesCollector.h"
+
 //
 // class decleration
 //
@@ -63,7 +62,6 @@ class MuJetProducer : public edm::EDProducer {
     kGroupByDeltaRAndVertexProb,
     kGroupByMassAndVertexProb,
     kGroupByDeltaROrMass,
-    kGroupByDeltaRAndMass,
     kGroupByDeltaROrMassAndVertexProb,
     kGroupByMassAndVertexProbOrDeltaR,
 
@@ -73,8 +71,7 @@ class MuJetProducer : public edm::EDProducer {
   };
 
   // ----------member data ---------------------------
-  edm::EDGetTokenT<pat::MuonCollection> m_muons;
-  edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
+  edm::InputTag m_muons;
   edm::InputTag m_tracks;
   edm::InputTag m_caloTowers;
   double m_minPt;
@@ -127,8 +124,6 @@ class MuJetProducer : public edm::EDProducer {
   double m_unionNumberAboveThresholdCone;
   double m_centralNumberAboveThresholdPt;
   double m_unionNumberAboveThresholdPt;
-  int m_barrelPixelLayer;
-  int m_endcapPixelLayer;
 };
 
 //
@@ -144,8 +139,7 @@ class MuJetProducer : public edm::EDProducer {
 // constructors and destructor
 //
 MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
-   : m_muons(                           consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons")))
-   , m_primaryVertices(                 consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices")))
+   : m_muons(                           iConfig.getParameter<edm::InputTag>("muons"))
    , m_tracks(                          iConfig.getParameter<edm::InputTag>("tracks"))
    , m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
    , m_minPt(                           iConfig.getParameter<double>("minPt"))
@@ -186,8 +180,6 @@ MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
    , m_unionNumberAboveThresholdCone(   iConfig.getParameter<double>("unionNumberAboveThresholdCone"))
    , m_centralNumberAboveThresholdPt(   iConfig.getParameter<double>("centralNumberAboveThresholdPt"))
    , m_unionNumberAboveThresholdPt(     iConfig.getParameter<double>("unionNumberAboveThresholdPt"))
-   , m_barrelPixelLayer(                iConfig.getParameter<int>("barrelPixelLayer"))
-   , m_endcapPixelLayer(                iConfig.getParameter<int>("endcapPixelLayer"))
 {
   //register your products
   produces<pat::MultiMuonCollection>("Pairs");
@@ -201,7 +193,6 @@ MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
   else if (m_groupingMode_string == "GroupByDeltaRAndVertexProb"      ) m_groupingMode = kGroupByDeltaRAndVertexProb;
   else if (m_groupingMode_string == "GroupByMassAndVertexProb"        ) m_groupingMode = kGroupByMassAndVertexProb;
   else if (m_groupingMode_string == "GroupByDeltaROrMass"             ) m_groupingMode = kGroupByDeltaROrMass;
-  else if (m_groupingMode_string == "GroupByDeltaRAndMass"            ) m_groupingMode = kGroupByDeltaRAndMass;
   else if (m_groupingMode_string == "GroupByDeltaROrMassAndVertexProb") m_groupingMode = kGroupByDeltaROrMassAndVertexProb;
   else if (m_groupingMode_string == "GroupByMassAndVertexProbOrDeltaR") m_groupingMode = kGroupByMassAndVertexProbOrDeltaR;
   else {
@@ -261,7 +252,7 @@ MuJetProducer::~MuJetProducer()
 //
 
 bool MuJetProducer::muonOkay(const pat::Muon &muon) {
-  if (muon.pt() < m_minPt ||  muon.p() < m_minPmag  ||  fabs(muon.eta()) > m_maxAbsEta) return false;
+  if (muon.pt() < m_minPt  ||  muon.p() < m_minPmag  ||  fabs(muon.eta()) > m_maxAbsEta) return false;
 
   if (m_selectTrackerMuons  &&  !muon.isTrackerMuon() ) return false;
   if (m_selectGlobalMuons   &&  !muon.isGlobalMuon()  ) return false;
@@ -359,7 +350,7 @@ bool MuJetProducer::muonOkay(const pat::Muon &muon) {
 // ------------ method called to produce the data  ------------
 void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   edm::Handle<pat::MuonCollection> muons;
-  iEvent.getByToken(m_muons, muons);
+  iEvent.getByLabel(m_muons, muons);
   const pat::MuonCollection *muons_ptr = &*muons;
 
   edm::Handle<reco::TrackCollection> tracks;
@@ -389,22 +380,20 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   std::vector<bool> active;
 
   edm::Handle<reco::VertexCollection> primaryVertices;
-  iEvent.getByToken(m_primaryVertices, primaryVertices);
+  iEvent.getByLabel("offlinePrimaryVertices", primaryVertices);
 
   //  const reco::Vertex* vtx = &((*primaryVertices)[0]);
-  const bool debug = false;
 
   std::map<const pat::Muon*,bool> used;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {
-      for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
-	if (one != two  &&  muonOkay(*two)) {
-	  
-          std::vector<const pat::Muon*> pairOfMuons;	  
+	    for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
+	      if (one != two  &&  muonOkay(*two)) {
+
+          std::vector<const pat::Muon*> pairOfMuons;
           pairOfMuons.push_back(&*one);
           pairOfMuons.push_back(&*two);
 
-	  //Checkpoint
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
                                    tracks_ptr,
@@ -419,25 +408,21 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
                                    m_centralNumberAboveThresholdCone,
                                    m_unionNumberAboveThresholdCone,
                                    m_centralNumberAboveThresholdPt,
-								   m_unionNumberAboveThresholdPt,
-								   m_barrelPixelLayer,
-								   m_endcapPixelLayer);
+                                   m_unionNumberAboveThresholdPt);
 
           bool satisfied_deltaR = (muonPair.dR(0, 1, muonPair.vertexValid()) < m_maxDeltaR);
-	  std::cout << "satisfied_deltaR " << muonPair.dR(0, 1, muonPair.vertexValid()) << " " << m_maxDeltaR << std::endl;
+
           bool satisfied_mass = (muonPair.mass() < m_maxMass);
-	  std::cout << "dimuon mass " << muonPair.mass() << " " << m_maxMass << " GeV" << std::endl;
+
           bool satisfied_vertexProb = (muonPair.vertexValid()  &&  muonPair.vertexProb() > m_minVertexProb);
-	  std::cout << "dimuon vertex " << muonPair.vertexValid() << " " << muonPair.vertexProb() << " " << m_minVertexProb << " " << satisfied_vertexProb << std::endl;
 
           bool satisfied = false;
-          if      (m_groupingMode == kGroupByDeltaR                   ) satisfied = satisfied_deltaR;
+          if       (m_groupingMode == kGroupByDeltaR                  ) satisfied = satisfied_deltaR;
           else if (m_groupingMode == kGroupByMass                     ) satisfied = satisfied_mass;
           else if (m_groupingMode == kGroupByVertexProb               ) satisfied = satisfied_vertexProb;
           else if (m_groupingMode == kGroupByDeltaRAndVertexProb      ) satisfied = satisfied_deltaR  &&  satisfied_vertexProb;
           else if (m_groupingMode == kGroupByMassAndVertexProb        ) satisfied = satisfied_mass    &&  satisfied_vertexProb;
           else if (m_groupingMode == kGroupByDeltaROrMass             ) satisfied = satisfied_deltaR  ||  satisfied_mass;
-          else if (m_groupingMode == kGroupByDeltaRAndMass            ) satisfied = satisfied_deltaR  &&  satisfied_mass;
           else if (m_groupingMode == kGroupByDeltaROrMassAndVertexProb) satisfied = (satisfied_deltaR ||  satisfied_mass)        &&  satisfied_vertexProb;
           else if (m_groupingMode == kGroupByMassAndVertexProbOrDeltaR) satisfied = satisfied_mass    &&  (satisfied_vertexProb  ||  satisfied_deltaR);
           else     assert(false);
@@ -455,12 +440,9 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
             used[&*one] = true;
             used[&*two] = true;
-          } 
-	  else {
-	    std::cout << "failed to build muon-jet" << std::endl;
-	  }
-	}
-      }
+          }
+	      }
+	    }
     }
   }
 
