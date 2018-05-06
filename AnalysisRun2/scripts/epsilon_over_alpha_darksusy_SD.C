@@ -500,4 +500,5 @@ void epsilon_over_alpha_darksusy_SD()
    c->Modified();
    c->cd();
    c->SetSelected(c);
+   c->SaveAs("epsilon_over_alpha_darksusy_SD.pdf");
 }

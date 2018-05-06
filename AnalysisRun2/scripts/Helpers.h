@@ -117,8 +117,8 @@ void decodeNMSSMFileName(const TString& fileName, TString& mH_string, TString& m
 {  
   // template: NMSSM_HToAATo4Mu_M-XXX_M-YYYY_TuneCUETP8M1
   //TString str1 = "NMSSM_HToAATo4Mu_M-";
-  //TString str1 = "NMSSM_HToAATo4Mu_mH_";
-  TString str1 = "NMSSM_mH_";
+  TString str1 = "NMSSM_HToAATo4Mu_mH_";
+  //TString str1 = "NMSSM_mH_";
   Ssiz_t loc1 = fileName.Index(str1);
   TString substr(fileName(loc1, 100)); 
 
@@ -128,8 +128,8 @@ void decodeNMSSMFileName(const TString& fileName, TString& mH_string, TString& m
   std::istream_iterator<std::string> end;
   std::vector<std::string> vstrings(begin, end);
   
-  mH_string = vstrings[2];
-  mA_string = vstrings[4];
+  mH_string = vstrings[3];
+  mA_string = vstrings[5];
   /* mH_string = vstrings[2]; */
   /* mA_string = vstrings[4]; */
 
