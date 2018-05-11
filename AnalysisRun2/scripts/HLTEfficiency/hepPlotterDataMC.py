@@ -68,7 +68,8 @@ class HepPlotterDataMC(HepPlotter):
         self.systColor     = '#99cc99'  # '#4d994d' <- use alpha=0.5 with this
         self.statSystColor = '#cce5cc'  # '#99cc99' <- use alpha=0.5 with this (=#c1e1c0)
         self.legendLoc     = 1
-
+        self.ratio_plot  = False
+        self.x_label        = ''
         return
 
 
@@ -128,6 +129,7 @@ class HepPlotterDataMC(HepPlotter):
         gs  = matplotlib.gridspec.GridSpec(2,1,height_ratios=[3,1],hspace=0.0)
         self.ax1 = fig.add_subplot(gs[0])
         self.ax2 = fig.add_subplot(gs[1],sharex=self.ax1)
+        #self.ax3 = fig.add_subplot(gs[2])
         plt.setp(self.ax1.get_xticklabels(),visible=False)
 
         ## -- Loop over samples for data plot [should only be one entry, but loop for protection]

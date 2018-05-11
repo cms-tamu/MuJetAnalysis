@@ -20,10 +20,12 @@ void decodeFileNameMany(const std::vector<string>& v, TString& mass_string, TStr
   TString str2 = "DarkSUSY_mH_125_mN1_10_mGammaD_";
   Ssiz_t first = str.Index(str2);
   Ssiz_t last = str.Index("_cT_");
-  mass_string = (str(first+str2.Length(),4));
+  mass_string = str(first+str2.Length(),4);
   ///Get the sample cT
   TString str3 = "_cT_";
-  cT_string = (str(last+str3.Length(),4));
+  Ssiz_t last2 = str.Index("_13TeV_");  
+  cT_string = str(last+str3.Length(),last2-(last+str3.Length()));
+
   bool verbose(false);
   if (verbose) cout << "mass_string " << mass_string << " cT_string " << cT_string << endl;
 }
@@ -118,22 +120,34 @@ void decodeNMSSMFileName(const TString& fileName, TString& mH_string, TString& m
   // template: NMSSM_HToAATo4Mu_M-XXX_M-YYYY_TuneCUETP8M1
   //TString str1 = "NMSSM_HToAATo4Mu_M-";
   TString str1 = "NMSSM_HToAATo4Mu_mH_";
-  //TString str1 = "NMSSM_mH_";
   Ssiz_t loc1 = fileName.Index(str1);
-  TString substr(fileName(loc1, 100)); 
+  if (loc1 != -1){
+    TString substr(fileName(loc1, 100)); 
+    std::stringstream ss(std::string(substr.Data()));
+    ss.imbue(std::locale(std::locale(), new tokens()));
+    std::istream_iterator<std::string> begin(ss);
+    std::istream_iterator<std::string> end;
+    std::vector<std::string> vstrings(begin, end);
+    
+    mH_string = vstrings[3];
+    mA_string = vstrings[5];
+  }
 
-  std::stringstream ss(std::string(substr.Data()));
-  ss.imbue(std::locale(std::locale(), new tokens()));
-  std::istream_iterator<std::string> begin(ss);
-  std::istream_iterator<std::string> end;
-  std::vector<std::string> vstrings(begin, end);
+  TString str2 = "NMSSM_mH_";
+  Ssiz_t loc2 = fileName.Index(str2);
+  if (loc2 != -1){
+    TString substr(fileName(loc2, 100)); 
+    std::stringstream ss(std::string(substr.Data()));
+    ss.imbue(std::locale(std::locale(), new tokens()));
+    std::istream_iterator<std::string> begin(ss);
+    std::istream_iterator<std::string> end;
+    std::vector<std::string> vstrings(begin, end);
+    
+    mH_string = vstrings[2];
+    mA_string = vstrings[4];
+  }
   
-  mH_string = vstrings[3];
-  mA_string = vstrings[5];
-  /* mH_string = vstrings[2]; */
-  /* mA_string = vstrings[4]; */
-
-  bool verbose(true);
+  bool verbose(false);
   if (verbose) cout << "mH_string " << mH_string << " mA_string " << mA_string << endl;
 }
 
@@ -142,14 +156,14 @@ void decodeFileDarkSUSYNameMany(const std::vector<string>& v, TString& neutralin
 				TString& mass_string, TString& cT_string)
 {  
   decodeDarkSUSYFileName(v[0], neutralino_string, mass_string, cT_string);
-  bool verbose(true);
+  bool verbose(false);
   if (verbose) cout << "neutralino_string " << neutralino_string << " mass_string " << mass_string << " cT_string " << cT_string << endl;
 }
 
 void decodeFileNMSSMNameMany(const std::vector<string>& v, TString& mH_string, TString& mA_string)
 {  
   decodeNMSSMFileName(v[0], mH_string, mA_string);
-  bool verbose(true);
+  bool verbose(false);
   if (verbose) cout << "mH_string " << mH_string << " mA_string " << mA_string << endl;
 }
 

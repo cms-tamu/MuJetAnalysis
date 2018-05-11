@@ -107,24 +107,12 @@ def efficiency_trigger(dirNames, triggerPaths):
             if (nMu<4):
                 continue
 
-            nMuPt8 = 0
-            if tree.selMu0_pT >= 8: nMuPt8 += 1
-            if tree.selMu1_pT >= 8: nMuPt8 += 1
-            if tree.selMu2_pT >= 8: nMuPt8 += 1
-            if tree.selMu3_pT >= 8: nMuPt8 += 1
-
-            nMuPt17 = 0
-            if tree.selMu0_pT >= 17: nMuPt17 += 1
-            if tree.selMu1_pT >= 17: nMuPt17 += 1
-            if tree.selMu2_pT >= 17: nMuPt17 += 1
-            if tree.selMu3_pT >= 17: nMuPt17 += 1
-
-
-            nMuPt17Barrel = 0
-            if (tree.selMu0_pT>=17 and abs(tree.selMu0_eta)<=0.9): nMuPt17Barrel += 1
-            if (tree.selMu1_pT>=17 and abs(tree.selMu1_eta)<=0.9): nMuPt17Barrel += 1
-            if (tree.selMu2_pT>=17 and abs(tree.selMu2_eta)<=0.9): nMuPt17Barrel += 1
-            if (tree.selMu3_pT>=17 and abs(tree.selMu3_eta)<=0.9): nMuPt17Barrel += 1
+            nMuPt8 = int(tree.selMu0_pT >= 8) + int(tree.selMu1_pT >= 8) + int(tree.selMu2_pT >= 8) + int(tree.selMu3_pT >= 8)
+            nMuPt17 = int(tree.selMu0_pT >= 17) + int(tree.selMu1_pT >= 17) + int(tree.selMu2_pT >= 17) + int(tree.selMu3_pT >= 17)
+            nMuPt17Barrel = (int(tree.selMu0_pT >= 17 and abs(tree.selMu0_eta)<=0.9) + 
+                             int(tree.selMu1_pT >= 17 and abs(tree.selMu1_eta)<=0.9) + 
+                             int(tree.selMu2_pT >= 17 and abs(tree.selMu2_eta)<=0.9) + 
+                             int(tree.selMu3_pT >= 17 and abs(tree.selMu3_eta)<=0.9))
  
             print nMuPt8, nMuPt17, nMuPt17Barrel
             print tree.selMu0_pT, tree.selMu0_eta
@@ -269,7 +257,7 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016DoubleMuon_BCDEFGH_20171024/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016DoubleMuon_BCDEFGH_20180506/'
     if 'full' in effTuple[0].GetName():
         hist.saveAs      = "eff_" + triggerPath + "_2016BCDEFGH_MuJetVtxDzIso_" + effTuple[2] # save figure with name
     elif 'barrel' in effTuple[0].GetName():
@@ -277,7 +265,7 @@ def makePlot(effTuple, triggerPath, format='pdf'):
     else:
         hist.saveAs      = "eff_" + triggerPath + "_2016BCDEFGH_" + effTuple[2] # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
-    hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
+    hist.CMSlabelStatus = ''  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
     hist.lumi = '2016 DoubleMuon B-H, 35.9'
     hist.drawStatUncertainty = True    

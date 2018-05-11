@@ -159,7 +159,7 @@ def scaleSample(sample, hist):
 
 ## make the selection
 nMuonCut = "int(selMu0_pT != -100) + int(selMu1_pT != -100) + int(selMu2_pT != -100) + int(selMu3_pT != -100) == 3"
-ptMuonCut= "selMu0_pT > 0 && selMu1_pT > 40 && selMu2_pT > 10" 
+ptMuonCut= "selMu0_pT > 30 && selMu1_pT > 30 && selMu2_pT > 10" 
 muonTightCut = "selMu0_isTight==1 && selMu1_isTight==1 && selMu2_isTight==1"
 muonDxyCut = "selMu0_dxy < 0.01 && selMu1_dxy < 0.01 && selMu2_dxy < 0.01"
 muonDzCut = "selMu0_dz < 0.1 && selMu1_dz < 0.1 && selMu2_dz < 0.1"
@@ -168,25 +168,25 @@ OK_MET  = "OK_MET==1"
 SS = 'selMu0_q == selMu1_q && selMu1_q == selMu2_q'
 OS = '!(%s)'%SS
 bjetCut = "nBJet_20==0"
-dimuonMasSCut = "abs(best_OS_dimuon_mass-91.2)<15"
+dimuonMassCut = "abs(best_OS_dimuon_mass-91.2)<15"
 
-my_cut = (TCut(nMuonCut) + 
-          TCut(ptMuonCut) + 
-          TCut(muonTightCut) + 
-          TCut(muonDxyCut) + 
-          TCut(muonDzCut) + 
-          TCut(muonIsoCut) + 
+my_cut = (TCut(nMuonCut) +
+          TCut(ptMuonCut) +
+          TCut(muonTightCut) +
+          TCut(muonDxyCut) +
+          TCut(muonDzCut) +
+          TCut(muonIsoCut) +
           TCut(OK_MET) +
-          TCut(bjetCut) +
-          TCut(OS)
+          TCut(bjetCut)
           )
 
-my_cut_dimuon = my_cut + TCut(dimuonMasSCut)
+my_cut_dimuon = my_cut + TCut(dimuonMassCut) + TCut(OS) 
 my_cut_SS = my_cut + TCut(SS)
 
 my_cut_HLT = my_cut + TCut("OK_Signal==1")
 my_cut_dimuon_HLT = my_cut_dimuon + TCut("OK_Signal==1")
 
+out_directory = "trigger_efficiency_plots_2016Combined_WZ_20180511_AllCuts_30_30_10/"
 
 print my_cut
 """
@@ -259,6 +259,31 @@ variables["best_SS_dimuon_mass"] = (40,70,110)
 variables["m123"] = (50,0,500)
 
 
+
+x_axis_labels = {}
+x_axis_labels["selMu0_q"] = r"Leading muon charge"
+x_axis_labels["selMu1_q"] = r"Second leading muon charge"
+x_axis_labels["selMu2_q"] = r"Third leading muon charge"
+
+x_axis_labels["selMu0_pT"] = r"Leading muon $p_\mathrm{T}$ [GeV]"
+x_axis_labels["selMu1_pT"] = r"Second leading muon $p_\mathrm{T}$ [GeV]"
+x_axis_labels["selMu2_pT"] = r"Third leading muon $p_\mathrm{T}$ [GeV]"
+
+x_axis_labels["selMu0_phi"] = r"Leading muon $\phi$"
+x_axis_labels["selMu1_phi"] = r"Second leading muon $\phi$"
+x_axis_labels["selMu2_phi"] = r"Third leading muon $\phi$"
+
+x_axis_labels["selMu0_eta"] = r"Leading muon $\eta$"
+x_axis_labels["selMu1_eta"] = r"Second leading muon $\eta$"
+x_axis_labels["selMu2_eta"] = r"Third leading muon $\eta$"
+
+x_axis_labels["patMET"] = r"MET [GeV]"
+x_axis_labels["patMET_phi"] = r"MET $\phi$"
+x_axis_labels["nBJet_20"] = r"Number of $b$ jets with $p_\mathrm{T} > 20$ GeV"
+x_axis_labels["best_OS_dimuon_mass"] = "Best OS dimuon mass [GeV]"
+x_axis_labels["best_SS_dimuon_mass"] = "Best SS dimuon mass [GeV]"
+x_axis_labels["m123"] = r"$m_{123}$ [GeV]"
+
 def makePlotDataVsMC(histogram1,
                      histogram2,
                      histogram3, 
@@ -276,10 +301,10 @@ def makePlotDataVsMC(histogram1,
     hist.y_label     = y_label
     hist.y_ratio_label     = "Data/MC"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016Combined_WZ_20180306/'
+    hist.saveDir     = out_directory
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
-    hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
+    hist.CMSlabelStatus = ''  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
     hist.lumi = '2016 MET B-H, 35.9'
     hist.plotLUMI = True
@@ -294,15 +319,18 @@ def makePlotDataVsMC(histogram1,
     hist.ratio_plot  = False        # plot a ratio of things [Data/MC]
     hist.ratio_type  = "ratio"     # "ratio"
     hist.stacked     = True        # stack plots
-    plot = hist.execute()
-    plot.tight_layout()
+    fig = hist.execute()
+    fig.text(0.95, 0.04, x_label, horizontalalignment='right', fontsize=20)
+    fig.tight_layout()
+    fig.subplots_adjust(bottom=0.15)
+    #plot.xlabel(x_label, horizontalalignment='right', x=1.0)
     hist.savefig()
 
 
 def makePlot(histogram, plotType, x_label, y_label, saveAs, isData = False, format='pdf'):
 
     ## setup histogram
-    hist = HepPlotter(plotType,1)#"histogram"
+    hist = HepPlotter("efficiency",1)#"histogram"
     hist.x_relative_size = 10
     hist.y_relative_size = 7
     hist.drawEffDist = False    # draw the physics distribution for efficiency (jet_pt for jet trigger)
@@ -310,28 +338,46 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, isData = False, form
     hist.x_label     = x_label# "Dimuon invariant mass"
     hist.y_label     = y_label
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016Combined_WZ_20180316/'
+    hist.saveDir     = out_directory
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     if isData:
-        hist.CMSlabelStatus = 'Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
+        hist.CMSlabelStatus = ''  # ('Simulation')+'Internal' || 'Preliminary' 
     else:
-        hist.CMSlabelStatus = 'Preliminary Simulation'  # ('Simulation')+'Internal' || 'Preliminary' 
+        hist.CMSlabelStatus = 'Simulation'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
     hist.lumi = '2016 MET B-H, 35.9'
     hist.plotLUMI = isData
     hist.drawStatUncertainty = True    
-    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label=r'')
+    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label='HLT\_TrkMu15\_DoubleTrkMu5NoFiltersNoVtx')
+
+    dataLabel = saveAs.split("_")[0]
+    print dataLabel
+    if dataLabel == "WZ":
+        extraText = r"$pp \rightarrow WZ$"
+        hist.extra_text.Add(extraText, coords=[0.1,0.3])
+    if dataLabel == "ZZ":
+        extraText = r"$pp \rightarrow ZZ$"
+        hist.extra_text.Add(extraText, coords=[0.1,0.3])
+    if dataLabel == "TTZ":
+        extraText = r"$pp \rightarrow t\bar{t}Z$"
+        hist.extra_text.Add(extraText, coords=[0.1,0.3])
+    if dataLabel == "TTW":
+        extraText = r"$pp \rightarrow t\bar{t}W$"
+        hist.extra_text.Add(extraText, coords=[0.1,0.3])
+
     plot = hist.execute()
     hist.savefig()
 
 
 ## for each kinematic property, plot all contributions
 for myvar in variables:
+    #continue
+
+
     print myvar
     bins = "(" + str(variables[myvar][0]) + "," + str(variables[myvar][1]) + "," + str(variables[myvar][2]) + ")" 
     print bins
-    continue
 
     """
     print chain_WZ.GetEntries(my_cut.GetTitle())
@@ -372,7 +418,13 @@ for myvar in variables:
     print h_Data.Integral() / (h_WZ.Integral() + h_ZZ.Integral() + h_TTZ.Integral() + h_TTW.Integral())
     print h_Data.Integral(), h_WZ.Integral() + h_ZZ.Integral() + h_TTZ.Integral() + h_TTW.Integral()
 
-    makePlotDataVsMC(h_WZ, h_ZZ, h_TTW, h_TTZ, h_Data, r"Plot", "Entries", "Combine_" + myvar, format='pdf')
+    makePlotDataVsMC(h_WZ, h_ZZ, h_TTW, h_TTZ, h_Data, x_axis_labels[myvar], "Entries", "Combine_" + myvar, format='pdf')
+
+
+
+#exit(1)
+
+
     
 ## efficiency plots
 for myvar in variables:
@@ -387,6 +439,9 @@ for myvar in variables:
         bins = "(8,0,16)"
     else:
         myvar_actual = myvar
+
+    if 'best_OS_dimuon_mass' in myvar: 
+        continue
 
     chain_WZ.Draw(myvar_actual + ">>h_WZ_" + myvar + bins, my_cut_dimuon)
     chain_ZZ.Draw(myvar_actual + ">>h_ZZ_" + myvar + bins, my_cut)
@@ -405,41 +460,42 @@ for myvar in variables:
     h_TTZ = TH1F(gDirectory.Get("h_TTZ_" + myvar).Clone("h_TTZ_" + myvar))
     h_Data = TH1F(gDirectory.Get("h_Data_" + myvar).Clone("h_Data_" + myvar))
 
-
     chain_WZ.Draw(myvar_actual + ">>h_WZ_" + myvar + "_HLT" + bins, my_cut_dimuon_HLT)
-    #chain_ZZ.Draw(myvar_actual + ">>h_ZZ_" + myvar + "_HLT" + bins, my_cut_HLT)
-    #chain_TTW.Draw(myvar_actual + ">>h_TTW_" + myvar + "_HLT" + bins, my_cut_HLT)
+    chain_ZZ.Draw(myvar_actual + ">>h_ZZ_" + myvar + "_HLT" + bins, my_cut_HLT)
+    chain_TTW.Draw(myvar_actual + ">>h_TTW_" + myvar + "_HLT" + bins, my_cut_HLT)
     chain_TTZ.Draw(myvar_actual + ">>h_TTZ_" + myvar + "_HLT" + bins, my_cut_dimuon_HLT)
     chain_Data.Draw(myvar_actual + ">>h_Data_" + myvar + "_HLT" + bins, my_cut_dimuon_HLT)
 
     h_WZ_HLT = TH1F(gDirectory.Get("h_WZ_" + myvar + "_HLT").Clone("h_WZ_" + myvar + "_HLT"))
-    #h_ZZ_HLT = TH1F(gDirectory.Get("h_ZZ_" + myvar + "_HLT").Clone("h_ZZ_" + myvar + "_HLT"))
-    #h_TTW_HLT = TH1F(gDirectory.Get("h_TTW_" + myvar + "_HLT").Clone("h_TTW_" + myvar + "_HLT"))
+    h_ZZ_HLT = TH1F(gDirectory.Get("h_ZZ_" + myvar + "_HLT").Clone("h_ZZ_" + myvar + "_HLT"))
+    h_TTW_HLT = TH1F(gDirectory.Get("h_TTW_" + myvar + "_HLT").Clone("h_TTW_" + myvar + "_HLT"))
     h_TTZ_HLT = TH1F(gDirectory.Get("h_TTZ_" + myvar + "_HLT").Clone("h_TTZ_" + myvar + "_HLT"))
     h_Data_HLT = TH1F(gDirectory.Get("h_Data_" + myvar + "_HLT").Clone("h_Data_" + myvar + "_HLT"))
     
     h_WZ_HLT_Eff = TEfficiency(h_WZ_HLT, h_WZ)
-    #h_ZZ_HLT_Eff = TEfficiency(h_ZZ_HLT, h_ZZ)
-    #h_TTW_HLT_Eff = TEfficiency(h_TTW_HLT, h_TTW)
+    h_ZZ_HLT_Eff = TEfficiency(h_ZZ_HLT, h_ZZ)
+    h_TTW_HLT_Eff = TEfficiency(h_TTW_HLT, h_TTW)
     h_TTZ_HLT_Eff = TEfficiency(h_TTZ_HLT, h_TTZ)
     h_Data_HLT_Eff = TEfficiency(h_Data_HLT, h_Data)
 
     print float(h_Data.GetEntries())
     print "WZ eff", h_WZ_HLT.GetEntries() / float(h_WZ.GetEntries()) 
-    #print "ZZ eff", h_ZZ_HLT.GetEntries() / float(h_ZZ.GetEntries()) 
-    #print "TTW eff", h_TTW_HLT.GetEntries() / float(h_TTW.GetEntries()) 
+    print "ZZ eff", h_ZZ_HLT.GetEntries() / float(h_ZZ.GetEntries()) 
+    print "TTW eff", h_TTW_HLT.GetEntries() / float(h_TTW.GetEntries()) 
     print "TTZ eff", h_TTZ_HLT.GetEntries() / float(h_TTZ.GetEntries()) 
     print "Data eff", h_Data_HLT.GetEntries() / float(h_Data.GetEntries()) 
+    
+    x_label = x_axis_labels[myvar]
 
-    makePlot(h_WZ_HLT_Eff, "efficiency", r"", "Trigger efficiency", "WZ_" + myvar + "_HLT", 
+    makePlot(h_WZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "WZ_" + myvar + "_HLT", 
              isData=False, format='pdf')
-    #makePlot(h_ZZ_HLT_Eff, "efficiency", r"", "Trigger efficiency", "ZZ_" + myvar + "_HLT", 
-    #         isData=False, format='pdf')
-    #makePlot(h_TTW_HLT_Eff, "efficiency", r"", "Trigger efficiency", "TTW_" + myvar + "_HLT", 
-    #         isData=False, format='pdf')
-    makePlot(h_TTZ_HLT_Eff, "efficiency", r"", "Trigger efficiency", "TTZ_" + myvar + "_HLT", 
+    makePlot(h_ZZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "ZZ_" + myvar + "_HLT", 
+             isData=False, format='pdf')
+    makePlot(h_TTW_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "TTW_" + myvar + "_HLT", 
+             isData=False, format='pdf')
+    makePlot(h_TTZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "TTZ_" + myvar + "_HLT", 
              isData=False, format='pdf')
 
-    makePlot(h_Data_HLT_Eff, "efficiency", r"", "Trigger efficiency", "Data_" + myvar + "_HLT", 
+    makePlot(h_Data_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "Data_" + myvar + "_HLT", 
              isData=True, format='pdf')
 

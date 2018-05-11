@@ -300,7 +300,7 @@ def makePlot(effTuple, darkSUSY, triggerPath, format='pdf'):
     hist.x_label     = effTuple[1]
     hist.y_label     = "Trigger efficiency"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016_DarkSUSY_13TeV_20171101/'
+    hist.saveDir     = 'trigger_efficiency_plots_2016_DarkSUSY_13TeV_20180506/'
     if 'full' in effTuple[0].GetName():
         hist.saveAs      = "eff_" + triggerPath + "_" + darkSUSY + "_MuJetVtxDzIso_" + effTuple[2] # save figure with name
     elif 'barrel' in effTuple[0].GetName():
@@ -308,7 +308,7 @@ def makePlot(effTuple, darkSUSY, triggerPath, format='pdf'):
     else:
         hist.saveAs      = "eff_" + triggerPath + "_" + darkSUSY + "_" + effTuple[2] # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
-    hist.CMSlabelStatus = 'Simulation Preliminary'  # ('Simulation')+'Internal' || 'Preliminary' 
+    hist.CMSlabelStatus = 'Simulation'  # ('Simulation')+'Internal' || 'Preliminary' 
     hist.initialize()
     hist.plotLUMI = False
     hist.drawStatUncertainty = True    
@@ -511,7 +511,7 @@ for sample in darkSUSY_HLT_Samples:
     darkSUSY = getDarkSUSYFileName(n1,ma,ctau)
 
     print "Checking", "mN1", n1, "mA", ma, "cT", ctau
-    if not ma == "1p5":
+    if not ma == "8p5":
         continue
 
 

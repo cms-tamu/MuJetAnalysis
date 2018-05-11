@@ -39,7 +39,7 @@ double calc_eff(double num, double denom)
 
 void printLine(std::string word, int n1, float n2, float n3, float n4, float n5){
   cout<< word << " &   "<< left << setw(7) 
-      << "$"<<int(n1)<<"$     &   "<<fixed<< std::setprecision(3)<< "$"<<n2<<"\\pm"<<n3<<"$         &     $"<< n4<<" \\pm " << n5<<"$ \\\\"<<endl;         
+      << "$"<<int(n1)<<"$     &   "<<fixed<< std::setprecision(4)<< "$"<<n2<<"\\pm"<<n3<<"$         &     $"<< n4<<" \\pm " << n5<<"$ \\\\"<<endl;         
 }
 
 
@@ -50,7 +50,7 @@ void printLine(std::string word){
 
 void printLine(int n1, float n2, float n3, float n4, float n5){
   cout<< left << setw(7) 
-      << "$"<<int(n1)<<"$     &   "<<fixed<< std::setprecision(3)<< "$"<<n2<<"\\pm"<<n3<<"$         &     $"<< n4<<" \\pm " << n5<<"$ \\\\"<<endl;         
+      << "$"<<int(n1)<<"$     &   "<<fixed<< std::setprecision(4)<< "$"<<n2<<"\\pm"<<n3<<"$         &     $"<< n4<<" \\pm " << n5<<"$ \\\\"<<endl;         
 }
 
 void printHeader()
@@ -135,13 +135,13 @@ void efficiency(const std::vector<std::string>& dirNames)
     return;
   }
 
-  cout<<" dirNames  "<<dirNames[0]<<endl;
+  //cout<<" dirNames  "<<dirNames[0]<<endl;
   decodeFileNMSSMNameMany(dirNames, mH_string, mA_string);
 
   TString fileName;
   fileName = "NMSSM_mH_" + mH_string + "_mA_" + mA_string;
   
-  cout<<" Sample   "<<fileName<<endl;
+  //cout<<" Sample   "<<fileName<<endl;
   // add files to the chain
   addfilesMany(chain, dirNames, ext);
   
@@ -482,19 +482,19 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   float alpha_gen = counter[k][5]/(counter[k][0]*1.0);
   float alpha_gen_err = sqrt( (alpha_gen*(1-alpha_gen))/(counter[k][0]*1.0));
-  cout << "alpha_gen_err " << alpha_gen_err << endl;
+  //cout << "alpha_gen_err " << alpha_gen_err << endl;
 
   float reco_sim = counter[k][17]/(counter[k][0]*1.0);
   float reco_sim_err = sqrt( (reco_sim*(1-reco_sim))/(counter[k][0]*1.0));
-  cout << "reco_sim_err " << reco_sim_err << endl;
+  //cout << "reco_sim_err " << reco_sim_err << endl;
 
   epsvsalph[k] = reco_sim/alpha_gen;
   Err[k]= sqrt( ( epsvsalph[k] * (1-epsvsalph[k]) ) / counter[k][5] );
 
-// calc_eff(reco_sim, alpha_gen);
+  // calc_eff(reco_sim, alpha_gen);
 
-  cout<<" mass  "<<mH_string<<" cT  "<<mA_string<<endl;
-  cout<<" TotEff "<<counter[k][17]/(counter[k][0]*1.0)<<endl;
+  // cout<<" mass  "<<mH_string<<" cT  "<<mA_string<<endl;
+  // cout<<" TotEff "<<counter[k][17]/(counter[k][0]*1.0)<<endl;
   // cout<<" epsvsalph[k]  "<<epsvsalph[k]<<endl;
 
   string cutsgen[6]={"All events",
@@ -521,6 +521,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   // cout<<"\\caption{Acceptances and efficiencies of the event selection requirements for dark photon m="<<mH_string<<" and ctau="<<mA_string<<"}  "<<endl;
   // cout<<"\\centering "<<endl;
+  cout<<"\\expandafter\\newcommand\\csname " << fileName << "\\endcsname{%"<<endl;
   cout<<"\\begin{tabular}{ |c|c|c|}"<<endl;
   cout << "\\hline" << endl;
   cout<<"\\multicolumn{3}{c|}{$m_{H} = "<<mH_string<<"~\\gev$, $m_{A} = "<< mA_string<<"~\\gev$} \\\\ \\hline \\hline"<<endl;  
@@ -545,9 +546,26 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<"\\multicolumn{3}{r|}{$"  << alpha_gen<<"\\pm "<< alpha_gen_err<<"$} \\\\ "<<endl;
   cout<<"\\multicolumn{3}{r|}{$"  << reco_sim<<"\\pm "<< reco_sim_err<<"$} \\\\ \\hline "<<endl;
   cout<<"\\multicolumn{3}{r|}{$"  << epsvsalph[k]<<"\\pm "<< Err[k]<<"$} \\\\ \\hline "<<endl;
-  cout<<"\\end{tabular}"<<endl;
+  cout<<"\\end{tabular}}"<<endl;
 
 
+  delete diMuons_dz;
+
+  delete P_t_Mu0;   
+  delete P_t_Mu1; 
+  delete P_t_Mu2; 
+  delete P_t_Mu3; 
+  
+  delete mass_C;
+  delete mass_F;
+
+  delete iso_C;
+  delete iso_F;
+
+  delete eta_Mu0;
+  delete eta_Mu1;
+  delete eta_Mu2;
+  delete eta_Mu3; 
 
 
 }
@@ -600,12 +618,12 @@ void foo_modified_NMSSM()
   setup();
 
   std::vector< std::vector<string> > NMSSM_v;
-  readTextFileWithSamples("NMSSM_3p55.txt", NMSSM_v);
+  readTextFileWithSamples("NMSSM_all.txt", NMSSM_v);
 
   for(const auto& v: NMSSM_v) {
-    for (const auto& p: v){
-      cout << p << endl;
-    }
+    // for (const auto& p: v){
+    //   cout << p << endl;
+    // }
     efficiency(v);
   }
 }

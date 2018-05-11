@@ -1,0 +1,117 @@
+{
+//=========Macro generated from canvas: cnv/cnv
+//=========  (Mon Mar 16 13:28:18 2015) by ROOT version5.34/18
+   TCanvas *cnv = new TCanvas("cnv", "cnv",1320,22,904,928);
+   gStyle->SetOptFit(1);
+   gStyle->SetOptStat(0);
+   gStyle->SetOptTitle(0);
+   cnv->SetHighLightColor(2);
+   cnv->Range(-1.0625,-0.07688618,5.1875,0.514546);
+   cnv->SetFillColor(0);
+   cnv->SetBorderMode(0);
+   cnv->SetBorderSize(2);
+   cnv->SetTickx(1);
+   cnv->SetTicky(1);
+   cnv->SetLeftMargin(0.17);
+   cnv->SetRightMargin(0.03);
+   cnv->SetTopMargin(0.07);
+   cnv->SetBottomMargin(0.13);
+   cnv->SetFrameFillStyle(0);
+   cnv->SetFrameBorderMode(0);
+   cnv->SetFrameFillStyle(0);
+   cnv->SetFrameBorderMode(0);
+   
+   TH1F *h_gammaD_cT_XY_lab_dummy = new TH1F("h_gammaD_cT_XY_lab_dummy","h_gammaD_cT_XY_lab_dummy",5,0,5);
+   h_gammaD_cT_XY_lab_dummy->SetMaximum(0.4731457);
+   h_gammaD_cT_XY_lab_dummy->SetLineStyle(0);
+   h_gammaD_cT_XY_lab_dummy->SetMarkerStyle(20);
+   h_gammaD_cT_XY_lab_dummy->GetXaxis()->SetTitle("L_{XY} of #gamma_{D} [mm]");
+   h_gammaD_cT_XY_lab_dummy->GetXaxis()->SetLabelFont(42);
+   h_gammaD_cT_XY_lab_dummy->GetXaxis()->SetLabelOffset(0.007);
+   h_gammaD_cT_XY_lab_dummy->GetXaxis()->SetTitleSize(0.06);
+   h_gammaD_cT_XY_lab_dummy->GetXaxis()->SetTitleOffset(0.95);
+   h_gammaD_cT_XY_lab_dummy->GetXaxis()->SetTitleFont(42);
+   h_gammaD_cT_XY_lab_dummy->GetYaxis()->SetTitle("Normalized Fraction of Events / 1.0 mm");
+   h_gammaD_cT_XY_lab_dummy->GetYaxis()->SetLabelFont(42);
+   h_gammaD_cT_XY_lab_dummy->GetYaxis()->SetLabelOffset(0.007);
+   h_gammaD_cT_XY_lab_dummy->GetYaxis()->SetTitleSize(0.05);
+   h_gammaD_cT_XY_lab_dummy->GetYaxis()->SetTitleOffset(1.3);
+   h_gammaD_cT_XY_lab_dummy->GetYaxis()->SetTitleFont(42);
+   h_gammaD_cT_XY_lab_dummy->GetZaxis()->SetLabelFont(42);
+   h_gammaD_cT_XY_lab_dummy->GetZaxis()->SetLabelOffset(0.007);
+   h_gammaD_cT_XY_lab_dummy->GetZaxis()->SetTitleSize(0.06);
+   h_gammaD_cT_XY_lab_dummy->GetZaxis()->SetTitleFont(42);
+   h_gammaD_cT_XY_lab_dummy->Draw("");
+   
+   TH1F *h_gammaD_cT_XY_lab = new TH1F("h_gammaD_cT_XY_lab","h_gammaD_cT_XY_lab",5,0,5);
+   h_gammaD_cT_XY_lab->SetBinContent(1,0.2628587);
+   h_gammaD_cT_XY_lab->SetBinContent(2,0.2221864);
+   h_gammaD_cT_XY_lab->SetBinContent(3,0.1935263);
+   h_gammaD_cT_XY_lab->SetBinContent(4,0.1713963);
+   h_gammaD_cT_XY_lab->SetBinContent(5,0.1500323);
+   h_gammaD_cT_XY_lab->SetBinContent(6,5.449452);
+   h_gammaD_cT_XY_lab->SetEntries(159998);
+
+   Int_t ci;   // for color index setting
+   ci = TColor::GetColor("#0000ff");
+   h_gammaD_cT_XY_lab->SetLineColor(ci);
+   h_gammaD_cT_XY_lab->SetLineWidth(2);
+   h_gammaD_cT_XY_lab->SetMarkerStyle(20);
+   h_gammaD_cT_XY_lab->GetXaxis()->SetTitle("L_{xy} of #gamma_{D} [mm]");
+   h_gammaD_cT_XY_lab->GetXaxis()->SetLabelFont(42);
+   h_gammaD_cT_XY_lab->GetXaxis()->SetLabelOffset(0.007);
+   h_gammaD_cT_XY_lab->GetXaxis()->SetTitleSize(0.06);
+   h_gammaD_cT_XY_lab->GetXaxis()->SetTitleOffset(0.95);
+   h_gammaD_cT_XY_lab->GetXaxis()->SetTitleFont(42);
+   h_gammaD_cT_XY_lab->GetYaxis()->SetTitle("Events");
+   h_gammaD_cT_XY_lab->GetYaxis()->SetLabelFont(42);
+   h_gammaD_cT_XY_lab->GetYaxis()->SetLabelOffset(0.007);
+   h_gammaD_cT_XY_lab->GetYaxis()->SetTitleSize(0.06);
+   h_gammaD_cT_XY_lab->GetYaxis()->SetTitleOffset(1.5);
+   h_gammaD_cT_XY_lab->GetYaxis()->SetTitleFont(42);
+   h_gammaD_cT_XY_lab->GetZaxis()->SetLabelFont(42);
+   h_gammaD_cT_XY_lab->GetZaxis()->SetLabelOffset(0.007);
+   h_gammaD_cT_XY_lab->GetZaxis()->SetTitleSize(0.06);
+   h_gammaD_cT_XY_lab->GetZaxis()->SetTitleFont(42);
+   h_gammaD_cT_XY_lab->Draw("same");
+   
+   TLegend *leg = new TLegend(0.4566667,0.82,0.7822222,0.9066667,NULL,"brNDC");
+   leg->SetBorderSize(0);
+   leg->SetTextSize(0.02777778);
+   leg->SetLineColor(1);
+   leg->SetLineStyle(1);
+   leg->SetLineWidth(1);
+   leg->SetFillColor(0);
+   leg->SetFillStyle(0);
+   TLegendEntry *entry=leg->AddEntry("NULL","#splitline{pp #rightarrow h #rightarrow 2n_{1} #rightarrow 2n_{D} + 2 #gamma_{D} #rightarrow 2n_{D} + 4#mu}{#splitline{m_{h} = 125 GeV, m_{n_{1}} = 10 GeV, m_{n_{D}} = 1 GeV}{m_{#gamma_{D}} = 0.4 GeV, c#tau_{#gamma_{D}} = 1. mm}}","h");
+   entry->SetLineColor(1);
+   entry->SetLineStyle(1);
+   entry->SetLineWidth(1);
+   entry->SetMarkerColor(1);
+   entry->SetMarkerStyle(21);
+   entry->SetMarkerSize(1);
+   entry->SetTextFont(42);
+   leg->Draw();
+   
+   leg = new TLegend(0.17,0.935,0.97,1,NULL,"brNDC");
+   leg->SetBorderSize(0);
+   leg->SetTextAlign(22);
+   leg->SetTextSize(0.045);
+   leg->SetLineColor(1);
+   leg->SetLineStyle(1);
+   leg->SetLineWidth(1);
+   leg->SetFillColor(0);
+   leg->SetFillStyle(0);
+   entry=leg->AddEntry("NULL","CMS Simulation (LHE) 13 TeV","h");
+   entry->SetLineColor(1);
+   entry->SetLineStyle(1);
+   entry->SetLineWidth(1);
+   entry->SetMarkerColor(1);
+   entry->SetMarkerStyle(21);
+   entry->SetMarkerSize(1);
+   entry->SetTextFont(42);
+   leg->Draw();
+   cnv->Modified();
+   cnv->cd();
+   cnv->SetSelected(cnv);
+}

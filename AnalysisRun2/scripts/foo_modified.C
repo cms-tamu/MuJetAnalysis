@@ -39,7 +39,7 @@ double calc_eff(double num, double denom)
 
 void printLine(std::string word, int n1, float n2, float n3, float n4, float n5){
   cout<< word << " &   "<< left << setw(7) 
-      << "$"<<int(n1)<<"$     &   "<<fixed<< std::setprecision(3)<< "$"<<n2<<"\\pm"<<n3<<"$         &     $"<< n4<<" \\pm " << n5<<"$ \\\\"<<endl;         
+      << "$"<<int(n1)<<"$     &   "<<fixed<< std::setprecision(4)<< "$"<<n2<<"\\pm"<<n3<<"$         &     $"<< n4<<" \\pm " << n5<<"$ \\\\"<<endl;         
 }
 
 
@@ -50,7 +50,7 @@ void printLine(std::string word){
 
 void printLine(int n1, float n2, float n3, float n4, float n5){
   cout<< left << setw(7) 
-      << "$"<<int(n1)<<"$     &   "<<fixed<< std::setprecision(3)<< "$"<<n2<<"\\pm"<<n3<<"$         &     $"<< n4<<" \\pm " << n5<<"$ \\\\"<<endl;         
+      << "$"<<int(n1)<<"$     &   "<<fixed<< std::setprecision(4)<< "$"<<n2<<"\\pm"<<n3<<"$         &     $"<< n4<<" \\pm " << n5<<"$ \\\\"<<endl;         
 }
 
 void printHeader()
@@ -71,10 +71,10 @@ void printHeader()
 		       "Pixel hit requirement",
 		       "$|z_{\\mu\\mu_1} - z_{\\mu\\mu_2}|<0.1~\\mathrm{cm}$",
 		       "$m_{\\mu\\mu_1} \\approx m_{\\mu\\mu_2}$",
-		       "Dimuon isolation $<2~\\gev$",
+		       "Dimuon- isolation $<2~\\gev$",
 		       "Trigger"
   };
-  cout<<"\\caption{Acceptances and efficiencies of the event selection requirements for several representative dark SUSY benchmark models in MC simulation."<<endl;
+  //cout<<"\\caption{Acceptances and efficiencies of the event selection requirements for several representative dark SUSY benchmark models in MC simulation."<<endl;
   cout<<"\\begin{tabular}{ |l|}"<<endl;
   
   cout<<"\\hline"<<endl;
@@ -130,14 +130,14 @@ void efficiency(const std::vector<std::string>& dirNames)
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
   
-  cout<<" dirNames  "<<dirNames[0]<<endl;
+  // cout<<" dirNames  "<<dirNames[0]<<endl;
 
   decodeFileNameMany(dirNames, mass_string, cT_string);
 
   TString fileName;
   fileName = "DarkSUSY_mH_125_mGammaD_" + mass_string + "_cT_" + cT_string;
   
-  cout<<" Sample   "<<fileName<<endl;
+  // cout<<" Sample   "<<fileName<<endl;
   // add files to the chain
   addfilesMany(chain, dirNames, ext);
   
@@ -455,19 +455,19 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   float alpha_gen = counter[k][5]/(counter[k][0]*1.0);
   float alpha_gen_err = sqrt( (alpha_gen*(1-alpha_gen))/(counter[k][0]*1.0));
-  cout << "alpha_gen_err " << alpha_gen_err << endl;
+  // cout << "alpha_gen_err " << alpha_gen_err << endl;
 
   float reco_sim = counter[k][17]/(counter[k][0]*1.0);
   float reco_sim_err = sqrt( (reco_sim*(1-reco_sim))/(counter[k][0]*1.0));
-  cout << "reco_sim_err " << reco_sim_err << endl;
+  // cout << "reco_sim_err " << reco_sim_err << endl;
 
   epsvsalph[k] = reco_sim/alpha_gen;
   Err[k]= sqrt( ( epsvsalph[k] * (1-epsvsalph[k]) ) / counter[k][5] );
 
 // calc_eff(reco_sim, alpha_gen);
 
-  cout<<" mass  "<<mass_string<<" cT  "<<cT_string<<endl;
-  cout<<" TotEff "<<counter[k][17]/(counter[k][0]*1.0)<<endl;
+  // cout<<" mass  "<<mass_string<<" cT  "<<cT_string<<endl;
+  // cout<<" TotEff "<<counter[k][17]/(counter[k][0]*1.0)<<endl;
   // cout<<" epsvsalph[k]  "<<epsvsalph[k]<<endl;
 
   string cutsgen[6]={"All events",
@@ -494,6 +494,9 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   // cout<<"\\caption{Acceptances and efficiencies of the event selection requirements for dark photon m="<<mass_string<<" and ctau="<<cT_string<<"}  "<<endl;
   // cout<<"\\centering "<<endl;
+
+  //cout<<" Sample   "<<fileName<<endl;
+  cout<<"\\expandafter\\newcommand\\csname " << fileName << "\\endcsname{%"<<endl;
   cout<<"\\begin{tabular}{ |c|c|c|}"<<endl;
   cout << "\\hline" << endl;
   cout<<"\\multicolumn{3}{c|}{$m_{\\gamma_D} = "<<mass_string<<"~\\gev$, $c\\tau_{\\gamma_D} = "<< cT_string<<"~\\mathrm{mm}$} \\\\ \\hline \\hline"<<endl;  
@@ -518,10 +521,25 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<"\\multicolumn{3}{r|}{$"  << alpha_gen<<"\\pm "<< alpha_gen_err<<"$} \\\\ "<<endl;
   cout<<"\\multicolumn{3}{r|}{$"  << reco_sim<<"\\pm "<< reco_sim_err<<"$} \\\\ \\hline "<<endl;
   cout<<"\\multicolumn{3}{r|}{$"  << epsvsalph[k]<<"\\pm "<< Err[k]<<"$} \\\\ \\hline "<<endl;
-  cout<<"\\end{tabular}"<<endl;
+  cout<<"\\end{tabular}}"<<endl;
 
+  delete diMuons_dz;
 
+  delete P_t_Mu0;   
+  delete P_t_Mu1; 
+  delete P_t_Mu2; 
+  delete P_t_Mu3; 
+  
+  delete mass_C;
+  delete mass_F;
 
+  delete iso_C;
+  delete iso_F;
+
+  delete eta_Mu0;
+  delete eta_Mu1;
+  delete eta_Mu2;
+  delete eta_Mu3; 
 
 }
 //  Float_t ctau1[15]={0,0.2,0.5,2.0,5.0};
@@ -572,47 +590,46 @@ void foo_modified()
 {
   setup();
   std::string samples[] = { 
-     // "DarkSUSY_m0p25_cT_0.txt",
-     // "DarkSUSY_m0p25_cT_0p05.txt",
-     // "DarkSUSY_m0p25_cT_0p1.txt",
-     // "DarkSUSY_m0p25_cT_0p5.txt",
-     // "DarkSUSY_m0p25_cT_1.txt",
-     // "DarkSUSY_m0p25_cT_2.txt",
-     // "DarkSUSY_m0p25_cT_5.txt",
+      // "DarkSUSY_m0p25_cT_0.txt",
+      // "DarkSUSY_m0p25_cT_0p05.txt",
+      // "DarkSUSY_m0p25_cT_0p1.txt",
+      // "DarkSUSY_m0p25_cT_0p5.txt",
+      // "DarkSUSY_m0p25_cT_1.txt",
+      // "DarkSUSY_m0p25_cT_2.txt",
+      // "DarkSUSY_m0p25_cT_5.txt",
+      // "DarkSUSY_m0p25_cT_20.txt",
+      // "DarkSUSY_m0p25_cT_100.txt",
 
-     // "DarkSUSY_m0p25_cT_20.txt",
-     // "DarkSUSY_m0p25_cT_100.txt",
+      // "DarkSUSY_m0p4_cT_0.txt",
+      // "DarkSUSY_m0p4_cT_0p5.txt",
+      // "DarkSUSY_m0p4_cT_1.txt",
+      // "DarkSUSY_m0p4_cT_2.txt",
+      // "DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_5_13TeV.txt",
+      // "DarkSUSY_m0p4_cT_20.txt",
+      // "DarkSUSY_m0p4_cT_100.txt",
 
-     // "DarkSUSY_m0p4_cT_0.txt",
-     // "DarkSUSY_m0p4_cT_0p5.txt",
-     // "DarkSUSY_m0p4_cT_1.txt",
-     // "DarkSUSY_m0p4_cT_2.txt",
-     // "DarkSUSY_mH_125_mN1_10_mGammaD_0p4_cT_5_13TeV.txt",
-     // "DarkSUSY_m0p4_cT_20.txt",
-     // "DarkSUSY_m0p4_cT_100.txt",
+      // "DarkSUSY_m0p7_cT_0.txt",
+      // "DarkSUSY_m0p7_cT_0p5.txt",
+      // "DarkSUSY_m0p7_cT_1.txt",
+      // "DarkSUSY_m0p7_cT_20.txt",
+      // "DarkSUSY_m0p7_cT_100.txt",
 
-     // "DarkSUSY_m0p7_cT_0.txt",
-     // "DarkSUSY_m0p7_cT_0p5.txt",
-     // "DarkSUSY_m0p7_cT_1.txt",
-     // "DarkSUSY_m0p7_cT_20.txt",
-     // "DarkSUSY_m0p7_cT_100.txt",
-
-     // "DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_0_13TeV.txt",
-     // "DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_5_13TeV.txt",
-     // "DarkSUSY_m1_cT_20.txt",
-     // "DarkSUSY_m1_cT_100.txt",
-
-     // "DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_0_13TeV.txt",
-     // "DarkSUSY_m5_cT_20.txt",
-     // "DarkSUSY_m5_cT_100.txt",
-
-     // "DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_0_13TeV.txt",
-     "DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_2_13TeV.txt",
-     "DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_20_13TeV.txt",
-     "DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_100_13TeV.txt",
+      // "DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_0_13TeV.txt",
+      // "DarkSUSY_mH_125_mN1_10_mGammaD_1_cT_5_13TeV.txt",
+      // "DarkSUSY_m1_cT_20.txt",
+    "DarkSUSY_m1_cT_100.txt",
+    
+    "DarkSUSY_mH_125_mN1_10_mGammaD_5_cT_0_13TeV.txt",
+    "DarkSUSY_m5_cT_20.txt",
+    "DarkSUSY_m5_cT_100.txt",
+    
+    "DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_0_13TeV.txt",
+    "DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_2_13TeV.txt",
+    "DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_20_13TeV.txt",
+    "DarkSUSY_mH_125_mN1_10_mGammaD_8p5_cT_100_13TeV.txt",
   };
   std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
-  for (auto p : samples){
+  for (const auto& p : samples){
     readTextFileWithSamples(p, DarkSUSY_mH_125_mGammaD_v);
   }
 

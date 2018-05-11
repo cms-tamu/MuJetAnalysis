@@ -400,7 +400,7 @@ class HepPlotter(object):
             x_axis = self.ax2
         else:
             x_axis = self.ax1
-        print" setting x axis"
+        #print" setting x axis"
         self.setXAxis(x_axis)
 
 
@@ -625,6 +625,7 @@ class HepPlotter(object):
     def setXAxis(self,x_axis):
         """Draw labels for x-axis"""
         x_axis.set_xlabel(self.x_label,fontsize=self.label_size,ha='right',va='top',position=(1,0))
+        #print "plotting x-axis"
         x_axis_xticks = x_axis.get_xticks()
         if len(set(x_axis_xticks.astype(int)))==len(x_axis_xticks):
             x_axis.set_xticklabels(x_axis_xticks.astype(int),fontProperties,fontsize=self.label_size)
