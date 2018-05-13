@@ -1,0 +1,6 @@
+WARNING: AutoLibraryloader::enable() and AutoLibraryLoader.h are deprecated.
+Use FWLiteEnabler::enable() and FWLiteEnabler.h instead
+Error in <TRint::ProcessLine>: macro jpsi.C not found in path .:/cvmfs/cms.cern.ch/slc6_amd64_gcc493/lcg/root/6.06.00-ikhhed5/macros:
+input_line_80:2:3: error: use of undeclared identifier 'analysis'
+ (analysis("Charmonium_E.txt"))
+  ^

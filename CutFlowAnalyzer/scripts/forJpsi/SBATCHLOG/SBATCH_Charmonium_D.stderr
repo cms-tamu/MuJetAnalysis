@@ -1,0 +1,69 @@
+WARNING: AutoLibraryloader::enable() and AutoLibraryLoader.h are deprecated.
+Use FWLiteEnabler::enable() and FWLiteEnabler.h instead
+Info in <TUnixSystem::ACLiC>: creating shared library /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/forJpsi/./jpsi_C.so
+Info in <TCanvas::Print>: png file plots/event_D.png has been created
+Info in <TCanvas::Print>: png file plots/diMuons_dz_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuons_dz_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/massC_aftTrig_cutD.png has been created
+Info in <TCanvas::Print>: pdf file plots/massC_aftTrig_cutD.pdf has been created
+Info in <TCanvas::Print>: png file plots/massC_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/massC_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/massF_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/massF_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/eta0_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/eta0_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/eta1_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/eta1_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/eta2_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/eta2_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/eta3_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/eta3_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/isoC_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/isoC_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/isoF_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/isoF_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/pt_mu0_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/pt_mu0_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/pt_mu1_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/pt_mu1_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/pt_mu2_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/pt_mu2_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/pt_mu3_aftTrig_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/pt_mu3_aftTrig_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/Iso_dim1_vs_dim2_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/Iso_dim1_vs_dim2_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/Iso_dim1_vs_dim2_D.C has been generated
+Info in <TCanvas::Print>: png file plots/mass_dim1_vs_dim2_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/mass_dim1_vs_dim2_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/mass_dim1_vs_dim2_D.C has been generated
+Info in <TCanvas::Print>: png file plots/Iso_dim1_vs_dim2_aftmasscutD.png has been created
+Info in <TCanvas::Print>: pdf file plots/Iso_dim1_vs_dim2_aftmasscutD.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/Iso_dim1_vs_dim2_aftmasscutD.C has been generated
+Info in <TCanvas::Print>: png file plots/diMuonC_Lxy_regionA_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonC_Lxy_regionA_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/diMuonC_Lxy_regionA_D.C has been generated
+Info in <TCanvas::Print>: png file plots/diMuonF_Lxy_regionA_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonF_Lxy_regionA_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/diMuonF_Lxy_regionA_D.C has been generated
+Info in <TCanvas::Print>: png file plots/diMuonC_Lxy_regionC_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonC_Lxy_regionC_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/diMuonC_Lxy_regionC_D.C has been generated
+Info in <TCanvas::Print>: png file plots/diMuonF_Lxy_regionC_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonF_Lxy_regionC_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/diMuonF_Lxy_regionC_D.C has been generated
+Info in <TCanvas::Print>: png file plots/diMuonC_Lxy_regionC_invtdz_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonC_Lxy_regionC_invtdz_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/diMuonF_Lxy_regionF_invtdz_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonF_Lxy_regionF_invtdz_D.pdf has been created
+Info in <TCanvas::Print>: png file plots/diMuonC_Rapidity_regionA_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonC_Rapidity_regionA_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/diMuonC_Rapidity_regionA_D.C has been generated
+Info in <TCanvas::Print>: png file plots/diMuonF_Rapidity_regionA_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonF_Rapidity_regionA_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/diMuonF_Rapidity_regionA_D.C has been generated
+Info in <TCanvas::Print>: png file plots/diMuonC_Rapidity_regionC_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonC_Rapidity_regionC_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/diMuonC_Rapidity_regionC_D.C has been generated
+Info in <TCanvas::Print>: png file plots/diMuonF_Rapidity_regionC_D.png has been created
+Info in <TCanvas::Print>: pdf file plots/diMuonF_Rapidity_regionC_D.pdf has been created
+Info in <TCanvas::SaveSource>: C++ Macro file: plots/diMuonF_Rapidity_regionC_D.C has been generated

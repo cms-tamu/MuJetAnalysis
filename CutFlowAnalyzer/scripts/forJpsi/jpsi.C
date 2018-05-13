@@ -34,8 +34,17 @@ Float_t epsvalp2[20]={0.0};
 
 Int_t ev_regionA=0;
 Int_t ev_regionB=0;
+Int_t ev_regionB1=0;
+Int_t ev_regionB2=0;
+Int_t ev_regionB3=0;
 Int_t ev_regionC=0;
+Int_t ev_regionC1=0;
+Int_t ev_regionC2=0;
+Int_t ev_regionC3=0;
 Int_t ev_regionD=0;
+Int_t ev_regionD1=0;
+Int_t ev_regionD2=0;
+Int_t ev_regionD3=0;
 
 void drawCMSPreliminaryWithLumi(double x, double y, double lumi){
 
@@ -89,12 +98,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   if(verbose) cout<<" dirNames  "<<dirNames[0]<<endl;
   
   
-    bool alldata=false;
-    //  bool alldata=true;
+  //      bool alldata=false;
+  bool alldata=false;
     //    bool mcsps=true;
-    bool mcdps=true;
-    //  bool mcdps=false;
-    bool mcsps=false;
+      //      bool mcdps=true;
+      bool mcdps=false;
+    bool mcsps=true;
   //  bool test=true;
   bool test=false;
   if(alldata) Run_period = "all";
@@ -192,6 +201,14 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *mass_C_aftTrig = new TH1F("mass_C_aftTrig","",100,0.0,5.0);
   TH1F *mass_F_aftTrig = new TH1F("mass_F_aftTrig","",100,0.0,5.0);
 
+  TH1F *mass_C_aftTrig_cut = new TH1F("mass_C_aftTrig_cut","",100,2.8,3.3);
+  TH1F *mass_F_aftTrig_cut = new TH1F("mass_F_aftTrig_cut","",100,2.8,3.3);
+
+  TH1F *mass_C_aftTrig_cut_lxylt0p05 = new TH1F("mass_C_aftTrig_cut_lxylt0p05","",100,2.8,3.3);
+  TH1F *mass_C_aftTrig_cut_lxylt0p2 = new TH1F("mass_C_aftTrig_cut_lxylt0p2","",100,2.8,3.3);
+  TH1F *mass_C_aftTrig_cut_lxylt0p4 = new TH1F("mass_C_aftTrig_cut_lxylt0p4","",100,2.8,3.3);
+  TH1F *mass_C_aftTrig_cut_lxylt1p0 = new TH1F("mass_C_aftTrig_cut_lxylt1p0","",100,2.8,3.3);
+
 
   TH1F *iso_C_aftTrig = new TH1F("iso_C_aftTrig","",100,0.0,12.0);
   TH1F *iso_F_aftTrig = new TH1F("iso_F_aftTrig","",100,0.0,12.0);
@@ -231,7 +248,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   //if(p == 0 || p%3 == 0) setup(); //reset vectors for every 4th cT for tables.
 
 
-  TFile *savehist = new TFile("plots/savehist_"+Run_period+".root","RECREATE");
+  TFile *savehist = new TFile("plots_SD20180512/savehist_"+Run_period+".root","RECREATE");
   
   
   while ((chEl=(TChainElement*)next())) {  //loopforfiles
@@ -241,7 +258,7 @@ void efficiency(const std::vector<std::string>& dirNames)
       if (verbose) std::cout << "File " << chEl->GetTitle() << " does not exist" << std::endl;
       continue;
     }
-    //		if (verbose) std::cout << "Loading directory cutFlowAnalyzerPXBL3PXFL2" << std::endl;
+    if (verbose) std::cout << "Loading directory cutFlowAnalyzerPXBL3PXFL2" << std::endl;
     myfile->cd("cutFlowAnalyzerPXBL3PXFL2");
 
     TTree *t = (TTree*)myfile->Get("cutFlowAnalyzerPXBL3PXFL2/Events");
@@ -250,7 +267,7 @@ void efficiency(const std::vector<std::string>& dirNames)
       continue;
     }
 
-    //		if (verbose) cout<<"  Events  "<<t->GetEntries()<<endl;
+    if (verbose) cout<<"  Events  "<<t->GetEntries()<<endl;
 
     int nentries;
 
@@ -383,14 +400,42 @@ void efficiency(const std::vector<std::string>& dirNames)
 	    
 	    Iso_dim1_vs_dim2->Fill(diMuonC_IsoTk_FittedVtx,diMuonF_IsoTk_FittedVtx);
 	    mass_dim1_vs_dim2->Fill(massC,massF);
+
+	    if(massC>2.8 && massC<3.3 && diMuonC_IsoTk_FittedVtx<2.0 && diMuonC_FittedVtx_Lxy<0.1) mass_C_aftTrig_cut->Fill(massC);
+	    if(massF>2.8 && massF<3.3 && diMuonF_IsoTk_FittedVtx<2.0 && diMuonF_FittedVtx_Lxy<0.1) mass_F_aftTrig_cut->Fill(massF);
+
+
+	    if(massC>2.8 && massC<3.3 && diMuonC_IsoTk_FittedVtx<2.0 && diMuonC_FittedVtx_Lxy<0.05) mass_C_aftTrig_cut_lxylt0p05->Fill(massC);
+	    if(massC>2.8 && massC<3.3 && diMuonC_IsoTk_FittedVtx<2.0 && diMuonC_FittedVtx_Lxy>0.05 && diMuonC_FittedVtx_Lxy<0.2) mass_C_aftTrig_cut_lxylt0p2->Fill(massC);
+	    if(massC>2.8 && massC<3.3 && diMuonC_IsoTk_FittedVtx<2.0 && diMuonC_FittedVtx_Lxy>0.2 && diMuonC_FittedVtx_Lxy<0.4) mass_C_aftTrig_cut_lxylt0p4->Fill(massC);
+	    if(massC>2.8 && massC<3.3 && diMuonC_IsoTk_FittedVtx<2.0 && diMuonC_FittedVtx_Lxy>0.4)  mass_C_aftTrig_cut_lxylt1p0->Fill(massC);
+
+
+
+
 	    
 	    if( (massC>2.8 && massC<3.3) && (massF>2.8 && massF<3.3) ){
+
+
 	      Iso_dim1_vs_dim2_aftmasscut->Fill(diMuonC_IsoTk_FittedVtx,diMuonF_IsoTk_FittedVtx);
 	      
 	      if(diMuonC_IsoTk_FittedVtx<2.0 && diMuonF_IsoTk_FittedVtx<2.0)  ev_regionA++;
-	      if(diMuonC_IsoTk_FittedVtx<2.0 && diMuonF_IsoTk_FittedVtx>2.0)  ev_regionB++;
-	      if(diMuonC_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx>2.0)  ev_regionC++;
-	      if(diMuonC_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<2.0)  ev_regionD++;
+
+	      if(diMuonC_IsoTk_FittedVtx<2.0 && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<12.0))  ev_regionB++;
+	      if(diMuonC_IsoTk_FittedVtx<2.0 && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<10.0))  ev_regionB1++;
+	      if(diMuonC_IsoTk_FittedVtx<2.0 && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<8.0))  ev_regionB2++;
+	      if(diMuonC_IsoTk_FittedVtx<2.0 && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<6.0))  ev_regionB3++;
+
+	      if((diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<12.0)  && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<12.0))  ev_regionC++;
+	      if((diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<10.0)  && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<10.0))  ev_regionC1++;
+	      if((diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<8.0)   && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<8.0))  ev_regionC2++;
+	      if((diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<6.0)   && (diMuonF_IsoTk_FittedVtx>2.0 && diMuonF_IsoTk_FittedVtx<6.0))  ev_regionC3++;
+
+	      if((diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<12.0) && diMuonF_IsoTk_FittedVtx<2.0)  ev_regionD++;
+	      if((diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<10.0) && diMuonF_IsoTk_FittedVtx<2.0)  ev_regionD1++;
+	      if((diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<8.0)  && diMuonF_IsoTk_FittedVtx<2.0)  ev_regionD2++;
+	      if((diMuonC_IsoTk_FittedVtx>2.0 && diMuonC_IsoTk_FittedVtx<6.0)  && diMuonF_IsoTk_FittedVtx<2.0)  ev_regionD3++;
+
 	      
 	    if(diMuonC_IsoTk_FittedVtx<2.0 && diMuonF_IsoTk_FittedVtx<2.0){
 	      diMuonC_Lxy_RegionA->Fill(diMuonC_FittedVtx_Lxy);
@@ -425,8 +470,8 @@ void efficiency(const std::vector<std::string>& dirNames)
       if(is1SelMu3p5)counter[k][6]++;
       if(is2SelMu3p5)counter[k][7]++;
       if(is3SelMu3p5)counter[k][8]++;
-      //      if(is4SelMu3p5 && selMu0_pT>17.0 && fabs(selMu0_eta)<0.9&& selMu3_pT>8.0){
-	if(is4SelMu3p5){
+      if(is4SelMu3p5 && selMu0_pT>17.0 && fabs(selMu0_eta)<0.9&& selMu3_pT>8.0){
+      //	if(is4SelMu3p5){
 	  counter[k][9]++;
 	  if(is2DiMuons){
 	    counter[k][10]++;
@@ -477,139 +522,151 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   TCanvas *cevt = new TCanvas("cevt","cevt");
   evt_number->Draw();
-  cevt->SaveAs("plots/event_"+Run_period+".png","recreate");
+  cevt->SaveAs("plots_SD20180512/event_"+Run_period+".png","recreate");
 
 
   //    TCanvas *cc = new TCanvas("cc","cc");
   //   mass_C->Draw();
-  //   cc->SaveAs("plots/massC_"+Run_period+".png","recreate");
+  //   cc->SaveAs("plots_SD20180512/massC_"+Run_period+".png","recreate");
 
   //   TCanvas *cf = new TCanvas("cf","cf");
   //   mass_F->Draw();
-  //   cf->SaveAs("plots/massF_"+Run_period+".png","recreate");
+  //   cf->SaveAs("plots_SD20180512/massF_"+Run_period+".png","recreate");
 
   //   TCanvas *e = new TCanvas("e","e");
   //  eta_Mu0->Draw();
-  //  e->SaveAs("plots/e0_"+Run_period+".png","recreate");
+  //  e->SaveAs("plots_SD20180512/e0_"+Run_period+".png","recreate");
 
   //  TCanvas *e1 = new TCanvas("e1","e1");
   //  eta_Mu0->Draw();
-  //  e1->SaveAs("plots/e1_"+Run_period+".png","recreate");
+  //  e1->SaveAs("plots_SD20180512/e1_"+Run_period+".png","recreate");
 
   //  TCanvas *e2 = new TCanvas("e2","e2");
   // eta_Mu0->Draw();
-  // e2->SaveAs("plots/e2_"+Run_period+".png","recreate");
+  // e2->SaveAs("plots_SD20180512/e2_"+Run_period+".png","recreate");
 
   // TCanvas *e3 = new TCanvas("e3","e3");
   // eta_Mu0->Draw();
-  // e3->SaveAs("plots/e3_"+Run_period+".png","recreate");
+  // e3->SaveAs("plots_SD20180512/e3_"+Run_period+".png","recreate");
 
   // TCanvas *isoC = new TCanvas("isoC","isoC");
   // iso_C->Draw();
-  // isoC->SaveAs("plots/isoC_"+Run_period+".png","recreate");
+  // isoC->SaveAs("plots_SD20180512/isoC_"+Run_period+".png","recreate");
 
   // TCanvas *isoF = new TCanvas("isoF","isoF");
   // iso_C->Draw();
-  // isoF->SaveAs("plots/isoF_"+Run_period+".png","recreate");
+  // isoF->SaveAs("plots_SD20180512/isoF_"+Run_period+".png","recreate");
 
   // TCanvas *c = new TCanvas("c","c");
   //  P_t_Mu0->Draw();
-  //  c->SaveAs("plots/pt_mu0_"+Run_period+".png","recreate");
+  //  c->SaveAs("plots_SD20180512/pt_mu0_"+Run_period+".png","recreate");
 
   //  TCanvas *c1 = new TCanvas("c1","c1");
   //  P_t_Mu1->Draw();
-  //  c1->SaveAs("plots/pt_mu1_"+Run_period+".png","recreate");
+  //  c1->SaveAs("plots_SD20180512/pt_mu1_"+Run_period+".png","recreate");
 
   //  TCanvas *c2 = new TCanvas("c2","c2");
   //  P_t_Mu2->Draw();
-  //  c2->SaveAs("plots/pt_mu2_"+Run_period+".png","recreate");
+  //  c2->SaveAs("plots_SD20180512/pt_mu2_"+Run_period+".png","recreate");
 
   //  TCanvas *c3 = new TCanvas("c3","c3");
   //  P_t_Mu3->Draw();
-  //  c3->SaveAs("plots/pt_mu3_"+Run_period+".png","recreate");
+  //  c3->SaveAs("plots_SD20180512/pt_mu3_"+Run_period+".png","recreate");
 
 
   TCanvas *tesa = new TCanvas("tesa","tesa");
   diMuons_dz->Write();
   diMuons_dz->GetXaxis()->SetTitle("di-#mu_{1z}  - di-#mu_{2z} [cm]");
   diMuons_dz->Draw();
-  tesa->SaveAs("plots/diMuons_dz_"+Run_period+".png","recreate");
-  tesa->SaveAs("plots/diMuons_dz_"+Run_period+".pdf","recreate");
+  tesa->SaveAs("plots_SD20180512/diMuons_dz_"+Run_period+".png","recreate");
+  tesa->SaveAs("plots_SD20180512/diMuons_dz_"+Run_period+".pdf","recreate");
+
+  mass_C_aftTrig_cut_lxylt0p05->Write();
+  mass_C_aftTrig_cut_lxylt0p2->Write(); 
+  mass_C_aftTrig_cut_lxylt0p4->Write(); 
+  mass_C_aftTrig_cut_lxylt1p0->Write();
+  
+  TCanvas *tccc = new TCanvas("tccc","tccc");
+  mass_C_aftTrig_cut->Write();
+  mass_C_aftTrig_cut->GetXaxis()->SetTitle("m_{di-#mu_{1}} [GeV]");
+  mass_C_aftTrig_cut->Draw();
+  tccc->SaveAs("plots_SD20180512/massC_aftTrig_cut"+Run_period+".png","recreate");
+  tccc->SaveAs("plots_SD20180512/massC_aftTrig_cut"+Run_period+".pdf","recreate");
 
   TCanvas *tcc = new TCanvas("tcc","tcc");
   mass_C_aftTrig->Write();
   mass_C_aftTrig->GetXaxis()->SetTitle("m_{di-#mu_{1}} [GeV]");
   mass_C_aftTrig->Draw();
-  tcc->SaveAs("plots/massC_aftTrig_"+Run_period+".png","recreate");
-  tcc->SaveAs("plots/massC_aftTrig_"+Run_period+".pdf","recreate");
+  tcc->SaveAs("plots_SD20180512/massC_aftTrig_"+Run_period+".png","recreate");
+  tcc->SaveAs("plots_SD20180512/massC_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *tcf = new TCanvas("tcf","tcf");
   mass_F_aftTrig->Write();
   mass_F_aftTrig->GetXaxis()->SetTitle("m_{di-#mu_{2}} [GeV]");
   mass_F_aftTrig->Draw();
-  tcf->SaveAs("plots/massF_aftTrig_"+Run_period+".png","recreate");
-  tcf->SaveAs("plots/massF_aftTrig_"+Run_period+".pdf","recreate");
+  tcf->SaveAs("plots_SD20180512/massF_aftTrig_"+Run_period+".png","recreate");
+  tcf->SaveAs("plots_SD20180512/massF_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *te = new TCanvas("te","te");
   eta_Mu0_aftTrig->Write();
   eta_Mu0_aftTrig->GetXaxis()->SetTitle("#eta_{#mu_{1}}");
   eta_Mu0_aftTrig->Draw();
-  te->SaveAs("plots/eta0_aftTrig_"+Run_period+".png","recreate");
-  te->SaveAs("plots/eta0_aftTrig_"+Run_period+".pdf","recreate");
+  te->SaveAs("plots_SD20180512/eta0_aftTrig_"+Run_period+".png","recreate");
+  te->SaveAs("plots_SD20180512/eta0_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *te1 = new TCanvas("te1","te1");
   eta_Mu1_aftTrig->GetXaxis()->SetTitle("#eta_{#mu_{2}}");
   eta_Mu1_aftTrig->Draw();
-  te1->SaveAs("plots/eta1_aftTrig_"+Run_period+".png","recreate");
-  te1->SaveAs("plots/eta1_aftTrig_"+Run_period+".pdf","recreate");
+  te1->SaveAs("plots_SD20180512/eta1_aftTrig_"+Run_period+".png","recreate");
+  te1->SaveAs("plots_SD20180512/eta1_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *te2 = new TCanvas("te2","te2");
   eta_Mu2_aftTrig->GetXaxis()->SetTitle("#eta_{#mu_{3}}");
   eta_Mu2_aftTrig->Draw();
-  te2->SaveAs("plots/eta2_aftTrig_"+Run_period+".png","recreate");
-  te2->SaveAs("plots/eta2_aftTrig_"+Run_period+".pdf","recreate");
+  te2->SaveAs("plots_SD20180512/eta2_aftTrig_"+Run_period+".png","recreate");
+  te2->SaveAs("plots_SD20180512/eta2_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *te3 = new TCanvas("te3","te3");
   eta_Mu3_aftTrig->GetXaxis()->SetTitle("#eta_{#mu_{4}}");
   eta_Mu3_aftTrig->Draw();
-  te3->SaveAs("plots/eta3_aftTrig_"+Run_period+".png","recreate");
-  te3->SaveAs("plots/eta3_aftTrig_"+Run_period+".pdf","recreate");
+  te3->SaveAs("plots_SD20180512/eta3_aftTrig_"+Run_period+".png","recreate");
+  te3->SaveAs("plots_SD20180512/eta3_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *tisoC = new TCanvas("tisoC","tisoC");
   iso_C_aftTrig->GetXaxis()->SetTitle("Iso_{di-#mu_{1}} [GeV]");
   iso_C_aftTrig->Draw();
-  tisoC->SaveAs("plots/isoC_aftTrig_"+Run_period+".png","recreate");
-  tisoC->SaveAs("plots/isoC_aftTrig_"+Run_period+".pdf","recreate");
+  tisoC->SaveAs("plots_SD20180512/isoC_aftTrig_"+Run_period+".png","recreate");
+  tisoC->SaveAs("plots_SD20180512/isoC_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *tisoF = new TCanvas("tisoF","tisoF");
   iso_F_aftTrig->GetXaxis()->SetTitle("Iso_{di-#mu_{2}} [GeV]");
   iso_F_aftTrig->Draw();
-  tisoF->SaveAs("plots/isoF_aftTrig_"+Run_period+".png","recreate");
-  tisoF->SaveAs("plots/isoF_aftTrig_"+Run_period+".pdf","recreate");
+  tisoF->SaveAs("plots_SD20180512/isoF_aftTrig_"+Run_period+".png","recreate");
+  tisoF->SaveAs("plots_SD20180512/isoF_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *tc = new TCanvas("tc","tc");
   P_t_Mu0_aftTrig->GetXaxis()->SetTitle("Pt_{#mu_{0}} [GeV]");
   P_t_Mu0_aftTrig->Draw();
-  tc->SaveAs("plots/pt_mu0_aftTrig_"+Run_period+".png","recreate");
-  tc->SaveAs("plots/pt_mu0_aftTrig_"+Run_period+".pdf","recreate");
+  tc->SaveAs("plots_SD20180512/pt_mu0_aftTrig_"+Run_period+".png","recreate");
+  tc->SaveAs("plots_SD20180512/pt_mu0_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *tc1 = new TCanvas("tc1","tc1");
   P_t_Mu1_aftTrig->GetXaxis()->SetTitle("Pt_{#mu_{1}} [GeV]");
   P_t_Mu1_aftTrig->Draw();
-  tc1->SaveAs("plots/pt_mu1_aftTrig_"+Run_period+".png","recreate");
-  tc1->SaveAs("plots/pt_mu1_aftTrig_"+Run_period+".pdf","recreate");
+  tc1->SaveAs("plots_SD20180512/pt_mu1_aftTrig_"+Run_period+".png","recreate");
+  tc1->SaveAs("plots_SD20180512/pt_mu1_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *tc2 = new TCanvas("tc2","tc2");
   P_t_Mu2_aftTrig->GetXaxis()->SetTitle("Pt_{#mu_{2}} [GeV]");
   P_t_Mu2_aftTrig->Draw();
-  tc2->SaveAs("plots/pt_mu2_aftTrig_"+Run_period+".png","recreate");
-  tc2->SaveAs("plots/pt_mu2_aftTrig_"+Run_period+".pdf","recreate");
+  tc2->SaveAs("plots_SD20180512/pt_mu2_aftTrig_"+Run_period+".png","recreate");
+  tc2->SaveAs("plots_SD20180512/pt_mu2_aftTrig_"+Run_period+".pdf","recreate");
 
   TCanvas *tc3 = new TCanvas("tc3","tc3");
   P_t_Mu3_aftTrig->GetXaxis()->SetTitle("Pt_{#mu_{3}} [GeV]");
   P_t_Mu3_aftTrig->Draw();
-  tc3->SaveAs("plots/pt_mu3_aftTrig_"+Run_period+".png","recreate");
-  tc3->SaveAs("plots/pt_mu3_aftTrig_"+Run_period+".pdf","recreate");
+  tc3->SaveAs("plots_SD20180512/pt_mu3_aftTrig_"+Run_period+".png","recreate");
+  tc3->SaveAs("plots_SD20180512/pt_mu3_aftTrig_"+Run_period+".pdf","recreate");
 
 
   // TLatex *prelim = new TLatex;
@@ -624,8 +681,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");  
 
-  c2d->SaveAs("plots/Iso_dim1_vs_dim2_"+Run_period+".png","recreate");
-  c2d->SaveAs("plots/Iso_dim1_vs_dim2_"+Run_period+".pdf","recreate");
+  c2d->SaveAs("plots_SD20180512/Iso_dim1_vs_dim2_"+Run_period+".png","recreate");
+  c2d->SaveAs("plots_SD20180512/Iso_dim1_vs_dim2_"+Run_period+".pdf","recreate");
+  c2d->SaveAs("plots_SD20180512/Iso_dim1_vs_dim2_"+Run_period+".C","recreate");
 
   //  TCanvas *c2d1 = new TCanvas("c2d1","c2d1",900,700);
   TCanvas *c2d1 = new TCanvas("c2d1","c2d1");
@@ -636,8 +694,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   mass_dim1_vs_dim2->Draw("COLORZ");
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c2d1->SaveAs("plots/mass_dim1_vs_dim2_"+Run_period+".png","recreate");
-  c2d1->SaveAs("plots/mass_dim1_vs_dim2_"+Run_period+".pdf","recreate");
+  c2d1->SaveAs("plots_SD20180512/mass_dim1_vs_dim2_"+Run_period+".png","recreate");
+  c2d1->SaveAs("plots_SD20180512/mass_dim1_vs_dim2_"+Run_period+".pdf","recreate");
+  c2d1->SaveAs("plots_SD20180512/mass_dim1_vs_dim2_"+Run_period+".C","recreate");
 
   TCanvas *c222 = new TCanvas("c222","c222");
   c222->SetRightMargin(0.18);
@@ -647,8 +706,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   Iso_dim1_vs_dim2_aftmasscut->Draw("COLORZ");
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c222->SaveAs("plots/Iso_dim1_vs_dim2_aftmasscut"+Run_period+".png","recreate");
-  c222->SaveAs("plots/Iso_dim1_vs_dim2_aftmasscut"+Run_period+".pdf","recreate");
+  c222->SaveAs("plots_SD20180512/Iso_dim1_vs_dim2_aftmasscut"+Run_period+".png","recreate");
+  c222->SaveAs("plots_SD20180512/Iso_dim1_vs_dim2_aftmasscut"+Run_period+".pdf","recreate");
+  c222->SaveAs("plots_SD20180512/Iso_dim1_vs_dim2_aftmasscut"+Run_period+".C","recreate");
 
   diMuonC_Lxy_RegionA->Write();
   diMuonF_Lxy_RegionA->Write();
@@ -667,42 +727,46 @@ void efficiency(const std::vector<std::string>& dirNames)
   diMuonC_Lxy_RegionA->Draw();
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c2221->SaveAs("plots/diMuonC_Lxy_regionA_"+Run_period+".png","recreate");
-  c2221->SaveAs("plots/diMuonC_Lxy_regionA_"+Run_period+".pdf","recreate");
+  c2221->SaveAs("plots_SD20180512/diMuonC_Lxy_regionA_"+Run_period+".png","recreate");
+  c2221->SaveAs("plots_SD20180512/diMuonC_Lxy_regionA_"+Run_period+".pdf","recreate");
+  c2221->SaveAs("plots_SD20180512/diMuonC_Lxy_regionA_"+Run_period+".C","recreate");
 
   TCanvas *c2222 = new TCanvas("c2222","c2222");
   diMuonF_Lxy_RegionA->GetXaxis()->SetTitle("Lxy_{di-#mu_{2}} [cm]");
   diMuonF_Lxy_RegionA->Draw();
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c2222->SaveAs("plots/diMuonF_Lxy_regionA_"+Run_period+".png","recreate");
-  c2222->SaveAs("plots/diMuonF_Lxy_regionA_"+Run_period+".pdf","recreate");
+  c2222->SaveAs("plots_SD20180512/diMuonF_Lxy_regionA_"+Run_period+".png","recreate");
+  c2222->SaveAs("plots_SD20180512/diMuonF_Lxy_regionA_"+Run_period+".pdf","recreate");
+  c2222->SaveAs("plots_SD20180512/diMuonF_Lxy_regionA_"+Run_period+".C","recreate");
 
   TCanvas *c2223 = new TCanvas("c2223","c2223");
   diMuonC_Lxy_RegionC->GetXaxis()->SetTitle("Lxy_{di-#mu_{1}} [cm]");
   diMuonC_Lxy_RegionC->Draw();
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c2223->SaveAs("plots/diMuonC_Lxy_regionC_"+Run_period+".png","recreate");
-  c2223->SaveAs("plots/diMuonC_Lxy_regionC_"+Run_period+".pdf","recreate");
+  c2223->SaveAs("plots_SD20180512/diMuonC_Lxy_regionC_"+Run_period+".png","recreate");
+  c2223->SaveAs("plots_SD20180512/diMuonC_Lxy_regionC_"+Run_period+".pdf","recreate");
+  c2223->SaveAs("plots_SD20180512/diMuonC_Lxy_regionC_"+Run_period+".C","recreate");
 
   TCanvas *c2224 = new TCanvas("c2224","c2224");
   diMuonF_Lxy_RegionC->GetXaxis()->SetTitle("Lxy_{di-#mu_{2}} [cm]");
   diMuonF_Lxy_RegionC->Draw();
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c2224->SaveAs("plots/diMuonF_Lxy_regionC_"+Run_period+".png","recreate");
-  c2224->SaveAs("plots/diMuonF_Lxy_regionC_"+Run_period+".pdf","recreate");
+  c2224->SaveAs("plots_SD20180512/diMuonF_Lxy_regionC_"+Run_period+".png","recreate");
+  c2224->SaveAs("plots_SD20180512/diMuonF_Lxy_regionC_"+Run_period+".pdf","recreate");
+  c2224->SaveAs("plots_SD20180512/diMuonF_Lxy_regionC_"+Run_period+".C","recreate");
 
   TCanvas *c22231 = new TCanvas("c22231","c22231");
   diMuonC_Lxy_RegionC_invtdz->Draw();
-  c22231->SaveAs("plots/diMuonC_Lxy_regionC_invtdz_"+Run_period+".png","recreate");
-  c22231->SaveAs("plots/diMuonC_Lxy_regionC_invtdz_"+Run_period+".pdf","recreate");
+  c22231->SaveAs("plots_SD20180512/diMuonC_Lxy_regionC_invtdz_"+Run_period+".png","recreate");
+  c22231->SaveAs("plots_SD20180512/diMuonC_Lxy_regionC_invtdz_"+Run_period+".pdf","recreate");
 
   TCanvas *c22242 = new TCanvas("c22242","c22242");
   diMuonF_Lxy_RegionC_invtdz->Draw();
-  c22242->SaveAs("plots/diMuonF_Lxy_regionF_invtdz_"+Run_period+".png","recreate");
-  c22242->SaveAs("plots/diMuonF_Lxy_regionF_invtdz_"+Run_period+".pdf","recreate");
+  c22242->SaveAs("plots_SD20180512/diMuonF_Lxy_regionF_invtdz_"+Run_period+".png","recreate");
+  c22242->SaveAs("plots_SD20180512/diMuonF_Lxy_regionF_invtdz_"+Run_period+".pdf","recreate");
 
 
 
@@ -711,32 +775,36 @@ void efficiency(const std::vector<std::string>& dirNames)
   diMuonC_Rapidity_RegionA->Draw();
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c22221->SaveAs("plots/diMuonC_Rapidity_regionA_"+Run_period+".png","recreate");
-  c22221->SaveAs("plots/diMuonC_Rapidity_regionA_"+Run_period+".pdf","recreate");
+  c22221->SaveAs("plots_SD20180512/diMuonC_Rapidity_regionA_"+Run_period+".png","recreate");
+  c22221->SaveAs("plots_SD20180512/diMuonC_Rapidity_regionA_"+Run_period+".pdf","recreate");
+  c22221->SaveAs("plots_SD20180512/diMuonC_Rapidity_regionA_"+Run_period+".C","recreate");
 
   TCanvas *c22222 = new TCanvas("c22222","c22222");
   diMuonF_Rapidity_RegionA->GetXaxis()->SetTitle("Rapidity_{di-#mu_{2}}");
   diMuonF_Rapidity_RegionA->Draw();
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c22222->SaveAs("plots/diMuonF_Rapidity_regionA_"+Run_period+".png","recreate");
-  c22222->SaveAs("plots/diMuonF_Rapidity_regionA_"+Run_period+".pdf","recreate");
+  c22222->SaveAs("plots_SD20180512/diMuonF_Rapidity_regionA_"+Run_period+".png","recreate");
+  c22222->SaveAs("plots_SD20180512/diMuonF_Rapidity_regionA_"+Run_period+".pdf","recreate");
+  c22222->SaveAs("plots_SD20180512/diMuonF_Rapidity_regionA_"+Run_period+".C","recreate");
 
   TCanvas *c22223 = new TCanvas("c22223","c22223");
   diMuonC_Rapidity_RegionC->GetXaxis()->SetTitle("Rapidity_{di-#mu_{1}}");
   diMuonC_Rapidity_RegionC->Draw();
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c22223->SaveAs("plots/diMuonC_Rapidity_regionC_"+Run_period+".png","recreate");
-  c22223->SaveAs("plots/diMuonC_Rapidity_regionC_"+Run_period+".pdf","recreate");
+  c22223->SaveAs("plots_SD20180512/diMuonC_Rapidity_regionC_"+Run_period+".png","recreate");
+  c22223->SaveAs("plots_SD20180512/diMuonC_Rapidity_regionC_"+Run_period+".pdf","recreate");
+  c22223->SaveAs("plots_SD20180512/diMuonC_Rapidity_regionC_"+Run_period+".C","recreate");
 
   TCanvas *c22224 = new TCanvas("c22224","c22224");
   diMuonF_Rapidity_RegionC->GetXaxis()->SetTitle("Rapidity_{di-#mu_{2}}");
   diMuonF_Rapidity_RegionC->Draw();
   t2->Draw("same");
   if(alldata) t1->DrawLatex(0.6,0.95,"35.9 fb^{-1} (13 TeV)");
-  c22224->SaveAs("plots/diMuonF_Rapidity_regionC_"+Run_period+".png","recreate");
-  c22224->SaveAs("plots/diMuonF_Rapidity_regionC_"+Run_period+".pdf","recreate");
+  c22224->SaveAs("plots_SD20180512/diMuonF_Rapidity_regionC_"+Run_period+".png","recreate");
+  c22224->SaveAs("plots_SD20180512/diMuonF_Rapidity_regionC_"+Run_period+".pdf","recreate");
+  c22224->SaveAs("plots_SD20180512/diMuonF_Rapidity_regionC_"+Run_period+".C","recreate");
   
   delete savehist;
   
@@ -785,9 +853,19 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<"end{landscape}"<<endl;
   
   cout<<" Events Region A   "<<ev_regionA<<endl;
+  cout<<"                   "<<endl;  
   cout<<" Events Region B   "<<ev_regionB<<endl;
+  cout<<" Events Region B1   "<<ev_regionB1<<endl;
+  cout<<" Events Region B2   "<<ev_regionB2<<endl;
+  cout<<" Events Region B3   "<<ev_regionB3<<endl;
   cout<<" Events Region C   "<<ev_regionC<<endl;
+  cout<<" Events Region C1   "<<ev_regionC1<<endl;
+  cout<<" Events Region C2   "<<ev_regionC2<<endl;
+  cout<<" Events Region C3   "<<ev_regionC3<<endl;
   cout<<" Events Region D   "<<ev_regionD<<endl;
+  cout<<" Events Region D1   "<<ev_regionD1<<endl;
+  cout<<" Events Region D2   "<<ev_regionD2<<endl;
+  cout<<" Events Region D3   "<<ev_regionD3<<endl;
   
   
 }
@@ -838,15 +916,16 @@ void efficiency(const std::vector<std::string>& dirNames)
 
 
 
-void analysis(const std::string txtfile)
+void jpsi()
 {
-
+  const std::string txtfile = "sps.txt";
+    
   setup();
-  std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
+  std::vector< std::vector<string> > vector_of_files;
   // // cout << "Vector Created" << endl;
-  readTextFileWithSamples(txtfile, DarkSUSY_mH_125_mGammaD_v);
+  readTextFileWithSamples(txtfile, vector_of_files);
   // // cout << "Samples read" << endl;
-  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency(v);
+  for(auto v: vector_of_files) efficiency(v);
   // // cout << "For Loop completes" << endl;
 
 }

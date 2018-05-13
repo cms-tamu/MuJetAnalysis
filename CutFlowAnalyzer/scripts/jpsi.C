@@ -369,9 +369,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   cevt->SaveAs("jpsi/event_"+Run_period+".png","recreate");
 
 
+
     TCanvas *cc = new TCanvas("cc","cc",800,600);
    mass_C->Draw();
    cc->SaveAs("jpsi/massC_"+Run_period+".png","recreate");
+
   
    TCanvas *cf = new TCanvas("cf","cf",800,600);
    mass_F->Draw();
@@ -417,11 +419,13 @@ void efficiency(const std::vector<std::string>& dirNames)
   P_t_Mu3->Draw();
   c3->SaveAs("jpsi/pt_mu3_"+Run_period+".png","recreate");
 
+  TFile *f2 = new TFile("jpsi_mass_"+Run_period+".root");
 
-
-    TCanvas *tcc = new TCanvas("tcc","tcc",800,600);
-   mass_C_aftTrig->Draw();
-   tcc->SaveAs("jpsi/massC_aftTrig_"+Run_period+".png","recreate");
+  TCanvas *tcc = new TCanvas("tcc","tcc",800,600);
+  mass_C_aftTrig->Draw();
+  mass_C_aftTrig->Write();
+  tcc->SaveAs("jpsi/massC_aftTrig_"+Run_period+".png","recreate");
+  f2->Close();
   
    TCanvas *tcf = new TCanvas("tcf","tcf",800,600);
    mass_F_aftTrig->Draw();

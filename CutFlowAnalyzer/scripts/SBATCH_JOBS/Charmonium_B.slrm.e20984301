@@ -1,0 +1,11 @@
+WARNING: AutoLibraryloader::enable() and AutoLibraryLoader.h are deprecated.
+Use FWLiteEnabler::enable() and FWLiteEnabler.h instead
+Info in <TUnixSystem::ACLiC>: creating shared library /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/./jpsi_C.so
+In file included from input_line_12:9:
+/fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/./jpsi.C:67:3: error: use of undeclared identifier 'decodeFileNameManyData'
+  decodeFileNameManyData(dirNames, Run_period);
+  ^
+Error in <ACLiC>: Dictionary generation failed!
+input_line_80:2:3: error: use of undeclared identifier 'analysis'
+ (analysis("Charmonium_B.txt"))
+  ^

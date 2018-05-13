@@ -20,6 +20,9 @@
 ///----Global Variables ----///
 TFile *BAM = new TFile("Efficiency_Plots.root","RECREATE");
 
+int my_canvas_x = 600;
+int my_canvas_y = 600;
+
 Float_t count_gam_A0[160][160];
 Float_t count_rec_A0[160][160];
 Float_t eff_A0[160][160];
@@ -28,192 +31,195 @@ Float_t count_gam_A1[160][160];
 Float_t count_rec_A1[160][160];
 Float_t eff_A1[160][160];
 
-TH1F *den_1D_A0_LXY = new TH1F("den_1D_A0_LXY", "den_1D_A0_LXY", 40, 0, 80);
-TH1F *num_1D_A0_LXY = new TH1F("num_1D_A0_LXY", "num_1D_A0_LXY", 40, 0, 80);
+TString cms_title = "#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                    13 TeV  ";
+TString cms_title2 = "#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                    13 TeV  ";
 
-TH1F *den_1D_A0_LZ = new TH1F("den_1D_A0_LZ", "den_1D_A0_LZ", 20, 0, 80);
-TH1F *num_1D_A0_LZ = new TH1F("num_1D_A0_LZ", "num_1D_A0_LZ", 20, 0, 80);
+TH1F *den_1D_A0_LXY = new TH1F("den_1D_A0_LXY", cms_title, 80, 0, 80);
+TH1F *num_1D_A0_LXY = new TH1F("num_1D_A0_LXY", cms_title, 80, 0, 80);
 
-TH1F *den_1D_A1_LXY = new TH1F("den_1D_A1_LXY", "den_1D_A1_LXY", 40, 0, 80);
-TH1F *num_1D_A1_LXY = new TH1F("num_1D_A1_LXY", "num_1D_A1_LXY", 40, 0, 80);
+TH1F *den_1D_A0_LZ = new TH1F("den_1D_A0_LZ", cms_title, 80, 0, 80);
+TH1F *num_1D_A0_LZ = new TH1F("num_1D_A0_LZ", cms_title, 80, 0, 80);
 
-TH1F *den_1D_A1_LZ = new TH1F("den_1D_A1_LZ", "den_1D_A1_LZ", 20, 0, 80);
-TH1F *num_1D_A1_LZ = new TH1F("num_1D_A1_LZ", "num_1D_A1_LZ", 20, 0, 80);
+TH1F *den_1D_A1_LXY = new TH1F("den_1D_A1_LXY", cms_title, 80, 0, 80);
+TH1F *num_1D_A1_LXY = new TH1F("num_1D_A1_LXY", cms_title, 80, 0, 80);
+
+TH1F *den_1D_A1_LZ = new TH1F("den_1D_A1_LZ", cms_title, 80, 0, 80);
+TH1F *num_1D_A1_LZ = new TH1F("num_1D_A1_LZ", cms_title, 80, 0, 80);
 
 TH1F *dR_A0 = new TH1F("dR_A0", "dR_A0", 100, 0, 1);
 TH1F *dR_A1 = new TH1F("dR_A1", "dR_A1", 100, 0, 1);
 
 TH1F *dPhi_Plot = new TH1F("dPhi_A0", "dPhi_A0", 1400, -7, 7);
 
-TH1F *den_1D_A1_pT = new TH1F("den_1D_A1_pT", "den_1D_A1_pT", 130, 0, 130);
-TH1F *num_1D_A1_pT = new TH1F("num_1D_A1_pT", "num_1D_A1_pT", 130, 0, 130);
+TH1F *den_1D_A1_pT = new TH1F("den_1D_A1_pT", cms_title, 130, 0, 130);
+TH1F *num_1D_A1_pT = new TH1F("num_1D_A1_pT", cms_title, 130, 0, 130);
 
-TH1F *den_1D_A0_pT = new TH1F("den_1D_A0_pT", "den_1D_A0_pT", 130, 0, 130);
-TH1F *num_1D_A0_pT = new TH1F("num_1D_A0_pT", "num_1D_A0_pT", 130, 0, 130);
+TH1F *den_1D_A0_pT = new TH1F("den_1D_A0_pT", cms_title, 130, 0, 130);
+TH1F *num_1D_A0_pT = new TH1F("num_1D_A0_pT", cms_title, 130, 0, 130);
 
 //Efficiency by eta -- <= 0.9
 
 Float_t bins[] = {0, 2, 4, 6, 8, 10, 12, 16, 18, 20, 25, 30, 35, 40, 45, 50, 60, 80};
 Int_t binnum = sizeof(bins)/sizeof(Float_t) - 1;
 
-TH1F *den_LEp8_1D_A0_LXY = new TH1F("den_LEp8_1D_A0_LXY", "den_LEp8_1D_A0_LXY", binnum, bins);
-TH1F *num_LEp8_1D_A0_LXY = new TH1F("num_LEp8_1D_A0_LXY", "num_LEp8_1D_A0_LXY", binnum, bins);
+TH1F *den_LEp8_1D_A0_LXY = new TH1F("den_LEp8_1D_A0_LXY", cms_title, binnum, bins);
+TH1F *num_LEp8_1D_A0_LXY = new TH1F("num_LEp8_1D_A0_LXY", cms_title, binnum, bins);
 
-TH1F *den_LEp8_1D_A0_LZ = new TH1F("den_LEp8_1D_A0_LZ", "den_LEp8_1D_A0_LZ", binnum, bins);
-TH1F *num_LEp8_1D_A0_LZ = new TH1F("num_LEp8_1D_A0_LZ", "num_LEp8_1D_A0_LZ", binnum, bins);
+TH1F *den_LEp8_1D_A0_LZ = new TH1F("den_LEp8_1D_A0_LZ", cms_title, binnum, bins);
+TH1F *num_LEp8_1D_A0_LZ = new TH1F("num_LEp8_1D_A0_LZ", cms_title, binnum, bins);
 
-TH1F *den_LEp8_1D_A1_LXY = new TH1F("den_LEp8_1D_A1_LXY", "den_LEp8_1D_A1_LXY", binnum, bins);
-TH1F *num_LEp8_1D_A1_LXY = new TH1F("num_LEp8_1D_A1_LXY", "num_LEp8_1D_A1_LXY", binnum, bins);
+TH1F *den_LEp8_1D_A1_LXY = new TH1F("den_LEp8_1D_A1_LXY", cms_title, binnum, bins);
+TH1F *num_LEp8_1D_A1_LXY = new TH1F("num_LEp8_1D_A1_LXY", cms_title, binnum, bins);
 
-TH1F *den_LEp8_1D_A1_LZ = new TH1F("den_LEp8_1D_A1_LZ", "den_LEp8_1D_A1_LZ", binnum, bins);
-TH1F *num_LEp8_1D_A1_LZ = new TH1F("num_LEp8_1D_A1_LZ", "num_LEp8_1D_A1_LZ", binnum, bins);
+TH1F *den_LEp8_1D_A1_LZ = new TH1F("den_LEp8_1D_A1_LZ", cms_title, binnum, bins);
+TH1F *num_LEp8_1D_A1_LZ = new TH1F("num_LEp8_1D_A1_LZ", cms_title, binnum, bins);
 
-TH1F *den_LEp8_1D_A1_pT = new TH1F("den_LEp8_1D_A1_pT", "den_LEp8_1D_A1_pT", binnum, bins);
-TH1F *num_LEp8_1D_A1_pT = new TH1F("num_LEp8_1D_A1_pT", "num_LEp8_1D_A1_pT", binnum, bins);
+TH1F *den_LEp8_1D_A1_pT = new TH1F("den_LEp8_1D_A1_pT", cms_title, binnum, bins);
+TH1F *num_LEp8_1D_A1_pT = new TH1F("num_LEp8_1D_A1_pT", cms_title, binnum, bins);
 
-TH1F *den_LEp8_1D_A0_pT = new TH1F("den_LEp8_1D_A0_pT", "den_LEp8_1D_A0_pT", binnum, bins);
-TH1F *num_LEp8_1D_A0_pT = new TH1F("num_LEp8_1D_A0_pT", "num_LEp8_1D_A0_pT", binnum, bins);
+TH1F *den_LEp8_1D_A0_pT = new TH1F("den_LEp8_1D_A0_pT", cms_title, binnum, bins);
+TH1F *num_LEp8_1D_A0_pT = new TH1F("num_LEp8_1D_A0_pT", cms_title, binnum, bins);
 
 //Efficiency by eta -- > 0.9
 
-TH1F *den_Gp8_1D_A0_LXY = new TH1F("den_Gp8_1D_A0_LXY", "den_Gp8_1D_A0_LXY", binnum, bins);
-TH1F *num_Gp8_1D_A0_LXY = new TH1F("num_Gp8_1D_A0_LXY", "num_Gp8_1D_A0_LXY", binnum, bins);
+TH1F *den_Gp8_1D_A0_LXY = new TH1F("den_Gp8_1D_A0_LXY", cms_title, binnum, bins);
+TH1F *num_Gp8_1D_A0_LXY = new TH1F("num_Gp8_1D_A0_LXY", cms_title, binnum, bins);
 
-TH1F *den_Gp8_1D_A0_LZ = new TH1F("den_Gp8_1D_A0_LZ", "den_Gp8_1D_A0_LZ", binnum, bins);
-TH1F *num_Gp8_1D_A0_LZ = new TH1F("num_Gp8_1D_A0_LZ", "num_Gp8_1D_A0_LZ", binnum, bins);
+TH1F *den_Gp8_1D_A0_LZ = new TH1F("den_Gp8_1D_A0_LZ", cms_title, binnum, bins);
+TH1F *num_Gp8_1D_A0_LZ = new TH1F("num_Gp8_1D_A0_LZ", cms_title, binnum, bins);
 
-TH1F *den_Gp8_1D_A1_LXY = new TH1F("den_Gp8_1D_A1_LXY", "den_Gp8_1D_A1_LXY", binnum, bins);
-TH1F *num_Gp8_1D_A1_LXY = new TH1F("num_Gp8_1D_A1_LXY", "num_Gp8_1D_A1_LXY", binnum, bins);
+TH1F *den_Gp8_1D_A1_LXY = new TH1F("den_Gp8_1D_A1_LXY", cms_title, binnum, bins);
+TH1F *num_Gp8_1D_A1_LXY = new TH1F("num_Gp8_1D_A1_LXY", cms_title, binnum, bins);
 
-TH1F *den_Gp8_1D_A1_LZ = new TH1F("den_Gp8_1D_A1_LZ", "den_Gp8_1D_A1_LZ", binnum, bins);
-TH1F *num_Gp8_1D_A1_LZ = new TH1F("num_Gp8_1D_A1_LZ", "num_Gp8_1D_A1_LZ", binnum, bins);
+TH1F *den_Gp8_1D_A1_LZ = new TH1F("den_Gp8_1D_A1_LZ", cms_title, binnum, bins);
+TH1F *num_Gp8_1D_A1_LZ = new TH1F("num_Gp8_1D_A1_LZ", cms_title, binnum, bins);
 
-TH1F *den_Gp8_1D_A1_pT = new TH1F("den_Gp8_1D_A1_pT", "den_Gp8_1D_A1_pT", binnum, bins);
-TH1F *num_Gp8_1D_A1_pT = new TH1F("num_Gp8_1D_A1_pT", "num_Gp8_1D_A1_pT", binnum, bins);
+TH1F *den_Gp8_1D_A1_pT = new TH1F("den_Gp8_1D_A1_pT", cms_title, binnum, bins);
+TH1F *num_Gp8_1D_A1_pT = new TH1F("num_Gp8_1D_A1_pT", cms_title, binnum, bins);
 
-TH1F *den_Gp8_1D_A0_pT = new TH1F("den_Gp8_1D_A0_pT", "den_Gp8_1D_A0_pT", binnum, bins);
-TH1F *num_Gp8_1D_A0_pT = new TH1F("num_Gp8_1D_A0_pT", "num_Gp8_1D_A0_pT", binnum, bins);
+TH1F *den_Gp8_1D_A0_pT = new TH1F("den_Gp8_1D_A0_pT", cms_title, binnum, bins);
+TH1F *num_Gp8_1D_A0_pT = new TH1F("num_Gp8_1D_A0_pT", cms_title, binnum, bins);
 
 //Efficiency by eta && event passed the trigger
 
-TH1F *den_Trig_LEp8_1D_A0_LXY = new TH1F("den_Trig_LEp8_1D_A0_LXY", "den_Trig_LEp8_1D_A0_LXY", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A0_LXY = new TH1F("num_Trig_LEp8_1D_A0_LXY", "num_Trig_LEp8_1D_A0_LXY", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A0_LXY = new TH1F("den_Trig_LEp8_1D_A0_LXY", cms_title, binnum, bins);
+TH1F *num_Trig_LEp8_1D_A0_LXY = new TH1F("num_Trig_LEp8_1D_A0_LXY", cms_title, binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A0_LZ = new TH1F("den_Trig_LEp8_1D_A0_LZ", "den_Trig_LEp8_1D_A0_LZ", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A0_LZ = new TH1F("num_Trig_LEp8_1D_A0_LZ", "num_Trig_LEp8_1D_A0_LZ", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A0_LZ = new TH1F("den_Trig_LEp8_1D_A0_LZ", cms_title, binnum, bins);
+TH1F *num_Trig_LEp8_1D_A0_LZ = new TH1F("num_Trig_LEp8_1D_A0_LZ", cms_title, binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A1_LXY = new TH1F("den_Trig_LEp8_1D_A1_LXY", "den_Trig_LEp8_1D_A1_LXY", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A1_LXY = new TH1F("num_Trig_LEp8_1D_A1_LXY", "num_Trig_LEp8_1D_A1_LXY", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A1_LXY = new TH1F("den_Trig_LEp8_1D_A1_LXY", cms_title, binnum, bins);
+TH1F *num_Trig_LEp8_1D_A1_LXY = new TH1F("num_Trig_LEp8_1D_A1_LXY", cms_title, binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A1_LZ = new TH1F("den_Trig_LEp8_1D_A1_LZ", "den_Trig_LEp8_1D_A1_LZ", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A1_LZ = new TH1F("num_Trig_LEp8_1D_A1_LZ", "num_Trig_LEp8_1D_A1_LZ", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A1_LZ = new TH1F("den_Trig_LEp8_1D_A1_LZ", cms_title, binnum, bins);
+TH1F *num_Trig_LEp8_1D_A1_LZ = new TH1F("num_Trig_LEp8_1D_A1_LZ", cms_title, binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A1_pT = new TH1F("den_Trig_LEp8_1D_A1_pT", "den_Trig_LEp8_1D_A1_pT", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A1_pT = new TH1F("num_Trig_LEp8_1D_A1_pT", "num_Trig_LEp8_1D_A1_pT", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A1_pT = new TH1F("den_Trig_LEp8_1D_A1_pT", cms_title, binnum, bins);
+TH1F *num_Trig_LEp8_1D_A1_pT = new TH1F("num_Trig_LEp8_1D_A1_pT", cms_title, binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A0_pT = new TH1F("den_Trig_LEp8_1D_A0_pT", "den_Trig_LEp8_1D_A0_pT", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A0_pT = new TH1F("num_Trig_LEp8_1D_A0_pT", "num_Trig_LEp8_1D_A0_pT", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A0_pT = new TH1F("den_Trig_LEp8_1D_A0_pT", cms_title, binnum, bins);
+TH1F *num_Trig_LEp8_1D_A0_pT = new TH1F("num_Trig_LEp8_1D_A0_pT", cms_title, binnum, bins);
 
 //Efficiency by eta -- > 0.9
 
-TH1F *den_Trig_Gp8_1D_A0_LXY = new TH1F("den_Trig_Gp8_1D_A0_LXY", "den_Trig_Gp8_1D_A0_LXY", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A0_LXY = new TH1F("num_Trig_Gp8_1D_A0_LXY", "num_Trig_Gp8_1D_A0_LXY", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A0_LXY = new TH1F("den_Trig_Gp8_1D_A0_LXY", cms_title, binnum, bins);
+TH1F *num_Trig_Gp8_1D_A0_LXY = new TH1F("num_Trig_Gp8_1D_A0_LXY", cms_title, binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A0_LZ = new TH1F("den_Trig_Gp8_1D_A0_LZ", "den_Trig_Gp8_1D_A0_LZ", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A0_LZ = new TH1F("num_Trig_Gp8_1D_A0_LZ", "num_Trig_Gp8_1D_A0_LZ", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A0_LZ = new TH1F("den_Trig_Gp8_1D_A0_LZ", cms_title, binnum, bins);
+TH1F *num_Trig_Gp8_1D_A0_LZ = new TH1F("num_Trig_Gp8_1D_A0_LZ", cms_title, binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A1_LXY = new TH1F("den_Trig_Gp8_1D_A1_LXY", "den_Trig_Gp8_1D_A1_LXY", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A1_LXY = new TH1F("num_Trig_Gp8_1D_A1_LXY", "num_Trig_Gp8_1D_A1_LXY", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A1_LXY = new TH1F("den_Trig_Gp8_1D_A1_LXY", cms_title, binnum, bins);
+TH1F *num_Trig_Gp8_1D_A1_LXY = new TH1F("num_Trig_Gp8_1D_A1_LXY", cms_title, binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A1_LZ = new TH1F("den_Trig_Gp8_1D_A1_LZ", "den_Trig_Gp8_1D_A1_LZ", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A1_LZ = new TH1F("num_Trig_Gp8_1D_A1_LZ", "num_Trig_Gp8_1D_A1_LZ", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A1_LZ = new TH1F("den_Trig_Gp8_1D_A1_LZ", cms_title, binnum, bins);
+TH1F *num_Trig_Gp8_1D_A1_LZ = new TH1F("num_Trig_Gp8_1D_A1_LZ", cms_title, binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A1_pT = new TH1F("den_Trig_Gp8_1D_A1_pT", "den_Trig_Gp8_1D_A1_pT", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A1_pT = new TH1F("num_Trig_Gp8_1D_A1_pT", "num_Trig_Gp8_1D_A1_pT", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A1_pT = new TH1F("den_Trig_Gp8_1D_A1_pT", cms_title, binnum, bins);
+TH1F *num_Trig_Gp8_1D_A1_pT = new TH1F("num_Trig_Gp8_1D_A1_pT", cms_title, binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A0_pT = new TH1F("den_Trig_Gp8_1D_A0_pT", "den_Trig_Gp8_1D_A0_pT", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A0_pT = new TH1F("num_Trig_Gp8_1D_A0_pT", "num_Trig_Gp8_1D_A0_pT", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A0_pT = new TH1F("den_Trig_Gp8_1D_A0_pT", cms_title, binnum, bins);
+TH1F *num_Trig_Gp8_1D_A0_pT = new TH1F("num_Trig_Gp8_1D_A0_pT", cms_title, binnum, bins);
 
 /*
 //Efficiency by eta -- <= 0.9.  
 
-TH1F *den_LEp8_1D_A0_mu0_LXY = new TH1F("den_LEp8_1D_A0_mu0_LXY", "den_LEp8_1D_A0_mu0_LXY", binnum, bins);
-TH1F *num_LEp8_1D_A0_mu0_LXY = new TH1F("num_LEp8_1D_A0_mu0_LXY", "num_LEp8_1D_A0_mu0_LXY", binnum, bins);
+TH1F *den_LEp8_1D_A0_mu0_LXY = new TH1F("den_LEp8_1D_A0_mu0_LXY", "mu0_LXY", binnum, bins);
+TH1F *num_LEp8_1D_A0_mu0_LXY = new TH1F("num_LEp8_1D_A0_mu0_LXY", "mu0_LXY", binnum, bins);
 
-TH1F *den_LEp8_1D_A0_mu0_LZ = new TH1F("den_LEp8_1D_A0_mu0_LZ", "den_LEp8_1D_A0_mu0_LZ", binnum, bins);
-TH1F *num_LEp8_1D_A0_mu0_LZ = new TH1F("num_LEp8_1D_A0_mu0_LZ", "num_LEp8_1D_A0_mu0_LZ", binnum, bins);
+TH1F *den_LEp8_1D_A0_mu0_LZ = new TH1F("den_LEp8_1D_A0_mu0_LZ", "mu0_LZ", binnum, bins);
+TH1F *num_LEp8_1D_A0_mu0_LZ = new TH1F("num_LEp8_1D_A0_mu0_LZ", "mu0_LZ", binnum, bins);
 
-TH1F *den_LEp8_1D_A0_mu1_LXY = new TH1F("den_LEp8_1D_A0_mu1_LXY", "den_LEp8_1D_A0_mu1_LXY", binnum, bins);
-TH1F *num_LEp8_1D_A0_mu1_LXY = new TH1F("num_LEp8_1D_A0_mu1_LXY", "num_LEp8_1D_A0_mu1_LXY", binnum, bins);
+TH1F *den_LEp8_1D_A0_mu1_LXY = new TH1F("den_LEp8_1D_A0_mu1_LXY", "mu1_LXY", binnum, bins);
+TH1F *num_LEp8_1D_A0_mu1_LXY = new TH1F("num_LEp8_1D_A0_mu1_LXY", "mu1_LXY", binnum, bins);
 
-TH1F *den_LEp8_1D_A0_mu1_LZ = new TH1F("den_LEp8_1D_A0_mu1_LZ", "den_LEp8_1D_A0_mu1_LZ", binnum, bins);
-TH1F *num_LEp8_1D_A0_mu1_LZ = new TH1F("num_LEp8_1D_A0_mu1_LZ", "num_LEp8_1D_A0_mu1_LZ", binnum, bins);
+TH1F *den_LEp8_1D_A0_mu1_LZ = new TH1F("den_LEp8_1D_A0_mu1_LZ", "mu1_LZ", binnum, bins);
+TH1F *num_LEp8_1D_A0_mu1_LZ = new TH1F("num_LEp8_1D_A0_mu1_LZ", "mu1_LZ", binnum, bins);
 
-TH1F *den_LEp8_1D_A0_mu1_pT = new TH1F("den_LEp8_1D_A0_mu1_pT", "den_LEp8_1D_A0_mu1_pT", binnum, bins);
-TH1F *num_LEp8_1D_A0_mu1_pT = new TH1F("num_LEp8_1D_A0_mu1_pT", "num_LEp8_1D_A0_mu1_pT", binnum, bins);
+TH1F *den_LEp8_1D_A0_mu1_pT = new TH1F("den_LEp8_1D_A0_mu1_pT", "mu1_pT", binnum, bins);
+TH1F *num_LEp8_1D_A0_mu1_pT = new TH1F("num_LEp8_1D_A0_mu1_pT", "mu1_pT", binnum, bins);
 
-TH1F *den_LEp8_1D_A0_mu0_pT = new TH1F("den_LEp8_1D_A0_mu0_pT", "den_LEp8_1D_A0_mu0_pT", binnum, bins);
-TH1F *num_LEp8_1D_A0_mu0_pT = new TH1F("num_LEp8_1D_A0_mu0_pT", "num_LEp8_1D_A0_mu0_pT", binnum, bins);
+TH1F *den_LEp8_1D_A0_mu0_pT = new TH1F("den_LEp8_1D_A0_mu0_pT", "mu0_pT", binnum, bins);
+TH1F *num_LEp8_1D_A0_mu0_pT = new TH1F("num_LEp8_1D_A0_mu0_pT", "mu0_pT", binnum, bins);
 
 //Efficiency by eta -- > 0.9
 
-TH1F *den_Gp8_1D_A0_mu0_LXY = new TH1F("den_Gp8_1D_A0_mu0_LXY", "den_Gp8_1D_A0_mu0_LXY", binnum, bins);
-TH1F *num_Gp8_1D_A0_mu0_LXY = new TH1F("num_Gp8_1D_A0_mu0_LXY", "num_Gp8_1D_A0_mu0_LXY", binnum, bins);
+TH1F *den_Gp8_1D_A0_mu0_LXY = new TH1F("den_Gp8_1D_A0_mu0_LXY", "mu0_LXY", binnum, bins);
+TH1F *num_Gp8_1D_A0_mu0_LXY = new TH1F("num_Gp8_1D_A0_mu0_LXY", "mu0_LXY", binnum, bins);
 
-TH1F *den_Gp8_1D_A0_mu0_LZ = new TH1F("den_Gp8_1D_A0_mu0_LZ", "den_Gp8_1D_A0_mu0_LZ", binnum, bins);
-TH1F *num_Gp8_1D_A0_mu0_LZ = new TH1F("num_Gp8_1D_A0_mu0_LZ", "num_Gp8_1D_A0_mu0_LZ", binnum, bins);
+TH1F *den_Gp8_1D_A0_mu0_LZ = new TH1F("den_Gp8_1D_A0_mu0_LZ", "mu0_LZ", binnum, bins);
+TH1F *num_Gp8_1D_A0_mu0_LZ = new TH1F("num_Gp8_1D_A0_mu0_LZ", "mu0_LZ", binnum, bins);
 
-TH1F *den_Gp8_1D_A0_mu1_LXY = new TH1F("den_Gp8_1D_A0_mu1_LXY", "den_Gp8_1D_A0_mu1_LXY", binnum, bins);
-TH1F *num_Gp8_1D_A0_mu1_LXY = new TH1F("num_Gp8_1D_A0_mu1_LXY", "num_Gp8_1D_A0_mu1_LXY", binnum, bins);
+TH1F *den_Gp8_1D_A0_mu1_LXY = new TH1F("den_Gp8_1D_A0_mu1_LXY", "mu1_LXY", binnum, bins);
+TH1F *num_Gp8_1D_A0_mu1_LXY = new TH1F("num_Gp8_1D_A0_mu1_LXY", "mu1_LXY", binnum, bins);
 
-TH1F *den_Gp8_1D_A0_mu1_LZ = new TH1F("den_Gp8_1D_A0_mu1_LZ", "den_Gp8_1D_A0_mu1_LZ", binnum, bins);
-TH1F *num_Gp8_1D_A0_mu1_LZ = new TH1F("num_Gp8_1D_A0_mu1_LZ", "num_Gp8_1D_A0_mu1_LZ", binnum, bins);
+TH1F *den_Gp8_1D_A0_mu1_LZ = new TH1F("den_Gp8_1D_A0_mu1_LZ", "mu1_LZ", binnum, bins);
+TH1F *num_Gp8_1D_A0_mu1_LZ = new TH1F("num_Gp8_1D_A0_mu1_LZ", "mu1_LZ", binnum, bins);
 
-TH1F *den_Gp8_1D_A0_mu1_pT = new TH1F("den_Gp8_1D_A0_mu1_pT", "den_Gp8_1D_A0_mu1_pT", binnum, bins);
-TH1F *num_Gp8_1D_A0_mu1_pT = new TH1F("num_Gp8_1D_A0_mu1_pT", "num_Gp8_1D_A0_mu1_pT", binnum, bins);
+TH1F *den_Gp8_1D_A0_mu1_pT = new TH1F("den_Gp8_1D_A0_mu1_pT", "mu1_pT", binnum, bins);
+TH1F *num_Gp8_1D_A0_mu1_pT = new TH1F("num_Gp8_1D_A0_mu1_pT", "mu1_pT", binnum, bins);
 
-TH1F *den_Gp8_1D_A0_mu0_pT = new TH1F("den_Gp8_1D_A0_mu0_pT", "den_Gp8_1D_A0_mu0_pT", binnum, bins);
-TH1F *num_Gp8_1D_A0_mu0_pT = new TH1F("num_Gp8_1D_A0_mu0_pT", "num_Gp8_1D_A0_mu0_pT", binnum, bins);
+TH1F *den_Gp8_1D_A0_mu0_pT = new TH1F("den_Gp8_1D_A0_mu0_pT", "mu0_pT", binnum, bins);
+TH1F *num_Gp8_1D_A0_mu0_pT = new TH1F("num_Gp8_1D_A0_mu0_pT", "mu0_pT", binnum, bins);
 
 //Efficiency by eta && event passed the trigger
 
-TH1F *den_Trig_LEp8_1D_A0_mu0_LXY = new TH1F("den_Trig_LEp8_1D_A0_mu0_LXY", "den_Trig_LEp8_1D_A0_mu0_LXY", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A0_mu0_LXY = new TH1F("num_Trig_LEp8_1D_A0_mu0_LXY", "num_Trig_LEp8_1D_A0_mu0_LXY", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A0_mu0_LXY = new TH1F("den_Trig_LEp8_1D_A0_mu0_LXY", "mu0_LXY", binnum, bins);
+TH1F *num_Trig_LEp8_1D_A0_mu0_LXY = new TH1F("num_Trig_LEp8_1D_A0_mu0_LXY", "mu0_LXY", binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A0_mu0_LZ = new TH1F("den_Trig_LEp8_1D_A0_mu0_LZ", "den_Trig_LEp8_1D_A0_mu0_LZ", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A0_mu0_LZ = new TH1F("num_Trig_LEp8_1D_A0_mu0_LZ", "num_Trig_LEp8_1D_A0_mu0_LZ", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A0_mu0_LZ = new TH1F("den_Trig_LEp8_1D_A0_mu0_LZ", "mu0_LZ", binnum, bins);
+TH1F *num_Trig_LEp8_1D_A0_mu0_LZ = new TH1F("num_Trig_LEp8_1D_A0_mu0_LZ", "mu0_LZ", binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A0_mu1_LXY = new TH1F("den_Trig_LEp8_1D_A0_mu1_LXY", "den_Trig_LEp8_1D_A0_mu1_LXY", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A0_mu1_LXY = new TH1F("num_Trig_LEp8_1D_A0_mu1_LXY", "num_Trig_LEp8_1D_A0_mu1_LXY", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A0_mu1_LXY = new TH1F("den_Trig_LEp8_1D_A0_mu1_LXY", "mu1_LXY", binnum, bins);
+TH1F *num_Trig_LEp8_1D_A0_mu1_LXY = new TH1F("num_Trig_LEp8_1D_A0_mu1_LXY", "mu1_LXY", binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A0_mu1_LZ = new TH1F("den_Trig_LEp8_1D_A0_mu1_LZ", "den_Trig_LEp8_1D_A0_mu1_LZ", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A0_mu1_LZ = new TH1F("num_Trig_LEp8_1D_A0_mu1_LZ", "num_Trig_LEp8_1D_A0_mu1_LZ", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A0_mu1_LZ = new TH1F("den_Trig_LEp8_1D_A0_mu1_LZ", "mu1_LZ", binnum, bins);
+TH1F *num_Trig_LEp8_1D_A0_mu1_LZ = new TH1F("num_Trig_LEp8_1D_A0_mu1_LZ", "mu1_LZ", binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A0_mu1_pT = new TH1F("den_Trig_LEp8_1D_A0_mu1_pT", "den_Trig_LEp8_1D_A0_mu1_pT", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A0_mu1_pT = new TH1F("num_Trig_LEp8_1D_A0_mu1_pT", "num_Trig_LEp8_1D_A0_mu1_pT", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A0_mu1_pT = new TH1F("den_Trig_LEp8_1D_A0_mu1_pT", "mu1_pT", binnum, bins);
+TH1F *num_Trig_LEp8_1D_A0_mu1_pT = new TH1F("num_Trig_LEp8_1D_A0_mu1_pT", "mu1_pT", binnum, bins);
 
-TH1F *den_Trig_LEp8_1D_A0_mu0_pT = new TH1F("den_Trig_LEp8_1D_A0_mu0_pT", "den_Trig_LEp8_1D_A0_mu0_pT", binnum, bins);
-TH1F *num_Trig_LEp8_1D_A0_mu0_pT = new TH1F("num_Trig_LEp8_1D_A0_mu0_pT", "num_Trig_LEp8_1D_A0_mu0_pT", binnum, bins);
+TH1F *den_Trig_LEp8_1D_A0_mu0_pT = new TH1F("den_Trig_LEp8_1D_A0_mu0_pT", "mu0_pT", binnum, bins);
+TH1F *num_Trig_LEp8_1D_A0_mu0_pT = new TH1F("num_Trig_LEp8_1D_A0_mu0_pT", "mu0_pT", binnum, bins);
 
 //Efficiency by eta -- > 0.9
 
-TH1F *den_Trig_Gp8_1D_A0_mu0_LXY = new TH1F("den_Trig_Gp8_1D_A0_mu0_LXY", "den_Trig_Gp8_1D_A0_mu0_LXY", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A0_mu0_LXY = new TH1F("num_Trig_Gp8_1D_A0_mu0_LXY", "num_Trig_Gp8_1D_A0_mu0_LXY", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A0_mu0_LXY = new TH1F("den_Trig_Gp8_1D_A0_mu0_LXY", "mu0_LXY", binnum, bins);
+TH1F *num_Trig_Gp8_1D_A0_mu0_LXY = new TH1F("num_Trig_Gp8_1D_A0_mu0_LXY", "mu0_LXY", binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A0_mu0_LZ = new TH1F("den_Trig_Gp8_1D_A0_mu0_LZ", "den_Trig_Gp8_1D_A0_mu0_LZ", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A0_mu0_LZ = new TH1F("num_Trig_Gp8_1D_A0_mu0_LZ", "num_Trig_Gp8_1D_A0_mu0_LZ", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A0_mu0_LZ = new TH1F("den_Trig_Gp8_1D_A0_mu0_LZ", "mu0_LZ", binnum, bins);
+TH1F *num_Trig_Gp8_1D_A0_mu0_LZ = new TH1F("num_Trig_Gp8_1D_A0_mu0_LZ", "mu0_LZ", binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A0_mu1_LXY = new TH1F("den_Trig_Gp8_1D_A0_mu1_LXY", "den_Trig_Gp8_1D_A0_mu1_LXY", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A0_mu1_LXY = new TH1F("num_Trig_Gp8_1D_A0_mu1_LXY", "num_Trig_Gp8_1D_A0_mu1_LXY", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A0_mu1_LXY = new TH1F("den_Trig_Gp8_1D_A0_mu1_LXY", "mu1_LXY", binnum, bins);
+TH1F *num_Trig_Gp8_1D_A0_mu1_LXY = new TH1F("num_Trig_Gp8_1D_A0_mu1_LXY", "mu1_LXY", binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A0_mu1_LZ = new TH1F("den_Trig_Gp8_1D_A0_mu1_LZ", "den_Trig_Gp8_1D_A0_mu1_LZ", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A0_mu1_LZ = new TH1F("num_Trig_Gp8_1D_A0_mu1_LZ", "num_Trig_Gp8_1D_A0_mu1_LZ", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A0_mu1_LZ = new TH1F("den_Trig_Gp8_1D_A0_mu1_LZ", "mu1_LZ", binnum, bins);
+TH1F *num_Trig_Gp8_1D_A0_mu1_LZ = new TH1F("num_Trig_Gp8_1D_A0_mu1_LZ", "mu1_LZ", binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A0_mu1_pT = new TH1F("den_Trig_Gp8_1D_A0_mu1_pT", "den_Trig_Gp8_1D_A0_mu1_pT", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A0_mu1_pT = new TH1F("num_Trig_Gp8_1D_A0_mu1_pT", "num_Trig_Gp8_1D_A0_mu1_pT", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A0_mu1_pT = new TH1F("den_Trig_Gp8_1D_A0_mu1_pT", "mu1_pT", binnum, bins);
+TH1F *num_Trig_Gp8_1D_A0_mu1_pT = new TH1F("num_Trig_Gp8_1D_A0_mu1_pT", "mu1_pT", binnum, bins);
 
-TH1F *den_Trig_Gp8_1D_A0_mu0_pT = new TH1F("den_Trig_Gp8_1D_A0_mu0_pT", "den_Trig_Gp8_1D_A0_mu0_pT", binnum, bins);
-TH1F *num_Trig_Gp8_1D_A0_mu0_pT = new TH1F("num_Trig_Gp8_1D_A0_mu0_pT", "num_Trig_Gp8_1D_A0_mu0_pT", binnum, bins);
+TH1F *den_Trig_Gp8_1D_A0_mu0_pT = new TH1F("den_Trig_Gp8_1D_A0_mu0_pT", "mu0_pT", binnum, bins);
+TH1F *num_Trig_Gp8_1D_A0_mu0_pT = new TH1F("num_Trig_Gp8_1D_A0_mu0_pT", "mu0_pT", binnum, bins);
 */
 
 
@@ -221,18 +227,18 @@ TH1F *num_Trig_Gp8_1D_A0_mu0_pT = new TH1F("num_Trig_Gp8_1D_A0_mu0_pT", "num_Tri
 //Plots WITHOUT cuts
 TH2F *dR_vs_dPhi = new TH2F("dR_vs_dPhi", "dR_vs_dPhi", 100, 0, 1, 800, -4, 4);
 
-TH2F *dR_vs_dLxy = new TH2F("dR_vs_dLxy", "dR_vs_dLxy", 100, 0, 1, 40, 0, 80);
-TH2F *dPhi_vs_dLxy = new TH2F("dPhi_vs_dLxy", "dPhi_vs_dLxy", 800, -4, 4, 40, 0, 80);
+TH2F *dR_vs_dLxy = new TH2F("dR_vs_dLxy", "dR_vs_dLxy", 100, 0, 1, 80, 0, 80);
+TH2F *dPhi_vs_dLxy = new TH2F("dPhi_vs_dLxy", "dPhi_vs_dLxy", 800, -4, 4, 80, 0, 80);
 
-TH2F *dR_vs_dLz = new TH2F("dR_vs_dLz", "dR_vs_dLz", 100, 0, 1, 20, 0, 80);
-TH2F *dPhi_vs_dLz = new TH2F("dPhi_vs_dLz", "dPhi_vs_dLz", 800, -4, 4, 20, 0, 80);
+TH2F *dR_vs_dLz = new TH2F("dR_vs_dLz", "dR_vs_dLz", 100, 0, 1, 80, 0, 80);
+TH2F *dPhi_vs_dLz = new TH2F("dPhi_vs_dLz", "dPhi_vs_dLz", 800, -4, 4, 80, 0, 80);
 
 
 TH2F *dR_vs_pt = new TH2F("dR_vs_pt", "dR_vs_pt", 100, 0, 1, 130, 0, 130);
 TH2F *pt_vs_dPhi = new TH2F("pt_vs_dPhi", "pt_vs_dPhi", 130,0,130, 800, -4, 4);
 
-TH2F *pt_vs_dLxy = new TH2F("pt_vs_dLxy", "pt_vs_dLxy", 130,0,130, 40, 0, 80);
-TH2F *pt_vs_dLz = new TH2F("pt_vs_dLz", "pt_vs_dLz", 130,0,130, 20, 0, 80);
+TH2F *pt_vs_dLxy = new TH2F("pt_vs_dLxy", "pt_vs_dLxy", 130,0,130, 80, 0, 80);
+TH2F *pt_vs_dLz = new TH2F("pt_vs_dLz", "pt_vs_dLz", 130,0,130, 80, 0, 80);
 
 void makeCounters(){
 
@@ -304,6 +310,72 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
       }
     }
   }
+}
+
+void set_title_and_label_style(TGraphAsymmErrors* gr)
+{
+   gr->GetXaxis()->SetLabelFont(42);
+   gr->GetXaxis()->SetLabelOffset(0.007);
+   gr->GetXaxis()->SetLabelSize(0.05);
+   gr->GetXaxis()->SetTitleSize(0.06);
+   gr->GetXaxis()->SetTitleFont(42);
+
+   gr->GetYaxis()->SetLabelFont(42);
+   gr->GetYaxis()->SetLabelOffset(0.007);
+   gr->GetYaxis()->SetLabelSize(0.05);
+   gr->GetYaxis()->SetTitleSize(0.06);
+   gr->GetYaxis()->SetTitleOffset(1.1);
+   gr->GetYaxis()->SetTitleFont(42);
+}
+
+void set_title_and_label_style(TH2F* gr)
+{
+   gr->GetXaxis()->SetLabelFont(42);
+   gr->GetXaxis()->SetLabelOffset(0.007);
+   gr->GetXaxis()->SetLabelSize(0.05);
+   gr->GetXaxis()->SetTitleSize(0.06);
+   gr->GetXaxis()->SetTitleFont(42);
+
+   gr->GetYaxis()->SetLabelFont(42);
+   gr->GetYaxis()->SetLabelOffset(0.007);
+   gr->GetYaxis()->SetLabelSize(0.05);
+   gr->GetYaxis()->SetTitleSize(0.06);
+   gr->GetYaxis()->SetTitleOffset(1.1);
+   gr->GetYaxis()->SetTitleFont(42);
+}
+
+void set_canvas_style(TCanvas* c)
+{
+   c->SetFillColor(0);
+   c->SetBorderMode(0);
+   c->SetBorderSize(2);
+   c->SetTickx(1);
+   c->SetTicky(1);
+   c->SetLeftMargin(0.15);
+   c->SetRightMargin(0.18);
+   c->SetTopMargin(0.07);
+   c->SetBottomMargin(0.17);
+   c->SetFrameFillStyle(0);
+   c->SetFrameBorderMode(0);
+   c->SetFrameFillStyle(0);
+   c->SetFrameBorderMode(0);
+}
+
+void set_canvas_style_tgraph(TCanvas* c)
+{
+   c->SetFillColor(0);
+   c->SetBorderMode(0);
+   c->SetBorderSize(2);
+   c->SetTickx(1);
+   c->SetTicky(1);
+   c->SetLeftMargin(0.15);
+   c->SetRightMargin(0.05);
+   c->SetTopMargin(0.07);
+   c->SetBottomMargin(0.15);
+   c->SetFrameFillStyle(0);
+   c->SetFrameBorderMode(0);
+   c->SetFrameFillStyle(0);
+   c->SetFrameBorderMode(0);
 }
 
 void create_eff_pergamD2DLxyLz(TString fileName){
@@ -950,11 +1022,11 @@ void create_eff_pergamD2DLxyLz(TString fileName){
 
 void makePlots(){
 
-  TH2F *den_2D_A0 = new TH2F("den_2D_A0","den_2D_A0",40,0,80,80,0.0,80.0);
-  TH2F *num_2D_A0 = new TH2F("num_2D_A0","num_2D_A0",40,0,80,80,0.0,80.0);
+  TH2F *den_2D_A0 = new TH2F("den_2D_A0",cms_title2,40,0,80,80,0.0,80.0);
+  TH2F *num_2D_A0 = new TH2F("num_2D_A0",cms_title2,40,0,80,80,0.0,80.0);
 
-  TH2F *eff_2D_A0 = new TH2F("eff_2D_A0","eff_2D_A0",40,0,80,80,0.0,80.0);
-  TH2F *eff_2D_A1 = new TH2F("eff_2D_A1","eff_2D_A1",40,0,80,80,0.0,80.0);
+  TH2F *eff_2D_A0 = new TH2F("eff_2D_A0",cms_title2,40,0,80,80,0.0,80.0);
+  TH2F *eff_2D_A1 = new TH2F("eff_2D_A1",cms_title2,40,0,80,80,0.0,80.0);
 
 
   for(int k=0;k<40;k++){
@@ -982,11 +1054,21 @@ void makePlots(){
 
 
 
-  TCanvas *effxy = new TCanvas("effxy", "effxy", 700, 500);
+  TCanvas *effxy = new TCanvas("effxy", "effxy", my_canvas_x, my_canvas_y);
+  set_canvas_style_tgraph(effxy);
+  gStyle->SetTitleFontSize(0.07);
+    gStyle->SetTitleStyle( 0 );
+  gStyle->SetTitleAlign(13);
+  gStyle->SetTitleX(0.);
+  gStyle->SetTitleY(1.);
+  gStyle->SetTitleW(1);
+  gStyle->SetTitleH(0.058);
+  gStyle->SetTitleBorderSize( 0 );
+  
   gr1 = new TGraphAsymmErrors(num_1D_A0_LXY, den_1D_A0_LXY);
-  gr1->SetTitle("");
+  gr1->SetTitle(cms_title);
   gr1->GetYaxis()->SetTitle("Efficiency");
-  gr1->GetXaxis()->SetTitle("L_{XY} [cm]");
+  gr1->GetXaxis()->SetTitle("L_{xy} [cm]");
   gr1->SetMarkerColor(kRed);
   gr1->SetLineColor(kRed);
   gr1->SetMarkerStyle(21);
@@ -1000,22 +1082,38 @@ void makePlots(){
   gr0->SetMarkerStyle(21);
   gr0->Draw("same");
 
+  set_title_and_label_style(gr1);
+  set_title_and_label_style(gr0);
+
   TLegend *leg = new TLegend(0.1690544,0.1476793,0.3008596,0.3333333);
   leg->SetBorderSize(0);
   leg->SetFillColor(0);
-  leg->SetTextSize(0.045);
-  leg->AddEntry(gr1,"#gamma_{D1}","L");
-  leg->AddEntry(gr0,"#gamma_{D2}","L");
+  leg->SetTextSize(0.05);
+  leg->AddEntry(gr1,"#gamma_{D1}","LP");
+  leg->AddEntry(gr0,"#gamma_{D2}","LP");
   leg->Draw("same");
 
   effxy->SaveAs("Efficiency_1D_LXY.pdf");
   effxy->SaveAs("Efficiency_1D_LXY.C");
 
-  TCanvas *effz2 = new TCanvas("effz2", "effz2", 700, 500);
+
+
+  TCanvas *effz2 = new TCanvas("effz2", "effz2", my_canvas_x, my_canvas_y);
+  set_canvas_style_tgraph(effz2);
+
+  gStyle->SetTitleFontSize(0.07);
+  gStyle->SetTitleStyle( 0 );
+  gStyle->SetTitleAlign(13);
+  gStyle->SetTitleX(0.);
+  gStyle->SetTitleY(1.);
+  gStyle->SetTitleW(1);
+  gStyle->SetTitleH(0.058);
+  gStyle->SetTitleBorderSize( 0 );
+
   gr2 = new TGraphAsymmErrors(num_1D_A0_LZ, den_1D_A0_LZ);
   gr2->SetMarkerColor(kRed);
   gr2->SetLineColor(kRed);
-  gr2->SetTitle("");
+  gr2->SetTitle(cms_title);
   gr2->GetYaxis()->SetTitle("Efficiency");
   gr2->GetXaxis()->SetTitle("L_{Z} [cm]");
   gr2->SetMarkerStyle(21);
@@ -1023,25 +1121,41 @@ void makePlots(){
   gr2->SetMaximum(1);
   gr2->Draw("ALP");
 
+
   gr3 = new TGraphAsymmErrors(num_1D_A1_LZ, den_1D_A1_LZ);
   gr3->SetMarkerColor(kBlue);
   gr3->SetLineColor(kBlue);
   gr3->SetMarkerStyle(21);
   gr3->Draw("same");
 
+  set_title_and_label_style(gr2);
+  set_title_and_label_style(gr3);
+
   leg->Draw("same");
 
   effz2->SaveAs("Efficiency_1D_Lz.pdf");
   effz2->SaveAs("Efficiency_1D_Lz.C");
 
-  TCanvas *effpt = new TCanvas("effpt", "effpt", 700, 500);
+  TCanvas *effpt = new TCanvas("effpt", "effpt", my_canvas_x, my_canvas_y);
+  set_canvas_style_tgraph(effpt);
+
+  gStyle->SetTitleFontSize(0.07);
+  gStyle->SetTitleStyle( 0 );
+  gStyle->SetTitleAlign(13);
+  gStyle->SetTitleX(0.);
+  gStyle->SetTitleY(1.);
+  gStyle->SetTitleW(1);
+  gStyle->SetTitleH(0.058);
+  gStyle->SetTitleBorderSize( 0 );
+
   gr_eff = new TGraphAsymmErrors(num_1D_A0_pT, den_1D_A0_pT);
   gr_eff->SetMarkerColor(kRed);
   gr_eff->SetLineColor(kRed);
-  gr_eff->SetTitle("");
+  gr_eff->SetTitle(cms_title);
   gr_eff->GetYaxis()->SetTitle("Efficiency");
   gr_eff->GetXaxis()->SetTitle("p_{T} [GeV]");
   gr_eff->SetMarkerStyle(21);
+  set_title_and_label_style(gr_eff);
   gr_eff->Draw("ALP");
 
   gr_eff2 = new TGraphAsymmErrors(num_1D_A1_pT, den_1D_A1_pT);
@@ -1050,41 +1164,67 @@ void makePlots(){
   gr_eff2->SetMarkerStyle(21);
   gr_eff2->Draw("same");
 
+  set_title_and_label_style(gr_eff);
+  set_title_and_label_style(gr_eff2);
+
   leg->Draw("same");
   effpt->SaveAs("Efficiency_vs_Gen_pT.pdf");
   effpt->SaveAs("Efficiency_vs_Gen_pT.C");
 
   //Efficiency by Eta plots
-  TLine *pixel_1 = new TLine(4.3, 0, 4.3, 1);
-  TLine *pixel_2 = new TLine(7.2, 0, 7.2, 1);
-  TLine *pixel_3 = new TLine(11, 0, 11, 1);
-  TLine *tracker_innerbarrel = new TLine(23.9, 0, 23.9, 1); 
-  TLine *tracker_outerbarrel = new TLine(60.5, 0, 60.5, 1);
+  TLine *pixel_1 = new TLine(4.0, 0, 4.0, 1);
+  TLine *pixel_11 = new TLine(4.4, 0, 4.4, 1);
+
+  TLine *pixel_2 = new TLine(6.9, 0, 6.9, 1);
+  TLine *pixel_21 = new TLine(7.3, 0, 7.3, 1);
+
+  TLine *pixel_3 = new TLine(9.8, 0,9.8, 1);
+  TLine *pixel_31 = new TLine(10.2, 0,10.2, 1);
 
   TLine *pixel_endcap_1 = new TLine(34.5, 0, 34.5, 1);
   TLine *pixel_endcap_2 = new TLine(46.5, 0, 46.5, 1);
 
-  //Blue Lines
-  pixel_1->SetLineStyle(2);
-  pixel_2->SetLineStyle(2);
-  pixel_3->SetLineStyle(2);
-  pixel_endcap_1->SetLineStyle(2);
-  pixel_endcap_2->SetLineStyle(2);
+  TLine *tracker_innerbarrel = new TLine(23.9, 0, 23.9, 1); 
+  TLine *tracker_outerbarrel = new TLine(60.5, 0, 60.5, 1);
 
+  //Blue Lines
+  int linestyle = 2;
+  int linewidth = 2;
+  pixel_1->SetLineStyle(linestyle);
+  pixel_2->SetLineStyle(linestyle);
+  pixel_3->SetLineStyle(linestyle);
+  pixel_1->SetLineStyle(linestyle);
+  pixel_2->SetLineWidth(linewidth);
+  pixel_3->SetLineWidth(linewidth);
   pixel_1->SetLineColor(kBlue);
   pixel_2->SetLineColor(kBlue);
   pixel_3->SetLineColor(kBlue);
+
+  pixel_endcap_1->SetLineStyle(linestyle);
+  pixel_endcap_2->SetLineStyle(linestyle);
+  pixel_endcap_1->SetLineWidth(linewidth);
+  pixel_endcap_2->SetLineWidth(linewidth);
   pixel_endcap_1->SetLineColor(kBlue);
   pixel_endcap_2->SetLineColor(kBlue);
 
   //Green Lines
-  tracker_innerbarrel->SetLineStyle(2);
-  tracker_outerbarrel->SetLineStyle(2);
+  tracker_innerbarrel->SetLineStyle(linestyle);
+  tracker_outerbarrel->SetLineStyle(linestyle);
+  tracker_innerbarrel->SetLineColor(kGreen+1);
+  tracker_outerbarrel->SetLineColor(kGreen+1);
 
-  tracker_innerbarrel->SetLineColor(kGreen);
-  tracker_outerbarrel->SetLineColor(kGreen);
+  TCanvas *eta_lxy = new TCanvas("eta_lxy", "eta_lxy", my_canvas_x, my_canvas_y);
+  set_canvas_style_tgraph(eta_lxy);
 
-  TCanvas *eta_lxy = new TCanvas("eta_lxy", "eta_lxy", 700, 500);
+  gStyle->SetTitleFontSize(0.07);
+  gStyle->SetTitleStyle( 0 );
+  gStyle->SetTitleAlign(13);
+  gStyle->SetTitleX(0.);
+  gStyle->SetTitleY(1.);
+  gStyle->SetTitleW(1);
+  gStyle->SetTitleH(0.058);
+  gStyle->SetTitleBorderSize( 0 );
+
   TMultiGraph *mg_lxy = new TMultiGraph();
 
   gr_a0_le_lxy = new TGraphAsymmErrors(num_LEp8_1D_A0_LXY, den_LEp8_1D_A0_LXY);
@@ -1116,17 +1256,22 @@ void makePlots(){
   gr_a1_g_lxy->SetLineStyle(2);
   mg_lxy->Add(gr_a1_g_lxy);
 
+  set_title_and_label_style(gr_a0_le_lxy);
+  set_title_and_label_style(gr_a1_le_lxy);
+  set_title_and_label_style(gr_a1_g_lxy);
+  set_title_and_label_style(gr_a0_g_lxy);
+
   TLegend *etaleg = new TLegend(0.5866762,0.2447257,0.7858166,0.4535865);
   etaleg->SetBorderSize(0);
   etaleg->SetFillColor(0);
-  etaleg->SetTextSize(0.03171247);
+  etaleg->SetTextSize(0.05);
   etaleg->SetFillStyle(0);
   etaleg->AddEntry(gr_a0_le_lxy,"|#eta_{#gamma D}| #leq 0.9 A0","L");
   etaleg->AddEntry(gr_a0_g_lxy, "|#eta_{#gamma D}| > 0.9 A0","L");
   etaleg->AddEntry(gr_a1_le_lxy,"|#eta_{#gamma D}| #leq 0.9 A1","L");
   etaleg->AddEntry(gr_a1_g_lxy, "|#eta_{#gamma D}| > 0.9 A1","L");
   mg_lxy->Draw("ALP");
-  mg_lxy->GetXaxis()->SetTitle("L_{XY} [cm]");
+  mg_lxy->GetXaxis()->SetTitle("L_{xy} [cm]");
   mg_lxy->GetYaxis()->SetTitle("Efficiency");
   mg_lxy->SetMinimum(0.);
   mg_lxy->SetMaximum(1.);
@@ -1135,7 +1280,7 @@ void makePlots(){
   TLegend *etalegz = new TLegend(0.6389685,0.2447257,0.8381089,0.4535865);
   etalegz->SetBorderSize(0);
   etalegz->SetFillColor(0);
-  etalegz->SetTextSize(0.03171247);
+  etalegz->SetTextSize(0.05);
   etalegz->SetFillStyle(0);
   etalegz->AddEntry(gr_a0_le_lxy,"|#eta_{#gamma D}| #leq 0.9 A0","L");
   etalegz->AddEntry(gr_a0_g_lxy, "|#eta_{#gamma D}| > 0.9 A0","L");
@@ -1156,14 +1301,29 @@ void makePlots(){
 
   cout << "Checkpoint 2" << endl;
 
-  TCanvas *eta_lz = new TCanvas("eta_lz", "eta_lz", 700, 500);
+  TCanvas *eta_lz = new TCanvas("eta_lz", "eta_lz", my_canvas_x, my_canvas_y);
+  set_canvas_style_tgraph(eta_lz);
   TMultiGraph *mg_lz = new TMultiGraph();
+
+  gStyle->SetTitleFontSize(0.07);
+  gStyle->SetTitleStyle( 0 );
+  gStyle->SetTitleAlign(13);
+  gStyle->SetTitleX(0.);
+  gStyle->SetTitleY(1.);
+  gStyle->SetTitleW(1);
+  gStyle->SetTitleH(0.058);
+  gStyle->SetTitleBorderSize( 0 );
 
   gr_a0_le_lz = new TGraphAsymmErrors(num_LEp8_1D_A0_LZ, den_LEp8_1D_A0_LZ);
   gr_a1_le_lz = new TGraphAsymmErrors(num_LEp8_1D_A1_LZ, den_LEp8_1D_A1_LZ);
   gr_a1_g_lz = new TGraphAsymmErrors(num_Gp8_1D_A1_LZ, den_Gp8_1D_A1_LZ);
   gr_a0_g_lz = new TGraphAsymmErrors(num_Gp8_1D_A0_LZ, den_Gp8_1D_A0_LZ);
   cout << "Checkpoint 3" << endl;
+
+  set_title_and_label_style(gr_a0_le_lz);
+  set_title_and_label_style(gr_a1_le_lz);
+  set_title_and_label_style(gr_a1_g_lz);
+  set_title_and_label_style(gr_a0_g_lz);
 
   gr_a0_le_lz->SetMarkerColor(kRed);
   gr_a0_le_lz->SetMarkerStyle(2);
@@ -1206,13 +1366,28 @@ void makePlots(){
 
   //Eta plots including Trigger
 
-  TCanvas *eta_lxy_trig = new TCanvas("eta_lxy_trig", "eta_lxy_trig", 700, 500);
+  TCanvas *eta_lxy_trig = new TCanvas("eta_lxy_trig", "eta_lxy_trig", my_canvas_x, my_canvas_y);
+  set_canvas_style_tgraph(eta_lxy_trig);
   TMultiGraph *mg_lxy_trig = new TMultiGraph();
+
+  gStyle->SetTitleFontSize(0.07);
+  gStyle->SetTitleStyle( 0 );
+  gStyle->SetTitleAlign(13);
+  gStyle->SetTitleX(0.);
+  gStyle->SetTitleY(1.);
+  gStyle->SetTitleW(1);
+  gStyle->SetTitleH(0.058);
+  gStyle->SetTitleBorderSize( 0 );
 
   gr_a0_le_lxy_trig = new TGraphAsymmErrors(num_Trig_LEp8_1D_A0_LXY, den_Trig_LEp8_1D_A0_LXY);
   gr_a1_le_lxy_trig = new TGraphAsymmErrors(num_Trig_LEp8_1D_A1_LXY, den_Trig_LEp8_1D_A1_LXY);
   gr_a1_g_lxy_trig = new TGraphAsymmErrors(num_Trig_Gp8_1D_A1_LXY, den_Trig_Gp8_1D_A1_LXY);
   gr_a0_g_lxy_trig = new TGraphAsymmErrors(num_Trig_Gp8_1D_A0_LXY, den_Trig_Gp8_1D_A0_LXY);
+
+  set_title_and_label_style(gr_a0_le_lxy_trig);
+  set_title_and_label_style(gr_a1_le_lxy_trig);
+  set_title_and_label_style(gr_a1_g_lxy_trig);
+  set_title_and_label_style(gr_a0_g_lxy_trig);
 
   gr_a0_le_lxy_trig->SetMarkerColor(kRed);
   gr_a0_le_lxy_trig->SetMarkerStyle(2);
@@ -1239,7 +1414,7 @@ void makePlots(){
   mg_lxy_trig->Add(gr_a1_g_lxy_trig);
 
   mg_lxy_trig->Draw("ALP");
-  mg_lxy_trig->GetXaxis()->SetTitle("L_{XY} [cm]");
+  mg_lxy_trig->GetXaxis()->SetTitle("L_{xy} [cm]");
   mg_lxy_trig->GetYaxis()->SetTitle("Efficiency");
   mg_lxy_trig->SetMinimum(0.);
   mg_lxy_trig->SetMaximum(1.);
@@ -1255,13 +1430,28 @@ void makePlots(){
   eta_lxy_trig->SaveAs("EfficiencyByEta_vs_Lxy_Trig.pdf");
   eta_lxy_trig->SaveAs("EfficiencyByEta_vs_Lxy_Trig.C");
 
-  TCanvas *eta_lz_trig = new TCanvas("eta_lz_trig", "eta_lz_trig", 700, 500);
+  TCanvas *eta_lz_trig = new TCanvas("eta_lz_trig", "eta_lz_trig", my_canvas_x, my_canvas_y);
+  set_canvas_style_tgraph(eta_lz_trig);
   TMultiGraph *mg_lz_trig = new TMultiGraph();
+
+  gStyle->SetTitleFontSize(0.07);
+  gStyle->SetTitleStyle( 0 );
+  gStyle->SetTitleAlign(13);
+  gStyle->SetTitleX(0.);
+  gStyle->SetTitleY(1.);
+  gStyle->SetTitleW(1);
+  gStyle->SetTitleH(0.058);
+  gStyle->SetTitleBorderSize( 0 );
 
   gr_a0_le_lz_trig = new TGraphAsymmErrors(num_Trig_LEp8_1D_A0_LZ, den_Trig_LEp8_1D_A0_LZ);
   gr_a1_le_lz_trig = new TGraphAsymmErrors(num_Trig_LEp8_1D_A1_LZ, den_Trig_LEp8_1D_A1_LZ);
   gr_a1_g_lz_trig = new TGraphAsymmErrors(num_Trig_Gp8_1D_A1_LZ, den_Trig_Gp8_1D_A1_LZ);
   gr_a0_g_lz_trig = new TGraphAsymmErrors(num_Trig_Gp8_1D_A0_LZ, den_Trig_Gp8_1D_A0_LZ);
+
+  set_title_and_label_style(gr_a0_le_lz_trig);
+  set_title_and_label_style(gr_a1_le_lz_trig);
+  set_title_and_label_style(gr_a1_g_lz_trig);
+  set_title_and_label_style(gr_a0_g_lz_trig);
 
   gr_a0_le_lz_trig->SetMarkerColor(kRed);
   gr_a0_le_lz_trig->SetMarkerStyle(2);
@@ -1304,30 +1494,30 @@ void makePlots(){
 
 
   /*
-    TCanvas *effxy0 = new TCanvas("effxy0", "effxy0", 700, 500);
+    TCanvas *effxy0 = new TCanvas("effxy0", "effxy0", my_canvas_x, my_canvas_y);
     gr4 = new TGraphAsymmErrors(num_1D_A1_LXY, den_1D_A1_LXY);
-    gr4->SetTitle("1D Efficiency #gamma_{D2} L_{XY}");
+    gr4->SetTitle("1D Efficiency #gamma_{D2} L_{xy}");
     gr4->GetYaxis()->SetTitle("Efficiency");
-    gr4->GetXaxis()->SetTitle("L_{XY} [cm]");
+    gr4->GetXaxis()->SetTitle("L_{xy} [cm]");
     gr4->SetMarkerColor(kBlue);
     gr4->SetMarkerStyle(21);
     gr4->Draw("ALP");
 
-    TCanvas *effz = new TCanvas("effz", "effz", 700, 500);
+    TCanvas *effz = new TCanvas("effz", "effz", my_canvas_x, my_canvas_y);
     gr5 = new TGraphAsymmErrors(num_1D_A1_LZ, den_1D_A1_LZ);
     gr5->SetTitle("1D Efficiency #gamma_{D2} L_{Z}");
     gr5->SetMarkerColor(4);
     gr5->SetMarkerStyle(21);
     gr5->Draw("ALP");
 
-    TCanvas *effxy3 = new TCanvas("effxy3", "effxy3", 700, 500);
+    TCanvas *effxy3 = new TCanvas("effxy3", "effxy3", my_canvas_x, my_canvas_y);
     gr6 = new TGraphAsymmErrors(num_1D_A0_LXY, den_1D_A0_LXY);
-    gr6->SetTitle("1D Efficiency #gamma_{D1} L_{XY}");
+    gr6->SetTitle("1D Efficiency #gamma_{D1} L_{xy}");
     gr6->SetMarkerColor(4);
     gr6->SetMarkerStyle(21);
     gr6->Draw("ALP");
 
-    TCanvas *effz3 = new TCanvas("effz3", "effz3", 700, 500);
+    TCanvas *effz3 = new TCanvas("effz3", "effz3", my_canvas_x, my_canvas_y);
     gr7 = new TGraphAsymmErrors(num_1D_A0_LZ, den_1D_A0_LZ);
     gr7->SetTitle("1D Efficiency #gamma_{D1} L_{Z}");
     gr7->SetMarkerColor(4);
@@ -1368,12 +1558,26 @@ void makePlots(){
 
   eff_2D_A0->SetContour(NCont);
 
+  set_title_and_label_style(eff_2D_A0);
+  set_title_and_label_style(eff_2D_A1);
 
-  TCanvas *c = new TCanvas("c","c",700,500);
+
+  TCanvas *c = new TCanvas("c","c",my_canvas_x, my_canvas_y);
+  set_canvas_style(c);
+
+  gStyle->SetTitleFontSize(0.07);
+  gStyle->SetTitleStyle( 0 );
+  gStyle->SetTitleAlign(13);
+  gStyle->SetTitleX(0.);
+  gStyle->SetTitleY(1.);
+  gStyle->SetTitleW(1);
+  gStyle->SetTitleH(0.058);
+  gStyle->SetTitleBorderSize( 0 );
+
   c->SetRightMargin(0.15);
-  eff_2D_A0->GetYaxis()->SetTitle("#gamma_{D1} Lxy [cm]");
-  eff_2D_A0->GetXaxis()->SetTitle("|#gamma_{D1} Lz| [cm]");
-  eff_2D_A0->GetZaxis()->SetTitle("Eff_{rec}/accep_{gen}");
+  eff_2D_A0->GetYaxis()->SetTitle("#gamma_{D1} L_{xy} [cm]");
+  eff_2D_A0->GetXaxis()->SetTitle("#gamma_{D1} |L_{z}| [cm]");
+  eff_2D_A0->GetZaxis()->SetTitle("#varepsilon_{Full}/#alpha_{GEN}");
   gStyle->SetOptStat(0);
   //    eff_2D_A0->SetContour((sizeof(levels)/sizeof(Double_t)), levels);
   eff_2D_A0->Draw("COLZ");
@@ -1386,11 +1590,21 @@ void makePlots(){
 
 
 
-  TCanvas *c1 = new TCanvas("c1","c1",700,500);
+  TCanvas *c1 = new TCanvas("c1","c1",my_canvas_x, my_canvas_y);
+  set_canvas_style(c1);
+  gStyle->SetTitleFontSize(0.07);
+  gStyle->SetTitleStyle( 0 );
+  gStyle->SetTitleAlign(13);
+  gStyle->SetTitleX(0.);
+  gStyle->SetTitleY(1.);
+  gStyle->SetTitleW(1);
+  gStyle->SetTitleH(0.058);
+  gStyle->SetTitleBorderSize( 0 );
+
   c1->SetRightMargin(0.15);
-  eff_2D_A1->GetYaxis()->SetTitle("#gamma_{D2} Lxy [cm]");
-  eff_2D_A1->GetXaxis()->SetTitle("|#gamma_{D2} Lz| [cm]");
-  eff_2D_A1->GetZaxis()->SetTitle("Eff_{rec}/accep_{gen}");
+  eff_2D_A1->GetYaxis()->SetTitle("#gamma_{D2} L_{xy} [cm]");
+  eff_2D_A1->GetXaxis()->SetTitle("#gamma_{D2} |L_{z}| [cm]");
+  eff_2D_A1->GetZaxis()->SetTitle("#varepsilon_{Full}/#alpha_{GEN}");
   gStyle->SetOptStat(0);
   eff_2D_A1->Draw("COLZ");
   c1->SaveAs("eff_2D_LxyLz_A1.pdf");
@@ -1405,6 +1619,7 @@ void efficiency(){
 
 
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_PAT_ANA_V2_v1/170124_224445/0000/");
+  /*
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_PAT_ANA_V2_v1/170128_023406/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_20k_PAT_ANA_V2_v1/170128_024144/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_80k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_80k_PAT_ANA_V2_v1/170128_024130/0000/");
@@ -1454,85 +1669,7 @@ void efficiency(){
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_77k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_77k_PAT_ANA_V2_v1/170128_024255/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_79k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_79k_PAT_ANA_V2_v1/170128_024211/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_80k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_80k_PAT_ANA_V2_v1/170128_024159/0000/");
-
-
-
-
-
-  //These cT's should be in order.
-  /*
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_2000_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_2000_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-
-
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f///");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/dildick/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0250_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
   */
-
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_1000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-  // create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_0250_cT_2000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-
-  /*
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN_71_v1_v2/asdf//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/bmichlin/DarkSUSY_mH_125_mGammaD_8500_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_8500_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/226daabb7c2674ae5cd9e5d6ac58846b//");
-
-
-
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_005_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_005_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_100_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_100_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/jrorie/DarkSUSY_mH_125_mGammaD_0275_cT_300_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v4/DarkSUSY_mH_125_mGammaD_0275_13TeV_cT_300_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/f543ab33d972fd2ae528b8fb60581c3f//");
-
-
-
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_000_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_000_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_010_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_010_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_020_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_020_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_050_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_050_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_200_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_200_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3//");
-    create_eff_pergamD2DLxyLz("create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/castaned/DarkSUSY_mH_125_mGammaD_0300_cT_500_13TeV_MG452_BR224_LHE_pythia8_GEN_SIM_MCRUN2_71_V1_v1/DarkSUSY_mH_125_mGammaD_0300_13TeV_cT_500_madgraph452_bridge224_LHE_pythia8_741p1_PAT_ANA/d0f588fd6866a3a3094022dcf1ebdad3//");
-  */
-
 
   makePlots();
 

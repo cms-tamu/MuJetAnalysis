@@ -1,0 +1,23 @@
+WARNING: AutoLibraryloader::enable() and AutoLibraryLoader.h are deprecated.
+Use FWLiteEnabler::enable() and FWLiteEnabler.h instead
+Info in <TUnixSystem::ACLiC>: creating shared library /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/forJpsi/./jpsi_C.so
+Info in <TCanvas::Print>: png file plots/event_all.png has been created
+Info in <TCanvas::Print>: png file plots/massC_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/massF_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/eta0_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/eta1_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/eta2_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/eta3_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/isoC_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/isoF_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/pt_mu0_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/pt_mu1_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/pt_mu2_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/pt_mu3_aftTrig_all.png has been created
+Info in <TCanvas::Print>: png file plots/Iso_dim1_vs_dim2_all.png has been created
+Info in <TCanvas::Print>: png file plots/mass_dim1_vs_dim2_all.png has been created
+Info in <TCanvas::Print>: png file plots/mass_dim1_vs_dim2_aftmasscutall.png has been created
+Info in <TCanvas::Print>: png file plots/diMuonC_Lxy_regionAall.png has been created
+Info in <TCanvas::Print>: png file plots/diMuonF_Lxy_regionAall.png has been created
+Info in <TCanvas::Print>: png file plots/diMuonC_Lxy_regionCall.png has been created
+Info in <TCanvas::Print>: png file plots/diMuonF_Lxy_regionCall.png has been created

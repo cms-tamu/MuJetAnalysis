@@ -1,0 +1,7 @@
+/var/spool/slurmd/job18678154/slurm_script: line 16: cd: /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFloAnalyzer/scripts: No such file or directory
+WARNING: AutoLibraryloader::enable() and AutoLibraryLoader.h are deprecated.
+Use FWLiteEnabler::enable() and FWLiteEnabler.h instead
+Error in <TROOT::LoadMacro>: macro jpsi.C not found in path .:/cvmfs/cms.cern.ch/slc6_amd64_gcc493/lcg/root/6.06.00-ikhhed5/macros:
+input_line_80:2:3: error: use of undeclared identifier 'analysis'
+ (analysis("MuOnia_Run2016B.txt"))
+  ^

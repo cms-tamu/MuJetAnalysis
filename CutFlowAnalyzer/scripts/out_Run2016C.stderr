@@ -1,0 +1,29 @@
+WARNING: AutoLibraryloader::enable() and AutoLibraryLoader.h are deprecated.
+Use FWLiteEnabler::enable() and FWLiteEnabler.h instead
+Info in <TCanvas::Print>: png file eventC.png has been created
+Info in <TCanvas::Print>: png file massCC.png has been created
+Info in <TCanvas::Print>: png file massFC.png has been created
+Info in <TCanvas::Print>: png file e0C.png has been created
+Info in <TCanvas::Print>: png file e1C.png has been created
+Info in <TCanvas::Print>: png file e2C.png has been created
+Info in <TCanvas::Print>: png file e3C.png has been created
+Info in <TCanvas::Print>: png file isoCC.png has been created
+Info in <TCanvas::Print>: png file isoFC.png has been created
+Info in <TCanvas::Print>: png file pt_mu0C.png has been created
+Info in <TCanvas::Print>: png file pt_mu1C.png has been created
+Info in <TCanvas::Print>: png file pt_mu2C.png has been created
+Info in <TCanvas::Print>: png file pt_mu3C.png has been created
+Info in <TCanvas::Print>: png file massC_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file massF_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file e0_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file e1_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file e2_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file e3_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file isoC_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file isoF_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file pt_mu0_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file pt_mu1_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file pt_mu2_aftTrigC.png has been created
+Info in <TCanvas::Print>: png file pt_mu3_aftTrigC.png has been created
+Info in <TCanvas::Print>: pdf file Iso_dim1_vs_dim2C.pdf has been created
+Info in <TCanvas::Print>: pdf file mass_dim1_vs_dim2C.pdf has been created

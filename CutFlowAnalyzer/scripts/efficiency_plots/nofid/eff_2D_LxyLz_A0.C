@@ -1,24 +1,15 @@
 void eff_2D_LxyLz_A0()
 {
 //=========Macro generated from canvas: c/c
-//=========  (Sun Jun  4 04:22:13 2017) by ROOT version6.06/01
+//=========  (Fri Nov  3 01:39:01 2017) by ROOT version6.06/01
    TCanvas *c = new TCanvas("c", "c",0,0,700,500);
-   gStyle->SetOptFit(1);
    gStyle->SetOptStat(0);
-   gStyle->SetOptTitle(0);
-   c->Range(-17.14286,-17.89474,97.14286,87.36842);
+   c->Range(-10.66667,-10,96,90);
    c->SetFillColor(0);
    c->SetBorderMode(0);
    c->SetBorderSize(2);
-   c->SetTickx(1);
-   c->SetTicky(1);
-   c->SetLeftMargin(0.15);
-   c->SetRightMargin(0.17);
-   c->SetTopMargin(0.07);
-   c->SetBottomMargin(0.17);
-   c->SetFrameFillStyle(0);
+   c->SetRightMargin(0.15);
    c->SetFrameBorderMode(0);
-   c->SetFrameFillStyle(0);
    c->SetFrameBorderMode(0);
    
    TH2F *eff_2D_A0 = new TH2F("eff_2D_A0","eff_2D_A0",40,0,80,80,0,80);
@@ -2750,13 +2741,13 @@ void eff_2D_LxyLz_A0()
    eff_2D_A0->SetContourLevel(102,0.9807692);
    eff_2D_A0->SetContourLevel(103,0.9903846);
    
-   TPaletteAxis *palette = new TPaletteAxis(80.57143,0,85.71429,80,eff_2D_A0);
+   TPaletteAxis *palette = new TPaletteAxis(80.53333,0,85.33333,80,eff_2D_A0);
 palette->SetLabelColor(1);
 palette->SetLabelFont(42);
-palette->SetLabelOffset(0.007);
-palette->SetLabelSize(0.05);
+palette->SetLabelOffset(0.005);
+palette->SetLabelSize(0.035);
 palette->SetTitleOffset(1);
-palette->SetTitleSize(0.06);
+palette->SetTitleSize(0.035);
 
    Int_t ci;      // for color index setting
    TColor *color; // for color definition with alpha
@@ -2764,87 +2755,35 @@ palette->SetTitleSize(0.06);
    palette->SetFillColor(ci);
    palette->SetFillStyle(1001);
    eff_2D_A0->GetListOfFunctions()->Add(palette,"br");
-   eff_2D_A0->SetFillStyle(0);
-   eff_2D_A0->SetLineStyle(0);
-   eff_2D_A0->SetMarkerStyle(20);
+
+   ci = TColor::GetColor("#000099");
+   eff_2D_A0->SetLineColor(ci);
    eff_2D_A0->GetXaxis()->SetTitle("|#gamma_{D1} Lz| [cm]");
    eff_2D_A0->GetXaxis()->SetLabelFont(42);
-   eff_2D_A0->GetXaxis()->SetLabelOffset(0.007);
-   eff_2D_A0->GetXaxis()->SetLabelSize(0.05);
-   eff_2D_A0->GetXaxis()->SetTitleSize(0.06);
+   eff_2D_A0->GetXaxis()->SetLabelSize(0.035);
+   eff_2D_A0->GetXaxis()->SetTitleSize(0.035);
    eff_2D_A0->GetXaxis()->SetTitleFont(42);
    eff_2D_A0->GetYaxis()->SetTitle("#gamma_{D1} Lxy [cm]");
    eff_2D_A0->GetYaxis()->SetLabelFont(42);
-   eff_2D_A0->GetYaxis()->SetLabelOffset(0.007);
-   eff_2D_A0->GetYaxis()->SetLabelSize(0.05);
-   eff_2D_A0->GetYaxis()->SetTitleSize(0.06);
-   eff_2D_A0->GetYaxis()->SetTitleOffset(1.1);
+   eff_2D_A0->GetYaxis()->SetLabelSize(0.035);
+   eff_2D_A0->GetYaxis()->SetTitleSize(0.035);
    eff_2D_A0->GetYaxis()->SetTitleFont(42);
    eff_2D_A0->GetZaxis()->SetTitle("Eff_{rec}/accep_{gen}");
    eff_2D_A0->GetZaxis()->SetLabelFont(42);
-   eff_2D_A0->GetZaxis()->SetLabelOffset(0.007);
-   eff_2D_A0->GetZaxis()->SetLabelSize(0.05);
-   eff_2D_A0->GetZaxis()->SetTitleSize(0.06);
+   eff_2D_A0->GetZaxis()->SetLabelSize(0.035);
+   eff_2D_A0->GetZaxis()->SetTitleSize(0.035);
    eff_2D_A0->GetZaxis()->SetTitleFont(42);
    eff_2D_A0->Draw("COLZ");
-
-   TLine *line = new TLine(0,9.8,48.5,9.8);
-   TLine *line2 = new TLine(48.5,0,48.5,9.8);
-
-   line->SetLineStyle(2);
-   line2->SetLineStyle(2);
-
-   line->SetLineWidth(2);
-   line2->SetLineWidth(2);
-
-   line->Draw("same");
-   line2->Draw("same");
-
-
+   
    TPaveText *pt = new TPaveText(0.4059483,0.9365254,0.5940517,0.995,"blNDC");
    pt->SetName("title");
    pt->SetBorderSize(0);
    pt->SetFillColor(0);
    pt->SetFillStyle(0);
    pt->SetTextFont(42);
-   TText *text = pt->AddText("eff_2D_A0");
+   TText *AText = pt->AddText("eff_2D_A0");
    pt->Draw();
-
-
-   TF1 *f1 = new TF1("f1","x*0.974168",0,80);
-   f1->SetFillColor(kBlack);
-   f1->SetLineColor(kBlack);
-   f1->SetFillStyle(0);
-   f1->SetLineWidth(3);
-   f1->GetXaxis()->SetLabelFont(42);
-   f1->GetXaxis()->SetLabelSize(0.035);
-   f1->GetXaxis()->SetTitleSize(0.035);
-   f1->GetXaxis()->SetTitleFont(42);
-   f1->GetYaxis()->SetLabelFont(42);
-   f1->GetYaxis()->SetLabelSize(0.035);
-   f1->GetYaxis()->SetTitleSize(0.035);
-   f1->GetYaxis()->SetTitleFont(42);
-   f1->Draw("same");
-   
-   TF1 *f3 = new TF1("f3","x*0.469642",0,80);
-   f3->SetFillColor(kBlack);
-   f3->SetLineColor(kBlack);
-   f3->SetFillStyle(0);
-   f3->SetLineWidth(3);
-   f3->GetXaxis()->SetLabelFont(42);
-   f3->GetXaxis()->SetLabelSize(0.035);
-   f3->GetXaxis()->SetTitleSize(0.035);
-   f3->GetXaxis()->SetTitleFont(42);
-   f3->GetYaxis()->SetLabelFont(42);
-   f3->GetYaxis()->SetLabelSize(0.035);
-   f3->GetYaxis()->SetTitleSize(0.035);
-   f3->GetYaxis()->SetTitleFont(42);
-   f3->Draw("same");
-
-
-
    c->Modified();
    c->cd();
    c->SetSelected(c);
-   c->SaveAs("eff_2D_LxyLz_A0_withlines.pdf","recreate");
 }

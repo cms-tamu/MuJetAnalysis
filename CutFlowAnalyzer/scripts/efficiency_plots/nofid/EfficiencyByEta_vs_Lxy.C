@@ -1,6 +1,7 @@
+void EfficiencyByEta_vs_Lxy()
 {
 //=========Macro generated from canvas: eta_lxy/eta_lxy
-//=========  (Thu May 11 04:01:02 2017) by ROOT version5.34/36
+//=========  (Fri Nov  3 01:39:01 2017) by ROOT version6.06/01
    TCanvas *eta_lxy = new TCanvas("eta_lxy", "eta_lxy",0,0,700,500);
    eta_lxy->Range(-15,-0.125,95,1.125);
    eta_lxy->SetFillColor(0);
@@ -13,7 +14,115 @@
    multigraph->SetName("");
    multigraph->SetTitle("");
    
-   TGraphAsymmErrors *grae = new TGraphAsymmErrors(17);
+   Double_t divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fx3007[17] = {
+   1,
+   3,
+   5,
+   7,
+   9,
+   11,
+   14,
+   17,
+   19,
+   22.5,
+   27.5,
+   32.5,
+   37.5,
+   42.5,
+   47.5,
+   55,
+   70};
+   Double_t divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fy3007[17] = {
+   0.9530272,
+   0.9320988,
+   0.9052144,
+   0.909698,
+   0.9123231,
+   0.9268859,
+   0.9038076,
+   0.868666,
+   0.8203593,
+   0.7382887,
+   0.6708128,
+   0.5306462,
+   0.5038199,
+   0.4393871,
+   0.3740622,
+   0.2502662,
+   0.01515869};
+   Double_t divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_felx3007[17] = {
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   2,
+   1,
+   1,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   5,
+   10};
+   Double_t divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fely3007[17] = {
+   0.001842005,
+   0.00331451,
+   0.004671523,
+   0.005151758,
+   0.005574521,
+   0.005485633,
+   0.004603449,
+   0.00813542,
+   0.009407098,
+   0.006972378,
+   0.008186146,
+   0.00928389,
+   0.01022632,
+   0.010731,
+   0.0113975,
+   0.008247077,
+   0.002651866};
+   Double_t divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fehx3007[17] = {
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   2,
+   1,
+   1,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   5,
+   10};
+   Double_t divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fehy3007[17] = {
+   0.001777032,
+   0.003174317,
+   0.004478849,
+   0.004906803,
+   0.005280569,
+   0.005142944,
+   0.004419091,
+   0.007741454,
+   0.009047828,
+   0.006856486,
+   0.008085554,
+   0.009263104,
+   0.01022319,
+   0.01078679,
+   0.01153567,
+   0.0084282,
+   0.003152072};
+   TGraphAsymmErrors *grae = new TGraphAsymmErrors(17,divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fx3007,divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fy3007,divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_felx3007,divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fehx3007,divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fely3007,divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY_fehy3007);
    grae->SetName("divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY");
    grae->SetTitle("num_LEp8_1D_A0_LXY");
 
@@ -25,66 +134,140 @@
    ci = TColor::GetColor("#ff0000");
    grae->SetMarkerColor(ci);
    grae->SetMarkerStyle(2);
-   grae->SetPoint(0,1,0.9502269);
-   grae->SetPointError(0,1,1,0.001854672,0.001792542);
-   grae->SetPoint(1,3,0.927334);
-   grae->SetPointError(1,1,1,0.003358011,0.003223873);
-   grae->SetPoint(2,5,0.9027027);
-   grae->SetPointError(2,1,1,0.004653343,0.004467375);
-   grae->SetPoint(3,7,0.9041714);
-   grae->SetPointError(3,1,1,0.005199964,0.004965671);
-   grae->SetPoint(4,9,0.9074816);
-   grae->SetPointError(4,1,1,0.005603091,0.005322358);
-   grae->SetPoint(5,11,0.9211712);
-   grae->SetPointError(5,1,1,0.005572881,0.005245382);
-   grae->SetPoint(6,14,0.8992449);
-   grae->SetPointError(6,2,2,0.004617439,0.004440981);
-   grae->SetPoint(7,17,0.8663641);
-   grae->SetPointError(7,1,1,0.008083373,0.007701784);
-   grae->SetPoint(8,19,0.8154825);
-   grae->SetPointError(8,1,1,0.009367966,0.009023591);
-   grae->SetPoint(9,22.5,0.7301367);
-   grae->SetPointError(9,2.5,2.5,0.006925264,0.006816833);
-   grae->SetPoint(10,27.5,0.6636746);
-   grae->SetPointError(10,2.5,2.5,0.008098663,0.008005228);
-   grae->SetPoint(11,32.5,0.5268118);
-   grae->SetPointError(11,2.5,2.5,0.009170649,0.009152911);
-   grae->SetPoint(12,37.5,0.5007886);
-   grae->SetPointError(12,2.5,2.5,0.0101242,0.01012356);
-   grae->SetPoint(13,42.5,0.4359877);
-   grae->SetPointError(13,2.5,2.5,0.01059002,0.01064752);
-   grae->SetPoint(14,47.5,0.3708748);
-   grae->SetPointError(14,2.5,2.5,0.01124532,0.01138376);
-   grae->SetPoint(15,55,0.2480942);
-   grae->SetPointError(15,5,5,0.008122702,0.008300998);
-   grae->SetPoint(16,70,0.01490452);
-   grae->SetPointError(16,10,10,0.002607628,0.003099702);
    
-   TH1F *Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7 = new TH1F("Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7","num_LEp8_1D_A0_LXY",100,0,88);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->SetMinimum(0);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->SetMaximum(1.045992);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->SetDirectory(0);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->SetStats(0);
+   TH1F *Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007 = new TH1F("Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007","num_LEp8_1D_A0_LXY",100,0,88);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->SetMinimum(0);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->SetMaximum(1.049034);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->SetDirectory(0);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->SetStats(0);
 
    ci = TColor::GetColor("#000099");
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->SetLineColor(ci);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetXaxis()->SetLabelFont(42);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetXaxis()->SetLabelSize(0.035);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetXaxis()->SetTitleSize(0.035);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetXaxis()->SetTitleFont(42);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetYaxis()->SetLabelFont(42);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetYaxis()->SetLabelSize(0.035);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetYaxis()->SetTitleSize(0.035);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetYaxis()->SetTitleFont(42);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetZaxis()->SetLabelFont(42);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetZaxis()->SetLabelSize(0.035);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetZaxis()->SetTitleSize(0.035);
-   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7->GetZaxis()->SetTitleFont(42);
-   grae->SetHistogram(Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY7);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->SetLineColor(ci);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetXaxis()->SetLabelFont(42);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetXaxis()->SetLabelSize(0.035);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetXaxis()->SetTitleSize(0.035);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetXaxis()->SetTitleFont(42);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetYaxis()->SetLabelFont(42);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetYaxis()->SetLabelSize(0.035);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetYaxis()->SetTitleSize(0.035);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetYaxis()->SetTitleFont(42);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetZaxis()->SetLabelFont(42);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetZaxis()->SetLabelSize(0.035);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetZaxis()->SetTitleSize(0.035);
+   Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007->GetZaxis()->SetTitleFont(42);
+   grae->SetHistogram(Graph_divide_num_LEp8_1D_A0_LXY_by_den_LEp8_1D_A0_LXY3007);
    
    multigraph->Add(grae,"");
    
-   grae = new TGraphAsymmErrors(17);
+   Double_t divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fx3008[17] = {
+   1,
+   3,
+   5,
+   7,
+   9,
+   11,
+   14,
+   17,
+   19,
+   22.5,
+   27.5,
+   32.5,
+   37.5,
+   42.5,
+   47.5,
+   55,
+   70};
+   Double_t divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fy3008[17] = {
+   0.8994709,
+   0.8334485,
+   0.8088889,
+   0.7577031,
+   0.7381657,
+   0.7565056,
+   0.7263626,
+   0.6861702,
+   0.625,
+   0.5440415,
+   0.4653979,
+   0.3707627,
+   0.3575949,
+   0.2745902,
+   0.2287582,
+   0.1428571,
+   0.05882353};
+   Double_t divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_felx3008[17] = {
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   2,
+   1,
+   1,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   5,
+   10};
+   Double_t divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fely3008[17] = {
+   0.00542333,
+   0.01037663,
+   0.01401404,
+   0.01710233,
+   0.01800482,
+   0.01991838,
+   0.01567883,
+   0.02575101,
+   0.02691619,
+   0.01861978,
+   0.02153075,
+   0.02298044,
+   0.02802317,
+   0.02957634,
+   0.03518777,
+   0.02950329,
+   0.03184338};
+   Double_t divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fehx3008[17] = {
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   2,
+   1,
+   1,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   5,
+   10};
+   Double_t divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fehy3008[17] = {
+   0.005181828,
+   0.00989968,
+   0.01329899,
+   0.01634959,
+   0.01727003,
+   0.01891808,
+   0.01515676,
+   0.02470745,
+   0.02620148,
+   0.01850166,
+   0.02165534,
+   0.02355339,
+   0.02897546,
+   0.03155137,
+   0.03905842,
+   0.03491135,
+   0.05392423};
+   grae = new TGraphAsymmErrors(17,divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fx3008,divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fy3008,divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_felx3008,divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fehx3008,divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fely3008,divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY_fehy3008);
    grae->SetName("divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY");
    grae->SetTitle("num_Gp8_1D_A0_LXY");
 
@@ -95,189 +278,303 @@
    ci = TColor::GetColor("#ff0000");
    grae->SetMarkerColor(ci);
    grae->SetMarkerStyle(2);
-   grae->SetPoint(0,1,0.9037115);
-   grae->SetPointError(0,1,1,0.005840855,0.005549231);
-   grae->SetPoint(1,3,0.84219);
-   grae->SetPointError(1,1,1,0.01103117,0.01045897);
-   grae->SetPoint(2,5,0.8077419);
-   grae->SetPointError(2,1,1,0.01520933,0.0143796);
-   grae->SetPoint(3,7,0.7639344);
-   grae->SetPointError(3,1,1,0.01845478,0.01754908);
-   grae->SetPoint(4,9,0.7340242);
-   grae->SetPointError(4,1,1,0.01963461,0.01878912);
-   grae->SetPoint(5,11,0.7603486);
-   grae->SetPointError(5,1,1,0.0215926,0.02039776);
-   grae->SetPoint(6,14,0.7205298);
-   grae->SetPointError(6,2,2,0.01728726,0.01667988);
-   grae->SetPoint(7,17,0.6727829);
-   grae->SetPointError(7,1,1,0.02799332,0.02687641);
-   grae->SetPoint(8,19,0.6238245);
-   grae->SetPointError(8,1,1,0.02905412,0.02823455);
-   grae->SetPoint(9,22.5,0.5586854);
-   grae->SetPointError(9,2.5,2.5,0.02050439,0.02031358);
-   grae->SetPoint(10,27.5,0.4723404);
-   grae->SetPointError(10,2.5,2.5,0.02400357,0.02412655);
-   grae->SetPoint(11,32.5,0.3702771);
-   grae->SetPointError(11,2.5,2.5,0.02511897,0.02580536);
-   grae->SetPoint(12,37.5,0.3595506);
-   grae->SetPointError(12,2.5,2.5,0.0306229,0.0317394);
-   grae->SetPoint(13,42.5,0.2684211);
-   grae->SetPointError(13,2.5,2.5,0.03338244,0.03601086);
-   grae->SetPoint(14,47.5,0.2272727);
-   grae->SetPointError(14,2.5,2.5,0.04158304,0.04707327);
-   grae->SetPoint(15,55,0.1282051);
-   grae->SetPointError(15,5,5,0.0386008,0.04965149);
-   grae->SetPoint(16,70,0.2);
-   grae->SetPointError(16,10,10,0.1067507,0.1570613);
    
-   TH1F *Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8 = new TH1F("Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8","num_Gp8_1D_A0_LXY",100,0,88);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->SetMinimum(0.007638693);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->SetMaximum(0.9912264);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->SetDirectory(0);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->SetStats(0);
+   TH1F *Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008 = new TH1F("Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008","num_Gp8_1D_A0_LXY",100,0,88);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->SetMinimum(0);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->SetMaximum(0.99242);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->SetDirectory(0);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->SetStats(0);
 
    ci = TColor::GetColor("#000099");
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->SetLineColor(ci);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetXaxis()->SetLabelFont(42);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetXaxis()->SetLabelSize(0.035);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetXaxis()->SetTitleSize(0.035);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetXaxis()->SetTitleFont(42);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetYaxis()->SetLabelFont(42);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetYaxis()->SetLabelSize(0.035);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetYaxis()->SetTitleSize(0.035);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetYaxis()->SetTitleFont(42);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetZaxis()->SetLabelFont(42);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetZaxis()->SetLabelSize(0.035);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetZaxis()->SetTitleSize(0.035);
-   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8->GetZaxis()->SetTitleFont(42);
-   grae->SetHistogram(Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY8);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->SetLineColor(ci);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetXaxis()->SetLabelFont(42);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetXaxis()->SetLabelSize(0.035);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetXaxis()->SetTitleSize(0.035);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetXaxis()->SetTitleFont(42);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetYaxis()->SetLabelFont(42);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetYaxis()->SetLabelSize(0.035);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetYaxis()->SetTitleSize(0.035);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetYaxis()->SetTitleFont(42);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetZaxis()->SetLabelFont(42);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetZaxis()->SetLabelSize(0.035);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetZaxis()->SetTitleSize(0.035);
+   Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008->GetZaxis()->SetTitleFont(42);
+   grae->SetHistogram(Graph_divide_num_Gp8_1D_A0_LXY_by_den_Gp8_1D_A0_LXY3008);
    
    multigraph->Add(grae,"");
    
-   grae = new TGraphAsymmErrors(17);
+   Double_t divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fx3009[17] = {
+   1,
+   3,
+   5,
+   7,
+   9,
+   11,
+   14,
+   17,
+   19,
+   22.5,
+   27.5,
+   32.5,
+   37.5,
+   42.5,
+   47.5,
+   55,
+   70};
+   Double_t divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fy3009[17] = {
+   0.9474507,
+   0.9102126,
+   0.8733112,
+   0.8419666,
+   0.8320405,
+   0.8143508,
+   0.806513,
+   0.7934298,
+   0.750306,
+   0.6415916,
+   0.6169045,
+   0.5118887,
+   0.4803241,
+   0.4700428,
+   0.4173592,
+   0.2722614,
+   0.02832861};
+   Double_t divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_felx3009[17] = {
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   2,
+   1,
+   1,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   5,
+   10};
+   Double_t divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fely3009[17] = {
+   0.001720844,
+   0.003622215,
+   0.005145374,
+   0.006488525,
+   0.007148085,
+   0.007887325,
+   0.006283051,
+   0.009997489,
+   0.01116849,
+   0.008358315,
+   0.009523991,
+   0.01081476,
+   0.01229287,
+   0.01365924,
+   0.01536031,
+   0.01143339,
+   0.005093947};
+   Double_t divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fehx3009[17] = {
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   2,
+   1,
+   1,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   5,
+   10};
+   Double_t divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fehy3009[17] = {
+   0.001670034,
+   0.003497664,
+   0.00497633,
+   0.00628371,
+   0.006918654,
+   0.007642712,
+   0.006134512,
+   0.009661317,
+   0.01085348,
+   0.008274619,
+   0.009436777,
+   0.01080386,
+   0.01231618,
+   0.0137031,
+   0.01551754,
+   0.01173335,
+   0.006066822};
+   grae = new TGraphAsymmErrors(17,divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fx3009,divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fy3009,divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_felx3009,divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fehx3009,divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fely3009,divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY_fehy3009);
    grae->SetName("divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY");
    grae->SetTitle("num_LEp8_1D_A1_LXY");
    grae->SetMarkerStyle(2);
-   grae->SetPoint(0,1,0.947147);
-   grae->SetPointError(0,1,1,0.001694653,0.001645632);
-   grae->SetPoint(1,3,0.9104542);
-   grae->SetPointError(1,1,1,0.003561298,0.003440446);
-   grae->SetPoint(2,5,0.8742747);
-   grae->SetPointError(2,1,1,0.005049926,0.004885514);
-   grae->SetPoint(3,7,0.8444382);
-   grae->SetPointError(3,1,1,0.006330177,0.006131212);
-   grae->SetPoint(4,9,0.8352365);
-   grae->SetPointError(4,1,1,0.006975294,0.006751259);
-   grae->SetPoint(5,11,0.8177794);
-   grae->SetPointError(5,1,1,0.007717715,0.007477497);
-   grae->SetPoint(6,14,0.8100623);
-   grae->SetPointError(6,2,2,0.006146859,0.006000991);
-   grae->SetPoint(7,17,0.7948024);
-   grae->SetPointError(7,1,1,0.009829927,0.009501613);
-   grae->SetPoint(8,19,0.7547733);
-   grae->SetPointError(8,1,1,0.01096087,0.01064832);
-   grae->SetPoint(9,22.5,0.6458685);
-   grae->SetPointError(9,2.5,2.5,0.00819887,0.008115452);
-   grae->SetPoint(10,27.5,0.6172927);
-   grae->SetPointError(10,2.5,2.5,0.009367482,0.009282763);
-   grae->SetPoint(11,32.5,0.5187282);
-   grae->SetPointError(11,2.5,2.5,0.01065121,0.01063456);
-   grae->SetPoint(12,37.5,0.4788654);
-   grae->SetPointError(12,2.5,2.5,0.01204376,0.01206781);
-   grae->SetPoint(13,42.5,0.4731774);
-   grae->SetPointError(13,2.5,2.5,0.01341391,0.01345176);
-   grae->SetPoint(14,47.5,0.4196664);
-   grae->SetPointError(14,2.5,2.5,0.01498243,0.01512765);
-   grae->SetPoint(15,55,0.275504);
-   grae->SetPointError(15,5,5,0.01120381,0.01148557);
-   grae->SetPoint(16,70,0.02901179);
-   grae->SetPointError(16,10,10,0.005051032,0.005981279);
    
-   TH1F *Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9 = new TH1F("Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9","num_LEp8_1D_A1_LXY",100,0,88);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->SetMinimum(0);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->SetMaximum(1.041276);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->SetDirectory(0);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->SetStats(0);
+   TH1F *Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009 = new TH1F("Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009","num_LEp8_1D_A1_LXY",100,0,88);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->SetMinimum(0);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->SetMaximum(1.041709);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->SetDirectory(0);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->SetStats(0);
 
    ci = TColor::GetColor("#000099");
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->SetLineColor(ci);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetXaxis()->SetLabelFont(42);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetXaxis()->SetLabelSize(0.035);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetXaxis()->SetTitleSize(0.035);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetXaxis()->SetTitleFont(42);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetYaxis()->SetLabelFont(42);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetYaxis()->SetLabelSize(0.035);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetYaxis()->SetTitleSize(0.035);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetYaxis()->SetTitleFont(42);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetZaxis()->SetLabelFont(42);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetZaxis()->SetLabelSize(0.035);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetZaxis()->SetTitleSize(0.035);
-   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9->GetZaxis()->SetTitleFont(42);
-   grae->SetHistogram(Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY9);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->SetLineColor(ci);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetXaxis()->SetLabelFont(42);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetXaxis()->SetLabelSize(0.035);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetXaxis()->SetTitleSize(0.035);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetXaxis()->SetTitleFont(42);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetYaxis()->SetLabelFont(42);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetYaxis()->SetLabelSize(0.035);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetYaxis()->SetTitleSize(0.035);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetYaxis()->SetTitleFont(42);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetZaxis()->SetLabelFont(42);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetZaxis()->SetLabelSize(0.035);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetZaxis()->SetTitleSize(0.035);
+   Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009->GetZaxis()->SetTitleFont(42);
+   grae->SetHistogram(Graph_divide_num_LEp8_1D_A1_LXY_by_den_LEp8_1D_A1_LXY3009);
    
    multigraph->Add(grae,"");
    
-   grae = new TGraphAsymmErrors(17);
+   Double_t divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fx3010[17] = {
+   1,
+   3,
+   5,
+   7,
+   9,
+   11,
+   14,
+   17,
+   19,
+   22.5,
+   27.5,
+   32.5,
+   37.5,
+   42.5,
+   47.5,
+   55,
+   70};
+   Double_t divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fy3010[17] = {
+   0.9544529,
+   0.9289544,
+   0.920603,
+   0.9024691,
+   0.9116809,
+   0.9240711,
+   0.9040307,
+   0.8791946,
+   0.8910891,
+   0.7843137,
+   0.6936813,
+   0.593801,
+   0.5387454,
+   0.4832215,
+   0.4331551,
+   0.3439716,
+   0.01404494};
+   Double_t divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_felx3010[17] = {
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   2,
+   1,
+   1,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   5,
+   10};
+   Double_t divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fely3010[17] = {
+   0.003574071,
+   0.007289589,
+   0.009522765,
+   0.0115681,
+   0.01204893,
+   0.01219539,
+   0.0100132,
+   0.01743744,
+   0.01777812,
+   0.01536724,
+   0.01803646,
+   0.02079393,
+   0.02238786,
+   0.02468623,
+   0.026734,
+   0.02058233,
+   0.006053481};
+   Double_t divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fehx3010[17] = {
+   1,
+   1,
+   1,
+   1,
+   1,
+   1,
+   2,
+   1,
+   1,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   2.5,
+   5,
+   10};
+   Double_t divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fehy3010[17] = {
+   0.003333976,
+   0.006685819,
+   0.008628251,
+   0.01051624,
+   0.01079905,
+   0.01072258,
+   0.00919736,
+   0.01562012,
+   0.01569051,
+   0.01464128,
+   0.01748345,
+   0.02047563,
+   0.0222389,
+   0.02476475,
+   0.02710948,
+   0.02115951,
+   0.009389505};
+   grae = new TGraphAsymmErrors(17,divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fx3010,divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fy3010,divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_felx3010,divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fehx3010,divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fely3010,divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY_fehy3010);
    grae->SetName("divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY");
    grae->SetTitle("num_Gp8_1D_A1_LXY");
    grae->SetLineStyle(2);
    grae->SetMarkerStyle(2);
-   grae->SetPoint(0,1,0.9575114);
-   grae->SetPointError(0,1,1,0.003811647,0.003521989);
-   grae->SetPoint(1,3,0.9306854);
-   grae->SetPointError(1,1,1,0.007833441,0.007126023);
-   grae->SetPoint(2,5,0.9229872);
-   grae->SetPointError(2,1,1,0.01021842,0.009168716);
-   grae->SetPoint(3,7,0.9007299);
-   grae->SetPointError(3,1,1,0.01277741,0.01153369);
-   grae->SetPoint(4,9,0.9086379);
-   grae->SetPointError(4,1,1,0.01330153,0.01184929);
-   grae->SetPoint(5,11,0.9225092);
-   grae->SetPointError(5,1,1,0.01325337,0.01157082);
-   grae->SetPoint(6,14,0.900655);
-   grae->SetPointError(6,2,2,0.0108909,0.009968357);
-   grae->SetPoint(7,17,0.8838384);
-   grae->SetPointError(7,1,1,0.01840364,0.0163162);
-   grae->SetPoint(8,19,0.8867403);
-   grae->SetPointError(8,1,1,0.01918831,0.01687828);
-   grae->SetPoint(9,22.5,0.78602);
-   grae->SetPointError(9,2.5,2.5,0.01662094,0.01576807);
-   grae->SetPoint(10,27.5,0.7026604);
-   grae->SetPointError(10,2.5,2.5,0.01918158,0.01852047);
-   grae->SetPoint(11,32.5,0.5750916);
-   grae->SetPointError(11,2.5,2.5,0.02219363,0.02190699);
-   grae->SetPoint(12,37.5,0.5529661);
-   grae->SetPointError(12,2.5,2.5,0.02403512,0.02380061);
-   grae->SetPoint(13,42.5,0.4734177);
-   grae->SetPointError(13,2.5,2.5,0.02628242,0.02642357);
-   grae->SetPoint(14,47.5,0.427673);
-   grae->SetPointError(14,2.5,2.5,0.02902816,0.02950788);
-   grae->SetPoint(15,55,0.3442623);
-   grae->SetPointError(15,5,5,0.02217608,0.02284391);
-   grae->SetPoint(16,70,0.009615385);
-   grae->SetPointError(16,10,10,0.005228567,0.009264563);
    
-   TH1F *Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10 = new TH1F("Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10","num_Gp8_1D_A1_LXY",100,0,88);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->SetMinimum(0);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->SetMaximum(1.056698);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->SetDirectory(0);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->SetStats(0);
+   TH1F *Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010 = new TH1F("Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010","num_Gp8_1D_A1_LXY",100,0,88);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->SetMinimum(0);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->SetMaximum(1.052766);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->SetDirectory(0);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->SetStats(0);
 
    ci = TColor::GetColor("#000099");
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->SetLineColor(ci);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetXaxis()->SetLabelFont(42);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetXaxis()->SetLabelSize(0.035);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetXaxis()->SetTitleSize(0.035);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetXaxis()->SetTitleFont(42);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetYaxis()->SetLabelFont(42);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetYaxis()->SetLabelSize(0.035);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetYaxis()->SetTitleSize(0.035);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetYaxis()->SetTitleFont(42);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetZaxis()->SetLabelFont(42);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetZaxis()->SetLabelSize(0.035);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetZaxis()->SetTitleSize(0.035);
-   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10->GetZaxis()->SetTitleFont(42);
-   grae->SetHistogram(Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY10);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->SetLineColor(ci);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetXaxis()->SetLabelFont(42);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetXaxis()->SetLabelSize(0.035);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetXaxis()->SetTitleSize(0.035);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetXaxis()->SetTitleFont(42);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetYaxis()->SetLabelFont(42);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetYaxis()->SetLabelSize(0.035);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetYaxis()->SetTitleSize(0.035);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetYaxis()->SetTitleFont(42);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetZaxis()->SetLabelFont(42);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetZaxis()->SetLabelSize(0.035);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetZaxis()->SetTitleSize(0.035);
+   Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010->GetZaxis()->SetTitleFont(42);
+   grae->SetHistogram(Graph_divide_num_Gp8_1D_A1_LXY_by_den_Gp8_1D_A1_LXY3010);
    
    multigraph->Add(grae,"");
    multigraph->Draw("ALP");

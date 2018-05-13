@@ -1,296 +1,57 @@
 void Efficiency_1D_LXY()
 {
 //=========Macro generated from canvas: effxy/effxy
-//=========  (Sun Jun  4 04:22:13 2017) by ROOT version6.06/01
-   TCanvas *effxy = new TCanvas("effxy", "effxy",0,0,700,500);
-   gStyle->SetOptFit(1);
-   gStyle->SetOptStat(0);
-   gStyle->SetOptTitle(0);
-   effxy->Range(-17.14286,-0.2236842,97.14286,1.092105);
+//=========  (Sun May 13 01:49:57 2018) by ROOT version6.06/01
+   TCanvas *effxy = new TCanvas("effxy", "effxy",0,23,600,600);
+   effxy->Range(-0.20625,-0.1923077,1.16875,1.089744);
    effxy->SetFillColor(0);
    effxy->SetBorderMode(0);
    effxy->SetBorderSize(2);
    effxy->SetTickx(1);
    effxy->SetTicky(1);
    effxy->SetLeftMargin(0.15);
-   effxy->SetRightMargin(0.08);
+   effxy->SetRightMargin(0.05);
    effxy->SetTopMargin(0.07);
-   effxy->SetBottomMargin(0.17);
+   effxy->SetBottomMargin(0.15);
    effxy->SetFrameFillStyle(0);
    effxy->SetFrameBorderMode(0);
    effxy->SetFrameFillStyle(0);
    effxy->SetFrameBorderMode(0);
    
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fx3001[40] = {
-   1,
-   3,
-   5,
-   7,
-   9,
-   11,
-   13,
-   15,
-   17,
-   19,
-   21,
-   23,
-   25,
-   27,
-   29,
-   31,
-   33,
-   35,
-   37,
-   39,
-   41,
-   43,
-   45,
-   47,
-   49,
-   51,
-   53,
-   55,
-   57,
-   59,
-   61,
-   63,
-   65,
-   67,
-   69,
-   71,
-   73,
-   75,
-   77,
-   79};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fy3001[40] = {
-   0.9426885,
-   0.9137154,
-   0.8885906,
-   0.8835979,
-   0.8793731,
-   0.8975344,
-   0.876951,
-   0.8713472,
-   0.838961,
-   0.7877551,
-   0.7322115,
-   0.7020619,
-   0.6575875,
-   0.6502994,
-   0.6278296,
-   0.5251989,
-   0.5122132,
-   0.4659378,
-   0.5325704,
-   0.4492223,
-   0.4265734,
-   0.4300518,
-   0.4095341,
-   0.3380783,
-   0.36,
-   0.3248588,
-   0.2993631,
-   0.2741935,
-   0.1687389,
-   0.1183432,
-   0.04295943,
-   0.01591512,
-   0.02005731,
-   0.01020408,
-   0,
-   0,
-   0,
-   0.00862069,
-   0,
-   0};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_felx3001[40] = {
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fely3001[40] = {
-   0.001804882,
-   0.003305236,
-   0.004528982,
-   0.005188205,
-   0.005697405,
-   0.005717811,
-   0.006580483,
-   0.006856966,
-   0.008014181,
-   0.009067024,
-   0.01006191,
-   0.01074562,
-   0.01155221,
-   0.01205758,
-   0.01288865,
-   0.01320351,
-   0.01397325,
-   0.01485132,
-   0.01526602,
-   0.01544793,
-   0.01604781,
-   0.01637194,
-   0.0166174,
-   0.01667747,
-   0.01798826,
-   0.01803748,
-   0.01872448,
-   0.0193422,
-   0.0160431,
-   0.01452509,
-   0.009902997,
-   0.006295133,
-   0.007367857,
-   0.005548392,
-   0,
-   0,
-   0,
-   0.007132541,
-   0,
-   0};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehx3001[40] = {
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehy3001[40] = {
-   0.001753829,
-   0.00319653,
-   0.00437669,
-   0.004999258,
-   0.005479629,
-   0.00545576,
-   0.006298955,
-   0.00656697,
-   0.007712478,
-   0.008799297,
-   0.00983317,
-   0.01053221,
-   0.01137273,
-   0.01187303,
-   0.01271396,
-   0.01316925,
-   0.01395469,
-   0.01491025,
-   0.01520701,
-   0.01554362,
-   0.01619911,
-   0.01652153,
-   0.01681985,
-   0.01707532,
-   0.01837547,
-   0.01855163,
-   0.01939063,
-   0.02018901,
-   0.01728476,
-   0.01613227,
-   0.01234401,
-   0.009384849,
-   0.01063631,
-   0.009826033,
-   0.008148934,
-   0.01385032,
-   0.01939479,
-   0.019543,
-   0.02093884,
-   0.02632867};
-   TGraphAsymmErrors *grae = new TGraphAsymmErrors(40,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fy3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_felx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fely3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehy3001);
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fx3001[1] = {
+   0.5};
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fy3001[1] = {
+   0.9511202};
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_felx3001[1] = {
+   0.5};
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fely3001[1] = {
+   0.004749273};
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehx3001[1] = {
+   0.5};
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehy3001[1] = {
+   0.004364631};
+   TGraphAsymmErrors *grae = new TGraphAsymmErrors(1,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fy3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_felx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fely3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehy3001);
    grae->SetName("divide_num_1D_A0_LXY_by_den_1D_A0_LXY");
-   grae->SetTitle("");
-   grae->SetFillStyle(0);
+   grae->SetTitle("#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                        13 TeV  ");
 
    Int_t ci;      // for color index setting
    TColor *color; // for color definition with alpha
    ci = TColor::GetColor("#ff0000");
    grae->SetLineColor(ci);
-   grae->SetLineStyle(0);
 
    ci = TColor::GetColor("#ff0000");
    grae->SetMarkerColor(ci);
    grae->SetMarkerStyle(21);
    
-   TH1F *Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001 = new TH1F("Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001","",100,0,88);
+   TH1F *Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001 = new TH1F("Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001","#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                        13 TeV  ",100,0,1.1);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetMinimum(0);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetMaximum(1);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetDirectory(0);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetStats(0);
-   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetFillStyle(0);
-   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetLineStyle(0);
-   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetMarkerStyle(20);
-   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetXaxis()->SetTitle("L_{XY} [cm]");
+
+   ci = TColor::GetColor("#000099");
+   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetLineColor(ci);
+   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetXaxis()->SetTitle("L_{xy} [cm]");
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetXaxis()->SetLabelFont(42);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetXaxis()->SetLabelOffset(0.007);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetXaxis()->SetLabelSize(0.05);
@@ -304,281 +65,44 @@ void Efficiency_1D_LXY()
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetYaxis()->SetTitleOffset(1.1);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetYaxis()->SetTitleFont(42);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetZaxis()->SetLabelFont(42);
-   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetZaxis()->SetLabelOffset(0.007);
-   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetZaxis()->SetLabelSize(0.05);
-   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetZaxis()->SetTitleSize(0.06);
+   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetZaxis()->SetLabelSize(0.035);
+   Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetZaxis()->SetTitleSize(0.035);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->GetZaxis()->SetTitleFont(42);
    grae->SetHistogram(Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001);
    
    grae->Draw("alp");
    
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fx3002[40] = {
-   1,
-   3,
-   5,
-   7,
-   9,
-   11,
-   13,
-   15,
-   17,
-   19,
-   21,
-   23,
-   25,
-   27,
-   29,
-   31,
-   33,
-   35,
-   37,
-   39,
-   41,
-   43,
-   45,
-   47,
-   49,
-   51,
-   53,
-   55,
-   57,
-   59,
-   61,
-   63,
-   65,
-   67,
-   69,
-   71,
-   73,
-   75,
-   77,
-   79};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fy3002[40] = {
-   0.9487109,
-   0.9136148,
-   0.8818512,
-   0.8535604,
-   0.8472866,
-   0.835229,
-   0.8248408,
-   0.8270739,
-   0.8105216,
-   0.7782139,
-   0.7070989,
-   0.6526442,
-   0.6373626,
-   0.6365576,
-   0.6149163,
-   0.5387755,
-   0.5448776,
-   0.4832347,
-   0.5148936,
-   0.4722892,
-   0.5012563,
-   0.4579832,
-   0.4193062,
-   0.4266442,
-   0.4296296,
-   0.3680154,
-   0.3928571,
-   0.2857143,
-   0.2172775,
-   0.1121495,
-   0.05128205,
-   0.02690583,
-   0.01702128,
-   0.01886792,
-   0.02777778,
-   0.0106383,
-   0.01666667,
-   0.01162791,
-   0,
-   0};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_felx3002[40] = {
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fely3002[40] = {
-   0.001536555,
-   0.003211007,
-   0.004509912,
-   0.005641383,
-   0.006173033,
-   0.006762978,
-   0.007444139,
-   0.008026964,
-   0.008638484,
-   0.00958643,
-   0.01115505,
-   0.01206319,
-   0.01263355,
-   0.01327838,
-   0.01388938,
-   0.01467727,
-   0.01548232,
-   0.01616086,
-   0.01683999,
-   0.01788532,
-   0.01833982,
-   0.01927113,
-   0.01977626,
-   0.02100652,
-   0.02207132,
-   0.02184568,
-   0.0231752,
-   0.02248035,
-   0.02160149,
-   0.01785216,
-   0.01335043,
-   0.01062158,
-   0.00812874,
-   0.009008525,
-   0.01324752,
-   0.008802179,
-   0.01379158,
-   0.009621158,
-   0,
-   0};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehx3002[40] = {
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1,
-   1};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehy3002[40] = {
-   0.001494829,
-   0.003108389,
-   0.004368431,
-   0.00547048,
-   0.005979304,
-   0.00655204,
-   0.007208604,
-   0.007749804,
-   0.008354218,
-   0.009306206,
-   0.01091759,
-   0.01187507,
-   0.01245134,
-   0.01307883,
-   0.0137096,
-   0.01461218,
-   0.01539853,
-   0.01619495,
-   0.01680729,
-   0.01795436,
-   0.01833655,
-   0.01939314,
-   0.02002902,
-   0.02126393,
-   0.02234297,
-   0.0223768,
-   0.02364588,
-   0.02353626,
-   0.02317101,
-   0.02047743,
-   0.01708022,
-   0.01572477,
-   0.01325365,
-   0.01466693,
-   0.02141829,
-   0.02403638,
-   0.0372819,
-   0.02622924,
-   0.0392319,
-   0.04288703};
-   grae = new TGraphAsymmErrors(40,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fy3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_felx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fely3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehy3002);
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fx3002[1] = {
+   0.5};
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fy3002[1] = {
+   0.9616952};
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_felx3002[1] = {
+   0.5};
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fely3002[1] = {
+   0.004278343};
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehx3002[1] = {
+   0.5};
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehy3002[1] = {
+   0.00388234};
+   grae = new TGraphAsymmErrors(1,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fy3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_felx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fely3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehy3002);
    grae->SetName("divide_num_1D_A1_LXY_by_den_1D_A1_LXY");
    grae->SetTitle("num_1D_A1_LXY");
-   grae->SetFillStyle(0);
 
    ci = TColor::GetColor("#0000ff");
    grae->SetLineColor(ci);
-   grae->SetLineStyle(0);
 
    ci = TColor::GetColor("#0000ff");
    grae->SetMarkerColor(ci);
    grae->SetMarkerStyle(21);
    
-   TH1F *Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002 = new TH1F("Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002","num_1D_A1_LXY",100,0,88);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMinimum(0);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMaximum(1.045226);
+   TH1F *Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002 = new TH1F("Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002","num_1D_A1_LXY",100,0,1.1);
+   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMinimum(0.9566008);
+   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMaximum(0.9663936);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetDirectory(0);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetStats(0);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetFillStyle(0);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetLineStyle(0);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMarkerStyle(20);
+
+   ci = TColor::GetColor("#000099");
+   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetLineColor(ci);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetXaxis()->SetLabelFont(42);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetXaxis()->SetLabelOffset(0.007);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetXaxis()->SetLabelSize(0.05);
@@ -591,9 +115,8 @@ void Efficiency_1D_LXY()
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetYaxis()->SetTitleOffset(1.1);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetYaxis()->SetTitleFont(42);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetZaxis()->SetLabelFont(42);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetZaxis()->SetLabelOffset(0.007);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetZaxis()->SetLabelSize(0.05);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetZaxis()->SetTitleSize(0.06);
+   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetZaxis()->SetLabelSize(0.035);
+   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetZaxis()->SetTitleSize(0.035);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetZaxis()->SetTitleFont(42);
    grae->SetHistogram(Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002);
    
@@ -601,32 +124,46 @@ void Efficiency_1D_LXY()
    
    TLegend *leg = new TLegend(0.1690544,0.1476793,0.3008596,0.3333333,NULL,"brNDC");
    leg->SetBorderSize(0);
-   leg->SetTextFont(62);
-   leg->SetTextSize(0.045);
+   leg->SetTextSize(0.05);
    leg->SetLineColor(1);
    leg->SetLineStyle(1);
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(1001);
-   TLegendEntry *entry=leg->AddEntry("divide_num_1D_A0_LXY_by_den_1D_A0_LXY","#gamma_{D1}","L");
+   TLegendEntry *entry=leg->AddEntry("divide_num_1D_A0_LXY_by_den_1D_A0_LXY","#gamma_{D1}","LP");
 
    ci = TColor::GetColor("#ff0000");
    entry->SetLineColor(ci);
+   entry->SetLineStyle(1);
    entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
+
+   ci = TColor::GetColor("#ff0000");
+   entry->SetMarkerColor(ci);
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
-   entry->SetTextFont(62);
-   entry=leg->AddEntry("divide_num_1D_A1_LXY_by_den_1D_A1_LXY","#gamma_{D2}","L");
+   entry->SetTextFont(42);
+   entry=leg->AddEntry("divide_num_1D_A1_LXY_by_den_1D_A1_LXY","#gamma_{D2}","LP");
 
    ci = TColor::GetColor("#0000ff");
    entry->SetLineColor(ci);
+   entry->SetLineStyle(1);
    entry->SetLineWidth(1);
-   entry->SetMarkerColor(1);
+
+   ci = TColor::GetColor("#0000ff");
+   entry->SetMarkerColor(ci);
    entry->SetMarkerStyle(21);
    entry->SetMarkerSize(1);
-   entry->SetTextFont(62);
+   entry->SetTextFont(42);
    leg->Draw();
+   
+   TPaveText *pt = new TPaveText(0,0.942,1,1,"blNDC");
+   pt->SetName("title");
+   pt->SetBorderSize(0);
+   pt->SetFillColor(0);
+   pt->SetFillStyle(0);
+   pt->SetTextFont(42);
+   TText *AText = pt->AddText("#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                        13 TeV  ");
+   pt->Draw();
    effxy->Modified();
    effxy->cd();
    effxy->SetSelected(effxy);

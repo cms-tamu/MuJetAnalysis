@@ -1,0 +1,19 @@
+#!/bin/bash      
+#SBATCH -J AnalysisJpsi
+#SBATCH -n1
+#SBATCH --time=08:30:00
+#SBATCH --mem-per-cpu=8000mb
+#SBATCH -p background-4g
+#SBATCH -o /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/SBATCHLOG/SBATCH_Charmonium_C.stdout
+#SBATCH -e /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/SBATCHLOG/SBATCH_Charmonium_C.stderr
+      
+cd  /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src
+export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
+source /cvmfs/cms.cern.ch/cmsset_default.sh
+export SCRAM_ARCH=slc6_amd64_gcc493
+eval `scramv1 runtime -sh`
+cd  /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts
+echo 'gROOT->ProcessLine(".L jpsi.C++"); analysis("Charmonium_C.txt")' | root -l -b 
+      
+exit 0
+
