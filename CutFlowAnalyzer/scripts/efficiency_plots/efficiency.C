@@ -17,6 +17,7 @@
 #include "TColor.h"
 #include "TStyle.h"
 
+
 ///----Global Variables ----///
 TFile *BAM = new TFile("Efficiency_Plots.root","RECREATE");
 
@@ -31,8 +32,8 @@ Float_t count_gam_A1[160][160];
 Float_t count_rec_A1[160][160];
 Float_t eff_A1[160][160];
 
-TString cms_title = "#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                    13 TeV  ";
-TString cms_title2 = "#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                    13 TeV  ";
+TString cms_title = "#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV"; // 1D eff
+TString cms_title2 = "#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                  13 TeV"; // 2D eff
 
 TH1F *den_1D_A0_LXY = new TH1F("den_1D_A0_LXY", cms_title, 80, 0, 80);
 TH1F *num_1D_A0_LXY = new TH1F("num_1D_A0_LXY", cms_title, 80, 0, 80);
@@ -51,11 +52,11 @@ TH1F *dR_A1 = new TH1F("dR_A1", "dR_A1", 100, 0, 1);
 
 TH1F *dPhi_Plot = new TH1F("dPhi_A0", "dPhi_A0", 1400, -7, 7);
 
-TH1F *den_1D_A1_pT = new TH1F("den_1D_A1_pT", cms_title, 130, 0, 130);
-TH1F *num_1D_A1_pT = new TH1F("num_1D_A1_pT", cms_title, 130, 0, 130);
+TH1F *den_1D_A1_pT = new TH1F("den_1D_A1_pT", cms_title, 40, 0, 120);
+TH1F *num_1D_A1_pT = new TH1F("num_1D_A1_pT", cms_title, 40, 0, 120);
 
-TH1F *den_1D_A0_pT = new TH1F("den_1D_A0_pT", cms_title, 130, 0, 130);
-TH1F *num_1D_A0_pT = new TH1F("num_1D_A0_pT", cms_title, 130, 0, 130);
+TH1F *den_1D_A0_pT = new TH1F("den_1D_A0_pT", cms_title, 40, 0, 120);
+TH1F *num_1D_A0_pT = new TH1F("num_1D_A0_pT", cms_title, 40, 0, 120);
 
 //Efficiency by eta -- <= 0.9
 
@@ -234,7 +235,7 @@ TH2F *dR_vs_dLz = new TH2F("dR_vs_dLz", "dR_vs_dLz", 100, 0, 1, 80, 0, 80);
 TH2F *dPhi_vs_dLz = new TH2F("dPhi_vs_dLz", "dPhi_vs_dLz", 800, -4, 4, 80, 0, 80);
 
 
-TH2F *dR_vs_pt = new TH2F("dR_vs_pt", "dR_vs_pt", 100, 0, 1, 130, 0, 130);
+TH2F *dR_vs_pt = new TH2F("dR_vs_pt", "dR_vs_pt", 100, 0, 1, 40, 0, 120);
 TH2F *pt_vs_dPhi = new TH2F("pt_vs_dPhi", "pt_vs_dPhi", 130,0,130, 800, -4, 4);
 
 TH2F *pt_vs_dLxy = new TH2F("pt_vs_dLxy", "pt_vs_dLxy", 130,0,130, 80, 0, 80);
@@ -312,7 +313,27 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
   }
 }
 
-void set_title_and_label_style(TGraphAsymmErrors* gr)
+template <class T>
+void set_title_and_label_style(T* gr)
+{
+   gr->GetXaxis()->SetLabelFont(42);
+   gr->GetXaxis()->SetLabelOffset(0.007);
+   gr->GetXaxis()->SetLabelSize(0.05);
+   gr->GetXaxis()->SetTitleSize(0.06);
+   gr->GetXaxis()->SetTitleFont(42);
+
+   gr->GetYaxis()->SetLabelFont(42);
+   gr->GetYaxis()->SetLabelOffset(0.007);
+   gr->GetYaxis()->SetLabelSize(0.05);
+   gr->GetYaxis()->SetTitleSize(0.06);
+   gr->GetYaxis()->SetTitleOffset(1.1);
+   gr->GetYaxis()->SetTitleFont(42);
+
+   // gr->GetZaxis()->SetLabelFont(42);
+   // gr->GetZaxis()->SetLabelOffset(0.007);
+}
+
+void set_title_and_label_style(TGraphErrors* gr)
 {
    gr->GetXaxis()->SetLabelFont(42);
    gr->GetXaxis()->SetLabelOffset(0.007);
@@ -328,20 +349,20 @@ void set_title_and_label_style(TGraphAsymmErrors* gr)
    gr->GetYaxis()->SetTitleFont(42);
 }
 
-void set_title_and_label_style(TH2F* gr)
+void set_title_and_label_style(TMultiGraph* gr)
 {
-   gr->GetXaxis()->SetLabelFont(42);
-   gr->GetXaxis()->SetLabelOffset(0.007);
-   gr->GetXaxis()->SetLabelSize(0.05);
-   gr->GetXaxis()->SetTitleSize(0.06);
-   gr->GetXaxis()->SetTitleFont(42);
+   gr->GetHistogram()->GetXaxis()->SetLabelFont(42);
+   gr->GetHistogram()->GetXaxis()->SetLabelOffset(0.007);
+   gr->GetHistogram()->GetXaxis()->SetLabelSize(0.05);
+   gr->GetHistogram()->GetXaxis()->SetTitleSize(0.06);
+   gr->GetHistogram()->GetXaxis()->SetTitleFont(42);
 
-   gr->GetYaxis()->SetLabelFont(42);
-   gr->GetYaxis()->SetLabelOffset(0.007);
-   gr->GetYaxis()->SetLabelSize(0.05);
-   gr->GetYaxis()->SetTitleSize(0.06);
-   gr->GetYaxis()->SetTitleOffset(1.1);
-   gr->GetYaxis()->SetTitleFont(42);
+   gr->GetHistogram()->GetYaxis()->SetLabelFont(42);
+   gr->GetHistogram()->GetYaxis()->SetLabelOffset(0.007);
+   gr->GetHistogram()->GetYaxis()->SetLabelSize(0.05);
+   gr->GetHistogram()->GetYaxis()->SetTitleSize(0.06);
+   gr->GetHistogram()->GetYaxis()->SetTitleOffset(1.1);
+   gr->GetHistogram()->GetYaxis()->SetTitleFont(42);
 }
 
 void set_canvas_style(TCanvas* c)
@@ -380,6 +401,7 @@ void set_canvas_style_tgraph(TCanvas* c)
 
 void create_eff_pergamD2DLxyLz(TString fileName){
 
+gROOT->SetBatch(kTRUE);
 
   //  bool verbose(true);
   bool verbose(false);
@@ -1039,14 +1061,14 @@ void makePlots(){
       if(count_gam_A0[k][j]!=0) eff_A0[k][j] = count_rec_A0[k][j]/(count_gam_A0[k][j]*1.0);
       if(count_rec_A0[k][j]==0 && count_gam_A0[k][j]!=0)   eff_A0[k][j] = 0.0001;
 
-      cout<<" efficiency A0   "<<eff_A0[k][j]<<endl;
+      // cout<<" efficiency A0   "<<eff_A0[k][j]<<endl;
       eff_2D_A0->SetBinContent(k+1,j+1,eff_A0[k][j]);
 
 
       if(count_gam_A1[k][j]!=0) eff_A1[k][j] = count_rec_A1[k][j]/(count_gam_A1[k][j]*1.0);
       if(count_rec_A1[k][j]==0 && count_gam_A1[k][j]!=0)   eff_A1[k][j] = 0.0001;
 
-      cout<<" efficiency A1   "<<eff_A1[k][j]<<endl;
+      // cout<<" efficiency A1   "<<eff_A1[k][j]<<endl;
 
       eff_2D_A1->SetBinContent(k+1,j+1,eff_A1[k][j]);
     }
@@ -1071,7 +1093,7 @@ void makePlots(){
   gr1->GetXaxis()->SetTitle("L_{xy} [cm]");
   gr1->SetMarkerColor(kRed);
   gr1->SetLineColor(kRed);
-  gr1->SetMarkerStyle(21);
+  gr1->SetMarkerStyle(25);
   gr1->SetMinimum(0);
   gr1->SetMaximum(1);
   gr1->Draw("ALP");
@@ -1079,13 +1101,13 @@ void makePlots(){
   gr0 = new TGraphAsymmErrors(num_1D_A1_LXY, den_1D_A1_LXY);
   gr0->SetMarkerColor(kBlue);
   gr0->SetLineColor(kBlue);
-  gr0->SetMarkerStyle(21);
-  gr0->Draw("same");
+  gr0->SetMarkerStyle(22);
+  gr0->Draw("P same");
 
   set_title_and_label_style(gr1);
   set_title_and_label_style(gr0);
 
-  TLegend *leg = new TLegend(0.1690544,0.1476793,0.3008596,0.3333333);
+  TLegend *leg = new TLegend(0.2,0.2,0.35,0.35);
   leg->SetBorderSize(0);
   leg->SetFillColor(0);
   leg->SetTextSize(0.05);
@@ -1096,6 +1118,14 @@ void makePlots(){
   effxy->SaveAs("Efficiency_1D_LXY.pdf");
   effxy->SaveAs("Efficiency_1D_LXY.C");
 
+  
+  gr1->GetXaxis()->SetLimits(0,12);
+  gr1->Draw("ALP");
+  gr0->Draw("P same");
+  leg->Draw("same");
+
+  effxy->SaveAs("Efficiency_1D_LXY_0to12.pdf");
+  effxy->SaveAs("Efficiency_1D_LXY_0to12.C");
 
 
   TCanvas *effz2 = new TCanvas("effz2", "effz2", my_canvas_x, my_canvas_y);
@@ -1115,7 +1145,7 @@ void makePlots(){
   gr2->SetLineColor(kRed);
   gr2->SetTitle(cms_title);
   gr2->GetYaxis()->SetTitle("Efficiency");
-  gr2->GetXaxis()->SetTitle("L_{Z} [cm]");
+  gr2->GetXaxis()->SetTitle("L_{z} [cm]");
   gr2->SetMarkerStyle(21);
   gr2->SetMinimum(0);
   gr2->SetMaximum(1);
@@ -1126,7 +1156,7 @@ void makePlots(){
   gr3->SetMarkerColor(kBlue);
   gr3->SetLineColor(kBlue);
   gr3->SetMarkerStyle(21);
-  gr3->Draw("same");
+  gr3->Draw("P same");
 
   set_title_and_label_style(gr2);
   set_title_and_label_style(gr3);
@@ -1135,6 +1165,16 @@ void makePlots(){
 
   effz2->SaveAs("Efficiency_1D_Lz.pdf");
   effz2->SaveAs("Efficiency_1D_Lz.C");
+
+
+  gr2->GetXaxis()->SetLimits(0,12);
+  gr2->Draw("ALP");
+  gr3->Draw("P same");
+  leg->Draw("same");
+
+  effz2->SaveAs("Efficiency_1D_Lz_0to12.pdf");
+  effz2->SaveAs("Efficiency_1D_Lz_0to12.C");
+
 
   TCanvas *effpt = new TCanvas("effpt", "effpt", my_canvas_x, my_canvas_y);
   set_canvas_style_tgraph(effpt);
@@ -1162,7 +1202,7 @@ void makePlots(){
   gr_eff2->SetMarkerColor(kBlue);
   gr_eff2->SetLineColor(kBlue);
   gr_eff2->SetMarkerStyle(21);
-  gr_eff2->Draw("same");
+  gr_eff2->Draw("P same");
 
   set_title_and_label_style(gr_eff);
   set_title_and_label_style(gr_eff2);
@@ -1225,8 +1265,7 @@ void makePlots(){
   gStyle->SetTitleH(0.058);
   gStyle->SetTitleBorderSize( 0 );
 
-  TMultiGraph *mg_lxy = new TMultiGraph();
-
+  TMultiGraph *mg_lxy = new TMultiGraph("",cms_title);
   gr_a0_le_lxy = new TGraphAsymmErrors(num_LEp8_1D_A0_LXY, den_LEp8_1D_A0_LXY);
   gr_a1_le_lxy = new TGraphAsymmErrors(num_LEp8_1D_A1_LXY, den_LEp8_1D_A1_LXY);
   gr_a1_g_lxy = new TGraphAsymmErrors(num_Gp8_1D_A1_LXY, den_Gp8_1D_A1_LXY);
@@ -1266,26 +1305,27 @@ void makePlots(){
   etaleg->SetFillColor(0);
   etaleg->SetTextSize(0.05);
   etaleg->SetFillStyle(0);
-  etaleg->AddEntry(gr_a0_le_lxy,"|#eta_{#gamma D}| #leq 0.9 A0","L");
-  etaleg->AddEntry(gr_a0_g_lxy, "|#eta_{#gamma D}| > 0.9 A0","L");
-  etaleg->AddEntry(gr_a1_le_lxy,"|#eta_{#gamma D}| #leq 0.9 A1","L");
-  etaleg->AddEntry(gr_a1_g_lxy, "|#eta_{#gamma D}| > 0.9 A1","L");
+  etaleg->AddEntry(gr_a0_le_lxy,"|#eta_{#gamma D1}| #leq 0.9","L");
+  etaleg->AddEntry(gr_a0_g_lxy, "|#eta_{#gamma D1}| > 0.9","L");
+  etaleg->AddEntry(gr_a1_le_lxy,"|#eta_{#gamma D2}| #leq 0.9","L");
+  etaleg->AddEntry(gr_a1_g_lxy, "|#eta_{#gamma D2}| > 0.9","L");
   mg_lxy->Draw("ALP");
   mg_lxy->GetXaxis()->SetTitle("L_{xy} [cm]");
   mg_lxy->GetYaxis()->SetTitle("Efficiency");
   mg_lxy->SetMinimum(0.);
   mg_lxy->SetMaximum(1.);
-  etaleg->Draw("same");
+  etaleg->Draw("P same");
+  set_title_and_label_style(mg_lxy);
 
   TLegend *etalegz = new TLegend(0.6389685,0.2447257,0.8381089,0.4535865);
   etalegz->SetBorderSize(0);
   etalegz->SetFillColor(0);
   etalegz->SetTextSize(0.05);
   etalegz->SetFillStyle(0);
-  etalegz->AddEntry(gr_a0_le_lxy,"|#eta_{#gamma D}| #leq 0.9 A0","L");
-  etalegz->AddEntry(gr_a0_g_lxy, "|#eta_{#gamma D}| > 0.9 A0","L");
-  etalegz->AddEntry(gr_a1_le_lxy,"|#eta_{#gamma D}| #leq 0.9 A1","L");
-  etalegz->AddEntry(gr_a1_g_lxy, "|#eta_{#gamma D}| > 0.9 A1","L");
+  etalegz->AddEntry(gr_a0_le_lxy,"|#eta_{#gamma D1}| #leq 0.9","L");
+  etalegz->AddEntry(gr_a0_g_lxy, "|#eta_{#gamma D1}| > 0.9","L");
+  etalegz->AddEntry(gr_a1_le_lxy,"|#eta_{#gamma D2}| #leq 0.9","L");
+  etalegz->AddEntry(gr_a1_g_lxy, "|#eta_{#gamma D2}| > 0.9","L");
 
   pixel_1->Draw("same");
   pixel_2->Draw("same");
@@ -1296,6 +1336,22 @@ void makePlots(){
 
   eta_lxy->SaveAs("EfficiencyByEta_vs_Lxy.pdf");
   eta_lxy->SaveAs("EfficiencyByEta_vs_Lxy.C");
+
+  
+  mg_lxy->GetXaxis()->SetLimits(0,12);
+  mg_lxy->Draw("ALP");
+  etaleg->Draw("same");
+  pixel_1->Draw("same");
+  pixel_2->Draw("same");
+  pixel_3->Draw("same");
+  tracker_innerbarrel->Draw("same");
+  tracker_outerbarrel->Draw("same");
+
+  effxy->SaveAs("EfficiencyByEta_1D_vs_Lxy_0to12.pdf");
+  effxy->SaveAs("EfficiencyByEta_1D_vs_Lxy_0to12.C");
+
+
+
   cout << "Checkpoint 1" << endl;
   //eta_lxy->SaveAs("EfficiencyByEta_vs_Lxy.C");
 
@@ -1303,7 +1359,7 @@ void makePlots(){
 
   TCanvas *eta_lz = new TCanvas("eta_lz", "eta_lz", my_canvas_x, my_canvas_y);
   set_canvas_style_tgraph(eta_lz);
-  TMultiGraph *mg_lz = new TMultiGraph();
+  TMultiGraph *mg_lz = new TMultiGraph("",cms_title);
 
   gStyle->SetTitleFontSize(0.07);
   gStyle->SetTitleStyle( 0 );
@@ -1352,7 +1408,8 @@ void makePlots(){
 
   cout << "Checkpoint 4" << endl;
   mg_lz->Draw("ALP");
-  mg_lz->GetXaxis()->SetTitle("L_{Z} [cm]");
+  set_title_and_label_style(mg_lz);
+  mg_lz->GetXaxis()->SetTitle("L_{z} [cm]");
   mg_lz->GetYaxis()->SetTitle("Efficiency");
   mg_lz->SetMinimum(0.);
   mg_lz->SetMaximum(1.);
@@ -1364,11 +1421,26 @@ void makePlots(){
   eta_lz->SaveAs("EfficiencyByEta_vs_Lz.pdf");
   eta_lz->SaveAs("EfficiencyByEta_vs_Lz.C");
 
+
+
+  mg_lz->GetXaxis()->SetLimits(0,12);
+  mg_lz->Draw("ALP");
+  etalegz->Draw("same");
+  pixel_1->Draw("same");
+  pixel_2->Draw("same");
+  pixel_3->Draw("same");
+  tracker_innerbarrel->Draw("same");
+  tracker_outerbarrel->Draw("same");
+
+  eta_lz->SaveAs("EfficiencyByEta_1D_vs_Lz_0to12.pdf");
+  eta_lz->SaveAs("EfficiencyByEta_1D_vs_Lz_0to12.C");
+
+
   //Eta plots including Trigger
 
   TCanvas *eta_lxy_trig = new TCanvas("eta_lxy_trig", "eta_lxy_trig", my_canvas_x, my_canvas_y);
   set_canvas_style_tgraph(eta_lxy_trig);
-  TMultiGraph *mg_lxy_trig = new TMultiGraph();
+  TMultiGraph *mg_lxy_trig = new TMultiGraph("",cms_title);
 
   gStyle->SetTitleFontSize(0.07);
   gStyle->SetTitleStyle( 0 );
@@ -1414,6 +1486,7 @@ void makePlots(){
   mg_lxy_trig->Add(gr_a1_g_lxy_trig);
 
   mg_lxy_trig->Draw("ALP");
+  set_title_and_label_style(mg_lxy_trig);
   mg_lxy_trig->GetXaxis()->SetTitle("L_{xy} [cm]");
   mg_lxy_trig->GetYaxis()->SetTitle("Efficiency");
   mg_lxy_trig->SetMinimum(0.);
@@ -1430,9 +1503,24 @@ void makePlots(){
   eta_lxy_trig->SaveAs("EfficiencyByEta_vs_Lxy_Trig.pdf");
   eta_lxy_trig->SaveAs("EfficiencyByEta_vs_Lxy_Trig.C");
 
+
+
+  mg_lxy_trig->GetXaxis()->SetLimits(0,12);
+  mg_lxy_trig->Draw("ALP");
+  etaleg->Draw("same");
+  pixel_1->Draw("same");
+  pixel_2->Draw("same");
+  pixel_3->Draw("same");
+  tracker_innerbarrel->Draw("same");
+  tracker_outerbarrel->Draw("same");
+
+  eta_lxy_trig->SaveAs("EfficiencyByEta_1D_vs_Lxy_Trig_0to12.pdf");
+  eta_lxy_trig->SaveAs("EfficiencyByEta_1D_vs_Lxy_Trig_0to12.C");
+
+
   TCanvas *eta_lz_trig = new TCanvas("eta_lz_trig", "eta_lz_trig", my_canvas_x, my_canvas_y);
   set_canvas_style_tgraph(eta_lz_trig);
-  TMultiGraph *mg_lz_trig = new TMultiGraph();
+  TMultiGraph *mg_lz_trig = new TMultiGraph("",cms_title);
 
   gStyle->SetTitleFontSize(0.07);
   gStyle->SetTitleStyle( 0 );
@@ -1479,7 +1567,8 @@ void makePlots(){
   mg_lz_trig->Add(gr_a1_g_lz_trig);
 
   mg_lz_trig->Draw("ALP");
-  mg_lz_trig->GetXaxis()->SetTitle("L_{Z} [cm]");
+  set_title_and_label_style(mg_lz_trig);
+  mg_lz_trig->GetXaxis()->SetTitle("L_{z} [cm]");
   mg_lz_trig->GetYaxis()->SetTitle("Efficiency");
   mg_lz_trig->SetMinimum(0.);
   mg_lz_trig->SetMaximum(1.);
@@ -1491,6 +1580,19 @@ void makePlots(){
   etalegz->Draw("same");
   eta_lz_trig->SaveAs("EfficiencyByEta_vs_Lz_Trig.pdf");
   eta_lz_trig->SaveAs("EfficiencyByEta_vs_Lz_Trig.C");
+
+
+  mg_lz_trig->GetXaxis()->SetLimits(0,12);
+  mg_lz_trig->Draw("ALP");
+  etalegz->Draw("same");
+  pixel_1->Draw("same");
+  pixel_2->Draw("same");
+  pixel_3->Draw("same");
+  tracker_innerbarrel->Draw("same");
+  tracker_outerbarrel->Draw("same");
+
+  eta_lz_trig->SaveAs("EfficiencyByEta_1D_vs_Lz_Trig_0to12.pdf");
+  eta_lz_trig->SaveAs("EfficiencyByEta_1D_vs_Lz_Trig_0to12.C");
 
 
   /*
@@ -1505,7 +1607,7 @@ void makePlots(){
 
     TCanvas *effz = new TCanvas("effz", "effz", my_canvas_x, my_canvas_y);
     gr5 = new TGraphAsymmErrors(num_1D_A1_LZ, den_1D_A1_LZ);
-    gr5->SetTitle("1D Efficiency #gamma_{D2} L_{Z}");
+    gr5->SetTitle("1D Efficiency #gamma_{D2} L_{z}");
     gr5->SetMarkerColor(4);
     gr5->SetMarkerStyle(21);
     gr5->Draw("ALP");
@@ -1519,7 +1621,7 @@ void makePlots(){
 
     TCanvas *effz3 = new TCanvas("effz3", "effz3", my_canvas_x, my_canvas_y);
     gr7 = new TGraphAsymmErrors(num_1D_A0_LZ, den_1D_A0_LZ);
-    gr7->SetTitle("1D Efficiency #gamma_{D1} L_{Z}");
+    gr7->SetTitle("1D Efficiency #gamma_{D1} L_{z");
     gr7->SetMarkerColor(4);
     gr7->SetMarkerStyle(21);
     gr7->Draw("ALP");
@@ -1578,6 +1680,12 @@ void makePlots(){
   eff_2D_A0->GetYaxis()->SetTitle("#gamma_{D1} L_{xy} [cm]");
   eff_2D_A0->GetXaxis()->SetTitle("#gamma_{D1} |L_{z}| [cm]");
   eff_2D_A0->GetZaxis()->SetTitle("#varepsilon_{Full}/#alpha_{GEN}");
+  eff_2D_A0->GetZaxis()->SetLabelFont(42);
+  eff_2D_A0->GetZaxis()->SetLabelOffset(0.007);
+  eff_2D_A0->GetZaxis()->SetTitleFont(42);
+  eff_2D_A0->GetZaxis()->SetTitleOffset(1.15);
+  eff_2D_A0->GetZaxis()->SetTitleSize(0.04);
+
   gStyle->SetOptStat(0);
   //    eff_2D_A0->SetContour((sizeof(levels)/sizeof(Double_t)), levels);
   eff_2D_A0->Draw("COLZ");
@@ -1605,6 +1713,11 @@ void makePlots(){
   eff_2D_A1->GetYaxis()->SetTitle("#gamma_{D2} L_{xy} [cm]");
   eff_2D_A1->GetXaxis()->SetTitle("#gamma_{D2} |L_{z}| [cm]");
   eff_2D_A1->GetZaxis()->SetTitle("#varepsilon_{Full}/#alpha_{GEN}");
+  eff_2D_A1->GetZaxis()->SetLabelFont(42);
+  eff_2D_A1->GetZaxis()->SetLabelOffset(0.007);
+  eff_2D_A1->GetZaxis()->SetTitleFont(42);
+  eff_2D_A1->GetZaxis()->SetTitleOffset(1.15);
+  eff_2D_A1->GetZaxis()->SetTitleSize(0.04);
   gStyle->SetOptStat(0);
   eff_2D_A1->Draw("COLZ");
   c1->SaveAs("eff_2D_LxyLz_A1.pdf");
@@ -1619,8 +1732,7 @@ void efficiency(){
 
 
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_PAT_ANA_V2_v1/170124_224445/0000/");
-  /*
-  create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_PAT_ANA_V2_v1/170128_023406/0000/");
+  Create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_PAT_ANA_V2_v1/170128_023406/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_20k_PAT_ANA_V2_v1/170128_024144/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_80k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_80k_PAT_ANA_V2_v1/170128_024130/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p5_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p5_13TeV_20k_PAT_ANA_V2_v1/170128_024115/0000/");
@@ -1669,7 +1781,6 @@ void efficiency(){
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_77k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_77k_PAT_ANA_V2_v1/170128_024255/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_79k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_79k_PAT_ANA_V2_v1/170128_024211/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_80k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_100_13TeV_80k_PAT_ANA_V2_v1/170128_024159/0000/");
-  */
 
   makePlots();
 

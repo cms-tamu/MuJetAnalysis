@@ -1,8 +1,8 @@
 void Efficiency_1D_LXY()
 {
 //=========Macro generated from canvas: effxy/effxy
-//=========  (Sun May 13 01:49:57 2018) by ROOT version6.06/01
-   TCanvas *effxy = new TCanvas("effxy", "effxy",0,23,600,600);
+//=========  (Sun May 13 03:03:07 2018) by ROOT version6.06/01
+   TCanvas *effxy = new TCanvas("effxy", "effxy",0,0,600,600);
    effxy->Range(-0.20625,-0.1923077,1.16875,1.089744);
    effxy->SetFillColor(0);
    effxy->SetBorderMode(0);
@@ -32,7 +32,7 @@ void Efficiency_1D_LXY()
    0.004364631};
    TGraphAsymmErrors *grae = new TGraphAsymmErrors(1,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fy3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_felx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fely3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehy3001);
    grae->SetName("divide_num_1D_A0_LXY_by_den_1D_A0_LXY");
-   grae->SetTitle("#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                        13 TeV  ");
+   grae->SetTitle("#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV");
 
    Int_t ci;      // for color index setting
    TColor *color; // for color definition with alpha
@@ -41,9 +41,9 @@ void Efficiency_1D_LXY()
 
    ci = TColor::GetColor("#ff0000");
    grae->SetMarkerColor(ci);
-   grae->SetMarkerStyle(21);
+   grae->SetMarkerStyle(25);
    
-   TH1F *Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001 = new TH1F("Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001","#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                        13 TeV  ",100,0,1.1);
+   TH1F *Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001 = new TH1F("Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001","#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV",100,0,1.1);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetMinimum(0);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetMaximum(1);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetDirectory(0);
@@ -86,16 +86,16 @@ void Efficiency_1D_LXY()
    0.00388234};
    grae = new TGraphAsymmErrors(1,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fy3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_felx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fely3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehy3002);
    grae->SetName("divide_num_1D_A1_LXY_by_den_1D_A1_LXY");
-   grae->SetTitle("num_1D_A1_LXY");
+   grae->SetTitle("#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV");
 
    ci = TColor::GetColor("#0000ff");
    grae->SetLineColor(ci);
 
    ci = TColor::GetColor("#0000ff");
    grae->SetMarkerColor(ci);
-   grae->SetMarkerStyle(21);
+   grae->SetMarkerStyle(22);
    
-   TH1F *Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002 = new TH1F("Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002","num_1D_A1_LXY",100,0,1.1);
+   TH1F *Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002 = new TH1F("Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002","#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV",100,0,1.1);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMinimum(0.9566008);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMaximum(0.9663936);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetDirectory(0);
@@ -120,9 +120,9 @@ void Efficiency_1D_LXY()
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->GetZaxis()->SetTitleFont(42);
    grae->SetHistogram(Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002);
    
-   grae->Draw("");
+   grae->Draw("p ");
    
-   TLegend *leg = new TLegend(0.1690544,0.1476793,0.3008596,0.3333333,NULL,"brNDC");
+   TLegend *leg = new TLegend(0.2,0.2,0.35,0.35,NULL,"brNDC");
    leg->SetBorderSize(0);
    leg->SetTextSize(0.05);
    leg->SetLineColor(1);
@@ -139,7 +139,7 @@ void Efficiency_1D_LXY()
 
    ci = TColor::GetColor("#ff0000");
    entry->SetMarkerColor(ci);
-   entry->SetMarkerStyle(21);
+   entry->SetMarkerStyle(25);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
    entry=leg->AddEntry("divide_num_1D_A1_LXY_by_den_1D_A1_LXY","#gamma_{D2}","LP");
@@ -151,7 +151,7 @@ void Efficiency_1D_LXY()
 
    ci = TColor::GetColor("#0000ff");
    entry->SetMarkerColor(ci);
-   entry->SetMarkerStyle(21);
+   entry->SetMarkerStyle(22);
    entry->SetMarkerSize(1);
    entry->SetTextFont(42);
    leg->Draw();
@@ -162,7 +162,7 @@ void Efficiency_1D_LXY()
    pt->SetFillColor(0);
    pt->SetFillStyle(0);
    pt->SetTextFont(42);
-   TText *AText = pt->AddText("#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                        13 TeV  ");
+   TText *AText = pt->AddText("#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV");
    pt->Draw();
    effxy->Modified();
    effxy->cd();

@@ -1,8 +1,8 @@
 void eff_2D_LxyLz_A1()
 {
 //=========Macro generated from canvas: c1/c1
-//=========  (Sun May 13 01:50:48 2018) by ROOT version6.06/01
-   TCanvas *c1 = new TCanvas("c1", "c1",0,23,600,600);
+//=========  (Sun May 13 03:03:07 2018) by ROOT version6.06/01
+   TCanvas *c1 = new TCanvas("c1", "c1",0,0,600,600);
    gStyle->SetOptStat(0);
    c1->Range(-17.14286,-17.89474,97.14286,87.36842);
    c1->SetFillColor(0);
@@ -19,7 +19,7 @@ void eff_2D_LxyLz_A1()
    c1->SetFrameFillStyle(0);
    c1->SetFrameBorderMode(0);
    
-   TH2F *eff_2D_A1 = new TH2F("eff_2D_A1","#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                        13 TeV  ",40,0,80,80,0,80);
+   TH2F *eff_2D_A1 = new TH2F("eff_2D_A1","#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                  13 TeV",40,0,80,80,0,80);
    eff_2D_A1->SetBinContent(43,0.9616952);
    eff_2D_A1->SetMinimum(0);
    eff_2D_A1->SetMaximum(1);
@@ -133,10 +133,10 @@ void eff_2D_LxyLz_A1()
    TPaletteAxis *palette = new TPaletteAxis(80.57143,0,85.71429,80,eff_2D_A1);
 palette->SetLabelColor(1);
 palette->SetLabelFont(42);
-palette->SetLabelOffset(0.005);
+palette->SetLabelOffset(0.007);
 palette->SetLabelSize(0.035);
-palette->SetTitleOffset(1);
-palette->SetTitleSize(0.035);
+palette->SetTitleOffset(1.15);
+palette->SetTitleSize(0.04);
 
    Int_t ci;      // for color index setting
    TColor *color; // for color definition with alpha
@@ -162,8 +162,9 @@ palette->SetTitleSize(0.035);
    eff_2D_A1->GetYaxis()->SetTitleFont(42);
    eff_2D_A1->GetZaxis()->SetTitle("#varepsilon_{Full}/#alpha_{GEN}");
    eff_2D_A1->GetZaxis()->SetLabelFont(42);
+   eff_2D_A1->GetZaxis()->SetLabelOffset(0.007);
    eff_2D_A1->GetZaxis()->SetLabelSize(0.035);
-   eff_2D_A1->GetZaxis()->SetTitleSize(0.035);
+   eff_2D_A1->GetZaxis()->SetTitleOffset(1.15);
    eff_2D_A1->GetZaxis()->SetTitleFont(42);
    eff_2D_A1->Draw("COLZ");
    
@@ -173,7 +174,7 @@ palette->SetTitleSize(0.035);
    pt->SetFillColor(0);
    pt->SetFillStyle(0);
    pt->SetTextFont(42);
-   TText *AText = pt->AddText("#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                        13 TeV  ");
+   TText *AText = pt->AddText("#scale[1.4]{#font[61]{CMS}}#font[52]{Simulation}                  13 TeV");
    pt->Draw();
    c1->Modified();
    c1->cd();
