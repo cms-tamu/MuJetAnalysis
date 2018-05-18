@@ -54,7 +54,7 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 
 void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root")
 {
-  bool verbose(true);
+  bool verbose(false);
   for(std::string dirname : v) {
     TSystemDirectory dir(dirname.c_str(), dirname.c_str());
     TList *files = dir.GetListOfFiles();

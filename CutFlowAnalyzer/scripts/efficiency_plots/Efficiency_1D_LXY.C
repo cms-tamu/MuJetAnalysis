@@ -1,9 +1,9 @@
 void Efficiency_1D_LXY()
 {
 //=========Macro generated from canvas: effxy/effxy
-//=========  (Sun May 13 03:03:07 2018) by ROOT version6.06/01
+//=========  (Sun May 13 10:47:26 2018) by ROOT version6.06/01
    TCanvas *effxy = new TCanvas("effxy", "effxy",0,0,600,600);
-   effxy->Range(-0.20625,-0.1923077,1.16875,1.089744);
+   effxy->Range(-2.0625,-0.1923077,11.6875,1.089744);
    effxy->SetFillColor(0);
    effxy->SetBorderMode(0);
    effxy->SetBorderSize(2);
@@ -18,19 +18,73 @@ void Efficiency_1D_LXY()
    effxy->SetFrameFillStyle(0);
    effxy->SetFrameBorderMode(0);
    
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fx3001[1] = {
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fx3001[10] = {
+   0.5,
+   1.5,
+   2.5,
+   3.5,
+   4.5,
+   5.5,
+   6.5,
+   7.5,
+   8.5,
+   9.5};
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fy3001[10] = {
+   0.9366294,
+   0.9122978,
+   0.9044646,
+   0.8802964,
+   0.8687483,
+   0.8419306,
+   0.8356345,
+   0.8479941,
+   0.8526598,
+   0.8378244};
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_felx3001[10] = {
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
    0.5};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fy3001[1] = {
-   0.9511202};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_felx3001[1] = {
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fely3001[10] = {
+   0.002203731,
+   0.003468538,
+   0.004216068,
+   0.005145222,
+   0.005855477,
+   0.006592045,
+   0.006996275,
+   0.007202779,
+   0.007263403,
+   0.008656284};
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehx3001[10] = {
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
    0.5};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fely3001[1] = {
-   0.004749273};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehx3001[1] = {
-   0.5};
-   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehy3001[1] = {
-   0.004364631};
-   TGraphAsymmErrors *grae = new TGraphAsymmErrors(1,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fy3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_felx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fely3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehy3001);
+   Double_t divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehy3001[10] = {
+   0.002135699,
+   0.003351173,
+   0.004059471,
+   0.004965014,
+   0.005646709,
+   0.006380878,
+   0.006770252,
+   0.006939829,
+   0.006986087,
+   0.008309018};
+   TGraphAsymmErrors *grae = new TGraphAsymmErrors(10,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fy3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_felx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehx3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fely3001,divide_num_1D_A0_LXY_by_den_1D_A0_LXY_fehy3001);
    grae->SetName("divide_num_1D_A0_LXY_by_den_1D_A0_LXY");
    grae->SetTitle("#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV");
 
@@ -43,7 +97,7 @@ void Efficiency_1D_LXY()
    grae->SetMarkerColor(ci);
    grae->SetMarkerStyle(25);
    
-   TH1F *Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001 = new TH1F("Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001","#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV",100,0,1.1);
+   TH1F *Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001 = new TH1F("Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001","#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV",100,0,11);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetMinimum(0);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetMaximum(1);
    Graph_divide_num_1D_A0_LXY_by_den_1D_A0_LXY3001->SetDirectory(0);
@@ -72,19 +126,73 @@ void Efficiency_1D_LXY()
    
    grae->Draw("alp");
    
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fx3002[1] = {
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fx3002[10] = {
+   0.5,
+   1.5,
+   2.5,
+   3.5,
+   4.5,
+   5.5,
+   6.5,
+   7.5,
+   8.5,
+   9.5};
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fy3002[10] = {
+   0.9125022,
+   0.8645523,
+   0.8202722,
+   0.8029155,
+   0.7808042,
+   0.7467566,
+   0.7070792,
+   0.7075792,
+   0.6939809,
+   0.6879937};
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_felx3002[10] = {
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
    0.5};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fy3002[1] = {
-   0.9616952};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_felx3002[1] = {
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fely3002[10] = {
+   0.00219302,
+   0.003761212,
+   0.00493104,
+   0.005702588,
+   0.00625191,
+   0.007199102,
+   0.007794879,
+   0.007849754,
+   0.008161713,
+   0.009479104};
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehx3002[10] = {
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
+   0.5,
    0.5};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fely3002[1] = {
-   0.004278343};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehx3002[1] = {
-   0.5};
-   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehy3002[1] = {
-   0.00388234};
-   grae = new TGraphAsymmErrors(1,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fy3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_felx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fely3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehy3002);
+   Double_t divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehy3002[10] = {
+   0.002145051,
+   0.003676434,
+   0.004829222,
+   0.005582786,
+   0.006128366,
+   0.007068699,
+   0.007677353,
+   0.007730195,
+   0.008043966,
+   0.009327461};
+   grae = new TGraphAsymmErrors(10,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fy3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_felx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehx3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fely3002,divide_num_1D_A1_LXY_by_den_1D_A1_LXY_fehy3002);
    grae->SetName("divide_num_1D_A1_LXY_by_den_1D_A1_LXY");
    grae->SetTitle("#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV");
 
@@ -95,9 +203,9 @@ void Efficiency_1D_LXY()
    grae->SetMarkerColor(ci);
    grae->SetMarkerStyle(22);
    
-   TH1F *Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002 = new TH1F("Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002","#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV",100,0,1.1);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMinimum(0.9566008);
-   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMaximum(0.9663936);
+   TH1F *Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002 = new TH1F("Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002","#scale[1.4]{    #font[61]{CMS}}#font[52]{Simulation}                          13 TeV",100,0,11);
+   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMinimum(0.6549013);
+   Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetMaximum(0.9382605);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetDirectory(0);
    Graph_divide_num_1D_A1_LXY_by_den_1D_A1_LXY3002->SetStats(0);
 

@@ -3165,6 +3165,7 @@ void Iso_dim1_vs_dim2_aftmasscutall()
    int max_8 = 80;
    int max_6 = 60;
    int mymax = max_12;
+
    cout << Iso_dim1_vs_dim2_aftmasscut__3->Integral(1,20,1,20) << endl;;
    cout << Iso_dim1_vs_dim2_aftmasscut__3->Integral(1,20,21,mymax) << endl;;
    cout << Iso_dim1_vs_dim2_aftmasscut__3->Integral(21,mymax,21,mymax) << endl;;

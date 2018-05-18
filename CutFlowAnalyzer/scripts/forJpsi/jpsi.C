@@ -82,7 +82,7 @@ void setup()
   }
 }
 
-int k = -1;
+int k = 0;
 void efficiency(const std::vector<std::string>& dirNames)
 {
 
@@ -99,11 +99,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   
   
   //      bool alldata=false;
-  bool alldata=false;
+  bool alldata=true;
     //    bool mcsps=true;
       //      bool mcdps=true;
       bool mcdps=false;
-    bool mcsps=true;
+    bool mcsps=false;
   //  bool test=true;
   bool test=false;
   if(alldata) Run_period = "all";
@@ -272,6 +272,48 @@ void efficiency(const std::vector<std::string>& dirNames)
     int nentries;
 
 
+    /*
+    */
+    t->SetBranchAddress("event",&event);
+    t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
+    t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
+    t->SetBranchAddress("diMuonC_FittedVtx_Lxy",&diMuonC_FittedVtx_Lxy);
+    t->SetBranchAddress("diMuonF_FittedVtx_Lxy",&diMuonF_FittedVtx_Lxy);
+    t->SetBranchAddress("diMuonC_FittedVtx_Rapidity",&diMuonC_FittedVtx_Rapidity);
+    t->SetBranchAddress("diMuonF_FittedVtx_Rapidity",&diMuonF_FittedVtx_Rapidity);
+    t->SetBranchAddress("isVertexOK",&isVtxOK);
+    t->SetBranchAddress("nRecoMu",&nRecoMu);
+    t->SetBranchAddress("is1SelMu3p5",&is1SelMu3p5);
+    t->SetBranchAddress("is2SelMu3p5",&is2SelMu3p5);
+    t->SetBranchAddress("is3SelMu3p5",&is3SelMu3p5);
+    t->SetBranchAddress("is4SelMu3p5",&is4SelMu3p5);
+    t->SetBranchAddress("selMu0_pT",&selMu0_pT);
+    t->SetBranchAddress("selMu1_pT",&selMu1_pT);
+    t->SetBranchAddress("selMu2_pT",&selMu2_pT);
+    t->SetBranchAddress("selMu3_pT",&selMu3_pT);
+    t->SetBranchAddress("massC",&massC);
+    t->SetBranchAddress("massF",&massF);
+    t->SetBranchAddress("selMu0_eta",&selMu0_eta);
+    t->SetBranchAddress("selMu1_eta",&selMu1_eta);
+    t->SetBranchAddress("selMu2_eta",&selMu2_eta);
+    t->SetBranchAddress("selMu3_eta",&selMu3_eta);
+    t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
+    t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
+    t->SetBranchAddress("is2DiMuons",&is2DiMuons);
+    t->SetBranchAddress("is2MuJets",&is2MuJets);
+    t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
+    t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
+    t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
+    t->SetBranchAddress("isDiMuonHLTFired",&is2DiMuonHLTFired);
+    t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
+    t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
+    t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_l3inc",&diMuonC_m1_FittedVtx_hitpix_l3inc);
+    t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l3inc",&diMuonC_m2_FittedVtx_hitpix_l3inc);
+    t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l3inc",&diMuonF_m1_FittedVtx_hitpix_l3inc);
+    t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l3inc",&diMuonF_m2_FittedVtx_hitpix_l3inc);
+
+    t->GetEntry(0);
+
     t->SetBranchStatus("*",0);
     t->SetBranchStatus("event",1);
     t->SetBranchStatus("diMuonC_FittedVtx_m",1);
@@ -311,48 +353,14 @@ void efficiency(const std::vector<std::string>& dirNames)
     t->SetBranchStatus("diMuonF_m1_FittedVtx_hitpix_l3inc",1);
     t->SetBranchStatus("diMuonF_m2_FittedVtx_hitpix_l3inc",1);
 
-    t->SetBranchAddress("event",&event);
-    t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
-    t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
-    t->SetBranchAddress("diMuonC_FittedVtx_Lxy",&diMuonC_FittedVtx_Lxy);
-    t->SetBranchAddress("diMuonF_FittedVtx_Lxy",&diMuonF_FittedVtx_Lxy);
-    t->SetBranchAddress("diMuonC_FittedVtx_Rapidity",&diMuonC_FittedVtx_Rapidity);
-    t->SetBranchAddress("diMuonF_FittedVtx_Rapidity",&diMuonF_FittedVtx_Rapidity);
-    t->SetBranchAddress("isVertexOK",&isVtxOK);
-    t->SetBranchAddress("nRecoMu",&nRecoMu);
-    t->SetBranchAddress("is1SelMu3p5",&is1SelMu3p5);
-    t->SetBranchAddress("is2SelMu3p5",&is2SelMu3p5);
-    t->SetBranchAddress("is3SelMu3p5",&is3SelMu3p5);
-    t->SetBranchAddress("is4SelMu3p5",&is4SelMu3p5);
-    t->SetBranchAddress("selMu0_pT",&selMu0_pT);
-    t->SetBranchAddress("selMu1_pT",&selMu1_pT);
-    t->SetBranchAddress("selMu2_pT",&selMu2_pT);
-    t->SetBranchAddress("selMu3_pT",&selMu3_pT);
-    t->SetBranchAddress("massC",&massC);
-    t->SetBranchAddress("massF",&massF);
-    t->SetBranchAddress("selMu0_eta",&selMu0_eta);
-    t->SetBranchAddress("selMu1_eta",&selMu1_eta);
-    t->SetBranchAddress("selMu2_eta",&selMu2_eta);
-    t->SetBranchAddress("selMu3_eta",&selMu3_eta);
-    t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
-    t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
-    t->SetBranchAddress("is2DiMuons",&is2DiMuons);
-    t->SetBranchAddress("is2MuJets",&is2MuJets);
-    t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
-    t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
-    t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
-    t->SetBranchAddress("isDiMuonHLTFired",&is2DiMuonHLTFired);
-    t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
-    t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
-    t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_l3inc",&diMuonC_m1_FittedVtx_hitpix_l3inc);
-    t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l3inc",&diMuonC_m2_FittedVtx_hitpix_l3inc);
-    t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l3inc",&diMuonF_m1_FittedVtx_hitpix_l3inc);
-    t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l3inc",&diMuonF_m2_FittedVtx_hitpix_l3inc);
 
     nentries = t->GetEntries(); //no of entries
 
-    for(int i=0;i<nentries;i++){ //loop for number of events
+    if (verbose) cout<<"  Events  "<<t->GetEntries()<<endl;
+
+    for(int i = 0; i<nentries; i++){ //loop for number of events
       t->GetEntry(i);
+      // cout << "Get event " << i << endl;
       counter[k][0]++;
 
       evt_number->Fill(event);
@@ -376,6 +384,8 @@ void efficiency(const std::vector<std::string>& dirNames)
       	}
       }
       
+
+      // cout << "Control region selections " << i << endl;
 
       //  Selection for control region
       if(nRecoMu>=4 && is2DiMuonHLTFired && isVtxOK){
@@ -918,7 +928,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
 void jpsi()
 {
-  const std::string txtfile = "sps.txt";
+  const std::string txtfile = "Charmonium_all.txt";
     
   setup();
   std::vector< std::vector<string> > vector_of_files;

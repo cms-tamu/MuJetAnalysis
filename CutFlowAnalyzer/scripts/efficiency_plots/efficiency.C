@@ -702,7 +702,7 @@ gROOT->SetBatch(kTRUE);
     for(int k=0;k<nentries;k++){
       t->GetEntry(k);	
       //      std::cout<<"  Enter new event  "<<std::endl;
-      if(isDiMuonHLTFired == 1){ //Make sure that the event fired the HLT
+      if(true or isDiMuonHLTFired == 1){ //Make sure that the event fired the HLT
 	//Loop for Efficienies
 	//	std::cout<<"  Enter trigger  "<<std::endl;
 
@@ -718,8 +718,8 @@ gROOT->SetBatch(kTRUE);
 	  //This begins the loop for A0
 	  //	  if(fabs(genA0_Lz_rdet) <= 46.5){ //second pixel endcap
 	  //	    if(genA0_Lxy_rdet <= 11.0){ //third tracker barrel
-	  if(fabs(genA0_Lz_rdet) <= 80.0){ //second pixel endcap
-	    if(genA0_Lxy_rdet <= 80.0){ //third tracker barrel
+	  if(fabs(genA0_Lz_rdet) <= 80){ //second pixel endcap
+	    if(genA0_Lxy_rdet <= 80){ //third tracker barrel
 	      //	      std::cout<<"  Fiducial  "<<std::endl;
 
 	      for(int n=0;n<40;n++){
@@ -831,8 +831,8 @@ gROOT->SetBatch(kTRUE);
 	  //This begins the loop for A1
 	  //	  if(fabs(genA1_Lz_rdet) <= 46.5){ //Second pixel endcap
 	  //	    if(genA1_Lxy_rdet <= 11.0){ //Third tracker barrel
-	  if(fabs(genA1_Lz_rdet) <= 80.0){ //Second pixel endcap
-	    if(genA1_Lxy_rdet <= 88.0){ //Third tracker barrel
+	  if(fabs(genA1_Lz_rdet) <= 80){ //Second pixel endcap
+	    if(genA1_Lxy_rdet <= 80){ //Third tracker barrel
 	      for(int n=0;n<40;n++){
 		if(fabs(genA1_Lz_rdet)>bin_edges_Lz[n] && fabs(genA1_Lz_rdet)<bin_edges_Lz[n+1]){
 
@@ -1233,7 +1233,7 @@ void makePlots(){
   pixel_1->SetLineStyle(linestyle);
   pixel_2->SetLineStyle(linestyle);
   pixel_3->SetLineStyle(linestyle);
-  pixel_1->SetLineStyle(linestyle);
+  pixel_1->SetLineWidth(linewidth);
   pixel_2->SetLineWidth(linewidth);
   pixel_3->SetLineWidth(linewidth);
   pixel_1->SetLineColor(kBlue);
@@ -1252,6 +1252,8 @@ void makePlots(){
   tracker_outerbarrel->SetLineStyle(linestyle);
   tracker_innerbarrel->SetLineColor(kGreen+1);
   tracker_outerbarrel->SetLineColor(kGreen+1);
+  tracker_innerbarrel->SetLineWidth(linewidth);
+  tracker_outerbarrel->SetLineWidth(linewidth);
 
   TCanvas *eta_lxy = new TCanvas("eta_lxy", "eta_lxy", my_canvas_x, my_canvas_y);
   set_canvas_style_tgraph(eta_lxy);
@@ -1663,6 +1665,34 @@ void makePlots(){
   set_title_and_label_style(eff_2D_A0);
   set_title_and_label_style(eff_2D_A1);
 
+  float bpx = 9.8;
+  float epx = 46.5;
+
+  pixel_3 = new TLine(0, bpx, epx, bpx);
+  pixel_endcap_2 = new TLine(epx, 0, epx, bpx);
+
+  //Blue Lines
+  linestyle = 2;
+  linewidth = 3;
+  pixel_3->SetLineStyle(linestyle);
+  pixel_3->SetLineWidth(linewidth);
+  pixel_3->SetLineColor(kGray+2);
+
+  pixel_endcap_2->SetLineStyle(linestyle);
+  pixel_endcap_2->SetLineWidth(linewidth);
+  pixel_endcap_2->SetLineColor(kGray+2);
+
+  TLine* eta0p9 = new TLine(0, 0, 80, 80*tan(2*atan(exp(-0.9))));
+  TLine* eta1p55 = new TLine(0, 0, 80, 80*tan(2*atan(exp(-1.55))));
+
+  eta0p9->SetLineStyle(1);
+  eta0p9->SetLineWidth(linewidth);
+  eta0p9->SetLineColor(kBlack);
+
+  eta1p55->SetLineStyle(5);
+  eta1p55->SetLineWidth(linewidth);
+  eta1p55->SetLineColor(kBlack);
+
 
   TCanvas *c = new TCanvas("c","c",my_canvas_x, my_canvas_y);
   set_canvas_style(c);
@@ -1689,6 +1719,20 @@ void makePlots(){
   gStyle->SetOptStat(0);
   //    eff_2D_A0->SetContour((sizeof(levels)/sizeof(Double_t)), levels);
   eff_2D_A0->Draw("COLZ");
+
+  pixel_3->Draw("same");
+  pixel_endcap_2->Draw("same");
+  eta0p9->Draw("same");
+  eta1p55->Draw("same");
+
+  leg = new TLegend(0.17,0.80,0.45,0.92);
+  leg->SetBorderSize(1);
+  leg->SetFillColor(0);
+  leg->SetTextSize(0.03);
+  leg->AddEntry(eta0p9,"|#eta| = 0.9","L");
+  leg->AddEntry(eta1p55,"|#eta| = 1.55","L");
+  leg->AddEntry(pixel_3,"Fiducial volume","L");
+  leg->Draw("same");
 
   c->SaveAs("eff_2D_LxyLz_A0.pdf");
   c->SaveAs("eff_2D_LxyLz_A0.C");
@@ -1720,6 +1764,13 @@ void makePlots(){
   eff_2D_A1->GetZaxis()->SetTitleSize(0.04);
   gStyle->SetOptStat(0);
   eff_2D_A1->Draw("COLZ");
+
+  pixel_3->Draw("same");
+  pixel_endcap_2->Draw("same");
+  eta0p9->Draw("same");
+  eta1p55->Draw("same");
+  leg->Draw("same");
+
   c1->SaveAs("eff_2D_LxyLz_A1.pdf");
   c1->SaveAs("eff_2D_LxyLz_A1.C");
   //I am not quite sure what this did...    
@@ -1732,7 +1783,7 @@ void efficiency(){
 
 
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0_13TeV_20k_PAT_ANA_V2_v1/170124_224445/0000/");
-  Create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_PAT_ANA_V2_v1/170128_023406/0000/");
+  create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p05_13TeV_20k_PAT_ANA_V2_v1/170128_023406/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_20k_PAT_ANA_V2_v1/170128_024144/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_80k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p1_13TeV_80k_PAT_ANA_V2_v1/170128_024130/0000/");
   create_eff_pergamD2DLxyLz("/fdata/hepx/store/user/lpernie/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p5_13TeV_20k_MG452_BR224_LHE_pythia8_GEN_SIM_MINIAOD_V2_v1/DarkSUSY_mH_125_mN1_10_mGammaD_0p25_cT_0p5_13TeV_20k_PAT_ANA_V2_v1/170128_024115/0000/");
