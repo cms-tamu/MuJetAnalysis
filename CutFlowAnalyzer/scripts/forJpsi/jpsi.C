@@ -939,3 +939,16 @@ void jpsi()
   // // cout << "For Loop completes" << endl;
 
 }
+
+void analysis(const std::string txtfile)
+{
+
+  setup();
+  std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
+  // // cout << "Vector Created" << endl;
+  readTextFileWithSamples(txtfile, DarkSUSY_mH_125_mGammaD_v);
+  // // cout << "Samples read" << endl;
+  for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency(v);
+  // // cout << "For Loop completes" << endl;
+
+}

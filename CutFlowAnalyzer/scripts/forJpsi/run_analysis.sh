@@ -9,7 +9,7 @@ if [ ! -d  SBATCHLOG ];then
 fi;
 
 
-declare -a arr=("Charmonium_B" "Charmonium_C" "Charmonium_D" "Charmonium_E" "Charmonium_F" "Charmonium_G" "Charmonium_H")
+declare -a arr=("Charmonium_B" "Charmonium_C" "Charmonium_D" "Charmonium_E" "Charmonium_F" "Charmonium_G" "Charmonium_H" "Charmonium_All")
 
 ## now loop through the above array
 for i in "${arr[@]}"
@@ -25,13 +25,13 @@ cat  >  SBATCH_JOBS/${i}.slrm <<EOF
 #SBATCH -o $PWD/SBATCHLOG/SBATCH_${i}.stdout
 #SBATCH -e $PWD/SBATCHLOG/SBATCH_${i}.stderr
       
-cd  /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src
+cd  /fdata/scratch/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src
 export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
 source $VO_CMS_SW_DIR/cmsset_default.sh
-export SCRAM_ARCH=slc6_amd64_gcc493
+export SCRAM_ARCH=slc6_amd64_gcc530
 eval \`scramv1 runtime -sh\`
-cd  /fdata/scratch/castaned/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/forJpsi
-echo 'gROOT->ProcessLine(".L jpsi.C++"); analysis("${i}.txt")' | root -l -b 
+cd  /fdata/scratch/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/forJpsi
+echo 'gROOT->ProcessLine(".L jpsiScriptsSD.C++"); analysis("${i}")' | root -l -b 
       
 exit 0
 

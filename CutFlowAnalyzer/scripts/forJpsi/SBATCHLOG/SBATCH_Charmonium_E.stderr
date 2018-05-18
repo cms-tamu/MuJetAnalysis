@@ -1,6 +1,6 @@
-WARNING: AutoLibraryloader::enable() and AutoLibraryLoader.h are deprecated.
-Use FWLiteEnabler::enable() and FWLiteEnabler.h instead
-Error in <TRint::ProcessLine>: macro jpsi.C not found in path .:/cvmfs/cms.cern.ch/slc6_amd64_gcc493/lcg/root/6.06.00-ikhhed5/macros:
-input_line_80:2:3: error: use of undeclared identifier 'analysis'
- (analysis("Charmonium_E.txt"))
+Info in <TUnixSystem::ACLiC>: creating shared library /fdata/scratch/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/forJpsi/./jpsiScriptsSD_C.so
+Warning in <ACLiC>: Failed to generate the dependency file for /fdata/scratch/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_20/src/MuJetAnalysis/CutFlowAnalyzer/scripts/forJpsi/./jpsiScriptsSD_C.so
+Error in <ACLiC>: Dictionary generation failed!
+input_line_10:2:3: error: use of undeclared identifier 'analysis'
+ (analysis("Charmonium_E"))
   ^
