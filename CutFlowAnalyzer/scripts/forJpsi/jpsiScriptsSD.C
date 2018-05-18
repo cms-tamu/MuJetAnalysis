@@ -41,12 +41,27 @@ void jpsiScriptsSD()
   TChain* chain = new TChain("cutFlowAnalyzerPXBL3PXFL2/Events");
   
   //std::string inputFile = "sps.txt"; TString sample = "SPS"; 
-  //std::string inputFile = "dps_smaller.txt"; TString sample = "DPS6";
-  std::string inputFile = "Charmonium_all.txt"; TString sample = "2016Charmonium_BH";
+  //std::string inputFile = "dps1.txt"; TString sample = "DPS1";
+  //std::string inputFile = "dps2.txt"; TString sample = "DPS2";
+  //std::string inputFile = "dps3.txt"; TString sample = "DPS3";
+  //std::string inputFile = "dps4.txt"; TString sample = "DPS4";
+  //std::string inputFile = "dps5.txt"; TString sample = "DPS5";
+  //std::string inputFile = "dps6.txt"; TString sample = "DPS6";
+  //std::string inputFile = "Charmonium_all.txt"; TString sample = "2016Charmonium_BH";
+
+  std::string inputFile = "Charmonium_B.txt";    TString sample = "2016Charmonium_B";
+  //std::string inputFile = "Charmonium_C_v4.txt"; TString sample = "2016Charmonium_C";
+  //std::string inputFile = "Charmonium_D.txt";    TString sample = "2016Charmonium_D";
+  //std::string inputFile = "Charmonium_E.txt";    TString sample = "2016Charmonium_E";
+  //std::string inputFile = "Charmonium_F.txt";    TString sample = "2016Charmonium_F";
+  //std::string inputFile = "Charmonium_G.txt";    TString sample = "2016Charmonium_G";
+  //std::string inputFile = "Charmonium_H.txt";    TString sample = "2016Charmonium_H";
 
   std::vector< std::vector<string> > input_data_files;
   readTextFileWithSamples(inputFile, input_data_files);
   addfilesMany(chain, input_data_files[0], "out_ana_");
+
+  TString outputdir = "plots_SPS_DPS_SD20180512/";
   
   // make plots
   TH1F *P_t_Mu0 = new TH1F("P_t_Mu0",";Leading muon p_{T} [GeV];Entries",100,0.0,50.0);
@@ -60,11 +75,8 @@ void jpsiScriptsSD()
   TH1F *iso_C = new TH1F("iso_C",";Iso_{#mu#mu1} [GeV];Entries",100,0.0,12.0);
   TH1F *iso_F = new TH1F("iso_F",";Iso_{#mu#mu2} [GeV];Entries",100,0.0,12.0);
 
-  TH1F *lxy_C = new TH1F("lxy_C",";Lxy_{#mu#mu1} [GeV];Entries",100,-0.5,2.0);
-  TH1F *lxy_F = new TH1F("lxy_F",";Lxy_{#mu#mu2} [GeV];Entries",100,-0.5,2.0);
-
-  chain->Draw("diMuonC_FittedVtx_Lxy>>lxy_C",recoMu4 + vtx + dimuon);
-  chain->Draw("diMuonF_FittedVtx_Lxy>>lxy_F",recoMu4 + vtx + dimuon);
+  TH1F *lxy_C = new TH1F("lxy_C",";Lxy_{#mu#mu1} [GeV];Entries",100,-0.02,0.2);
+  TH1F *lxy_F = new TH1F("lxy_F",";Lxy_{#mu#mu2} [GeV];Entries",100,-0.02,0.2);
 
   TH1F *diMuon_DeltaRapidity = new TH1F("diMuon_DeltaRapidity",";;Entries",50,0,5.0);
 
@@ -282,7 +294,7 @@ void jpsiScriptsSD()
   cout<<" Events Passing muon selection step12   "<<chain->GetEntries(step12)<<endl;
   
   // write the bare histograms to file
-  TFile* output_root = new TFile("plots_SD20180512/Histograms" + sample + ".root","RECREATE");
+  TFile* output_root = new TFile(outputdir + "Histograms" + sample + ".root","RECREATE");
 
   P_t_Mu0->Write();
   P_t_Mu1->Write();

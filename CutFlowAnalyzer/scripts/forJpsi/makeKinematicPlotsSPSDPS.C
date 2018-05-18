@@ -123,6 +123,12 @@ void makeKinematicPlotsSPSDPS()
   TH1F *SPS_iso_F = (TH1F*)f_SPS->Get("iso_F");
   TH1F *DPS_iso_F = (TH1F*)f_DPS->Get("iso_F");
   
+  TH1F *SPS_lxy_C = (TH1F*)f_SPS->Get("lxy_C");
+  TH1F *DPS_lxy_C = (TH1F*)f_DPS->Get("lxy_C");
+
+  TH1F *SPS_lxy_F = (TH1F*)f_SPS->Get("lxy_F");
+  TH1F *DPS_lxy_F = (TH1F*)f_DPS->Get("lxy_F");
+
   TH1F *SPS_P_t_Mu0 = (TH1F*)f_SPS->Get("P_t_Mu0");
   TH1F *DPS_P_t_Mu0 = (TH1F*)f_DPS->Get("P_t_Mu0");
 
@@ -131,5 +137,7 @@ void makeKinematicPlotsSPSDPS()
   makePlot(SPS_mass_F, DPS_mass_F, "m_{(#mu#mu)_{2}} [GeV]", "SPS_DPS_massF");
   makePlot(SPS_iso_C, DPS_iso_C, "Iso_{(#mu#mu)_{1}} [GeV]", "SPS_DPS_isoC");
   makePlot(SPS_iso_F, DPS_iso_F, "Iso_{(#mu#mu)_{2}} [GeV]", "SPS_DPS_isoF");
+  makePlot(SPS_lxy_C, DPS_lxy_C, "Lxy_{(#mu#mu)_{1}} [GeV]", "SPS_DPS_lxyC");
+  makePlot(SPS_lxy_F, DPS_lxy_F, "Lxy_{(#mu#mu)_{2}} [GeV]", "SPS_DPS_lxyF");
   makePlot(SPS_P_t_Mu0, DPS_P_t_Mu0, "p_{T,1} [GeV]", "SPS_DPS_P_t_Mu0");
 }
