@@ -1867,8 +1867,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
         bool trackIsMuon = false;
-        if (    diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(0)->innerTrack()) )
-		|| diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(1)->innerTrack()) ) ) trackIsMuon = true;
+        if (    tamu::helpers::sameTrack( &*track, &*(diMuonTmp->muon(0)->innerTrack()) )
+		|| tamu::helpers::sameTrack( &*track, &*(diMuonTmp->muon(1)->innerTrack()) ) ) trackIsMuon = true;
         if ( trackIsMuon == false ) {
           double dPhi = tamu::helpers::My_dPhi( diMuonTmp->vertexMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->vertexMomentum().eta() - track->eta();
@@ -1910,8 +1910,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
         bool trackIsMuon = false;
-        if (    diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(0)->innerTrack()) )
-		|| diMuonTmp->sameTrack( &*track, &*(diMuonTmp->muon(1)->innerTrack()) ) ) trackIsMuon = true;
+        if (    tamu::helpers::sameTrack( &*track, &*(diMuonTmp->muon(0)->innerTrack()) )
+		|| tamu::helpers::sameTrack( &*track, &*(diMuonTmp->muon(1)->innerTrack()) ) ) trackIsMuon = true;
         if ( trackIsMuon == false ) {
           double dPhi = tamu::helpers::My_dPhi( diMuonTmp->consistentVtxMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->consistentVtxMomentum().eta() - track->eta();
@@ -2164,7 +2164,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       m_orphan_isoTk = 0.;
       m_orphan_dimu_isoTk = 0.;
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-        if (!muJet->sameTrack(&*track,&*(orphan->innerTrack()))) {
+        if (!tamu::helpers::sameTrack(&*track,&*(orphan->innerTrack()))) {
           double dphi = orphan->innerTrack()->phi() - track->phi();
           if (dphi > M_PI) dphi -= 2.*M_PI;
           if (dphi < -M_PI) dphi += 2.*M_PI;
@@ -2179,7 +2179,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       //iso dimuon-orphan
        for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
          bool track_is_muon = false;
-         if (muJet->sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) || muJet->sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
+         if (tamu::helpers::sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) || tamu::helpers::sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
          if (!track_is_muon) {
            double dphi = muJet->phi() - track->phi();
            if (dphi > M_PI) dphi -= 2.*M_PI;
