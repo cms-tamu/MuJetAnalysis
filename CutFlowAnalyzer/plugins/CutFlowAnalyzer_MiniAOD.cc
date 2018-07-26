@@ -1064,23 +1064,33 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
     edm::Handle<reco::GenParticleCollection> genParticles;
     iEvent.getByToken(m_genParticles, genParticles);
-
-    // Loop over all genParticles and save prompt muons from particles with codes 36 (a1) or 3000022 (gammaD) in vector genMuons
+    
+    //@Wei SHI 07.26.2018
+    //Note for PDG ID in three benchmark models: 
+    //(1) NMSSM: Higgs={35}, new light boson={36,54}, muons={13,-13}, 
+    //    '54' is the corner case in pythia when '36' doesn't work for some mass points 
+    //(2) MSSMD (Dark SUSY): Higgs={25}, new light boson={3000022}, muons={13,-13}
+    //(3) ALP: Higgs={25}, new light boson={9000005}, muons={13,-13}
     std::vector<const reco::GenParticle*> genH;
     std::vector<const reco::GenParticle*> genA_unsorted;
     std::vector<const reco::GenParticle*> genA;
     std::vector<const reco::GenParticle*> genMuons;
     std::vector<const reco::Candidate*>   genMuonMothers;
+
     // Loop over all gen particles
     int counterGenParticle = 0;
     for(reco::GenParticleCollection::const_iterator iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
-      counterGenParticle++;
-      //    std::cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << std::endl;
-      // Check if gen particle is muon (pdgId = +/-13) and stable (status = 1)
+      counterGenParticle++;    
+      // std::cout << counterGenParticle << " " << iGenParticle->status() << " " << iGenParticle->pdgId() << " " << iGenParticle->vx() << " " << iGenParticle->vy() << " " << iGenParticle->vz() << std::endl;
+      
+      // Check if gen particle is muon
       if ( fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1 ) {
+	      
+	//This example below looks super suspicious to me. Does it really exist? @Wei SHI 07.26.2018
         // Mother of the muon can be muon. Find the last muon in this chain: genMuonCand
         // Example: a1 -> mu+ (status = 3) mu- (status = 3)
         //          mu- (status = 3) -> mu- (status = 2) -> mu- (status = 1)
+	      
         const reco::Candidate *genMuonCand = &(*iGenParticle);
         bool isMuonMother = true;
         while(isMuonMother) {
@@ -1092,11 +1102,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             }
           }
         }
+	      
         // Loop over all real (non-muon) mothers of the muon (here we use genMuonCand)
         for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
-          // Check if mother is CP-odd Higgs (PdgId = 36) or gamma_Dark (PdgId = 3000022)
-          //        if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 || genMuonCand->mother(iMother)->pdgId() == 443 )
-          if ( genMuonCand->mother(iMother)->pdgId() == 36 || genMuonCand->mother(iMother)->pdgId() == 3000022 ) {
+          
+          if ( genMuonCand->mother(iMother)->pdgId() == 36 || 
+	       genMuonCand->mother(iMother)->pdgId() == 54 || 
+	       genMuonCand->mother(iMother)->pdgId() == 3000022 ||
+	       genMuonCand->mother(iMother)->pdgId() == 9000005  ) {
             // Store the muon (stable, first in chain) into vector
             genMuons.push_back(&(*iGenParticle));
             // Store mother of the muon into vector. We need this to group muons into dimuons later
@@ -1104,17 +1117,18 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           }
         }
       }
-      // Check if gen particle is
-      if (    ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 25 ) // decaying (status = 3) SM Higgs (pdgId = 25)
-	      || ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 35 ) // decaying (status = 3) CP-even Higgs (pdgId = 35)
-	      ) {
-        genH.push_back(&(*iGenParticle)); // Store the Higgs into vector
+	    
+      // Check if gen particle is Higgs
+      if ( ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 25 ) ||
+	   ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 35 )  ) {
+        genH.push_back(&(*iGenParticle)); 
       }
-      // Check if gen particle is
-      if (    ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36      ) // decaying (status = 3) CP-odd Higgs (pdgId = 36)
-	      || ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 3000022 ) // decaying (status = 3) gamma_Dark (pdgId = 3000022)
-	      //         || ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 443   ) // decaying (status = 2) J/psi (pdgId = 443)
-	      ) {
+	    
+      // Check if gen particle is new light boson
+      if ( ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 36 ) ||
+	   ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 54 ) ||
+	   ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 3000022 ) ||
+	   ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 9000005 )  ) {
         genA_unsorted.push_back(&(*iGenParticle));
       }
     }
