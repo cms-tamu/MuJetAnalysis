@@ -247,6 +247,7 @@ private:
   //****************************************************************************
 
   std::vector<std::string> signalHltPaths_;
+  std::vector<std::string> controlHltPaths_;
   std::vector<std::string> b_hltPaths;
   bool histo_name;
   std::map<int,std::string> NameAndNumb;
@@ -316,6 +317,8 @@ private:
   Int_t missingHitsAfterVertex_diMuonF_ConsistentVTX;
 
   Bool_t b_isDiMuonHLTFired;
+  Bool_t b_isControlHLT16Fired;
+  Bool_t b_isControlHLT6Fired;
 
   Bool_t b_is2DiMuonsMassOK_FittedVtx;
 
@@ -710,6 +713,7 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   //****************************************************************************
 
   signalHltPaths_ = iConfig.getParameter<std::vector<std::string> >("signalHltPaths");
+  controlHltPaths_ = iConfig.getParameter<std::vector<std::string> >("controlHltPaths");
 
   //****************************************************************************
   //                 SET RECO LEVEL VARIABLES AND COUNTERS
@@ -1816,6 +1820,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   // HLT cut
   b_isDiMuonHLTFired = false;
+  b_isControlHLT16Fired = false;
+  b_isControlHLT6Fired = false;
   b_hltPaths.clear();
 
   edm::Handle<edm::TriggerResults> TrResults;
@@ -1837,6 +1843,18 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           b_isDiMuonHLTFired = true;
         }
       }
+	  
+      const & p0 = controlHltPaths_[0];
+      const & p1 = controlHltPaths_[1];
+      if (trigNameStr.find(p0) != std::string::npos) {
+        if ( m_debug > 10 ) std::cout << trigNameStr << " control trigger pT16!" << std::endl;
+          b_isControlHLT16Fired = true;
+      }    
+      if (trigNameStr.find(p1) != std::string::npos) {
+        if ( m_debug > 10 ) std::cout << trigNameStr << " control trigger pT6!" << std::endl;
+          b_isControlHLT6Fired = true;
+      }
+	    
     }
   }
 
@@ -2520,6 +2538,8 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
   m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
+  m_ttree->Branch("isControlHLT16Fired",            &b_isControlHLT16Fired,            "isControlHLT16Fired/O");
+  m_ttree->Branch("isControlHLT6Fired",             &b_isControlHLT6Fired,             "isControlHLT6Fired/O");
   m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
   m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
