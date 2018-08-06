@@ -16,7 +16,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_Prompt_v11')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
-process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
+process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_MiniAOD_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_MiniAOD_cfi")
 
