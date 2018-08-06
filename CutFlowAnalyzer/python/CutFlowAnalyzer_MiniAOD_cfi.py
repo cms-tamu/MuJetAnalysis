@@ -28,4 +28,8 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     signalHltPaths = cms.vstring(
         'HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx',
     ),
+    controlHltPaths = cms.vstring(
+        'HLT_TrkMu16NoFiltersNoVtx',
+        'HLT_TrkMu6NoFiltersNoVtx',
+    ),
 )
