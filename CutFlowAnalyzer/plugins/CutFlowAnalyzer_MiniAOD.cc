@@ -1844,8 +1844,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         }
       }
 	  
-      const & p0 = controlHltPaths_[0];
-      const & p1 = controlHltPaths_[1];
+      const std::string& p0 = controlHltPaths_[0];
+      const std::string& p1 = controlHltPaths_[1];
       if (trigNameStr.find(p0) != std::string::npos) {
         if ( m_debug > 10 ) std::cout << trigNameStr << " control trigger pT16!" << std::endl;
           b_isControlHLT16Fired = true;
