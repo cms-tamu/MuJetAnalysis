@@ -48,7 +48,7 @@ else:         process.patifySelect = cms.Sequence(process.patifyMC)
 process.dump=cms.EDAnalyzer('EventContentAnalyzer')
 
 process.p = cms.Path(
-    process.baseLineSelectionFilter *
+#    process.baseLineSelectionFilter *
     process.patifySelect *
     process.MuJetProducers *
 #    process.dump *
