@@ -1985,6 +1985,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           //@Wei SHI 08.07.2018
           //Function changes in CMSSW_10_1_X: https://github.com/cms-sw/cmssw/blob/CMSSW_10_1_X/PhysicsTools/RecoUtils/src/CheckHitPattern.cc#L94
 	  //CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
+	  checkHitPattern.init(iSetup);
           CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
 
           if(k==0) b_diMuonC_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
@@ -2015,6 +2016,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           GlobalPoint pos(diMuonF->vertexPoint().x(), diMuonF->vertexPoint().y(), diMuonF->vertexPoint().z());
           VertexState trueDecVert(pos, GlobalError());
           //CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
+          checkHitPattern.init(iSetup);
 	  CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
 
           if(k==0) b_diMuonF_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
