@@ -1832,7 +1832,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   for (int itrig = 0; itrig != ntrigs; ++itrig) {
     TString trigName = triggerNames.triggerName(itrig);
     std::string trigNameStr(trigName.Data());
-    if ( m_debug > 10 ) std::cout << "@"<<itrig<<": "<<trigNameStr << " is present in edmTriggerResults!" << std::endl;
+    if ( m_debug > 10 ) std::cout << "@"<<itrig<<" path: "<<trigNameStr << std::endl;
 	  
     if(trRes->accept(itrig)){
       b_hltPaths.push_back(trigNameStr);
