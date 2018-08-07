@@ -1832,26 +1832,31 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   for (int itrig = 0; itrig != ntrigs; ++itrig) {
     TString trigName = triggerNames.triggerName(itrig);
     std::string trigNameStr(trigName.Data());
+    if ( m_debug > 10 ) std::cout << "@"<<itrig<<": "<<trigNameStr << " is present in edmTriggerResults!" << std::endl;
+	  
     if(trRes->accept(itrig)){
       b_hltPaths.push_back(trigNameStr);
       if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl;
       
       // check if this event was fired by the signal trigger!
       for (const auto& p: signalHltPaths_){
+	if ( m_debug > 10 ) std::cout << "Signal trigger is "<< p << std::endl;
         if (trigNameStr.find(p) != std::string::npos) {
-        if ( m_debug > 10 ) std::cout << trigNameStr << " signal trigger!" << std::endl;
+        if ( m_debug > 10 ) std::cout << "Signal trigger " << p << " fired!" << std::endl;
           b_isDiMuonHLTFired = true;
         }
       }
 	  
       const std::string& p0 = controlHltPaths_[0];
       const std::string& p1 = controlHltPaths_[1];
+      if ( m_debug > 10 ) std::cout << "Control trigger is "<< p0 << std::endl;
       if (trigNameStr.find(p0) != std::string::npos) {
-        if ( m_debug > 10 ) std::cout << trigNameStr << " control trigger pT16!" << std::endl;
+        if ( m_debug > 10 ) std::cout << "Control trigger " << p0 << " fired!" << std::endl;
           b_isControlHLT16Fired = true;
       }    
+      if ( m_debug > 10 ) std::cout << "Control trigger is "<< p1 << std::endl;
       if (trigNameStr.find(p1) != std::string::npos) {
-        if ( m_debug > 10 ) std::cout << trigNameStr << " control trigger pT6!" << std::endl;
+        if ( m_debug > 10 ) std::cout << "Control trigger " << p1 << " fired!" << std::endl;
           b_isControlHLT6Fired = true;
       }
 	    
