@@ -1123,16 +1123,16 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       }
 	    
       // Check if gen particle is Higgs
-      if ( ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 25 ) ||
-	   ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 35 )  ) {
+      if ( ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 25 ) ||
+	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 35 )  ) {
         genH.push_back(&(*iGenParticle)); 
       }
 	    
       // Check if gen particle is new light boson
-      if ( ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 36 ) ||
-	   ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 54 ) ||
-	   ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 3000022 ) ||
-	   ( iGenParticle->status() == 2 && iGenParticle->pdgId() == 9000005 )  ) {
+      if ( ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36 ) ||
+	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 54 ) ||
+	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 3000022 ) ||
+	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 9000005 )  ) {
         genA_unsorted.push_back(&(*iGenParticle));
       }
     }
