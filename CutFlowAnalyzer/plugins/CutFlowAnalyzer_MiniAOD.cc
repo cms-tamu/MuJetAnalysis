@@ -321,9 +321,7 @@ private:
   Bool_t b_isControlHLT6Fired;
 
   Bool_t b_is2DiMuonsMassOK_FittedVtx;
-
   Bool_t b_is2DiMuonsMassOK_ConsistentVtx;
-
   Bool_t b_isVertexOK;
 
   Float_t b_Mass4Mu;
@@ -381,7 +379,6 @@ private:
   Float_t b_diMuonC_FittedVtx_vy;
   Float_t b_diMuonC_FittedVtx_vz;
 
-
   Int_t b_diMuonC_m1_FittedVtx_hitpix;
   Int_t b_diMuonC_m2_FittedVtx_hitpix;
   Int_t b_diMuonF_m1_FittedVtx_hitpix;
@@ -396,9 +393,6 @@ private:
   Int_t b_diMuonC_m2_FittedVtx_hitpix_l3inc;
   Int_t b_diMuonF_m1_FittedVtx_hitpix_l3inc;
   Int_t b_diMuonF_m2_FittedVtx_hitpix_l3inc;
-
-  Int_t b_pixelhitfailure_C;
-  Int_t b_pixelhitfailure_F;
 
   Int_t b_diMuonC_m1_FittedVtx_HBV;
   Int_t b_diMuonC_m2_FittedVtx_HBV;
@@ -476,170 +470,6 @@ private:
   Float_t b_PAT_jet_Btag1[100];
   Float_t b_PAT_jet_Btag2[100];
   Float_t b_PAT_jet_Btag3[100];
-
-  Int_t b_ntracks;
-
-  Float_t b_track_pt[1000];
-  Float_t b_track_charge[1000];
-  Float_t b_track_qoverp[1000];
-  Float_t b_track_theta[1000];
-  Float_t b_track_phi[1000];
-  Float_t b_track_dxy[1000];
-  Float_t b_track_dz[1000];
-
-  Float_t b_track_errpt[1000];
-  Float_t b_track_errcharge[1000];
-  Float_t b_track_errqoverp[1000];
-  Float_t b_track_errtheta[1000];
-  Float_t b_track_errphi[1000];
-  Float_t b_track_errdxy[1000];
-  Float_t b_track_errdz[1000];
-
-  Int_t b_match_mu1track_muJetC;
-  Int_t b_match_mu2track_muJetC;
-  Int_t b_match_mu1track_muJetF;
-  Int_t b_match_mu2track_muJetF;
-
-  Float_t mtrack_pt[10];
-  Float_t mtrack_charge[10];
-  Float_t mtrack_qoverp[10];
-  Float_t mtrack_theta[10];
-  Float_t mtrack_phi[10];
-  Float_t mtrack_dxy[10];
-  Float_t mtrack_dz[10];
-
-  Float_t mtrack_errpt[10];
-  Float_t mtrack_errcharge[10];
-  Float_t mtrack_errqoverp[10];
-  Float_t mtrack_errtheta[10];
-  Float_t mtrack_errphi[10];
-  Float_t mtrack_errdxy[10];
-  Float_t mtrack_errdz[10];
-
-  Float_t muJetC_muon1_track_diffcharge[1000];
-  Float_t muJetC_muon1_track_diffpt[1000];
-  Float_t muJetC_muon1_track_diffqoverp[1000];
-  Float_t muJetC_muon1_track_difftheta[1000];
-  Float_t muJetC_muon1_track_diffphi[1000];
-  Float_t muJetC_muon1_track_diffdxy[1000];
-  Float_t muJetC_muon1_track_diffdz[1000];
-
-  Float_t muJetC_muon1_track_diffchi2[1000];
-  Float_t muJetC_muon1_track_diffchi2theta[1000];
-  Float_t muJetC_muon1_track_diffchi2qoverpt[1000];
-  Float_t muJetC_muon1_track_diffchi2phi[1000];
-  Float_t muJetC_muon1_track_diffchi2dxy[1000];
-  Float_t muJetC_muon1_track_diffchi2dz[1000];
-
-
-  Float_t muJetC_muon1_track_mincharge;
-  Float_t muJetC_muon1_track_minqoverpt;
-  Float_t muJetC_muon1_track_mintheta;
-  Float_t muJetC_muon1_track_minphi;
-  Float_t muJetC_muon1_track_mindxy;
-  Float_t muJetC_muon1_track_mindz;
-
-  Float_t muJetC_muon1_track_minchi2;
-  Float_t muJetC_muon2_track_minchi2;
-  Float_t muJetF_muon1_track_minchi2;
-  Float_t muJetF_muon2_track_minchi2;
-
-
-  Float_t muJetC_muon1_track_minchi2theta;
-  Float_t muJetC_muon1_track_minchi2qoverpt;
-  Float_t muJetC_muon1_track_minchi2phi;
-  Float_t muJetC_muon1_track_minchi2dxy;
-  Float_t muJetC_muon1_track_minchi2dz;
-
-
-  Float_t muJetC_muon2_track_diffcharge[1000];
-  Float_t muJetC_muon2_track_diffpt[1000];
-  Float_t muJetC_muon2_track_diffqoverp[1000];
-  Float_t muJetC_muon2_track_difftheta[1000];
-  Float_t muJetC_muon2_track_diffphi[1000];
-  Float_t muJetC_muon2_track_diffdxy[1000];
-  Float_t muJetC_muon2_track_diffdz[1000];
-
-  Float_t b_mutrack_pT_mu1JetC;
-  Float_t b_mutrack_pT_mu2JetC;
-  Float_t b_mutrack_pT_mu1JetF;
-  Float_t b_mutrack_pT_mu2JetF;
-
-  Float_t b_mutrack_eta_mu1JetC;
-  Float_t b_mutrack_eta_mu2JetC;
-  Float_t b_mutrack_eta_mu1JetF;
-  Float_t b_mutrack_eta_mu2JetF;
-
-  Float_t b_mutrack_phi_mu1JetC;
-  Float_t b_mutrack_phi_mu2JetC;
-  Float_t b_mutrack_phi_mu1JetF;
-  Float_t b_mutrack_phi_mu2JetF;
-
-  Float_t b_mutrack_charge_mu1JetC;
-  Float_t b_mutrack_charge_mu2JetC;
-  Float_t b_mutrack_charge_mu1JetF;
-  Float_t b_mutrack_charge_mu2JetF;
-
-  Int_t b_innerlayers_mu1_muJetC;
-  Int_t b_innerlayers_mu2_muJetC;
-  Int_t b_innerlayers_mu1_muJetF;
-  Int_t b_innerlayers_mu2_muJetF;
-
-  Int_t b_compdet_mu1_muJetC[10];
-  Int_t b_compdet_mu2_muJetC[10];
-  Int_t b_compdet_mu1_muJetF[10];
-  Int_t b_compdet_mu2_muJetF[10];
-
-  Int_t b_numhit_mu1_muJetC[100];
-  Int_t b_numhit_mu2_muJetC[100];
-  Int_t b_numhit_mu1_muJetF[100];
-  Int_t b_numhit_mu2_muJetF[100];
-
-  Int_t b_PXBID_mu1muJetC[10][10];
-  Int_t b_PXFID_mu1muJetC[10][10];
-  Int_t b_PXBID_mu2muJetC[10][10];
-  Int_t b_PXFID_mu2muJetC[10][10];
-
-  Int_t b_PXBID_mu1muJetF[10][10];
-  Int_t b_PXFID_mu1muJetF[10][10];
-  Int_t b_PXBID_mu2muJetF[10][10];
-  Int_t b_PXFID_mu2muJetF[10][10];
-
-  Float_t b_mj1m0posx[10][10];
-  Float_t b_mj1m0posy[10][10];
-  Float_t b_mj1m0posx_err[10][10];
-  Float_t b_mj1m0posy_err[10][10];
-  Float_t b_mj1m1posx[10][10];
-  Float_t b_mj1m1posy[10][10];
-  Float_t b_mj1m1posx_err[10][10];
-  Float_t b_mj1m1posy_err[10][10];
-
-  Float_t  b_mj2m0posx[10][10];
-  Float_t  b_mj2m0posy[10][10];
-  Float_t  b_mj2m0posx_err[10][10];
-  Float_t  b_mj2m0posy_err[10][10];
-  Float_t  b_mj2m1posx[10][10];
-  Float_t  b_mj2m1posy[10][10];
-  Float_t  b_mj2m1posx_err[10][10];
-  Float_t  b_mj2m1posy_err[10][10];
-
-  Float_t b_pixelhit_mu1_muJetC_posx[10][100];
-  Float_t b_pixelhit_mu1_muJetC_posy[10][100];
-  Float_t b_pixelhit_mu1_muJetC_errposx[10][100];
-  Float_t b_pixelhit_mu1_muJetC_errposy[10][100];
-  Float_t b_pixelhit_mu2_muJetC_posx[10][100];
-  Float_t b_pixelhit_mu2_muJetC_posy[10][100];
-  Float_t b_pixelhit_mu2_muJetC_errposx[10][100];
-  Float_t b_pixelhit_mu2_muJetC_errposy[10][100];
-
-  Float_t b_pixelhit_mu1_muJetF_posx[10][100];
-  Float_t b_pixelhit_mu1_muJetF_posy[10][100];
-  Float_t b_pixelhit_mu1_muJetF_errposx[10][100];
-  Float_t b_pixelhit_mu1_muJetF_errposy[10][100];
-  Float_t b_pixelhit_mu2_muJetF_posx[10][100];
-  Float_t b_pixelhit_mu2_muJetF_posy[10][100];
-  Float_t b_pixelhit_mu2_muJetF_errposx[10][100];
-  Float_t b_pixelhit_mu2_muJetF_errposy[10][100];
 
   //BB estimation
   Bool_t runBBestimation_;
@@ -806,190 +636,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_diMuonF_m1_FittedVtx_MHAV = -1000;
   b_diMuonF_m2_FittedVtx_MHAV = -1000;
 
-
-  //Pixel Hit Recovery
-  muJetC_muon1_track_minchi2=-10000000;
-  muJetC_muon2_track_minchi2=-10000000;
-  muJetF_muon1_track_minchi2=-10000000;
-  muJetF_muon2_track_minchi2=-10000000;
-
-  muJetC_muon1_track_minchi2theta=-10000000;
-  muJetC_muon1_track_minchi2qoverpt=-10000000;
-  muJetC_muon1_track_minchi2phi=-10000000;
-  muJetC_muon1_track_minchi2dxy=-10000000;
-  muJetC_muon1_track_minchi2dz=-10000000;
-
-  muJetC_muon1_track_mincharge=-10000000;
-  muJetC_muon1_track_minqoverpt=-10000000;
-  muJetC_muon1_track_mintheta=-10000000;
-  muJetC_muon1_track_minphi=-10000000;
-  muJetC_muon1_track_mindxy=-10000000;
-  muJetC_muon1_track_mindz=-10000000;
-
-  for(int k=0;k<1000;k++){
-    muJetC_muon1_track_diffchi2[k]=-10000000;
-    muJetC_muon1_track_diffchi2theta[k]=-10000000;
-    muJetC_muon1_track_diffchi2qoverpt[k]=-10000000;
-    muJetC_muon1_track_diffchi2phi[k]=-10000000;
-    muJetC_muon1_track_diffchi2dxy[k]=-10000000;
-    muJetC_muon1_track_diffchi2dz[k]=-10000000;
-
-    muJetC_muon1_track_diffcharge[k]=-10000000;
-    muJetC_muon1_track_diffpt[k]=-10000000;
-    muJetC_muon1_track_diffqoverp[k]=-10000000;
-    muJetC_muon1_track_difftheta[k]=-10000000;
-    muJetC_muon1_track_diffphi[k]=-10000000;
-    muJetC_muon1_track_diffdxy[k]=-10000000;
-    muJetC_muon1_track_diffdz[k]=-10000000;
-
-    muJetC_muon2_track_diffcharge[k]=-10000000;
-    muJetC_muon2_track_diffpt[k]=-10000000;
-    muJetC_muon2_track_diffqoverp[k]=-10000000;
-    muJetC_muon2_track_difftheta[k]=-10000000;
-    muJetC_muon2_track_diffphi[k]=-10000000;
-    muJetC_muon2_track_diffdxy[k]=-10000000;
-    muJetC_muon2_track_diffdz[k]=-10000000;
-  }
-
-
-
-  for(int k=0;k<1000;k++){
-    b_track_pt[k]=-10000000.0;
-    b_track_charge[k]=-10000000;
-    b_track_qoverp[k]=-10000000;
-    b_track_theta[k]=-10000000;
-    b_track_phi[k]=-10000000;
-    b_track_dxy[k]=-10000000;
-    b_track_dz[k]=-10000000;
-
-    b_track_errpt[k]=-10000000;
-    b_track_errcharge[k]=-10000000;
-    b_track_errqoverp[k]=-10000000;
-    b_track_errtheta[k]=-10000000;
-    b_track_errphi[k]=-10000000;
-    b_track_errdxy[k]=-10000000;
-    b_track_errdz[k]=-10000000;
-  }
-
-
-  for(int k=0;k<10;k++){
-    mtrack_pt[k]=-10000000;
-    mtrack_charge[k]=-10000000;
-    mtrack_qoverp[k]=-10000000;
-    mtrack_theta[k]=-10000000;
-    mtrack_phi[k]=-10000000;
-    mtrack_dxy[k]=-10000000;
-    mtrack_dz[k]=-10000000;
-
-    mtrack_errpt[k]=-10000000;
-    mtrack_errcharge[k]=-10000000;
-    mtrack_errqoverp[k]=-10000000;
-    mtrack_errtheta[k]=-10000000;
-    mtrack_errphi[k]=-10000000;
-    mtrack_errdxy[k]=-10000000;
-    mtrack_errdz[k]=-10000000;
-  }
-
-  b_match_mu1track_muJetC=0;
-  b_match_mu2track_muJetC=0;
-  b_match_mu1track_muJetF=0;
-  b_match_mu2track_muJetF=0;
-
-  b_mutrack_pT_mu1JetC=-100000;
-  b_mutrack_pT_mu2JetC=-100000;
-  b_mutrack_pT_mu1JetF=-100000;
-  b_mutrack_pT_mu2JetF=-100000;
-
-  b_mutrack_eta_mu1JetC=-100000;
-  b_mutrack_eta_mu2JetC=-100000;
-  b_mutrack_eta_mu1JetF=-100000;
-  b_mutrack_eta_mu2JetF=-100000;
-
-  b_mutrack_phi_mu1JetC=-100000;
-  b_mutrack_phi_mu2JetC=-100000;
-  b_mutrack_phi_mu1JetF=-100000;
-  b_mutrack_phi_mu2JetF=-100000;
-
-  b_mutrack_charge_mu1JetC=-100000;
-  b_mutrack_charge_mu2JetC=-100000;
-  b_mutrack_charge_mu1JetF=-100000;
-  b_mutrack_charge_mu2JetF=-100000;
-
-  b_ntracks=-10000;
-
-  b_innerlayers_mu1_muJetC=-10000;
-  b_innerlayers_mu2_muJetC=-10000;
-  b_innerlayers_mu1_muJetF=-10000;
-  b_innerlayers_mu2_muJetF=-10000;
-
-  for(int k=0;k<10;k++){
-    b_compdet_mu1_muJetC[k]=-10000;
-    b_compdet_mu2_muJetC[k]=-10000;
-    b_compdet_mu1_muJetF[k]=-10000;
-    b_compdet_mu2_muJetF[k]=-10000;
-  }
-
-  for(int k=0;k<100;k++){
-    b_numhit_mu1_muJetC[k]=-10000;
-    b_numhit_mu2_muJetC[k]=-10000;
-    b_numhit_mu1_muJetF[k]=-10000;
-    b_numhit_mu2_muJetF[k]=-10000;
-  }
-
-  for(int k=0;k<10;k++){
-    for(int j=0;j<10;j++){
-      b_PXBID_mu1muJetC[k][j]=-10000;
-      b_PXFID_mu1muJetC[k][j]=-10000;
-      b_PXBID_mu2muJetC[k][j]=-10000;
-      b_PXFID_mu2muJetC[k][j]=-10000;
-
-      b_PXBID_mu1muJetF[k][j]=-10000;
-      b_PXFID_mu1muJetF[k][j]=-10000;
-      b_PXBID_mu2muJetF[k][j]=-10000;
-      b_PXFID_mu2muJetF[k][j]=-10000;
-
-      b_mj1m0posx[k][j]=-10000;
-      b_mj1m0posy[k][j]=-10000;
-      b_mj1m0posx_err[k][j]=-10000;
-      b_mj1m0posy_err[k][j]=-10000;
-      b_mj1m1posx[k][j]=-10000;
-      b_mj1m1posy[k][j]=-10000;
-      b_mj1m1posx_err[k][j]=-10000;
-      b_mj1m1posy_err[k][j]=-10000;
-
-      b_mj2m0posx[k][j]=-10000;
-      b_mj2m0posy[k][j]=-10000;
-      b_mj2m0posx_err[k][j]=-10000;
-      b_mj2m0posy_err[k][j]=-10000;
-      b_mj2m1posx[k][j]=-10000;
-      b_mj2m1posy[k][j]=-10000;
-      b_mj2m1posx_err[k][j]=-10000;
-      b_mj2m1posy_err[k][j]=-10000;
-
-    }
-  }
-
-  for(int k=0;k<10;k++){
-    for(int j=0;j<100;j++){
-      b_pixelhit_mu1_muJetC_posx[k][j]=-10000;
-      b_pixelhit_mu1_muJetC_posy[k][j]=-10000;
-      b_pixelhit_mu1_muJetC_errposx[k][j]=-10000;
-      b_pixelhit_mu1_muJetC_errposy[k][j]=-10000;
-      b_pixelhit_mu2_muJetC_posx[k][j]=-10000;
-      b_pixelhit_mu2_muJetC_posy[k][j]=-10000;
-      b_pixelhit_mu2_muJetC_errposx[k][j]=-10000;
-      b_pixelhit_mu2_muJetC_errposy[k][j]=-10000;
-
-      b_pixelhit_mu1_muJetF_posx[k][j]=-10000;
-      b_pixelhit_mu1_muJetF_posy[k][j]=-10000;
-      b_pixelhit_mu1_muJetF_errposx[k][j]=-10000;
-      b_pixelhit_mu1_muJetF_errposy[k][j]=-10000;
-      b_pixelhit_mu2_muJetF_posx[k][j]=-10000;
-      b_pixelhit_mu2_muJetF_posy[k][j]=-10000;
-      b_pixelhit_mu2_muJetF_errposx[k][j]=-10000;
-      b_pixelhit_mu2_muJetF_errposy[k][j]=-10000;
-    }
-  }
   b_Mass4Mu = -1.;
 
   //****************************************************************************
@@ -1068,11 +714,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
     edm::Handle<reco::GenParticleCollection> genParticles;
     iEvent.getByToken(m_genParticles, genParticles);
-    
+
     //@Wei SHI 07.26.2018
-    //Note for PDG ID in three benchmark models: 
-    //(1) NMSSM: Higgs={35}, new light boson={36,54}, muons={13,-13}, 
-    //    '54' is the corner case in pythia when '36' doesn't work for some mass points 
+    //Note for PDG ID in three benchmark models:
+    //(1) NMSSM: Higgs={35}, new light boson={36,54}, muons={13,-13},
+    //    '54' is the corner case in pythia when '36' doesn't work for some mass points
     //(2) MSSMD (Dark SUSY): Higgs={25}, new light boson={3000022}, muons={13,-13}
     //(3) ALP: Higgs={25}, new light boson={9000005}, muons={13,-13}
     std::vector<const reco::GenParticle*> genH;
@@ -1084,17 +730,17 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     // Loop over all gen particles
     int counterGenParticle = 0;
     for(reco::GenParticleCollection::const_iterator iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
-      counterGenParticle++;    
+      counterGenParticle++;
       if(m_debug > 10) std::cout << "#" <<counterGenParticle << " id: " << iGenParticle->pdgId() << "; status: " << iGenParticle->status() <<"; px: "<< iGenParticle->px() << "; py: "<< iGenParticle->py() << "; pz: "<< iGenParticle->pz() << std::endl;
-      
+
       // Check if gen particle is muon
       if ( fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1 ) {
-	      
+
 	//This example below looks super suspicious to me. Does it really exist? @Wei SHI 07.26.2018
         // Mother of the muon can be muon. Find the last muon in this chain: genMuonCand
         // Example: a1 -> mu+ (status = 3) mu- (status = 3)
         //          mu- (status = 3) -> mu- (status = 2) -> mu- (status = 1)
-	      
+
         const reco::Candidate *genMuonCand = &(*iGenParticle);
         bool isMuonMother = true;
         while(isMuonMother) {
@@ -1106,12 +752,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             }
           }
         }
-	      
+
         // Loop over all real (non-muon) mothers of the muon (here we use genMuonCand)
         for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
-          
-          if ( genMuonCand->mother(iMother)->pdgId() == 36 || 
-	       genMuonCand->mother(iMother)->pdgId() == 54 || 
+
+          if ( genMuonCand->mother(iMother)->pdgId() == 36 ||
+	       genMuonCand->mother(iMother)->pdgId() == 54 ||
 	       genMuonCand->mother(iMother)->pdgId() == 3000022 ||
 	       genMuonCand->mother(iMother)->pdgId() == 9000005  ) {
             // Store the muon (stable, first in chain) into vector
@@ -1121,13 +767,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           }
         }
       }
-	    
+
       // Check if gen particle is Higgs
       if ( ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 25 ) ||
 	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 35 )  ) {
-        genH.push_back(&(*iGenParticle)); 
+        genH.push_back(&(*iGenParticle));
       }
-	    
+
       // Check if gen particle is new light boson
       if ( ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36 ) ||
 	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 54 ) ||
@@ -1833,11 +1479,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     TString trigName = triggerNames.triggerName(itrig);
     std::string trigNameStr(trigName.Data());
     if ( m_debug > 10 ) std::cout << "HLT Menu #"<<itrig<<": "<<trigNameStr << std::endl;
-	  
+
     if(trRes->accept(itrig)){
       b_hltPaths.push_back(trigNameStr);
       if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl;
-      
+
       // check if this event was fired by the signal trigger!
       for (const auto& p: signalHltPaths_){
 	if ( m_debug > 10 ) std::cout << "Signal trigger is "<< p << std::endl;
@@ -1846,20 +1492,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           b_isDiMuonHLTFired = true;
         }
       }
-	  
+
       const std::string& p0 = controlHltPaths_[0];
       const std::string& p1 = controlHltPaths_[1];
       if ( m_debug > 10 ) std::cout << "Control trigger is "<< p0 << std::endl;
       if (trigNameStr.find(p0) != std::string::npos) {
         if ( m_debug > 10 ) std::cout << "Control trigger " << p0 << " fired!" << std::endl;
           b_isControlHLT16Fired = true;
-      }    
+      }
       if ( m_debug > 10 ) std::cout << "Control trigger is "<< p1 << std::endl;
       if (trigNameStr.find(p1) != std::string::npos) {
         if ( m_debug > 10 ) std::cout << "Control trigger " << p1 << " fired!" << std::endl;
           b_isControlHLT6Fired = true;
       }
-	    
+
     }
   }
 
