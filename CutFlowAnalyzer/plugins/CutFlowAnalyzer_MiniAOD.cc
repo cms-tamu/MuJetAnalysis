@@ -278,6 +278,21 @@ private:
   // bb Estimation
   Float_t b_massC;
   Float_t b_massF;
+
+  Float_t b_muJetC_Mu0_pt;
+  Float_t b_muJetC_Mu0_eta;
+  Float_t b_muJetC_Mu0_phi;
+  Float_t b_muJetC_Mu1_pt;
+  Float_t b_muJetC_Mu1_eta;
+  Float_t b_muJetC_Mu1_phi;
+
+  Float_t b_muJetF_Mu0_pt;
+  Float_t b_muJetF_Mu0_eta;
+  Float_t b_muJetF_Mu0_phi;
+  Float_t b_muJetF_Mu1_pt;
+  Float_t b_muJetF_Mu1_eta;
+  Float_t b_muJetF_Mu1_phi;
+
   Float_t b_isoC_1mm;
   Float_t b_isoF_1mm;
 
@@ -1229,7 +1244,21 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   const pat::MultiMuon *muJetF = NULL;
   int   nMuJetsContainMu17     = 0;
   unsigned int nMuJets = muJets->size();
-  b_massC = -999.; b_massF = -999.;
+  b_massC = -999.;
+  b_massF = -999.;
+  b_muJetC_Mu0_pt = -999.;
+  b_muJetC_Mu0_eta = -999.;
+  b_muJetC_Mu0_phi = -999.;
+  b_muJetC_Mu1_pt = -999.;
+  b_muJetC_Mu1_eta = -999.;
+  b_muJetC_Mu1_phi = -999.;
+
+  b_muJetF_Mu0_pt = -999.;
+  b_muJetF_Mu0_eta = -999.;
+  b_muJetF_Mu0_phi = -999.;
+  b_muJetF_Mu1_pt = -999.;
+  b_muJetF_Mu1_eta = -999.;
+  b_muJetF_Mu1_phi = -999.;
   b_is2MuJets = false;
   if ( nMuJets == 2) {
     for ( unsigned int j = 0; j < nMuJets; j++ ) {
@@ -1277,7 +1306,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons){
     m_events2DiMuons++;
     b_massC = muJetC->mass();
+    b_muJetC_Mu0_pt = muJetC.muon(0)->pt();
+    b_muJetC_Mu0_eta = muJetC.muon(0)->eta();
+    b_muJetC_Mu0_phi = muJetC.muon(0)->phi();
+    b_muJetC_Mu1_pt = muJetC.muon(1)->pt();
+    b_muJetC_Mu1_eta = muJetC.muon(1)->eta();
+    b_muJetC_Mu1_phi = muJetC.muon(1)->phi();
+
     b_massF = muJetF->mass();
+    b_muJetF_Mu0_pt = muJetF.muon(0)->pt();
+    b_muJetF_Mu0_eta = muJetF.muon(0)->eta();
+    b_muJetF_Mu0_phi = muJetF.muon(0)->phi();
+    b_muJetF_Mu1_pt = muJetF.muon(1)->pt();
+    b_muJetF_Mu1_eta = muJetF.muon(1)->eta();
+    b_muJetF_Mu1_phi = muJetF.muon(1)->phi();
   }
   // "Old" fitted vertexes
   b_is2DiMuonsFittedVtxOK = false;
@@ -2176,6 +2218,19 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   // bb Estimation
   m_ttree->Branch("massC",                          &b_massC,                          "massC/F");
+  m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
+  m_ttree->Branch("muJetC_Mu0_pt",                  &b_muJetC_Mu0_pt,                  "muJetC_Mu0_pt/F");
+  m_ttree->Branch("muJetC_Mu1_pt",                  &b_muJetC_Mu1_pt,                  "muJetC_Mu1_pt/F");
+  m_ttree->Branch("muJetC_Mu0_eta",                 &b_muJetC_Mu0_eta,                 "muJetC_Mu0_eta/F");
+  m_ttree->Branch("muJetC_Mu1_eta",                 &b_muJetC_Mu1_eta,                 "muJetC_Mu1_eta/F");
+  m_ttree->Branch("muJetC_Mu0_phi",                 &b_muJetC_Mu0_phi,                 "muJetC_Mu0_phi/F");
+  m_ttree->Branch("muJetC_Mu1_phi",                 &b_muJetC_Mu1_phi,                 "muJetC_Mu1_phi/F");
+  m_ttree->Branch("muJetF_Mu0_pt",                  &b_muJetF_Mu0_pt,                  "muJetF_Mu0_pt/F");
+  m_ttree->Branch("muJetF_Mu1_pt",                  &b_muJetF_Mu1_pt,                  "muJetF_Mu1_pt/F");
+  m_ttree->Branch("muJetF_Mu0_eta",                 &b_muJetF_Mu0_eta,                 "muJetF_Mu0_eta/F");
+  m_ttree->Branch("muJetF_Mu1_eta",                 &b_muJetF_Mu1_eta,                 "muJetF_Mu1_eta/F");
+  m_ttree->Branch("muJetF_Mu0_phi",                 &b_muJetF_Mu0_phi,                 "muJetF_Mu0_phi/F");
+  m_ttree->Branch("muJetF_Mu1_phi",                 &b_muJetF_Mu1_phi,                 "muJetF_Mu1_phi/F");
   m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
   m_ttree->Branch("isoC_1mm",                       &b_isoC_1mm,                       "isoC_1mm/F");
   m_ttree->Branch("isoF_1mm",                       &b_isoF_1mm,                       "isoF_1mm/F");
