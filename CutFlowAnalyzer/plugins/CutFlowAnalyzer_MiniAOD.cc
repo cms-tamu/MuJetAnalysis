@@ -1306,20 +1306,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons){
     m_events2DiMuons++;
     b_massC = muJetC->mass();
-    b_muJetC_Mu0_pt = muJetC.muon(0)->pt();
-    b_muJetC_Mu0_eta = muJetC.muon(0)->eta();
-    b_muJetC_Mu0_phi = muJetC.muon(0)->phi();
-    b_muJetC_Mu1_pt = muJetC.muon(1)->pt();
-    b_muJetC_Mu1_eta = muJetC.muon(1)->eta();
-    b_muJetC_Mu1_phi = muJetC.muon(1)->phi();
+    b_muJetC_Mu0_pt = muJetC->muon(0)->pt();
+    b_muJetC_Mu0_eta = muJetC->muon(0)->eta();
+    b_muJetC_Mu0_phi = muJetC->muon(0)->phi();
+    b_muJetC_Mu1_pt = muJetC->muon(1)->pt();
+    b_muJetC_Mu1_eta = muJetC->muon(1)->eta();
+    b_muJetC_Mu1_phi = muJetC->muon(1)->phi();
 
     b_massF = muJetF->mass();
-    b_muJetF_Mu0_pt = muJetF.muon(0)->pt();
-    b_muJetF_Mu0_eta = muJetF.muon(0)->eta();
-    b_muJetF_Mu0_phi = muJetF.muon(0)->phi();
-    b_muJetF_Mu1_pt = muJetF.muon(1)->pt();
-    b_muJetF_Mu1_eta = muJetF.muon(1)->eta();
-    b_muJetF_Mu1_phi = muJetF.muon(1)->phi();
+    b_muJetF_Mu0_pt = muJetF->muon(0)->pt();
+    b_muJetF_Mu0_eta = muJetF->muon(0)->eta();
+    b_muJetF_Mu0_phi = muJetF->muon(0)->phi();
+    b_muJetF_Mu1_pt = muJetF->muon(1)->pt();
+    b_muJetF_Mu1_eta = muJetF->muon(1)->eta();
+    b_muJetF_Mu1_phi = muJetF->muon(1)->phi();
   }
   // "Old" fitted vertexes
   b_is2DiMuonsFittedVtxOK = false;
