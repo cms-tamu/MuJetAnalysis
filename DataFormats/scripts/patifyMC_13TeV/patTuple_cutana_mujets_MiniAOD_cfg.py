@@ -13,7 +13,7 @@ process.options.allowUnscheduled = cms.untracked.bool(False)
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '92X_dataRun2_Prompt_v11')
+process.GlobalTag = GlobalTag(process.GlobalTag, '101X_upgrade2018_realistic_v7')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cff")
@@ -23,10 +23,7 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_MiniAOD_cfi"
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
-        #'file:/fdata/hepx/store/user/dildick/DoubleMuon/crab_DoubleMuon-Run2017C-PromptReco-v1-SKIM-20171206/171206_225208/0000/Filter_135.root',
-        #'file:/fdata/hepx/store/user/dildick/MET/crab_MET-Run2017C-PromptReco-v1-SKIM-20171129/171130_025209/0000/Filter_135.root'
-        #'file:/fdata/hepx/store/user/dildick/MET/crab_MET-Run2017F-PromptReco-v1-SKIM-20171129/171130_025541/0000/Filter_102.root'
-        'file:/fdata/hepx/store/user/dildick/DoubleMuon/crab_DoubleMuon-Run2017D-PromptReco-v1-SKIM-20171206/171206_225345/0000/Filter_1.root'
+        'file:out_miniaod.root'
         )
 )
 
@@ -48,7 +45,7 @@ else:         process.patifySelect = cms.Sequence(process.patifyMC)
 process.dump=cms.EDAnalyzer('EventContentAnalyzer')
 
 process.p = cms.Path(
-    process.baseLineSelectionFilter *
+#    process.baseLineSelectionFilter *
     process.patifySelect *
     process.MuJetProducers *
 #    process.dump *

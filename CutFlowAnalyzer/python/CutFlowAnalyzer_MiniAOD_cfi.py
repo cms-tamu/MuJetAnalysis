@@ -9,7 +9,7 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     tracks = cms.InputTag("unpackedTracksAndVertices"),
     TriggerResults = cms.InputTag("TriggerResults","","HLT"),
     TrackRefitter = cms.InputTag("TrackRefitter"),
-    genParticles = cms.InputTag("prunedGenParticles"),
+    PrunedGenParticles = cms.InputTag("prunedGenParticles"),
     primaryVertices = cms.InputTag("unpackedTracksAndVertices"),
     PATJet = cms.InputTag("patJets"),
     DiMuons_Iso_Max = cms.double(2.0),
@@ -27,5 +27,9 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     ## no need to version it!
     signalHltPaths = cms.vstring(
         'HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx',
+    ),
+    controlHltPaths = cms.vstring(
+        'HLT_TrkMu16NoFiltersNoVtx',
+        'HLT_TrkMu6NoFiltersNoVtx',
     ),
 )
