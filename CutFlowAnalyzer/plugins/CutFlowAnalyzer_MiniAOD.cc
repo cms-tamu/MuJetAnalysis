@@ -374,16 +374,6 @@ private:
   Float_t b_selMu2_pT;
   Float_t b_selMu3_pT;
 
-  Bool_t b_selMu0_trigHLT16;
-  Bool_t b_selMu1_trigHLT16;
-  Bool_t b_selMu2_trigHLT16;
-  Bool_t b_selMu3_trigHLT16;
-
-  Bool_t b_selMu0_trigHLT6;
-  Bool_t b_selMu1_trigHLT6;
-  Bool_t b_selMu2_trigHLT6;
-  Bool_t b_selMu3_trigHLT6;
-
   Float_t b_diMuonC_FittedVtx_m;
   Float_t b_diMuonC_FittedVtx_px;
   Float_t b_diMuonC_FittedVtx_py;
@@ -1127,8 +1117,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_pT  = selMuons[0]->pt();
     b_selMu0_eta = selMuons[0]->eta();
     b_selMu0_phi = selMuons[0]->phi();
-    b_selMu0_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[0], signalHltPaths_[0] + "_v*", 16.);
-    b_selMu0_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[0], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu0_px  = -100.0;
     b_selMu0_py  = -100.0;
@@ -1136,8 +1124,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_pT  = -100.0;
     b_selMu0_eta = -100.0;
     b_selMu0_phi = -100.0;
-    b_selMu0_trigHLT16 = false;
-    b_selMu0_trigHLT6 = false;
   }
   if ( selMuons.size() > 1 ) {
     b_selMu1_px  = selMuons[1]->px();
@@ -1146,8 +1132,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_pT  = selMuons[1]->pt();
     b_selMu1_eta = selMuons[1]->eta();
     b_selMu1_phi = selMuons[1]->phi();
-    b_selMu1_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[1], signalHltPaths_[0] + "_v*", 16.);
-    b_selMu1_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[1], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu1_px  = -100.0;
     b_selMu1_py  = -100.0;
@@ -1155,8 +1139,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_pT  = -100.0;
     b_selMu1_eta = -100.0;
     b_selMu1_phi = -100.0;
-    b_selMu1_trigHLT16 = false;
-    b_selMu1_trigHLT6 = false;
   }
   if ( selMuons.size() > 2 ) {
     b_selMu2_px  = selMuons[2]->px();
@@ -1165,8 +1147,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_pT  = selMuons[2]->pt();
     b_selMu2_eta = selMuons[2]->eta();
     b_selMu2_phi = selMuons[2]->phi();
-    b_selMu2_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[2], signalHltPaths_[0] + "_v*", 16.);
-    b_selMu2_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[2], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
@@ -1174,8 +1154,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_pT  = -100.0;
     b_selMu2_eta = -100.0;
     b_selMu2_phi = -100.0;
-    b_selMu2_trigHLT16 = false;
-    b_selMu2_trigHLT6 = false;
   }
   if ( selMuons.size() > 3 ) {
     b_selMu3_px  = selMuons[3]->px();
@@ -1184,8 +1162,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_pT  = selMuons[3]->pt();
     b_selMu3_eta = selMuons[3]->eta();
     b_selMu3_phi = selMuons[3]->phi();
-    b_selMu3_trigHLT16 = wasRecoMuonTriggerMatched(selMuons[3], signalHltPaths_[0] + "_v*", 16.);
-    b_selMu3_trigHLT6 = wasRecoMuonTriggerMatched(selMuons[3], signalHltPaths_[0] + "_v*", 6.);
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1193,8 +1169,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_pT  = -100.0;
     b_selMu3_eta = -100.0;
     b_selMu3_phi = -100.0;
-    b_selMu3_trigHLT16 = false;
-    b_selMu3_trigHLT6 = false;
   }
 
 
@@ -2116,16 +2090,6 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("selMu2_phi", &b_selMu2_phi, "selMu2_phi/F");
   m_ttree->Branch("selMu3_phi", &b_selMu3_phi, "selMu3_phi/F");
 
-  m_ttree->Branch("selMu0_trigHLT16", &b_selMu0_trigHLT16, "selMu0_trigHLT16/O");
-  m_ttree->Branch("selMu1_trigHLT16", &b_selMu1_trigHLT16, "selMu1_trigHLT16/O");
-  m_ttree->Branch("selMu2_trigHLT16", &b_selMu2_trigHLT16, "selMu2_trigHLT16/O");
-  m_ttree->Branch("selMu3_trigHLT16", &b_selMu3_trigHLT16, "selMu3_trigHLT16/O");
-
-  m_ttree->Branch("selMu0_trigHLT6", &b_selMu0_trigHLT6, "selMu0_trigHLT6/O");
-  m_ttree->Branch("selMu1_trigHLT6", &b_selMu1_trigHLT6, "selMu1_trigHLT6/O");
-  m_ttree->Branch("selMu2_trigHLT6", &b_selMu2_trigHLT6, "selMu2_trigHLT6/O");
-  m_ttree->Branch("selMu3_trigHLT6", &b_selMu3_trigHLT6, "selMu3_trigHLT6/O");
-
   // RECO DiMuons
   m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
   m_ttree->Branch("diMuonC_FittedVtx_px",  &b_diMuonC_FittedVtx_px,  "diMuonC_FittedVtx_px/F");
@@ -2365,16 +2329,6 @@ void CutFlowAnalyzer_MiniAOD::FillTrigInfo( TH1F * h1, const edm::TriggerNames& 
       }
     }
   }
-}
-
-bool CutFlowAnalyzer_MiniAOD::wasRecoMuonTriggerMatched(const pat::Muon* muon,
-                                                        const std::string& name, const float pt)
-{
-  const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath(name);
-
-  return (mu01 != NULL &&
-          mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") &&
-          mu01->pt() >= pt);
 }
 
 
