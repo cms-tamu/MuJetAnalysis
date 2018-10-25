@@ -9,12 +9,12 @@ bool tamu::helpers::PtOrder (const reco::GenParticle* p1, const reco::GenParticl
 }
 
 bool tamu::helpers::sameTrack(const reco::Track *one, const reco::Track *two) {
-  return (fabs(one->px() - two->px()) < 0.11  &&
-	  fabs(one->py() - two->py()) < 0.11  &&
-	  fabs(one->pz() - two->pz()) < 0.11  &&
-	  fabs(one->vx() - two->vx()) < 0.11  &&
-	  fabs(one->vy() - two->vy()) < 0.11  &&
-	  fabs(one->vz() - two->vz()) < 0.11);
+  return (fabs(one->px() - two->px()) < 1e-10  &&
+	  fabs(one->py() - two->py()) < 1e-10  &&
+	  fabs(one->pz() - two->pz()) < 1e-10  &&
+	  fabs(one->vx() - two->vx()) < 1e-10  &&
+	  fabs(one->vy() - two->vy()) < 1e-10 &&
+	  fabs(one->vz() - two->vz()) < 1e-10);
 }
 
 
