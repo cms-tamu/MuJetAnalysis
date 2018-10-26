@@ -1574,8 +1574,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         bool trackIsMuon = false;
 	const pat::PackedCandidate* candFittedVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
 	const pat::PackedCandidate* candFittedVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
-        if (  tamu::helpers::sameTrack( &*track, &*(candFittedVtx_diMuonTmpMu0->pseudoTrack()) )
-	   || tamu::helpers::sameTrack( &*track, &*(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ) trackIsMuon = true;
+        if (  tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu0->pseudoTrack()) )
+	   || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ) trackIsMuon = true;
         if ( trackIsMuon == false ) {
           double dPhi = tamu::helpers::My_dPhi( diMuonTmp->vertexMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->vertexMomentum().eta() - track->eta();
@@ -1619,8 +1619,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         bool trackIsMuon = false;
 	const pat::PackedCandidate* candConsistentVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
 	const pat::PackedCandidate* candConsistentVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
-        if (   tamu::helpers::sameTrack( &*track, &*(candConsistentVtx_diMuonTmpMu0->pseudoTrack()) )
-	    || tamu::helpers::sameTrack( &*track, &*(candConsistentVtx_diMuonTmpMu1->pseudoTrack()) ) ) trackIsMuon = true;
+        if (   tamu::helpers::sameTrack( &*track, &(candConsistentVtx_diMuonTmpMu0->pseudoTrack()) )
+	    || tamu::helpers::sameTrack( &*track, &(candConsistentVtx_diMuonTmpMu1->pseudoTrack()) ) ) trackIsMuon = true;
         if ( trackIsMuon == false ) {
           double dPhi = tamu::helpers::My_dPhi( diMuonTmp->consistentVtxMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->consistentVtxMomentum().eta() - track->eta();
@@ -1655,7 +1655,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
 	      
 	const pat::PackedCandidate* canddiMuonC = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(k)->sourceCandidatePtr(0).get());
-        if( tamu::helpers::sameTrack(&*track,&*(canddiMuonC->pseudoTrack())) ){
+        if( tamu::helpers::sameTrack(&*track,&(canddiMuonC->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
 
           static CheckHitPattern checkHitPattern;
@@ -1689,7 +1689,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           }
         }
 	const pat::PackedCandidate* canddiMuonF = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(k)->sourceCandidatePtr(0).get());
-        if( tamu::helpers::sameTrack(&*track,&*(canddiMuonF->pseudoTrack())) ){
+        if( tamu::helpers::sameTrack(&*track,&(canddiMuonF->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
 
           static CheckHitPattern checkHitPattern;
@@ -1885,7 +1885,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	      
 	/*Iso for orphan muon*/
 	const pat::PackedCandidate* candOrphan = dynamic_cast<const pat::PackedCandidate*>(orphan->sourceCandidatePtr(0).get());
-        if ( !tamu::helpers::sameTrack(&*track,&*(candOrphan->pseudoTrack())) ) {
+        if ( !tamu::helpers::sameTrack(&*track,&(candOrphan->pseudoTrack())) ) {
 	  double dphi = tamu::helpers::My_dPhi( orphan->innerTrack()->phi(), track->phi() );
           double deta = orphan->innerTrack()->eta() - track->eta();
           double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
@@ -1908,8 +1908,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	const pat::PackedCandidate* candOrphanDimu0 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(0)->sourceCandidatePtr(0).get());
 	const pat::PackedCandidate* candOrphanDimu1 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(1)->sourceCandidatePtr(0).get());
 	//Wei Shi 10.25.2018
-	 if (   tamu::helpers::sameTrack(&*track,&*(candOrphanDimu0->pseudoTrack())) 
-	     || tamu::helpers::sameTrack(&*track,&*(candOrphanDimu1->pseudoTrack())) ) track_is_muon = true;
+	 if (   tamu::helpers::sameTrack(&*track,&(candOrphanDimu0->pseudoTrack())) 
+	     || tamu::helpers::sameTrack(&*track,&(candOrphanDimu1->pseudoTrack())) ) track_is_muon = true;
          if (!track_is_muon) {
 	   double dphi = tamu::helpers::My_dPhi( muJet->phi(), track->phi() );
            double deta = muJet->eta() - track->eta();
