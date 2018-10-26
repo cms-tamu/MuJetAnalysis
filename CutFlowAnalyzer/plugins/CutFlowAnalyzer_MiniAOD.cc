@@ -1879,13 +1879,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	/*Iso for orphan muon*/
 	const pat::PackedCandidate* candOrphan = dynamic_cast<const pat::PackedCandidate*>(orphan.sourceCandidatePtr(0).get());
         if ( !tamu::helpers::sameTrack(&*track,&*(candOrphan->pseudoTrack())) ) {
-          double dphi = orphan->innerTrack()->phi() - track->phi();
-          if (dphi > M_PI) dphi -= 2.*M_PI;
-          if (dphi < -M_PI) dphi += 2.*M_PI;
+	  double dphi = tamu::helpers::My_dPhi( orphan->innerTrack()->phi(), track->phi() );
           double deta = orphan->innerTrack()->eta() - track->eta();
           double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
           if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-            double dz = fabs(track->dz(beamSpot->position())-orphan->innerTrack()->dz(beamSpot->position()));
+            double dz = fabs( track->dz(beamSpot->position()) - orphan->innerTrack()->dz(beamSpot->position()) );
             if (dz < 0.1){ m_orphan_isoTk += track->pt(); }
           }
         }//End iso for orphan muon
@@ -1906,13 +1904,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	 if (   tamu::helpers::sameTrack(&*track,&*(candOrphanDimu0->pseudoTrack())) 
 	     || tamu::helpers::sameTrack(&*track,&*(candOrphanDimu1->pseudoTrack())) ) track_is_muon = true;
          if (!track_is_muon) {
-           double dphi = muJet->phi() - track->phi();
-           if (dphi > M_PI) dphi -= 2.*M_PI;
-           if (dphi < -M_PI) dphi += 2.*M_PI;
+	   double dphi = tamu::helpers::My_dPhi( muJet->phi(), track->phi() );
            double deta = muJet->eta() - track->eta();
            double dR   = sqrt(pow(dphi, 2) + pow(deta, 2));
            if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-             double dz = fabs(track->dz(beamSpot->position())-muJet->vertexDz(beamSpot->position()));
+             double dz = fabs( track->dz(beamSpot->position()) - muJet->vertexDz(beamSpot->position()) );
              if (dz < 0.1){ m_orphan_dimu_isoTk += track->pt(); }
            }
          }//End iso for orphan associated dimuon
