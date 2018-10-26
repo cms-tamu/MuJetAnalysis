@@ -77,6 +77,9 @@ private:
   Float_t m_threshold_DiMuons_Iso_dR;
   Float_t m_threshold_DiMuons_Iso_dz;
   Float_t m_threshold_DiMuons_Iso_pT;
+  Float_t iso_track_pt_threshold;//To be used in orphan-dimuon iso
+  Float_t iso_track_dR_threshold;
+  Float_t iso_track_dz_threshold;
 
   //****************************************************************************
   //          EVENT LEVEL VARIABLES, COUNTERS, BRANCHES AND SELECTORS
@@ -520,6 +523,10 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_threshold_DiMuons_Iso_dR = 0.4; // Isolation cone              //There is no real way to avoid hard-coding this value
   m_threshold_DiMuons_Iso_dz = 0.1; // Track displacement [cm]     //There is no real way to avoid hard-coding this value
   m_threshold_DiMuons_Iso_pT = 0.5; // Track pT [GeV]              //There is no real way to avoid hard-coding this value
+  //To be used in orphan-dimuon iso
+  iso_track_dR_threshold = 0.4;
+  iso_track_dz_threshold = 0.1;
+  iso_track_pt_threshold = 0.5;
 
   //****************************************************************************
   //               SET EVENT LEVEL VARIABLES AND COUNTERS
@@ -1867,10 +1874,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           m_dimuorphan_containstrig2++;
         }
       }
+	    
       m_orphan_dimu_mass = muJet->mass();
       m_orphan_mass = orphan->mass();
-      
-      double iso_track_pt_treshold = 0.5;
       m_orphan_isoTk = 0.;
       m_orphan_dimu_isoTk = 0.;
 	    
@@ -1882,9 +1888,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	  double dphi = tamu::helpers::My_dPhi( orphan->innerTrack()->phi(), track->phi() );
           double deta = orphan->innerTrack()->eta() - track->eta();
           double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
-          if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
+          if (dR < iso_track_dR_threshold && track->pt() > iso_track_pt_threshold) {
             double dz = fabs( track->dz(beamSpot->position()) - orphan->innerTrack()->dz(beamSpot->position()) );
-            if (dz < 0.1){ m_orphan_isoTk += track->pt(); }
+            if (dz < iso_track_dz_threshold){ m_orphan_isoTk += track->pt(); }
           }
         }//End iso for orphan muon
 	      
@@ -1907,9 +1913,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	   double dphi = tamu::helpers::My_dPhi( muJet->phi(), track->phi() );
            double deta = muJet->eta() - track->eta();
            double dR   = sqrt(pow(dphi, 2) + pow(deta, 2));
-           if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
+           if (dR < iso_track_dR_threshold && track->pt() > iso_track_pt_threshold) {
              double dz = fabs( track->dz(beamSpot->position()) - muJet->vertexDz(beamSpot->position()) );
-             if (dz < 0.1){ m_orphan_dimu_isoTk += track->pt(); }
+             if (dz < iso_track_dz_threshold){ m_orphan_dimu_isoTk += track->pt(); }
            }
          }//End iso for orphan associated dimuon
 	      
