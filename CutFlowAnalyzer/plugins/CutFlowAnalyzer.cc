@@ -1998,8 +1998,10 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonC->vertexPoint().x(), diMuonC->vertexPoint().y(), diMuonC->vertexPoint().z());
           VertexState trueDecVert(pos, GlobalError());
-          //CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
-          CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
+          CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
+	  //To be used for Run 2018
+	  //checkHitPattern.init(iSetup);
+          //CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
 
           if(k==0) b_diMuonC_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
           if(k==0) b_diMuonC_m1_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
@@ -2028,8 +2030,10 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonF->vertexPoint().x(), diMuonF->vertexPoint().y(), diMuonF->vertexPoint().z());
           VertexState trueDecVert(pos, GlobalError());
-          //CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
-	  CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
+          CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
+	  //To be used for Run 2018
+	  //checkHitPattern.init(iSetup);
+          //CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
 
           if(k==0) b_diMuonF_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
           if(k==0) b_diMuonF_m1_FittedVtx_MHAV = hitInfo.missHitsAfterVert;

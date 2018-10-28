@@ -19,6 +19,7 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
+#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
@@ -62,8 +63,6 @@ private:
   virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
   virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
 
-  bool wasRecoMuonTriggerMatched(const pat::Muon* mu, const std::string& name, const float pt);
-
   edm::ParameterSet param_;
   edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
 
@@ -79,6 +78,9 @@ private:
   Float_t m_threshold_DiMuons_Iso_dR;
   Float_t m_threshold_DiMuons_Iso_dz;
   Float_t m_threshold_DiMuons_Iso_pT;
+  Float_t iso_track_pt_threshold;//To be used in orphan-dimuon iso
+  Float_t iso_track_dR_threshold;
+  Float_t iso_track_dz_threshold;
 
   //****************************************************************************
   //          EVENT LEVEL VARIABLES, COUNTERS, BRANCHES AND SELECTORS
@@ -522,6 +524,10 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_threshold_DiMuons_Iso_dR = 0.4; // Isolation cone              //There is no real way to avoid hard-coding this value
   m_threshold_DiMuons_Iso_dz = 0.1; // Track displacement [cm]     //There is no real way to avoid hard-coding this value
   m_threshold_DiMuons_Iso_pT = 0.5; // Track pT [GeV]              //There is no real way to avoid hard-coding this value
+  //To be used in orphan-dimuon iso
+  iso_track_dR_threshold = 0.4;
+  iso_track_dz_threshold = 0.1;
+  iso_track_pt_threshold = 0.5;
 
   //****************************************************************************
   //               SET EVENT LEVEL VARIABLES AND COUNTERS
@@ -1566,8 +1572,18 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
         bool trackIsMuon = false;
-        if (    tamu::helpers::sameTrack( &*track, &*(diMuonTmp->muon(0)->innerTrack()) )
-		|| tamu::helpers::sameTrack( &*track, &*(diMuonTmp->muon(1)->innerTrack()) ) ) trackIsMuon = true;
+	const pat::PackedCandidate* candFittedVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
+	const pat::PackedCandidate* candFittedVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
+        if ( m_debug > 10 ) std::cout << "track_px: " <<track->px() << "; track_py: "<<track->py() <<"; track_pz: "<<track->pz()<< "; track_vx: " <<track->vx() << "; track_vy: "<<track->vy() <<"; track_vz: "<<track->vz()<<std::endl;
+        if (  tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu0->pseudoTrack()) )
+	   || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ){ 
+          trackIsMuon = true;
+          if ( m_debug > 10 ) std::cout << "Track is muon!>>> "<<std::endl;
+          if ( m_debug > 10 ) std::cout <<"muon0_px: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().px() << "; muon0_py: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().py() <<"; muon0_pz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().pz()<< "; muon0_vx: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().vx() << "; muon0_vy: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vy() <<"; muon0_vz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vz()<<std::endl;
+          if ( m_debug > 10 ) std::cout <<"muon1_px: " <<candFittedVtx_diMuonTmpMu1->pseudoTrack().px() << "; muon1_py: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().py() <<"; muon1_pz: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().pz()<< "; muon1_vx: " <<candFittedVtx_diMuonTmpMu1->pseudoTrack().vx() << "; muon1_vy: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().vy() <<"; muon1_vz: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().vz()<<std::endl;
+          if ( m_debug > 10 ) std::cout <<"muon0_inner_px: " <<diMuonTmp->muon(0)->innerTrack()->px() << "; muon0_inner_py: "<<diMuonTmp->muon(0)->innerTrack()->py()<< "; muon0_inner_pz: "<<diMuonTmp->muon(0)->innerTrack()->pz()<< "; muon0_inner_vx: "<<diMuonTmp->muon(0)->innerTrack()->vx()<< "; muon0_inner_vy: "<<diMuonTmp->muon(0)->innerTrack()->vy()<< "; muon0_inner_vz: "<<diMuonTmp->muon(0)->innerTrack()->vz()<<std::endl;
+          if ( m_debug > 10 ) std::cout <<"muon1_inner_px: " <<diMuonTmp->muon(1)->innerTrack()->px() << "; muon1_inner_py: "<<diMuonTmp->muon(1)->innerTrack()->py()<< "; muon1_inner_pz: "<<diMuonTmp->muon(1)->innerTrack()->pz()<< "; muon1_inner_vx: "<<diMuonTmp->muon(1)->innerTrack()->vx()<< "; muon1_inner_vy: "<<diMuonTmp->muon(1)->innerTrack()->vy()<< "; muon1_inner_vz: "<<diMuonTmp->muon(1)->innerTrack()->vz()<<std::endl;
+        }
         if ( trackIsMuon == false ) {
           double dPhi = tamu::helpers::My_dPhi( diMuonTmp->vertexMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->vertexMomentum().eta() - track->eta();
@@ -1609,8 +1625,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
         bool trackIsMuon = false;
-        if (    tamu::helpers::sameTrack( &*track, &*(diMuonTmp->muon(0)->innerTrack()) )
-		|| tamu::helpers::sameTrack( &*track, &*(diMuonTmp->muon(1)->innerTrack()) ) ) trackIsMuon = true;
+	const pat::PackedCandidate* candConsistentVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
+	const pat::PackedCandidate* candConsistentVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
+        if (   tamu::helpers::sameTrack( &*track, &(candConsistentVtx_diMuonTmpMu0->pseudoTrack()) )
+	    || tamu::helpers::sameTrack( &*track, &(candConsistentVtx_diMuonTmpMu1->pseudoTrack()) ) ) trackIsMuon = true;
         if ( trackIsMuon == false ) {
           double dPhi = tamu::helpers::My_dPhi( diMuonTmp->consistentVtxMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->consistentVtxMomentum().eta() - track->eta();
@@ -1643,17 +1661,19 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   if ( b_is2DiMuonsFittedVtxOK ) {
     for(uint32_t k=0;k<2;k++){
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-        if(tamu::helpers::sameTrack(&*track,&*(diMuonC->muon(k)->innerTrack()))){
+	      
+	const pat::PackedCandidate* canddiMuonC = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(k)->sourceCandidatePtr(0).get());
+        if( tamu::helpers::sameTrack(&*track,&(canddiMuonC->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
 
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonC->vertexPoint().x(), diMuonC->vertexPoint().y(), diMuonC->vertexPoint().z());
           VertexState trueDecVert(pos, GlobalError());
+	  CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
           //@Wei SHI 08.07.2018
-          //Function changes in CMSSW_10_1_X: https://github.com/cms-sw/cmssw/blob/CMSSW_10_1_X/PhysicsTools/RecoUtils/src/CheckHitPattern.cc#L94
-	  //CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
-	  checkHitPattern.init(iSetup);
-          CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
+          //Function usage changes to lines below starting CMSSW_10_1_X: https://github.com/cms-sw/cmssw/blob/CMSSW_10_1_X/PhysicsTools/RecoUtils/src/CheckHitPattern.cc#L94
+	  //checkHitPattern.init(iSetup);
+          //CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
 
           if(k==0) b_diMuonC_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
           if(k==0) b_diMuonC_m1_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
@@ -1676,15 +1696,16 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l3inc = 1;
           }
         }
-        if(tamu::helpers::sameTrack(&*track,&*(diMuonF->muon(k)->innerTrack()))){
+	const pat::PackedCandidate* canddiMuonF = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(k)->sourceCandidatePtr(0).get());
+        if( tamu::helpers::sameTrack(&*track,&(canddiMuonF->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
 
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonF->vertexPoint().x(), diMuonF->vertexPoint().y(), diMuonF->vertexPoint().z());
           VertexState trueDecVert(pos, GlobalError());
-          //CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
-          checkHitPattern.init(iSetup);
-	  CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
+          CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
+          //checkHitPattern.init(iSetup);
+	  //CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
 
           if(k==0) b_diMuonF_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
           if(k==0) b_diMuonF_m1_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
@@ -1862,41 +1883,53 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           m_dimuorphan_containstrig2++;
         }
       }
+	    
       m_orphan_dimu_mass = muJet->mass();
       m_orphan_mass = orphan->mass();
-      //iso orphan
-      double iso_track_pt_treshold = 0.5;
       m_orphan_isoTk = 0.;
       m_orphan_dimu_isoTk = 0.;
+	    
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-        if (!tamu::helpers::sameTrack(&*track,&*(orphan->innerTrack()))) {
-          double dphi = orphan->innerTrack()->phi() - track->phi();
-          if (dphi > M_PI) dphi -= 2.*M_PI;
-          if (dphi < -M_PI) dphi += 2.*M_PI;
+	      
+	/*Iso for orphan muon*/
+	const pat::PackedCandidate* candOrphan = dynamic_cast<const pat::PackedCandidate*>(orphan->sourceCandidatePtr(0).get());
+        if ( !tamu::helpers::sameTrack(&*track,&(candOrphan->pseudoTrack())) ) {
+	  double dphi = tamu::helpers::My_dPhi( orphan->innerTrack()->phi(), track->phi() );
           double deta = orphan->innerTrack()->eta() - track->eta();
           double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
-          if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-            double dz = fabs(track->dz(beamSpot->position())-orphan->innerTrack()->dz(beamSpot->position()));
-            if (dz < 0.1){ m_orphan_isoTk += track->pt(); }
+          if (dR < iso_track_dR_threshold && track->pt() > iso_track_pt_threshold) {
+            double dz = fabs( track->dz(beamSpot->position()) - orphan->innerTrack()->dz(beamSpot->position()) );
+            if (dz < iso_track_dz_threshold){ m_orphan_isoTk += track->pt(); }
           }
-        }
-      }
-      //iso dimuon-orphan
-       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-         bool track_is_muon = false;
-         if (tamu::helpers::sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) || tamu::helpers::sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
+        }//End iso for orphan muon
+	      
+	/*Iso for orphan associated dimuon*/
+	bool track_is_muon = false;
+	//Can't use the old method in AOD below since MiniAOD has different precision for the two collections:
+        /*if (tamu::helpers::sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) 
+	     || tamu::helpers::sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
+        */    
+	//Instead, get the packed PF candidate associated to the slimmedMuons, and then use the pseudoTrack pointer, this is essentially 
+	//what was done for the unpackedTracksAndVertices collection(i.e., tracks here)
+	//Refer to MiniAOD workbook: https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2017#Pointers_and_navigation
+	//and https://github.com/cms-sw/cmssw/blob/CMSSW_9_4_X/PhysicsTools/PatAlgos/plugins/TrackAndVertexUnpacker.cc#L87
+	const pat::PackedCandidate* candOrphanDimu0 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(0)->sourceCandidatePtr(0).get());
+	const pat::PackedCandidate* candOrphanDimu1 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(1)->sourceCandidatePtr(0).get());
+	//Wei Shi 10.25.2018
+	 if (   tamu::helpers::sameTrack(&*track,&(candOrphanDimu0->pseudoTrack())) 
+	     || tamu::helpers::sameTrack(&*track,&(candOrphanDimu1->pseudoTrack())) ) track_is_muon = true;
          if (!track_is_muon) {
-           double dphi = muJet->phi() - track->phi();
-           if (dphi > M_PI) dphi -= 2.*M_PI;
-           if (dphi < -M_PI) dphi += 2.*M_PI;
+	   double dphi = tamu::helpers::My_dPhi( muJet->phi(), track->phi() );
            double deta = muJet->eta() - track->eta();
            double dR   = sqrt(pow(dphi, 2) + pow(deta, 2));
-           if (dR < 0.4 && track->pt() > iso_track_pt_treshold) {
-             double dz = fabs(track->dz(beamSpot->position())-muJet->vertexDz(beamSpot->position()));
-             if (dz < 0.1){ m_orphan_dimu_isoTk += track->pt(); }
+           if (dR < iso_track_dR_threshold && track->pt() > iso_track_pt_threshold) {
+             double dz = fabs( track->dz(beamSpot->position()) - muJet->vertexDz(beamSpot->position()) );
+             if (dz < iso_track_dz_threshold){ m_orphan_dimu_isoTk += track->pt(); }
            }
-         }
-       }
+         }//End iso for orphan associated dimuon
+	      
+      }//End loop over tracks
+	    
      }
    }
   //****************************************************************************
