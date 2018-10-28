@@ -1574,8 +1574,16 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         bool trackIsMuon = false;
 	const pat::PackedCandidate* candFittedVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
 	const pat::PackedCandidate* candFittedVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
+        if ( m_debug > 10 ) std::cout << "track_px: " <<track->px() << "; track_py: "<<track->py() <<"; track_pz: "<<track->pz()<< "; track_vx: " <<track->vx() << "; track_vy: "<<track->vy() <<"; track_vz: "<<track->vz()<<std::endl;
         if (  tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu0->pseudoTrack()) )
-	   || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ) trackIsMuon = true;
+	   || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ){ 
+          trackIsMuon = true;
+          if ( m_debug > 10 ) std::cout << "Track is muon!>>> "<<std::endl;
+          if ( m_debug > 10 ) std::cout <<"muon0_px: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().px() << "; muon0_py: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().py() <<"; muon0_pz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().pz()<< "; muon0_vx: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().vx() << "; muon0_vy: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vy() <<"; muon0_vz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vz()<<std::endl;
+          if ( m_debug > 10 ) std::cout <<"muon1_px: " <<candFittedVtx_diMuonTmpMu1->pseudoTrack().px() << "; muon1_py: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().py() <<"; muon1_pz: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().pz()<< "; muon1_vx: " <<candFittedVtx_diMuonTmpMu1->pseudoTrack().vx() << "; muon1_vy: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().vy() <<"; muon1_vz: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().vz()<<std::endl;
+          if ( m_debug > 10 ) std::cout <<"muon0_inner_px: " <<diMuonTmp->muon(0)->innerTrack()->px() << "; muon0_inner_py: "<<diMuonTmp->muon(0)->innerTrack()->py()<< "; muon0_inner_pz: "<<diMuonTmp->muon(0)->innerTrack()->pz()<< "; muon0_inner_vx: "<<diMuonTmp->muon(0)->innerTrack()->vx()<< "; muon0_inner_vy: "<<diMuonTmp->muon(0)->innerTrack()->vy()<< "; muon0_inner_vz: "<<diMuonTmp->muon(0)->innerTrack()->vz()<<std::endl;
+          if ( m_debug > 10 ) std::cout <<"muon1_inner_px: " <<diMuonTmp->muon(1)->innerTrack()->px() << "; muon1_inner_py: "<<diMuonTmp->muon(1)->innerTrack()->py()<< "; muon1_inner_pz: "<<diMuonTmp->muon(1)->innerTrack()->pz()<< "; muon1_inner_vx: "<<diMuonTmp->muon(1)->innerTrack()->vx()<< "; muon1_inner_vy: "<<diMuonTmp->muon(1)->innerTrack()->vy()<< "; muon1_inner_vz: "<<diMuonTmp->muon(1)->innerTrack()->vz()<<std::endl;
+        }
         if ( trackIsMuon == false ) {
           double dPhi = tamu::helpers::My_dPhi( diMuonTmp->vertexMomentum().phi(), track->phi() );
           double dEta = diMuonTmp->vertexMomentum().eta() - track->eta();
