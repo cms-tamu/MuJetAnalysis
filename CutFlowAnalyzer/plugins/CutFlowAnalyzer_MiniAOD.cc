@@ -1177,22 +1177,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_phi = -100.0;
   }
 
-
-
-  // Trimuons
-  std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
-  for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
-
-    if (muon->pt() > m_threshold_Mu17_pT  &&  fabs(muon->eta()) < m_threshold_Mu17_eta) {
-      const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx_v*");
-
-      if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_threshold_Mu17_pT)  ){
-        hightrigmuons.push_back(muon);
-      }
-    }
-  }
-
-
   if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
 
   b_is1SelMu17 = false;
