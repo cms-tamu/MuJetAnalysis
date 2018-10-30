@@ -1813,10 +1813,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       m_orphan_EtaOrph = orphan->eta();
       m_orphan_PtMu0   = muJet->muon(0)->pt();
       m_orphan_EtaMu0  = muJet->muon(0)->eta();
+      m_orphan_PhiMu1  = muJet->muon(0)->phi();
       m_orphan_PtMu1   = muJet->muon(1)->pt();
       m_orphan_EtaMu1  = muJet->muon(1)->eta();
       m_orphan_PhiMu1  = muJet->muon(1)->phi();
-
+      
+      //What's the point of this lorentz vector?
       TLorentzVector mymu0, mymu1;
       mymu0.SetPtEtaPhiM(m_orphan_PtMu0,m_orphan_EtaMu0,m_orphan_PhiMu0,0);
       mymu1.SetPtEtaPhiM(m_orphan_PtMu1,m_orphan_EtaMu1,m_orphan_PhiMu1,0);
@@ -1824,6 +1826,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       m_orphan_EtaMu01  = (mymu0+mymu1).Eta();
       m_orphan_PhiMu01  = (mymu0+mymu1).Phi();
       m_orphan_DRdiMuOrph  = sqrt( pow(m_orphan_EtaMu01-m_orphan_EtaOrph,2) + pow(TVector2::Phi_mpi_pi(m_orphan_PhiMu01-m_orphan_PhiOrph),2) );
+      
       m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
       m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
 
