@@ -13,8 +13,9 @@ process.options.allowUnscheduled = cms.untracked.bool(False)
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v14')
-#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v6')
+#Default run on data
+#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v14')
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v6')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cff")
@@ -24,7 +25,8 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_MiniAOD_cfi"
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:/afs/cern.ch/work/w/wshi/public/RunII2017Analysis/CMSSW_9_4_7/src/E00B7630-A1AF-E811-AF7B-EC0D9A0B3260.root'
+        #'file:/afs/cern.ch/work/w/wshi/public/RunII2017Analysis/CMSSW_9_4_7/src/E00B7630-A1AF-E811-AF7B-EC0D9A0B3260.root'#NMSSM MC
+        'file:/afs/cern.ch/work/w/wshi/public/RunII2017Analysis/CMSSW_9_4_7/src/FAC28F5A-C639-E811-B4BB-10604BA8FC24.root'#2017C Data
         )
 )
 
@@ -39,6 +41,7 @@ process = customizePatOutput(process)
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10) )
 
+#Default run on data
 runOnData = True
 if runOnData: process.patifySelect = cms.Sequence(process.patifyData)
 else:         process.patifySelect = cms.Sequence(process.patifyMC)

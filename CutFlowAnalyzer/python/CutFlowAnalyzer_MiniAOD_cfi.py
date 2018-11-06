@@ -22,7 +22,7 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     MeasurementTracker = cms.string(''),
     MeasurementTrackerEvent = cms.InputTag('MeasurementTrackerEvent'),
     Propagator = cms.string("RungeKuttaTrackerPropagator"),
-    runBBestimation = cms.bool(False),
+    runBBestimation = cms.bool(True),
     skimOutput = cms.bool(False),
     ## no need to version it!
     signalHltPaths = cms.vstring(
