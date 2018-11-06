@@ -13,8 +13,9 @@ process.options.allowUnscheduled = cms.untracked.bool(False)
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v14')
-#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v6')
+#Default run on data
+#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v14')
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v6')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cff")
@@ -39,6 +40,7 @@ process = customizePatOutput(process)
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10) )
 
+#Default run on data
 runOnData = True
 if runOnData: process.patifySelect = cms.Sequence(process.patifyData)
 else:         process.patifySelect = cms.Sequence(process.patifyMC)
