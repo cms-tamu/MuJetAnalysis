@@ -25,7 +25,8 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_MiniAOD_cfi"
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:/afs/cern.ch/work/w/wshi/public/RunII2017Analysis/CMSSW_9_4_7/src/E00B7630-A1AF-E811-AF7B-EC0D9A0B3260.root'
+        #'file:/afs/cern.ch/work/w/wshi/public/RunII2017Analysis/CMSSW_9_4_7/src/E00B7630-A1AF-E811-AF7B-EC0D9A0B3260.root'#NMSSM MC
+        'file:/afs/cern.ch/work/w/wshi/public/RunII2017Analysis/CMSSW_9_4_7/src/FAC28F5A-C639-E811-B4BB-10604BA8FC24.root'#2017C Data
         )
 )
 
