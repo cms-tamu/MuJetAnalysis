@@ -6,7 +6,7 @@ const std::string fileWithAnaDirs(cmssw_base + "/src/MuJetAnalysis/AnalysisRun2/
 
 void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
 {
-  bool verbose(false);
+  bool verbose(true);
   TSystemDirectory dir(dirname, dirname);
   TList *files = dir.GetListOfFiles();
   if (files) {

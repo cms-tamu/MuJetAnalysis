@@ -103,7 +103,7 @@ void fitrapidity()
   leg->SetTextFont(42);
   leg->SetTextSize(0.05);
   leg->SetMargin(0.13);
-  leg->AddEntry(data_clone,"Data","PL");
+  leg->AddEntry(data_clone,"Data","P");
   leg->AddEntry(signal_SPS_clone,"MC SPS","L");
   leg->AddEntry(signal_DPS_clone,"MC DPS","L");
 
@@ -179,7 +179,7 @@ void fitrapidity()
     leg9->SetTextFont(42);
     leg9->SetTextSize(0.05);
     leg9->SetMargin(0.13);
-    leg9->AddEntry(data,"Data","PL");
+    leg9->AddEntry(data,"Data","P");
     leg9->AddEntry(result,"Simultaneous fit ","L");
 
     result->GetXaxis()->SetTitle("|Y_{(#mu#mu)_{1}} - Y_{(#mu#mu)_{2}}|");
@@ -215,9 +215,12 @@ void fitrapidity()
     result2->GetXaxis()->SetTitle("|Y_{(#mu#mu)_{1}} - Y_{(#mu#mu)_{2}}|");
     result2->GetYaxis()->SetTitle("Fit/Data");
     result2->SetTitle(histTitle);
-    result2->SetLineWidth(2);
+    result2->SetMarkerColor(kBlack);
+    result2->SetMarkerStyle(20);
+    result2->SetMarkerSize(1);
+    //    data_clone->SetMarkerStyle(20);
     result2->GetYaxis()->SetRangeUser(0,2);
-    result2->Draw("PL");
+    result2->Draw("P");
     
     TLegend *leg10 = new TLegend(0.20,0.15,0.60,0.4);
     leg10->SetFillColor(kWhite);
@@ -226,7 +229,7 @@ void fitrapidity()
     leg10->SetTextFont(42);
     leg10->SetTextSize(0.05);
     leg10->SetMargin(0.13);
-    leg10->AddEntry(data,"Data","PL");
+    leg10->AddEntry(data,"Data","P");
     leg10->AddEntry(result,"Simultaneous fit ","L");
     leg10->Draw("same");
     c->SaveAs("rapidityfit_ratio.C","recreate");

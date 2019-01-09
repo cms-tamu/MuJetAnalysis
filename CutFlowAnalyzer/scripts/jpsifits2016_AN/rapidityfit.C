@@ -1,7 +1,7 @@
 void rapidityfit()
 {
 //=========Macro generated from canvas: c/c
-//=========  (Fri May 18 18:38:05 2018) by ROOT version6.06/01
+//=========  (Fri May 18 18:46:35 2018) by ROOT version6.06/01
    TCanvas *c = new TCanvas("c", "c",0,0,600,600);
    gStyle->SetOptStat(0);
    c->Range(-0.9375,-5.993096,5.3125,33.96088);
@@ -201,7 +201,7 @@ void rapidityfit()
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("diMuon_DeltaRapidity_RegionA","Data","PL");
+   TLegendEntry *entry=leg->AddEntry("diMuon_DeltaRapidity_RegionA","Data","P");
    entry->SetLineColor(1);
    entry->SetLineStyle(1);
    entry->SetLineWidth(1);

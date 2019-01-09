@@ -1,7 +1,7 @@
 void rapidity_dist()
 {
 //=========Macro generated from canvas: c2/c2
-//=========  (Fri May 18 18:38:05 2018) by ROOT version6.06/01
+//=========  (Fri May 18 18:46:34 2018) by ROOT version6.06/01
    TCanvas *c2 = new TCanvas("c2", "c2",0,0,600,600);
    gStyle->SetOptStat(0);
    c2->Range(0,0,1,1);
@@ -350,7 +350,7 @@ void rapidity_dist()
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("data_clone","Data","PL");
+   TLegendEntry *entry=leg->AddEntry("data_clone","Data","P");
    entry->SetLineColor(1);
    entry->SetLineStyle(1);
    entry->SetLineWidth(1);

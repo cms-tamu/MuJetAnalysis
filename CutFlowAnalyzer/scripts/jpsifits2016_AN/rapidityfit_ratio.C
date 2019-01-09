@@ -1,7 +1,7 @@
 void rapidityfit_ratio()
 {
 //=========Macro generated from canvas: c/c
-//=========  (Fri May 18 18:38:05 2018) by ROOT version6.06/01
+//=========  (Fri May 18 18:46:35 2018) by ROOT version6.06/01
    TCanvas *c = new TCanvas("c", "c",1,1,600,576);
    gStyle->SetOptStat(0);
    c->Range(-0.9375,-5.993096,5.3125,33.96088);
@@ -103,7 +103,7 @@ void rapidityfit_ratio()
    result2__6->SetMinimum(0);
    result2__6->SetMaximum(2);
    result2__6->SetEntries(55.42987);
-   result2__6->SetLineWidth(2);
+   result2__6->SetMarkerStyle(20);
    result2__6->GetXaxis()->SetTitle("|Y_{(#mu#mu)_{1}} - Y_{(#mu#mu)_{2}}|");
    result2__6->GetXaxis()->SetLabelFont(42);
    result2__6->GetXaxis()->SetLabelOffset(0.007);
@@ -121,7 +121,7 @@ void rapidityfit_ratio()
    result2__6->GetZaxis()->SetLabelSize(0.035);
    result2__6->GetZaxis()->SetTitleSize(0.035);
    result2__6->GetZaxis()->SetTitleFont(42);
-   result2__6->Draw("PL");
+   result2__6->Draw("P");
    
    TLegend *leg = new TLegend(-2.353437e-185,-2.353437e-185,-2.353437e-185,-2.353437e-185,NULL,"brNDC");
    leg->SetBorderSize(0);
@@ -131,7 +131,7 @@ void rapidityfit_ratio()
    leg->SetLineWidth(1);
    leg->SetFillColor(0);
    leg->SetFillStyle(0);
-   TLegendEntry *entry=leg->AddEntry("diMuon_DeltaRapidity_RegionA","Data","PL");
+   TLegendEntry *entry=leg->AddEntry("diMuon_DeltaRapidity_RegionA","Data","P");
    entry->SetLineColor(1);
    entry->SetLineStyle(1);
    entry->SetLineWidth(1);
