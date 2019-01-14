@@ -3,7 +3,7 @@ import FWCore.ParameterSet.Config as cms
 from MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cfi import *
 
 TrackerMuJetProducer05 = MuJetProducer.clone(
-    maxMass = cms.double(100.),
+    maxMass = cms.double(58.),
     muons = cms.InputTag("cleanPatTrackerMuonsTriggerMatch"),
     selectTrackerMuons = cms.bool(True),
     selectGlobalMuons = cms.bool(False),
@@ -15,7 +15,7 @@ TrackerMuJetProducer05 = MuJetProducer.clone(
 )
 
 PFMuJetProducer05 = MuJetProducer.clone(
-    maxMass = cms.double(100.),
+    maxMass = cms.double(58.),
     muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
     selectTrackerMuons = cms.bool(False),
     selectGlobalMuons = cms.bool(False),
