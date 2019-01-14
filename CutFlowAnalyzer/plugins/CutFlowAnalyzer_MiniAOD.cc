@@ -520,6 +520,9 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_threshold_Mu8_pT   =  8.0; // min pT in GeV      //These values are set by trigger efficiencies and detector geometry so may be left hard-coded
   m_threshold_Mu8_eta  =  2.4; // max eta in Endcaps //These values are set by trigger efficiencies and detector geometry so may be left hard-coded
 
+  m_HLT_Mu16_pT = 16.0; //High pT (GeV) leg of the signal HLT
+  m_HLT_Mu6_pT  =  6.0; //Low  pT (GeV) leg of the signal HLT
+  m_HLT_Mu_eta  =  2.5; //abs(eta) restriction of the signal HLT 
 
   m_threshold_DiMuons_Iso_dR = 0.4; // Isolation cone              //There is no real way to avoid hard-coding this value
   m_threshold_DiMuons_Iso_dz = 0.1; // Track displacement [cm]     //There is no real way to avoid hard-coding this value
@@ -547,7 +550,10 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_events2GenMu8  = 0;
   m_events3GenMu8  = 0;
   m_events4GenMu8  = 0;
-
+	
+  m_events1GenMu16 = 0;
+  m_events1GenMu16 = 0;
+  m_events1GenMu16Mu6Mu6 = 0;
 
   //****************************************************************************
   //                 SET HLT LEVEL VARIABLES AND COUNTERS
@@ -594,7 +600,6 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
 
   param_ = iConfig;
   measurementTrkToken_ = consumes<MeasurementTrackerEvent>(iConfig.getParameter<edm::InputTag>("MeasurementTrackerEvent"));
-
 
 }
 
@@ -1049,40 +1054,69 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_genMu3_phi = -100.0;
     }
 
+    //For analysis basic selections
     std::vector<const reco::GenParticle*> genMuons17;
     std::vector<const reco::GenParticle*> genMuons8;
+    //For HLT eff study on MC
+    std::vector<const reco::GenParticle*> genMuons16;
+    std::vector<const reco::GenParticle*> genMuons6;
 
-    for ( unsigned int i = 0; i < genMuons.size(); i++ ) {
+    for ( unsigned int i = 0; i < genMuons.size(); i++ ) {	 
       if ( genMuons[i]->pt() > m_threshold_Mu17_pT && fabs( genMuons[i]->eta() ) < m_threshold_Mu17_eta ) {
         genMuons17.push_back(genMuons[i]);
       }
       if ( genMuons[i]->pt() > m_threshold_Mu8_pT && fabs( genMuons[i]->eta() ) < m_threshold_Mu8_eta ) {
         genMuons8.push_back(genMuons[i]);
       }
+      if ( genMuons[i]->pt() > m_HLT_Mu16_pT && fabs( genMuons[i]->eta() ) < m_HLT_Mu_eta) {
+        genMuons16.push_back(genMuons[i]);
+      }
+      if ( genMuons[i]->pt() > m_HLT_Mu6_pT  && fabs( genMuons[i]->eta() ) < m_HLT_Mu_eta ) {
+        genMuons6.push_back(genMuons[i]);
+      }	    
     }
+	  
+    //Analysis selections  
     b_is1GenMu17 = false;
     b_is2GenMu8  = false;
     b_is3GenMu8  = false;
     b_is4GenMu8  = false;
+    //For HLT: only care three muons
+    b_has1GenMu16 = false;
+    b_has1GenMu6  = false;
+    b_has1GenMu16Mu6Mu6  = false;    
 
-    if ( genMuons17.size() >=1) {
+    if ( genMuons17.size() >= 1) {
       m_events1GenMu17++;
       b_is1GenMu17 = true;
-      if ( genMuons8.size() >=2 ) {
+      if ( genMuons8.size() >= 2 ) {
         m_events2GenMu8++;
         b_is2GenMu8 = true;
       }
-      if ( genMuons8.size() >=3 ) {
+      if ( genMuons8.size() >= 3 ) {
         m_events3GenMu8++;
         b_is3GenMu8 = true;
       }
-      if ( genMuons8.size() >=4 ) {
+      if ( genMuons8.size() >= 4 ) {
         m_events4GenMu8++;
         b_is4GenMu8 = true;
       }
     }
+	
+    if ( genMuons16.size() >= 1) {
+      m_events1GenMu16++;
+      b_has1GenMu16 = true;
+    }
+    if ( genMuons6.size() >= 1) {
+      m_events1GenMu6++;
+      b_has1GenMu6 = true;
+    }
+    if ( genMuons16.size() >= 1 && genMuons6.size() >= 3) {
+      m_events1GenMu16Mu6Mu6++;
+      b_has1GenMu16Mu6Mu6 = true;
+    }
 
-    if ( m_debug > 10 ) std::cout << m_events << " Stop GEN Level" << std::endl;
+    if ( m_debug > 10 ) std::cout << m_events << " GEN Level Done " << std::endl;
   }
 
   //****************************************************************************
