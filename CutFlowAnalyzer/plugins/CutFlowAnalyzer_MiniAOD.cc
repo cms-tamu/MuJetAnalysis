@@ -558,10 +558,6 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_events2GenMu8  = 0;
   m_events3GenMu8  = 0;
   m_events4GenMu8  = 0;
-  //For HLT eff	
-  m_events1GenMu16 = 0;
-  m_events1GenMu6 = 0;
-  m_events1GenMu16Mu6Mu6 = 0;
 
   //****************************************************************************
   //                 SET HLT LEVEL VARIABLES AND COUNTERS
