@@ -74,11 +74,16 @@ private:
   Float_t m_threshold_Mu17_eta;
   Float_t m_threshold_Mu8_pT;
   Float_t m_threshold_Mu8_eta;
-
+  //For HLT eff
+  Float_t m_HLT_Mu16_pT;
+  Float_t m_HLT_Mu6_pT;
+  Float_t m_HLT_Mu_eta;
+  
   Float_t m_threshold_DiMuons_Iso_dR;
   Float_t m_threshold_DiMuons_Iso_dz;
   Float_t m_threshold_DiMuons_Iso_pT;
-  Float_t iso_track_pt_threshold;//To be used in orphan-dimuon iso
+  //To be used in orphan-dimuon iso
+  Float_t iso_track_pt_threshold;
   Float_t iso_track_dR_threshold;
   Float_t iso_track_dz_threshold;
 
@@ -143,7 +148,7 @@ private:
   Int_t m_events2GenMu8;   // ... with 2 gen muons: pT > 8 GeV,  |eta| < 2.4
   Int_t m_events3GenMu8;   // ... with 3 gen muons: pT > 8 GeV,  |eta| < 2.4
   Int_t m_events4GenMu8;   // ... with 4 gen muons: pT > 8 GeV,  |eta| < 2.4
-  Int_t m_eventsGenALxyOK; // ... with both A bosons decay inside Lxy < 4 cm
+  Int_t m_eventsGenALxyOK; // ... with both A bosons decay inside Lxy 
 
   // GEN Level Selectors
   Bool_t b_is4GenMu;
@@ -152,6 +157,10 @@ private:
   Bool_t b_is3GenMu8;
   Bool_t b_is4GenMu8;
   Bool_t b_isGenALxyOK;
+  // For HLT eff
+  Bool_t b_has1GenMu16;
+  Bool_t b_has1GenMu6;
+  Bool_t b_has1GenMu16Mu6Mu6;
 
   // Bosons
   Float_t b_genH_m;
@@ -550,9 +559,9 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_events2GenMu8  = 0;
   m_events3GenMu8  = 0;
   m_events4GenMu8  = 0;
-	
+  //For HLT eff	
   m_events1GenMu16 = 0;
-  m_events1GenMu16 = 0;
+  m_events1GenMu6 = 0;
   m_events1GenMu16Mu6Mu6 = 0;
 
   //****************************************************************************
@@ -1104,15 +1113,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
 	
     if ( genMuons16.size() >= 1) {
-      m_events1GenMu16++;
       b_has1GenMu16 = true;
     }
-    if ( genMuons6.size() >= 1) {
-      m_events1GenMu6++;
+    if ( genMuons6.size() >= 1) {  
       b_has1GenMu6 = true;
     }
     if ( genMuons16.size() >= 1 && genMuons6.size() >= 3) {
-      m_events1GenMu16Mu6Mu6++;
       b_has1GenMu16Mu6Mu6 = true;
     }
 
@@ -2105,6 +2111,11 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is2GenMu8",   &b_is2GenMu8,      "is2GenMu8/O");
   m_ttree->Branch("is3GenMu8",   &b_is3GenMu8,      "is3GenMu8/O");
   m_ttree->Branch("is4GenMu8",   &b_is4GenMu8,      "is4GenMu8/O");
+  
+  //For signal HLT study
+  m_ttree->Branch("has1GenMu16",  &b_has1GenMu16,     "has1GenMu16/O");
+  m_ttree->Branch("has1GenMu6",   &b_has1GenMu6,      "has1GenMu6/O");
+  m_ttree->Branch("has1GenMu16Mu6Mu6",   &b_has1GenMu16Mu6Mu6,      "has1GenMu16Mu6Mu6/O");
 
 
   //****************************************************************************
