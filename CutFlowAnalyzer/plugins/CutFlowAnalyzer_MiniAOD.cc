@@ -148,7 +148,6 @@ private:
   Int_t m_events2GenMu8;   // ... with 2 gen muons: pT > 8 GeV,  |eta| < 2.4
   Int_t m_events3GenMu8;   // ... with 3 gen muons: pT > 8 GeV,  |eta| < 2.4
   Int_t m_events4GenMu8;   // ... with 4 gen muons: pT > 8 GeV,  |eta| < 2.4
-  Int_t m_eventsGenALxyOK; // ... with both A bosons decay inside Lxy 
 
   // GEN Level Selectors
   Bool_t b_is4GenMu;
@@ -156,7 +155,7 @@ private:
   Bool_t b_is2GenMu8;
   Bool_t b_is3GenMu8;
   Bool_t b_is4GenMu8;
-  Bool_t b_isGenALxyOK;
+ 
   // For HLT eff
   Bool_t b_has1GenMu16;
   Bool_t b_has1GenMu6;
