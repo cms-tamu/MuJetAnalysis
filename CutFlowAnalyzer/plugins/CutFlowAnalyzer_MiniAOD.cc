@@ -1131,20 +1131,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
-
   std::vector<const pat::Muon*> selMuons;
-  std::vector<const pat::Muon*> selMuons8;
-  std::vector<const pat::Muon*> selMuons17;
 
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
     if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
       selMuons.push_back( &(*iMuon) );
-      if ( iMuon->pt() > m_threshold_Mu8_pT && fabs(iMuon->eta()) < m_threshold_Mu8_eta ) {
-        selMuons8.push_back( &(*iMuon) );
-      }
-      if ( iMuon->pt() > m_threshold_Mu17_pT && fabs(iMuon->eta()) < m_threshold_Mu17_eta ) {
-        selMuons17.push_back( &(*iMuon) );
-      }
     }
   }
 
@@ -1214,6 +1205,17 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
+  std::vector<const pat::Muon*> selMuons17;
+  std::vector<const pat::Muon*> selMuons8;
+	
+  for ( unsigned int i = 0; i < selMuons.size(); i++ ) {	 
+      if ( selMuons[i]->pt() > m_threshold_Mu17_pT && fabs( selMuons[i]->eta() ) < m_threshold_Mu17_eta ) {
+        selMuons17.push_back(selMuons[i]);
+      }
+      if ( selMuons[i]->pt() > m_threshold_Mu8_pT && fabs( selMuons[i]->eta() ) < m_threshold_Mu8_eta ) {
+        selMuons8.push_back(selMuons[i]);
+      }
+  }
 
   b_is1SelMu17 = false;
   b_is2SelMu8  = false;
