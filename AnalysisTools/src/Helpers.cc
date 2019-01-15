@@ -8,7 +8,7 @@ bool tamu::helpers::PtOrder (const reco::GenParticle* p1, const reco::GenParticl
   return (p1->pt() > p2->pt() ); 
 }
 //Added for PF muon sorting for 2017 and 2018 by Wei @01.15.2019
-bool tamu::helpers::PtOrderPFMu (const pat::Muon* p1, const pat::Muon* p2) { 
+bool tamu::helpers::PtOrderPFMu (const reco::Muon* p1, const reco::Muon* p2) { 
   return (p1->pt() > p2->pt() ); 
 }
 
