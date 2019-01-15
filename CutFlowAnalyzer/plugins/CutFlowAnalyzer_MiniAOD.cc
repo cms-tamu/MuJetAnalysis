@@ -986,7 +986,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
     }
 
-
     // Sort genMuons by pT (leading pT first)
     if ( genMuons.size() > 1 ) std::sort( genMuons.begin(), genMuons.end(), tamu::helpers::PtOrder );
 
@@ -1140,7 +1139,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
     if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
       selMuons.push_back( &(*iMuon) );
-      if ( iMuon->pt() > m_threshold_Mu8_pT ) {
+      if ( iMuon->pt() > m_threshold_Mu8_pT && fabs(iMuon->eta()) < m_threshold_Mu8_eta ) {
         selMuons8.push_back( &(*iMuon) );
       }
       if ( iMuon->pt() > m_threshold_Mu17_pT && fabs(iMuon->eta()) < m_threshold_Mu17_eta ) {
@@ -1149,6 +1148,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
   }
 
+  // Sort selMuons by pT (leading pT first)
+  if ( selMuons.size() > 1 ) std::sort( selMuons.begin(), selMuons.end(), tamu::helpers::PtOrderPFMu );
   b_nRecoMu = selMuons.size();
 
   if ( selMuons.size() > 0 ) {

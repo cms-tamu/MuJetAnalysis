@@ -7,6 +7,10 @@ double tamu::helpers::cotan(double i) {
 bool tamu::helpers::PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2) { 
   return (p1->pt() > p2->pt() ); 
 }
+//Added for PF muon sorting for 2017 and 2018 by Wei @01.15.2019
+bool tamu::helpers::PtOrderPFMu (const pat::Muon* p1, const pat::Muon* p2) { 
+  return (p1->pt() > p2->pt() ); 
+}
 
 bool tamu::helpers::sameTrack(const reco::Track *one, const reco::Track *two) {
   return (fabs(one->px() - two->px()) < 1e-10  &&

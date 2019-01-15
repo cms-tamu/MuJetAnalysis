@@ -18,6 +18,8 @@ double cotan(double i);
 
 bool PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2);
 
+bool PtOrderPFMu (const pat::Muon* p1, const pat::Muon* p2);
+  
 bool sameTrack(const reco::Track *one, const reco::Track *two);
 
 bool sameTrackRF(const reco::Track *one, const reco::Track *two);
