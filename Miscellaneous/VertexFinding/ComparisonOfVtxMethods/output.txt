@@ -1,0 +1,27 @@
+   ------------------------------------------------------------
+  | Welcome to ROOT 6.02/05                http://root.cern.ch |
+  |                               (c) 1995-2014, The ROOT Team |
+  | Built for linuxx8664gcc                                    |
+  | From tag , 9 February 2015                                 |
+  | Try '.help', '.demo', '.license', '.credits', '.quit'/'.q' |
+   ------------------------------------------------------------
+
+
+Processing VertexInvestigation.C+...
+Info in <TUnixSystem::ACLiC>: creating shared library /home/bmichlin/CMSSW_7_4_1_patch1/src/MuJetAnalysis/AnalysisRun2/scripts/VertexFinding/ComparisonOfVtxMethods/./VertexInvestigation_C.so
+Begin vertex investigation...
+Info in <TCanvas::Print>: pdf file GEN_Fitted_dx.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Fitted_dy.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Fitted_dz.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Consistent_dx.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Consistent_dy.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Consistent_dz.pdf has been created
+Info in <TCanvas::Print>: pdf file Fitted_Consistent_dx.pdf has been created
+Info in <TCanvas::Print>: pdf file Fitted_Consistent_dy.pdf has been created
+Info in <TCanvas::Print>: pdf file Fitted_Consistent_dz.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Fitted_Residual_dx_vs_GEN.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Fitted_Residual_dy_vs_GEN.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Fitted_Residual_dz_vs_GEN.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Consistent_Residual_dx_vs_GEN.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Consistent_Residual_dy_vs_GEN.pdf has been created
+Info in <TCanvas::Print>: pdf file GEN_Consistent_Residual_dz_vs_GEN.pdf has been created
