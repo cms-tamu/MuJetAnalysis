@@ -125,10 +125,21 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *eta_Mu2 = new TH1F("eta_Mu2","",100,-2.5,2.5);
   TH1F *eta_Mu3 = new TH1F("eta_Mu3","",100,-2.5,2.5);
 
+
   TH2F *EWKShape2D = new TH2F("EWKShape2D","",120,0.0,60.0,120,0.0,60.0);//From MC, actual dimu mass starts from 0.2113, ends at 58 GeV
-  TH2F *EWKShape2DScaled = new TH2F("EWKShape2DScaled","",120,0.0,60.0,120,0.0,60.0);//Scaled to Run2 lumi
   TH2F *EWKShapeSR = new TH2F("EWKShapeSR","",120,0.0,60.0,120,0.0,60.0);//consistent mass
-  TH2F *EWKShapeSRScaled = new TH2F("EWKShapeSRScaled","",120,0.0,60.0,120,0.0,60.0);//
+  TH1F *EWKShape2DmassC = new TH2F("EWKShape2DmassC","",120,0.0,60.0);
+  TH1F *EWKShape2DmassF = new TH2F("EWKShape2DmassF","",120,0.0,60.0);
+  TH1F *EWKShapeSRmassC = new TH2F("EWKShapeSRmassC","",120,0.0,60.0);
+  TH1F *EWKShapeSRmassF = new TH2F("EWKShapeSRmassF","",120,0.0,60.0);
+
+  TH2F *EWKShape2DScaled = new TH2F("EWKShape2DScaled","",120,0.0,60.0,120,0.0,60.0);//Scaled to Run2 lumi
+  TH2F *EWKShapeSRScaled = new TH2F("EWKShapeSRScaled","",120,0.0,60.0,120,0.0,60.0);
+  TH1F *EWKShape2DmassCScaled = new TH2F("EWKShape2DmassCScaled","",120,0.0,60.0);
+  TH1F *EWKShape2DmassFScaled = new TH2F("EWKShape2DmassFScaled","",120,0.0,60.0);
+  TH1F *EWKShapeSRmassCScaled = new TH2F("EWKShapeSRmassCScaled","",120,0.0,60.0);
+  TH1F *EWKShapeSRmassFScaled = new TH2F("EWKShapeSRmassFScaled","",120,0.0,60.0);
+
 
   TObjArray *fileElements=chain->GetListOfFiles();
   TIter next(fileElements);
@@ -265,7 +276,11 @@ void efficiency(const std::vector<std::string>& dirNames)
 
                           if( ModelEWKShape ){
                             EWKShape2D->Fill(massC,massF);
+                            EWKShape2DmassC->Fill(massC);
+                            EWKShape2DmassF->Fill(massF);
                             EWKShape2DScaled->Fill(massC,massF,weight2017);
+                            EWKShape2DmassCScaled->Fill(massC,weight2017);
+                            EWKShape2DmassFScaled->Fill(massF,weight2017);
                           }//end if ModelEWKShape
 
                           if( is2DiMuonsMassOK ){
@@ -273,7 +288,11 @@ void efficiency(const std::vector<std::string>& dirNames)
 
                             if( ModelEWKShape ){
                               EWKShapeSR->Fill(massC,massF);
+                              EWKShapeSRmassC->Fill(massC);
+                              EWKShapeSRmassF->Fill(massF);
                               EWKShapeSRScaled->Fill(massC,massF,weight2017);
+                              EWKShapeSRmassCScaled->Fill(massC,weight2017);
+                              EWKShapeSRmassFScaled->Fill(massF,weight2017);
                             }//end if ModelEWKShape
 
                           }//end 17
@@ -368,9 +387,19 @@ void efficiency(const std::vector<std::string>& dirNames)
 
    if( ModelEWKShape ){
      EWKShape2D->Write();
+     EWKShape2DmassC->Write();
+     EWKShape2DmassF->Write();
      EWKShape2DScaled->Write();
+     EWKShape2DmassCScaled->Write();
+     EWKShape2DmassFScaled->Write();
+
      EWKShapeSR->Write();
+     EWKShapeSRmassC->Write();
+     EWKShapeSRmassF->Write();
      EWKShapeSRScaled->Write();
+     EWKShapeSRmassCScaled->Write();
+     EWKShapeSRmassFScaled->Write();
+
    }
 
    myPlot.Close();
