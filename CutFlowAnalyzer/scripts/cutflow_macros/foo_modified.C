@@ -128,17 +128,17 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   TH2F *EWKShape2D = new TH2F("EWKShape2D","",120,0.0,60.0,120,0.0,60.0);//From MC, actual dimu mass starts from 0.2113, ends at 58 GeV
   TH2F *EWKShapeSR = new TH2F("EWKShapeSR","",120,0.0,60.0,120,0.0,60.0);//consistent mass
-  TH1F *EWKShape2DmassC = new TH2F("EWKShape2DmassC","",120,0.0,60.0);
-  TH1F *EWKShape2DmassF = new TH2F("EWKShape2DmassF","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassC = new TH2F("EWKShapeSRmassC","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassF = new TH2F("EWKShapeSRmassF","",120,0.0,60.0);
+  TH1F *EWKShape2DmassC = new TH1F("EWKShape2DmassC","",120,0.0,60.0);
+  TH1F *EWKShape2DmassF = new TH1F("EWKShape2DmassF","",120,0.0,60.0);
+  TH1F *EWKShapeSRmassC = new TH1F("EWKShapeSRmassC","",120,0.0,60.0);
+  TH1F *EWKShapeSRmassF = new TH1F("EWKShapeSRmassF","",120,0.0,60.0);
 
   TH2F *EWKShape2DScaled = new TH2F("EWKShape2DScaled","",120,0.0,60.0,120,0.0,60.0);//Scaled to Run2 lumi
   TH2F *EWKShapeSRScaled = new TH2F("EWKShapeSRScaled","",120,0.0,60.0,120,0.0,60.0);
-  TH1F *EWKShape2DmassCScaled = new TH2F("EWKShape2DmassCScaled","",120,0.0,60.0);
-  TH1F *EWKShape2DmassFScaled = new TH2F("EWKShape2DmassFScaled","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassCScaled = new TH2F("EWKShapeSRmassCScaled","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassFScaled = new TH2F("EWKShapeSRmassFScaled","",120,0.0,60.0);
+  TH1F *EWKShape2DmassCScaled = new TH1F("EWKShape2DmassCScaled","",120,0.0,60.0);
+  TH1F *EWKShape2DmassFScaled = new TH1F("EWKShape2DmassFScaled","",120,0.0,60.0);
+  TH1F *EWKShapeSRmassCScaled = new TH1F("EWKShapeSRmassCScaled","",120,0.0,60.0);
+  TH1F *EWKShapeSRmassFScaled = new TH1F("EWKShapeSRmassFScaled","",120,0.0,60.0);
 
 
   TObjArray *fileElements=chain->GetListOfFiles();
