@@ -4,16 +4,20 @@ using namespace std;
 #include <algorithm>    // std::max
 #include <stdlib.h>
 #include <math.h>
-#include <TH1F.h>
-#include <TCanvas.h>
 #include <TFile.h>
-#include <TH2F.h>
 #include <TTree.h>
+#include <TH1.h>
+#include <TH2.h>
+#include <TF1.h>
 #include <TCut.h>
 #include <TGraph.h>
 #include <TGraphErrors.h>
 #include <TLegend.h>
+#include <TCanvas.h>
 #include <TStyle.h>
+#include <TPaveStats.h>
+#include <THStack.h>
+#include <TFitResultPtr.h>
 #include <TChain.h>
 #include <TChainElement.h>
 #include "Helpers.h"
@@ -31,6 +35,8 @@ Float_t epsvalp[20] = {0.0};
 Float_t epsvalp2[20] = {0.0};
 Float_t weight2017 = 36.734*56.36/1000000;//weight2017 = (lumi * Xsection) / 2017 MC events
 Float_t weight2018 = 1.0;//TBD
+Float_t FitMean = 0.0;
+Float_t FitSigma = 0.0;
 
 void setup()
 {
@@ -114,9 +120,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *P_t_Mu2 = new TH1F("P_t_Mu2","",200,0.0,100.0);
   TH1F *P_t_Mu3 = new TH1F("P_t_Mu3","",200,0.0,100.0);
 
-  TH1F *mass_C= new TH1F("mass_C","",200,0.0,1.0);
-  TH1F *mass_F= new TH1F("mass_F","",200,0.0,1.0);
-
   TH1F *iso_C = new TH1F("iso_C","",200,0.0,10.0);
   TH1F *iso_F = new TH1F("iso_F","",200,0.0,10.0);
 
@@ -140,6 +143,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *EWKShapeSRmassCScaled = new TH1F("EWKShapeSRmassCScaled","",120,0.0,60.0);
   TH1F *EWKShapeSRmassFScaled = new TH1F("EWKShapeSRmassFScaled","",120,0.0,60.0);
 
+  TH1F *DimuMass= new TH1F("DimuMass","",6000,0.0,60.0);//bin width 0.01 GeV
 
   TObjArray *fileElements=chain->GetListOfFiles();
   TIter next(fileElements);
@@ -230,8 +234,6 @@ void efficiency(const std::vector<std::string>& dirNames)
 		    eta_Mu3->Fill(selMu3_eta);
 
 		    if( is2DiMuons && SavePlots ){
-		      mass_C->Fill(massC);
-		      mass_F->Fill(massF);
 		      iso_C->Fill(diMuonC_IsoTk_FittedVtx);
 		      iso_F->Fill(diMuonF_IsoTk_FittedVtx);
 		    }
@@ -294,6 +296,10 @@ void efficiency(const std::vector<std::string>& dirNames)
                               EWKShapeSRmassCScaled->Fill(massC,weight2017);
                               EWKShapeSRmassFScaled->Fill(massF,weight2017);
                             }//end if ModelEWKShape
+
+                            if( ModelSRWidth ){
+                    		      DimuMass->Fill( (massC+massF)/2 );
+                    		    }//end if ModelSRWidth
 
                           }//end 17
                         }//end 16
@@ -379,8 +385,6 @@ void efficiency(const std::vector<std::string>& dirNames)
      eta_Mu1->Write();
      eta_Mu2->Write();
      eta_Mu3->Write();
-     mass_C->Write();
-     mass_F->Write();
      iso_C->Write();
      iso_F->Write();
    }
@@ -399,7 +403,20 @@ void efficiency(const std::vector<std::string>& dirNames)
      EWKShapeSRScaled->Write();
      EWKShapeSRmassCScaled->Write();
      EWKShapeSRmassFScaled->Write();
+   }
 
+   if( ModelSRWidth ){
+     DimuMass->SetLineColor(kBlue);
+     DimuMass->SetLineWidth(2);
+     DimuMass->Fit("gaus","","",0,60);
+     FitMean = DimuMass->GetFunction("gaus")->GetParameter(1);//get 2nd parameter Mean
+     FitSigma = DimuMass->GetFunction("gaus")->GetParameter(2);//get 3rd parameter Sigma
+     DimuMass->GetFunction("gaus")->SetLineColor(kBlue);
+     DimuMass->GetFunction("gaus")->SetLineStyle(2);
+     gStyle->SetOptStat(0);
+     DimuMass->Write();
+
+     cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
    }
 
    myPlot.Close();
@@ -409,11 +426,11 @@ void analysis(const std::string txtfile)
 {
 
 setup();
-std::vector< std::vector<string> > DarkSUSY_mH_125_mGammaD_v;
+std::vector< std::vector<string> > NtuplePaths;
 // // cout << "Vector Created" << endl;
-readTextFileWithSamples(txtfile, DarkSUSY_mH_125_mGammaD_v);
+readTextFileWithSamples(txtfile, NtuplePaths);
 // // cout << "Samples read" << endl;
-for(auto v: DarkSUSY_mH_125_mGammaD_v) efficiency(v);
+for(auto v: NtuplePaths) efficiency(v);
 // // cout << "For Loop completes" << endl;
 
 }
