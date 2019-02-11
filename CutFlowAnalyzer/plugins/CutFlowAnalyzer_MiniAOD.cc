@@ -78,7 +78,7 @@ private:
   Float_t m_HLT_Mu16_pT;
   Float_t m_HLT_Mu6_pT;
   Float_t m_HLT_Mu_eta;
-  
+
   Float_t m_threshold_DiMuons_Iso_dR;
   Float_t m_threshold_DiMuons_Iso_dz;
   Float_t m_threshold_DiMuons_Iso_pT;
@@ -155,7 +155,7 @@ private:
   Bool_t b_is2GenMu8;
   Bool_t b_is3GenMu8;
   Bool_t b_is4GenMu8;
- 
+
   // For HLT eff
   Bool_t b_has1GenMu16;
   Bool_t b_has1GenMu6;
@@ -476,15 +476,15 @@ private:
   bool runDisplacedVtxFinder_;
   bool skimOutput_; //fill only events with 2 good dimuons
 
-  //PixelHitRecovery
   Int_t b_NPATJet;
+  Int_t b_NPATJetTightB;
+  Int_t b_NPATJetMediumB;
+  Int_t b_NPATJetLooseB;
   Float_t b_PAT_jet_pt[100];
   Float_t b_PAT_jet_eta[100];
   Float_t b_PAT_jet_phi[100];
-  Float_t b_PAT_jet_en[100];
-  Float_t b_PAT_jet_Btag1[100];
-  Float_t b_PAT_jet_Btag2[100];
-  Float_t b_PAT_jet_Btag3[100];
+  Float_t b_PAT_jet_E[100];
+  Float_t b_PAT_jet_CSVv2[100];
 
   //BB estimation
   Bool_t runBBestimation_;
@@ -530,7 +530,7 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
 
   m_HLT_Mu16_pT = 16.0; //High pT (GeV) leg of the signal HLT
   m_HLT_Mu6_pT  =  6.0; //Low  pT (GeV) leg of the signal HLT
-  m_HLT_Mu_eta  =  2.5; //abs(eta) restriction of the signal HLT 
+  m_HLT_Mu_eta  =  2.5; //abs(eta) restriction of the signal HLT
 
   m_threshold_DiMuons_Iso_dR = 0.4; // Isolation cone              //There is no real way to avoid hard-coding this value
   m_threshold_DiMuons_Iso_dz = 0.1; // Track displacement [cm]     //There is no real way to avoid hard-coding this value
@@ -1064,7 +1064,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     std::vector<const reco::GenParticle*> genMuons16;
     std::vector<const reco::GenParticle*> genMuons6;
 
-    for ( unsigned int i = 0; i < genMuons.size(); i++ ) {	 
+    for ( unsigned int i = 0; i < genMuons.size(); i++ ) {
       if ( genMuons[i]->pt() > m_threshold_Mu17_pT && fabs( genMuons[i]->eta() ) < m_threshold_Mu17_eta ) {
         genMuons17.push_back(genMuons[i]);
       }
@@ -1076,10 +1076,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       }
       if ( genMuons[i]->pt() > m_HLT_Mu6_pT  && fabs( genMuons[i]->eta() ) < m_HLT_Mu_eta ) {
         genMuons6.push_back(genMuons[i]);
-      }	    
+      }
     }
-	  
-    //Analysis selections  
+
+    //Analysis selections
     b_is1GenMu17 = false;
     b_is2GenMu8  = false;
     b_is3GenMu8  = false;
@@ -1087,7 +1087,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     //For HLT: only care three muons
     b_has1GenMu16 = false;
     b_has1GenMu6  = false;
-    b_has1GenMu16Mu6Mu6  = false;    
+    b_has1GenMu16Mu6Mu6  = false;
 
     if ( genMuons17.size() >= 1) {
       m_events1GenMu17++;
@@ -1105,11 +1105,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         b_is4GenMu8 = true;
       }
     }
-	
+
     if ( genMuons16.size() >= 1) {
       b_has1GenMu16 = true;
     }
-    if ( genMuons6.size() >= 1) {  
+    if ( genMuons6.size() >= 1) {
       b_has1GenMu6 = true;
     }
     if ( genMuons16.size() >= 1 && genMuons6.size() >= 3) {
@@ -1207,8 +1207,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
   std::vector<const pat::Muon*> selMuons17;
   std::vector<const pat::Muon*> selMuons8;
-	
-  for ( unsigned int i = 0; i < selMuons.size(); i++ ) {	 
+
+  for ( unsigned int i = 0; i < selMuons.size(); i++ ) {
       if ( selMuons[i]->pt() > m_threshold_Mu17_pT && fabs( selMuons[i]->eta() ) < m_threshold_Mu17_eta ) {
         selMuons17.push_back(selMuons[i]);
       }
@@ -1598,7 +1598,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	const pat::PackedCandidate* candFittedVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
         if ( m_debug > 10 ) std::cout << "track_px: " <<track->px() << "; track_py: "<<track->py() <<"; track_pz: "<<track->pz()<< "; track_vx: " <<track->vx() << "; track_vy: "<<track->vy() <<"; track_vz: "<<track->vz()<<std::endl;
         if (  tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu0->pseudoTrack()) )
-	   || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ){ 
+	   || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ){
           trackIsMuon = true;
           if ( m_debug > 10 ) std::cout << "Track is muon!>>> "<<std::endl;
           if ( m_debug > 10 ) std::cout <<"muon0_px: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().px() << "; muon0_py: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().py() <<"; muon0_pz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().pz()<< "; muon0_vx: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().vx() << "; muon0_vy: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vy() <<"; muon0_vz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vz()<<std::endl;
@@ -1672,18 +1672,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
     b_diMuonC_IsoTk_ConsistentVtx = diMuonC_IsoTk_ConsistentVtx;
     b_diMuonF_IsoTk_ConsistentVtx = diMuonF_IsoTk_ConsistentVtx;
-
-
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon isolation" << std::endl;
 
-
-
   if ( b_is2DiMuonsFittedVtxOK ) {
     for(uint32_t k=0;k<2;k++){
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-	      
+
 	const pat::PackedCandidate* canddiMuonC = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(k)->sourceCandidatePtr(0).get());
         if( tamu::helpers::sameTrack(&*track,&(canddiMuonC->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
@@ -1774,6 +1770,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     std::cout<<"  hitpix diMuonC m2   "<<b_diMuonC_m2_FittedVtx_hitpix_l3inc<<std::endl;
   }
 
+  //****************************************************************************
+  //                          B-Bbar Estimation
+  //****************************************************************************
   if(runBBestimation_){
     FillTrigInfo(triggerComposition, triggerNames, NameAndNumb );
     m_orphan_passOffLineSel = false;
@@ -1789,27 +1788,39 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     m_orphan_EtaMu1  = -99.;
 
     // B-Jets
-    int NPATJet=0;
+    int NPATJet        = 0;
+    int NPATJetTightB  = 0;
+    int NPATJetMediumB = 0;
+    int NPATJetLooseB  = 0;
     edm::Handle<std::vector<pat::Jet> > PATJet;
     iEvent.getByToken(m_PATJet, PATJet);
     for( auto Myjet = PATJet->begin(); Myjet != PATJet->end(); ++Myjet ){
       if( fabs(Myjet->eta())<2.4 && Myjet->pt()>5. ){
-        // B-tags available:
-        //'pfTrackCountingHighEffBJetTags', 'pfTtrackCountingHighPurBJetTags', 'pfJetProbabilityBJetTags', 'pfJetBProbabilityBJetTags', 'pfSimpleSecondaryVertexHighEffBJetTags',
-        //'pfSimpleSecondaryVertexHighPurBJetTags', 'pfCombinedSecondaryVertexV2BJetTags', 'pfCombinedInclusiveSecondaryVertexV2BJetTags', 'pfCombinedMVAV2BJetTags'
-        b_PAT_jet_pt[NPATJet]    = Myjet->pt();
-        b_PAT_jet_eta[NPATJet]   = Myjet->eta();
-        b_PAT_jet_phi[NPATJet]   = Myjet->phi();
-        b_PAT_jet_en[NPATJet]    = Myjet->energy();
-        b_PAT_jet_Btag1[NPATJet] = Myjet->bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
-        b_PAT_jet_Btag2[NPATJet] = Myjet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
-        b_PAT_jet_Btag3[NPATJet] = Myjet->bDiscriminator("pfCombinedMVAV2BJetTags");
+        // B-tags: https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2017#Jets
+        // 2017 WP: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation94X
+        b_PAT_jet_pt[NPATJet]   = Myjet->pt();
+        b_PAT_jet_eta[NPATJet]  = Myjet->eta();
+        b_PAT_jet_phi[NPATJet]  = Myjet->phi();
+        b_PAT_jet_E[NPATJet]    = Myjet->energy();
+        b_PAT_jet_CSVv2[NPATJet] = Myjet->bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+        if( b_PAT_jet_CSVv2[NPATJet] > 0.9693 ) {
+          NPATJetTightB++;
+        }
+        if( b_PAT_jet_CSVv2[NPATJet] > 0.8838 ) {
+          NPATJetMediumB++;
+        }
+        if( b_PAT_jet_CSVv2[NPATJet] > 0.5803 ) {
+          NPATJetLooseB++;
+        }
         NPATJet++;
       }
-    }
-    if(NPATJet>0) b_NPATJet=NPATJet;
+    }//end loop over jets
+    b_NPATJet = NPATJet;
+    b_NPATJetTightB = NPATJetTightB;
+    b_NPATJetMediumB = NPATJetMediumB;
+    b_NPATJetLooseB = NPATJetLooseB;
 
-    // Trimuons
+    //high pT muon trigger object
     std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
     for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
 
@@ -1821,6 +1832,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         }
       }
     }
+
     //Orphan branches
     m_orphan_dimu_mass = -999.;
     m_orphan_mass = -999.;
@@ -1833,6 +1845,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     edm::Handle<pat::MuonCollection> orphans;
     iEvent.getByToken(m_muJetOrphans, orphans);
     float mu1788 = 0;
+    //bb estimation event selection
     if (muJets->size() == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
       m_orphan_passOffLineSel = true;
       pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
@@ -1855,7 +1868,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       m_orphan_PtMu1   = muJet->muon(1)->pt();
       m_orphan_EtaMu1  = muJet->muon(1)->eta();
       m_orphan_PhiMu1  = muJet->muon(1)->phi();
-      
+
       //What's the point of this lorentz vector?
       TLorentzVector mymu0, mymu1;
       mymu0.SetPtEtaPhiM(m_orphan_PtMu0,m_orphan_EtaMu0,m_orphan_PhiMu0,0);
@@ -1864,7 +1877,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       m_orphan_EtaMu01  = (mymu0+mymu1).Eta();
       m_orphan_PhiMu01  = (mymu0+mymu1).Phi();
       m_orphan_DRdiMuOrph  = sqrt( pow(m_orphan_EtaMu01-m_orphan_EtaOrph,2) + pow(TVector2::Phi_mpi_pi(m_orphan_PhiMu01-m_orphan_PhiOrph),2) );
-      
+
       m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
       m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
 
@@ -1889,6 +1902,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
       m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
       m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
+
+      //Check whether orphan muon or dimu muons fired high pT leg
       for (auto iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
         if( orphan->innerTrack().isAvailable() &&
             (*iter)->innerTrack().isAvailable() &&
@@ -1908,14 +1923,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           m_dimuorphan_containstrig2++;
         }
       }
-	    
+
       m_orphan_dimu_mass = muJet->mass();
       m_orphan_mass = orphan->mass();
       m_orphan_isoTk = 0.;
       m_orphan_dimu_isoTk = 0.;
-	    
+
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-	      
+
 	/*Iso for orphan muon*/
 	const pat::PackedCandidate* candOrphan = dynamic_cast<const pat::PackedCandidate*>(orphan->sourceCandidatePtr(0).get());
         if ( !tamu::helpers::sameTrack(&*track,&(candOrphan->pseudoTrack())) ) {
@@ -1927,21 +1942,21 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             if (dz < iso_track_dz_threshold){ m_orphan_isoTk += track->pt(); }
           }
         }//End iso for orphan muon
-	      
+
 	/*Iso for orphan associated dimuon*/
 	bool track_is_muon = false;
 	//Can't use the old method in AOD below since MiniAOD has different precision for the two collections:
-        /*if (tamu::helpers::sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) 
+        /*if (tamu::helpers::sameTrack(&*track,&*(muJet->muon(0)->innerTrack()))
 	     || tamu::helpers::sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
-        */    
-	//Instead, get the packed PF candidate associated to the slimmedMuons, and then use the pseudoTrack pointer, this is essentially 
+        */
+	//Instead, get the packed PF candidate associated to the slimmedMuons, and then use the pseudoTrack pointer, this is essentially
 	//what was done for the unpackedTracksAndVertices collection(i.e., tracks here)
 	//Refer to MiniAOD workbook: https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2017#Pointers_and_navigation
 	//and https://github.com/cms-sw/cmssw/blob/CMSSW_9_4_X/PhysicsTools/PatAlgos/plugins/TrackAndVertexUnpacker.cc#L87
 	const pat::PackedCandidate* candOrphanDimu0 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(0)->sourceCandidatePtr(0).get());
 	const pat::PackedCandidate* candOrphanDimu1 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(1)->sourceCandidatePtr(0).get());
 	//Wei Shi 10.25.2018
-	 if (   tamu::helpers::sameTrack(&*track,&(candOrphanDimu0->pseudoTrack())) 
+	 if (   tamu::helpers::sameTrack(&*track,&(candOrphanDimu0->pseudoTrack()))
 	     || tamu::helpers::sameTrack(&*track,&(candOrphanDimu1->pseudoTrack())) ) track_is_muon = true;
          if (!track_is_muon) {
 	   double dphi = tamu::helpers::My_dPhi( muJet->phi(), track->phi() );
@@ -1952,11 +1967,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
              if (dz < iso_track_dz_threshold){ m_orphan_dimu_isoTk += track->pt(); }
            }
          }//End iso for orphan associated dimuon
-	      
+
       }//End loop over tracks
-	    
-     }
-   }
+
+    }//end bbbar event selection: one dimuon + one orphan
+   }//end runBBestimation
   //****************************************************************************
   //                          RECO LEVEL ANALYSIS FINISH
   //****************************************************************************
@@ -2109,7 +2124,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is2GenMu8",   &b_is2GenMu8,      "is2GenMu8/O");
   m_ttree->Branch("is3GenMu8",   &b_is3GenMu8,      "is3GenMu8/O");
   m_ttree->Branch("is4GenMu8",   &b_is4GenMu8,      "is4GenMu8/O");
-  
+
   //For signal HLT study
   m_ttree->Branch("has1GenMu16",  &b_has1GenMu16,     "has1GenMu16/O");
   m_ttree->Branch("has1GenMu6",   &b_has1GenMu6,      "has1GenMu6/O");
@@ -2243,24 +2258,24 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("b_diMuonF_m1_FittedVtx_MHAV", &b_diMuonF_m1_FittedVtx_MHAV, "diMuonF_m1_FittedVtx_MHAV/I");
   m_ttree->Branch("b_diMuonF_m2_FittedVtx_MHAV", &b_diMuonF_m2_FittedVtx_MHAV, "diMuonF_m2_FittedVtx_MHAV/I");
 
-  // bb Estimation
   m_ttree->Branch("massC",                          &b_massC,                          "massC/F");
   m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
+  m_ttree->Branch("isoC_1mm",                       &b_isoC_1mm,                       "isoC_1mm/F");
+  m_ttree->Branch("isoF_1mm",                       &b_isoF_1mm,                       "isoF_1mm/F");
+
   m_ttree->Branch("muJetC_Mu0_pt",                  &b_muJetC_Mu0_pt,                  "muJetC_Mu0_pt/F");
   m_ttree->Branch("muJetC_Mu1_pt",                  &b_muJetC_Mu1_pt,                  "muJetC_Mu1_pt/F");
   m_ttree->Branch("muJetC_Mu0_eta",                 &b_muJetC_Mu0_eta,                 "muJetC_Mu0_eta/F");
   m_ttree->Branch("muJetC_Mu1_eta",                 &b_muJetC_Mu1_eta,                 "muJetC_Mu1_eta/F");
   m_ttree->Branch("muJetC_Mu0_phi",                 &b_muJetC_Mu0_phi,                 "muJetC_Mu0_phi/F");
   m_ttree->Branch("muJetC_Mu1_phi",                 &b_muJetC_Mu1_phi,                 "muJetC_Mu1_phi/F");
+
   m_ttree->Branch("muJetF_Mu0_pt",                  &b_muJetF_Mu0_pt,                  "muJetF_Mu0_pt/F");
   m_ttree->Branch("muJetF_Mu1_pt",                  &b_muJetF_Mu1_pt,                  "muJetF_Mu1_pt/F");
   m_ttree->Branch("muJetF_Mu0_eta",                 &b_muJetF_Mu0_eta,                 "muJetF_Mu0_eta/F");
   m_ttree->Branch("muJetF_Mu1_eta",                 &b_muJetF_Mu1_eta,                 "muJetF_Mu1_eta/F");
   m_ttree->Branch("muJetF_Mu0_phi",                 &b_muJetF_Mu0_phi,                 "muJetF_Mu0_phi/F");
   m_ttree->Branch("muJetF_Mu1_phi",                 &b_muJetF_Mu1_phi,                 "muJetF_Mu1_phi/F");
-  m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
-  m_ttree->Branch("isoC_1mm",                       &b_isoC_1mm,                       "isoC_1mm/F");
-  m_ttree->Branch("isoF_1mm",                       &b_isoF_1mm,                       "isoF_1mm/F");
 
   // RECO Level Selectors
   m_ttree->Branch("is1SelMu17",                     &b_is1SelMu17,                     "is1SelMu17/O");
@@ -2274,7 +2289,6 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is2DiMuonsFittedVtxOK_KF",       &b_is2DiMuonsFittedVtxOK_KF,       "is2DiMuonsFittedVtxOK_KF/O");
   m_ttree->Branch("is2DiMuonsFittedVtxOK_VS",       &b_is2DiMuonsFittedVtxOK_VS,       "is2DiMuonsFittedVtxOK_VS/O");
 
-
   m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
   m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
   m_ttree->Branch("isControlHLT16Fired",            &b_isControlHLT16Fired,            "isControlHLT16Fired/O");
@@ -2285,7 +2299,6 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);
   m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
-
 
   // Orpahn Muon
   if(runBBestimation_){
@@ -2312,6 +2325,12 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
     m_ttree_orphan->Branch("orph_EtaMu0", &m_orphan_EtaMu0, "orph_EtaMu0/F");
     m_ttree_orphan->Branch("orph_PtMu1", &m_orphan_PtMu1, "orph_PtMu1/F");
     m_ttree_orphan->Branch("orph_EtaMu1", &m_orphan_EtaMu1, "orph_EtaMu1/F");
+
+    //B-tags/jets
+    m_ttree_orphan->Branch("NPATJet", &b_NPATJet, "NPATJet/I");
+    m_ttree_orphan->Branch("NPATJetTightB", &b_NPATJetTightB, "NPATJetTightB/I");
+    m_ttree_orphan->Branch("NPATJetMediumB", &b_NPATJetMediumB, "NPATJetMediumB/I");
+    m_ttree_orphan->Branch("NPATJetLooseB", &b_NPATJetLooseB, "NPATJetLooseB/I");
   }
 }
 
