@@ -15,8 +15,10 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
 #Default run on data
 #Tags are specified here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmVAnalysisSummaryTable
+#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v15')//2018 MC
+#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Sep2018Rereco_v1')//2018 data
 #process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v17')
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v11') 
+process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v11')
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cff")

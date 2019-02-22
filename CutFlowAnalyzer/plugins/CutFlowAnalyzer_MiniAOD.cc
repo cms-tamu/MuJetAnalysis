@@ -1323,12 +1323,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_muJetF_Mu1_phi = -999.;
   b_is2MuJets = false;
   //Store average no. of daughters in one mujet
-  for ( unsigned int d = 0; d < b_nMuJets; d++ ) {
+  for ( int d = 0; d < b_nMuJets; d++ ) {
     b_nDaughterPerMuJet = b_nDaughterPerMuJet + (*muJets)[d].numberOfDaughters();
   }
   b_nDaughterPerMuJet = b_nDaughterPerMuJet / b_nMuJets;
   if ( b_nMuJets == 2) {
-    for ( unsigned int j = 0; j < b_nMuJets; j++ ) {
+    for ( int j = 0; j < b_nMuJets; j++ ) {
       bool isMuJetContainMu17 = false;
       for ( unsigned int m = 0; m < (*muJets)[j].numberOfDaughters(); m++ ) {
         if ( (*muJets)[j].muon(m)->pt() > m_threshold_Mu17_pT && fabs( (*muJets)[j].muon(m)->eta() ) < m_threshold_Mu17_eta ) {
@@ -1635,7 +1635,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_isSignalHLTL1Fired = false;
   std::vector<std::string>::const_iterator algo;
   edm::Handle< L1GlobalTriggerReadoutRecord > gtRecord;
-  iEvent.getByLabel(m_L1Res, gtRecord);
+  iEvent.getByToken(m_L1Res, gtRecord);
   const DecisionWord dWord = gtRecord->decisionWord();
   if (useFinalDecision_) {
     b_isSignalHLTL1Fired = gtRecord->decision();
