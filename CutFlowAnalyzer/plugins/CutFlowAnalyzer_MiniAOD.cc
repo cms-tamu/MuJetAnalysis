@@ -15,6 +15,11 @@
 
 #include "DataFormats/Candidate/interface/CandMatchMap.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutSetupFwd.h"
+#include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutSetup.h"
+#include "CondFormats/L1TObjects/interface/L1GtTriggerMenu.h"
+#include "CondFormats/DataRecord/interface/L1GtTriggerMenuRcd.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/PatCandidates/interface/Muon.h"
@@ -276,6 +281,7 @@ private:
 
   std::vector<std::string> signalHltPaths_;
   std::vector<std::string> controlHltPaths_;
+  std::vector<std::string> l1algos_;
   std::vector<std::string> b_hltPaths;
   bool histo_name;
   std::map<int,std::string> NameAndNumb;
@@ -291,6 +297,7 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_tracks;
   edm::EDGetTokenT<reco::GenParticleCollection> m_genParticles;
   edm::EDGetTokenT<edm::TriggerResults> m_trigRes;
+  edm::EDGetTokenT<L1GlobalTriggerReadoutRecord> m_L1Res;
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
@@ -364,6 +371,7 @@ private:
   Bool_t b_isDiMuonHLTFired;
   Bool_t b_isControlHLT16Fired;
   Bool_t b_isControlHLT6Fired;
+  Bool_t b_isSignalHLTL1Fired;
 
   Bool_t b_is2DiMuonsMassOK_FittedVtx;
   //Bool_t b_is2DiMuonsMassOK_ConsistentVtx;
@@ -373,6 +381,8 @@ private:
 
   // Reco branches in ROOT tree (they all start with b_)
   Int_t b_nRecoMu;
+  Int_t b_nMuJets;
+  Float_t b_nDaughterPerMuJet;
 
   Float_t b_selMu0_px;
   Float_t b_selMu1_px;
@@ -495,6 +505,7 @@ private:
 
   bool runDisplacedVtxFinder_;
   bool skimOutput_; //fill only events with 2 good dimuons
+  bool useFinalDecision_;//L1 fin-OR
 
   Int_t b_NPATJet;
   Int_t b_NPATJetTightB;
@@ -583,8 +594,9 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   //                 SET HLT LEVEL VARIABLES AND COUNTERS
   //****************************************************************************
 
-  signalHltPaths_ = iConfig.getParameter<std::vector<std::string> >("signalHltPaths");
+  signalHltPaths_  = iConfig.getParameter<std::vector<std::string> >("signalHltPaths");
   controlHltPaths_ = iConfig.getParameter<std::vector<std::string> >("controlHltPaths");
+  l1algos_         = iConfig.getParameter<std::vector<std::string> >("l1algos");//l1 seeds for signal
 
   //****************************************************************************
   //                 SET RECO LEVEL VARIABLES AND COUNTERS
@@ -597,6 +609,7 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
   m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("PrunedGenParticles"));
   m_trigRes         = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
+  m_L1Res           = consumes<L1GlobalTriggerReadoutRecord>(iConfig.getParameter< edm::InputTag >("L1Results"));
   m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
@@ -606,6 +619,7 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
   runBBestimation_ = iConfig.getParameter<bool>("runBBestimation");
   skimOutput_ = iConfig.getParameter<bool>("skimOutput");
+  useFinalDecision_ = iConfig.getParameter<bool>("useFinalDecision");
 
   m_randomSeed = 1234;
   m_trandom3   = TRandom3(m_randomSeed); // Random generator
@@ -1289,8 +1303,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   iEvent.getByToken(m_muJets, muJets);
   const pat::MultiMuon *muJetC = NULL;
   const pat::MultiMuon *muJetF = NULL;
-  int   nMuJetsContainMu17     = 0;
-  unsigned int nMuJets = muJets->size();
+  int nMuJetsContainMu17 = 0;
+  b_nDaughterPerMuJet  = 0.;
+  b_nMuJets = muJets->size();
   b_massC = -999.;
   b_massF = -999.;
   b_muJetC_Mu0_pt = -999.;
@@ -1307,8 +1322,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_muJetF_Mu1_eta = -999.;
   b_muJetF_Mu1_phi = -999.;
   b_is2MuJets = false;
-  if ( nMuJets == 2) {
-    for ( unsigned int j = 0; j < nMuJets; j++ ) {
+  //Store average no. of daughters in one mujet
+  for ( unsigned int d = 0; d < b_nMuJets; d++ ) {
+    b_nDaughterPerMuJet = b_nDaughterPerMuJet + (*muJets)[d].numberOfDaughters();
+  }
+  b_nDaughterPerMuJet = b_nDaughterPerMuJet / b_nMuJets;
+  if ( b_nMuJets == 2) {
+    for ( unsigned int j = 0; j < b_nMuJets; j++ ) {
       bool isMuJetContainMu17 = false;
       for ( unsigned int m = 0; m < (*muJets)[j].numberOfDaughters(); m++ ) {
         if ( (*muJets)[j].muon(m)->pt() > m_threshold_Mu17_pT && fabs( (*muJets)[j].muon(m)->eta() ) < m_threshold_Mu17_eta ) {
@@ -1606,6 +1626,26 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on HLT" << std::endl;
 
+  //Adapt from: https://github.com/cms-sw/cmssw/blob/CMSSW_9_4_X/L1Trigger/Skimmer/src/L1Filter.cc
+  //get L1 menu
+  edm::ESHandle<L1GtTriggerMenu> menuRcd;
+  iSetup.get<L1GtTriggerMenuRcd>().get(menuRcd) ;
+  const L1GtTriggerMenu* menu = menuRcd.product();
+  //get L1 decisions for signal HLT L1 seeds
+  b_isSignalHLTL1Fired = false;
+  std::vector<std::string>::const_iterator algo;
+  edm::Handle< L1GlobalTriggerReadoutRecord > gtRecord;
+  iEvent.getByLabel(m_L1Res, gtRecord);
+  const DecisionWord dWord = gtRecord->decisionWord();
+  if (useFinalDecision_) {
+    b_isSignalHLTL1Fired = gtRecord->decision();
+  }
+  else {
+    for (algo = l1algos_.begin(); algo != l1algos_.end(); ++algo) {
+      b_isSignalHLTL1Fired |= menu->gtAlgorithmResult( (*algo), dWord);
+    }
+  }//end L1
+
   // Cut on dimuon masses - use fitted vertexes
   b_is2DiMuonsMassOK_FittedVtx = false;
   if ( b_is2DiMuonsFittedVtxOK ) {
@@ -1647,11 +1687,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
         bool trackIsMuon = false;
-	const pat::PackedCandidate* candFittedVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
-	const pat::PackedCandidate* candFittedVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
+        const pat::PackedCandidate* candFittedVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
+        const pat::PackedCandidate* candFittedVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
         if ( m_debug > 10 ) std::cout << "track_px: " <<track->px() << "; track_py: "<<track->py() <<"; track_pz: "<<track->pz()<< "; track_vx: " <<track->vx() << "; track_vy: "<<track->vy() <<"; track_vz: "<<track->vz()<<std::endl;
         if (  tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu0->pseudoTrack()) )
-	   || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ){
+	         || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ){
           trackIsMuon = true;
           if ( m_debug > 10 ) std::cout << "Track is muon!>>> "<<std::endl;
           if ( m_debug > 10 ) std::cout <<"muon0_px: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().px() << "; muon0_py: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().py() <<"; muon0_pz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().pz()<< "; muon0_vx: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().vx() << "; muon0_vy: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vy() <<"; muon0_vz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vz()<<std::endl;
@@ -1665,8 +1705,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           double dR   = sqrt( dPhi*dPhi + dEta*dEta );
           double dz   = diMuonTmp->vertexDz(beamSpot->position()) - track->dz(beamSpot->position());
           if (    dR          < m_threshold_DiMuons_Iso_dR
-		  && track->pt() > m_threshold_DiMuons_Iso_pT
-		  && fabs( dz )  < m_threshold_DiMuons_Iso_dz ) {
+		           && track->pt() > m_threshold_DiMuons_Iso_pT
+		           && fabs( dz )  < m_threshold_DiMuons_Iso_dz ) {
             diMuonTmp_IsoTk_FittedVtx += track->pt();
           }
         }
@@ -2206,6 +2246,9 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   // Reco Muons
   m_ttree->Branch("nRecoMu",  &b_nRecoMu,  "nRecoMu/I");
+  m_ttree->Branch("nMuJets",  &b_nMuJets,  "nMuJets/I");
+  m_ttree->Branch("nDaughterPerMuJet",  &b_nDaughterPerMuJet,  "nDaughterPerMuJet/F");
+
 
   m_ttree->Branch("selMu0_px",  &b_selMu0_px,  "selMu0_px/F");
   m_ttree->Branch("selMu1_px",  &b_selMu1_px,  "selMu1_px/F");
@@ -2364,6 +2407,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
   m_ttree->Branch("isControlHLT16Fired",            &b_isControlHLT16Fired,            "isControlHLT16Fired/O");
   m_ttree->Branch("isControlHLT6Fired",             &b_isControlHLT6Fired,             "isControlHLT6Fired/O");
+  m_ttree->Branch("isSignalHLTL1Fired",             &b_isSignalHLTL1Fired,             "isSignalHLTL1Fired/O");
   m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
   //m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
