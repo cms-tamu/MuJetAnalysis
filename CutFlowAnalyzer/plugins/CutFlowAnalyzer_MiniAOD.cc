@@ -209,6 +209,10 @@ private:
   Float_t b_genA1_Lxy;
   Float_t b_genA1_L;
 
+  Float_t b_genA_dPhi;//Use phi of two A
+  Float_t b_genA_dEta;
+  Float_t b_genA_dR;
+
   // Muons accossiated with A-bosons
   Float_t b_genA0Mu0_px;
   Float_t b_genA0Mu1_px;
@@ -240,6 +244,11 @@ private:
   Float_t b_genA1Mu0_phi;
   Float_t b_genA1Mu1_phi;
 
+  Float_t b_genA0Mu0_charge;
+  Float_t b_genA0Mu1_charge;
+  Float_t b_genA1Mu0_charge;
+  Float_t b_genA1Mu1_charge;
+
   Float_t b_genA0Mu0_vx;
   Float_t b_genA0Mu1_vx;
   Float_t b_genA1Mu0_vx;
@@ -262,18 +271,28 @@ private:
   Float_t b_genA1Mu_dPhi;
   Float_t b_genA0Mu_dR;
   Float_t b_genA1Mu_dR;
+  Float_t b_genA0Mu_dCharge;
+  Float_t b_genA1Mu_dCharge;//Should be 2 or -2
 
-  //Geometry of two bosons
+  //Geometry of dimu
+  //Use muons from the same A
   Float_t b_genDiMu0_Eta;
   Float_t b_genDiMu1_Eta;
   Float_t b_genDiMu0_Phi;
   Float_t b_genDiMu1_Phi;
-  Float_t b_genA_dPhi;//Use phi of two A
-  Float_t b_genA_dEta;
-  Float_t b_genA_dR;
-  Float_t b_genDiMu_dPhi;//Use phi of muons from same A
+  Float_t b_genDiMu_dPhi;
   Float_t b_genDiMu_dEta;
   Float_t b_genDiMu_dR;
+  //Use muons from different A
+  Float_t b_genFakeDiMu0_Eta;
+  Float_t b_genFakeDiMu1_Eta;
+  Float_t b_genFakeDiMu0_Phi;
+  Float_t b_genFakeDiMu1_Phi;
+  Float_t b_genFakeDiMu_dPhi;
+  Float_t b_genFakeDiMu_dEta;
+  Float_t b_genFakeDiMu_dR;
+  //ddPhi
+  Float_t b_gen_ddPhi;
 
   //****************************************************************************
   //          HLT LEVEL VARIABLES, BRANCHES, COUNTERS AND SELECTORS
@@ -969,6 +988,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_genA1Mu0_phi = genMuonGroups[1][0]->phi();
       b_genA1Mu1_phi = genMuonGroups[1][1]->phi();
 
+      b_genA0Mu0_charge = genMuonGroups[0][0]->charge();
+      b_genA0Mu1_charge = genMuonGroups[0][1]->charge();
+      b_genA1Mu0_charge = genMuonGroups[1][0]->charge();
+      b_genA1Mu1_charge = genMuonGroups[1][1]->charge();
+
       b_genA0Mu0_vx = genMuonGroups[0][0]->vx() - b_beamSpot_x;
       b_genA0Mu1_vx = genMuonGroups[0][1]->vx() - b_beamSpot_x;
       b_genA1Mu0_vx = genMuonGroups[1][0]->vx() - b_beamSpot_x;
@@ -1026,23 +1050,73 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_genA1Mu_dPhi = tamu::helpers::My_dPhi( b_genA1Mu0_phi, b_genA1Mu1_phi );
       b_genA0Mu_dR   = sqrt(b_genA0Mu_dEta*b_genA0Mu_dEta + b_genA0Mu_dPhi*b_genA0Mu_dPhi);
       b_genA1Mu_dR   = sqrt(b_genA1Mu_dEta*b_genA1Mu_dEta + b_genA1Mu_dPhi*b_genA1Mu_dPhi);
+      //Check if muons from same mother has oppo. charge
+      //they should be as they are generated this way
+      b_genA0Mu_dCharge = b_genA0Mu0_charge - b_genA0Mu1_charge;
+      b_genA1Mu_dCharge = b_genA1Mu0_charge - b_genA1Mu1_charge;
 
-      //Form Dimu 4-v from gen muons
       TLorentzVector A0Mu0, A0Mu1, A1Mu0, A1Mu1;
       A0Mu0.SetPtEtaPhiM(b_genA0Mu0_pt, b_genA0Mu0_eta, b_genA0Mu0_phi, 0.105);
       A0Mu1.SetPtEtaPhiM(b_genA0Mu1_pt, b_genA0Mu1_eta, b_genA0Mu1_phi, 0.105);
       A1Mu0.SetPtEtaPhiM(b_genA1Mu0_pt, b_genA1Mu0_eta, b_genA1Mu0_phi, 0.105);
       A1Mu1.SetPtEtaPhiM(b_genA1Mu1_pt, b_genA1Mu1_eta, b_genA1Mu1_phi, 0.105);
-      b_genDiMu0_Eta = (A0Mu0 + A0Mu1).Eta();
-      b_genDiMu1_Eta = (A1Mu0 + A1Mu1).Eta();
-      b_genDiMu0_Phi = (A0Mu0 + A0Mu1).Phi();
-      b_genDiMu1_Phi = (A1Mu0 + A1Mu1).Phi();
-      b_genDiMu_dEta = b_genDiMu0_Eta - b_genDiMu1_Eta;
-      b_genDiMu_dPhi = tamu::helpers::My_dPhi( b_genDiMu0_Phi, b_genDiMu1_Phi );
-      b_genDiMu_dR   = sqrt(b_genDiMu_dEta*b_genDiMu_dEta + b_genDiMu_dPhi*b_genDiMu_dPhi);
+
+      //Form nominal Dimu 4-v from gen muons
+      if ( (b_genA0Mu0_charge * b_genA0Mu1_charge < 0) &&
+           (b_genA1Mu0_charge * b_genA1Mu1_charge < 0) ) {
+             b_genDiMu0_Eta = (A0Mu0 + A0Mu1).Eta();
+             b_genDiMu1_Eta = (A1Mu0 + A1Mu1).Eta();
+             b_genDiMu0_Phi = (A0Mu0 + A0Mu1).Phi();
+             b_genDiMu1_Phi = (A1Mu0 + A1Mu1).Phi();
+             b_genDiMu_dEta = b_genDiMu0_Eta - b_genDiMu1_Eta;
+             b_genDiMu_dPhi = tamu::helpers::My_dPhi( b_genDiMu0_Phi, b_genDiMu1_Phi );
+             b_genDiMu_dR   = sqrt( b_genDiMu_dEta*b_genDiMu_dEta + b_genDiMu_dPhi*b_genDiMu_dPhi );
+      } else {
+             std::cout << "WARNING! GEN level muon from the same mother have same charge!" << std::endl;
+             b_genDiMu0_Eta = -999.;
+             b_genDiMu1_Eta = -999.;
+             b_genDiMu0_Phi = -999.;
+             b_genDiMu1_Phi = -999.;
+             b_genDiMu_dEta = -999.;
+             b_genDiMu_dPhi = -999.;
+             b_genDiMu_dR   = -999.;
+      }
+
+      //Form Fake Dimu 4-v using muons with oppo. charge from different genA
+      if ( (b_genA0Mu0_charge * b_genA1Mu0_charge < 0) &&
+           (b_genA0Mu1_charge * b_genA1Mu1_charge < 0) ) {
+        b_genFakeDiMu0_Eta = (A0Mu0 + A1Mu0).Eta();
+        b_genFakeDiMu1_Eta = (A0Mu1 + A1Mu1).Eta();
+        b_genFakeDiMu0_Phi = (A0Mu0 + A1Mu0).Phi();
+        b_genFakeDiMu1_Phi = (A0Mu0 + A1Mu1).Phi();
+        b_genFakeDiMu_dEta = b_genFakeDiMu0_Eta - b_genFakeDiMu1_Eta;
+        b_genFakeDiMu_dPhi = tamu::helpers::My_dPhi( b_genFakeDiMu0_Phi, b_genFakeDiMu1_Phi );
+        b_genFakeDiMu_dR   = sqrt( b_genFakeDiMu_dEta*b_genFakeDiMu_dEta + b_genFakeDiMu_dPhi*b_genFakeDiMu_dPhi );
+      }
+      else if ( (b_genA0Mu0_charge * b_genA1Mu1_charge < 0) &&
+                (b_genA0Mu1_charge * b_genA1Mu0_charge < 0) ) {
+        b_genFakeDiMu0_Eta = (A0Mu0 + A1Mu1).Eta();
+        b_genFakeDiMu1_Eta = (A0Mu1 + A1Mu0).Eta();
+        b_genFakeDiMu0_Phi = (A0Mu0 + A1Mu1).Phi();
+        b_genFakeDiMu1_Phi = (A0Mu1 + A1Mu0).Phi();
+        b_genFakeDiMu_dEta = b_genFakeDiMu0_Eta - b_genFakeDiMu1_Eta;
+        b_genFakeDiMu_dPhi = tamu::helpers::My_dPhi( b_genFakeDiMu0_Phi, b_genFakeDiMu1_Phi );
+        b_genFakeDiMu_dR   = sqrt( b_genFakeDiMu_dEta*b_genFakeDiMu_dEta + b_genFakeDiMu_dPhi*b_genFakeDiMu_dPhi );
+      } else {
+        b_genFakeDiMu0_Eta = -99.;
+        b_genFakeDiMu1_Eta = -99.;
+        b_genFakeDiMu0_Phi = -99.;
+        b_genFakeDiMu1_Phi = -99.;
+        b_genFakeDiMu_dEta = -99.;
+        b_genFakeDiMu_dPhi = -99.;
+        b_genFakeDiMu_dR   = -99.;
+      }//end Form Dimu 4-v using muons with oppo. charge from different genA
+
+      //Store the difference b/t dPhi of nominal and fake dimu pairs
+      b_gen_ddPhi = fabs(b_genDiMu_dPhi) - fabs(b_genFakeDiMu_dPhi);
 
     } else {
-
+      std::cout << "WARNING! No signal topology found at GEN level!" << std::endl;
     }//end if ( genMuonGroups.size() == 2 ...) else {}
 
     // Sort genMuons by pT (leading pT first)
@@ -1441,8 +1515,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuonF_FittedVtx_L   = diMuonF->vertexL(beamSpotPosition);
     b_diMuonF_FittedVtx_dz  = diMuonF->vertexDz(beamSpot->position());
 
-	std::cout << "diMuonC vtx (x, y, z): " << diMuonC->vertexPoint().x() << ", " << diMuonC->vertexPoint().y() << ", " << diMuonC->vertexPoint().z() << std::endl;
-	std::cout << "diMuonF vtx (x, y, z): " << diMuonF->vertexPoint().x() << ", " << diMuonF->vertexPoint().y() << ", " << diMuonF->vertexPoint().z() << std::endl;
+	  if ( m_debug > 10 ) std::cout << "diMuonC vtx (x, y, z): " << diMuonC->vertexPoint().x() << ", " << diMuonC->vertexPoint().y() << ", " << diMuonC->vertexPoint().z() << std::endl;
+	  if ( m_debug > 10 ) std::cout << "diMuonF vtx (x, y, z): " << diMuonF->vertexPoint().x() << ", " << diMuonF->vertexPoint().y() << ", " << diMuonF->vertexPoint().z() << std::endl;
   } else {
     b_diMuonC_FittedVtx_m   = -1000.0;
     b_diMuonC_FittedVtx_px  = -1000.0;
@@ -1634,17 +1708,17 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //get L1 decisions for signal HLT L1 seeds
   b_isSignalHLTL1Fired = false;
   std::vector<std::string>::const_iterator algo;
-  edm::Handle< L1GlobalTriggerReadoutRecord > gtRecord;
+  edm::Handle<L1GlobalTriggerReadoutRecord> gtRecord;
   iEvent.getByToken(m_L1Res, gtRecord);
   const DecisionWord dWord = gtRecord->decisionWord();
   if (useFinalDecision_) {
     b_isSignalHLTL1Fired = gtRecord->decision();
   }
-  else {
+  else if ( !dWord.empty() ) {
     for (algo = l1algos_.begin(); algo != l1algos_.end(); ++algo) {
       b_isSignalHLTL1Fired |= menu->gtAlgorithmResult( (*algo), dWord);
     }
-  }//end L1
+  }//end else if
 
   // Cut on dimuon masses - use fitted vertexes
   b_is2DiMuonsMassOK_FittedVtx = false;
@@ -2147,18 +2221,9 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("genA1_Lxy", &b_genA1_Lxy, "genA1_Lxy/F");
   m_ttree->Branch("genA1_L",   &b_genA1_L,   "genA1_L/F");
 
-  m_ttree->Branch("genDiMu0_Eta",  &b_genDiMu0_Eta,  "genDiMu0_Eta/F");
-  m_ttree->Branch("genDiMu0_Phi",  &b_genDiMu0_Phi,  "genDiMu0_Phi/F");
-  m_ttree->Branch("genDiMu1_Eta",  &b_genDiMu1_Eta,  "genDiMu1_Eta/F");
-  m_ttree->Branch("genDiMu1_Phi",  &b_genDiMu1_Phi,  "genDiMu1_Phi/F");
-
   m_ttree->Branch("genA_dEta",  &b_genA_dEta,  "genA_dEta/F");
   m_ttree->Branch("genA_dPhi",  &b_genA_dPhi,  "genA_dPhi/F");
   m_ttree->Branch("genA_dR",    &b_genA_dR,    "genA_dR/F");
-
-  m_ttree->Branch("genDiMu_dEta",  &b_genDiMu_dEta,  "genDiMu_dEta/F");
-  m_ttree->Branch("genDiMu_dPhi",  &b_genDiMu_dPhi,  "genDiMu_dPhi/F");
-  m_ttree->Branch("genDiMu_dR",    &b_genDiMu_dR,    "genDiMu_dR/F");
 
   // Muons from bosons
   m_ttree->Branch("genA0Mu0_px", &b_genA0Mu0_px, "genA0Mu0_px/F");
@@ -2191,6 +2256,11 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("genA1Mu0_phi", &b_genA1Mu0_phi, "genA1Mu0_phi/F");
   m_ttree->Branch("genA1Mu1_phi", &b_genA1Mu1_phi, "genA1Mu1_phi/F");
 
+  m_ttree->Branch("genA0Mu0_charge", &b_genA0Mu0_charge, "genA0Mu0_charge/F");
+  m_ttree->Branch("genA0Mu1_charge", &b_genA0Mu1_charge, "genA0Mu1_charge/F");
+  m_ttree->Branch("genA1Mu0_charge", &b_genA1Mu0_charge, "genA1Mu0_charge/F");
+  m_ttree->Branch("genA1Mu1_charge", &b_genA1Mu1_charge, "genA1Mu1_charge/F");
+
   m_ttree->Branch("genA0Mu0_vx", &b_genA0Mu0_vx, "genA0Mu0_vx/F");
   m_ttree->Branch("genA0Mu1_vx", &b_genA0Mu1_vx, "genA0Mu1_vx/F");
   m_ttree->Branch("genA1Mu0_vx", &b_genA1Mu0_vx, "genA1Mu0_vx/F");
@@ -2212,6 +2282,24 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("genA1Mu_dPhi", &b_genA1Mu_dPhi, "genA1Mu_dPhi/F");
   m_ttree->Branch("genA0Mu_dR",   &b_genA0Mu_dR,   "genA0Mu_dR/F");
   m_ttree->Branch("genA1Mu_dR",   &b_genA1Mu_dR,   "genA1Mu_dR/F");
+  m_ttree->Branch("genA0Mu_dCharge",   &b_genA0Mu_dCharge,   "genA0Mu_dCharge/F");
+  m_ttree->Branch("genA1Mu_dCharge",   &b_genA1Mu_dCharge,   "genA1Mu_dCharge/F");
+
+  m_ttree->Branch("genDiMu0_Eta",  &b_genDiMu0_Eta,  "genDiMu0_Eta/F");
+  m_ttree->Branch("genDiMu0_Phi",  &b_genDiMu0_Phi,  "genDiMu0_Phi/F");
+  m_ttree->Branch("genDiMu1_Eta",  &b_genDiMu1_Eta,  "genDiMu1_Eta/F");
+  m_ttree->Branch("genDiMu1_Phi",  &b_genDiMu1_Phi,  "genDiMu1_Phi/F");
+  m_ttree->Branch("genDiMu_dEta",  &b_genDiMu_dEta,  "genDiMu_dEta/F");
+  m_ttree->Branch("genDiMu_dPhi",  &b_genDiMu_dPhi,  "genDiMu_dPhi/F");
+  m_ttree->Branch("genDiMu_dR",    &b_genDiMu_dR,    "genDiMu_dR/F");
+  m_ttree->Branch("genFakeDiMu0_Eta",  &b_genFakeDiMu0_Eta,  "genFakeDiMu0_Eta/F");
+  m_ttree->Branch("genFakeDiMu0_Phi",  &b_genFakeDiMu0_Phi,  "genFakeDiMu0_Phi/F");
+  m_ttree->Branch("genFakeDiMu1_Eta",  &b_genFakeDiMu1_Eta,  "genFakeDiMu1_Eta/F");
+  m_ttree->Branch("genFakeDiMu1_Phi",  &b_genFakeDiMu1_Phi,  "genFakeDiMu1_Phi/F");
+  m_ttree->Branch("genFakeDiMu_dEta",  &b_genFakeDiMu_dEta,  "genFakeDiMu_dEta/F");
+  m_ttree->Branch("genFakeDiMu_dPhi",  &b_genFakeDiMu_dPhi,  "genFakeDiMu_dPhi/F");
+  m_ttree->Branch("genFakeDiMu_dR",    &b_genFakeDiMu_dR,    "genFakeDiMu_dR/F");
+  m_ttree->Branch("gen_ddPhi",    &b_gen_ddPhi,    "gen_ddPhi/F");
 
   // GEN Level Muons
   m_ttree->Branch("genMu0_pT",  &b_genMu0_pT,  "genMu0_pT/F");
