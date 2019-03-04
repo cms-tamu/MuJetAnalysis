@@ -280,17 +280,27 @@ private:
   Float_t b_genDiMu1_Eta;
   Float_t b_genDiMu0_Phi;
   Float_t b_genDiMu1_Phi;
+  Float_t b_genDiMu0_M;
+  Float_t b_genDiMu1_M;
+  Float_t b_genDiMu0_Pt;
+  Float_t b_genDiMu1_Pt;
   Float_t b_genDiMu_dPhi;
   Float_t b_genDiMu_dEta;
   Float_t b_genDiMu_dR;
+  Float_t b_genDiMu_dM;
   //Use muons from different A
   Float_t b_genFakeDiMu0_Eta;
   Float_t b_genFakeDiMu1_Eta;
   Float_t b_genFakeDiMu0_Phi;
   Float_t b_genFakeDiMu1_Phi;
+  Float_t b_genFakeDiMu0_M;
+  Float_t b_genFakeDiMu1_M;
+  Float_t b_genFakeDiMu0_Pt;
+  Float_t b_genFakeDiMu1_Pt;
   Float_t b_genFakeDiMu_dPhi;
   Float_t b_genFakeDiMu_dEta;
   Float_t b_genFakeDiMu_dR;
+  Float_t b_genFakeDiMu_dM;
   //ddPhi
   Float_t b_gen_ddPhi;
 
@@ -1068,18 +1078,28 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
              b_genDiMu1_Eta = (A1Mu0 + A1Mu1).Eta();
              b_genDiMu0_Phi = (A0Mu0 + A0Mu1).Phi();
              b_genDiMu1_Phi = (A1Mu0 + A1Mu1).Phi();
+             b_genDiMu0_M   = (A0Mu0 + A0Mu1).M();
+             b_genDiMu1_M   = (A1Mu0 + A1Mu1).M();
+             b_genDiMu0_Pt  = (A0Mu0 + A0Mu1).Pt();
+             b_genDiMu1_Pt  = (A1Mu0 + A1Mu1).Pt();
              b_genDiMu_dEta = b_genDiMu0_Eta - b_genDiMu1_Eta;
              b_genDiMu_dPhi = tamu::helpers::My_dPhi( b_genDiMu0_Phi, b_genDiMu1_Phi );
              b_genDiMu_dR   = sqrt( b_genDiMu_dEta*b_genDiMu_dEta + b_genDiMu_dPhi*b_genDiMu_dPhi );
+             b_genDiMu_dM   = b_genDiMu0_M - b_genDiMu1_M;
       } else {
              std::cout << "WARNING! GEN level muon from the same mother have same charge!" << std::endl;
              b_genDiMu0_Eta = -999.;
              b_genDiMu1_Eta = -999.;
              b_genDiMu0_Phi = -999.;
              b_genDiMu1_Phi = -999.;
+             b_genDiMu0_M   = -999.;
+             b_genDiMu1_M   = -999.;
+             b_genDiMu0_Pt  = -999.;
+             b_genDiMu1_Pt  = -999.;
              b_genDiMu_dEta = -999.;
              b_genDiMu_dPhi = -999.;
              b_genDiMu_dR   = -999.;
+             b_genDiMu_dM   = -999.;
       }
 
       //Form Fake Dimu 4-v using muons with oppo. charge from different genA
@@ -1089,9 +1109,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         b_genFakeDiMu1_Eta = (A0Mu1 + A1Mu1).Eta();
         b_genFakeDiMu0_Phi = (A0Mu0 + A1Mu0).Phi();
         b_genFakeDiMu1_Phi = (A0Mu0 + A1Mu1).Phi();
+        b_genFakeDiMu0_M   = (A0Mu0 + A1Mu0).M();
+        b_genFakeDiMu1_M   = (A0Mu1 + A1Mu1).M();
+        b_genFakeDiMu0_Pt  = (A0Mu0 + A1Mu0).Pt();
+        b_genFakeDiMu1_Pt  = (A0Mu1 + A1Mu1).Pt();
         b_genFakeDiMu_dEta = b_genFakeDiMu0_Eta - b_genFakeDiMu1_Eta;
         b_genFakeDiMu_dPhi = tamu::helpers::My_dPhi( b_genFakeDiMu0_Phi, b_genFakeDiMu1_Phi );
         b_genFakeDiMu_dR   = sqrt( b_genFakeDiMu_dEta*b_genFakeDiMu_dEta + b_genFakeDiMu_dPhi*b_genFakeDiMu_dPhi );
+        b_genFakeDiMu_dM   = b_genFakeDiMu0_M - b_genFakeDiMu1_M;
       }
       else if ( (b_genA0Mu0_charge * b_genA1Mu1_charge < 0) &&
                 (b_genA0Mu1_charge * b_genA1Mu0_charge < 0) ) {
@@ -1099,17 +1124,27 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         b_genFakeDiMu1_Eta = (A0Mu1 + A1Mu0).Eta();
         b_genFakeDiMu0_Phi = (A0Mu0 + A1Mu1).Phi();
         b_genFakeDiMu1_Phi = (A0Mu1 + A1Mu0).Phi();
+        b_genFakeDiMu0_M   = (A0Mu0 + A1Mu1).M();
+        b_genFakeDiMu1_M   = (A0Mu1 + A1Mu0).M();
+        b_genFakeDiMu0_Pt  = (A0Mu0 + A1Mu1).Pt();
+        b_genFakeDiMu1_Pt  = (A0Mu1 + A1Mu0).Pt();
         b_genFakeDiMu_dEta = b_genFakeDiMu0_Eta - b_genFakeDiMu1_Eta;
         b_genFakeDiMu_dPhi = tamu::helpers::My_dPhi( b_genFakeDiMu0_Phi, b_genFakeDiMu1_Phi );
         b_genFakeDiMu_dR   = sqrt( b_genFakeDiMu_dEta*b_genFakeDiMu_dEta + b_genFakeDiMu_dPhi*b_genFakeDiMu_dPhi );
+        b_genFakeDiMu_dM   = b_genFakeDiMu0_M - b_genFakeDiMu1_M;
       } else {
         b_genFakeDiMu0_Eta = -99.;
         b_genFakeDiMu1_Eta = -99.;
         b_genFakeDiMu0_Phi = -99.;
         b_genFakeDiMu1_Phi = -99.;
+        b_genFakeDiMu0_M   = -999.;
+        b_genFakeDiMu1_M   = -999.;
+        b_genFakeDiMu0_Pt  = -999.;
+        b_genFakeDiMu1_Pt  = -999.;
         b_genFakeDiMu_dEta = -99.;
         b_genFakeDiMu_dPhi = -99.;
         b_genFakeDiMu_dR   = -99.;
+        b_genFakeDiMu_dM   = -999.;
       }//end Form Dimu 4-v using muons with oppo. charge from different genA
 
       //Store the difference b/t dPhi of nominal and fake dimu pairs
@@ -2287,18 +2322,28 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   m_ttree->Branch("genDiMu0_Eta",  &b_genDiMu0_Eta,  "genDiMu0_Eta/F");
   m_ttree->Branch("genDiMu0_Phi",  &b_genDiMu0_Phi,  "genDiMu0_Phi/F");
+  m_ttree->Branch("genDiMu0_M",    &b_genDiMu0_M,    "genDiMu0_M/F");
+  m_ttree->Branch("genDiMu0_Pt",   &b_genDiMu0_Pt,   "genDiMu0_Pt/F");
   m_ttree->Branch("genDiMu1_Eta",  &b_genDiMu1_Eta,  "genDiMu1_Eta/F");
   m_ttree->Branch("genDiMu1_Phi",  &b_genDiMu1_Phi,  "genDiMu1_Phi/F");
+  m_ttree->Branch("genDiMu1_M",    &b_genDiMu1_M,    "genDiMu1_M/F");
+  m_ttree->Branch("genDiMu1_Pt",   &b_genDiMu1_Pt,   "genDiMu1_Pt/F");
   m_ttree->Branch("genDiMu_dEta",  &b_genDiMu_dEta,  "genDiMu_dEta/F");
   m_ttree->Branch("genDiMu_dPhi",  &b_genDiMu_dPhi,  "genDiMu_dPhi/F");
   m_ttree->Branch("genDiMu_dR",    &b_genDiMu_dR,    "genDiMu_dR/F");
+  m_ttree->Branch("genDiMu_dM",    &b_genDiMu_dM,    "genDiMu_dM/F");
   m_ttree->Branch("genFakeDiMu0_Eta",  &b_genFakeDiMu0_Eta,  "genFakeDiMu0_Eta/F");
   m_ttree->Branch("genFakeDiMu0_Phi",  &b_genFakeDiMu0_Phi,  "genFakeDiMu0_Phi/F");
+  m_ttree->Branch("genFakeDiMu0_M",    &b_genFakeDiMu0_M,    "genFakeDiMu0_M/F");
+  m_ttree->Branch("genFakeDiMu0_Pt",   &b_genFakeDiMu0_Pt,   "genFakeDiMu0_Pt/F");
   m_ttree->Branch("genFakeDiMu1_Eta",  &b_genFakeDiMu1_Eta,  "genFakeDiMu1_Eta/F");
   m_ttree->Branch("genFakeDiMu1_Phi",  &b_genFakeDiMu1_Phi,  "genFakeDiMu1_Phi/F");
+  m_ttree->Branch("genFakeDiMu1_M",    &b_genFakeDiMu1_M,    "genFakeDiMu1_M/F");
+  m_ttree->Branch("genFakeDiMu1_Pt",   &b_genFakeDiMu1_Pt,   "genFakeDiMu1_Pt/F");
   m_ttree->Branch("genFakeDiMu_dEta",  &b_genFakeDiMu_dEta,  "genFakeDiMu_dEta/F");
   m_ttree->Branch("genFakeDiMu_dPhi",  &b_genFakeDiMu_dPhi,  "genFakeDiMu_dPhi/F");
   m_ttree->Branch("genFakeDiMu_dR",    &b_genFakeDiMu_dR,    "genFakeDiMu_dR/F");
+  m_ttree->Branch("genFakeDiMu_dM",    &b_genFakeDiMu_dM,    "genFakeDiMu_dM/F");
   m_ttree->Branch("gen_ddPhi",    &b_gen_ddPhi,    "gen_ddPhi/F");
 
   // GEN Level Muons
