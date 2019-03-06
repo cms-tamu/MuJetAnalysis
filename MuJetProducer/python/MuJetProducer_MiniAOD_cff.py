@@ -15,7 +15,7 @@ from MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cfi import *
 #)
 
 PFMuJetProducer05 = MuJetProducer.clone(
-    maxMass = cms.double(58.),
+    maxMass = cms.double(9.),
     muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
     selectTrackerMuons = cms.bool(False),
     selectGlobalMuons = cms.bool(False),
@@ -45,10 +45,10 @@ PFMuJetProducer05PXBL4PXFL3 = PFMuJetProducer05.clone(
 )
 
 MuJetProducers = cms.Sequence(
-    #TrackerMuJetProducer05 * 
+    #TrackerMuJetProducer05 *
     PFMuJetProducer05 *
     #TrackerMuJetProducer05PXBL3PXFL2 *
     PFMuJetProducer05PXBL3PXFL2 *
     #TrackerMuJetProducer05PXBL4PXFL3 *
-    PFMuJetProducer05PXBL4PXFL3 
+    PFMuJetProducer05PXBL4PXFL3
 )

@@ -8,6 +8,9 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     muJetOrphans = cms.InputTag("PFMuJetProducer05", "Orphans"),
     tracks = cms.InputTag("unpackedTracksAndVertices"),
     TriggerResults = cms.InputTag("TriggerResults","","HLT"),
+    #L1 input
+    L1Results = cms.InputTag("gtDigis"),
+    useFinalDecision = cms.bool(False),
     TrackRefitter = cms.InputTag("TrackRefitter"),
     PrunedGenParticles = cms.InputTag("prunedGenParticles"),
     primaryVertices = cms.InputTag("unpackedTracksAndVertices"),
@@ -26,10 +29,16 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     skimOutput = cms.bool(False),
     ## no need to version it!
     signalHltPaths = cms.vstring(
-        'HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx',
+    'HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx',
     ),
     controlHltPaths = cms.vstring(
-        'HLT_TrkMu16NoFiltersNoVtx',
-        'HLT_TrkMu6NoFiltersNoVtx',
+    'HLT_TrkMu16NoFiltersNoVtx',
+    'HLT_TrkMu6NoFiltersNoVtx',
     ),
+    #L1 algos for signal HLT (FIN-OR)
+    l1algos = cms.vstring(
+    "L1_DoubleMu_12_5",
+    "L1_DoubleMu_15_5_SQ",
+    "L1_DoubleMu_15_7" ,
+    "L1_TripleMu_5_3_3"),
 )

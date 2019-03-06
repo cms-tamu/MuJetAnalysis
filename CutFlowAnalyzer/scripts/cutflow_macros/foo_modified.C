@@ -56,9 +56,9 @@ void efficiency(const std::vector<std::string>& dirNames)
 {
 
   bool verbose(true);
-  bool SavePlots(false);
   bool ModelEWKShape(false);
   bool ModelSRWidth(false);
+  bool PerEventTriggerEff(false);
   //	TString dirname(fileName);
   TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
@@ -115,19 +115,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  diMuonF_m2_FittedVtx_hitpix_l3inc;
   Int_t  nRecoMu;
 
-  TH1F *P_t_Mu0 = new TH1F("P_t_Mu0","",200,0.0,100.0);
-  TH1F *P_t_Mu1 = new TH1F("P_t_Mu1","",200,0.0,100.0);
-  TH1F *P_t_Mu2 = new TH1F("P_t_Mu2","",200,0.0,100.0);
-  TH1F *P_t_Mu3 = new TH1F("P_t_Mu3","",200,0.0,100.0);
-
-  TH1F *iso_C = new TH1F("iso_C","",200,0.0,10.0);
-  TH1F *iso_F = new TH1F("iso_F","",200,0.0,10.0);
-
-  TH1F *eta_Mu0 = new TH1F("eta_Mu0","",100,-2.5,2.5);
-  TH1F *eta_Mu1 = new TH1F("eta_Mu1","",100,-2.5,2.5);
-  TH1F *eta_Mu2 = new TH1F("eta_Mu2","",100,-2.5,2.5);
-  TH1F *eta_Mu3 = new TH1F("eta_Mu3","",100,-2.5,2.5);
-
+  TH1D* leading_pt = new TH1D("leading_pt","",50,0.,50.);
+  TH1D* leading_eta = new TH1D("leading_eta","",50,-2.5,2.5);
+  TH1D* leading_phi = new TH1D("leading_phi","",60,-TMath::Pi(),TMath::Pi());
+  TH1D* HLT_leading_pt = new TH1D("HLT_leading_pt","",50,0.,50.);
+  TH1D* HLT_leading_eta = new TH1D("HLT_leading_eta","",50,-2.5,2.5);
+  TH1D* HLT_leading_phi = new TH1D("HLT_leading_phi","",60,-TMath::Pi(),TMath::Pi());
+  TH1D* L1_leading_pt = new TH1D("L1_leading_pt","",50,0.,50.);
+  TH1D* L1_leading_eta = new TH1D("L1_leading_eta","",50,-2.5,2.5);
+  TH1D* L1_leading_phi = new TH1D("L1_leading_phi","",60,-TMath::Pi(),TMath::Pi());
 
   TH2F *EWKShape2D = new TH2F("EWKShape2D","",120,0.0,60.0,120,0.0,60.0);//From MC, actual dimu mass starts from 0.2113, ends at 58 GeV
   TH2F *EWKShapeSR = new TH2F("EWKShapeSR","",120,0.0,60.0,120,0.0,60.0);//consistent mass
@@ -188,12 +184,17 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("selMu1_pT",&selMu1_pT);
 		t->SetBranchAddress("selMu2_pT",&selMu2_pT);
 		t->SetBranchAddress("selMu3_pT",&selMu3_pT);
-		t->SetBranchAddress("massC",&massC);
-		t->SetBranchAddress("massF",&massF);
 		t->SetBranchAddress("selMu0_eta",&selMu0_eta);
 		t->SetBranchAddress("selMu1_eta",&selMu1_eta);
 		t->SetBranchAddress("selMu2_eta",&selMu2_eta);
 		t->SetBranchAddress("selMu3_eta",&selMu3_eta);
+    t->SetBranchAddress("selMu0_phi",&selMu0_phi);
+		t->SetBranchAddress("selMu1_phi",&selMu1_phi);
+		t->SetBranchAddress("selMu2_phi",&selMu2_phi);
+		t->SetBranchAddress("selMu3_phi",&selMu3_phi);
+
+    t->SetBranchAddress("massC",&massC);
+		t->SetBranchAddress("massF",&massF);
 
 		t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
 		t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
@@ -205,6 +206,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
 		t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
 		t->SetBranchAddress("isDiMuonHLTFired",&is2DiMuonHLTFired);
+    t->SetBranchAddress("isSignalHLTL1Fired",&isSignalHLTL1Fired);
 		t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
 		t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
 		t->SetBranchAddress("genA0_Lxy",&genA0_Lxy);
@@ -222,22 +224,6 @@ void efficiency(const std::vector<std::string>& dirNames)
 		for( int i = 0; i < nentries; i++ ){
 		  t->GetEntry(i);
 		  counter[k][0]++;
-
-		  if( nRecoMu >= 4 && SavePlots ){
-		    P_t_Mu0->Fill(selMu0_pT);
-		    P_t_Mu1->Fill(selMu1_pT);
-		    P_t_Mu2->Fill(selMu2_pT);
-		    P_t_Mu3->Fill(selMu3_pT);
-		    eta_Mu0->Fill(selMu0_eta);
-		    eta_Mu1->Fill(selMu1_eta);
-		    eta_Mu2->Fill(selMu2_eta);
-		    eta_Mu3->Fill(selMu3_eta);
-
-		    if( is2DiMuons && SavePlots ){
-		      iso_C->Fill(diMuonC_IsoTk_FittedVtx);
-		      iso_F->Fill(diMuonF_IsoTk_FittedVtx);
-		    }
-		  }
 
 		  if( is1GenMu17 ) counter[k][1]++;
 		  if( is2GenMu8 ) counter[k][2]++;
@@ -273,10 +259,10 @@ void efficiency(const std::vector<std::string>& dirNames)
                       if( is2DiMuonHLTFired ){
                         counter[k][15]++;
 
-                        if( diMuonC_IsoTk_FittedVtx < 2.0 && diMuonF_IsoTk_FittedVtx < 2.0 ){
+                        if( diMuonC_IsoTk_FittedVtx < 2.0 && diMuonF_IsoTk_FittedVtx < 2.0 ) {
                           counter[k][16]++;
 
-                          if( ModelEWKShape ){
+                          if( ModelEWKShape ) {
                             EWKShape2D->Fill(massC,massF);
                             EWKShape2DmassC->Fill(massC);
                             EWKShape2DmassF->Fill(massF);
@@ -288,7 +274,31 @@ void efficiency(const std::vector<std::string>& dirNames)
                           if( is2DiMuonsMassOK ){
                             counter[k][17]++;
 
-                            if( ModelEWKShape ){
+                            //**********************************************
+                            // All offline analysis selections finished
+                            //**********************************************
+
+                            if( PerEventTriggerEff ) {
+
+                              leading_pt->Fill(selMu0_pT);
+                              leading_eta->Fill(selMu0_eta);
+                              leading_phi->Fill(selMu0_phi);
+
+                              if ( is2DiMuonHLTFired ) {
+                                HLT_leading_pt->Fill(selMu0_pT);
+	                              HLT_leading_eta->Fill(selMu0_eta);
+                                HLT_leading_phi->Fill(selMu0_phi);
+                              }//HLT fired
+
+                              if ( isSignalHLTL1Fired ) {
+                                L1_leading_pt->Fill(selMu0_pT);
+                                L1_leading_eta->Fill(selMu0_eta);
+                                L1_leading_phi->Fill(selMu0_phi);
+                              }//L1 seeds fired
+
+                            }//end if PerEventTriggerEff
+
+                            if( ModelEWKShape ) {
                               EWKShapeSR->Fill(massC,massF);
                               EWKShapeSRmassC->Fill(massC);
                               EWKShapeSRmassF->Fill(massF);
@@ -297,7 +307,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                               EWKShapeSRmassFScaled->Fill(massF,weight2017);
                             }//end if ModelEWKShape
 
-                            if( ModelSRWidth ){
+                            if( ModelSRWidth ) {
                     		      DimuMass->Fill( (massC+massF)/2 );
                     		    }//end if ModelSRWidth
 
@@ -373,20 +383,23 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<"end{tabular}"<<endl;
   cout<<"end{landscape}"<<endl;
 
-  TString output="/home/ws13/EWKBKGModel2017/CMSSW_9_4_7/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/CutFlowPlots.root";
+  TString output="/home/ws13/EWKBKGModel2017/CMSSW_9_4_7/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/foo_modified.root";
   TFile myPlot(output,"RECREATE");
 
-   if( SavePlots ){
-     P_t_Mu0->Write();
-     P_t_Mu1->Write();
-     P_t_Mu2->Write();
-     P_t_Mu3->Write();
-     eta_Mu0->Write();
-     eta_Mu1->Write();
-     eta_Mu2->Write();
-     eta_Mu3->Write();
-     iso_C->Write();
-     iso_F->Write();
+   if (PerEventTriggerEff) {
+     //Per-event Efficiency for signal HLT and L1 seeds after all offline selections
+     if( TEfficiency::CheckConsistency(HLT_leading_pt, leading_pt) ) TEfficiency* eff_HLT_leading_pt  = new TEfficiency(HLT_leading_pt, leading_pt);
+     if( TEfficiency::CheckConsistency(HLT_leading_eta, leading_eta) ) TEfficiency* eff_HLT_leading_eta = new TEfficiency(HLT_leading_eta, leading_eta);
+     if( TEfficiency::CheckConsistency(HLT_leading_phi, leading_phi) ) TEfficiency* eff_HLT_leading_phi = new TEfficiency(HLT_leading_phi, leading_phi);
+     if( TEfficiency::CheckConsistency(L1_leading_pt, leading_pt) ) TEfficiency* eff_L1_leading_pt  = new TEfficiency(L1_leading_pt, leading_pt);
+     if( TEfficiency::CheckConsistency(L1_leading_eta, leading_eta) ) TEfficiency* eff_L1_leading_eta = new TEfficiency(L1_leading_eta, leading_eta);
+     if( TEfficiency::CheckConsistency(L1_leading_phi, leading_phi) ) TEfficiency* eff_L1_leading_phi = new TEfficiency(L1_leading_phi, leading_phi);
+     eff_HLT_leading_pt->Write();
+     eff_HLT_leading_eta->Write();
+     eff_HLT_leading_phi->Write();
+     eff_L1_leading_pt->Write();
+     eff_L1_leading_eta->Write();
+     eff_L1_leading_phi->Write();
    }
 
    if( ModelEWKShape ){
@@ -424,7 +437,6 @@ void efficiency(const std::vector<std::string>& dirNames)
 
 void analysis(const std::string txtfile)
 {
-
 setup();
 std::vector< std::vector<string> > NtuplePaths;
 // // cout << "Vector Created" << endl;
@@ -432,5 +444,4 @@ readTextFileWithSamples(txtfile, NtuplePaths);
 // // cout << "Samples read" << endl;
 for(auto v: NtuplePaths) efficiency(v);
 // // cout << "For Loop completes" << endl;
-
 }
