@@ -2050,7 +2050,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     iEvent.getByToken(m_muJetOrphans, orphans);
     float mu1788 = 0;
     //bb estimation event selection
-    if (muJets->size() == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
+    if (b_nMuJets == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
       m_orphan_passOffLineSel = true;
       pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
       pat::MuonCollection::const_iterator orphan = orphans->begin();
