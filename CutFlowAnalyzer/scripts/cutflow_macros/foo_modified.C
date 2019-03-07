@@ -20,6 +20,8 @@ using namespace std;
 #include <TFitResultPtr.h>
 #include <TChain.h>
 #include <TChainElement.h>
+#include <TEfficiency.h>
+#include <TMath.h>
 #include "Helpers.h"
 
 Float_t counter[20][18];//samples; selections
@@ -92,6 +94,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t selMu2_eta;
   Float_t selMu3_eta;
 
+  Float_t selMu0_phi;
+  Float_t selMu1_phi;
+  Float_t selMu2_phi;
+  Float_t selMu3_phi;
+
   Bool_t  is2DiMuons;
   Bool_t  is2MuJets;
   Bool_t  isVtxOK;
@@ -100,6 +107,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  is2DiMuonsMassOK;
 
   Bool_t  is2DiMuonHLTFired;
+  Bool_t  isSignalHLTL1Fired;
   Float_t diMuonC_IsoTk_FittedVtx;
   Float_t diMuonF_IsoTk_FittedVtx;
 
@@ -115,15 +123,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  diMuonF_m2_FittedVtx_hitpix_l3inc;
   Int_t  nRecoMu;
 
-  TH1D* leading_pt = new TH1D("leading_pt","",50,0.,50.);
-  TH1D* leading_eta = new TH1D("leading_eta","",50,-2.5,2.5);
-  TH1D* leading_phi = new TH1D("leading_phi","",60,-TMath::Pi(),TMath::Pi());
-  TH1D* HLT_leading_pt = new TH1D("HLT_leading_pt","",50,0.,50.);
-  TH1D* HLT_leading_eta = new TH1D("HLT_leading_eta","",50,-2.5,2.5);
-  TH1D* HLT_leading_phi = new TH1D("HLT_leading_phi","",60,-TMath::Pi(),TMath::Pi());
-  TH1D* L1_leading_pt = new TH1D("L1_leading_pt","",50,0.,50.);
-  TH1D* L1_leading_eta = new TH1D("L1_leading_eta","",50,-2.5,2.5);
-  TH1D* L1_leading_phi = new TH1D("L1_leading_phi","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* leading_pt = new TH1F("leading_pt","",50,0.,50.);
+  TH1F* leading_eta = new TH1F("leading_eta","",50,-2.5,2.5);
+  TH1F* leading_phi = new TH1F("leading_phi","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* HLT_leading_pt = new TH1F("HLT_leading_pt","",50,0.,50.);
+  TH1F* HLT_leading_eta = new TH1F("HLT_leading_eta","",50,-2.5,2.5);
+  TH1F* HLT_leading_phi = new TH1F("HLT_leading_phi","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* L1_leading_pt = new TH1F("L1_leading_pt","",50,0.,50.);
+  TH1F* L1_leading_eta = new TH1F("L1_leading_eta","",50,-2.5,2.5);
+  TH1F* L1_leading_phi = new TH1F("L1_leading_phi","",60,-TMath::Pi(),TMath::Pi());
 
   TH2F *EWKShape2D = new TH2F("EWKShape2D","",120,0.0,60.0,120,0.0,60.0);//From MC, actual dimu mass starts from 0.2113, ends at 58 GeV
   TH2F *EWKShapeSR = new TH2F("EWKShapeSR","",120,0.0,60.0,120,0.0,60.0);//consistent mass
@@ -357,7 +365,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" is3GenMu8   &   "<<left<< setw(7)<< counter[k][3]<<"    &    "<<left<< setw(7)<< TotEff[k][3]<<"      &        "<<left<< setw(7)<<  RelEff[k][3]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][3]<<" & "<<left<< setw(7)<<  RelEffErr[k][3]<<" hline "<<endl;
   cout<<" is4GenMu8   &   "<<left<< setw(7)<< counter[k][4]<<"    &    "<<left<< setw(7)<< TotEff[k][4]<<"      &        "<<left<< setw(7)<<  RelEff[k][4]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][4]<<" & "<<left<< setw(7)<<  RelEffErr[k][4]<<" hline "<<endl;
 
-  cout<<" Lxy<9.8&& Lz<48.5 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
+  cout<<" Lxy<9.8 && Lz<48.5 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
   cout<<"                                                                          "<<" hline "<<endl;
 
   cout<<" is1SelMu17   &    "<<left<< setw(7)<< counter[k][6]<<"  &    "<<left<< setw(7)<< TotEff[k][6] <<setw(10)<<"   &    "<<left<< setw(7)<<  RelEff[k][6]<<"  &    "<<left<< setw(7)<<  TotEffErr[k][6]<<" &  " <<  RelEffErr[k][6]<<" hline "<<endl;
@@ -388,18 +396,31 @@ void efficiency(const std::vector<std::string>& dirNames)
 
    if (PerEventTriggerEff) {
      //Per-event Efficiency for signal HLT and L1 seeds after all offline selections
-     if( TEfficiency::CheckConsistency(HLT_leading_pt, leading_pt) ) TEfficiency* eff_HLT_leading_pt  = new TEfficiency(HLT_leading_pt, leading_pt);
-     if( TEfficiency::CheckConsistency(HLT_leading_eta, leading_eta) ) TEfficiency* eff_HLT_leading_eta = new TEfficiency(HLT_leading_eta, leading_eta);
-     if( TEfficiency::CheckConsistency(HLT_leading_phi, leading_phi) ) TEfficiency* eff_HLT_leading_phi = new TEfficiency(HLT_leading_phi, leading_phi);
-     if( TEfficiency::CheckConsistency(L1_leading_pt, leading_pt) ) TEfficiency* eff_L1_leading_pt  = new TEfficiency(L1_leading_pt, leading_pt);
-     if( TEfficiency::CheckConsistency(L1_leading_eta, leading_eta) ) TEfficiency* eff_L1_leading_eta = new TEfficiency(L1_leading_eta, leading_eta);
-     if( TEfficiency::CheckConsistency(L1_leading_phi, leading_phi) ) TEfficiency* eff_L1_leading_phi = new TEfficiency(L1_leading_phi, leading_phi);
-     eff_HLT_leading_pt->Write();
-     eff_HLT_leading_eta->Write();
-     eff_HLT_leading_phi->Write();
-     eff_L1_leading_pt->Write();
-     eff_L1_leading_eta->Write();
-     eff_L1_leading_phi->Write();
+     if( TEfficiency::CheckConsistency(*HLT_leading_pt, *leading_pt) ) {
+       TEfficiency* eff_HLT_leading_pt  = new TEfficiency(*HLT_leading_pt, *leading_pt);
+       eff_HLT_leading_pt->Write();
+     }
+     if( TEfficiency::CheckConsistency(*HLT_leading_eta, *leading_eta) ) {
+       TEfficiency* eff_HLT_leading_eta = new TEfficiency(*HLT_leading_eta, *leading_eta);
+       eff_HLT_leading_eta->Write();
+     }
+     if( TEfficiency::CheckConsistency(*HLT_leading_phi, *leading_phi) ) {
+       TEfficiency* eff_HLT_leading_phi = new TEfficiency(*HLT_leading_phi, *leading_phi);
+       eff_HLT_leading_phi->Write();
+     }
+     if( TEfficiency::CheckConsistency(*L1_leading_pt, *leading_pt) ) {
+       TEfficiency* eff_L1_leading_pt  = new TEfficiency(*L1_leading_pt, *leading_pt);
+       eff_L1_leading_pt->Write();
+     }
+     if( TEfficiency::CheckConsistency(*L1_leading_eta, *leading_eta) ) {
+       TEfficiency* eff_L1_leading_eta = new TEfficiency(*L1_leading_eta, *leading_eta);
+       eff_L1_leading_eta->Write();
+     }
+     if( TEfficiency::CheckConsistency(*L1_leading_phi, *leading_phi) ) {
+       TEfficiency* eff_L1_leading_phi = new TEfficiency(*L1_leading_phi, *leading_phi);
+       eff_L1_leading_phi->Write();
+     }
+
    }
 
    if( ModelEWKShape ){
