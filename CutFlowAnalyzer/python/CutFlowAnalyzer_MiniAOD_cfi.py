@@ -8,9 +8,11 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     muJetOrphans = cms.InputTag("PFMuJetProducer05", "Orphans"),
     tracks = cms.InputTag("unpackedTracksAndVertices"),
     TriggerResults = cms.InputTag("TriggerResults","","HLT"),
-    #L1 input
-    L1Results = cms.InputTag("gtDigis"),
-    useFinalDecision = cms.bool(False),
+    # Access L1 decision: Method 1 input
+    #L1Results = cms.InputTag("gtDigis"),
+    #useFinalDecision = cms.bool(False),
+    # Access L1 decision: Method 2 input
+    hltProcess=cms.string("HLT"),
     TrackRefitter = cms.InputTag("TrackRefitter"),
     PrunedGenParticles = cms.InputTag("prunedGenParticles"),
     primaryVertices = cms.InputTag("unpackedTracksAndVertices"),

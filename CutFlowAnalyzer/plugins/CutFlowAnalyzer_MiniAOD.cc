@@ -15,6 +15,7 @@
 
 #include "DataFormats/Candidate/interface/CandMatchMap.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
+#include "HLTrigger/HLTcore/interface/HLTPrescaleProvider.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutRecord.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutSetupFwd.h"
 #include "DataFormats/L1GlobalTrigger/interface/L1GlobalTriggerReadoutSetup.h"
@@ -49,6 +50,10 @@
 
 class CutFlowAnalyzer_MiniAOD : public edm::EDAnalyzer
 {
+private:
+  HLTPrescaleProvider hltPSProv_;
+  std::string hltProcess_; //name of HLT process, usually "HLT"
+
 public:
   explicit CutFlowAnalyzer_MiniAOD(const edm::ParameterSet&);
   ~CutFlowAnalyzer_MiniAOD();
@@ -60,13 +65,13 @@ public:
 
 private:
   virtual void beginJob() ;
+  virtual void beginRun(edm::Run const&, edm::EventSetup const&);
   virtual void analyze(const edm::Event&, const edm::EventSetup&);
   virtual void endJob() ;
 
-  virtual void beginRun(edm::Run const&, edm::EventSetup const&);
-  virtual void endRun(edm::Run const&, edm::EventSetup const&);
-  virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
-  virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
+  //virtual void endRun(edm::Run const&, edm::EventSetup const&);
+  //virtual void beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
+  //virtual void endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&);
 
   edm::ParameterSet param_;
   edm::EDGetTokenT<MeasurementTrackerEvent> measurementTrkToken_;
@@ -326,7 +331,7 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_tracks;
   edm::EDGetTokenT<reco::GenParticleCollection> m_genParticles;
   edm::EDGetTokenT<edm::TriggerResults> m_trigRes;
-  edm::EDGetTokenT<L1GlobalTriggerReadoutRecord> m_L1Res;
+  //edm::EDGetTokenT<L1GlobalTriggerReadoutRecord> m_L1Res;
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
@@ -576,9 +581,12 @@ private:
   //Float_t  m_orphan_DRdiMuOrph;
 };
 
-CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfig)
-
+CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfig):
+//Add for accessing L1 decision   @Wei SHI, Mar 11, 2019
+hltPSProv_(iConfig,consumesCollector(),*this),//it needs a referernce to the calling module for some reason, hence the *this
+hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
 {
+
   //****************************************************************************
   //                          SET THRESHOLDS
   //****************************************************************************
@@ -638,7 +646,7 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
   m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("PrunedGenParticles"));
   m_trigRes         = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
-  m_L1Res           = consumes<L1GlobalTriggerReadoutRecord>(iConfig.getParameter< edm::InputTag >("L1Results"));
+  //m_L1Res           = consumes<L1GlobalTriggerReadoutRecord>(iConfig.getParameter< edm::InputTag >("L1Results"));
   m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
@@ -648,7 +656,7 @@ CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfi
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
   runBBestimation_ = iConfig.getParameter<bool>("runBBestimation");
   skimOutput_ = iConfig.getParameter<bool>("skimOutput");
-  useFinalDecision_ = iConfig.getParameter<bool>("useFinalDecision");
+  //useFinalDecision_ = iConfig.getParameter<bool>("useFinalDecision");
 
   m_randomSeed = 1234;
   m_trandom3   = TRandom3(m_randomSeed); // Random generator
@@ -684,6 +692,17 @@ CutFlowAnalyzer_MiniAOD::~CutFlowAnalyzer_MiniAOD()
 //
 // member functions
 //
+// ------------ method called when starting to processes a run  ------------
+void CutFlowAnalyzer_MiniAOD::beginRun(const edm::Run& run,const edm::EventSetup& setup)
+{
+  //Added for L1 decision @Wei SHI, Mar 11, 2019
+  //Need to initalise the menu each run (menu can and will change on run boundaries)
+  bool changed=false;
+  hltPSProv_.init(run,setup,hltProcess_,changed);
+  const l1t::L1TGlobalUtil& l1GtUtils = hltPSProv_.l1tGlobalUtil();
+  if ( m_debug > 10 ) std::cout <<"l1 menu "<<l1GtUtils.gtTriggerMenuName()<<" version "<<l1GtUtils.gtTriggerMenuVersion()<<" comment "<<std::endl;
+  if ( m_debug > 10 ) std::cout <<"hlt name "<<hltPSProv_.hltConfigProvider().tableName()<<std::endl;
+}
 
 // ------------ method called for each event  ------------
 void
@@ -1735,14 +1754,17 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on HLT" << std::endl;
 
+  //get L1 decisions for signal HLT L1 seeds
+  b_isSignalHLTL1Fired = false;
+  std::vector<std::string>::const_iterator algo;
+
+  /*
+  //Access L1 decisions: Method 1 --> Not working as of Mar 11, 2019
   //Adapt from: https://github.com/cms-sw/cmssw/blob/CMSSW_9_4_X/L1Trigger/Skimmer/src/L1Filter.cc
   //get L1 menu
   edm::ESHandle<L1GtTriggerMenu> menuRcd;
   iSetup.get<L1GtTriggerMenuRcd>().get(menuRcd) ;
   const L1GtTriggerMenu* menu = menuRcd.product();
-  //get L1 decisions for signal HLT L1 seeds
-  b_isSignalHLTL1Fired = false;
-  std::vector<std::string>::const_iterator algo;
   edm::Handle<L1GlobalTriggerReadoutRecord> gtRecord;
   iEvent.getByToken(m_L1Res, gtRecord);
   const DecisionWord dWord = gtRecord->decisionWord();
@@ -1754,6 +1776,36 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_isSignalHLTL1Fired |= menu->gtAlgorithmResult( (*algo), dWord);
     }
   }//end else if
+  */
+
+  //Access L1 decisions: Method 2
+  //I seem to recall this function being slow so perhaps cache for a given lumi
+  //(it only changes on lumi boundaries)
+  int psColumn = hltPSProv_.prescaleSet(iEvent,iSetup);
+  if ( m_debug > 10 ) std::cout <<"PS column "<<psColumn<<std::endl;
+  if(psColumn==0 && iEvent.isRealData()){
+    std::cout <<"PS column zero detected for data, this is unlikely (almost all triggers are disabled in normal menus here) and its more likely that you've not loaded the correct global tag in "<<std::endl;
+  }
+
+  //note to the reader, what I'm doing is extremely dangerious (a const cast), never do this!
+  //however in this narrow case, it fixes a bug in l1t::L1TGlobalUtil (the method should be const)
+  //and it is safe for this specific instance
+  l1t::L1TGlobalUtil& l1GtUtils = const_cast<l1t::L1TGlobalUtil&> (hltPSProv_.l1tGlobalUtil());
+  if ( m_debug > 10 ) std::cout <<"l1 menu: name decisions prescale "<<std::endl;
+  for(size_t bitNr=0;bitNr<l1GtUtils.decisionsFinal().size();bitNr++){
+    const std::string& bitName = l1GtUtils.decisionsFinal()[bitNr].first; // l1GtUtils.decisionsFinal() is of type std::vector<std::pair<std::string,bool> >
+
+    bool passInitial = l1GtUtils.decisionsInitial()[bitNr].second; //before masks and prescales, so if we have a 15 GeV electron passing L1_SingleEG10, it will show up as true but will likely not cause a L1 acccept due to the seeds high prescale
+    bool passInterm = l1GtUtils.decisionsInterm()[bitNr].second; //after mask (?, unsure what this is)
+    bool passFinal = l1GtUtils.decisionsFinal()[bitNr].second; //after masks & prescales, true means it gives a L1 accept to the HLT
+    int prescale = l1GtUtils.prescales()[bitNr].second;
+    for (algo = l1algos_.begin(); algo != l1algos_.end(); ++algo) {
+      if (bitName == *algo && passFinal){
+        b_isSignalHLTL1Fired = true;
+      }
+    }//end loop over L1 seeds in signal HLT
+    if ( m_debug > 10 ) std::cout <<"   "<<bitNr<<" "<<bitName<<" "<<passInitial<<" "<<passInterm<<" "<<passFinal<<" "<<prescale<<std::endl;
+  }
 
   // Cut on dimuon masses - use fitted vertexes
   b_is2DiMuonsMassOK_FittedVtx = false;
@@ -2661,34 +2713,26 @@ void CutFlowAnalyzer_MiniAOD::FillTrigInfo( TH1F * h1, const edm::TriggerNames& 
   }
 }
 
-
-// ------------ method called when starting to processes a run  ------------
-void
-CutFlowAnalyzer_MiniAOD::beginRun(edm::Run const&, edm::EventSetup const&)
-{
-}
-
 // ------------ method called when ending the processing of a run  ------------
-void
-CutFlowAnalyzer_MiniAOD::endRun(edm::Run const&, edm::EventSetup const&)
+/*void CutFlowAnalyzer_MiniAOD::endRun(edm::Run const&, edm::EventSetup const&)
 {
 }
-
+*/
+/*
 // ------------ method called when starting to processes a luminosity block  ------------
-void
-CutFlowAnalyzer_MiniAOD::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+void CutFlowAnalyzer_MiniAOD::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
-
+*/
+/*
 // ------------ method called when ending the processing of a luminosity block  ------------
-void
-CutFlowAnalyzer_MiniAOD::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
+void CutFlowAnalyzer_MiniAOD::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
 {
 }
+*/
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
-void
-CutFlowAnalyzer_MiniAOD::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
+void CutFlowAnalyzer_MiniAOD::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   //The following says we do not know what parameters are allowed so do no validation
   // Please change this to state exactly what you do use, even if it is no parameters
   edm::ParameterSetDescription desc;

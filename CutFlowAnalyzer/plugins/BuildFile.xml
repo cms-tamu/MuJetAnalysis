@@ -6,6 +6,10 @@
 <use   name="FWCore/Utilities"/>
 <use   name="CommonTools/UtilAlgos"/>
 <use   name="DataFormats/Candidate"/>
+<use   name="HLTrigger/HLTcore"/>
+<use   name="DataFormats/L1GlobalTrigger"/>
+<use   name="CondFormats/L1TObjects"/>
+<use   name="CondFormats/DataRecord"/>
 <use   name="DataFormats/DetId"/>
 <use   name="DataFormats/HepMCCandidate"/>
 <use   name="DataFormats/MuonReco"/>
