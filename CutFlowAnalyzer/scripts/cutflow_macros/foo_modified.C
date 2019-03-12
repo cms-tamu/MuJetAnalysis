@@ -299,10 +299,32 @@ void efficiency(const std::vector<std::string>& dirNames)
                     if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
                       counter[k][14]++;
 
-                      if( is2DiMuonHLTFired ){
+                      if( diMuonC_IsoTk_FittedVtx < 2.0 && diMuonF_IsoTk_FittedVtx < 2.0  ){
                         counter[k][15]++;
 
-                        if( diMuonC_IsoTk_FittedVtx < 2.0 && diMuonF_IsoTk_FittedVtx < 2.0 ) {
+                        if( PerEventTriggerEff ) {
+                          //pass all offline selections (except HLT fired, otherwise will show 100% all-time for L1 and HLT)
+                          // !!!Note: to be more precise, need to put isSignalHLTFired as the last counter and this section in
+                          //the second to last counter for these plots to make sense
+                          leading_pt_pass_all->Fill(selMu0_pT);
+                          leading_eta_pass_all->Fill(selMu0_eta);
+                          leading_phi_pass_all->Fill(selMu0_phi);
+
+                          if ( is2DiMuonHLTFired ) {
+                            HLT_leading_pt_pass_all->Fill(selMu0_pT);
+                            HLT_leading_eta_pass_all->Fill(selMu0_eta);
+                            HLT_leading_phi_pass_all->Fill(selMu0_phi);
+                          }//HLT fired
+
+                          if ( isSignalHLTL1Fired ) {
+                            L1_leading_pt_pass_all->Fill(selMu0_pT);
+                            L1_leading_eta_pass_all->Fill(selMu0_eta);
+                            L1_leading_phi_pass_all->Fill(selMu0_phi);
+                          }//L1 seeds fired
+
+                        }//end if PerEventTriggerEff
+
+                        if( is2DiMuonHLTFired ) {
                           counter[k][16]++;
 
                           if( ModelEWKShape ) {
@@ -320,27 +342,6 @@ void efficiency(const std::vector<std::string>& dirNames)
                             //**********************************************
                             // All offline analysis selections finished
                             //**********************************************
-
-                            if( PerEventTriggerEff ) {//pass all offline selections
-
-                              leading_pt_pass_all->Fill(selMu0_pT);
-                              leading_eta_pass_all->Fill(selMu0_eta);
-                              leading_phi_pass_all->Fill(selMu0_phi);
-
-                              if ( is2DiMuonHLTFired ) {
-                                HLT_leading_pt_pass_all->Fill(selMu0_pT);
-	                              HLT_leading_eta_pass_all->Fill(selMu0_eta);
-                                HLT_leading_phi_pass_all->Fill(selMu0_phi);
-                              }//HLT fired
-
-                              if ( isSignalHLTL1Fired ) {
-                                L1_leading_pt_pass_all->Fill(selMu0_pT);
-                                L1_leading_eta_pass_all->Fill(selMu0_eta);
-                                L1_leading_phi_pass_all->Fill(selMu0_phi);
-                              }//L1 seeds fired
-
-                            }//end if PerEventTriggerEff
-
                             if( ModelEWKShape ) {
                               EWKShapeSR->Fill(massC,massF);
                               EWKShapeSRmassC->Fill(massC);
@@ -415,8 +416,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   cout<<" is2DiMuonsPixHitOk  &  "<< counter[k][13]<<"  &    "<< TotEff[k][13]<<" &     "<< RelEff[k][13]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][13]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][13]<<" hline "<<endl;
   cout<<" is2DiMuonsFittedDzOk    &  "<< counter[k][14]<<"  &    "<< TotEff[k][14]<<" &     "<< RelEff[k][14]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][14]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][14]<<" hline "<<endl;
-  cout<<" isSignalHLTFired   &  "<< counter[k][15]<<"  &    "<< TotEff[k][15]<<" &     "<< RelEff[k][15]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][15]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][15]<<" hline "<<endl;
-  cout<<" is2DiMuonsIsoTkOK    &  "<< counter[k][16] <<" &    "<< TotEff[k][16]<<" &     "<< RelEff[k][16]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][16]<<" &  " <<fixed<<std::setprecision(3) << RelEffErr[k][16]<<" hline "<<endl;
+  cout<<" is2DiMuonsIsoTkOK   &  "<< counter[k][15]<<"  &    "<< TotEff[k][15]<<" &     "<< RelEff[k][15]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][15]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][15]<<" hline "<<endl;
+  cout<<" isSignalHLTFired    &  "<< counter[k][16] <<" &    "<< TotEff[k][16]<<" &     "<< RelEff[k][16]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][16]<<" &  " <<fixed<<std::setprecision(3) << RelEffErr[k][16]<<" hline "<<endl;
   cout<<" is2DiMuonsMassOK    &  "<< counter[k][17] <<" &    "<< TotEff[k][17]<<" &     "<< RelEff[k][17]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][17]<<" &  " <<fixed<<std::setprecision(3) << RelEffErr[k][17]<<" hline "<<endl;
 
   cout
