@@ -123,15 +123,25 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  diMuonF_m2_FittedVtx_hitpix_l3inc;
   Int_t  nRecoMu;
 
-  TH1F* leading_pt = new TH1F("leading_pt","",50,0.,50.);
-  TH1F* leading_eta = new TH1F("leading_eta","",50,-2.5,2.5);
-  TH1F* leading_phi = new TH1F("leading_phi","",60,-TMath::Pi(),TMath::Pi());
-  TH1F* HLT_leading_pt = new TH1F("HLT_leading_pt","",50,0.,50.);
-  TH1F* HLT_leading_eta = new TH1F("HLT_leading_eta","",50,-2.5,2.5);
-  TH1F* HLT_leading_phi = new TH1F("HLT_leading_phi","",60,-TMath::Pi(),TMath::Pi());
-  TH1F* L1_leading_pt = new TH1F("L1_leading_pt","",50,0.,50.);
-  TH1F* L1_leading_eta = new TH1F("L1_leading_eta","",50,-2.5,2.5);
-  TH1F* L1_leading_phi = new TH1F("L1_leading_phi","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* leading_pt_pass_basic = new TH1F("leading_pt_pass_basic","",50,0.,50.);
+  TH1F* leading_eta_pass_basic = new TH1F("leading_eta_pass_basic","",50,-2.5,2.5);
+  TH1F* leading_phi_pass_basic = new TH1F("leading_phi_pass_basic","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* HLT_leading_pt_pass_basic = new TH1F("HLT_leading_pt_pass_basic","",50,0.,50.);
+  TH1F* HLT_leading_eta_pass_basic = new TH1F("HLT_leading_eta_pass_basic","",50,-2.5,2.5);
+  TH1F* HLT_leading_phi_pass_basic = new TH1F("HLT_leading_phi_pass_basic","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* L1_leading_pt_pass_basic = new TH1F("L1_leading_pt_pass_basic","",50,0.,50.);
+  TH1F* L1_leading_eta_pass_basic = new TH1F("L1_leading_eta_pass_basic","",50,-2.5,2.5);
+  TH1F* L1_leading_phi_pass_basic = new TH1F("L1_leading_phi_pass_basic","",60,-TMath::Pi(),TMath::Pi());
+
+  TH1F* leading_pt_pass_all = new TH1F("leading_pt_pass_all","",50,0.,50.);
+  TH1F* leading_eta_pass_all = new TH1F("leading_eta_pass_all","",50,-2.5,2.5);
+  TH1F* leading_phi_pass_all = new TH1F("leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* HLT_leading_pt_pass_all = new TH1F("HLT_leading_pt_pass_all","",50,0.,50.);
+  TH1F* HLT_leading_eta_pass_all = new TH1F("HLT_leading_eta_pass_all","",50,-2.5,2.5);
+  TH1F* HLT_leading_phi_pass_all = new TH1F("HLT_leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* L1_leading_pt_pass_all = new TH1F("L1_leading_pt_pass_all","",50,0.,50.);
+  TH1F* L1_leading_eta_pass_all = new TH1F("L1_leading_eta_pass_all","",50,-2.5,2.5);
+  TH1F* L1_leading_phi_pass_all = new TH1F("L1_leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
 
   TH2F *EWKShape2D = new TH2F("EWKShape2D","",120,0.0,60.0,120,0.0,60.0);//From MC, actual dimu mass starts from 0.2113, ends at 58 GeV
   TH2F *EWKShapeSR = new TH2F("EWKShapeSR","",120,0.0,60.0,120,0.0,60.0);//consistent mass
@@ -246,7 +256,32 @@ void efficiency(const std::vector<std::string>& dirNames)
 		  if( is2SelMu8 ) counter[k][7]++;
 		  if( is3SelMu8 ) counter[k][8]++;
 		  if( is4SelMu8 ){
+
         counter[k][9]++;
+
+        //**********************************************
+        // Basic offline pT selections finished
+        //**********************************************
+
+        if( PerEventTriggerEff ) {//pass basic offline pT selections
+
+          leading_pt_pass_basic->Fill(selMu0_pT);
+          leading_eta_pass_basic->Fill(selMu0_eta);
+          leading_phi_pass_basic->Fill(selMu0_phi);
+
+          if ( is2DiMuonHLTFired ) {
+            HLT_leading_pt_pass_basic->Fill(selMu0_pT);
+            HLT_leading_eta_pass_basic->Fill(selMu0_eta);
+            HLT_leading_phi_pass_basic->Fill(selMu0_phi);
+          }//HLT fired
+
+          if ( isSignalHLTL1Fired ) {
+            L1_leading_pt_pass_basic->Fill(selMu0_pT);
+            L1_leading_eta_pass_basic->Fill(selMu0_eta);
+            L1_leading_phi_pass_basic->Fill(selMu0_phi);
+          }//L1 seeds fired
+
+        }//end if PerEventTriggerEff
 
         if( isVtxOK ){
           counter[k][10]++;
@@ -286,22 +321,22 @@ void efficiency(const std::vector<std::string>& dirNames)
                             // All offline analysis selections finished
                             //**********************************************
 
-                            if( PerEventTriggerEff ) {
+                            if( PerEventTriggerEff ) {//pass all offline selections
 
-                              leading_pt->Fill(selMu0_pT);
-                              leading_eta->Fill(selMu0_eta);
-                              leading_phi->Fill(selMu0_phi);
+                              leading_pt_pass_all->Fill(selMu0_pT);
+                              leading_eta_pass_all->Fill(selMu0_eta);
+                              leading_phi_pass_all->Fill(selMu0_phi);
 
                               if ( is2DiMuonHLTFired ) {
-                                HLT_leading_pt->Fill(selMu0_pT);
-	                              HLT_leading_eta->Fill(selMu0_eta);
-                                HLT_leading_phi->Fill(selMu0_phi);
+                                HLT_leading_pt_pass_all->Fill(selMu0_pT);
+	                              HLT_leading_eta_pass_all->Fill(selMu0_eta);
+                                HLT_leading_phi_pass_all->Fill(selMu0_phi);
                               }//HLT fired
 
                               if ( isSignalHLTL1Fired ) {
-                                L1_leading_pt->Fill(selMu0_pT);
-                                L1_leading_eta->Fill(selMu0_eta);
-                                L1_leading_phi->Fill(selMu0_phi);
+                                L1_leading_pt_pass_all->Fill(selMu0_pT);
+                                L1_leading_eta_pass_all->Fill(selMu0_eta);
+                                L1_leading_phi_pass_all->Fill(selMu0_phi);
                               }//L1 seeds fired
 
                             }//end if PerEventTriggerEff
@@ -391,39 +426,77 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<"end{tabular}"<<endl;
   cout<<"end{landscape}"<<endl;
 
-  TString output="/home/ws13/EWKBKGModel2017/CMSSW_9_4_7/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/foo_modified.root";
+  TString output="./foo_modified.root";
   TFile myPlot(output,"RECREATE");
 
-   if (PerEventTriggerEff) {
+   if ( PerEventTriggerEff ) {
+     //Per-event Efficiency for signal HLT and L1 seeds after basic offline pT selections
+     if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
+       TEfficiency* eff_HLT_leading_pt_pass_basic  = new TEfficiency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic);
+       eff_HLT_leading_pt_pass_basic->SetTitle("HLT efficiency vs leading pT (after basic offline pT selections);Leading pT [GeV];#epsilon");
+       eff_HLT_leading_pt_pass_basic->Write();
+     }
+     if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
+       TEfficiency* eff_HLT_leading_eta_pass_basic = new TEfficiency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic);
+       eff_HLT_leading_eta_pass_basic->SetTitle("HLT efficiency vs leading eta (after basic offline pT selections);Leading eta;#epsilon");
+       eff_HLT_leading_eta_pass_basic->Write();
+     }
+     if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
+       TEfficiency* eff_HLT_leading_phi_pass_basic = new TEfficiency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic);
+       eff_HLT_leading_phi_pass_basic->SetTitle("HLT efficiency vs leading phi (after basic offline pT selections);Leading phi;#epsilon");
+       eff_HLT_leading_phi_pass_basic->Write();
+     }
+     if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
+       TEfficiency* eff_L1_leading_pt_past_basic  = new TEfficiency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic);
+       eff_L1_leading_pt_past_basic->SetTitle("L1 efficiency vs leading pT (after basic offline pT selections);Leading pT;#epsilon");
+       eff_L1_leading_pt_past_basic->Write();
+     }
+     if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
+       TEfficiency* eff_L1_leading_eta_past_basic = new TEfficiency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic);
+       eff_L1_leading_eta_past_basic->SetTitle("L1 efficiency vs leading eta (after basic offline pT selections);Leading eta;#epsilon");
+       eff_L1_leading_eta_past_basic->Write();
+     }
+     if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
+       TEfficiency* eff_L1_leading_phi_pass_basic = new TEfficiency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic);
+       eff_L1_leading_phi_pass_basic->SetTitle("L1 efficiency vs leading phi (after basic offline pT selections);Leading phi;#epsilon");
+       eff_L1_leading_phi_pass_basic->Write();
+     }
+
      //Per-event Efficiency for signal HLT and L1 seeds after all offline selections
-     if( TEfficiency::CheckConsistency(*HLT_leading_pt, *leading_pt) ) {
-       TEfficiency* eff_HLT_leading_pt  = new TEfficiency(*HLT_leading_pt, *leading_pt);
-       eff_HLT_leading_pt->Write();
+     if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_all, *leading_pt_pass_all) ) {
+       TEfficiency* eff_HLT_leading_pt_pass_all  = new TEfficiency(*HLT_leading_pt_pass_all, *leading_pt_pass_all);
+       eff_HLT_leading_pt_pass_all->SetTitle("HLT efficiency vs leading pT (after all offline selections);Leading pT [GeV];#epsilon");
+       eff_HLT_leading_pt_pass_all->Write();
      }
-     if( TEfficiency::CheckConsistency(*HLT_leading_eta, *leading_eta) ) {
-       TEfficiency* eff_HLT_leading_eta = new TEfficiency(*HLT_leading_eta, *leading_eta);
-       eff_HLT_leading_eta->Write();
+     if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_all, *leading_eta_pass_all) ) {
+       TEfficiency* eff_HLT_leading_eta_pass_all = new TEfficiency(*HLT_leading_eta_pass_all, *leading_eta_pass_all);
+       eff_HLT_leading_eta_pass_all->SetTitle("HLT efficiency vs leading eta (after all offline selections);Leading eta;#epsilon");
+       eff_HLT_leading_eta_pass_all->Write();
      }
-     if( TEfficiency::CheckConsistency(*HLT_leading_phi, *leading_phi) ) {
-       TEfficiency* eff_HLT_leading_phi = new TEfficiency(*HLT_leading_phi, *leading_phi);
-       eff_HLT_leading_phi->Write();
+     if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_all, *leading_phi_pass_all) ) {
+       TEfficiency* eff_HLT_leading_phi_pass_all = new TEfficiency(*HLT_leading_phi_pass_all, *leading_phi_pass_all);
+       eff_HLT_leading_phi_pass_all->SetTitle("HLT efficiency vs leading phi (after all offline selections);Leading phi;#epsilon");
+       eff_HLT_leading_phi_pass_all->Write();
      }
-     if( TEfficiency::CheckConsistency(*L1_leading_pt, *leading_pt) ) {
-       TEfficiency* eff_L1_leading_pt  = new TEfficiency(*L1_leading_pt, *leading_pt);
-       eff_L1_leading_pt->Write();
+     if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_all, *leading_pt_pass_all) ) {
+       TEfficiency* eff_L1_leading_pt_past_all  = new TEfficiency(*L1_leading_pt_pass_all, *leading_pt_pass_all);
+       eff_L1_leading_pt_past_all->SetTitle("L1 efficiency vs leading pT (after all offline selections);Leading pT;#epsilon");
+       eff_L1_leading_pt_past_all->Write();
      }
-     if( TEfficiency::CheckConsistency(*L1_leading_eta, *leading_eta) ) {
-       TEfficiency* eff_L1_leading_eta = new TEfficiency(*L1_leading_eta, *leading_eta);
-       eff_L1_leading_eta->Write();
+     if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_all, *leading_eta_pass_all) ) {
+       TEfficiency* eff_L1_leading_eta_past_all = new TEfficiency(*L1_leading_eta_pass_all, *leading_eta_pass_all);
+       eff_L1_leading_eta_past_all->SetTitle("L1 efficiency vs leading eta (after all offline selections);Leading eta;#epsilon");
+       eff_L1_leading_eta_past_all->Write();
      }
-     if( TEfficiency::CheckConsistency(*L1_leading_phi, *leading_phi) ) {
-       TEfficiency* eff_L1_leading_phi = new TEfficiency(*L1_leading_phi, *leading_phi);
-       eff_L1_leading_phi->Write();
+     if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_all, *leading_phi_pass_all) ) {
+       TEfficiency* eff_L1_leading_phi_pass_all = new TEfficiency(*L1_leading_phi_pass_all, *leading_phi_pass_all);
+       eff_L1_leading_phi_pass_all->SetTitle("L1 efficiency vs leading phi (after all offline selections);Leading phi;#epsilon");
+       eff_L1_leading_phi_pass_all->Write();
      }
 
-   }
+   }//end if (PerEventTriggerEff)
 
-   if( ModelEWKShape ){
+   if ( ModelEWKShape ) {
      EWKShape2D->Write();
      EWKShape2DmassC->Write();
      EWKShape2DmassF->Write();
@@ -437,9 +510,9 @@ void efficiency(const std::vector<std::string>& dirNames)
      EWKShapeSRScaled->Write();
      EWKShapeSRmassCScaled->Write();
      EWKShapeSRmassFScaled->Write();
-   }
+   } //end if ( ModelEWKShape )
 
-   if( ModelSRWidth ){
+   if ( ModelSRWidth ) {
      DimuMass->SetLineColor(kBlue);
      DimuMass->SetLineWidth(2);
      DimuMass->Fit("gaus","","",0,60);
@@ -451,7 +524,7 @@ void efficiency(const std::vector<std::string>& dirNames)
      DimuMass->Write();
 
      cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
-   }
+   }//end if ( ModelSRWidth )
 
    myPlot.Close();
 }
