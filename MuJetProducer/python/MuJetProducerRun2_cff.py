@@ -14,10 +14,11 @@ PFMuJetProducer05 = MuJetProducer.clone(
     maxTrackerNormChi2 = cms.double(-1.0)
 )
 
-PFMuJetProducer05PXBL3PXFL2 = PFMuJetProducer05.clone(
-    barrelPixelLayer = cms.int32(3),
-    endcapPixelLayer = cms.int32(2),
-)
+#Used in Phase-0 Pixel: PFMuJetProducer05PXBL3PXFL2
+#PFMuJetProducer05PXBL3PXFL2 = PFMuJetProducer05.clone(
+#    barrelPixelLayer = cms.int32(3),
+#    endcapPixelLayer = cms.int32(2),
+#)
 
 PFMuJetProducer05PXBL4PXFL3 = PFMuJetProducer05.clone(
     barrelPixelLayer = cms.int32(4),
@@ -26,6 +27,6 @@ PFMuJetProducer05PXBL4PXFL3 = PFMuJetProducer05.clone(
 
 MuJetProducers = cms.Sequence(
     PFMuJetProducer05 *
-    PFMuJetProducer05PXBL3PXFL2 *
+    #PFMuJetProducer05PXBL3PXFL2 *
     PFMuJetProducer05PXBL4PXFL3
 )

@@ -121,6 +121,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  diMuonC_m2_FittedVtx_hitpix_l3inc;
   Int_t  diMuonF_m1_FittedVtx_hitpix_l3inc;
   Int_t  diMuonF_m2_FittedVtx_hitpix_l3inc;
+  Int_t  diMuonC_m1_FittedVtx_hitpix_Phase1;
+  Int_t  diMuonC_m2_FittedVtx_hitpix_Phase1;
+  Int_t  diMuonF_m1_FittedVtx_hitpix_Phase1;
+  Int_t  diMuonF_m2_FittedVtx_hitpix_Phase1;
   Int_t  nRecoMu;
 
   TH1F* leading_pt_pass_basic = new TH1F("leading_pt_pass_basic","",50,0.,50.);
@@ -172,11 +176,11 @@ void efficiency(const std::vector<std::string>& dirNames)
       if (verbose) std::cout << "File " << chEl->GetTitle() << " does not exist" << std::endl;
       continue;
     }
-		myfile->cd("cutFlowAnalyzerPXBL3PXFL2");
+		myfile->cd("cutFlowAnalyzerPXBL4PXFL3");
 
-		TTree *t = (TTree*)myfile->Get("cutFlowAnalyzerPXBL3PXFL2/Events");
+		TTree *t = (TTree*)myfile->Get("cutFlowAnalyzerPXBL4PXFL3/Events");
 		if (!t) {
-		  if (verbose) std::cout << "Tree cutFlowAnalyzerPXBL3PXFL2/Events does not exist" << std::endl;
+		  if (verbose) std::cout << "Tree cutFlowAnalyzerPXBL4PXFL3/Events does not exist" << std::endl;
 		  continue;
 		}
 
@@ -236,6 +240,11 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l3inc",&diMuonC_m2_FittedVtx_hitpix_l3inc);
 		t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l3inc",&diMuonF_m1_FittedVtx_hitpix_l3inc);
 		t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l3inc",&diMuonF_m2_FittedVtx_hitpix_l3inc);
+    //To be used for Run2
+    t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_Phase1",&diMuonC_m1_FittedVtx_hitpix_Phase1);
+		t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1",&diMuonC_m2_FittedVtx_hitpix_Phase1);
+		t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1",&diMuonF_m1_FittedVtx_hitpix_Phase1);
+		t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1",&diMuonF_m2_FittedVtx_hitpix_Phase1);
 
 		nentries = t->GetEntries();
 
@@ -250,7 +259,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 		    counter[k][4]++;
         //Phase-0 pixel system (Pre2017): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.2 cm; Lz = 48.5 cm
         //Phase-1 pixel system (2017+2018): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.9 cm; Lz = 39.6 cm
-        //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm
+        //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm //To be used for Run2
         //[1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
         //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
 		    if( ( genA0_Lxy < 10.9 && fabs(genA0_Lz) < 39.6 ) &&
@@ -299,6 +308,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
               if( ( diMuonC_m1_FittedVtx_hitpix_l3inc == 1 || diMuonC_m2_FittedVtx_hitpix_l3inc == 1 ) &&
                   ( diMuonF_m1_FittedVtx_hitpix_l3inc == 1 || diMuonF_m2_FittedVtx_hitpix_l3inc == 1 ) ){
+                    //This needs to match counter[k][5] geometry
                     counter[k][13]++;
 
                     if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
