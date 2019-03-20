@@ -449,8 +449,8 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
     for (unsigned int i = 0;  i < jets.size();  i++) {
       for (unsigned int j = i+1;  j < jets.size();  j++) {
-
-        deltaMassTmp = jets[i].mass() - jets[j].mass();
+        //closest mass
+        deltaMassTmp = fabs( jets[i].mass() - jets[j].mass() );
         if (deltaMassTmp < MinDeltaMass){
           MinDeltaMass = deltaMassTmp;
           PairOne = jets[i];

@@ -325,9 +325,10 @@ private:
 
   // Labels to access
   edm::EDGetTokenT<pat::MuonCollection> m_muons;        // reconstructed muons
-  edm::EDGetTokenT<pat::MultiMuonCollection> m_muJets;       // muon jets built from reconstructed muons
+  edm::EDGetTokenT<pat::MultiMuonCollection> m_muPairs;
+  edm::EDGetTokenT<pat::MultiMuonCollection> m_muJets;
+  edm::EDGetTokenT<pat::MuonCollection> m_muJetOrphans;
   edm::EDGetTokenT<reco::BeamSpot> m_beamSpot;
-  edm::EDGetTokenT<pat::MuonCollection> m_muJetOrphans; // muon orphan, not found in any group
   edm::EDGetTokenT<reco::TrackCollection> m_tracks;
   edm::EDGetTokenT<reco::GenParticleCollection> m_genParticles;
   edm::EDGetTokenT<edm::TriggerResults> m_trigRes;
@@ -415,7 +416,9 @@ private:
 
   // Reco branches in ROOT tree (they all start with b_)
   Int_t b_nRecoMu;
+  Int_t b_nMuPairs;
   Int_t b_nMuJets;
+  Float_t b_nDaughterPerMuPair;
   Float_t b_nDaughterPerMuJet;
 
   Float_t b_selMu0_px;
@@ -640,9 +643,10 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   //****************************************************************************
 
   m_muons           = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"));
+  m_muPairs         = consumes<pat::MultiMuonCollection>(iConfig.getParameter<edm::InputTag>("muPairs"));
   m_muJets          = consumes<pat::MultiMuonCollection>(iConfig.getParameter<edm::InputTag>("muJets"));
-  m_beamSpot        = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
   m_muJetOrphans    = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muJetOrphans"));
+  m_beamSpot        = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
   m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
   m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("PrunedGenParticles"));
   m_trigRes         = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
@@ -1425,7 +1429,25 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
   }
 
-  if ( m_debug > 10 ) std::cout << m_events << " Build RECO muon jets" << std::endl;
+  std::cout <<"---------------------"<< std::endl;
+  std::cout <<"Event #"<< m_events << ": build RECO muon pairs" << std::endl;
+
+  //Check all formed mu pairs in each event
+  edm::Handle<pat::MultiMuonCollection> muPairs;
+  iEvent.getByToken(m_muPairs, muPairs);
+  b_nDaughterPerMuPair = 0.;
+  b_nMuPairs = muPairs->size();
+  std::cout << ">>> Tot No. of Mu pairs: " << b_nMuPairs << std::endl;
+  for ( int i = 0; i < b_nMuPairs; i++ ) {
+    //Sanity check: should always equal 2
+    b_nDaughterPerMuPair = b_nDaughterPerMuPair + (*muPairs)[i].numberOfDaughters();
+    //print out mu pair masses
+    std::cout << "Mu pair #" << i+1 <<" mass: "<< (*muPairs)[i].mass() <<"; No. of Daughters: "<< (*muPairs)[i].numberOfDaughters() << std::endl;
+  }
+  if ( b_nMuPairs!=0 ) {
+    b_nDaughterPerMuPair = b_nDaughterPerMuPair / b_nMuPairs;
+    std::cout << "Avg. No. of Daughter per Mu pair: " << b_nDaughterPerMuPair << std::endl;
+  }
 
   edm::Handle<pat::MultiMuonCollection> muJets;
   iEvent.getByToken(m_muJets, muJets);
@@ -1450,12 +1472,19 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_muJetF_Mu1_eta = -999.;
   b_muJetF_Mu1_phi = -999.;
   b_is2MuJets = false;
+  std::cout << ">>> Tot No. of Mu Jets: " << b_nMuJets << std::endl;
   //Store average no. of daughters in one mujet
   for ( int d = 0; d < b_nMuJets; d++ ) {
     b_nDaughterPerMuJet = b_nDaughterPerMuJet + (*muJets)[d].numberOfDaughters();
+    std::cout << "Mu Jet #" << d+1 <<" mass: "<< (*muJets)[d].mass() << "; No. of Daughters: "<< (*muJets)[d].numberOfDaughters() << std::endl;
   }
-  b_nDaughterPerMuJet = b_nDaughterPerMuJet / b_nMuJets;
+  if ( b_nMuJets!=0 ) {
+    b_nDaughterPerMuJet = b_nDaughterPerMuJet / b_nMuJets;
+    std::cout << "Avg. No. of Daughter per Mu Jet: " << b_nDaughterPerMuJet << std::endl;
+  }
+
   if ( b_nMuJets == 2) {
+    std::cout << "Exactly two mu jets !! PairOne mass: "<< (*muJets)[0].mass() << "; PairTwo mass: "<< (*muJets)[1].mass() << std::endl;
     for ( int j = 0; j < b_nMuJets; j++ ) {
       bool isMuJetContainMu17 = false;
       for ( unsigned int m = 0; m < (*muJets)[j].numberOfDaughters(); m++ ) {
@@ -1515,6 +1544,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_muJetF_Mu1_pt = muJetF->muon(1)->pt();
     b_muJetF_Mu1_eta = muJetF->muon(1)->eta();
     b_muJetF_Mu1_phi = muJetF->muon(1)->phi();
+
   }
   // "Old" fitted vertexes
   b_is2DiMuonsFittedVtxOK = false;
@@ -2431,9 +2461,10 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   // Reco Muons
   m_ttree->Branch("nRecoMu",  &b_nRecoMu,  "nRecoMu/I");
+  m_ttree->Branch("nMuPairs",  &b_nMuPairs,  "nMuPairs/I");
+  m_ttree->Branch("nDaughterPerMuPair",  &b_nDaughterPerMuPair,  "nDaughterPerMuPair/F");
   m_ttree->Branch("nMuJets",  &b_nMuJets,  "nMuJets/I");
   m_ttree->Branch("nDaughterPerMuJet",  &b_nDaughterPerMuJet,  "nDaughterPerMuJet/F");
-
 
   m_ttree->Branch("selMu0_px",  &b_selMu0_px,  "selMu0_px/F");
   m_ttree->Branch("selMu1_px",  &b_selMu1_px,  "selMu1_px/F");
