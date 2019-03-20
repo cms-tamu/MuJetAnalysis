@@ -248,8 +248,13 @@ void efficiency(const std::vector<std::string>& dirNames)
 		  if( is3GenMu8 ) counter[k][3]++;
 		  if( is4GenMu8 ){
 		    counter[k][4]++;
-		    if( ( genA0_Lxy < 9.8 && fabs(genA0_Lz) < 46.5 ) &&
-            ( genA1_Lxy < 9.8 && fabs(genA1_Lz) < 46.5 ) ) counter[k][5]++;
+        //Phase-0 pixel system (Pre2017): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.2 cm; Lz = 48.5 cm
+        //Phase-1 pixel system (2017+2018): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.9 cm; Lz = 39.6 cm
+        //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm
+        //[1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
+        //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
+		    if( ( genA0_Lxy < 10.9 && fabs(genA0_Lz) < 39.6 ) &&
+            ( genA1_Lxy < 10.9 && fabs(genA1_Lz) < 39.6 ) ) counter[k][5]++;
 		  }
 
 		  if( is1SelMu17 ) counter[k][6]++;
@@ -401,7 +406,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" is3GenMu8   &   "<<left<< setw(7)<< counter[k][3]<<"    &    "<<left<< setw(7)<< TotEff[k][3]<<"      &        "<<left<< setw(7)<<  RelEff[k][3]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][3]<<" & "<<left<< setw(7)<<  RelEffErr[k][3]<<" hline "<<endl;
   cout<<" is4GenMu8   &   "<<left<< setw(7)<< counter[k][4]<<"    &    "<<left<< setw(7)<< TotEff[k][4]<<"      &        "<<left<< setw(7)<<  RelEff[k][4]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][4]<<" & "<<left<< setw(7)<<  RelEffErr[k][4]<<" hline "<<endl;
 
-  cout<<" Lxy<9.8 && Lz<48.5 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
+  cout<<" Lxy<10.9 && Lz<39.6 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
   cout<<"                                                                          "<<" hline "<<endl;
 
   cout<<" is1SelMu17   &    "<<left<< setw(7)<< counter[k][6]<<"  &    "<<left<< setw(7)<< TotEff[k][6] <<setw(10)<<"   &    "<<left<< setw(7)<<  RelEff[k][6]<<"  &    "<<left<< setw(7)<<  TotEffErr[k][6]<<" &  " <<  RelEffErr[k][6]<<" hline "<<endl;
