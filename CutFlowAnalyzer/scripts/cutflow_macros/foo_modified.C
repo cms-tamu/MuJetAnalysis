@@ -262,8 +262,8 @@ void efficiency(const std::vector<std::string>& dirNames)
         //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm //To be used for Run2
         //[1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
         //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
-		    if( ( genA0_Lxy < 10.9 && fabs(genA0_Lz) < 39.6 ) &&
-            ( genA1_Lxy < 10.9 && fabs(genA1_Lz) < 39.6 ) ) counter[k][5]++;
+		    if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) &&
+            ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) counter[k][5]++;
 		  }
 
 		  if( is1SelMu17 ) counter[k][6]++;
@@ -306,9 +306,9 @@ void efficiency(const std::vector<std::string>& dirNames)
             if( is2DiMuons ){
               counter[k][12]++;
 
-              if( ( diMuonC_m1_FittedVtx_hitpix_l3inc == 1 || diMuonC_m2_FittedVtx_hitpix_l3inc == 1 ) &&
-                  ( diMuonF_m1_FittedVtx_hitpix_l3inc == 1 || diMuonF_m2_FittedVtx_hitpix_l3inc == 1 ) ){
-                    //This needs to match counter[k][5] geometry
+              if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
+                  ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
+                    //!!! Note: this needs to match counter[k][5] geometry
                     counter[k][13]++;
 
                     if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
@@ -416,7 +416,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" is3GenMu8   &   "<<left<< setw(7)<< counter[k][3]<<"    &    "<<left<< setw(7)<< TotEff[k][3]<<"      &        "<<left<< setw(7)<<  RelEff[k][3]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][3]<<" & "<<left<< setw(7)<<  RelEffErr[k][3]<<" hline "<<endl;
   cout<<" is4GenMu8   &   "<<left<< setw(7)<< counter[k][4]<<"    &    "<<left<< setw(7)<< TotEff[k][4]<<"      &        "<<left<< setw(7)<<  RelEff[k][4]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][4]<<" & "<<left<< setw(7)<<  RelEffErr[k][4]<<" hline "<<endl;
 
-  cout<<" Lxy<10.9 && Lz<39.6 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
+  cout<<" Lxy<16.0 && Lz<51.6 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
   cout<<"                                                                          "<<" hline "<<endl;
 
   cout<<" is1SelMu17   &    "<<left<< setw(7)<< counter[k][6]<<"  &    "<<left<< setw(7)<< TotEff[k][6] <<setw(10)<<"   &    "<<left<< setw(7)<<  RelEff[k][6]<<"  &    "<<left<< setw(7)<<  TotEffErr[k][6]<<" &  " <<  RelEffErr[k][6]<<" hline "<<endl;
