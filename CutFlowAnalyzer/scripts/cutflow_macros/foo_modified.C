@@ -311,6 +311,11 @@ void efficiency(const std::vector<std::string>& dirNames)
                     //!!! Note: this needs to match counter[k][5] geometry
                     counter[k][13]++;
 
+                    //**********************************************
+                    // Placeholder for dz, iso distributions for dark SUSY samples,
+                    // especially for large displaced ones
+                    //**********************************************
+
                     if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
                       counter[k][14]++;
 
