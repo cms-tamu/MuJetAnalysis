@@ -2730,37 +2730,6 @@ CutFlowAnalyzer_MiniAOD::endJob()
 
    cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << endl;
    cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << endl;
-
-   cout << " *** FITTED VERTEXES *** " << endl;
-
-
-   cout << " *** CONSISTENT VERTEXES *** " << endl;
-
-   cout << " *** FITTED VERTEXES *** " << endl;
-  cout << m_events << endl;
-  cout << m_events1GenMu17                  << endl;
-  cout << m_events2GenMu8                   << endl;
-  cout << m_events3GenMu8                   << endl;
-  cout << m_events4GenMu8                   << endl;
-  cout << m_events1SelMu17                  << endl;
-  cout << m_events2SelMu8                   << endl;
-  cout << m_events3SelMu8                   << endl;
-  cout << m_events4SelMu8                   << endl;
-  cout << m_events2MuJets                   << endl;
-  cout << m_events2DiMuons                  << endl;
-
-   cout << " *** CONSISTENT VERTEXES *** " << endl;
-  cout << m_events << endl;
-  cout << m_events1GenMu17                      << endl;
-  cout << m_events2GenMu8                       << endl;
-  cout << m_events3GenMu8                       << endl;
-  cout << m_events4GenMu8                       << endl;
-  cout << m_events1SelMu17                      << endl;
-  cout << m_events2SelMu8                       << endl;
-  cout << m_events3SelMu8                       << endl;
-  cout << m_events4SelMu8                       << endl;
-  cout << m_events2MuJets                       << endl;
-  cout << m_events2DiMuons                      << endl;
 }
 
 void CutFlowAnalyzer_MiniAOD::FillTrigInfo( TH1F * h1, const edm::TriggerNames& triggerNames, std::map<int,std::string> nameAndNumb )
