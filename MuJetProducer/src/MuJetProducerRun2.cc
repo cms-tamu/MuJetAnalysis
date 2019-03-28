@@ -398,9 +398,9 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
                                    m_centralNumberAboveThresholdCone,
                                    m_unionNumberAboveThresholdCone,
                                    m_centralNumberAboveThresholdPt,
-								   m_unionNumberAboveThresholdPt,
-								   m_barrelPixelLayer,
-								   m_endcapPixelLayer);
+                                   m_unionNumberAboveThresholdPt,
+                                   m_barrelPixelLayer,
+                                   m_endcapPixelLayer);
 
           bool satisfied_deltaR = (muonPair.dR(0, 1, muonPair.vertexValid()) < m_maxDeltaR);
 

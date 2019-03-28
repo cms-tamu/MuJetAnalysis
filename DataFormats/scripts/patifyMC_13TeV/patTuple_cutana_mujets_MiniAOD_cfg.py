@@ -29,8 +29,9 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_MiniAOD_cfi"
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:/afs/cern.ch/work/w/wshi/public/dPhiForMuJet/CMSSW_9_4_7/src/B6C2D7D2-BDB1-E811-937D-A4BF01125BD0.root'#2017 NMSSM MC(mH=125,mA=3)
+        #'file:/afs/cern.ch/work/w/wshi/public/dPhiForMuJet/CMSSW_9_4_7/src/B6C2D7D2-BDB1-E811-937D-A4BF01125BD0.root'#2017 NMSSM MC(mH=125,mA=3)
         #'file:/afs/cern.ch/work/w/wshi/public/2017MuClusterdM/CMSSW_9_4_7/src/460C5E54-06B0-E811-B24D-1CB72C1B6CCA.root'#2017 ALP MC (mALP=30)
+        'file:/afs/cern.ch/work/w/wshi/public/Run2DimuSorting/CMSSW_9_4_7/src/BA9717EC-3840-E911-A0A8-AC1F6B596094.root'#2017 MSSMD MC (mN1=10, mGammaD=5, cT=10)
         #'file:/afs/cern.ch/work/w/wshi/public/2017MuClusterdM/CMSSW_9_4_7/src/B654BC56-CC25-E911-812F-B083FECFF2BE.root'#2017 MSSMD MC (mN1=10, mGammaD=8.5, cT=2)
         #'file:/afs/cern.ch/work/w/wshi/public/2017MuClusterdM/CMSSW_9_4_7/src/82230C10-5931-E911-907C-008CFA1111D0.root'#2017 MSSMD MC (mN1=60, mGammaD=35, cT=2)
         #'file:/afs/cern.ch/work/w/wshi/public/RunII2017Analysis/CMSSW_9_4_7/src/FAC28F5A-C639-E811-B4BB-10604BA8FC24.root'#2017C Data
