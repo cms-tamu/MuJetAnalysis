@@ -48,13 +48,13 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
     lorentzVector += (*muon)->p4();
   }
 
+	// Wei SHI@03.28.2019: Set charge for the multi-muon, doesn't seem to be useful
   setCharge(charge);
-  setP4( PolarLorentzVector(lorentzVector.pt(),lorentzVector.eta(),lorentzVector.phi(),lorentzVector.mass()));
-
+  setP4( PolarLorentzVector(lorentzVector.pt(),lorentzVector.eta(),lorentzVector.phi(),lorentzVector.mass()) );
 
   std::map<const reco::Candidate*,unsigned int> ancestorCounter;
   for (std::vector<const pat::Muon*>::const_iterator muon = muons.begin();  muon != muons.end();  ++muon) {
-    const reco::GenParticle *genParticle = (*muon)->genParticle();
+    const reco::GenParticle *genParticle = (*muon)->genParticle();//For MC ONLY
     if (genParticle != NULL) {
       const reco::Candidate *mother = genParticle->mother();
       while (mother != NULL) {

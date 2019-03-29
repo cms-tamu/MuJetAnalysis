@@ -251,6 +251,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 		for( int i = 0; i < nentries; i++ ){
 		  t->GetEntry(i);
 		  counter[k][0]++;
+      cout<<"Event #"<<i+1<<endl;
 
 		  if( is1GenMu17 ) counter[k][1]++;
 		  if( is2GenMu8 ) counter[k][2]++;
@@ -263,8 +264,13 @@ void efficiency(const std::vector<std::string>& dirNames)
         //[1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
         //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
 		    if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) &&
-            ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) counter[k][5]++;
-		  }
+            ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
+              counter[k][5]++;
+            }
+            else{//outside fiducial volume
+              cout<<"GEN Outside Pixel: genA0_Lxy = "<<genA0_Lxy<<"; fabs(genA0_Lz) = "<<fabs(genA0_Lz)<<"; genA1_Lxy = "<<genA1_Lxy<<"; fabs(genA1_Lz)= "<<fabs(genA1_Lz)<<endl;
+            }
+		  }//End GEN Level
 
 		  if( is1SelMu17 ) counter[k][6]++;
 		  if( is2SelMu8 ) counter[k][7]++;
@@ -310,6 +316,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                   ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
                     //!!! Note: this needs to match counter[k][5] geometry
                     counter[k][13]++;
+                    cout<<"Offline has Pixel Hit: C_m1 = "<<diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<diMuonC_m2_FittedVtx_hitpix_Phase1<<"; F_m1 = "<<diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<diMuonF_m2_FittedVtx_hitpix_Phase1<<endl;
+                    cout<<"massC: "<<massC<<"massF: "<<massF<<endl;
 
                     //**********************************************
                     // Placeholder for dz, iso distributions for dark SUSY samples,
