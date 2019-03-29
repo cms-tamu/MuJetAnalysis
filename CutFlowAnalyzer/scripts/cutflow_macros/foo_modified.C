@@ -251,7 +251,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 		for( int i = 0; i < nentries; i++ ){
 		  t->GetEntry(i);
 		  counter[k][0]++;
-      cout<<"Event #"<<i+1<<endl;
+      int debug=0;
 
 		  if( is1GenMu17 ) counter[k][1]++;
 		  if( is2GenMu8 ) counter[k][2]++;
@@ -268,6 +268,8 @@ void efficiency(const std::vector<std::string>& dirNames)
               counter[k][5]++;
             }
             else{//outside fiducial volume
+              debug=1;
+              cout<<">>> Event #"<<i+1<<endl;
               cout<<"GEN Outside Pixel: genA0_Lxy = "<<genA0_Lxy<<"; fabs(genA0_Lz) = "<<fabs(genA0_Lz)<<"; genA1_Lxy = "<<genA1_Lxy<<"; fabs(genA1_Lz)= "<<fabs(genA1_Lz)<<endl;
             }
 		  }//End GEN Level
@@ -316,8 +318,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                   ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
                     //!!! Note: this needs to match counter[k][5] geometry
                     counter[k][13]++;
-                    cout<<"Offline has Pixel Hit: C_m1 = "<<diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<diMuonC_m2_FittedVtx_hitpix_Phase1<<"; F_m1 = "<<diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<diMuonF_m2_FittedVtx_hitpix_Phase1<<endl;
-                    cout<<"massC: "<<massC<<"massF: "<<massF<<endl;
+                    if(debug==1) cout<<"Offline has Pixel Hit: C_m1 = "<<diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<diMuonC_m2_FittedVtx_hitpix_Phase1<<"; F_m1 = "<<diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<diMuonF_m2_FittedVtx_hitpix_Phase1<<endl;
+                    if(debug==1) cout<<"massC: "<<massC<<"massF: "<<massF<<endl;
 
                     //**********************************************
                     // Placeholder for dz, iso distributions for dark SUSY samples,
