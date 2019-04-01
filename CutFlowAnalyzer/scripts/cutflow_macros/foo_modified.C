@@ -279,7 +279,8 @@ void efficiency(const std::vector<std::string>& dirNames)
             else{//outside fiducial volume
               debug=1;
               cout<<">>> Event #"<<i+1<<endl;
-              cout<<"GEN Outside Pixel: genA0_Lxy = "<<genA0_Lxy<<"; |genA0_Lz| = "<<fabs(genA0_Lz)<<"; genA1_Lxy = "<<genA1_Lxy<<"; |genA1_Lz|= "<<fabs(genA1_Lz)<<endl;
+              cout<<"genA0: Lxy = "<<genA0_Lxy<<" cm; |Lz| = "<<fabs(genA0_Lz)<<" cm"<<endl;
+              cout<<"genA1: Lxy = "<<genA1_Lxy<<" cm; |Lz| = "<<fabs(genA1_Lz)<<" cm"<<endl;
             }
 		  }//End GEN Level
 
@@ -328,10 +329,10 @@ void efficiency(const std::vector<std::string>& dirNames)
                     //!!! Note: this needs to match counter[k][5] geometry
                     counter[k][13]++;
                     if(debug==1) {
-                      cout<<"DimuC mass: "<<massC<<"; Lxy = "<<diMuonC_FittedVtx_Lxy<<"; |Lz| = "<<sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) )<<endl;
-                      cout<<"Pixel Hit: C_m1 = "<<diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<diMuonC_m2_FittedVtx_hitpix_Phase1<<endl;
-                      cout<<"DimuF mass: "<<massF<<"; Lxy = "<<diMuonF_FittedVtx_Lxy<<"; |Lz| = "<<sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) )<<endl;
-                      cout<<"Pixel Hit: F_m1 = "<<diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<diMuonF_m2_FittedVtx_hitpix_Phase1<<endl;
+                      cout<<"DimuC: Lxy = "<<diMuonC_FittedVtx_Lxy<<" cm; |Lz| = "<<sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) )<<" cm; mass = "<<massC<<endl;
+                      cout<<"Pixel: C_m1 = "<<diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<diMuonC_m2_FittedVtx_hitpix_Phase1<<endl;
+                      cout<<"DimuF: Lxy = "<<diMuonF_FittedVtx_Lxy<<" cm; |Lz| = "<<sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) )<<" cm; mass = "<<massF<<endl;
+                      cout<<"Pixel: F_m1 = "<<diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<diMuonF_m2_FittedVtx_hitpix_Phase1<<endl;
                     }
 
                     //**********************************************
