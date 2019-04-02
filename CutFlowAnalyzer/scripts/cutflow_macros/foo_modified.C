@@ -116,15 +116,27 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t  genA0_Lz;
   Float_t  genA1_Lz;
   Float_t  diMuons_dz_FittedVtx;
-
+  /*
   Int_t  diMuonC_m1_FittedVtx_hitpix_l3inc;
   Int_t  diMuonC_m2_FittedVtx_hitpix_l3inc;
   Int_t  diMuonF_m1_FittedVtx_hitpix_l3inc;
   Int_t  diMuonF_m2_FittedVtx_hitpix_l3inc;
+  */
   Int_t  diMuonC_m1_FittedVtx_hitpix_Phase1;
   Int_t  diMuonC_m2_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m1_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m2_FittedVtx_hitpix_Phase1;
+
+  Int_t diMuonC_m1_FittedVtx_NonZero_ValidPixelHits;
+  Int_t diMuonC_m2_FittedVtx_NonZero_ValidPixelHits;
+  Int_t diMuonF_m1_FittedVtx_NonZero_ValidPixelHits;
+  Int_t diMuonF_m2_FittedVtx_NonZero_ValidPixelHits;
+
+  Int_t diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
+
   Float_t  diMuonC_FittedVtx_Lxy;
   Float_t  diMuonC_FittedVtx_L;
   Float_t  diMuonF_FittedVtx_Lxy;
@@ -239,16 +251,27 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("genA1_Lxy",&genA1_Lxy);
 		t->SetBranchAddress("genA0_Lz",&genA0_Lz);
 		t->SetBranchAddress("genA1_Lz",&genA1_Lz);
-
+    /*
 		t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_l3inc",&diMuonC_m1_FittedVtx_hitpix_l3inc);
 		t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l3inc",&diMuonC_m2_FittedVtx_hitpix_l3inc);
 		t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l3inc",&diMuonF_m1_FittedVtx_hitpix_l3inc);
 		t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l3inc",&diMuonF_m2_FittedVtx_hitpix_l3inc);
+    */
     //To be used for Run2
     t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_Phase1",&diMuonC_m1_FittedVtx_hitpix_Phase1);
 		t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1",&diMuonC_m2_FittedVtx_hitpix_Phase1);
 		t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1",&diMuonF_m1_FittedVtx_hitpix_Phase1);
 		t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1",&diMuonF_m2_FittedVtx_hitpix_Phase1);
+    //
+    t->SetBranchAddress("diMuonC_m1_FittedVtx_NonZero_ValidPixelHits",&diMuonC_m1_FittedVtx_NonZero_ValidPixelHits);
+		t->SetBranchAddress("diMuonC_m2_FittedVtx_NonZero_ValidPixelHits",&diMuonC_m2_FittedVtx_NonZero_ValidPixelHits);
+		t->SetBranchAddress("diMuonF_m1_FittedVtx_NonZero_ValidPixelHits",&diMuonF_m1_FittedVtx_NonZero_ValidPixelHits);
+		t->SetBranchAddress("diMuonF_m2_FittedVtx_NonZero_ValidPixelHits",&diMuonF_m2_FittedVtx_NonZero_ValidPixelHits);
+    //
+    t->SetBranchAddress("diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement);
+		t->SetBranchAddress("diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement);
+		t->SetBranchAddress("diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement);
+		t->SetBranchAddress("diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement);
     //For checking pixel Hit
     t->SetBranchAddress("diMuonC_FittedVtx_Lxy",&diMuonC_FittedVtx_Lxy);
 		t->SetBranchAddress("diMuonC_FittedVtx_L",&diMuonC_FittedVtx_L);
@@ -330,9 +353,13 @@ void efficiency(const std::vector<std::string>& dirNames)
                     counter[k][13]++;
                     if(debug==1) {
                       cout<<"DimuC: Lxy = "<<diMuonC_FittedVtx_Lxy<<" cm; |Lz| = "<<sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) )<<" cm; mass = "<<massC<<endl;
-                      cout<<"Pixel: C_m1 = "<<diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<diMuonC_m2_FittedVtx_hitpix_Phase1<<endl;
+                      cout<<"ValidHit  PixelLayers: C_m1 = "<<diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<diMuonC_m2_FittedVtx_hitpix_Phase1<<endl;
+                      cout<<"Non-Zero    PixelHits: C_m1 = "<<diMuonC_m1_FittedVtx_NonZero_ValidPixelHits<<"; C_m2 = "<<diMuonC_m2_FittedVtx_NonZero_ValidPixelHits<<endl;
+                      cout<<"Non-Zero PixelMeasure: C_m1 = "<<diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; C_m2 = "<<diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<endl;
                       cout<<"DimuF: Lxy = "<<diMuonF_FittedVtx_Lxy<<" cm; |Lz| = "<<sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) )<<" cm; mass = "<<massF<<endl;
-                      cout<<"Pixel: F_m1 = "<<diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<diMuonF_m2_FittedVtx_hitpix_Phase1<<endl;
+                      cout<<"ValidHit  PixelLayers: F_m1 = "<<diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<diMuonF_m2_FittedVtx_hitpix_Phase1<<endl;
+                      cout<<"Non-Zero    PixelHits: F_m1 = "<<diMuonF_m1_FittedVtx_NonZero_ValidPixelHits<<"; F_m2 = "<<diMuonF_m2_FittedVtx_NonZero_ValidPixelHits<<endl;
+                      cout<<"Non-Zero PixelMeasure: F_m1 = "<<diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; F_m2 = "<<diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<endl;
                     }
 
                     //**********************************************

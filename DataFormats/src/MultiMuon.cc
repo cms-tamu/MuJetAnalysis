@@ -211,6 +211,8 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
 pat::MultiMuon::~MultiMuon() {}
 
 /// calculate the vertex from TransientTracks; return true if successful
+//Refer to:[1]https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookVertexFittingTutorial
+//[2] https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideTransientTracks
 bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrackBuilder, int barrelLayer, int endcapLayer) {
 #ifdef MULTIMUONCANDIDATE_FOR_FWLITE
   return false;
