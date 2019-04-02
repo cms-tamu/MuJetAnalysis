@@ -2025,6 +2025,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	const pat::PackedCandidate* canddiMuonC = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(k)->sourceCandidatePtr(0).get());
         if( tamu::helpers::sameTrack(&*track,&(canddiMuonC->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
+
+          std::cout << "diMuC Mu"<<k<<" pseudotrk(x,y,z)[cm]: " <<canddiMuonC->pseudoTrack().vx() << ", "<<canddiMuonC->pseudoTrack().vy() <<", "<<canddiMuonC->pseudoTrack().vz()<<std::endl;
+          std::cout << "Same trk          (x,y,z)[cm]: " <<track->vx() << ", "<<track->vy() <<", "<<track->vz()<<std::endl;
           /*
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonC->vertexPoint().x(), diMuonC->vertexPoint().y(), diMuonC->vertexPoint().z());
@@ -2079,6 +2082,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	const pat::PackedCandidate* canddiMuonF = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(k)->sourceCandidatePtr(0).get());
         if( tamu::helpers::sameTrack(&*track,&(canddiMuonF->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
+          std::cout << "diMuF Mu"<<k<<" pseudotrk(x,y,z)[cm]: " <<canddiMuonF->pseudoTrack().vx() << ", "<<canddiMuonF->pseudoTrack().vy() <<", "<<canddiMuonF->pseudoTrack().vz()<<std::endl;
+          std::cout << "Same trk          (x,y,z)[cm]: " <<track->vx() << ", "<<track->vy() <<", "<<track->vz()<<std::endl;
           /*
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonF->vertexPoint().x(), diMuonF->vertexPoint().y(), diMuonF->vertexPoint().z());
