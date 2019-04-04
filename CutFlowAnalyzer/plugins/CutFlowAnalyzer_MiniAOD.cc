@@ -1101,14 +1101,15 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         b_genA1_L = sqrt( b_genA1_Lx * b_genA1_Lx + b_genA1_Ly * b_genA1_Ly + b_genA1_Lz * b_genA1_Lz );
 
         std::cout<<">>> Event #"<<m_events<<std::endl;
-        std::cout<<"genA0     (x,y,z)[cm]: "<<b_genA0_vx<<", "<<b_genA0_vy<<", "<<b_genA0_vz<<std::endl;
-        std::cout<<"genA0 Mu0 (x,y,z)[cm]: "<<b_genA0Mu0_vx<<", "<<b_genA0Mu0_vy<<", "<<b_genA0Mu0_vz<<std::endl;
-        std::cout<<"genA0 Mu1 (x,y,z)[cm]: "<<b_genA0Mu1_vx<<", "<<b_genA0Mu1_vy<<", "<<b_genA0Mu1_vz<<std::endl;
-        std::cout<<"genA0 (Lxy, |Lz|)[cm]: "<<b_genA0_Lxy<<", "<<fabs(b_genA0_Lz)<<std::endl;
-        std::cout<<"genA1     (x,y,z)[cm]: "<<b_genA1_vx<<", "<<b_genA1_vy<<", "<<b_genA1_vz<<std::endl;
-        std::cout<<"genA1 Mu0 (x,y,z)[cm]: "<<b_genA1Mu0_vx<<", "<<b_genA1Mu0_vy<<", "<<b_genA1Mu0_vz<<std::endl;
-        std::cout<<"genA1 Mu1 (x,y,z)[cm]: "<<b_genA1Mu1_vx<<", "<<b_genA1Mu1_vy<<", "<<b_genA1Mu1_vz<<std::endl;
-        std::cout<<"genA1 (Lxy, |Lz|)[cm]: "<<b_genA1_Lxy<<", "<<fabs(b_genA1_Lz)<<std::endl;
+        std::cout<<"GENA mass (0, 1)[GeV]: "<<b_genA0_m    <<", "<<b_genA1_m       << std::endl;
+        std::cout<<"genA0     (x,y,z)[cm]: "<<b_genA0_vx   <<", "<<b_genA0_vy      <<", "<<b_genA0_vz<<std::endl;
+        std::cout<<"genA0 Mu0 (x,y,z)[cm]: "<<b_genA0Mu0_vx<<", "<<b_genA0Mu0_vy   <<", "<<b_genA0Mu0_vz<<std::endl;
+        std::cout<<"genA0 Mu1 (x,y,z)[cm]: "<<b_genA0Mu1_vx<<", "<<b_genA0Mu1_vy   <<", "<<b_genA0Mu1_vz<<std::endl;
+        std::cout<<"genA0 (Lxy, |Lz|)[cm]: "<<b_genA0_Lxy  <<", "<<fabs(b_genA0_Lz)<<std::endl;
+        std::cout<<"genA1     (x,y,z)[cm]: "<<b_genA1_vx   <<", "<<b_genA1_vy      <<", "<<b_genA1_vz<<std::endl;
+        std::cout<<"genA1 Mu0 (x,y,z)[cm]: "<<b_genA1Mu0_vx<<", "<<b_genA1Mu0_vy   <<", "<<b_genA1Mu0_vz<<std::endl;
+        std::cout<<"genA1 Mu1 (x,y,z)[cm]: "<<b_genA1Mu1_vx<<", "<<b_genA1Mu1_vy   <<", "<<b_genA1Mu1_vz<<std::endl;
+        std::cout<<"genA1 (Lxy, |Lz|)[cm]: "<<b_genA1_Lxy  <<", "<<fabs(b_genA1_Lz)<<std::endl;
 
       } else {
         std::cout << "WARNING! Muon vertexes are different. No Lxy's are calculated." << std::endl;
@@ -2026,7 +2027,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         if( tamu::helpers::sameTrack(&*track,&(canddiMuonC->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
 
-          std::cout << "diMuC Mu"<<k<<" pseudotrk(x,y,z)[cm]: " <<canddiMuonC->pseudoTrack().vx() << ", "<<canddiMuonC->pseudoTrack().vy() <<", "<<canddiMuonC->pseudoTrack().vz()<<std::endl;
+          std::cout << "diMuC Mu"<<k<<" seudotrk(x,y,z)[cm]: " <<canddiMuonC->pseudoTrack().vx() << ", "<<canddiMuonC->pseudoTrack().vy() <<", "<<canddiMuonC->pseudoTrack().vz()<<std::endl;
           std::cout << "Same trk          (x,y,z)[cm]: " <<track->vx() << ", "<<track->vy() <<", "<<track->vz()<<std::endl;
           /*
           static CheckHitPattern checkHitPattern;
@@ -2082,7 +2083,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	const pat::PackedCandidate* canddiMuonF = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(k)->sourceCandidatePtr(0).get());
         if( tamu::helpers::sameTrack(&*track,&(canddiMuonF->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
-          std::cout << "diMuF Mu"<<k<<" pseudotrk(x,y,z)[cm]: " <<canddiMuonF->pseudoTrack().vx() << ", "<<canddiMuonF->pseudoTrack().vy() <<", "<<canddiMuonF->pseudoTrack().vz()<<std::endl;
+          std::cout << "diMuF Mu"<<k<<" seudotrk(x,y,z)[cm]: " <<canddiMuonF->pseudoTrack().vx() << ", "<<canddiMuonF->pseudoTrack().vy() <<", "<<canddiMuonF->pseudoTrack().vz()<<std::endl;
           std::cout << "Same trk          (x,y,z)[cm]: " <<track->vx() << ", "<<track->vy() <<", "<<track->vz()<<std::endl;
           /*
           static CheckHitPattern checkHitPattern;

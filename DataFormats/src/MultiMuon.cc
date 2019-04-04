@@ -169,7 +169,6 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
   m_chi2 = aMultiMuon.m_chi2;
   m_ndof = aMultiMuon.m_ndof;
   m_mindisttrack = aMultiMuon.m_mindisttrack;
-  m_mindisttrack = aMultiMuon.m_mindisttrack;
   m_mindisttrack_scan = aMultiMuon.m_mindisttrack_scan;
   m_vtx_x_scan = aMultiMuon.m_vtx_x_scan;
   m_vtx_y_scan = aMultiMuon.m_vtx_y_scan;
@@ -236,12 +235,18 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
   }
 
   if (tracksToVertex.size() < 2) return false;
+	if (muonTracks.size() < 2) return false;
+	std::cout << "muonTrk 0      (x,y,z)[cm]: " << muonTracks[0]->vx()    << ", " << muonTracks[0]->vy()    << ", " << muonTracks[0]->vz()    <<std::endl;
+	std::cout << "muonTrk 1      (x,y,z)[cm]: " << muonTracks[1]->vx()    << ", " << muonTracks[1]->vy()    << ", " << muonTracks[1]->vz()    <<std::endl;
 
   KalmanVertexFitter vertexFitter;
   CachingVertex<5> fittedVertex = vertexFitter.vertex(tracksToVertex);
 
   if(fittedVertex.isValid()){
+		std::cout << " *** FittedVertex valid!" <<std::endl;
     setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
+
+		std::cout << " Fitted vtx (x,y,z)[cm]: " <<fittedVertex.position().x() << ", " << fittedVertex.position().y() << ", " <<fittedVertex.position().z()<<std::endl;
 
     double covarianceMatrixArray[6] = {
       fittedVertex.error().cxx(),
@@ -257,14 +262,18 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
     m_vertexValid_fitted = true;
 
+		/*
     FreeTrajectoryState const & posState2 = tracksToVertex[0].impactPointTSCP().theState();
     FreeTrajectoryState const & negState2 = tracksToVertex[1].impactPointTSCP().theState();
 
     TwoTrackMinimumDistance cApp2;
-    cApp2.calculate(posState2, negState2);
+    cApp2.calculate(posState2, negState2);*/
+
   }
   else if( !fittedVertex.isValid()){
-
+		std::cout << " @@@ FittedVertex not valid!"<<std::endl;
+		//This doesn't look like necessary
+    /*
     FreeTrajectoryState const & posState = tracksToVertex[0].impactPointTSCP().theState();
     FreeTrajectoryState const & negState = tracksToVertex[1].impactPointTSCP().theState();
 
@@ -273,8 +282,10 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     float dca = fabs( cApp.distance() );
 
     m_mindisttrack = dca;
+		*/
 
-    if (muonTracks.size() > 0){
+		//Need 2 muon tracks
+    if (muonTracks.size() > 1){
 
       double newx1 = 0.0;
       double newy1 = 0.0;
@@ -283,6 +294,9 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       double newx2 = 0.0;
       double newy2 = 0.0;
       double newz2 = 0.0;
+
+			int final_i = -1;
+			int final_j = -1;
 
       float minSeparation = std::numeric_limits<float>::max();
 
@@ -338,10 +352,13 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 						newx2 = current_x_bdy2;
 						newy2 = y_at_x_2;
 						newz2 = z_at_x_2;
+						final_i = i;
+						final_j = j;
 					}//end if separation
 
 				}//end for j maxR
 			}//end for i maxR
+			std::cout << " Scan vtx i = " <<final_i << "; j = "<< final_j <<std::endl;
 
       m_mindisttrack_scan = minSeparation;
 
@@ -350,14 +367,19 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
       m_vtx_z_scan = (newz1+newz2)/2.;
 		}//end if muonTracks.size() > 0
 
-    setVertex(Point(m_vtx_x_scan,m_vtx_y_scan,m_vtx_z_scan));
+    setVertex( Point(m_vtx_x_scan, m_vtx_y_scan, m_vtx_z_scan) );
+		std::cout << " Scan vtx (x,y,z)[cm]: " << m_vtx_x_scan << ", " << m_vtx_y_scan << ", " << m_vtx_z_scan <<std::endl;
 
     if( m_mindisttrack_scan < 0.05 ) m_vertexValid_mindist = true;
+
   }//end elif !fittedVertex.isValid()
 
-
-  if(m_vertexValid_fitted || m_vertexValid_mindist) m_vertexValid = true;
-  else{ return false;}
+  if(m_vertexValid_fitted || m_vertexValid_mindist) {
+		m_vertexValid = true;
+	}
+	else{
+		return false;
+	}
 
 
   m_vertexPCA.clear();
@@ -366,10 +388,12 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
     TrajectoryStateClosestToPoint TSCTP = tracksToVertex[i].trajectoryStateClosestToPoint(vertexPoint());
 
+    std::cout << " TSCTP (x,y,z)[cm]: " << TSCTP.position().x() << ", " << TSCTP.position().y() << ", " << TSCTP.position().z() <<std::endl;
+
     m_vertexPCA.push_back(TSCTP.position());
 
     GlobalError error = TSCTP.theState().cartesianError().position();
-//    double covarianceMatrixArray2[6] = {error.cxx(), error.cyy(), error.czz(), error.cyx(), error.czx(), error.czy()};
+		//{error.cxx(), error.cyy(), error.czz(), error.cyx(), error.czx(), error.czy()};
     double covarianceMatrixArray2[6] = {error.cxx(), error.cyx(), error.cyy(), error.czx(), error.czy(), error.czz()};
 		// YP: Check if this definition is correct
     CovarianceMatrix covarianceMatrix2 = CovarianceMatrix(covarianceMatrixArray2, 6);
