@@ -29,11 +29,11 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_MiniAOD_cfi"
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/460C5E54-06B0-E811-B24D-1CB72C1B6CCA.root'#2017 ALP MC (mALP=30)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/BA9717EC-3840-E911-A0A8-AC1F6B596094.root'#2017 MSSMD MC (mN1=10, mGammaD=5, cT=10)
-        'file:/afs/cern.ch/work/w/wshi/public/INPUT/E8D69F89-6C33-E911-B440-D4856459AC30.root'#2017 MSSMD MC (mN1=10, mGammaD=5, cT=50)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/B654BC56-CC25-E911-812F-B083FECFF2BE.root'#2017 MSSMD MC (mN1=10, mGammaD=8.5, cT=2)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/82230C10-5931-E911-907C-008CFA1111D0.root'#2017 MSSMD MC (mN1=60, mGammaD=35, cT=2)
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/460C5E54-06B0-E811-B24D-1CB72C1B6CCA.root'#2017 ALP MC MINIAODSIM (mALP=30)
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/BA9717EC-3840-E911-A0A8-AC1F6B596094.root'#2017 MSSMD MC MINIAODSIM (mN1=10, mGammaD=5, cT=10)
+        'file:/afs/cern.ch/work/w/wshi/public/INPUT/E8D69F89-6C33-E911-B440-D4856459AC30.root'#2017 MSSMD MC MINIAODSIM (mN1=10, mGammaD=5, cT=50)
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/B654BC56-CC25-E911-812F-B083FECFF2BE.root'#2017 MSSMD MC MINIAODSIM (mN1=10, mGammaD=8.5, cT=2)
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/82230C10-5931-E911-907C-008CFA1111D0.root'#2017 MSSMD MC MINIAODSIM (mN1=60, mGammaD=35, cT=2)
         )
 )
 
