@@ -2,7 +2,7 @@
 //
 // Package:    MuJetProducer
 // Class:      MuJetProducer
-// 
+//
 /**\class MuJetProducer MuJetProducer.cc MuJetAnalysis/MuJetProducer/src/MuJetProducer.cc
 
 Description: <one line class summary>
@@ -12,7 +12,7 @@ Implementation:
 */
 //
 // Jim Pivarski <pivarski@physics.tamu.edu>
-// 
+//
 //         Created:  Mon Feb  8 23:07:29 CST 2010
 // $Id: MuJetProducer.cc,v 1.6 2013/03/05 23:16:04 pakhotin Exp $
 //
@@ -52,7 +52,7 @@ class MuJetProducer : public edm::EDProducer {
   virtual void beginJob() ;
   virtual void produce(edm::Event&, const edm::EventSetup&);
   virtual void endJob() ;
-  
+
   bool muonOkay(const pat::Muon &muon);
 
   enum {
@@ -73,7 +73,6 @@ class MuJetProducer : public edm::EDProducer {
 
   // ----------member data ---------------------------
   edm::EDGetTokenT<pat::MuonCollection> m_muons;
-  edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
   edm::InputTag m_tracks;
   edm::InputTag m_caloTowers;
   double m_minPt;
@@ -144,7 +143,6 @@ class MuJetProducer : public edm::EDProducer {
 //
 MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
    : m_muons(                           consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons")))
-   , m_primaryVertices(                 consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices")))
    , m_tracks(                          iConfig.getParameter<edm::InputTag>("tracks"))
    , m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
    , m_minPt(                           iConfig.getParameter<double>("minPt"))
@@ -226,7 +224,7 @@ MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
     else {
       throw cms::Exception("BadConfig") << "algorithm must be one of \"TMLastStation\", \"TM2DCompatibility\", \"TMOneStation\"" << std::endl;
     }
-    
+
     m_detailed_minNumberOfMatches.push_back( detailedSelector->getParameter<int>(   "minNumberOfMatches"));
     m_detailed_maxAbsDx.push_back(           detailedSelector->getParameter<double>("maxAbsDx"));
     m_detailed_maxAbsPullX.push_back(        detailedSelector->getParameter<double>("maxAbsPullX"));
@@ -248,7 +246,7 @@ MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
 
 MuJetProducer::~MuJetProducer()
 {
- 
+
    // do anything here that needs to be done at desctruction time
    // (e.g. close files, deallocate resources etc.)
 
@@ -347,7 +345,7 @@ bool MuJetProducer::muonOkay(const pat::Muon &muon) {
   std::vector<double>::const_iterator                     maxChamberDist     = m_detailed_maxChamberDist.begin();
   std::vector<double>::const_iterator                     maxChamberDistPull = m_detailed_maxChamberDistPull.begin();
   std::vector<reco::Muon::ArbitrationType>::const_iterator arbitrationType    = m_detailed_arbitrationType.begin();
-  
+
   for (;  algorithmType != m_detailed_algorithmType.end();  ++algorithmType, ++minNumberOfMatches, ++maxAbsDx, ++maxAbsPullX, ++maxAbsDy, ++maxAbsPullY, ++maxChamberDist, ++maxChamberDistPull, ++arbitrationType) {
     if (!muon::isGoodMuon(muon, *algorithmType, *minNumberOfMatches, *maxAbsDx, *maxAbsPullX, *maxAbsDy, *maxAbsPullY, *maxChamberDist, *maxChamberDistPull, *arbitrationType)) return false;
   }
@@ -386,11 +384,6 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   // true means active (can be merged), false means inactive (already merged: data is in the merged jet)
   std::vector<pat::MultiMuon> jets;
   std::vector<bool> active;
-
-  edm::Handle<reco::VertexCollection> primaryVertices;
-  iEvent.getByToken(m_primaryVertices, primaryVertices);
-
-  //  const reco::Vertex* vtx = &((*primaryVertices)[0]);
 
   std::map<const pat::Muon*,bool> used;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
@@ -522,19 +515,19 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
     if (active[i]) EquivalenceClasses->push_back(jets[i]);
   }
 
-  iEvent.put(std::move(Pairs), "Pairs"); 
+  iEvent.put(std::move(Pairs), "Pairs");
   iEvent.put(std::move(Orphans), "Orphans");
-  iEvent.put(std::move(EquivalenceClasses)); 
+  iEvent.put(std::move(EquivalenceClasses));
 }
 
 // ------------ method called once each job just before starting event loop  ------------
-void 
+void
 MuJetProducer::beginJob()
 {
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
-void 
+void
 MuJetProducer::endJob() {
 }
 

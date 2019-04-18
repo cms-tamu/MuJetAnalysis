@@ -3,9 +3,8 @@ from MuJetAnalysis.MuJetProducer.MuJetProducerRun2_cfi import *
 
 PFMuJetProducer05PXBL4PXFL3 = MuJetProducer.clone(
     maxMass = cms.double(60.),
-    muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
-    selectTrackerMuons = cms.bool(False),
-    selectGlobalMuons = cms.bool(False),
+    #muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
+    muons = cms.InputTag("slimmedMuons"),
     minSegmentMatches = cms.int32(-1),
     minTrackerHits = cms.int32(-1),
     maxTrackerNormChi2 = cms.double(-1.0),

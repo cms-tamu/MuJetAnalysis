@@ -2028,7 +2028,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           const reco::HitPattern& p = track->hitPattern();
 
           std::cout << "diMuC Mu"<<k<<" seudotrk(x,y,z)[cm]: " <<canddiMuonC->pseudoTrack().vx() << ", "<<canddiMuonC->pseudoTrack().vy() <<", "<<canddiMuonC->pseudoTrack().vz()<<std::endl;
-          std::cout << "Same trk          (x,y,z)[cm]: " <<track->vx() << ", "<<track->vy() <<", "<<track->vz()<<std::endl;
+          //std::cout << "Same trk          (x,y,z)[cm]: " <<track->vx() << ", "<<track->vy() <<", "<<track->vz()<<std::endl;
           /*
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonC->vertexPoint().x(), diMuonC->vertexPoint().y(), diMuonC->vertexPoint().z());
@@ -2084,7 +2084,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         if( tamu::helpers::sameTrack(&*track,&(canddiMuonF->pseudoTrack())) ){
           const reco::HitPattern& p = track->hitPattern();
           std::cout << "diMuF Mu"<<k<<" seudotrk(x,y,z)[cm]: " <<canddiMuonF->pseudoTrack().vx() << ", "<<canddiMuonF->pseudoTrack().vy() <<", "<<canddiMuonF->pseudoTrack().vz()<<std::endl;
-          std::cout << "Same trk          (x,y,z)[cm]: " <<track->vx() << ", "<<track->vy() <<", "<<track->vz()<<std::endl;
+          //std::cout << "Same trk          (x,y,z)[cm]: " <<track->vx() << ", "<<track->vy() <<", "<<track->vz()<<std::endl;
           /*
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonF->vertexPoint().x(), diMuonF->vertexPoint().y(), diMuonF->vertexPoint().z());
@@ -2136,12 +2136,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }//end loop for 2 muons
 
     std::cout<<"ValidHit  PixelLayers: C_m1 = "<<b_diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_hitpix_Phase1<<std::endl;
-    std::cout<<"Non-Zero    PixelHits: C_m1 = "<<b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits<<std::endl;
-    std::cout<<"Non-Zero PixelMeasure: C_m1 = "<<b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<std::endl;
+    //std::cout<<"Non-Zero    PixelHits: C_m1 = "<<b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits<<std::endl;
+    //std::cout<<"Non-Zero PixelMeasure: C_m1 = "<<b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<std::endl;
 
     std::cout<<"ValidHit  PixelLayers: F_m1 = "<<b_diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_hitpix_Phase1<<std::endl;
-    std::cout<<"Non-Zero    PixelHits: F_m1 = "<<b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits<<std::endl;
-    std::cout<<"Non-Zero PixelMeasure: F_m1 = "<<b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<std::endl;
+    //std::cout<<"Non-Zero    PixelHits: F_m1 = "<<b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits<<std::endl;
+    //std::cout<<"Non-Zero PixelMeasure: F_m1 = "<<b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<std::endl;
 
   }//end b_is2DiMuonsFittedVtxOK
 

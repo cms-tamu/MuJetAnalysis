@@ -239,6 +239,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	std::cout << "muonTrk 0      (x,y,z)[cm]: " << muonTracks[0]->vx()    << ", " << muonTracks[0]->vy()    << ", " << muonTracks[0]->vz()    <<std::endl;
 	std::cout << "muonTrk 1      (x,y,z)[cm]: " << muonTracks[1]->vx()    << ", " << muonTracks[1]->vy()    << ", " << muonTracks[1]->vz()    <<std::endl;
 
+
   KalmanVertexFitter vertexFitter;
   CachingVertex<5> fittedVertex = vertexFitter.vertex(tracksToVertex);
 

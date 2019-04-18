@@ -2,7 +2,8 @@ import FWCore.ParameterSet.Config as cms
 
 cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     analyzerDebug = cms.int32(-1),
-    muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
+    #muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
+    muons = cms.InputTag("slimmedMuons"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     muPairs = cms.InputTag("PFMuJetProducer05", "Pairs"),
     muJets = cms.InputTag("PFMuJetProducer05"),

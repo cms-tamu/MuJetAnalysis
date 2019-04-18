@@ -2,15 +2,15 @@ import FWCore.ParameterSet.Config as cms
 
 MuJetProducer = cms.EDProducer(
     "MuJetProducer",
-    
+
     # source of pat::Muons with user-specified quality cuts
-    muons = cms.InputTag("cleanPatMuonsTriggerMatch"),
-    primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    #muons = cms.InputTag("cleanPatMuonsTriggerMatch"),
+    muons = cms.InputTag("slimmedMuons"),
     minPt = cms.double(8.),
     minPmag = cms.double(0.),
     maxAbsEta = cms.double(2.4),
     selectTrackerMuons = cms.bool(True),
-    selectGlobalMuons = cms.bool(False),
+    selectGlobalMuons = cms.bool(True),
     minTrackerHits = cms.int32(8),
     maxTrackerNormChi2 = cms.double(4.),
     maxTrackerDxy = cms.double(-1.),
@@ -38,7 +38,7 @@ MuJetProducer = cms.EDProducer(
     maxMass = cms.double(9.),
     minVertexProb = cms.double(0.01),
     groupByCharge = cms.string("opposite"),
-    
+
     # defines isolation variables for offline cuts
     tracks = cms.InputTag("unpackedTracksAndVertices"),
     caloTowers = cms.InputTag("towerMaker"),
