@@ -67,6 +67,7 @@ class MuJetProducerRun2 : public edm::EDProducer {
 
   // ----------member data ---------------------------
   edm::EDGetTokenT<pat::MuonCollection> m_muons;
+  edm::EDGetTokenT<reco::BeamSpot> m_beamSpot;
   edm::InputTag m_tracks;
   edm::InputTag m_caloTowers;
   double m_minPt;
@@ -137,6 +138,7 @@ class MuJetProducerRun2 : public edm::EDProducer {
 //
 MuJetProducerRun2::MuJetProducerRun2(const edm::ParameterSet& iConfig)
    : m_muons(                           consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons")))
+   , m_beamSpot(                        consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot")))
    , m_tracks(                          iConfig.getParameter<edm::InputTag>("tracks"))
    , m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
    , m_minPt(                           iConfig.getParameter<double>("minPt"))
@@ -353,6 +355,9 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   iEvent.getByToken(m_muons, muons);
   const pat::MuonCollection *muons_ptr = &*muons;
 
+  edm::Handle<reco::BeamSpot> beamSpot;
+  iEvent.getByToken(m_beamSpot, beamSpot);
+
   edm::Handle<reco::TrackCollection> tracks;
   edm::Handle<CaloTowerCollection> caloTowers;
   const reco::TrackCollection *tracks_ptr = NULL;
@@ -374,6 +379,30 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   // output #1: a collection of pairs of muons
   std::unique_ptr<pat::MultiMuonCollection> Pairs(new pat::MultiMuonCollection);
   std::vector<pat::MultiMuon> jets;
+
+  //DEGUG@Wei SHI 2019.04.18
+  std::cout <<"BeamSpot:    (x,y,z)[cm]: "<< beamSpot->position().x() << ", " << beamSpot->position().y() <<", "<< beamSpot->position().z() <<std::endl;
+  for (pat::MuonCollection::const_iterator mui = muons->begin();  mui != muons->end();  ++mui) {
+    std::cout <<"slimmedMuon: (x,y,z)[cm]: "<< mui->vx() - beamSpot->position().x() <<", "<< mui->vy() - beamSpot->position().y() <<", "<< mui->vz() - beamSpot->position().z() <<std::endl;
+    std::cout <<"                 pT[GeV]: "<< mui->pt() <<"; eta: "<< mui->eta() <<"; phi: "<< mui->phi() <<std::endl;
+    //MC truth
+    if(mui->genParticle() != 0){
+      std::cout <<"Matched GEN: (x,y,z)[cm]: "<< mui->genParticle()->vx() - beamSpot->position().x() << ", " <<mui->genParticle()->vy() - beamSpot->position().y() <<", "<< mui->genParticle()->vz() - beamSpot->position().z() <<std::endl;
+      std::cout <<"                 pT[GeV]: "<< mui->genParticle()->pt() << "; eta: " << mui->genParticle()->eta() <<"; phi: "<< mui->genParticle()->phi() <<std::endl;
+      std::cout <<"                  PDG ID: "<< mui->genParticle()->pdgId() << "; Status: " << mui->genParticle()->status() <<std::endl;
+    }
+    /*std::cout <<"Gen matched (0):"<<mui->genParticle(0)<<std::endl;
+    std::cout <<"Gen matched (1):"<<mui->genParticle(1)<<std::endl;
+    std::cout <<"Gen matched size:"<<mui->genParticle()->size()<<std::endl;
+    */
+    /*for ( reco::GenParticleCollection::const_iterator it = mui->genParticle()->begin(); it != mui->genParticle()->end(); ++it ) {
+      std::cout << "Matched to PDGID: " << it->pdgId() << "; status: " << it->status() <<"; vx: "<< it->vx() << "; vy: "<< it->vy() << "; vz: "<< it->vz() << std::endl;
+    }*/
+    if (muonOkay(*mui)) {
+      std::cout <<"muonOkay"<<std::endl;
+    }
+  }//loop over miniaod slimmedMuon
+
 
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {

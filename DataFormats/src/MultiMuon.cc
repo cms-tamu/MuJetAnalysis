@@ -219,16 +219,18 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
   std::vector<reco::TransientTrack> tracksToVertex;
   std::vector<const reco::Track*> muonTracks;
-
+  std::cout <<"----------"<<std::endl;
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
     if (muon(i) == NULL) {
       throw cms::Exception("MultiMuon") << "MultiMuons should only contain pat::Muons";
     }
-    if (muon(i)->innerTrack().isAvailable()) {
+    if (muon(i)->innerTrack().isAvailable()) {//i.e. tracker track
+			std::cout <<"muon "<< i <<": inner track"<<std::endl;
       tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->innerTrack()));
       muonTracks.push_back(&*muon(i)->innerTrack()); //&*track
     }
-    else if (muon(i)->outerTrack().isAvailable()) {
+    else if (muon(i)->outerTrack().isAvailable()) {//i.e. muon detector only
+			std::cout <<"muon "<< i <<": outer track"<<std::endl;
       tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->outerTrack()));
       muonTracks.push_back(&*muon(i)->outerTrack()); //&*track
     }

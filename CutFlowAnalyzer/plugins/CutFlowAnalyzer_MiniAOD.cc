@@ -1102,13 +1102,19 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
         std::cout<<">>> MINIAOD Event #"<<m_events<<std::endl;
         std::cout<<"GENA mass (0, 1)[GeV]: "<<b_genA0_m    <<", "<<b_genA1_m       << std::endl;
+        
         std::cout<<"genA0     (x,y,z)[cm]: "<<b_genA0_vx   <<", "<<b_genA0_vy      <<", "<<b_genA0_vz<<std::endl;
         std::cout<<"genA0 Mu0 (x,y,z)[cm]: "<<b_genA0Mu0_vx<<", "<<b_genA0Mu0_vy   <<", "<<b_genA0Mu0_vz<<std::endl;
+        std::cout<<"genA0 Mu0 pT    [GeV]: "<<b_genA0Mu0_pt<<"; eta: "<<b_genA0Mu0_eta   <<"; phi: "<<b_genA0Mu0_phi<<std::endl;
         std::cout<<"genA0 Mu1 (x,y,z)[cm]: "<<b_genA0Mu1_vx<<", "<<b_genA0Mu1_vy   <<", "<<b_genA0Mu1_vz<<std::endl;
+        std::cout<<"genA0 Mu1 pT    [GeV]: "<<b_genA0Mu1_pt<<"; eta: "<<b_genA0Mu1_eta   <<"; phi: "<<b_genA0Mu1_phi<<std::endl;
         std::cout<<"genA0 (Lxy, |Lz|)[cm]: "<<b_genA0_Lxy  <<", "<<fabs(b_genA0_Lz)<<std::endl;
+
         std::cout<<"genA1     (x,y,z)[cm]: "<<b_genA1_vx   <<", "<<b_genA1_vy      <<", "<<b_genA1_vz<<std::endl;
         std::cout<<"genA1 Mu0 (x,y,z)[cm]: "<<b_genA1Mu0_vx<<", "<<b_genA1Mu0_vy   <<", "<<b_genA1Mu0_vz<<std::endl;
+        std::cout<<"genA1 Mu0 pT    [GeV]: "<<b_genA1Mu0_pt<<"; eta: "<<b_genA1Mu0_eta   <<"; phi: "<<b_genA1Mu0_phi<<std::endl;
         std::cout<<"genA1 Mu1 (x,y,z)[cm]: "<<b_genA1Mu1_vx<<", "<<b_genA1Mu1_vy   <<", "<<b_genA1Mu1_vz<<std::endl;
+        std::cout<<"genA1 Mu1 pT    [GeV]: "<<b_genA1Mu1_pt<<"; eta: "<<b_genA1Mu1_eta   <<"; phi: "<<b_genA1Mu1_phi<<std::endl;
         std::cout<<"genA1 (Lxy, |Lz|)[cm]: "<<b_genA1_Lxy  <<", "<<fabs(b_genA1_Lz)<<std::endl;
 
       } else {

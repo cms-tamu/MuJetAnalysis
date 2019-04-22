@@ -6,6 +6,7 @@ MuJetProducer = cms.EDProducer(
     # source of pat::Muons with user-specified quality cuts
     #muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
     muons = cms.InputTag("slimmedMuons"),
+    beamSpot = cms.InputTag("offlineBeamSpot"),
     minPt = cms.double(8.),
     minPmag = cms.double(0.),
     maxAbsEta = cms.double(2.4),

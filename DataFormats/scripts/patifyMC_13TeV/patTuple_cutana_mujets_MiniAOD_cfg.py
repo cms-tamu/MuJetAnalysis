@@ -56,14 +56,11 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 #if runOnData: process.patifySelect = cms.Sequence(process.patifyData)
 #else:         process.patifySelect = cms.Sequence(process.patifyMC)
 
-process.dump=cms.EDAnalyzer('EventContentAnalyzer')
-
 process.p = cms.Path(
 #    process.baseLineSelectionFilter *
 #    process.patifySelect *
     process.unpackedTracksAndVertices *
     process.MuJetProducers *
-#    process.dump *
     process.cutFlowAnalyzers
     )
 
