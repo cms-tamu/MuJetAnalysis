@@ -8,10 +8,11 @@ MuJetProducer = cms.EDProducer(
     muons = cms.InputTag("slimmedMuons"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     minPt = cms.double(8.),
-    minPmag = cms.double(0.),
     maxAbsEta = cms.double(2.4),
-    selectTrackerMuons = cms.bool(True),
-    selectGlobalMuons = cms.bool(True),
+    #maybe need to set to false to keep sensitive to displacedmuons
+    #Both false or just global to false?
+    selectTrackerMuons = cms.bool(False),
+    selectGlobalMuons = cms.bool(False),
     minTrackerHits = cms.int32(8),
     maxTrackerNormChi2 = cms.double(4.),
     maxTrackerDxy = cms.double(-1.),
@@ -31,7 +32,7 @@ MuJetProducer = cms.EDProducer(
 
     # what to include in the jets
     calculateVertex = cms.bool(True),
-    calculateIsolation = cms.bool(False),
+    #calculateIsolation = cms.bool(False),
 
     # how to group muons into jets
     groupingMode = cms.string("GroupByMassAndVertexProbOrDeltaR"),
@@ -41,24 +42,24 @@ MuJetProducer = cms.EDProducer(
     groupByCharge = cms.string("opposite"),
 
     # defines isolation variables for offline cuts
-    tracks = cms.InputTag("unpackedTracksAndVertices"),
-    caloTowers = cms.InputTag("towerMaker"),
+    #tracks = cms.InputTag("unpackedTracksAndVertices"),
+    #caloTowers = cms.InputTag("towerMaker"),
 
     # recommended parameters for isolation
-    centralTrackIsolationCone = cms.double(0.4),
-    centralTrackThresholdPt = cms.double(1.5),
-    centralNumberAboveThresholdCone = cms.double(0.4),
-    centralNumberAboveThresholdPt = cms.double(1.5),
+    #centralTrackIsolationCone = cms.double(0.4),
+    #centralTrackThresholdPt = cms.double(1.5),
+    #centralNumberAboveThresholdCone = cms.double(0.4),
+    #centralNumberAboveThresholdPt = cms.double(1.5),
 
     # union (non-circular) isolation regions are not recommended
-    unionTrackIsolationCone = cms.double(0.),
-    unionTrackThresholdPt = cms.double(1e6),
-    unionNumberAboveThresholdCone = cms.double(0.),
-    unionNumberAboveThresholdPt = cms.double(1e6),
+    #unionTrackIsolationCone = cms.double(0.),
+    #unionTrackThresholdPt = cms.double(1e6),
+    #unionNumberAboveThresholdCone = cms.double(0.),
+    #unionNumberAboveThresholdPt = cms.double(1e6),
 
     # calorimeter isolation is not recommended
-    centralCaloIsolationCone = cms.double(0.),
-    unionCaloIsolationCone = cms.double(0.),
+    #centralCaloIsolationCone = cms.double(0.),
+    #unionCaloIsolationCone = cms.double(0.),
 
     # fiducial region
     barrelPixelLayer = cms.int32(1),

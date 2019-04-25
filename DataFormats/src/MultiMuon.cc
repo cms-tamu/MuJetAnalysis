@@ -12,6 +12,7 @@
 #include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
 #include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
 #include "TrackingTools/PatternTools/interface/TwoTrackMinimumDistance.h"
+#include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
 #else
 class TransientTrackBuilder {};
@@ -20,19 +21,19 @@ class TransientTrackBuilder {};
 /// constructor with muons
 pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
 		const TransientTrackBuilder    *transientTrackBuilder,
-		const reco::TrackCollection    *tracks,
-		const pat::MuonCollection      *allmuons,
-		const CaloTowerCollection      *caloTowers,
-		double centralTrackIsolationCone,
-		double unionTrackIsolationCone,
-		double centralTrackThresholdPt,
-		double unionTrackThresholdPt,
-		double centralCaloIsolationCone,
-		double unionCaloIsolationCone,
-		double centralNumberAboveThresholdCone,
-		double unionNumberAboveThresholdCone,
-		double centralNumberAboveThresholdPt,
-		double unionNumberAboveThresholdPt,
+		//const reco::TrackCollection    *tracks,
+		//const pat::MuonCollection      *allmuons,
+		//const CaloTowerCollection      *caloTowers,
+		//double centralTrackIsolationCone,
+		//double unionTrackIsolationCone,
+		//double centralTrackThresholdPt,
+		//double unionTrackThresholdPt,
+		//double centralCaloIsolationCone,
+		//double unionCaloIsolationCone,
+		//double centralNumberAboveThresholdCone,
+		//double unionNumberAboveThresholdCone,
+		//double centralNumberAboveThresholdPt,
+		//double unionNumberAboveThresholdPt,
 		int barrelPixelLayer,
 		int endcapPixelLayer)
 
@@ -105,7 +106,7 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
 			              barrelPixelLayer,
 										endcapPixelLayer);
   }
-
+/*
   // Consistent vertex
   m_consistentVtxValid = false;
   m_centralTrackIsolationCone = 0.;
@@ -115,6 +116,7 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
   m_centralTrackIsolation     = 0.;
   m_unionTrackIsolation       = 0.;
 
+	//Recommended
   if (tracks != NULL) {
     calculateTrackIsolation(tracks,
 			                      allmuons,
@@ -151,11 +153,12 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
                                            centralNumberAboveThresholdPt,
                                            unionNumberAboveThresholdPt);
   }
+	*/
 
   m_barrelPixelLayer = barrelPixelLayer;
   m_endcapPixelLayer = endcapPixelLayer;
 
-}
+}//end MultiMuon constructor
 
 /// constructor from MultiMuonType
 pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandidate(aMultiMuon) {
@@ -181,27 +184,27 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
     m_vertexP4.push_back(aMultiMuon.m_vertexP4[i]);
   }
 
-  m_consistentVtxValid = aMultiMuon.m_consistentVtxValid;
+  //m_consistentVtxValid = aMultiMuon.m_consistentVtxValid;
 
-  m_centralTrackIsolationCone       = aMultiMuon.m_centralTrackIsolationCone;
-  m_unionTrackIsolationCone         = aMultiMuon.m_unionTrackIsolationCone;
-  m_centralTrackThresholdPt         = aMultiMuon.m_centralTrackThresholdPt;
-  m_unionTrackThresholdPt           = aMultiMuon.m_unionTrackThresholdPt;
-  m_centralCaloIsolationCone        = aMultiMuon.m_centralCaloIsolationCone;
-  m_unionCaloIsolationCone          = aMultiMuon.m_unionCaloIsolationCone;
-  m_centralNumberAboveThresholdCone = aMultiMuon.m_centralNumberAboveThresholdCone;
-  m_unionNumberAboveThresholdCone   = aMultiMuon.m_unionNumberAboveThresholdCone;
-  m_centralNumberAboveThresholdPt   = aMultiMuon.m_centralNumberAboveThresholdPt;
-  m_unionNumberAboveThresholdPt     = aMultiMuon.m_unionNumberAboveThresholdPt;
+  //m_centralTrackIsolationCone       = aMultiMuon.m_centralTrackIsolationCone;
+  //m_unionTrackIsolationCone         = aMultiMuon.m_unionTrackIsolationCone;
+  //m_centralTrackThresholdPt         = aMultiMuon.m_centralTrackThresholdPt;
+  //m_unionTrackThresholdPt           = aMultiMuon.m_unionTrackThresholdPt;
+  //m_centralCaloIsolationCone        = aMultiMuon.m_centralCaloIsolationCone;
+  //m_unionCaloIsolationCone          = aMultiMuon.m_unionCaloIsolationCone;
+  //m_centralNumberAboveThresholdCone = aMultiMuon.m_centralNumberAboveThresholdCone;
+  //m_unionNumberAboveThresholdCone   = aMultiMuon.m_unionNumberAboveThresholdCone;
+  //m_centralNumberAboveThresholdPt   = aMultiMuon.m_centralNumberAboveThresholdPt;
+  //m_unionNumberAboveThresholdPt     = aMultiMuon.m_unionNumberAboveThresholdPt;
 
-  m_centralTrackIsolation       = aMultiMuon.m_centralTrackIsolation;
-  m_unionTrackIsolation         = aMultiMuon.m_unionTrackIsolation;
-  m_centralECALIsolation        = aMultiMuon.m_centralECALIsolation;
-  m_unionECALIsolation          = aMultiMuon.m_unionECALIsolation;
-  m_centralHCALIsolation        = aMultiMuon.m_centralHCALIsolation;
-  m_unionHCALIsolation          = aMultiMuon.m_unionHCALIsolation;
-  m_centralNumberAboveThreshold = aMultiMuon.m_centralNumberAboveThreshold;
-  m_unionNumberAboveThreshold   = aMultiMuon.m_unionNumberAboveThreshold;
+  //m_centralTrackIsolation       = aMultiMuon.m_centralTrackIsolation;
+  //m_unionTrackIsolation         = aMultiMuon.m_unionTrackIsolation;
+  //m_centralECALIsolation        = aMultiMuon.m_centralECALIsolation;
+  //m_unionECALIsolation          = aMultiMuon.m_unionECALIsolation;
+  //m_centralHCALIsolation        = aMultiMuon.m_centralHCALIsolation;
+  //m_unionHCALIsolation          = aMultiMuon.m_unionHCALIsolation;
+  //m_centralNumberAboveThreshold = aMultiMuon.m_centralNumberAboveThreshold;
+  //m_unionNumberAboveThreshold   = aMultiMuon.m_unionNumberAboveThreshold;
   m_barrelPixelLayer = aMultiMuon.m_barrelPixelLayer;
   m_endcapPixelLayer = aMultiMuon.m_endcapPixelLayer;
 }
@@ -287,7 +290,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     m_mindisttrack = dca;
 		*/
 
-		//Need 2 muon tracks
+		//Need 2 muon tracks, closeby muon tracks
     if (muonTracks.size() > 1){
 
       double newx1 = 0.0;
@@ -410,6 +413,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
 }//end calculateVertex
 
+/*
 void pat::MultiMuon::calculateTrackIsolation(  const reco::TrackCollection *tracks,
                                                const pat::MuonCollection   *allmuons,
                                                double centralCone,
@@ -484,7 +488,9 @@ void pat::MultiMuon::calculateTrackIsolation(  const reco::TrackCollection *trac
   }
 
 }//end calculateTrackIsolation
+*/
 
+/*
 void pat::MultiMuon::calculateNumberAboveThresholdIsolation(  const reco::TrackCollection *tracks,
                                                               const pat::MuonCollection *allmuons,
                                                               double centralCone,
@@ -562,7 +568,9 @@ void pat::MultiMuon::calculateNumberAboveThresholdIsolation(  const reco::TrackC
   }
 
 }//end calculateNumberAboveThresholdIsolation
+*/
 
+/*
 void pat::MultiMuon::calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone) {
   m_centralCaloIsolationCone = centralCone;
   m_unionCaloIsolationCone   = unionCone;
@@ -627,6 +635,7 @@ void pat::MultiMuon::calculateCaloIsolation(const CaloTowerCollection *caloTower
   }
 
 }//end calculateCaloIsolation
+*/
 
 bool pat::MultiMuon::overlaps(const pat::MultiMuon &aMultiMuon) const {
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
@@ -661,20 +670,21 @@ bool pat::MultiMuon::contains(const pat::Muon &aMuon) const {
 }
 
 pat::MultiMuon pat::MultiMuon::merge( const pat::MultiMuon &aMultiMuon,
-                                      const TransientTrackBuilder *transientTrackBuilder,
-                                      const reco::TrackCollection *tracks,
-                                      const pat::MuonCollection *allmuons,
-                                      const CaloTowerCollection *caloTowers,
-                                      double centralTrackIsolationCone,
-                                      double unionTrackIsolationCone,
-                                      double centralTrackThresholdPt,
-                                      double unionTrackThresholdPt,
-                                      double centralCaloIsolationCone,
-                                      double unionCaloIsolationCone,
-                                      double centralNumberAboveThresholdCone,
-                                      double unionNumberAboveThresholdCone,
-                                      double centralNumberAboveThresholdPt,
-                                      double unionNumberAboveThresholdPt) {
+                                      const TransientTrackBuilder *transientTrackBuilder
+                                      //const reco::TrackCollection *tracks,
+                                      //const pat::MuonCollection *allmuons,
+                                      //const CaloTowerCollection *caloTowers,
+                                      //double centralTrackIsolationCone,
+                                      //double unionTrackIsolationCone,
+                                      //double centralTrackThresholdPt,
+                                      //double unionTrackThresholdPt,
+                                      //double centralCaloIsolationCone,
+                                      //double unionCaloIsolationCone,
+                                      //double centralNumberAboveThresholdCone,
+                                      //double unionNumberAboveThresholdCone,
+                                      //double centralNumberAboveThresholdPt,
+                                      //double unionNumberAboveThresholdPt
+																			) {
 
   std::vector<const pat::Muon*> muons;
 
@@ -707,20 +717,21 @@ pat::MultiMuon pat::MultiMuon::merge( const pat::MultiMuon &aMultiMuon,
   }//end j aMultiMuon.numberOfDaughters()
 
   return pat::MultiMuon(muons,
-		                    transientTrackBuilder,
-												tracks,
-												allmuons,
-												caloTowers,
-												centralTrackIsolationCone,
-												unionTrackIsolationCone,
-												centralTrackThresholdPt,
-												unionTrackThresholdPt,
-												centralCaloIsolationCone,
-												unionCaloIsolationCone,
-												centralNumberAboveThresholdCone,
-												unionNumberAboveThresholdCone,
-												centralNumberAboveThresholdPt,
-												unionNumberAboveThresholdPt);
+		                    transientTrackBuilder
+												//tracks,
+												//allmuons,
+												//caloTowers,
+												//centralTrackIsolationCone,
+												//unionTrackIsolationCone,
+												//centralTrackThresholdPt,
+												//unionTrackThresholdPt,
+												//centralCaloIsolationCone,
+												//unionCaloIsolationCone,
+												//centralNumberAboveThresholdCone,
+												//unionNumberAboveThresholdCone,
+												//centralNumberAboveThresholdPt,
+												//unionNumberAboveThresholdPt
+												);
 }//end merge
 
 void pat::MultiMuon::checkVertex() const {
@@ -728,12 +739,13 @@ void pat::MultiMuon::checkVertex() const {
     throw cms::Exception("MultiMuon") << "Request for vertex information, but no vertex has been calculated.";
   }
 }
-
+/*
 void pat::MultiMuon::checkConsistentVtx() const {
   if (!m_consistentVtxValid) {
     throw cms::Exception("MultiMuon") << "Request for consistent vertex information, but no vertex has been calculated.";
   }
 }
+*/
 
 bool pat::MultiMuon::sameTrack(const reco::Track *one, const reco::Track *two) const {
   return ( fabs(one->px() - two->px()) < 1e-10  &&
@@ -744,6 +756,7 @@ bool pat::MultiMuon::sameTrack(const reco::Track *one, const reco::Track *two) c
            fabs(one->vz() - two->vz()) < 1e-10    );
 }
 
+/*
 double pat::MultiMuon::noiseEcal(const CaloTower &tower) const {
   const double theNoiseTow_EB = 0.04;
   const double theNoiseTow_EE = 0.15;
@@ -760,6 +773,7 @@ double pat::MultiMuon::noiseHOcal(const CaloTower &tower) const {
   const double theNoise_HO = 0.2;
   return theNoise_HO;
 }
+*/
 
 GlobalVector pat::MultiMuon::daughterCOM(int i, bool vertex) const {
   double betax = 0.;
@@ -815,6 +829,7 @@ double pat::MultiMuon::daughterCOMcosTheta(int i, bool vertex) const {
   return d.z() / d.mag();
 }
 
+/*
 std::vector<std::pair<int,int> > pat::MultiMuon::consistentPairs(bool vertex) const {
   std::vector<int> positives, negatives;
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
@@ -897,6 +912,7 @@ std::vector<std::pair<int,int> > pat::MultiMuon::consistentPairs(bool vertex) co
 
   return output;
 }//end consistentPairs
+*/
 
 void pat::MultiMuon::buildPermutation(std::vector<std::vector<int> > &results, std::vector<int> working, int where, int value) const {
   std::vector<int>::iterator iter = working.begin();
@@ -912,6 +928,7 @@ void pat::MultiMuon::buildPermutation(std::vector<std::vector<int> > &results, s
   }
 }
 
+/*
 std::vector<double> pat::MultiMuon::consistentPairMasses(bool vertex) const {
   std::vector<std::pair<int,int> > pairIndicies = consistentPairs(vertex);
   std::vector<double> output;
@@ -943,6 +960,7 @@ std::vector<double> pat::MultiMuon::consistentPairMasses(bool vertex) const {
 
   return output;
 }
+*/
 
 
 // functions that define fiducial volume

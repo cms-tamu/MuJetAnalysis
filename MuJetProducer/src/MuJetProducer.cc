@@ -73,8 +73,8 @@ class MuJetProducer : public edm::EDProducer {
 
   // ----------member data ---------------------------
   edm::EDGetTokenT<pat::MuonCollection> m_muons;
-  edm::InputTag m_tracks;
-  edm::InputTag m_caloTowers;
+  //edm::InputTag m_tracks;
+  //edm::InputTag m_caloTowers;
   double m_minPt;
   double m_minPmag;
   double m_maxAbsEta;
@@ -107,7 +107,7 @@ class MuJetProducer : public edm::EDProducer {
   std::vector<double> m_detailed_maxChamberDistPull;
   std::vector<reco::Muon::ArbitrationType> m_detailed_arbitrationType;
   bool m_calculateVertex;
-  bool m_calculateIsolation;
+  //bool m_calculateIsolation;
   std::string m_groupingMode_string;
   int m_groupingMode;
   double m_maxDeltaR;
@@ -115,16 +115,16 @@ class MuJetProducer : public edm::EDProducer {
   double m_minVertexProb;
   std::string m_groupByCharge_string;
   int m_groupByCharge;
-  double m_centralTrackIsolationCone;
-  double m_unionTrackIsolationCone;
-  double m_centralTrackThresholdPt;
-  double m_unionTrackThresholdPt;
-  double m_centralCaloIsolationCone;
-  double m_unionCaloIsolationCone;
-  double m_centralNumberAboveThresholdCone;
-  double m_unionNumberAboveThresholdCone;
-  double m_centralNumberAboveThresholdPt;
-  double m_unionNumberAboveThresholdPt;
+  //double m_centralTrackIsolationCone;
+  //double m_unionTrackIsolationCone;
+  //double m_centralTrackThresholdPt;
+  //double m_unionTrackThresholdPt;
+  //double m_centralCaloIsolationCone;
+  //double m_unionCaloIsolationCone;
+  //double m_centralNumberAboveThresholdCone;
+  //double m_unionNumberAboveThresholdCone;
+  //double m_centralNumberAboveThresholdPt;
+  //double m_unionNumberAboveThresholdPt;
   int m_barrelPixelLayer;
   int m_endcapPixelLayer;
 };
@@ -143,8 +143,8 @@ class MuJetProducer : public edm::EDProducer {
 //
 MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
    : m_muons(                           consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons")))
-   , m_tracks(                          iConfig.getParameter<edm::InputTag>("tracks"))
-   , m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
+   //, m_tracks(                          iConfig.getParameter<edm::InputTag>("tracks"))
+   //, m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
    , m_minPt(                           iConfig.getParameter<double>("minPt"))
    , m_minPmag(                         iConfig.getParameter<double>("minPmag"))
    , m_maxAbsEta(                       iConfig.getParameter<double>("maxAbsEta"))
@@ -167,22 +167,22 @@ MuJetProducer::MuJetProducer(const edm::ParameterSet& iConfig)
    , m_muonSelectors_strings(           iConfig.getParameter<std::vector<std::string> >("muonSelectors"))
    , m_detailedSelectors(               iConfig.getParameter<std::vector<edm::ParameterSet> >("detailedSelectors"))
    , m_calculateVertex(                 iConfig.getParameter<bool>("calculateVertex"))
-   , m_calculateIsolation(              iConfig.getParameter<bool>("calculateIsolation"))
+   //, m_calculateIsolation(              iConfig.getParameter<bool>("calculateIsolation"))
    , m_groupingMode_string(             iConfig.getParameter<std::string>("groupingMode"))
    , m_maxDeltaR(                       iConfig.getParameter<double>("maxDeltaR"))
    , m_maxMass(                         iConfig.getParameter<double>("maxMass"))
    , m_minVertexProb(                   iConfig.getParameter<double>("minVertexProb"))
    , m_groupByCharge_string(            iConfig.getParameter<std::string>("groupByCharge"))
-   , m_centralTrackIsolationCone(       iConfig.getParameter<double>("centralTrackIsolationCone"))
-   , m_unionTrackIsolationCone(         iConfig.getParameter<double>("unionTrackIsolationCone"))
-   , m_centralTrackThresholdPt(         iConfig.getParameter<double>("centralTrackThresholdPt"))
-   , m_unionTrackThresholdPt(           iConfig.getParameter<double>("unionTrackThresholdPt"))
-   , m_centralCaloIsolationCone(        iConfig.getParameter<double>("centralCaloIsolationCone"))
-   , m_unionCaloIsolationCone(          iConfig.getParameter<double>("unionCaloIsolationCone"))
-   , m_centralNumberAboveThresholdCone( iConfig.getParameter<double>("centralNumberAboveThresholdCone"))
-   , m_unionNumberAboveThresholdCone(   iConfig.getParameter<double>("unionNumberAboveThresholdCone"))
-   , m_centralNumberAboveThresholdPt(   iConfig.getParameter<double>("centralNumberAboveThresholdPt"))
-   , m_unionNumberAboveThresholdPt(     iConfig.getParameter<double>("unionNumberAboveThresholdPt"))
+   //, m_centralTrackIsolationCone(       iConfig.getParameter<double>("centralTrackIsolationCone"))
+   //, m_unionTrackIsolationCone(         iConfig.getParameter<double>("unionTrackIsolationCone"))
+   //, m_centralTrackThresholdPt(         iConfig.getParameter<double>("centralTrackThresholdPt"))
+   //, m_unionTrackThresholdPt(           iConfig.getParameter<double>("unionTrackThresholdPt"))
+   //, m_centralCaloIsolationCone(        iConfig.getParameter<double>("centralCaloIsolationCone"))
+   //, m_unionCaloIsolationCone(          iConfig.getParameter<double>("unionCaloIsolationCone"))
+   //, m_centralNumberAboveThresholdCone( iConfig.getParameter<double>("centralNumberAboveThresholdCone"))
+   //, m_unionNumberAboveThresholdCone(   iConfig.getParameter<double>("unionNumberAboveThresholdCone"))
+   //, m_centralNumberAboveThresholdPt(   iConfig.getParameter<double>("centralNumberAboveThresholdPt"))
+   //, m_unionNumberAboveThresholdPt(     iConfig.getParameter<double>("unionNumberAboveThresholdPt"))
    , m_barrelPixelLayer(                iConfig.getParameter<int>("barrelPixelLayer"))
    , m_endcapPixelLayer(                iConfig.getParameter<int>("endcapPixelLayer"))
 {
@@ -357,8 +357,8 @@ bool MuJetProducer::muonOkay(const pat::Muon &muon) {
 void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
-  const pat::MuonCollection *muons_ptr = &*muons;
-
+//  const pat::MuonCollection *muons_ptr = &*muons;
+/*
   edm::Handle<reco::TrackCollection> tracks;
   edm::Handle<CaloTowerCollection> caloTowers;
   const reco::TrackCollection *tracks_ptr = NULL;
@@ -368,7 +368,7 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
     iEvent.getByLabel(m_caloTowers, caloTowers);
     tracks_ptr = &*tracks;
     caloTowers_ptr = &*caloTowers;
-  }
+  }*/
 
   edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
   const TransientTrackBuilder *transientTrackBuilder_ptr = NULL;
@@ -397,19 +397,19 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
 //Checkpoint
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
-                                   tracks_ptr,
-                                   muons_ptr,
-                                   caloTowers_ptr,
-                                   m_centralTrackIsolationCone,
-                                   m_unionTrackIsolationCone,
-                                   m_centralTrackThresholdPt,
-                                   m_unionTrackThresholdPt,
-                                   m_centralCaloIsolationCone,
-                                   m_unionCaloIsolationCone,
-                                   m_centralNumberAboveThresholdCone,
-                                   m_unionNumberAboveThresholdCone,
-                                   m_centralNumberAboveThresholdPt,
-								   m_unionNumberAboveThresholdPt,
+                                   //tracks_ptr,
+                                   //muons_ptr,
+                                   //caloTowers_ptr,
+                                   //m_centralTrackIsolationCone,
+                                   //m_unionTrackIsolationCone,
+                                   //m_centralTrackThresholdPt,
+                                   //m_unionTrackThresholdPt,
+                                   //m_centralCaloIsolationCone,
+                                   //m_unionCaloIsolationCone,
+                                   //m_centralNumberAboveThresholdCone,
+                                   //m_unionNumberAboveThresholdCone,
+                                   //m_centralNumberAboveThresholdPt,
+								   //m_unionNumberAboveThresholdPt,
 								   m_barrelPixelLayer,
 								   m_endcapPixelLayer);
 
@@ -478,20 +478,21 @@ void MuJetProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup) {
         if (active[i]  &&  active[j]) {
           if (jets[i].overlaps(jets[j])) {
             newjets.push_back( jets[i].merge(jets[j],
-                               transientTrackBuilder_ptr,
-                               tracks_ptr,
-                               muons_ptr,
-                               caloTowers_ptr,
-                               m_centralTrackIsolationCone,
-                               m_unionTrackIsolationCone,
-                               m_centralTrackThresholdPt,
-                               m_unionTrackThresholdPt,
-                               m_centralCaloIsolationCone,
-                               m_unionCaloIsolationCone,
-                               m_centralNumberAboveThresholdCone,
-                               m_unionNumberAboveThresholdCone,
-                               m_centralNumberAboveThresholdPt,
-                               m_unionNumberAboveThresholdPt));
+                               transientTrackBuilder_ptr
+                               //tracks_ptr,
+                               //muons_ptr,
+                               //caloTowers_ptr,
+                               //m_centralTrackIsolationCone,
+                               //m_unionTrackIsolationCone,
+                               //m_centralTrackThresholdPt,
+                               //m_unionTrackThresholdPt,
+                               //m_centralCaloIsolationCone,
+                               //m_unionCaloIsolationCone,
+                               //m_centralNumberAboveThresholdCone,
+                               //m_unionNumberAboveThresholdCone,
+                               //m_centralNumberAboveThresholdPt,
+                               //m_unionNumberAboveThresholdPt
+                             ));
             active[i] = false;
             active[j] = false;
           }
