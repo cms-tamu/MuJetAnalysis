@@ -28,6 +28,8 @@ Implementation:
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
+#include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
+#include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/MuonReco/interface/MuonSelectors.h"
 
 #include "DataFormats/VertexReco/interface/Vertex.h"
@@ -35,6 +37,7 @@ Implementation:
 #include "FWCore/Framework/interface/ConsumesCollector.h"
 
 #include "TRandom3.h"
+#include "TLorentzVector.h"
 
 // class declaration
 class MuJetProducerRun2 : public edm::EDProducer {
@@ -67,6 +70,7 @@ class MuJetProducerRun2 : public edm::EDProducer {
 
   // ----------member data ---------------------------
   edm::EDGetTokenT<pat::MuonCollection> m_muons;
+  edm::EDGetTokenT<reco::TrackCollection> m_DSAmuons;
   edm::EDGetTokenT<reco::BeamSpot> m_beamSpot;
   //edm::InputTag m_tracks;
   //edm::InputTag m_caloTowers;
@@ -137,6 +141,7 @@ class MuJetProducerRun2 : public edm::EDProducer {
 //
 MuJetProducerRun2::MuJetProducerRun2(const edm::ParameterSet& iConfig)
    : m_muons(                           consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons")))
+   , m_DSAmuons(                        consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("DSAmuons")))//might consume?
    , m_beamSpot(                        consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot")))
    //, m_tracks(                          iConfig.getParameter<edm::InputTag>("tracks"))
    //, m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
@@ -353,6 +358,9 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   iEvent.getByToken(m_muons, muons);
   //const pat::MuonCollection *muons_ptr = &*muons;
 
+  edm::Handle<reco::TrackCollection> DSAmuons;
+  iEvent.getByToken(m_DSAmuons, DSAmuons);
+
   edm::Handle<reco::BeamSpot> beamSpot;
   iEvent.getByToken(m_beamSpot, beamSpot);
 
@@ -378,23 +386,94 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   std::unique_ptr<pat::MultiMuonCollection> Pairs(new pat::MultiMuonCollection);
   std::vector<pat::MultiMuon> jets;
 
-  //DEGUG@Wei SHI 2019.04.18
+  //DEBUG@Wei SHI 2019.04.18
   std::cout << "*******************************" << std::endl;
   std::cout << "BeamSpot:    (x,y,z)[cm]: "<< beamSpot->position().x() << ", " << beamSpot->position().y() <<", "<< beamSpot->position().z() <<std::endl;
+
   for (pat::MuonCollection::const_iterator mui = muons->begin();  mui != muons->end();  ++mui) {
     std::cout << "slimmedMuon: (x,y,z)[cm]: "<< mui->vx() - beamSpot->position().x() <<", "<< mui->vy() - beamSpot->position().y() <<", "<< mui->vz() - beamSpot->position().z() <<std::endl;
-    std::cout << "                 pT[GeV]: "<< mui->pt() <<"; eta: "<< mui->eta() <<"; phi: "<< mui->phi() <<std::endl;
+    std::cout << "                 pT[GeV]: "<< mui->pt() <<"; eta: "<< mui->eta() <<"; phi: "<< mui->phi() << "; Q: " << mui->charge() <<std::endl;
     //MC truth
     if(mui->genParticle() != 0){
       std::cout << "Matched GEN: (x,y,z)[cm]: "<< mui->genParticle()->vx() - beamSpot->position().x() << ", " <<mui->genParticle()->vy() - beamSpot->position().y() <<", "<< mui->genParticle()->vz() - beamSpot->position().z() <<std::endl;
       std::cout << "                 pT[GeV]: "<< mui->genParticle()->pt() << "; eta: " << mui->genParticle()->eta() <<"; phi: "<< mui->genParticle()->phi() <<std::endl;
       std::cout << "                  PDG ID: "<< mui->genParticle()->pdgId() << "; Status: " << mui->genParticle()->status() <<std::endl;
     }
+    const pat::PackedCandidate* Candmui = dynamic_cast<const pat::PackedCandidate*>(mui->sourceCandidatePtr(0).get());
+    if ( Candmui != 0 ){
+      const reco::HitPattern& pi = Candmui->pseudoTrack().hitPattern();
+      std::cout << "     Hit BPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
+      std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) <<std::endl;
+      std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) <<std::endl;
+      std::cout << "                    #4: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) <<std::endl;
+      std::cout << "         FPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) <<std::endl;
+      std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) <<std::endl;
+      std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) <<std::endl;
+    }
     if (muonOkay(*mui)) {
       std::cout <<"muonOkay"<<std::endl;
     }
-  }//loop over miniaod slimmedMuon
+  }
 
+  for (reco::TrackCollection::const_iterator muj = DSAmuons->begin();  muj != DSAmuons->end();  ++muj) {
+
+    std::cout << "DSA Mu     (x,y,z)[cm]: "<< muj->vx() - beamSpot->position().x() <<", "<< muj->vy() - beamSpot->position().y() <<", "<< muj->vz() - beamSpot->position().z() <<std::endl;
+    std::cout << "               pT[GeV]: "<< muj->pt() <<"; eta: "<< muj->eta() <<"; phi: "<< muj->phi() << "; Q: " << muj->charge() <<std::endl;
+    const reco::HitPattern& pj = muj->hitPattern();
+    std::cout << "     Hit BPix layer #1: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
+    std::cout << "                    #2: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) <<std::endl;
+    std::cout << "                    #3: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) <<std::endl;
+    std::cout << "                    #4: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) <<std::endl;
+    std::cout << "         FPix layer #1: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) <<std::endl;
+    std::cout << "                    #2: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) <<std::endl;
+    std::cout << "                    #3: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) <<std::endl;
+    //MC truth: how to get the MC truth of reco tracks?
+    /*
+    if(muj->genParticle() != 0){
+      std::cout << "Matched GEN: (x,y,z)[cm]: "<< muj->genParticle()->vx() - beamSpot->position().x() << ", " <<muj->genParticle()->vy() - beamSpot->position().y() <<", "<< muj->genParticle()->vz() - beamSpot->position().z() <<std::endl;
+      std::cout << "                 pT[GeV]: "<< muj->genParticle()->pt() << "; eta: " << muj->genParticle()->eta() <<"; phi: "<< muj->genParticle()->phi() <<std::endl;
+      std::cout << "                  PDG ID: "<< muj->genParticle()->pdgId() << "; Status: " << muj->genParticle()->status() <<std::endl;
+    }*/
+
+  }
+
+  //Built Transient tracks from DSA muons and fit their vertex
+  for (reco::TrackCollection::const_iterator ONE = DSAmuons->begin();  ONE != DSAmuons->end();  ++ONE) {
+    for (reco::TrackCollection::const_iterator TWO = ONE;  TWO != DSAmuons->end();  ++TWO) {
+      TLorentzVector P4ONE, P4TWO;
+      P4ONE.SetPtEtaPhiM(ONE->pt(), ONE->eta(), ONE->phi(), 0.105);
+      P4TWO.SetPtEtaPhiM(TWO->pt(), TWO->eta(), TWO->phi(), 0.105);
+      if (ONE != TWO && ONE->pt() > 8 && TWO->pt() > 8 && fabs(ONE->eta()) < 2.4 && fabs(TWO->eta()) < 2.4
+      && (ONE->charge() != TWO->charge()) && (P4ONE + P4TWO).M() < 60.0 ){
+
+        std::cout << "    mu ONE   (x,y,z)[cm]: " << ONE->vx() - beamSpot->position().x() <<", "<< ONE->vy() - beamSpot->position().y() <<", "<< ONE->vz() - beamSpot->position().z() <<std::endl;
+        std::cout << "                 pT[GeV]: " << ONE->pt() <<"; eta: "<< ONE->eta() <<"; phi: "<< ONE->phi() << "; Q: " << ONE->charge() <<std::endl;
+        std::cout << "    mu TWO   (x,y,z)[cm]: " << TWO->vx() - beamSpot->position().x() <<", "<< TWO->vy() - beamSpot->position().y() <<", "<< TWO->vz() - beamSpot->position().z() <<std::endl;
+        std::cout << "                 pT[GeV]: " << TWO->pt() <<"; eta: "<< TWO->eta() <<"; phi: "<< TWO->phi() << "; Q: " << TWO->charge() <<std::endl;
+        std::cout << "          Pair mass[GeV]: " << (P4ONE + P4TWO).M() <<std::endl;
+        
+        std::vector<reco::TransientTrack> DimuTT;
+        DimuTT.push_back( (*transientTrackBuilder).build(*ONE) );
+        DimuTT.push_back( (*transientTrackBuilder).build(*TWO) );
+
+        //Fitting Vtx
+        KalmanVertexFitter KVF;
+        CachingVertex<5> DimuVtx = KVF.vertex(DimuTT);
+        if( DimuVtx.isValid() ){
+          std::cout << "*** DSA dimu vtx valid! ***" <<std::endl;
+          //setVertex(Point(DimuVtx.position().x(), DimuVtx.position().y(), DimuVtx.position().z()));
+          std::cout << "DSA dimu vtx (x,y,z)[cm]: " << DimuVtx.position().x() << ", " << DimuVtx.position().y() << ", " << DimuVtx.position().z()<<std::endl;
+        }
+        else{
+          std::cout << "*** DSA dimu vtx NOT valid! ***" <<std::endl;
+        }
+
+
+      }//end if
+    }//end for TWO
+  }//end for One
+
+  //end DEBUG @Wei SHI 2019.04.18
 
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {

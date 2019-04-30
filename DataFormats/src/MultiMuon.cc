@@ -244,11 +244,16 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	std::cout << "muonTrk 0      (x,y,z)[cm]: " << muonTracks[0]->vx()    << ", " << muonTracks[0]->vy()    << ", " << muonTracks[0]->vz()    <<std::endl;
 	std::cout << "muonTrk 1      (x,y,z)[cm]: " << muonTracks[1]->vx()    << ", " << muonTracks[1]->vy()    << ", " << muonTracks[1]->vz()    <<std::endl;
 
-
+  //Here it's fitting muons with IP constraints, so it will always be giving a vertex at IP
+	//Which is not true in this case
   KalmanVertexFitter vertexFitter;
   CachingVertex<5> fittedVertex = vertexFitter.vertex(tracksToVertex);
 
-  if(fittedVertex.isValid()){
+  //Another method: KalmanVertexFitter kvf(kvfPSet)
+  TransientVertex tv = vertexFitter.vertex(tracksToVertex);
+	if( tv.isValid() ) std::cout << "TransientVertex Position: " <<tv.position().x() << ", " << tv.position().y() << ", " <<tv.position().z()<<std::endl;
+
+  if( fittedVertex.isValid() ){
 		std::cout << " *** FittedVertex valid!" <<std::endl;
     setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
 

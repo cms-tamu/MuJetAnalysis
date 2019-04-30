@@ -334,6 +334,7 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
+  edm::EDGetTokenT<reco::VertexCollection> m_secondaryVertices;
   edm::EDGetTokenT<std::vector<pat::Jet> > m_PATJet;
 
   Int_t         m_nThrowsConsistentVertexesCalculator;
@@ -670,6 +671,7 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
+  m_secondaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("secondaryVertices"));
   m_PATJet          = consumes<std::vector<pat::Jet> >(iConfig.getParameter<edm::InputTag>("PATJet"));
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
@@ -1661,14 +1663,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
 	  std::cout << "diMuC vtx         (x,y,z)[cm]: " << b_diMuonC_FittedVtx_vx << ", " << b_diMuonC_FittedVtx_vy << ", " << b_diMuonC_FittedVtx_vz << std::endl;
     std::cout << "            (Lxy,|Lz|,dz)[cm]: " << b_diMuonC_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonC_FittedVtx_L,2) - pow(b_diMuonC_FittedVtx_Lxy,2) )<<", "<<b_diMuonC_FittedVtx_dz<< std::endl;
-    std::cout << "      Mu0 innerTrk(x,y,z)[cm]: " << diMuonC->muon(0)->innerTrack()->vx() << ", " << diMuonC->muon(0)->innerTrack()->vy() << ", " << diMuonC->muon(0)->innerTrack()->vz() << std::endl;
-    std::cout << "      Mu1 innerTrk(x,y,z)[cm]: " << diMuonC->muon(1)->innerTrack()->vx() << ", " << diMuonC->muon(1)->innerTrack()->vy() << ", " << diMuonC->muon(1)->innerTrack()->vz() << std::endl;
-
     std::cout << "diMuF vtx         (x,y,z)[cm]: " << b_diMuonF_FittedVtx_vx << ", " << b_diMuonF_FittedVtx_vy << ", " << b_diMuonF_FittedVtx_vz << std::endl;
     std::cout << "            (Lxy,|Lz|,dz)[cm]: " << b_diMuonF_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonF_FittedVtx_L,2) - pow(b_diMuonF_FittedVtx_Lxy,2) )<<", "<<b_diMuonF_FittedVtx_dz<< std::endl;
-    std::cout << "      Mu0 innerTrk(x,y,z)[cm]: " << diMuonF->muon(0)->innerTrack()->vx() << ", " << diMuonF->muon(0)->innerTrack()->vy() << ", " << diMuonF->muon(0)->innerTrack()->vz() << std::endl;
-    std::cout << "      Mu1 innerTrk(x,y,z)[cm]: " << diMuonF->muon(1)->innerTrack()->vx() << ", " << diMuonF->muon(1)->innerTrack()->vy() << ", " << diMuonF->muon(1)->innerTrack()->vz() << std::endl;
-
     std::cout << "Dimu vtx mass     (C, F)[GeV]: " << b_diMuonC_FittedVtx_m  << ", " << b_diMuonF_FittedVtx_m  << std::endl;
   } else {
     b_diMuonC_FittedVtx_m   = -1000.0;
@@ -2045,8 +2041,17 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       if ( canddiMuonC != 0 ){
 
         const reco::HitPattern& p = canddiMuonC->pseudoTrack().hitPattern();
-        std::cout << "diMuC Mu" << k << " numberOfValidHits  : " << p.numberOfValidHits() <<std::endl;
-        std::cout << "         "     << " seudotrk(x,y,z)[cm]: " << canddiMuonC->pseudoTrack().vx() << ", " << canddiMuonC->pseudoTrack().vy() << ", " <<canddiMuonC->pseudoTrack().vz() <<std::endl;
+        std::cout << "diMuC Mu" << k << " numberOfValidHits         : " << p.numberOfValidHits() <<std::endl;
+        std::cout << "         "     << " numberOfValidTrackerHits  : " << p.numberOfValidTrackerHits() <<std::endl;
+        std::cout << "         "     << " numberOfValidPixelHits    : " << p.numberOfValidPixelHits() <<std::endl;
+        std::cout << "         "     << " PF Cand lostInnerHits     : " << canddiMuonC->lostInnerHits() <<std::endl;
+        std::cout << "         "     << " PF pseudotrk   (x,y,z)[cm]: " << canddiMuonC->pseudoTrack().vx()      << ", " << canddiMuonC->pseudoTrack().vy()      << ", " << canddiMuonC->pseudoTrack().vz() <<std::endl;
+        if ( diMuonC->muon(k)->innerTrack().isAvailable() ) std::cout << "         "     << " PAT innerTrk   (x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", " << diMuonC->muon(k)->innerTrack()->vy() << ", " << diMuonC->muon(k)->innerTrack()->vz() << std::endl;
+        if ( diMuonC->muon(k)->outerTrack().isAvailable() ) std::cout << "         "     << " PAT outerTrk   (x,y,z)[cm]: " << diMuonC->muon(k)->outerTrack()->vx() << ", " << diMuonC->muon(k)->outerTrack()->vy() << ", " << diMuonC->muon(k)->outerTrack()->vz() << std::endl;
+        if ( diMuonC->muon(k)->globalTrack().isAvailable() ) std::cout << "         "     << " PAT globalTrk  (x,y,z)[cm]: " << diMuonC->muon(k)->globalTrack()->vx() << ", " << diMuonC->muon(k)->globalTrack()->vy() << ", " << diMuonC->muon(k)->globalTrack()->vz() << std::endl;
+        if ( diMuonC->muon(k)->muonBestTrack().isAvailable() ) std::cout << "         "     << " PAT bestTrk    (x,y,z)[cm]: " << diMuonC->muon(k)->muonBestTrack()->vx() << ", " << diMuonC->muon(k)->muonBestTrack()->vy() << ", " << diMuonC->muon(k)->muonBestTrack()->vz() << std::endl;
+        if ( diMuonC->muon(k)->tunePMuonBestTrack().isAvailable() ) std::cout << "         "     << " PAT TPbestTrk  (x,y,z)[cm]: " << diMuonC->muon(k)->tunePMuonBestTrack()->vx() << ", " << diMuonC->muon(k)->tunePMuonBestTrack()->vy() << ", " << diMuonC->muon(k)->tunePMuonBestTrack()->vz() << std::endl;
+
             /*
             if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ){
               if(k==0) b_diMuonC_m1_FittedVtx_hitpix = 1;
@@ -2086,8 +2091,17 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         const pat::PackedCandidate* canddiMuonF = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(k)->sourceCandidatePtr(0).get());
         if ( canddiMuonF != 0 ){
             const reco::HitPattern& p = canddiMuonF->pseudoTrack().hitPattern();
-            std::cout << "diMuF Mu" << k << " numberOfValidHits  : " << p.numberOfValidHits() <<std::endl;
-            std::cout << "diMuF Mu" << k << " seudotrk(x,y,z)[cm]: " << canddiMuonF->pseudoTrack().vx() << ", " << canddiMuonF->pseudoTrack().vy() << ", " << canddiMuonF->pseudoTrack().vz() <<std::endl;
+            std::cout << "diMuF Mu" << k << " numberOfValidHits         : " << p.numberOfValidHits() <<std::endl;
+            std::cout << "         "     << " numberOfValidTrackerHits  : " << p.numberOfValidTrackerHits() <<std::endl;
+            std::cout << "         "     << " numberOfValidPixelHits    : " << p.numberOfValidPixelHits() <<std::endl;
+            std::cout << "         "     << " PF Cand lostInnerHits     : " << canddiMuonF->lostInnerHits() <<std::endl;
+            std::cout << "         "     << " PF pseudotrk   (x,y,z)[cm]: " << canddiMuonF->pseudoTrack().vx()      << ", " << canddiMuonF->pseudoTrack().vy()      << ", " << canddiMuonF->pseudoTrack().vz() <<std::endl;
+            if ( diMuonF->muon(k)->innerTrack().isAvailable() ) std::cout << "         "     << " PAT innerTrk   (x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", " << diMuonF->muon(k)->innerTrack()->vy() << ", " << diMuonF->muon(k)->innerTrack()->vz() << std::endl;
+            if ( diMuonF->muon(k)->outerTrack().isAvailable() ) std::cout << "         "     << " PAT outerTrk   (x,y,z)[cm]: " << diMuonF->muon(k)->outerTrack()->vx() << ", " << diMuonF->muon(k)->outerTrack()->vy() << ", " << diMuonF->muon(k)->outerTrack()->vz() << std::endl;
+            if ( diMuonF->muon(k)->globalTrack().isAvailable() ) std::cout << "         "     << " PAT globalTrk  (x,y,z)[cm]: " << diMuonF->muon(k)->globalTrack()->vx() << ", " << diMuonF->muon(k)->globalTrack()->vy() << ", " << diMuonF->muon(k)->globalTrack()->vz() << std::endl;
+            if ( diMuonF->muon(k)->muonBestTrack().isAvailable() ) std::cout << "         "     << " PAT bestTrk    (x,y,z)[cm]: " << diMuonF->muon(k)->muonBestTrack()->vx() << ", " << diMuonF->muon(k)->muonBestTrack()->vy() << ", " << diMuonF->muon(k)->muonBestTrack()->vz() << std::endl;
+            if ( diMuonF->muon(k)->tunePMuonBestTrack().isAvailable() ) std::cout << "         "     << " PAT TPbestTrk  (x,y,z)[cm]: " << diMuonF->muon(k)->tunePMuonBestTrack()->vx() << ", " << diMuonF->muon(k)->tunePMuonBestTrack()->vy() << ", " << diMuonF->muon(k)->tunePMuonBestTrack()->vz() << std::endl;
+
             /*
             if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
               if(k==0) b_diMuonF_m1_FittedVtx_hitpix = 1;
@@ -2145,6 +2159,19 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_isVertexOK = true;
     }
   }
+
+  // Check secondary vertices
+  edm::Handle<reco::VertexCollection> secondaryVertices;
+  iEvent.getByToken(m_secondaryVertices, secondaryVertices);
+  //Check if muon tracks belong to the secondary vertices, if so check the vertex position
+  for (reco::VertexCollection::const_iterator sv = secondaryVertices->begin();  sv != secondaryVertices->end();  ++sv) {
+    std::cout<<"SV (x,y,z)[cm]: "<<sv->x()<<", "<<sv->y()<<", "<<sv->z()<<std::endl;
+    std::cout<<"SV tracksSize : "<<sv->tracksSize()<<std::endl;
+    for(reco::Vertex::trackRef_iterator tt = sv->tracks_begin(); tt != sv->tracks_end(); ++tt) {
+      std::cout<<"trk pT   [GeV]: "<<tt->castTo<reco::TrackRef>()->pt()<<std::endl;
+    }
+  }
+
 
   if ( m_debug > 10 ) std::cout << m_events << " Stop RECO Level" << std::endl;
 
