@@ -29,6 +29,7 @@ Implementation:
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/Records/interface/TransientTrackRecord.h"
 #include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
+#include "RecoVertex/VertexTools/interface/SequentialVertexFitter.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
 #include "DataFormats/MuonReco/interface/MuonSelectors.h"
 
@@ -448,10 +449,10 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
         std::cout << "    mu ONE   (x,y,z)[cm]: " << ONE->vx() - beamSpot->position().x() <<", "<< ONE->vy() - beamSpot->position().y() <<", "<< ONE->vz() - beamSpot->position().z() <<std::endl;
         std::cout << "                 pT[GeV]: " << ONE->pt() <<"; eta: "<< ONE->eta() <<"; phi: "<< ONE->phi() << "; Q: " << ONE->charge() <<std::endl;
-        std::cout << "    mu TWO   (x,y,z)[cm]: " << TWO->vx() - beamSpot->position().x() <<", "<< TWO->vy() - beamSpot->position().y() <<", "<< TWO->vz() - beamSpot->position().z() <<std::endl;
+        std::cout << "       TWO   (x,y,z)[cm]: " << TWO->vx() - beamSpot->position().x() <<", "<< TWO->vy() - beamSpot->position().y() <<", "<< TWO->vz() - beamSpot->position().z() <<std::endl;
         std::cout << "                 pT[GeV]: " << TWO->pt() <<"; eta: "<< TWO->eta() <<"; phi: "<< TWO->phi() << "; Q: " << TWO->charge() <<std::endl;
         std::cout << "          Pair mass[GeV]: " << (P4ONE + P4TWO).M() <<std::endl;
-        
+
         std::vector<reco::TransientTrack> DimuTT;
         DimuTT.push_back( (*transientTrackBuilder).build(*ONE) );
         DimuTT.push_back( (*transientTrackBuilder).build(*TWO) );
@@ -460,14 +461,14 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
         KalmanVertexFitter KVF;
         CachingVertex<5> DimuVtx = KVF.vertex(DimuTT);
         if( DimuVtx.isValid() ){
-          std::cout << "*** DSA dimu vtx valid! ***" <<std::endl;
+          std::cout << "    * DSA dimu vtx valid! *" <<std::endl;
           //setVertex(Point(DimuVtx.position().x(), DimuVtx.position().y(), DimuVtx.position().z()));
-          std::cout << "DSA dimu vtx (x,y,z)[cm]: " << DimuVtx.position().x() << ", " << DimuVtx.position().y() << ", " << DimuVtx.position().z()<<std::endl;
+          std::cout << "         vtx (x,y,z)[cm]: " << DimuVtx.position().x() << ", " << DimuVtx.position().y() << ", " << DimuVtx.position().z()<<std::endl;
         }
         else{
-          std::cout << "*** DSA dimu vtx NOT valid! ***" <<std::endl;
+          std::cout << "    * DSA dimu vtx NOT valid! *" <<std::endl;
         }
-
+        std::cout << "-----------" <<std::endl;
 
       }//end if
     }//end for TWO

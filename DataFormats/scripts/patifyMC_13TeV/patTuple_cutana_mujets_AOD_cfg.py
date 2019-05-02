@@ -18,12 +18,12 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("MuJetAnalysis.DataFormats.RECOtoPAT_cff")
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_cff")
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_cff")
-process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_AOD_cfi")
+#process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_AOD_cfi")
 
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:/afs/cern.ch/work/w/wshi/public/INPUT/5C690722-8631-E911-BE8B-003048F59728.root'#2017 MSSMD MC AODSIM (mN1=10, mGammaD=5, cT=50)
+        'file:/afs/cern.ch/work/w/wshi/public/INPUT/68D1D254-E22B-E911-890C-002590E7E07A.root'#2017 MSSMD AODSIM (mN1=10, mGammaD=5, cT=50)
     )
 )
 
