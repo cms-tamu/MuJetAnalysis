@@ -24,6 +24,7 @@ process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
         'file:/afs/cern.ch/work/w/wshi/public/INPUT/68D1D254-E22B-E911-890C-002590E7E07A.root'#2017 MSSMD AODSIM (mN1=10, mGammaD=5, cT=50)
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/HIG-RunIIFall17DRPremix-2016MG4.root' #2016 MG4 LHE, sim-reco using 2017 setting
     )
 )
 

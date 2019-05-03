@@ -40,6 +40,7 @@ process.source = cms.Source(
         #'file:/afs/cern.ch/work/w/wshi/public/INPUT/DF223035-AD40-E34A-857B-5C55FC925EC8.root'#2018 NMSSM MINIAODSIM (MH=125, MA=3)
         #'file:/afs/cern.ch/work/w/wshi/public/INPUT/HIG-RunIIFall17MiniAODv2-03562.root' # Private: 2017 MSSMD MINIAODSIM CMSSW_9_4_7 (mN1=10, mGammaD=5, cT=50)
         'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD.root' # Private: 2017 MSSMD ReMiniAODed under CMSSW_10_2_5(with displaceStandaloneMuon collection) (mN1=10, mGammaD=5, cT=50)
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD_2016MG4.root' #Private: 2017 MSSMD ReMiniAODed under CMSSW_10_2_5 using 2016 MG4 generated LHE
         )
 )
 
