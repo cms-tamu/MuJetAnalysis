@@ -144,8 +144,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t  diMuonF_FittedVtx_L;
   Int_t  nRecoMu;
 
-  TH2F* Lxy_Residual_GEN_leading_pT = new TH1F("Lxy_Residual_GEN_leading_pT","",50,0.,500.,100,-500.,500.);//cm
-  TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH1F("Abs_Lz_Residual_GEN_leading_pT","",90,0.,900.,180,-900.,900.);
+  TH2F* Lxy_Residual_GEN_leading_pT = new TH2F("Lxy_Residual_GEN_leading_pT","",30,0.01,300.,60,-300.,300.);//cm
+  TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH2F("Abs_Lz_Residual_GEN_leading_pT","",30,0.01,300.,60,-300.,300.);
 
   TH1F* leading_pt_pass_basic = new TH1F("leading_pt_pass_basic","",50,0.,50.);
   TH1F* leading_eta_pass_basic = new TH1F("leading_eta_pass_basic","",50,-2.5,2.5);
@@ -291,8 +291,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 
       //Check vtx significance without any selections
       if ( CheckRecoVtx ){
-        Lxy_Residual_GEN_leading_pT->Fill(genA0_Lxy, diMuonC_FittedVtx_Lxy);//assume they match
-        Abs_Lz_Residual_GEN_leading_pT->Fill(genA0_Lz, sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
+        Lxy_Residual_GEN_leading_pT->Fill(genA0_Lxy, genA0_Lxy-diMuonC_FittedVtx_Lxy);//assume they match
+        Abs_Lz_Residual_GEN_leading_pT->Fill(genA0_Lz, genA0_Lz-sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
       }//end CheckRecoVtx
 
 		  if( is1GenMu17 ) counter[k][1]++;
