@@ -8,14 +8,13 @@ MuJetProducer = cms.EDProducer(
     #StandAlone muons might be embedded in the pat::Muon
     muons = cms.InputTag("slimmedMuons"),
     #DSA collection
-    DSAmuons = cms.InputTag("displacedStandAloneMuons"),#Available in Re-MiniAOD under 10_2_X
+    #DSAmuons = cms.InputTag("displacedStandAloneMuons"),#Available in Re-MiniAOD under 10_2_X
     beamSpot = cms.InputTag("offlineBeamSpot"),
     minPt = cms.double(8.),
     maxAbsEta = cms.double(2.4),
-    #For displaced muons, we might need displaceStandaloneMuon collection (No IP constraint)
-    #to fit the displaced vertex, so shouldn't apply too strict selection here
     #Signal muons pT are on the order of tens of GeV, not usually below 10 GeV
-    selectTrackerMuons = cms.bool(False),
+    selectTrackerMuons = cms.bool(True),
+    #Global uses standalone which are constriant to IP
     selectGlobalMuons = cms.bool(False),
     minTrackerHits = cms.int32(8),
     maxTrackerNormChi2 = cms.double(4.),

@@ -2034,8 +2034,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     //loop over two muons
     for(uint32_t k=0;k<2;k++){
 
-      //Maybe we shouldn't use the pseudoTrack since they all extrapolate to the beamline
-      //This will always give valid hit in pixel layers (It's interesting to see AOD samples printout)
+      //2017 AOD sees same, seems to be a sample issue
       //maybe we should use the fittedVertex position to veto dimuons outdide the fiducial volume
       const pat::PackedCandidate* canddiMuonC = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(k)->sourceCandidatePtr(0).get());
       if ( canddiMuonC != 0 ){
@@ -2046,7 +2045,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         std::cout << "         "     << " numberOfValidPixelHits    : " << p.numberOfValidPixelHits() <<std::endl;
         std::cout << "         "     << " PF Cand lostInnerHits     : " << canddiMuonC->lostInnerHits() <<std::endl;
         std::cout << "         "     << " PF pseudotrk   (x,y,z)[cm]: " << canddiMuonC->pseudoTrack().vx()      << ", " << canddiMuonC->pseudoTrack().vy()      << ", " << canddiMuonC->pseudoTrack().vz() <<std::endl;
-        if ( diMuonC->muon(k)->innerTrack().isAvailable() ) std::cout << "         "     << " PAT innerTrk   (x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", " << diMuonC->muon(k)->innerTrack()->vy() << ", " << diMuonC->muon(k)->innerTrack()->vz() << std::endl;
+        if ( diMuonC->muon(k)->innerTrack().isAvailable() ) {
+          std::cout << "         "     << " PAT innerTrk   (x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", " << diMuonC->muon(k)->innerTrack()->vy() << ", " << diMuonC->muon(k)->innerTrack()->vz() << std::endl;
+          std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonC->muon(k)->innerTrack()->dxy() << ", " << diMuonC->muon(k)->innerTrack()->dz() << std::endl;
+        }
         if ( diMuonC->muon(k)->outerTrack().isAvailable() ) std::cout << "         "     << " PAT outerTrk   (x,y,z)[cm]: " << diMuonC->muon(k)->outerTrack()->vx() << ", " << diMuonC->muon(k)->outerTrack()->vy() << ", " << diMuonC->muon(k)->outerTrack()->vz() << std::endl;
         if ( diMuonC->muon(k)->globalTrack().isAvailable() ) std::cout << "         "     << " PAT globalTrk  (x,y,z)[cm]: " << diMuonC->muon(k)->globalTrack()->vx() << ", " << diMuonC->muon(k)->globalTrack()->vy() << ", " << diMuonC->muon(k)->globalTrack()->vz() << std::endl;
         if ( diMuonC->muon(k)->muonBestTrack().isAvailable() ) std::cout << "         "     << " PAT bestTrk    (x,y,z)[cm]: " << diMuonC->muon(k)->muonBestTrack()->vx() << ", " << diMuonC->muon(k)->muonBestTrack()->vy() << ", " << diMuonC->muon(k)->muonBestTrack()->vz() << std::endl;
@@ -2096,7 +2098,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             std::cout << "         "     << " numberOfValidPixelHits    : " << p.numberOfValidPixelHits() <<std::endl;
             std::cout << "         "     << " PF Cand lostInnerHits     : " << canddiMuonF->lostInnerHits() <<std::endl;
             std::cout << "         "     << " PF pseudotrk   (x,y,z)[cm]: " << canddiMuonF->pseudoTrack().vx()      << ", " << canddiMuonF->pseudoTrack().vy()      << ", " << canddiMuonF->pseudoTrack().vz() <<std::endl;
-            if ( diMuonF->muon(k)->innerTrack().isAvailable() ) std::cout << "         "     << " PAT innerTrk   (x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", " << diMuonF->muon(k)->innerTrack()->vy() << ", " << diMuonF->muon(k)->innerTrack()->vz() << std::endl;
+            if ( diMuonF->muon(k)->innerTrack().isAvailable() ) {
+              std::cout << "         "     << " PAT innerTrk   (x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", " << diMuonF->muon(k)->innerTrack()->vy() << ", " << diMuonF->muon(k)->innerTrack()->vz() << std::endl;
+              std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonF->muon(k)->innerTrack()->dxy() << ", " << diMuonF->muon(k)->innerTrack()->dz() << std::endl;
+            }
             if ( diMuonF->muon(k)->outerTrack().isAvailable() ) std::cout << "         "     << " PAT outerTrk   (x,y,z)[cm]: " << diMuonF->muon(k)->outerTrack()->vx() << ", " << diMuonF->muon(k)->outerTrack()->vy() << ", " << diMuonF->muon(k)->outerTrack()->vz() << std::endl;
             if ( diMuonF->muon(k)->globalTrack().isAvailable() ) std::cout << "         "     << " PAT globalTrk  (x,y,z)[cm]: " << diMuonF->muon(k)->globalTrack()->vx() << ", " << diMuonF->muon(k)->globalTrack()->vy() << ", " << diMuonF->muon(k)->globalTrack()->vz() << std::endl;
             if ( diMuonF->muon(k)->muonBestTrack().isAvailable() ) std::cout << "         "     << " PAT bestTrk    (x,y,z)[cm]: " << diMuonF->muon(k)->muonBestTrack()->vx() << ", " << diMuonF->muon(k)->muonBestTrack()->vy() << ", " << diMuonF->muon(k)->muonBestTrack()->vz() << std::endl;

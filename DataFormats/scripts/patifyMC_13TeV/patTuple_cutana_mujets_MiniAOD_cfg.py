@@ -36,11 +36,12 @@ process.source = cms.Source(
         #'file:/afs/cern.ch/work/w/wshi/public/INPUT/E8D69F89-6C33-E911-B440-D4856459AC30.root'#2017 MSSMD MINIAODSIM (mN1=10, mGammaD=5, cT=50)
         #'file:/afs/cern.ch/work/w/wshi/public/INPUT/B654BC56-CC25-E911-812F-B083FECFF2BE.root'#2017 MSSMD MINIAODSIM (mN1=10, mGammaD=8.5, cT=2)
         #'file:/afs/cern.ch/work/w/wshi/public/INPUT/82230C10-5931-E911-907C-008CFA1111D0.root'#2017 MSSMD MINIAODSIM (mN1=60, mGammaD=35, cT=2)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/76651043-7F44-E811-9D72-0025905A60C6.root'#2017 Era E DoubleMuon
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/76651043-7F44-E811-9D72-0025905A60C6.root'#2017 Data Era E DoubleMuon
         #'file:/afs/cern.ch/work/w/wshi/public/INPUT/DF223035-AD40-E34A-857B-5C55FC925EC8.root'#2018 NMSSM MINIAODSIM (MH=125, MA=3)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/HIG-RunIIFall17MiniAODv2-03562.root' # Private: 2017 MSSMD MINIAODSIM CMSSW_9_4_7 (mN1=10, mGammaD=5, cT=50)
-        'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD.root' # Private: 2017 MSSMD ReMiniAODed under CMSSW_10_2_5(with displaceStandaloneMuon collection) (mN1=10, mGammaD=5, cT=50)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD_2016MG4.root' #Private: 2017 MSSMD ReMiniAODed under CMSSW_10_2_5 using 2016 MG4 generated LHE
+        'file:/afs/cern.ch/work/w/wshi/public/INPUT/HIG-RunIIFall17MiniAODv2-03562.root' # Private: 2017 MSSMD MINIAODSIM CMSSW_9_4_7 (mN1=10, mGammaD=5, cT=50)
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/HIG-RunIIFall17MiniAODv2-03562_noPU.root' # Same as above except no PU simulation
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD.root' # Private: 2017 MSSMD ReMiniAODed under CMSSW_10_2_5(with displaceStandaloneMuon collection) (mN1=10, mGammaD=5, cT=50)
+        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD_noPU.root' # Same as above except no PU simulation
         )
 )
 

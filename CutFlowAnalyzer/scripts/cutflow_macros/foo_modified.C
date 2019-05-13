@@ -144,8 +144,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t  diMuonF_FittedVtx_L;
   Int_t  nRecoMu;
 
-  TH2F* Lxy_Residual_GEN_leading_pT = new TH2F("Lxy_Residual_GEN_leading_pT","",30,0.01,300.,60,-300.,300.);//cm
-  TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH2F("Abs_Lz_Residual_GEN_leading_pT","",30,0.01,300.,60,-300.,300.);
+  TH2F* Lxy_Residual_GEN_leading_pT = new TH2F("Lxy_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);//cm
+  TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH2F("Abs_Lz_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);
 
   TH1F* leading_pt_pass_basic = new TH1F("leading_pt_pass_basic","",50,0.,50.);
   TH1F* leading_eta_pass_basic = new TH1F("leading_eta_pass_basic","",50,-2.5,2.5);

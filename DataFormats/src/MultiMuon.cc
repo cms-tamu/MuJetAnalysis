@@ -15,6 +15,8 @@
 #include "TrackingTools/PatternTools/interface/TwoTrackMinimumDistance.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
+#include "TLorentzVector.h"
+
 #else
 class TransientTrackBuilder {};
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
@@ -223,7 +225,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
   std::vector<reco::TransientTrack> tracksToVertex;
   std::vector<const reco::Track*> muonTracks;
-  std::cout <<"----------"<<std::endl;
+
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
     if (muon(i) == NULL) {
       throw cms::Exception("MultiMuon") << "MultiMuons should only contain pat::Muons";
@@ -245,14 +247,19 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	std::cout << "muonTrk 0      (x,y,z)[cm]: " << muonTracks[0]->vx()    << ", " << muonTracks[0]->vy()    << ", " << muonTracks[0]->vz()    <<std::endl;
 	std::cout << "muonTrk 1      (x,y,z)[cm]: " << muonTracks[1]->vx()    << ", " << muonTracks[1]->vy()    << ", " << muonTracks[1]->vz()    <<std::endl;
 
-  //Here it's fitting muons with IP constraints, so it will always be giving a vertex at IP
+	TLorentzVector p4one, p4two;
+	p4one.SetPtEtaPhiM(muonTracks[0]->pt(), muonTracks[0]->eta(), muonTracks[0]->phi(), 0.105);
+	p4two.SetPtEtaPhiM(muonTracks[1]->pt(), muonTracks[1]->eta(), muonTracks[1]->phi(), 0.105);
+  std::cout << "            Pair mass[GeV]: " << (p4one + p4two).M() <<std::endl;
+
+	//Here it's fitting muons with IP constraints, so it will always be giving a vertex at IP
 	//Which is not true in this case
   KalmanVertexFitter vertexFitter;
   CachingVertex<5> fittedVertex = vertexFitter.vertex(tracksToVertex);
 
   //Another method: KalmanVertexFitter kvf(kvfPSet)
-  TransientVertex tv = vertexFitter.vertex(tracksToVertex);
-	if( tv.isValid() ) std::cout << "TransientVertex Position: " <<tv.position().x() << ", " << tv.position().y() << ", " <<tv.position().z()<<std::endl;
+  //TransientVertex tv = vertexFitter.vertex(tracksToVertex);
+	//if( tv.isValid() ) std::cout << "TransientVertex Position: " <<tv.position().x() << ", " << tv.position().y() << ", " <<tv.position().z()<<std::endl;
 
   if( fittedVertex.isValid() ){
 		std::cout << " *** FittedVertex valid!" <<std::endl;

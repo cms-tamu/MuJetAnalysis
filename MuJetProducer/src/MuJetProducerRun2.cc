@@ -71,7 +71,7 @@ class MuJetProducerRun2 : public edm::EDProducer {
 
   // ----------member data ---------------------------
   edm::EDGetTokenT<pat::MuonCollection> m_muons;
-  edm::EDGetTokenT<reco::TrackCollection> m_DSAmuons;
+  //edm::EDGetTokenT<reco::TrackCollection> m_DSAmuons;
   edm::EDGetTokenT<reco::BeamSpot> m_beamSpot;
   //edm::InputTag m_tracks;
   //edm::InputTag m_caloTowers;
@@ -142,7 +142,7 @@ class MuJetProducerRun2 : public edm::EDProducer {
 //
 MuJetProducerRun2::MuJetProducerRun2(const edm::ParameterSet& iConfig)
    : m_muons(                           consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons")))
-   , m_DSAmuons(                        consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("DSAmuons")))//might consume?
+   //, m_DSAmuons(                        consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("DSAmuons")))//might consume?
    , m_beamSpot(                        consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot")))
    //, m_tracks(                          iConfig.getParameter<edm::InputTag>("tracks"))
    //, m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
@@ -260,8 +260,10 @@ MuJetProducerRun2::~MuJetProducerRun2()
 bool MuJetProducerRun2::muonOkay(const pat::Muon &muon) {
   if (muon.pt() < m_minPt ||  fabs(muon.eta()) > m_maxAbsEta) return false;
 
-  if (m_selectTrackerMuons  &&  !muon.isTrackerMuon() ) return false;
-  if (m_selectGlobalMuons   &&  !muon.isGlobalMuon()  ) return false;
+  //if (m_selectTrackerMuons  &&  !muon.isTrackerMuon() ) return false;
+  //if (m_selectGlobalMuons   &&  !muon.isGlobalMuon()  ) return false;
+  if ( !muon.isTrackerMuon() ) return false;//Want tracker muon only
+  if ( muon.isGlobalMuon()  ) return false;//Don't want global muon
 
   if (m_minTrackerHits > 0) {
     if (muon.innerTrack().isNull()) return false;
@@ -359,8 +361,8 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   iEvent.getByToken(m_muons, muons);
   //const pat::MuonCollection *muons_ptr = &*muons;
 
-  edm::Handle<reco::TrackCollection> DSAmuons;
-  iEvent.getByToken(m_DSAmuons, DSAmuons);
+  //edm::Handle<reco::TrackCollection> DSAmuons;
+  //iEvent.getByToken(m_DSAmuons, DSAmuons);
 
   edm::Handle<reco::BeamSpot> beamSpot;
   iEvent.getByToken(m_beamSpot, beamSpot);
@@ -390,16 +392,12 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   //DEBUG@Wei SHI 2019.04.18
   std::cout << "*******************************" << std::endl;
   std::cout << "BeamSpot:    (x,y,z)[cm]: "<< beamSpot->position().x() << ", " << beamSpot->position().y() <<", "<< beamSpot->position().z() <<std::endl;
-
+  double MuonCount=0;
   for (pat::MuonCollection::const_iterator mui = muons->begin();  mui != muons->end();  ++mui) {
-    std::cout << "slimmedMuon: (x,y,z)[cm]: "<< mui->vx() - beamSpot->position().x() <<", "<< mui->vy() - beamSpot->position().y() <<", "<< mui->vz() - beamSpot->position().z() <<std::endl;
-    std::cout << "                 pT[GeV]: "<< mui->pt() <<"; eta: "<< mui->eta() <<"; phi: "<< mui->phi() << "; Q: " << mui->charge() <<std::endl;
-    //MC truth
-    if(mui->genParticle() != 0){
-      std::cout << "Matched GEN: (x,y,z)[cm]: "<< mui->genParticle()->vx() - beamSpot->position().x() << ", " <<mui->genParticle()->vy() - beamSpot->position().y() <<", "<< mui->genParticle()->vz() - beamSpot->position().z() <<std::endl;
-      std::cout << "                 pT[GeV]: "<< mui->genParticle()->pt() << "; eta: " << mui->genParticle()->eta() <<"; phi: "<< mui->genParticle()->phi() <<std::endl;
-      std::cout << "                  PDG ID: "<< mui->genParticle()->pdgId() << "; Status: " << mui->genParticle()->status() <<std::endl;
-    }
+
+    std::cout << "Muon     #"<<MuonCount<<": (x,y,z)[cm]: "<< mui->vx() <<", "<< mui->vy() <<", "<< mui->vz() <<std::endl;
+    std::cout << "                 pT[GeV]: "<< mui->pt() <<"; eta: "<< mui->eta() <<"; phi: "<< mui->phi() << "; Q: " << mui->charge()<<"; Tracker Muon: "<< mui->isTrackerMuon()<< "; Global Muon: "<< mui->isGlobalMuon() <<std::endl;
+
     const pat::PackedCandidate* Candmui = dynamic_cast<const pat::PackedCandidate*>(mui->sourceCandidatePtr(0).get());
     if ( Candmui != 0 ){
       const reco::HitPattern& pi = Candmui->pseudoTrack().hitPattern();
@@ -411,11 +409,21 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
       std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) <<std::endl;
       std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) <<std::endl;
     }
+    else{
+      std::cout <<"Didn't find a PFCandidates the muon was made from..."<<std::endl;
+    }
+    //MC truth
+    if(mui->genParticle() != 0){
+      std::cout << "Matched GEN: (x,y,z)[cm]: "<< mui->genParticle()->vx() << ", " <<mui->genParticle()->vy() <<", "<< mui->genParticle()->vz() <<std::endl;
+      std::cout << "                 pT[GeV]: "<< mui->genParticle()->pt() << "; eta: " << mui->genParticle()->eta() <<"; phi: "<< mui->genParticle()->phi() <<std::endl;
+      std::cout << "                  PDG ID: "<< mui->genParticle()->pdgId() << "; Status: " << mui->genParticle()->status() <<std::endl;
+    }
     if (muonOkay(*mui)) {
       std::cout <<"muonOkay"<<std::endl;
     }
+    MuonCount++;
   }
-
+/*
   for (reco::TrackCollection::const_iterator muj = DSAmuons->begin();  muj != DSAmuons->end();  ++muj) {
 
     std::cout << "DSA Mu     (x,y,z)[cm]: "<< muj->vx() - beamSpot->position().x() <<", "<< muj->vy() - beamSpot->position().y() <<", "<< muj->vz() - beamSpot->position().z() <<std::endl;
@@ -428,15 +436,10 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     std::cout << "         FPix layer #1: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) <<std::endl;
     std::cout << "                    #2: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) <<std::endl;
     std::cout << "                    #3: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) <<std::endl;
-    //MC truth: how to get the MC truth of reco tracks?
-    /*
-    if(muj->genParticle() != 0){
-      std::cout << "Matched GEN: (x,y,z)[cm]: "<< muj->genParticle()->vx() - beamSpot->position().x() << ", " <<muj->genParticle()->vy() - beamSpot->position().y() <<", "<< muj->genParticle()->vz() - beamSpot->position().z() <<std::endl;
-      std::cout << "                 pT[GeV]: "<< muj->genParticle()->pt() << "; eta: " << muj->genParticle()->eta() <<"; phi: "<< muj->genParticle()->phi() <<std::endl;
-      std::cout << "                  PDG ID: "<< muj->genParticle()->pdgId() << "; Status: " << muj->genParticle()->status() <<std::endl;
-    }*/
+
 
   }
+
 
   //Built Transient tracks from DSA muons and fit their vertex
   for (reco::TrackCollection::const_iterator ONE = DSAmuons->begin();  ONE != DSAmuons->end();  ++ONE) {
@@ -473,9 +476,10 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
       }//end if
     }//end for TWO
   }//end for One
+  */
 
   //end DEBUG @Wei SHI 2019.04.18
-
+  double PairCount=-1;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {
 	    for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
@@ -485,6 +489,9 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           pairOfMuons.push_back(&*one);
           pairOfMuons.push_back(&*two);
 
+          PairCount++;
+          std::cout <<"----------"<<std::endl;
+          std::cout << "Pair #"<<PairCount<<std::endl;
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
                                    //tracks_ptr,
@@ -564,6 +571,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     // Check if the two picked pairs share
     if ( PairOne.overlaps(PairTwo) ) {
       //pick one randomly
+      //@May9: Pick the pair with higher leading pT muon?
       if (m_trandom3.Integer(2) == 0) {
         FinalJets.push_back(PairOne);
         used[&*(PairOne.muon(0))] = true;
