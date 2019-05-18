@@ -12,9 +12,7 @@ MuJetProducer = cms.EDProducer(
     beamSpot = cms.InputTag("offlineBeamSpot"),
     minPt = cms.double(8.),
     maxAbsEta = cms.double(2.4),
-    #Signal muons pT are on the order of tens of GeV, not usually below 10 GeV
-    selectTrackerMuons = cms.bool(True),
-    #Global uses standalone which are constriant to IP
+    selectTrackerMuons = cms.bool(False),
     selectGlobalMuons = cms.bool(False),
     minTrackerHits = cms.int32(8),
     maxTrackerNormChi2 = cms.double(4.),

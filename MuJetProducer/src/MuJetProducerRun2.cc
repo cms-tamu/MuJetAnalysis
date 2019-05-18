@@ -260,10 +260,10 @@ MuJetProducerRun2::~MuJetProducerRun2()
 bool MuJetProducerRun2::muonOkay(const pat::Muon &muon) {
   if (muon.pt() < m_minPt ||  fabs(muon.eta()) > m_maxAbsEta) return false;
 
-  //if (m_selectTrackerMuons  &&  !muon.isTrackerMuon() ) return false;
-  //if (m_selectGlobalMuons   &&  !muon.isGlobalMuon()  ) return false;
-  if ( !muon.isTrackerMuon() ) return false;//Want tracker muon only
-  if ( muon.isGlobalMuon()  ) return false;//Don't want global muon
+  if (m_selectTrackerMuons  &&  !muon.isTrackerMuon() ) return false;
+  if (m_selectGlobalMuons   &&  !muon.isGlobalMuon()  ) return false;
+  //if ( !muon.isTrackerMuon() ) return false;//Want tracker muon only
+  //if ( muon.isGlobalMuon()  ) return false;//Don't want global muon
 
   if (m_minTrackerHits > 0) {
     if (muon.innerTrack().isNull()) return false;
@@ -397,11 +397,14 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
     std::cout << "Muon     #"<<MuonCount<<": (x,y,z)[cm]: "<< mui->vx() <<", "<< mui->vy() <<", "<< mui->vz() <<std::endl;
     std::cout << "                 pT[GeV]: "<< mui->pt() <<"; eta: "<< mui->eta() <<"; phi: "<< mui->phi() << "; Q: " << mui->charge()<<"; Tracker Muon: "<< mui->isTrackerMuon()<< "; Global Muon: "<< mui->isGlobalMuon() <<std::endl;
+    if ( mui->innerTrack().isAvailable() ) {
+    std::cout << " innerTrk ValidPixelHits: " << mui->innerTrack()->hitPattern().numberOfValidPixelHits() << std::endl;
+    }
 
     const pat::PackedCandidate* Candmui = dynamic_cast<const pat::PackedCandidate*>(mui->sourceCandidatePtr(0).get());
-    if ( Candmui != 0 ){
+    if ( Candmui != 0 && Candmui->hasTrackDetails() ){
       const reco::HitPattern& pi = Candmui->pseudoTrack().hitPattern();
-      std::cout << "     Hit BPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
+      std::cout << "Cast Hit BPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
       std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) <<std::endl;
       std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) <<std::endl;
       std::cout << "                    #4: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) <<std::endl;

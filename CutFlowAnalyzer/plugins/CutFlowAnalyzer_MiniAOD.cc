@@ -1947,7 +1947,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         const pat::PackedCandidate* candFittedVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
         const pat::PackedCandidate* candFittedVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
         //dynamic cast can be null
-        if ( candFittedVtx_diMuonTmpMu0 != 0 && candFittedVtx_diMuonTmpMu1 != 0 ){
+        if ( candFittedVtx_diMuonTmpMu0 != 0 && candFittedVtx_diMuonTmpMu1 != 0 && candFittedVtx_diMuonTmpMu0->hasTrackDetails() && candFittedVtx_diMuonTmpMu1->hasTrackDetails() ){
           if (  tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu0->pseudoTrack()) )
   	         || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ){
             trackIsMuon = true;
@@ -2034,113 +2034,76 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     //loop over two muons
     for(uint32_t k=0;k<2;k++){
 
-      //2017 AOD sees same, seems to be a sample issue
-      //maybe we should use the fittedVertex position to veto dimuons outdide the fiducial volume
-      const pat::PackedCandidate* canddiMuonC = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(k)->sourceCandidatePtr(0).get());
-      if ( canddiMuonC != 0 ){
+      if ( diMuonC->muon(k)->innerTrack().isAvailable() ){
+        //Directly use muon innerTrack
+        const reco::HitPattern& p = diMuonC->muon(k)->innerTrack()->hitPattern();
+        std::cout << "diMuC Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
+        std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
+        std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
+        std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", " << diMuonC->muon(k)->innerTrack()->vy() << ", " << diMuonC->muon(k)->innerTrack()->vz() << std::endl;
+        std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonC->muon(k)->innerTrack()->dxy() << ", " << diMuonC->muon(k)->innerTrack()->dz() << std::endl;
 
-        const reco::HitPattern& p = canddiMuonC->pseudoTrack().hitPattern();
-        std::cout << "diMuC Mu" << k << " numberOfValidHits         : " << p.numberOfValidHits() <<std::endl;
-        std::cout << "         "     << " numberOfValidTrackerHits  : " << p.numberOfValidTrackerHits() <<std::endl;
-        std::cout << "         "     << " numberOfValidPixelHits    : " << p.numberOfValidPixelHits() <<std::endl;
-        std::cout << "         "     << " PF Cand lostInnerHits     : " << canddiMuonC->lostInnerHits() <<std::endl;
-        std::cout << "         "     << " PF pseudotrk   (x,y,z)[cm]: " << canddiMuonC->pseudoTrack().vx()      << ", " << canddiMuonC->pseudoTrack().vy()      << ", " << canddiMuonC->pseudoTrack().vz() <<std::endl;
-        if ( diMuonC->muon(k)->innerTrack().isAvailable() ) {
-          std::cout << "         "     << " PAT innerTrk   (x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", " << diMuonC->muon(k)->innerTrack()->vy() << ", " << diMuonC->muon(k)->innerTrack()->vz() << std::endl;
-          std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonC->muon(k)->innerTrack()->dxy() << ", " << diMuonC->muon(k)->innerTrack()->dz() << std::endl;
-        }
-        if ( diMuonC->muon(k)->outerTrack().isAvailable() ) std::cout << "         "     << " PAT outerTrk   (x,y,z)[cm]: " << diMuonC->muon(k)->outerTrack()->vx() << ", " << diMuonC->muon(k)->outerTrack()->vy() << ", " << diMuonC->muon(k)->outerTrack()->vz() << std::endl;
-        if ( diMuonC->muon(k)->globalTrack().isAvailable() ) std::cout << "         "     << " PAT globalTrk  (x,y,z)[cm]: " << diMuonC->muon(k)->globalTrack()->vx() << ", " << diMuonC->muon(k)->globalTrack()->vy() << ", " << diMuonC->muon(k)->globalTrack()->vz() << std::endl;
-        if ( diMuonC->muon(k)->muonBestTrack().isAvailable() ) std::cout << "         "     << " PAT bestTrk    (x,y,z)[cm]: " << diMuonC->muon(k)->muonBestTrack()->vx() << ", " << diMuonC->muon(k)->muonBestTrack()->vy() << ", " << diMuonC->muon(k)->muonBestTrack()->vz() << std::endl;
-        if ( diMuonC->muon(k)->tunePMuonBestTrack().isAvailable() ) std::cout << "         "     << " PAT TPbestTrk  (x,y,z)[cm]: " << diMuonC->muon(k)->tunePMuonBestTrack()->vx() << ", " << diMuonC->muon(k)->tunePMuonBestTrack()->vy() << ", " << diMuonC->muon(k)->tunePMuonBestTrack()->vz() << std::endl;
-
-            /*
-            if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ){
-              if(k==0) b_diMuonC_m1_FittedVtx_hitpix = 1;
-              if(k==1) b_diMuonC_m2_FittedVtx_hitpix = 1;
-            }
-            if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) ){
-              if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l2inc = 1;
-              if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l2inc = 1;
-            }
-            if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) ){
-              if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l3inc = 1;
-              if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l3inc = 1;
-            }
-            */
-            if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
-         p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
+        if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
               if(k==0) b_diMuonC_m1_FittedVtx_hitpix_Phase1 = 1;
               if(k==1) b_diMuonC_m2_FittedVtx_hitpix_Phase1 = 1;
             }
-            //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
-            if ( p.numberOfValidPixelHits() > 0 ){
-              if(k==0) b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits = 1;
-              if(k==1) b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits = 1;
-            }
-            if ( p.pixelLayersWithMeasurement() > 0 ){
-              if(k==0) b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
-              if(k==1) b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
-            }
+        //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
+        if ( p.numberOfValidPixelHits() > 0 ){
+          if(k==0) b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits = 1;
+          if(k==1) b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits = 1;
+        }
+        if ( p.pixelLayersWithMeasurement() > 0 ){
+          if(k==0) b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
+          if(k==1) b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
+        }
 
-        }//end if cast canddiMuonC exists
+      }//C innerTrack available
 
-        const pat::PackedCandidate* canddiMuonF = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(k)->sourceCandidatePtr(0).get());
-        if ( canddiMuonF != 0 ){
-            const reco::HitPattern& p = canddiMuonF->pseudoTrack().hitPattern();
-            std::cout << "diMuF Mu" << k << " numberOfValidHits         : " << p.numberOfValidHits() <<std::endl;
-            std::cout << "         "     << " numberOfValidTrackerHits  : " << p.numberOfValidTrackerHits() <<std::endl;
-            std::cout << "         "     << " numberOfValidPixelHits    : " << p.numberOfValidPixelHits() <<std::endl;
-            std::cout << "         "     << " PF Cand lostInnerHits     : " << canddiMuonF->lostInnerHits() <<std::endl;
-            std::cout << "         "     << " PF pseudotrk   (x,y,z)[cm]: " << canddiMuonF->pseudoTrack().vx()      << ", " << canddiMuonF->pseudoTrack().vy()      << ", " << canddiMuonF->pseudoTrack().vz() <<std::endl;
-            if ( diMuonF->muon(k)->innerTrack().isAvailable() ) {
-              std::cout << "         "     << " PAT innerTrk   (x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", " << diMuonF->muon(k)->innerTrack()->vy() << ", " << diMuonF->muon(k)->innerTrack()->vz() << std::endl;
-              std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonF->muon(k)->innerTrack()->dxy() << ", " << diMuonF->muon(k)->innerTrack()->dz() << std::endl;
-            }
-            if ( diMuonF->muon(k)->outerTrack().isAvailable() ) std::cout << "         "     << " PAT outerTrk   (x,y,z)[cm]: " << diMuonF->muon(k)->outerTrack()->vx() << ", " << diMuonF->muon(k)->outerTrack()->vy() << ", " << diMuonF->muon(k)->outerTrack()->vz() << std::endl;
-            if ( diMuonF->muon(k)->globalTrack().isAvailable() ) std::cout << "         "     << " PAT globalTrk  (x,y,z)[cm]: " << diMuonF->muon(k)->globalTrack()->vx() << ", " << diMuonF->muon(k)->globalTrack()->vy() << ", " << diMuonF->muon(k)->globalTrack()->vz() << std::endl;
-            if ( diMuonF->muon(k)->muonBestTrack().isAvailable() ) std::cout << "         "     << " PAT bestTrk    (x,y,z)[cm]: " << diMuonF->muon(k)->muonBestTrack()->vx() << ", " << diMuonF->muon(k)->muonBestTrack()->vy() << ", " << diMuonF->muon(k)->muonBestTrack()->vz() << std::endl;
-            if ( diMuonF->muon(k)->tunePMuonBestTrack().isAvailable() ) std::cout << "         "     << " PAT TPbestTrk  (x,y,z)[cm]: " << diMuonF->muon(k)->tunePMuonBestTrack()->vx() << ", " << diMuonF->muon(k)->tunePMuonBestTrack()->vy() << ", " << diMuonF->muon(k)->tunePMuonBestTrack()->vz() << std::endl;
+      /*
+      //maybe we should use the fittedVertex position to veto dimuons outdide the fiducial volume
+      const pat::PackedCandidate* canddiMuonC = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(k)->sourceCandidatePtr(0).get());
+      if ( canddiMuonC != 0 && canddiMuonC->hasTrackDetails() ){
 
-            /*
-            if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
-              if(k==0) b_diMuonF_m1_FittedVtx_hitpix = 1;
-              if(k==1) b_diMuonF_m2_FittedVtx_hitpix = 1;
-            }
-            if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
-              if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l2inc = 1;
-              if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l2inc = 1;
-            }
-            if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) ){
-              if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l3inc = 1;
-              if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l3inc = 1;
-            }
-            */
-            if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
-  	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
-         p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
+        const reco::HitPattern& p = canddiMuonC->pseudoTrack().hitPattern();
+      }//end if cast canddiMuonC exists
+      */
+
+      if ( diMuonF->muon(k)->innerTrack().isAvailable() ){
+        //Directly use muon innerTrack
+        const reco::HitPattern& p = diMuonF->muon(k)->innerTrack()->hitPattern();
+        std::cout << "diMuF Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
+        std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
+        std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
+        std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", " << diMuonF->muon(k)->innerTrack()->vy() << ", " << diMuonF->muon(k)->innerTrack()->vz() << std::endl;
+        std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonF->muon(k)->innerTrack()->dxy() << ", " << diMuonF->muon(k)->innerTrack()->dz() << std::endl;
+
+        if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
               if(k==0) b_diMuonF_m1_FittedVtx_hitpix_Phase1 = 1;
               if(k==1) b_diMuonF_m2_FittedVtx_hitpix_Phase1 = 1;
             }
-            if ( p.numberOfValidPixelHits() > 0 ){
-              if(k==0) b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits = 1;
-              if(k==1) b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits = 1;
-            }
-            if ( p.pixelLayersWithMeasurement() > 0 ){
-              if(k==0) b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
-              if(k==1) b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
-            }
+        if ( p.numberOfValidPixelHits() > 0 ){
+          if(k==0) b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits = 1;
+          if(k==1) b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits = 1;
+        }
+        if ( p.pixelLayersWithMeasurement() > 0 ){
+          if(k==0) b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
+          if(k==1) b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
+        }
 
+      }//F innerTrack available
+
+        /*
+        const pat::PackedCandidate* canddiMuonF = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(k)->sourceCandidatePtr(0).get());
+        if ( canddiMuonF != 0 && canddiMuonF->hasTrackDetails() ){
+            const reco::HitPattern& p = canddiMuonF->pseudoTrack().hitPattern();
         }//end if cast canddiMuonF exists
+        */
 
     }//end loop for 2 muons
 
@@ -2339,7 +2302,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
         /*Iso for orphan muon*/
         const pat::PackedCandidate* candOrphan = dynamic_cast<const pat::PackedCandidate*>(orphan->sourceCandidatePtr(0).get());
-        if ( candOrphan != 0 ){
+        if ( candOrphan != 0 && candOrphan->hasTrackDetails() ){
 
           if ( !tamu::helpers::sameTrack(&*track,&(candOrphan->pseudoTrack())) ) {
             double dphi = tamu::helpers::My_dPhi( orphan->innerTrack()->phi(), track->phi() );
@@ -2366,7 +2329,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         const pat::PackedCandidate* candOrphanDimu0 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(0)->sourceCandidatePtr(0).get());
         const pat::PackedCandidate* candOrphanDimu1 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(1)->sourceCandidatePtr(0).get());
         //Wei Shi 10.25.2018
-        if ( candOrphanDimu0 != 0 && candOrphanDimu1 != 0 ){
+        if ( candOrphanDimu0 != 0 && candOrphanDimu1 != 0 && candOrphanDimu0->hasTrackDetails() && candOrphanDimu1->hasTrackDetails() ){
 
           if (   tamu::helpers::sameTrack(&*track,&(candOrphanDimu0->pseudoTrack())) ||
                  tamu::helpers::sameTrack(&*track,&(candOrphanDimu1->pseudoTrack()))
