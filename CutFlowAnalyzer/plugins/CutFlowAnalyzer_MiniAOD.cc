@@ -858,12 +858,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     edm::Handle<reco::GenParticleCollection> genParticles;
     iEvent.getByToken(m_genParticles, genParticles);
 
-    //@Wei SHI 07.26.2018
+    //@Wei SHI
     //Note for PDG ID in three benchmark models:
     //(1) NMSSM: Higgs={35}, new light boson={36,54}, muons={13,-13},
     //    '54' is the corner case in pythia when '36' doesn't work for some mass points
     //(2) MSSMD (Dark SUSY): Higgs={25}, new light boson={3000022}, muons={13,-13}
     //(3) ALP: Higgs={25}, new light boson={9000005}, muons={13,-13}
+    //(4) Scalar Model from Mehdi: Higgs like ZD={5000002}, new light boson SD={5000512}, muons={13,-13}
     std::vector<const reco::GenParticle*> genH;
     std::vector<const reco::GenParticle*> genA_unsorted;
     std::vector<const reco::GenParticle*> genA;
@@ -899,10 +900,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         // Loop over all real (non-muon) mothers of the muon (here we use genMuonCand)
         for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
 
-          if ( genMuonCand->mother(iMother)->pdgId() == 36 ||
-	       genMuonCand->mother(iMother)->pdgId() == 54 ||
-	       genMuonCand->mother(iMother)->pdgId() == 3000022 ||
-	       genMuonCand->mother(iMother)->pdgId() == 9000005  ) {
+          if (
+            genMuonCand->mother(iMother)->pdgId() == 36 ||
+            genMuonCand->mother(iMother)->pdgId() == 54 ||
+            genMuonCand->mother(iMother)->pdgId() == 3000022 ||
+            genMuonCand->mother(iMother)->pdgId() == 9000005 ||
+            genMuonCand->mother(iMother)->pdgId() == 5000512
+          ) {
             // Store the muon (stable, first in chain) into vector
             genMuons.push_back(&(*iGenParticle));
             // Store mother of the muon into vector. We need this to group muons into dimuons later
@@ -912,16 +916,22 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       }
 
       // Check if gen particle is Higgs
-      if ( ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 25 ) ||
-	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 35 )  ) {
+      if (
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 25 ) ||
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 35 ) ||
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 5000002 )
+       ) {
         genH.push_back(&(*iGenParticle));
       }
 
       // Check if gen particle is new light boson
-      if ( ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36 ) ||
-	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 54 ) ||
-	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 3000022 ) ||
-	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 9000005 )  ) {
+      if (
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36 ) ||
+	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 54 ) ||
+	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 3000022 ) ||
+	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 9000005 ) ||
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 5000512 )
+      ) {
         genA_unsorted.push_back(&(*iGenParticle));
       }
     }
