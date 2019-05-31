@@ -167,21 +167,21 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* L1_leading_eta_pass_all = new TH1F("L1_leading_eta_pass_all","",50,-2.5,2.5);
   TH1F* L1_leading_phi_pass_all = new TH1F("L1_leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
 
-  TH2F *EWKShape2D = new TH2F("EWKShape2D","",120,0.0,60.0,120,0.0,60.0);//From MC, actual dimu mass starts from 0.2113, ends at 58 GeV
-  TH2F *EWKShapeSR = new TH2F("EWKShapeSR","",120,0.0,60.0,120,0.0,60.0);//consistent mass
-  TH1F *EWKShape2DmassC = new TH1F("EWKShape2DmassC","",120,0.0,60.0);
-  TH1F *EWKShape2DmassF = new TH1F("EWKShape2DmassF","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassC = new TH1F("EWKShapeSRmassC","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassF = new TH1F("EWKShapeSRmassF","",120,0.0,60.0);
+  TH2F *EWKShape2D = new TH2F("EWKShape2D","",300,0.0,60.0,300,0.0,60.0);//From MC, actual dimu mass starts from 0.2113, ends at 58 GeV; binning 0.2GeV
+  TH2F *EWKShapeSR = new TH2F("EWKShapeSR","",300,0.0,60.0,300,0.0,60.0);//consistent mass
+  TH1F *EWKShape2DmassC = new TH1F("EWKShape2DmassC","",300,0.0,60.0);
+  TH1F *EWKShape2DmassF = new TH1F("EWKShape2DmassF","",300,0.0,60.0);
+  TH1F *EWKShapeSRmassC = new TH1F("EWKShapeSRmassC","",300,0.0,60.0);
+  TH1F *EWKShapeSRmassF = new TH1F("EWKShapeSRmassF","",300,0.0,60.0);
 
-  TH2F *EWKShape2DScaled = new TH2F("EWKShape2DScaled","",120,0.0,60.0,120,0.0,60.0);//Scaled to Run2 lumi
-  TH2F *EWKShapeSRScaled = new TH2F("EWKShapeSRScaled","",120,0.0,60.0,120,0.0,60.0);
-  TH1F *EWKShape2DmassCScaled = new TH1F("EWKShape2DmassCScaled","",120,0.0,60.0);
-  TH1F *EWKShape2DmassFScaled = new TH1F("EWKShape2DmassFScaled","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassCScaled = new TH1F("EWKShapeSRmassCScaled","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassFScaled = new TH1F("EWKShapeSRmassFScaled","",120,0.0,60.0);
+  TH2F *EWKShape2DScaled = new TH2F("EWKShape2DScaled","",300,0.0,60.0,300,0.0,60.0);//Scaled to Run2 lumi
+  TH2F *EWKShapeSRScaled = new TH2F("EWKShapeSRScaled","",300,0.0,60.0,300,0.0,60.0);
+  TH1F *EWKShape2DmassCScaled = new TH1F("EWKShape2DmassCScaled","",300,0.0,60.0);
+  TH1F *EWKShape2DmassFScaled = new TH1F("EWKShape2DmassFScaled","",300,0.0,60.0);
+  TH1F *EWKShapeSRmassCScaled = new TH1F("EWKShapeSRmassCScaled","",300,0.0,60.0);
+  TH1F *EWKShapeSRmassFScaled = new TH1F("EWKShapeSRmassFScaled","",300,0.0,60.0);
 
-  TH1F *DimuMass= new TH1F("DimuMass","",6000,0.0,60.0);//bin width 0.01 GeV
+  TH1F *DimuMass= new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
 
   TObjArray *fileElements=chain->GetListOfFiles();
   TIter next(fileElements);
@@ -602,6 +602,8 @@ void efficiency(const std::vector<std::string>& dirNames)
    if ( ModelSRWidth ) {
      DimuMass->SetLineColor(kBlue);
      DimuMass->SetLineWidth(2);
+     DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
+     DimuMass->GetYaxis()->SetTitle("Events/0.01GeV");
      DimuMass->Fit("gaus","","",0,60);
      FitMean = DimuMass->GetFunction("gaus")->GetParameter(1);//get 2nd parameter Mean
      FitSigma = DimuMass->GetFunction("gaus")->GetParameter(2);//get 3rd parameter Sigma
