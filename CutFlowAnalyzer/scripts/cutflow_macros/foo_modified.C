@@ -234,13 +234,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("selMu1_phi",&selMu1_phi);
 		t->SetBranchAddress("selMu2_phi",&selMu2_phi);
 		t->SetBranchAddress("selMu3_phi",&selMu3_phi);
-
     t->SetBranchAddress("massC",&massC);
 		t->SetBranchAddress("massF",&massF);
-
-		t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
-		t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
-
 		t->SetBranchAddress("isVertexOK",&isVtxOK);
 		t->SetBranchAddress("is2DiMuons",&is2DiMuons);
 		t->SetBranchAddress("is2MuJets",&is2MuJets);
