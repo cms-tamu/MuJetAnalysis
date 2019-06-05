@@ -35,7 +35,7 @@ Float_t epsvsalph2[20] = {0.0};
 Float_t epsvsalph[20] = {0.0};
 Float_t epsvalp[20] = {0.0};
 Float_t epsvalp2[20] = {0.0};
-Float_t weight2017 = 36.734*56.36/1000000;//weight2017 = (lumi * Xsection) / 2017 MC events
+Float_t weight2017 = 36.734*56.36/1000000;//weight2017 = (lumi[fb-1] * Xsection of the process[fb]) / # of MC events for the process
 Float_t weight2018 = 1.0;//TBD
 Float_t FitMean = 0.0;
 Float_t FitSigma = 0.0;
@@ -59,7 +59,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   bool verbose(true);
   bool CheckRecoVtx(false);
-  bool ModelEWKShape(false);
+  bool ModelBKGShape(false);
   bool ModelSRWidth(false);
   bool PerEventTriggerEff(false);
   //	TString dirname(fileName);
@@ -117,12 +117,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t  genA0_Lz;
   Float_t  genA1_Lz;
   Float_t  diMuons_dz_FittedVtx;
-  /*
-  Int_t  diMuonC_m1_FittedVtx_hitpix_l3inc;
-  Int_t  diMuonC_m2_FittedVtx_hitpix_l3inc;
-  Int_t  diMuonF_m1_FittedVtx_hitpix_l3inc;
-  Int_t  diMuonF_m2_FittedVtx_hitpix_l3inc;
-  */
+
   Int_t  diMuonC_m1_FittedVtx_hitpix_Phase1;
   Int_t  diMuonC_m2_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m1_FittedVtx_hitpix_Phase1;
@@ -167,19 +162,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* L1_leading_eta_pass_all = new TH1F("L1_leading_eta_pass_all","",50,-2.5,2.5);
   TH1F* L1_leading_phi_pass_all = new TH1F("L1_leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
 
-  TH2F *EWKShape2D = new TH2F("EWKShape2D","",300,0.0,60.0,300,0.0,60.0);//From MC, actual dimu mass starts from 0.2113, ends at 58 GeV; binning 0.2GeV
-  TH2F *EWKShapeSR = new TH2F("EWKShapeSR","",300,0.0,60.0,300,0.0,60.0);//consistent mass
-  TH1F *EWKShape2DmassC = new TH1F("EWKShape2DmassC","",300,0.0,60.0);
-  TH1F *EWKShape2DmassF = new TH1F("EWKShape2DmassF","",300,0.0,60.0);
-  TH1F *EWKShapeSRmassC = new TH1F("EWKShapeSRmassC","",300,0.0,60.0);
-  TH1F *EWKShapeSRmassF = new TH1F("EWKShapeSRmassF","",300,0.0,60.0);
+  //Actual dimu mass starts from 0.2113, ends at 58 GeV; binning 0.2GeV
+  TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",300,0.0,60.0,300,0.0,60.0);
+  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",300,0.0,60.0);
+  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",300,0.0,60.0);
 
-  TH2F *EWKShape2DScaled = new TH2F("EWKShape2DScaled","",300,0.0,60.0,300,0.0,60.0);//Scaled to Run2 lumi
-  TH2F *EWKShapeSRScaled = new TH2F("EWKShapeSRScaled","",300,0.0,60.0,300,0.0,60.0);
-  TH1F *EWKShape2DmassCScaled = new TH1F("EWKShape2DmassCScaled","",300,0.0,60.0);
-  TH1F *EWKShape2DmassFScaled = new TH1F("EWKShape2DmassFScaled","",300,0.0,60.0);
-  TH1F *EWKShapeSRmassCScaled = new TH1F("EWKShapeSRmassCScaled","",300,0.0,60.0);
-  TH1F *EWKShapeSRmassFScaled = new TH1F("EWKShapeSRmassFScaled","",300,0.0,60.0);
+  //Scaled to Run2 lumi
+  TH2F *BKGShapeCRScaled = new TH2F("BKGShapeCRScaled","",300,0.0,60.0,300,0.0,60.0);
+  TH1F *BKGShapeCRmassCScaled = new TH1F("BKGShapeCRmassCScaled","",300,0.0,60.0);
+  TH1F *BKGShapeCRmassFScaled = new TH1F("BKGShapeCRmassFScaled","",300,0.0,60.0);
 
   TH1F *DimuMass= new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
 
@@ -250,12 +241,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("genA1_Lxy",&genA1_Lxy);
 		t->SetBranchAddress("genA0_Lz",&genA0_Lz);
 		t->SetBranchAddress("genA1_Lz",&genA1_Lz);
-    /*
-		t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_l3inc",&diMuonC_m1_FittedVtx_hitpix_l3inc);
-		t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l3inc",&diMuonC_m2_FittedVtx_hitpix_l3inc);
-		t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l3inc",&diMuonF_m1_FittedVtx_hitpix_l3inc);
-		t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l3inc",&diMuonF_m2_FittedVtx_hitpix_l3inc);
-    */
+
     //To be used for Run2
     t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_Phase1",&diMuonC_m1_FittedVtx_hitpix_Phase1);
 		t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1",&diMuonC_m2_FittedVtx_hitpix_Phase1);
@@ -399,35 +385,32 @@ void efficiency(const std::vector<std::string>& dirNames)
                   if( is2DiMuonHLTFired ) {
                     counter[k][15]++;
 
-                    if( ModelEWKShape ) {
-                      EWKShape2D->Fill(massC,massF);
-                      EWKShape2DmassC->Fill(massC);
-                      EWKShape2DmassF->Fill(massF);
-                      EWKShape2DScaled->Fill(massC,massF,weight2017);
-                      EWKShape2DmassCScaled->Fill(massC,weight2017);
-                      EWKShape2DmassFScaled->Fill(massF,weight2017);
-                    }//end if ModelEWKShape
-
                     if( is2DiMuonsMassOK ){
                       counter[k][16]++;
-
                       //**********************************************
                       // All offline analysis selections finished
                       //**********************************************
-                      if( ModelEWKShape ) {
-                        EWKShapeSR->Fill(massC,massF);
-                        EWKShapeSRmassC->Fill(massC);
-                        EWKShapeSRmassF->Fill(massF);
-                        EWKShapeSRScaled->Fill(massC,massF,weight2017);
-                        EWKShapeSRmassCScaled->Fill(massC,weight2017);
-                        EWKShapeSRmassFScaled->Fill(massF,weight2017);
-                      }//end if ModelEWKShape
 
                       if( ModelSRWidth ) {
                         DimuMass->Fill( (massC+massF)/2 );
                       }//end if ModelSRWidth
 
-                    }//end 16
+                    }//end 16: massconsistent
+                    else{
+                      //************************************************
+                      //Control region: for bkg comparison on data and MC
+                      //plot BKG shape on mmumu1 and mmumu2
+                      //************************************************
+                      if( ModelBKGShape ) {
+                        BKGShapeCR->Fill(massC,massF);
+                        BKGShapeCRmassC->Fill(massC);
+                        BKGShapeCRmassF->Fill(massF);
+                        BKGShapeCRScaled->Fill(massC,massF,weight2017);
+                        BKGShapeCRmassCScaled->Fill(massC,weight2017);
+                        BKGShapeCRmassFScaled->Fill(massF,weight2017);
+                      }//end if ModelBKGShape
+
+                    }
                   }//end 15
                 }//end 14
               }//end 13
@@ -574,21 +557,14 @@ void efficiency(const std::vector<std::string>& dirNames)
 
    }//end if (PerEventTriggerEff)
 
-   if ( ModelEWKShape ) {
-     EWKShape2D->Write();
-     EWKShape2DmassC->Write();
-     EWKShape2DmassF->Write();
-     EWKShape2DScaled->Write();
-     EWKShape2DmassCScaled->Write();
-     EWKShape2DmassFScaled->Write();
-
-     EWKShapeSR->Write();
-     EWKShapeSRmassC->Write();
-     EWKShapeSRmassF->Write();
-     EWKShapeSRScaled->Write();
-     EWKShapeSRmassCScaled->Write();
-     EWKShapeSRmassFScaled->Write();
-   } //end if ( ModelEWKShape )
+   if ( ModelBKGShape ) {
+     BKGShapeCR->Write();
+     BKGShapeCRmassC->Write();
+     BKGShapeCRmassF->Write();
+     BKGShapeCRScaled->Write();
+     BKGShapeCRmassCScaled->Write();
+     BKGShapeCRmassFScaled->Write();
+   } //end if ( ModelBKGShape )
 
    if ( ModelSRWidth ) {
      DimuMass->SetLineColor(kBlue);
