@@ -1912,29 +1912,25 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   }
 
   // Cut on dimuon masses - use fitted vertexes
+  //2016 and before: fabs(massC-massF) < 5 * [0.026+0.013*(m1+m2)/2]
+  //Run2 (2017+2018): fabs(massC-massF) < 3 * {0.003044 + 0.007025 * (massC+massF)/2 + 0.000053 * [(massC+massF)/2]^2}
   b_is2DiMuonsMassOK_FittedVtx = false;
   if ( b_is2DiMuonsFittedVtxOK ) {
     double massC = b_diMuonC_FittedVtx_m;
     double massF = b_diMuonF_FittedVtx_m;
-    if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_is2DiMuonsMassOK_FittedVtx = true;
+    if (
+      fabs(massC-massF) < 3*(0.003044 + 0.007025*(massC+massF)/2.0 + 0.000053*(massC+massF)*(massC+massF)/4.0)
+    ) {
+      b_is2DiMuonsMassOK_FittedVtx = true;
+    }
   }
 
-/*
-  // Cut on dimuon masses - use consistent vertexes
-  b_is2DiMuonsMassOK_ConsistentVtx = false;
-  if ( b_is2DiMuonsConsistentVtxOK ) {
-    double massC = b_diMuonC_ConsistentVtx_m;
-    double massF = b_diMuonF_ConsistentVtx_m;
-    if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_is2DiMuonsMassOK_ConsistentVtx = true;
-  }
-*/
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon mass" << std::endl;
 
-  // Cut on isolation
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(m_tracks, tracks);
 
-  // Cut on isolation - use fitted vertexes
+  // Calculate isolation - use fitted vertexes
   b_diMuonC_IsoTk_FittedVtx = -1.;
   b_diMuonF_IsoTk_FittedVtx = -1.;
   b_isoC_1mm = -1.;
