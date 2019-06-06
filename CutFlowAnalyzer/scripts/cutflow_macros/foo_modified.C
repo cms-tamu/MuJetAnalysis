@@ -61,6 +61,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   bool CheckRecoVtx(false);
   bool ModelBKGShape(false);
   bool ModelSRWidth(false);
+  bool PlotDimuIso(false);
   bool PerEventTriggerEff(false);
   //	TString dirname(fileName);
   TChain* chain = new TChain("dummy");
@@ -166,13 +167,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",300,0.0,60.0,300,0.0,60.0);
   TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",300,0.0,60.0);
   TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",300,0.0,60.0);
-
   //Scaled to Run2 lumi
   TH2F *BKGShapeCRScaled = new TH2F("BKGShapeCRScaled","",300,0.0,60.0,300,0.0,60.0);
   TH1F *BKGShapeCRmassCScaled = new TH1F("BKGShapeCRmassCScaled","",300,0.0,60.0);
   TH1F *BKGShapeCRmassFScaled = new TH1F("BKGShapeCRmassFScaled","",300,0.0,60.0);
 
-  TH1F *DimuMass= new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
+  TH1F *DimuMass = new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
+
+  TH1F *IsoDimuC = new TH1F("IsoDimuC","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuF = new TH1F("IsoDimuF","",1000,0.0,100.0);//binning 0.1 GeV
 
   TObjArray *fileElements=chain->GetListOfFiles();
   TIter next(fileElements);
@@ -387,6 +390,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
                     if( is2DiMuonsMassOK ){
                       counter[k][16]++;
+
                       //**********************************************
                       // All offline analysis selections finished
                       //**********************************************
@@ -394,6 +398,12 @@ void efficiency(const std::vector<std::string>& dirNames)
                       if( ModelSRWidth ) {
                         DimuMass->Fill( (massC+massF)/2 );
                       }//end if ModelSRWidth
+
+                      //Note to eliminate/relax Iso cut at counter 14, e.g. Iso<50 GeV or Iso>0
+                      if( PlotDimuIso ) {
+                        IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
+                        IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
+                      }
 
                     }//end 16: massconsistent
                     else{
@@ -581,6 +591,11 @@ void efficiency(const std::vector<std::string>& dirNames)
 
      cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
    }//end if ( ModelSRWidth )
+
+   if ( PlotDimuIso ) {
+     IsoDimuC->Write();
+     IsoDimuF->Write();
+   }//end if ( PlotDimuIso )
 
    myPlot.Close();
 }
