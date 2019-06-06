@@ -385,22 +385,6 @@ private:
   Int_t  m_events2DiMuons; // ... with 2 dimuons (dimuon = muon jet with 2 muons)
 
   Bool_t b_is2DiMuonsFittedVtxOK;
-  //Bool_t b_is2DiMuonsFittedVtxOK_KF;
-  //Bool_t b_is2DiMuonsFittedVtxOK_VS;
-  //Bool_t b_is2DiMuonsConsistentVtxOK;
-
-/*
-  //For vertex finding sanity checks
-  Int_t hitsBeforeVertex_diMuonC_FittedVTX;
-  Int_t hitsBeforeVertex_diMuonF_FittedVTX;
-  Int_t hitsBeforeVertex_diMuonC_ConsistentVTX;
-  Int_t hitsBeforeVertex_diMuonF_ConsistentVTX;
-
-  Int_t missingHitsAfterVertex_diMuonC_FittedVTX;
-  Int_t missingHitsAfterVertex_diMuonF_FittedVTX;
-  Int_t missingHitsAfterVertex_diMuonC_ConsistentVTX;
-  Int_t missingHitsAfterVertex_diMuonF_ConsistentVTX;
-*/
 
   Bool_t b_isDiMuonHLTFired;
   Bool_t b_isControlHLT16Fired;
@@ -460,23 +444,6 @@ private:
   Float_t b_diMuonC_FittedVtx_vy;
   Float_t b_diMuonC_FittedVtx_vz;
 
-  /*
-  Int_t b_diMuonC_m1_FittedVtx_hitpix;
-  Int_t b_diMuonC_m2_FittedVtx_hitpix;
-  Int_t b_diMuonF_m1_FittedVtx_hitpix;
-  Int_t b_diMuonF_m2_FittedVtx_hitpix;
-
-  Int_t b_diMuonC_m1_FittedVtx_hitpix_l2inc;
-  Int_t b_diMuonC_m2_FittedVtx_hitpix_l2inc;
-  Int_t b_diMuonF_m1_FittedVtx_hitpix_l2inc;
-  Int_t b_diMuonF_m2_FittedVtx_hitpix_l2inc;
-
-  Int_t b_diMuonC_m1_FittedVtx_hitpix_l3inc;
-  Int_t b_diMuonC_m2_FittedVtx_hitpix_l3inc;
-  Int_t b_diMuonF_m1_FittedVtx_hitpix_l3inc;
-  Int_t b_diMuonF_m2_FittedVtx_hitpix_l3inc;
-  */
-
   Int_t b_diMuonC_m1_FittedVtx_hitpix_Phase1;
   Int_t b_diMuonC_m2_FittedVtx_hitpix_Phase1;
   Int_t b_diMuonF_m1_FittedVtx_hitpix_Phase1;
@@ -491,17 +458,6 @@ private:
   Int_t b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
   Int_t b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement;
   Int_t b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
-/*
-  Int_t b_diMuonC_m1_FittedVtx_HBV;
-  Int_t b_diMuonC_m2_FittedVtx_HBV;
-  Int_t b_diMuonF_m1_FittedVtx_HBV;
-  Int_t b_diMuonF_m2_FittedVtx_HBV;
-
-  Int_t b_diMuonC_m1_FittedVtx_MHAV;
-  Int_t b_diMuonC_m2_FittedVtx_MHAV;
-  Int_t b_diMuonF_m1_FittedVtx_MHAV;
-  Int_t b_diMuonF_m2_FittedVtx_MHAV;
-  */
 
   Float_t b_diMuonC_FittedVtx_Lxy;
   Float_t b_diMuonC_FittedVtx_L;
@@ -520,42 +476,11 @@ private:
   Float_t b_diMuonF_FittedVtx_Lxy;
   Float_t b_diMuonF_FittedVtx_L;
   Float_t b_diMuonF_FittedVtx_dz;
-/*
-  Float_t b_diMuonC_ConsistentVtx_m;
-  Float_t b_diMuonC_ConsistentVtx_px;
-  Float_t b_diMuonC_ConsistentVtx_py;
-  Float_t b_diMuonC_ConsistentVtx_pz;
-  Float_t b_diMuonC_ConsistentVtx_eta;
-  Float_t b_diMuonC_ConsistentVtx_phi;
-  Float_t b_diMuonC_ConsistentVtx_vx;
-  Float_t b_diMuonC_ConsistentVtx_vy;
-  Float_t b_diMuonC_ConsistentVtx_vz;
 
-  Float_t b_diMuonC_ConsistentVtx_Lxy;
-  Float_t b_diMuonC_ConsistentVtx_L;
-  Float_t b_diMuonC_ConsistentVtx_dz;
-
-  Float_t b_diMuonF_ConsistentVtx_m;
-  Float_t b_diMuonF_ConsistentVtx_px;
-  Float_t b_diMuonF_ConsistentVtx_py;
-  Float_t b_diMuonF_ConsistentVtx_pz;
-  Float_t b_diMuonF_ConsistentVtx_eta;
-  Float_t b_diMuonF_ConsistentVtx_phi;
-  Float_t b_diMuonF_ConsistentVtx_vx;
-  Float_t b_diMuonF_ConsistentVtx_vy;
-  Float_t b_diMuonF_ConsistentVtx_vz;
-
-  Float_t b_diMuonF_ConsistentVtx_Lxy;
-  Float_t b_diMuonF_ConsistentVtx_L;
-  Float_t b_diMuonF_ConsistentVtx_dz;
-*/
   Float_t b_diMuons_dz_FittedVtx;
-  //Float_t b_diMuons_dz_ConsistentVtx;
 
   Float_t b_diMuonC_IsoTk_FittedVtx;
   Float_t b_diMuonF_IsoTk_FittedVtx;
-  //Float_t b_diMuonC_IsoTk_ConsistentVtx;
-  //Float_t b_diMuonF_IsoTk_ConsistentVtx;
 
   //bool runDisplacedVtxFinder_;
   bool skimOutput_; //fill only events with 2 good dimuons
@@ -735,23 +660,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
 
-  /*
-  b_diMuonC_m1_FittedVtx_hitpix=-1000;
-  b_diMuonC_m2_FittedVtx_hitpix=-1000;
-  b_diMuonF_m1_FittedVtx_hitpix=-1000;
-  b_diMuonF_m2_FittedVtx_hitpix=-1000;
-
-  b_diMuonC_m1_FittedVtx_hitpix_l2inc=-1000;
-  b_diMuonC_m2_FittedVtx_hitpix_l2inc=-1000;
-  b_diMuonF_m1_FittedVtx_hitpix_l2inc=-1000;
-  b_diMuonF_m2_FittedVtx_hitpix_l2inc=-1000;
-
-  b_diMuonC_m1_FittedVtx_hitpix_l3inc=-1000;
-  b_diMuonC_m2_FittedVtx_hitpix_l3inc=-1000;
-  b_diMuonF_m1_FittedVtx_hitpix_l3inc=-1000;
-  b_diMuonF_m2_FittedVtx_hitpix_l3inc=-1000;
-  */
-
   b_diMuonC_m1_FittedVtx_hitpix_Phase1=-1000;
   b_diMuonC_m2_FittedVtx_hitpix_Phase1=-1000;
   b_diMuonF_m1_FittedVtx_hitpix_Phase1=-1000;
@@ -766,18 +674,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
   b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
   b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
-
-  /*
-  b_diMuonC_m1_FittedVtx_HBV = -1000;
-  b_diMuonC_m2_FittedVtx_HBV = -1000;
-  b_diMuonF_m1_FittedVtx_HBV = -1000;
-  b_diMuonF_m2_FittedVtx_HBV = -1000;
-
-  b_diMuonC_m1_FittedVtx_MHAV = -1000;
-  b_diMuonC_m2_FittedVtx_MHAV = -1000;
-  b_diMuonF_m1_FittedVtx_MHAV = -1000;
-  b_diMuonF_m2_FittedVtx_MHAV = -1000;
-  */
 
   b_Mass4Mu = -1.;
 
@@ -1611,28 +1507,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_muJetF_Mu1_phi = muJetF->muon(1)->phi();
 
   }
-  // "Old" fitted vertexes
+  // fitted vertexes
   b_is2DiMuonsFittedVtxOK = false;
   if ( diMuonC != NULL && diMuonF != NULL ) {
     if ( diMuonC->vertexValid() && diMuonF->vertexValid() ) {
       b_is2DiMuonsFittedVtxOK = true;
     }
   }
-
-/*
-  b_is2DiMuonsFittedVtxOK_KF = false;
-  if ( diMuonC != NULL && diMuonF != NULL ) {
-    if ( diMuonC->vertexValid_fitted() && diMuonF->vertexValid_fitted() ) {
-      b_is2DiMuonsFittedVtxOK_KF = true;
-    }
-  }
-  b_is2DiMuonsFittedVtxOK_VS = false;
-  if ( diMuonC != NULL && diMuonF != NULL ) {
-    if ( diMuonC->vertexValid_mindist() && diMuonF->vertexValid_mindist() ) {
-      b_is2DiMuonsFittedVtxOK_VS = true;
-    }
-  }
-  */
 
   // Fill branches with variables calculated with "old" fitted vertexes
   if ( b_is2DiMuonsFittedVtxOK ) {
@@ -1706,109 +1587,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuonF_FittedVtx_dz  = -1000.0;
   }
 
-/*
-  // "New" consistent vertexes
-  b_is2DiMuonsConsistentVtxOK = false;
-  if ( diMuonC != NULL && diMuonF != NULL ) {
-    if ( m_debug > 10 ) std::cout << "Two good dimuons" << std::endl;
-    edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
-    const TransientTrackBuilder *transientTrackBuilder_ptr = NULL;
-    try {
-      iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
-      transientTrackBuilder_ptr = &*transientTrackBuilder;
-
-      ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition);
-      ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
-      ConsistentVtx.SetDebug(0);
-      ConsistentVtx.setBarrelPixelLayer(m_barrelPixelLayer);
-      ConsistentVtx.setEndcapPixelLayer(m_endcapPixelLayer);
-
-      b_is2DiMuonsConsistentVtxOK = ConsistentVtx.Calculate(diMuonC, diMuonF);
-
-      if (runDisplacedVtxFinder_) {
-        DisplacedVertexFinder displacedVtx(transientTrackBuilder_ptr, beamSpotPosition);
-        displacedVtx.setDebug(0);
-        displacedVtx.findDisplacedVertex(diMuonC, diMuonF);
-      }
-    } catch (...) {
-      std::cout << ">>>> WARNING!!! TransientTrackRecord is not available!!! <<<<" << std::endl;
-    }
-  }
-  // Fill branches with variables calculated with "new" consistent vertexes
-  if ( b_is2DiMuonsConsistentVtxOK ) {
-    b_diMuonC_ConsistentVtx_m   = diMuonC->consistentVtxMass();
-    b_diMuonC_ConsistentVtx_px  = diMuonC->consistentVtxMomentum().x();
-    b_diMuonC_ConsistentVtx_py  = diMuonC->consistentVtxMomentum().y();
-    b_diMuonC_ConsistentVtx_pz  = diMuonC->consistentVtxMomentum().z();
-    b_diMuonC_ConsistentVtx_eta = diMuonC->consistentVtxMomentum().eta();
-    b_diMuonC_ConsistentVtx_phi = diMuonC->consistentVtxMomentum().phi();
-    b_diMuonC_ConsistentVtx_vx  = diMuonC->consistentVtxPoint().x();
-    b_diMuonC_ConsistentVtx_vy  = diMuonC->consistentVtxPoint().y();
-    b_diMuonC_ConsistentVtx_vz  = diMuonC->consistentVtxPoint().z();
-
-    b_diMuonC_ConsistentVtx_Lxy = diMuonC->consistentVtxLxy(beamSpotPosition);
-    b_diMuonC_ConsistentVtx_L   = diMuonC->consistentVtxL(beamSpotPosition);
-    b_diMuonC_ConsistentVtx_dz  = diMuonC->consistentVtxDz(beamSpotPosition);
-
-    b_diMuonF_ConsistentVtx_m   = diMuonF->consistentVtxMass();
-    b_diMuonF_ConsistentVtx_px  = diMuonF->consistentVtxMomentum().x();
-    b_diMuonF_ConsistentVtx_py  = diMuonF->consistentVtxMomentum().y();
-    b_diMuonF_ConsistentVtx_pz  = diMuonF->consistentVtxMomentum().z();
-    b_diMuonF_ConsistentVtx_eta = diMuonF->consistentVtxMomentum().eta();
-    b_diMuonF_ConsistentVtx_phi = diMuonF->consistentVtxMomentum().phi();
-    b_diMuonF_ConsistentVtx_vx  = diMuonF->consistentVtxPoint().x();
-    b_diMuonF_ConsistentVtx_vy  = diMuonF->consistentVtxPoint().y();
-    b_diMuonF_ConsistentVtx_vz  = diMuonF->consistentVtxPoint().z();
-
-    b_diMuonF_ConsistentVtx_Lxy = diMuonF->consistentVtxLxy(beamSpotPosition);
-    b_diMuonF_ConsistentVtx_L   = diMuonF->consistentVtxL(beamSpotPosition);
-    b_diMuonF_ConsistentVtx_dz  = diMuonF->consistentVtxDz(beamSpotPosition);
-  } else {
-    b_diMuonC_ConsistentVtx_m   = -1000.0;
-    b_diMuonC_ConsistentVtx_px  = -1000.0;
-    b_diMuonC_ConsistentVtx_py  = -1000.0;
-    b_diMuonC_ConsistentVtx_pz  = -1000.0;
-    b_diMuonC_ConsistentVtx_eta = -1000.0;
-    b_diMuonC_ConsistentVtx_phi = -1000.0;
-    b_diMuonC_ConsistentVtx_vx  = -1000.0;
-    b_diMuonC_ConsistentVtx_vy  = -1000.0;
-    b_diMuonC_ConsistentVtx_vz  = -1000.0;
-
-    b_diMuonC_ConsistentVtx_Lxy = -1000.0;
-    b_diMuonC_ConsistentVtx_L   = -1000.0;
-    b_diMuonC_ConsistentVtx_dz  = -1000.0;
-
-    b_diMuonF_ConsistentVtx_m   = -1000.0;
-    b_diMuonF_ConsistentVtx_px  = -1000.0;
-    b_diMuonF_ConsistentVtx_py  = -1000.0;
-    b_diMuonF_ConsistentVtx_pz  = -1000.0;
-    b_diMuonF_ConsistentVtx_eta = -1000.0;
-    b_diMuonF_ConsistentVtx_phi = -1000.0;
-    b_diMuonF_ConsistentVtx_vx  = -1000.0;
-    b_diMuonF_ConsistentVtx_vy  = -1000.0;
-    b_diMuonF_ConsistentVtx_vz  = -1000.0;
-
-    b_diMuonF_ConsistentVtx_Lxy = -1000.0;
-    b_diMuonF_ConsistentVtx_L   = -1000.0;
-    b_diMuonF_ConsistentVtx_dz  = -1000.0;
-  }
-*/
-
   // Calculate dz between dimuons - use fitted vertexes
   if ( b_is2DiMuonsFittedVtxOK ) {
     b_diMuons_dz_FittedVtx = b_diMuonC_FittedVtx_dz - b_diMuonF_FittedVtx_dz;
   } else {
     b_diMuons_dz_FittedVtx = -1000.0;
   }
-
-  /*
-  // Calculate dz between dimuons - use consistent vertexes
-  if ( b_is2DiMuonsConsistentVtxOK ) {
-    b_diMuons_dz_ConsistentVtx = b_diMuonC_ConsistentVtx_dz - b_diMuonF_ConsistentVtx_dz;
-  } else {
-    b_diMuons_dz_ConsistentVtx = -1000.0;
-  }
-  */
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
 
@@ -1991,49 +1775,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   }
 
-/*
-  // Cut on isolation - use consistent vertexes
-  b_diMuonC_IsoTk_ConsistentVtx = -1.;
-  b_diMuonF_IsoTk_ConsistentVtx = -1.;
-  if ( b_is2DiMuonsConsistentVtxOK ) {
-    double diMuonC_IsoTk_ConsistentVtx = 0.0;
-    double diMuonF_IsoTk_ConsistentVtx = 0.0;
-
-    const pat::MultiMuon *diMuonTmp = NULL;
-    for ( unsigned int i = 1; i <= 2; i++ ) {
-      double diMuonTmp_IsoTk_ConsistentVtx = 0.0;
-      if ( i == 1 ) diMuonTmp = diMuonC;
-      if ( i == 2 ) diMuonTmp = diMuonF;
-
-      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-        bool trackIsMuon = false;
-	const pat::PackedCandidate* candConsistentVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
-	const pat::PackedCandidate* candConsistentVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
-        if (   tamu::helpers::sameTrack( &*track, &(candConsistentVtx_diMuonTmpMu0->pseudoTrack()) )
-	    || tamu::helpers::sameTrack( &*track, &(candConsistentVtx_diMuonTmpMu1->pseudoTrack()) ) ) trackIsMuon = true;
-        if ( trackIsMuon == false ) {
-          double dPhi = tamu::helpers::My_dPhi( diMuonTmp->consistentVtxMomentum().phi(), track->phi() );
-          double dEta = diMuonTmp->consistentVtxMomentum().eta() - track->eta();
-          double dR   = sqrt( dPhi*dPhi + dEta*dEta );
-          double dz   = diMuonTmp->consistentVtxDz(beamSpotPosition) - track->dz(beamSpot->position());
-          if (    dR          < m_threshold_DiMuons_Iso_dR
-		  && track->pt() > m_threshold_DiMuons_Iso_pT
-		  && fabs( dz )  < m_threshold_DiMuons_Iso_dz ) {
-            diMuonTmp_IsoTk_ConsistentVtx += track->pt();
-          }
-        }
-      }
-      if ( i == 1 ) {
-        diMuonC_IsoTk_ConsistentVtx = diMuonTmp_IsoTk_ConsistentVtx;
-      }
-      if ( i == 2 ) {
-        diMuonF_IsoTk_ConsistentVtx = diMuonTmp_IsoTk_ConsistentVtx;
-      }
-    }
-    b_diMuonC_IsoTk_ConsistentVtx = diMuonC_IsoTk_ConsistentVtx;
-    b_diMuonF_IsoTk_ConsistentVtx = diMuonF_IsoTk_ConsistentVtx;
-  }
-*/
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon isolation" << std::endl;
 
   if ( b_is2DiMuonsFittedVtxOK ) {
@@ -2632,61 +2373,11 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("diMuonF_FittedVtx_Lxy", &b_diMuonF_FittedVtx_Lxy, "diMuonF_FittedVtx_Lxy/F");
   m_ttree->Branch("diMuonF_FittedVtx_L",   &b_diMuonF_FittedVtx_L,   "diMuonF_FittedVtx_L/F");
   m_ttree->Branch("diMuonF_FittedVtx_dz",  &b_diMuonF_FittedVtx_dz,  "diMuonF_FittedVtx_dz/F");
-/*
-  m_ttree->Branch("diMuonC_ConsistentVtx_m",   &b_diMuonC_ConsistentVtx_m,   "diMuonC_ConsistentVtx_m/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_px",  &b_diMuonC_ConsistentVtx_px,  "diMuonC_ConsistentVtx_px/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_py",  &b_diMuonC_ConsistentVtx_py,  "diMuonC_ConsistentVtx_py/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_pz",  &b_diMuonC_ConsistentVtx_pz,  "diMuonC_ConsistentVtx_pz/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_eta", &b_diMuonC_ConsistentVtx_eta, "diMuonC_ConsistentVtx_eta/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_phi", &b_diMuonC_ConsistentVtx_phi, "diMuonC_ConsistentVtx_phi/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_vx",  &b_diMuonC_ConsistentVtx_vx,  "diMuonC_ConsistentVtx_vx/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_vy",  &b_diMuonC_ConsistentVtx_vy,  "diMuonC_ConsistentVtx_vy/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_vz",  &b_diMuonC_ConsistentVtx_vz,  "diMuonC_ConsistentVtx_vz/F");
-
-  m_ttree->Branch("diMuonC_ConsistentVtx_Lxy", &b_diMuonC_ConsistentVtx_Lxy, "diMuonC_ConsistentVtx_Lxy/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_L",   &b_diMuonC_ConsistentVtx_L,   "diMuonC_ConsistentVtx_L/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_dz",  &b_diMuonC_ConsistentVtx_dz,  "diMuonC_ConsistentVtx_dz/F");
-
-  m_ttree->Branch("diMuonF_ConsistentVtx_m",   &b_diMuonF_ConsistentVtx_m,   "diMuonF_ConsistentVtx_m/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_px",  &b_diMuonF_ConsistentVtx_px,  "diMuonF_ConsistentVtx_px/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_py",  &b_diMuonF_ConsistentVtx_py,  "diMuonF_ConsistentVtx_py/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_pz",  &b_diMuonF_ConsistentVtx_pz,  "diMuonF_ConsistentVtx_pz/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_eta", &b_diMuonF_ConsistentVtx_eta, "diMuonF_ConsistentVtx_eta/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_phi", &b_diMuonF_ConsistentVtx_phi, "diMuonF_ConsistentVtx_phi/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_vx",  &b_diMuonF_ConsistentVtx_vx,  "diMuonF_ConsistentVtx_vx/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_vy",  &b_diMuonF_ConsistentVtx_vy,  "diMuonF_ConsistentVtx_vy/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_vz",  &b_diMuonF_ConsistentVtx_vz,  "diMuonF_ConsistentVtx_vz/F");
-
-  m_ttree->Branch("diMuonF_ConsistentVtx_Lxy", &b_diMuonF_ConsistentVtx_Lxy, "diMuonF_ConsistentVtx_Lxy/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_L",   &b_diMuonF_ConsistentVtx_L,   "diMuonF_ConsistentVtx_L/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_dz",  &b_diMuonF_ConsistentVtx_dz,  "diMuonF_ConsistentVtx_dz/F");
-  */
 
   m_ttree->Branch("diMuonC_IsoTk_FittedVtx", &b_diMuonC_IsoTk_FittedVtx, "diMuonC_IsoTk_FittedVtx/F");
   m_ttree->Branch("diMuonF_IsoTk_FittedVtx", &b_diMuonF_IsoTk_FittedVtx, "diMuonF_IsoTk_FittedVtx/F");
 
   m_ttree->Branch("diMuons_dz_FittedVtx", &b_diMuons_dz_FittedVtx, "diMuons_dz_FittedVtx/F");
-
-  //m_ttree->Branch("diMuons_dz_ConsistentVtx", &b_diMuons_dz_ConsistentVtx, "diMuons_dz_ConsistentVtx/F");
-  //m_ttree->Branch("diMuonC_IsoTk_ConsistentVtx", &b_diMuonC_IsoTk_ConsistentVtx, "diMuonC_IsoTk_ConsistentVtx/F");
-  //m_ttree->Branch("diMuonF_IsoTk_ConsistentVtx", &b_diMuonF_IsoTk_ConsistentVtx, "diMuonF_IsoTk_ConsistentVtx/F");
-
-  /*
-  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix", &b_diMuonC_m1_FittedVtx_hitpix, "diMuonC_m1_FittedVtx_hitpix/I");
-  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix", &b_diMuonC_m2_FittedVtx_hitpix, "diMuonC_m2_FittedVtx_hitpix/I");
-  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix", &b_diMuonF_m1_FittedVtx_hitpix, "diMuonF_m1_FittedVtx_hitpix/I");
-  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix", &b_diMuonF_m2_FittedVtx_hitpix, "diMuonF_m2_FittedVtx_hitpix/I");
-
-  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l2inc", &b_diMuonC_m1_FittedVtx_hitpix_l2inc, "diMuonC_m1_FittedVtx_hitpix_l2inc/I");
-  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l2inc", &b_diMuonC_m2_FittedVtx_hitpix_l2inc, "diMuonC_m2_FittedVtx_hitpix_l2inc/I");
-  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l2inc", &b_diMuonF_m1_FittedVtx_hitpix_l2inc, "diMuonF_m1_FittedVtx_hitpix_l2inc/I");
-  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l2inc", &b_diMuonF_m2_FittedVtx_hitpix_l2inc, "diMuonF_m2_FittedVtx_hitpix_l2inc/I");
-
-  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l3inc", &b_diMuonC_m1_FittedVtx_hitpix_l3inc, "diMuonC_m1_FittedVtx_hitpix_l3inc/I");
-  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l3inc", &b_diMuonC_m2_FittedVtx_hitpix_l3inc, "diMuonC_m2_FittedVtx_hitpix_l3inc/I");
-  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l3inc", &b_diMuonF_m1_FittedVtx_hitpix_l3inc, "diMuonF_m1_FittedVtx_hitpix_l3inc/I");
-  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l3inc", &b_diMuonF_m2_FittedVtx_hitpix_l3inc, "diMuonF_m2_FittedVtx_hitpix_l3inc/I");
-  */
 
   m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_Phase1", &b_diMuonC_m1_FittedVtx_hitpix_Phase1, "diMuonC_m1_FittedVtx_hitpix_Phase1/I");
   m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_Phase1", &b_diMuonC_m2_FittedVtx_hitpix_Phase1, "diMuonC_m2_FittedVtx_hitpix_Phase1/I");
@@ -2702,16 +2393,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement", &b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement, "diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement/I");
   m_ttree->Branch("diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement", &b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement, "diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement/I");
   m_ttree->Branch("diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement", &b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement, "diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement/I");
-/*
-  m_ttree->Branch("b_diMuonC_m1_FittedVtx_HBV", &b_diMuonC_m1_FittedVtx_HBV, "diMuonC_m1_FittedVtx_HBV/I");
-  m_ttree->Branch("b_diMuonC_m2_FittedVtx_HBV", &b_diMuonC_m2_FittedVtx_HBV, "diMuonC_m2_FittedVtx_HBV/I");
-  m_ttree->Branch("b_diMuonF_m1_FittedVtx_HBV", &b_diMuonF_m1_FittedVtx_HBV, "diMuonF_m1_FittedVtx_HBV/I");
-  m_ttree->Branch("b_diMuonF_m2_FittedVtx_HBV", &b_diMuonF_m2_FittedVtx_HBV, "diMuonF_m2_FittedVtx_HBV/I");
-  m_ttree->Branch("b_diMuonC_m1_FittedVtx_MHAV", &b_diMuonC_m1_FittedVtx_MHAV, "diMuonC_m1_FittedVtx_MHAV/I");
-  m_ttree->Branch("b_diMuonC_m2_FittedVtx_MHAV", &b_diMuonC_m2_FittedVtx_MHAV, "diMuonC_m2_FittedVtx_MHAV/I");
-  m_ttree->Branch("b_diMuonF_m1_FittedVtx_MHAV", &b_diMuonF_m1_FittedVtx_MHAV, "diMuonF_m1_FittedVtx_MHAV/I");
-  m_ttree->Branch("b_diMuonF_m2_FittedVtx_MHAV", &b_diMuonF_m2_FittedVtx_MHAV, "diMuonF_m2_FittedVtx_MHAV/I");
-*/
+
   m_ttree->Branch("massC",                          &b_massC,                          "massC/F");
   m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
   m_ttree->Branch("isoC_1mm",                       &b_isoC_1mm,                       "isoC_1mm/F");
@@ -2741,16 +2423,11 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
   m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
 
-  //m_ttree->Branch("is2DiMuonsFittedVtxOK_KF",       &b_is2DiMuonsFittedVtxOK_KF,       "is2DiMuonsFittedVtxOK_KF/O");
-  //m_ttree->Branch("is2DiMuonsFittedVtxOK_VS",       &b_is2DiMuonsFittedVtxOK_VS,       "is2DiMuonsFittedVtxOK_VS/O");
-  //m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
-
   m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
   m_ttree->Branch("isControlHLT16Fired",            &b_isControlHLT16Fired,            "isControlHLT16Fired/O");
   m_ttree->Branch("isControlHLT6Fired",             &b_isControlHLT6Fired,             "isControlHLT6Fired/O");
   m_ttree->Branch("isSignalHLTL1Fired",             &b_isSignalHLTL1Fired,             "isSignalHLTL1Fired/O");
   m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
-  //m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);
