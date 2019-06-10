@@ -436,8 +436,9 @@ void efficiency(const std::vector<std::string>& dirNames)
     }//end for entries
 
     myfile->Close();
+    if (verbose) std::cout << "myfile->Close() " << std::endl;
 
-  }
+  }//end while next
 
   RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
   for(int m=0;m<17;m++){
@@ -445,15 +446,15 @@ void efficiency(const std::vector<std::string>& dirNames)
     TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
     if(m>0){
       if(m==6){
-	RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
-	RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
+        RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
+        RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
       }
       else{
-	RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
-	RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
+        RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
+        RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
       }
     }
-  }
+  }//end for
 
   epsvsalph[k] = counter[k][16]/(counter[k][5]*1.0); //mainvalue of epsilob_rec/alpha_gen
   cout<<" Here is the cut-flow-table:"<<endl;
@@ -605,7 +606,7 @@ void efficiency(const std::vector<std::string>& dirNames)
    }//end if ( PlotDimuIso )
 
    myPlot.Close();
-}
+}//end efficiency function
 
 void analysis(const std::string txtfile)
 {
