@@ -34,7 +34,7 @@ void CutFlowTable()
   bool PlotDimuIso(false);
   bool PerEventTriggerEff(false);
 
-  TString dirName='/fdata/hepx/store/user/wshi/QCD_Pt-470to600_MuEnrichedPt5_TuneCP5_13TeV_pythia8/Run2/190604_192236/0000/';
+  const string dirName="/fdata/hepx/store/user/wshi/QCD_Pt-470to600_MuEnrichedPt5_TuneCP5_13TeV_pythia8/Run2/190604_192236/0000/";
   const std::vector<std::string>& dirNames;
   dirNames.push_back(dirName.Data());
   cout<<" dirNames  "<<dirNames[0]<<endl;
