@@ -271,11 +271,11 @@ void efficiency(const std::vector<std::string>& dirNames)
     nf++;
     if (verbose) std::cout << "nentries: "<< nentries << std::endl;
     if (verbose) std::cout << "nf: "<< nf << std::endl;
-    if (verbose) std::cout << "counter[k][0]: " <<counter[k][0]<< std::endl;
 
 		for( int i = 0; i < nentries; i++ ){
 		  t->GetEntry(i);
 		  counter[k][0]++;
+      if (verbose) std::cout << "counter 0: "<< counter[k][0] << std::endl;
       int debug=0;
 
       //Check vtx significance without any selections
@@ -306,13 +306,15 @@ void efficiency(const std::vector<std::string>& dirNames)
             }
 		  }//End GEN Level
 
+      if (verbose) std::cout << "counter 5: "<< counter[k][5] << std::endl;
+
 		  if( is1SelMu17 ) counter[k][6]++;
 		  if( is2SelMu8 ) counter[k][7]++;
 		  if( is3SelMu8 ) counter[k][8]++;
 		  if( is4SelMu8 ){
 
         counter[k][9]++;
-
+        if (verbose) std::cout << "counter 9: "<< counter[k][9] << std::endl;
         //**********************************************
         // Basic offline pT selections finished
         //**********************************************
@@ -347,6 +349,7 @@ void efficiency(const std::vector<std::string>& dirNames)
             ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
               //!!! Note: this needs to match counter[k][5] geometry
               counter[k][12]++;
+              if (verbose) std::cout << "counter 12: "<< counter[k][12] << std::endl;
               if(debug==1) {
                 cout<<"DimuC: Lxy = "<<diMuonC_FittedVtx_Lxy<<" cm; |Lz| = "<<sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) )<<" cm; mass = "<<massC<<endl;
                 cout<<"ValidHit  PixelLayers: C_m1 = "<<diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<diMuonC_m2_FittedVtx_hitpix_Phase1<<endl;
@@ -389,13 +392,14 @@ void efficiency(const std::vector<std::string>& dirNames)
                     }//L1 seeds fired
 
                   }//end if PerEventTriggerEff
+                  if (verbose) std::cout << "counter 14: "<< counter[k][14] << std::endl;
 
                   if( is2DiMuonHLTFired ) {
                     counter[k][15]++;
 
                     if( is2DiMuonsMassOK ){
                       counter[k][16]++;
-
+                      if (verbose) std::cout << "counter 16: "<< counter[k][16] << std::endl;
                       //**********************************************
                       // All offline analysis selections finished
                       //**********************************************
@@ -425,7 +429,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                         BKGShapeCRmassFScaled->Fill(massF,weight2017);
                       }//end if ModelBKGShape
 
-                    }
+                    }//end else
+
                   }//end 15
                 }//end 14
               }//end 13
