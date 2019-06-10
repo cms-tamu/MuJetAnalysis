@@ -24,7 +24,7 @@ using namespace std;
 #include <TMath.h>
 #include "Helpers.h"
 
-Float_t counter[20][17];//samples; selections
+int counter[20][17];//samples:20; selections
 Float_t TotEff[20][17];
 Float_t TotEffErr[20][17];
 Float_t RelEff[20][17];
@@ -54,7 +54,6 @@ for(int i=0;i<20;i++){
 }
 
 int k = -1;
-int nf = 0;
 void efficiency(const std::vector<std::string>& dirNames)
 {
 
@@ -183,6 +182,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   TChainElement *chEl=0;
 
   k++;//Print k
+  int nf = 0;//Number of input files under the kth sample
 
   while ((chEl=(TChainElement*)next())) {
     if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
@@ -497,7 +497,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<"end{tabular}"<<endl;
   cout<<"end{landscape}"<<endl;
 
-  TString output="./foo_modified.root";
+  //kth sample
+  TString output="";
+  output = output + "./foo_modified_sample_" + Form("%d", k)+ ".root";
   TFile myPlot(output,"RECREATE");
 
    if ( CheckRecoVtx ){
