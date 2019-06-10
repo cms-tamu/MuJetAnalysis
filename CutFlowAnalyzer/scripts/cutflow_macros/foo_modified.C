@@ -54,6 +54,7 @@ for(int i=0;i<20;i++){
 }
 
 int k = -1;
+int nf = 0;
 void efficiency(const std::vector<std::string>& dirNames)
 {
 
@@ -181,7 +182,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   TIter next(fileElements);
   TChainElement *chEl=0;
 
-  k++;
+  k++;//Print k
 
   while ((chEl=(TChainElement*)next())) {
     if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
@@ -267,6 +268,10 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("diMuonF_FittedVtx_L",&diMuonF_FittedVtx_L);
 
 		nentries = t->GetEntries();
+    nf++;
+    if (verbose) std::cout << "nentries: "<< nentries << std::endl;
+    if (verbose) std::cout << "nf: "<< nf << std::endl;
+    if (verbose) std::cout << "counter[k][0]: " <<counter[k][0]<< std::endl;
 
 		for( int i = 0; i < nentries; i++ ){
 		  t->GetEntry(i);
