@@ -275,9 +275,6 @@ void efficiency(const std::vector<std::string>& dirNames)
 		for( int i = 0; i < nentries; i++ ){
 		  t->GetEntry(i);
 		  counter[k][0]++;
-      if (verbose) std::cout << "*****************" << std::endl;
-      if (verbose) std::cout << "Event #: "<< i << std::endl;
-      if (verbose) std::cout << "counter 0: "<< counter[k][0] << std::endl;
 
       //Check vtx significance without any selections
       if ( CheckRecoVtx ){
@@ -285,21 +282,11 @@ void efficiency(const std::vector<std::string>& dirNames)
         Abs_Lz_Residual_GEN_leading_pT->Fill(genA0_Lz, genA0_Lz-sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
       }//end CheckRecoVtx
 
-		  if( is1GenMu17 ) {
-        counter[k][1]++;
-        if (verbose) std::cout << "counter 1: "<< counter[k][1] << std::endl;
-      }
-		  if( is2GenMu8 ) {
-        counter[k][2]++;
-        if (verbose) std::cout << "counter 2: "<< counter[k][2] << std::endl;
-      }
-		  if( is3GenMu8 ) {
-        counter[k][3]++;
-        if (verbose) std::cout << "counter 3: "<< counter[k][3] << std::endl;
-      }
+		  if( is1GenMu17 ) counter[k][1]++;
+		  if( is2GenMu8 ) counter[k][2]++;
+		  if( is3GenMu8 ) counter[k][3]++;
 		  if( is4GenMu8 ){
 		    counter[k][4]++;
-        if (verbose) std::cout << "counter 4: "<< counter[k][4] << std::endl;
         //Phase-0 pixel system (Pre2017): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.2 cm; Lz = 48.5 cm
         //Phase-1 pixel system (2017+2018): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.9 cm; Lz = 39.6 cm
         //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm //To be used for Run2
@@ -308,26 +295,15 @@ void efficiency(const std::vector<std::string>& dirNames)
 		    if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) &&
             ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
               counter[k][5]++;
-              if (verbose) std::cout << "counter 5: "<< counter[k][5] << std::endl;
             }
 
 		  }//End GEN Level
 
-		  if( is1SelMu17 ) {
-        counter[k][6]++;
-        if (verbose) std::cout << "counter 6: "<< counter[k][6] << std::endl;
-      }
-		  if( is2SelMu8 ) {
-        counter[k][7]++;
-        if (verbose) std::cout << "counter 7: "<< counter[k][7] << std::endl;
-      }
-		  if( is3SelMu8 ) {
-        counter[k][8]++;
-        if (verbose) std::cout << "counter 8: "<< counter[k][8] << std::endl;
-      }
+		  if( is1SelMu17 ) counter[k][6]++;
+		  if( is2SelMu8 ) counter[k][7]++;
+		  if( is3SelMu8 ) counter[k][8]++;
 		  if( is4SelMu8 ){
         counter[k][9]++;
-        if (verbose) std::cout << "counter 9: "<< counter[k][9] << std::endl;
         //**********************************************
         // Basic offline pT selections finished
         //**********************************************
@@ -354,17 +330,14 @@ void efficiency(const std::vector<std::string>& dirNames)
 
         if( isVtxOK ){
           counter[k][10]++;
-          if (verbose) std::cout << "counter 10: "<< counter[k][10] << std::endl;
 
           if( is2DiMuons ){
             counter[k][11]++;
-            if (verbose) std::cout << "counter 11: "<< counter[k][11] << std::endl;
 
             if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
             ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
               //!!! Note: this needs to match counter[k][5] geometry
               counter[k][12]++;
-              if (verbose) std::cout << "counter 12: "<< counter[k][12] << std::endl;
 
               //**********************************************
               // Placeholder for dz, iso distributions for dark SUSY samples,
@@ -372,11 +345,9 @@ void efficiency(const std::vector<std::string>& dirNames)
               //**********************************************
               if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
                 counter[k][13]++;
-                if (verbose) std::cout << "counter 13: "<< counter[k][13] << std::endl;
 
                 if( diMuonC_IsoTk_FittedVtx < 2.0 && diMuonF_IsoTk_FittedVtx < 2.0  ){
                   counter[k][14]++;
-                  if (verbose) std::cout << "counter 14: "<< counter[k][14] << std::endl;
 
                   if( PerEventTriggerEff ) {
                     //pass all offline selections (except HLT fired, otherwise will show 100% all-time for L1 and HLT)
@@ -399,15 +370,12 @@ void efficiency(const std::vector<std::string>& dirNames)
                     }//L1 seeds fired
 
                   }//end if PerEventTriggerEff
-                  if (verbose) std::cout << "counter 14: "<< counter[k][14] << std::endl;
 
                   if( is2DiMuonHLTFired ) {
                     counter[k][15]++;
-                    if (verbose) std::cout << "counter 15: "<< counter[k][15] << std::endl;
 
                     if( is2DiMuonsMassOK ){
                       counter[k][16]++;
-                      if (verbose) std::cout << "counter 16: "<< counter[k][16] << std::endl;
                       //**********************************************
                       // All offline analysis selections finished
                       //**********************************************
@@ -449,7 +417,6 @@ void efficiency(const std::vector<std::string>& dirNames)
     }//end for entries
 
     myfile->Close();
-    if (verbose) std::cout << "myfile->Close() " << std::endl;
 
   }//end while next
 
