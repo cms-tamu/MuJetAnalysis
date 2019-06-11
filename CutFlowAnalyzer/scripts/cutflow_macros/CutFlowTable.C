@@ -34,8 +34,7 @@ void CutFlowTable()
   bool PlotDimuIso(false);
   bool PerEventTriggerEff(false);
 
-  const std::vector<std::string>& dirNames;
-  dirNames="/fdata/hepx/store/user/wshi/QCD_Pt-470to600_MuEnrichedPt5_TuneCP5_13TeV_pythia8/Run2/190604_192236/0000/";
+  const std::vector<std::string>& dirNames="/fdata/hepx/store/user/wshi/GluGluToContinToZZTo4tau_13TeV_MCFM701_pythia8/Run2/190530_203358/0000/";
   cout<<" dirNames  "<<dirNames[0]<<endl;
   //	TString dirname(fileName);
   TChain* chain = new TChain("dummy");
