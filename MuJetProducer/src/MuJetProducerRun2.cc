@@ -390,39 +390,39 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   std::vector<pat::MultiMuon> jets;
 
   //DEBUG@Wei SHI 2019.04.18
-  std::cout << "*******************************" << std::endl;
-  std::cout << "BeamSpot:    (x,y,z)[cm]: "<< beamSpot->position().x() << ", " << beamSpot->position().y() <<", "<< beamSpot->position().z() <<std::endl;
+  //std::cout << "*******************************" << std::endl;
+  //std::cout << "BeamSpot:    (x,y,z)[cm]: "<< beamSpot->position().x() << ", " << beamSpot->position().y() <<", "<< beamSpot->position().z() <<std::endl;
   double MuonCount=0;
   for (pat::MuonCollection::const_iterator mui = muons->begin();  mui != muons->end();  ++mui) {
 
-    std::cout << "Muon     #"<<MuonCount<<": (x,y,z)[cm]: "<< mui->vx() <<", "<< mui->vy() <<", "<< mui->vz() <<std::endl;
-    std::cout << "                 pT[GeV]: "<< mui->pt() <<"; eta: "<< mui->eta() <<"; phi: "<< mui->phi() << "; Q: " << mui->charge()<<"; Tracker Muon: "<< mui->isTrackerMuon()<< "; Global Muon: "<< mui->isGlobalMuon() <<std::endl;
+    //std::cout << "Muon     #"<<MuonCount<<": (x,y,z)[cm]: "<< mui->vx() <<", "<< mui->vy() <<", "<< mui->vz() <<std::endl;
+    //std::cout << "                 pT[GeV]: "<< mui->pt() <<"; eta: "<< mui->eta() <<"; phi: "<< mui->phi() << "; Q: " << mui->charge()<<"; Tracker Muon: "<< mui->isTrackerMuon()<< "; Global Muon: "<< mui->isGlobalMuon() <<std::endl;
     if ( mui->innerTrack().isAvailable() ) {
-    std::cout << " innerTrk ValidPixelHits: " << mui->innerTrack()->hitPattern().numberOfValidPixelHits() << std::endl;
+    //std::cout << " innerTrk ValidPixelHits: " << mui->innerTrack()->hitPattern().numberOfValidPixelHits() << std::endl;
     }
 
     const pat::PackedCandidate* Candmui = dynamic_cast<const pat::PackedCandidate*>(mui->sourceCandidatePtr(0).get());
     if ( Candmui != 0 && Candmui->hasTrackDetails() ){
       const reco::HitPattern& pi = Candmui->pseudoTrack().hitPattern();
-      std::cout << "Cast Hit BPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
-      std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) <<std::endl;
-      std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) <<std::endl;
-      std::cout << "                    #4: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) <<std::endl;
-      std::cout << "         FPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) <<std::endl;
-      std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) <<std::endl;
-      std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) <<std::endl;
+      //std::cout << "Cast Hit BPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
+      //std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) <<std::endl;
+      //std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) <<std::endl;
+      //std::cout << "                    #4: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) <<std::endl;
+      //std::cout << "         FPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) <<std::endl;
+      //std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) <<std::endl;
+      //std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) <<std::endl;
     }
     else{
-      std::cout <<"Didn't find a PFCandidates the muon was made from..."<<std::endl;
+      //std::cout <<"Didn't find a PFCandidates the muon was made from..."<<std::endl;
     }
     //MC truth
     if(mui->genParticle() != 0){
-      std::cout << "Matched GEN: (x,y,z)[cm]: "<< mui->genParticle()->vx() << ", " <<mui->genParticle()->vy() <<", "<< mui->genParticle()->vz() <<std::endl;
-      std::cout << "                 pT[GeV]: "<< mui->genParticle()->pt() << "; eta: " << mui->genParticle()->eta() <<"; phi: "<< mui->genParticle()->phi() <<std::endl;
-      std::cout << "                  PDG ID: "<< mui->genParticle()->pdgId() << "; Status: " << mui->genParticle()->status() <<std::endl;
+      //std::cout << "Matched GEN: (x,y,z)[cm]: "<< mui->genParticle()->vx() << ", " <<mui->genParticle()->vy() <<", "<< mui->genParticle()->vz() <<std::endl;
+      //std::cout << "                 pT[GeV]: "<< mui->genParticle()->pt() << "; eta: " << mui->genParticle()->eta() <<"; phi: "<< mui->genParticle()->phi() <<std::endl;
+      //std::cout << "                  PDG ID: "<< mui->genParticle()->pdgId() << "; Status: " << mui->genParticle()->status() <<std::endl;
     }
     if (muonOkay(*mui)) {
-      std::cout <<"muonOkay"<<std::endl;
+      //std::cout <<"muonOkay"<<std::endl;
     }
     MuonCount++;
   }
@@ -493,8 +493,8 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           pairOfMuons.push_back(&*two);
 
           PairCount++;
-          std::cout <<"----------"<<std::endl;
-          std::cout << "Pair #"<<PairCount<<std::endl;
+          //std::cout <<"----------"<<std::endl;
+          //std::cout << "Pair #"<<PairCount<<std::endl;
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
                                    //tracks_ptr,

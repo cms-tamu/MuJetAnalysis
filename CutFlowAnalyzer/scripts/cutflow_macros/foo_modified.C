@@ -176,6 +176,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   TH1F *IsoDimuC = new TH1F("IsoDimuC","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoDimuF = new TH1F("IsoDimuF","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimu = new TH1F("IsoOrphanDimu","",1000,0.0,100.0);//binning 0.1 GeV
 
   TObjArray *fileElements=chain->GetListOfFiles();
   TIter next(fileElements);
@@ -196,6 +197,12 @@ void efficiency(const std::vector<std::string>& dirNames)
 		TTree *t = (TTree*)myfile->Get("cutFlowAnalyzerPXBL4PXFL3/Events");
 		if (!t) {
 		  if (verbose) std::cout << "Tree cutFlowAnalyzerPXBL4PXFL3/Events does not exist" << std::endl;
+		  continue;
+		}
+
+    TTree *o = (TTree*)myfile->Get("cutFlowAnalyzerPXBL4PXFL3/Events_orphan");
+		if (!o) {
+		  if (verbose) std::cout << "Tree cutFlowAnalyzerPXBL4PXFL3/Events_orphan does not exist" << std::endl;
 		  continue;
 		}
 
@@ -266,6 +273,14 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("diMuonC_FittedVtx_L",&diMuonC_FittedVtx_L);
 		t->SetBranchAddress("diMuonF_FittedVtx_Lxy",&diMuonF_FittedVtx_Lxy);
 		t->SetBranchAddress("diMuonF_FittedVtx_L",&diMuonF_FittedVtx_L);
+
+    //Get branch from orphan-dimuon tree
+    o->SetBranchAddress("orph_dimu_mass",&orph_dimu_mass);
+    o->SetBranchAddress("orph_dimu_isoTk",&orph_dimu_isoTk);
+    o->SetBranchAddress("orph_dimu_z",&orph_dimu_z);
+    o->SetBranchAddress("orph_passOffLineSelPtEta",&orph_passOffLineSelPtEta);//offline high pT mu in barrel
+    o->SetBranchAddress("orph_passOffLineSelPt1788",&orph_passOffLineSelPt1788);//offline pT sel
+    o->SetBranchAddress("orph_AllTrackerMu",&orph_AllTrackerMu);//tracker mu
 
 		nentries = t->GetEntries();
     nf++;
@@ -414,7 +429,17 @@ void efficiency(const std::vector<std::string>& dirNames)
           }//end 11
         }//end 10
       }//end 9
-    }//end for entries
+    }//end for i entries
+
+    //Loop over orphan-dimuon tree
+    mentries = o->GetEntries();
+		for( int j = 0; j < mentries; j++ ){
+		  o->GetEntry(j);
+      //Pass offline basic selections, same as signal
+		  if(orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu){
+        IsoOrphanDimu->Fill(orph_dimu_isoTk);
+      }
+    }//end for j entries
 
     myfile->Close();
 
@@ -448,12 +473,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" Selection   "<<" \\# Events   "<<"   Total Efficiency  "<<" Relative Efficiency   "<<" TotalEffError   "<<" RelEffError "<<" hline "<<endl;
 
   cout<<" No cut      &   "<<left<< setw(7)<< counter[k][0]<<"     &   "<<fixed<< std::setprecision(3)<< TotEff[k][0]<<"         &     "<< RelEff[k][0]<<"           &   "<<left<< setw(7)<< TotEffErr[k][0]<<"      &   "<< RelEffErr[k][0]<<" hline "<<endl;
-  cout<<" is1GenMu17  &   "<<left<< setw(7)<< counter[k][1]<<"    &    "<<left<< setw(7)<< TotEff[k][1]<<"      &        "<<left<< setw(7)<<  RelEff[k][1]<<"    &    "<<fixed<<std::setprecision(3)<< TotEffErr[k][1]<<" &   "<<left<< setw(7)<<  RelEffErr[k][1]<<" hline "<<endl;
+  cout<<" is1GenMu17Barrel  &   "<<left<< setw(7)<< counter[k][1]<<"    &    "<<left<< setw(7)<< TotEff[k][1]<<"      &        "<<left<< setw(7)<<  RelEff[k][1]<<"    &    "<<fixed<<std::setprecision(3)<< TotEffErr[k][1]<<" &   "<<left<< setw(7)<<  RelEffErr[k][1]<<" hline "<<endl;
   cout<<" is2GenMu8   &   "<<left<< setw(7)<< counter[k][2]<<"    &    "<<left<< setw(7)<< TotEff[k][2]<<"      &        "<<left<< setw(7)<<  RelEff[k][2]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][2]<<" & "<<left<< setw(7)<< RelEffErr[k][2]<<" hline "<<endl;
   cout<<" is3GenMu8   &   "<<left<< setw(7)<< counter[k][3]<<"    &    "<<left<< setw(7)<< TotEff[k][3]<<"      &        "<<left<< setw(7)<<  RelEff[k][3]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][3]<<" & "<<left<< setw(7)<<  RelEffErr[k][3]<<" hline "<<endl;
   cout<<" is4GenMu8   &   "<<left<< setw(7)<< counter[k][4]<<"    &    "<<left<< setw(7)<< TotEff[k][4]<<"      &        "<<left<< setw(7)<<  RelEff[k][4]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][4]<<" & "<<left<< setw(7)<<  RelEffErr[k][4]<<" hline "<<endl;
-
-  cout<<" Lxy<16.0 && Lz<51.6 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
+  //Phase-1 pixel: Lxy<16.0cm && Lz<51.6cm
+  cout<<" Lxy<16.0cm && Lz<51.6cm & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
   cout<<"                                                                          "<<" hline "<<endl;
 
   cout<<" is1SelMu17   &    "<<left<< setw(7)<< counter[k][6]<<"  &    "<<left<< setw(7)<< TotEff[k][6] <<setw(10)<<"   &    "<<left<< setw(7)<<  RelEff[k][6]<<"  &    "<<left<< setw(7)<<  TotEffErr[k][6]<<" &  " <<  RelEffErr[k][6]<<" hline "<<endl;
@@ -583,6 +608,25 @@ void efficiency(const std::vector<std::string>& dirNames)
    if ( PlotDimuIso ) {
      IsoDimuC->Write();
      IsoDimuF->Write();
+     TH1F *IsoDimuCNormalized = (TH1F*)IsoDimuC->Clone("IsoDimuCNormalized");
+     TH1F *IsoDimuFNormalized = (TH1F*)IsoDimuF->Clone("IsoDimuFNormalized");
+     if ( IsoDimuC->Integral() > 0 && IsoDimuF->Integral() > 0 ){
+       Double_t scaleC = 1./IsoDimuC->Integral();
+       Double_t scaleF = 1./IsoDimuF->Integral();
+       IsoDimuCNormalized->Scale(scaleC);
+       IsoDimuFNormalized->Scale(scaleF);
+       IsoDimuCNormalized->Write();
+       IsoDimuFNormalized->Write();
+     }//Protect against 0 entry
+
+     IsoOrphanDimu->Write();
+     TH1F *IsoOrphanDimuNormalized = (TH1F*)IsoOrphanDimu->Clone("IsoOrphanDimuNormalized");
+     if ( IsoOrphanDimu->Integral() > 0 ){
+       Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral();
+       IsoOrphanDimuNormalized->Scale(scaleOrphanDimu);
+       IsoOrphanDimuNormalized->Write();
+     }//Protect against 0 entry
+
    }//end if ( PlotDimuIso )
 
    myPlot.Close();

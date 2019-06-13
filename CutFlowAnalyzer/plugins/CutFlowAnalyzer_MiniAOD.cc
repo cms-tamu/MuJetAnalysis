@@ -843,7 +843,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_genH_vy  = genH[0]->vy() - b_beamSpot_y;
       b_genH_vz  = genH[0]->vz() - b_beamSpot_z;
     } else {
-      //    std::cout << "WARNING! genH.size() != 1" << std::endl;
+      std::cout << "WARNING! genH.size() != 1" << std::endl;
     }
 
     if ( genA_unsorted.size() >= 2 ) {
