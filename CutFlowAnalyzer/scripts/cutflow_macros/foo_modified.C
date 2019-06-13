@@ -181,6 +181,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   TH1F *DimuMass = new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
 
+  TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass","",300,0.0,60.0);//binning 0.2GeV
   TH1F *IsoDimuC = new TH1F("IsoDimuC","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoDimuF = new TH1F("IsoDimuF","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoOrphanDimu = new TH1F("IsoOrphanDimu","",1000,0.0,100.0);//binning 0.1 GeV
@@ -444,6 +445,7 @@ void efficiency(const std::vector<std::string>& dirNames)
       //Pass offline basic selections, same as signal
 		  if(orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu){
         IsoOrphanDimu->Fill(orph_dimu_isoTk);
+        OrphanDimuMass->Fill(orph_dimu_mass);
       }
     }//end for j entries
 
@@ -632,6 +634,11 @@ void efficiency(const std::vector<std::string>& dirNames)
        IsoOrphanDimuNormalized->Scale(scaleOrphanDimu);
        IsoOrphanDimuNormalized->Write();
      }//Protect against 0 entry
+     OrphanDimuMass->SetLineColor(kBlue);
+     OrphanDimuMass->SetLineWidth(2);
+     OrphanDimuMass->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
+     OrphanDimuMass->GetYaxis()->SetTitle("Events/0.2GeV");
+     OrphanDimuMass->Write();
 
    }//end if ( PlotDimuIso )
 
