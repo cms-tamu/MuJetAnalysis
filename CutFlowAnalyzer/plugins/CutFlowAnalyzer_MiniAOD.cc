@@ -760,7 +760,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     //    '54' is the corner case in pythia when '36' doesn't work for some mass points
     //(2) MSSMD (Dark SUSY): Higgs={25}, new light boson={3000022}, muons={13,-13}
     //(3) ALP: Higgs={25}, new light boson={9000005}, muons={13,-13}
-    //(4) Scalar Model from Mehdi: Higgs like ZD={5000002}, new light boson SD={5000512}, muons={13,-13}
+    //(4) Scalar Model from Mehdi: Higgs like ZD={5000002}, new light boson SD={5000512, -5000512}, muons={13,-13}
     std::vector<const reco::GenParticle*> genH;
     std::vector<const reco::GenParticle*> genA_unsorted;
     std::vector<const reco::GenParticle*> genA;
@@ -801,7 +801,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             genMuonCand->mother(iMother)->pdgId() == 54 ||
             genMuonCand->mother(iMother)->pdgId() == 3000022 ||
             genMuonCand->mother(iMother)->pdgId() == 9000005 ||
-            genMuonCand->mother(iMother)->pdgId() == 5000512
+            fabs( genMuonCand->mother(iMother)->pdgId() ) == 5000512
           ) {
             // Store the muon (stable, first in chain) into vector
             genMuons.push_back(&(*iGenParticle));
@@ -826,7 +826,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 54 ) ||
 	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 3000022 ) ||
 	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 9000005 ) ||
-        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 5000512 )
+        ( iGenParticle->status() == 22 && fabs( iGenParticle->pdgId() ) == 5000512 )
       ) {
         genA_unsorted.push_back(&(*iGenParticle));
       }
