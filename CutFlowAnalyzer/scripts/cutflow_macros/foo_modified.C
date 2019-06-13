@@ -140,6 +140,13 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t  diMuonF_FittedVtx_L;
   Int_t  nRecoMu;
 
+  Float_t orph_dimu_mass;
+  Float_t orph_dimu_isoTk;
+  Float_t orph_dimu_z;
+  Bool_t  orph_passOffLineSelPtEta;
+  Bool_t  orph_passOffLineSelPt1788;
+  Bool_t  orph_AllTrackerMu;
+
   TH2F* Lxy_Residual_GEN_leading_pT = new TH2F("Lxy_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);//cm
   TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH2F("Abs_Lz_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);
 
@@ -206,8 +213,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 		  continue;
 		}
 
-    //if (verbose) cout<<"  Events  "<<t->GetEntries()<<endl;
     int nentries;
+    int mentries;
 
 		t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
 		t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
@@ -223,7 +230,6 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("is2SelMu8",&is2SelMu8);
 		t->SetBranchAddress("is3SelMu8",&is3SelMu8);
 		t->SetBranchAddress("is4SelMu8",&is4SelMu8);
-
 		t->SetBranchAddress("selMu0_pT",&selMu0_pT);
 		t->SetBranchAddress("selMu1_pT",&selMu1_pT);
 		t->SetBranchAddress("selMu2_pT",&selMu2_pT);
