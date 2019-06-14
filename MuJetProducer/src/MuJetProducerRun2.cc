@@ -404,7 +404,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     const pat::PackedCandidate* Candmui = dynamic_cast<const pat::PackedCandidate*>(mui->sourceCandidatePtr(0).get());
     if ( Candmui != 0 && Candmui->hasTrackDetails() ){
       const reco::HitPattern& pi = Candmui->pseudoTrack().hitPattern();
-      //std::cout << "Cast Hit BPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
+      std::cout << "Cast Hit BPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
       //std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) <<std::endl;
       //std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) <<std::endl;
       //std::cout << "                    #4: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) <<std::endl;

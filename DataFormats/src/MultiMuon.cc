@@ -377,7 +377,7 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 
 				}//end for j maxR
 			}//end for i maxR
-			//std::cout << " Scan vtx i = " <<final_i << "; j = "<< final_j <<std::endl;
+			std::cout << " Scan vtx i = " <<final_i << "; j = "<< final_j <<std::endl;
 
       m_mindisttrack_scan = minSeparation;
 
