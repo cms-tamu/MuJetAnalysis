@@ -112,6 +112,19 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  isSignalHLTL1Fired;
   Float_t diMuonC_IsoTk_FittedVtx;
   Float_t diMuonF_IsoTk_FittedVtx;
+  Float_t diMuonCMu0_IsoTk0p3_FittedVtx;
+  Float_t diMuonCMu0_IsoTk0p4_FittedVtx;
+  Float_t diMuonCMu0_IsoTk0p5_FittedVtx;
+  Float_t diMuonCMu1_IsoTk0p3_FittedVtx;
+  Float_t diMuonCMu1_IsoTk0p4_FittedVtx;
+  Float_t diMuonCMu1_IsoTk0p5_FittedVtx;
+
+  Float_t diMuonFMu0_IsoTk0p3_FittedVtx;
+  Float_t diMuonFMu0_IsoTk0p4_FittedVtx;
+  Float_t diMuonFMu0_IsoTk0p5_FittedVtx;
+  Float_t diMuonFMu1_IsoTk0p3_FittedVtx;
+  Float_t diMuonFMu1_IsoTk0p4_FittedVtx;
+  Float_t diMuonFMu1_IsoTk0p5_FittedVtx;
 
   Float_t  genA0_Lxy;//A0:dark photon that contains the most energetic muon; redt: wrt detector
   Float_t  genA1_Lxy;
@@ -184,8 +197,21 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *MassC = new TH1F("MassC","",600,0.0,60.0);//binning 0.1 GeV
   TH1F *MassF = new TH1F("MassF","",600,0.0,60.0);//binning 0.1 GeV
   TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass","",600,0.0,60.0);//binning 0.2GeV
+
   TH1F *IsoDimuC = new TH1F("IsoDimuC","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoDimuF = new TH1F("IsoDimuF","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu0_dR0p3 = new TH1F("IsoDimuCMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu0_dR0p4 = new TH1F("IsoDimuCMu0_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu0_dR0p5 = new TH1F("IsoDimuCMu0_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu1_dR0p3 = new TH1F("IsoDimuCMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu1_dR0p4 = new TH1F("IsoDimuCMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu1_dR0p5 = new TH1F("IsoDimuCMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu0_dR0p3 = new TH1F("IsoDimuFMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu0_dR0p4 = new TH1F("IsoDimuFMu0_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu0_dR0p5 = new TH1F("IsoDimuFMu0_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu1_dR0p3 = new TH1F("IsoDimuFMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu1_dR0p4 = new TH1F("IsoDimuFMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu1_dR0p5 = new TH1F("IsoDimuFMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoOrphanDimu = new TH1F("IsoOrphanDimu","",1000,0.0,100.0);//binning 0.1 GeV
 
   TObjArray *fileElements=chain->GetListOfFiles();
@@ -255,8 +281,22 @@ void efficiency(const std::vector<std::string>& dirNames)
 		t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
 		t->SetBranchAddress("isDiMuonHLTFired",&is2DiMuonHLTFired);
     t->SetBranchAddress("isSignalHLTL1Fired",&isSignalHLTL1Fired);
+
 		t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
 		t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
+    t->SetBranchAddress("diMuonCMu0_IsoTk0p3_FittedVtx",&diMuonCMu0_IsoTk0p3_FittedVtx);
+    t->SetBranchAddress("diMuonCMu0_IsoTk0p4_FittedVtx",&diMuonCMu0_IsoTk0p4_FittedVtx);
+    t->SetBranchAddress("diMuonCMu0_IsoTk0p5_FittedVtx",&diMuonCMu0_IsoTk0p5_FittedVtx);
+    t->SetBranchAddress("diMuonCMu1_IsoTk0p3_FittedVtx",&diMuonCMu1_IsoTk0p3_FittedVtx);
+    t->SetBranchAddress("diMuonCMu1_IsoTk0p4_FittedVtx",&diMuonCMu1_IsoTk0p4_FittedVtx);
+    t->SetBranchAddress("diMuonCMu1_IsoTk0p5_FittedVtx",&diMuonCMu1_IsoTk0p5_FittedVtx);
+    t->SetBranchAddress("diMuonFMu0_IsoTk0p3_FittedVtx",&diMuonFMu0_IsoTk0p3_FittedVtx);
+    t->SetBranchAddress("diMuonFMu0_IsoTk0p4_FittedVtx",&diMuonFMu0_IsoTk0p4_FittedVtx);
+    t->SetBranchAddress("diMuonFMu0_IsoTk0p5_FittedVtx",&diMuonFMu0_IsoTk0p5_FittedVtx);
+    t->SetBranchAddress("diMuonFMu1_IsoTk0p3_FittedVtx",&diMuonFMu1_IsoTk0p3_FittedVtx);
+    t->SetBranchAddress("diMuonFMu1_IsoTk0p4_FittedVtx",&diMuonFMu1_IsoTk0p4_FittedVtx);
+    t->SetBranchAddress("diMuonFMu1_IsoTk0p5_FittedVtx",&diMuonFMu1_IsoTk0p5_FittedVtx);
+
 		t->SetBranchAddress("genA0_Lxy",&genA0_Lxy);
 		t->SetBranchAddress("genA1_Lxy",&genA1_Lxy);
 		t->SetBranchAddress("genA0_Lz",&genA0_Lz);
@@ -370,7 +410,8 @@ void efficiency(const std::vector<std::string>& dirNames)
               if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
                 counter[k][13]++;
 
-                if( diMuonC_IsoTk_FittedVtx < 2.0 && diMuonF_IsoTk_FittedVtx < 2.0  ){
+                //@Wei: Dimu iso cut removed at the moment, will be replaced by single muon iso cuts
+                if( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx >= 0.0  ){
                   counter[k][14]++;
 
                   if( PerEventTriggerEff ) {
@@ -414,6 +455,18 @@ void efficiency(const std::vector<std::string>& dirNames)
                         MassF->Fill(massF);
                         IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
                         IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
+                        IsoDimuCMu0_dR0p3->Fill(diMuonCMu0_IsoTk0p3_FittedVtx);
+                        IsoDimuCMu0_dR0p4->Fill(diMuonCMu0_IsoTk0p4_FittedVtx);
+                        IsoDimuCMu0_dR0p5->Fill(diMuonCMu0_IsoTk0p5_FittedVtx);
+                        IsoDimuCMu1_dR0p3->Fill(diMuonCMu1_IsoTk0p3_FittedVtx);
+                        IsoDimuCMu1_dR0p4->Fill(diMuonCMu1_IsoTk0p4_FittedVtx);
+                        IsoDimuCMu1_dR0p5->Fill(diMuonCMu1_IsoTk0p5_FittedVtx);
+                        IsoDimuFMu0_dR0p3->Fill(diMuonFMu0_IsoTk0p3_FittedVtx);
+                        IsoDimuFMu0_dR0p4->Fill(diMuonFMu0_IsoTk0p4_FittedVtx);
+                        IsoDimuFMu0_dR0p5->Fill(diMuonFMu0_IsoTk0p5_FittedVtx);
+                        IsoDimuFMu1_dR0p3->Fill(diMuonFMu1_IsoTk0p3_FittedVtx);
+                        IsoDimuFMu1_dR0p4->Fill(diMuonFMu1_IsoTk0p4_FittedVtx);
+                        IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
                       }
 
                     }//end 16: mass consistent
@@ -626,27 +679,63 @@ void efficiency(const std::vector<std::string>& dirNames)
      MassF->Write();
      IsoDimuC->Write();
      IsoDimuF->Write();
+     IsoDimuCMu0_dR0p3->Write();
+     IsoDimuCMu0_dR0p4->Write();
+     IsoDimuCMu0_dR0p5->Write();
+     IsoDimuCMu1_dR0p3->Write();
+     IsoDimuCMu1_dR0p4->Write();
+     IsoDimuCMu1_dR0p5->Write();
+     IsoDimuFMu0_dR0p3->Write();
+     IsoDimuFMu0_dR0p4->Write();
+     IsoDimuFMu0_dR0p5->Write();
+     IsoDimuFMu1_dR0p3->Write();
+     IsoDimuFMu1_dR0p4->Write();
+     IsoDimuFMu1_dR0p5->Write();
+     //Normalize iso
      TH1F *IsoDimuCNormalized = (TH1F*)IsoDimuC->Clone("IsoDimuCNormalized");
      TH1F *IsoDimuFNormalized = (TH1F*)IsoDimuF->Clone("IsoDimuFNormalized");
-     if ( IsoDimuC->Integral() > 0 && IsoDimuF->Integral() > 0 ){
-       Double_t scaleC = 1./IsoDimuC->Integral();
-       Double_t scaleF = 1./IsoDimuF->Integral();
-       IsoDimuCNormalized->Scale(scaleC);
-       IsoDimuFNormalized->Scale(scaleF);
-       IsoDimuCNormalized->Write();
-       IsoDimuFNormalized->Write();
-     }//Protect against 0 entry
+     TH1F *IsoDimuCMu0_dR0p3_Normalized = (TH1F*)IsoDimuCMu0_dR0p3->Clone("IsoDimuCMu0_dR0p3_Normalized");
+     TH1F *IsoDimuCMu0_dR0p4_Normalized = (TH1F*)IsoDimuCMu0_dR0p4->Clone("IsoDimuCMu0_dR0p4_Normalized");
+     TH1F *IsoDimuCMu0_dR0p5_Normalized = (TH1F*)IsoDimuCMu0_dR0p5->Clone("IsoDimuCMu0_dR0p5_Normalized");
+     TH1F *IsoDimuCMu1_dR0p3_Normalized = (TH1F*)IsoDimuCMu1_dR0p3->Clone("IsoDimuCMu1_dR0p3_Normalized");
+     TH1F *IsoDimuCMu1_dR0p4_Normalized = (TH1F*)IsoDimuCMu1_dR0p4->Clone("IsoDimuCMu1_dR0p4_Normalized");
+     TH1F *IsoDimuCMu1_dR0p5_Normalized = (TH1F*)IsoDimuCMu1_dR0p5->Clone("IsoDimuCMu1_dR0p5_Normalized");
+     TH1F *IsoDimuFMu0_dR0p3_Normalized = (TH1F*)IsoDimuFMu0_dR0p3->Clone("IsoDimuFMu0_dR0p3_Normalized");
+     TH1F *IsoDimuFMu0_dR0p4_Normalized = (TH1F*)IsoDimuFMu0_dR0p4->Clone("IsoDimuFMu0_dR0p4_Normalized");
+     TH1F *IsoDimuFMu0_dR0p5_Normalized = (TH1F*)IsoDimuFMu0_dR0p5->Clone("IsoDimuFMu0_dR0p5_Normalized");
+     TH1F *IsoDimuFMu1_dR0p3_Normalized = (TH1F*)IsoDimuFMu1_dR0p3->Clone("IsoDimuFMu1_dR0p3_Normalized");
+     TH1F *IsoDimuFMu1_dR0p4_Normalized = (TH1F*)IsoDimuFMu1_dR0p4->Clone("IsoDimuFMu1_dR0p4_Normalized");
+     TH1F *IsoDimuFMu1_dR0p5_Normalized = (TH1F*)IsoDimuFMu1_dR0p5->Clone("IsoDimuFMu1_dR0p5_Normalized");
+     //Protect against 0 entry
+     if ( IsoDimuC->Integral() > 0 ){ Double_t scaleC = 1./IsoDimuC->Integral(); IsoDimuCNormalized->Scale(scaleC); IsoDimuCNormalized->Write(); }
+     if ( IsoDimuF->Integral() > 0 ){ Double_t scaleF = 1./IsoDimuF->Integral(); IsoDimuFNormalized->Scale(scaleF); IsoDimuFNormalized->Write(); }
+     if ( IsoDimuCMu0_dR0p3->Integral() > 0 ){ Double_t scaleCMu0_dR0p3 = 1./IsoDimuCMu0_dR0p3->Integral(); IsoDimuCMu0_dR0p3_Normalized->Scale(scaleCMu0_dR0p3); IsoDimuCMu0_dR0p3_Normalized->Write(); }
+     if ( IsoDimuCMu0_dR0p4->Integral() > 0 ){ Double_t scaleCMu0_dR0p4 = 1./IsoDimuCMu0_dR0p4->Integral(); IsoDimuCMu0_dR0p4_Normalized->Scale(scaleCMu0_dR0p4); IsoDimuCMu0_dR0p4_Normalized->Write(); }
+     if ( IsoDimuCMu0_dR0p5->Integral() > 0 ){ Double_t scaleCMu0_dR0p5 = 1./IsoDimuCMu0_dR0p5->Integral(); IsoDimuCMu0_dR0p5_Normalized->Scale(scaleCMu0_dR0p5); IsoDimuCMu0_dR0p5_Normalized->Write(); }
+
+     if ( IsoDimuCMu1_dR0p3->Integral() > 0 ){ Double_t scaleCMu1_dR0p3 = 1./IsoDimuCMu1_dR0p3->Integral(); IsoDimuCMu1_dR0p3_Normalized->Scale(scaleCMu1_dR0p3); IsoDimuCMu1_dR0p3_Normalized->Write(); }
+     if ( IsoDimuCMu1_dR0p4->Integral() > 0 ){ Double_t scaleCMu1_dR0p4 = 1./IsoDimuCMu1_dR0p4->Integral(); IsoDimuCMu1_dR0p4_Normalized->Scale(scaleCMu1_dR0p4); IsoDimuCMu1_dR0p4_Normalized->Write(); }
+     if ( IsoDimuCMu1_dR0p5->Integral() > 0 ){ Double_t scaleCMu1_dR0p5 = 1./IsoDimuCMu1_dR0p5->Integral(); IsoDimuCMu1_dR0p5_Normalized->Scale(scaleCMu1_dR0p5); IsoDimuCMu1_dR0p5_Normalized->Write(); }
+
+     if ( IsoDimuFMu0_dR0p3->Integral() > 0 ){ Double_t scaleFMu0_dR0p3 = 1./IsoDimuFMu0_dR0p3->Integral(); IsoDimuFMu0_dR0p3_Normalized->Scale(scaleFMu0_dR0p3); IsoDimuFMu0_dR0p3_Normalized->Write(); }
+     if ( IsoDimuFMu0_dR0p4->Integral() > 0 ){ Double_t scaleFMu0_dR0p4 = 1./IsoDimuFMu0_dR0p4->Integral(); IsoDimuFMu0_dR0p4_Normalized->Scale(scaleFMu0_dR0p4); IsoDimuFMu0_dR0p4_Normalized->Write(); }
+     if ( IsoDimuFMu0_dR0p5->Integral() > 0 ){ Double_t scaleFMu0_dR0p5 = 1./IsoDimuFMu0_dR0p5->Integral(); IsoDimuFMu0_dR0p5_Normalized->Scale(scaleFMu0_dR0p5); IsoDimuFMu0_dR0p5_Normalized->Write(); }
+     
+     if ( IsoDimuFMu1_dR0p3->Integral() > 0 ){ Double_t scaleFMu1_dR0p3 = 1./IsoDimuFMu1_dR0p3->Integral(); IsoDimuFMu1_dR0p3_Normalized->Scale(scaleFMu1_dR0p3); IsoDimuFMu1_dR0p3_Normalized->Write(); }
+     if ( IsoDimuFMu1_dR0p4->Integral() > 0 ){ Double_t scaleFMu1_dR0p4 = 1./IsoDimuFMu1_dR0p4->Integral(); IsoDimuFMu1_dR0p4_Normalized->Scale(scaleFMu1_dR0p4); IsoDimuFMu1_dR0p4_Normalized->Write(); }
+     if ( IsoDimuFMu1_dR0p5->Integral() > 0 ){ Double_t scaleFMu1_dR0p5 = 1./IsoDimuFMu1_dR0p5->Integral(); IsoDimuFMu1_dR0p5_Normalized->Scale(scaleFMu1_dR0p5); IsoDimuFMu1_dR0p5_Normalized->Write(); }
 
      OrphanDimuMass->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
      OrphanDimuMass->GetYaxis()->SetTitle("Events/0.2GeV");
      OrphanDimuMass->Write();
      IsoOrphanDimu->Write();
      TH1F *IsoOrphanDimuNormalized = (TH1F*)IsoOrphanDimu->Clone("IsoOrphanDimuNormalized");
+     //Protect against 0 entry
      if ( IsoOrphanDimu->Integral() > 0 ){
        Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral();
        IsoOrphanDimuNormalized->Scale(scaleOrphanDimu);
        IsoOrphanDimuNormalized->Write();
-     }//Protect against 0 entry
+     }
 
    }//end if ( PlotIso )
 
