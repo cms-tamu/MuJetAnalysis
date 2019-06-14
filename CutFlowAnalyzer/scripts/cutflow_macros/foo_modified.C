@@ -61,7 +61,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   bool CheckRecoVtx(false);
   bool ModelBKGShape(false);
   bool ModelSRWidth(false);
-  bool PlotDimuIso(false);
+  bool PlotIso(false);
   bool PerEventTriggerEff(false);
   //	TString dirname(fileName);
   TChain* chain = new TChain("dummy");
@@ -181,7 +181,9 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   TH1F *DimuMass = new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
 
-  TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass","",300,0.0,60.0);//binning 0.2GeV
+  TH1F *MassC = new TH1F("MassC","",600,0.0,60.0);//binning 0.1 GeV
+  TH1F *MassF = new TH1F("MassF","",600,0.0,60.0);//binning 0.1 GeV
+  TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass","",600,0.0,60.0);//binning 0.2GeV
   TH1F *IsoDimuC = new TH1F("IsoDimuC","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoDimuF = new TH1F("IsoDimuF","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoOrphanDimu = new TH1F("IsoOrphanDimu","",1000,0.0,100.0);//binning 0.1 GeV
@@ -407,12 +409,14 @@ void efficiency(const std::vector<std::string>& dirNames)
                       }//end if ModelSRWidth
 
                       //Note to eliminate/relax Iso cut at counter 14, e.g. Iso<50 GeV or Iso>0
-                      if( PlotDimuIso ) {
+                      if( PlotIso ) {
+                        MassC->Fill(massC);
+                        MassF->Fill(massF);
                         IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
                         IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
                       }
 
-                    }//end 16: massconsistent
+                    }//end 16: mass consistent
                     else{
                       //************************************************
                       //Control region: for bkg comparison on data and MC
@@ -613,7 +617,13 @@ void efficiency(const std::vector<std::string>& dirNames)
      cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
    }//end if ( ModelSRWidth )
 
-   if ( PlotDimuIso ) {
+   if ( PlotIso ) {
+     MassC->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]");
+     MassC->GetYaxis()->SetTitle("Events/0.1GeV");
+     MassF->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]");
+     MassF->GetYaxis()->SetTitle("Events/0.1GeV");
+     MassC->Write();
+     MassF->Write();
      IsoDimuC->Write();
      IsoDimuF->Write();
      TH1F *IsoDimuCNormalized = (TH1F*)IsoDimuC->Clone("IsoDimuCNormalized");
@@ -627,6 +637,9 @@ void efficiency(const std::vector<std::string>& dirNames)
        IsoDimuFNormalized->Write();
      }//Protect against 0 entry
 
+     OrphanDimuMass->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
+     OrphanDimuMass->GetYaxis()->SetTitle("Events/0.2GeV");
+     OrphanDimuMass->Write();
      IsoOrphanDimu->Write();
      TH1F *IsoOrphanDimuNormalized = (TH1F*)IsoOrphanDimu->Clone("IsoOrphanDimuNormalized");
      if ( IsoOrphanDimu->Integral() > 0 ){
@@ -634,13 +647,8 @@ void efficiency(const std::vector<std::string>& dirNames)
        IsoOrphanDimuNormalized->Scale(scaleOrphanDimu);
        IsoOrphanDimuNormalized->Write();
      }//Protect against 0 entry
-     OrphanDimuMass->SetLineColor(kBlue);
-     OrphanDimuMass->SetLineWidth(2);
-     OrphanDimuMass->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
-     OrphanDimuMass->GetYaxis()->SetTitle("Events/0.2GeV");
-     OrphanDimuMass->Write();
 
-   }//end if ( PlotDimuIso )
+   }//end if ( PlotIso )
 
    myPlot.Close();
 }//end efficiency function

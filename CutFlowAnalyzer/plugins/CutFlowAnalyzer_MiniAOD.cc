@@ -1006,23 +1006,22 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         b_genA0_L = sqrt( b_genA0_Lx * b_genA0_Lx + b_genA0_Ly * b_genA0_Ly + b_genA0_Lz * b_genA0_Lz );
         b_genA1_L = sqrt( b_genA1_Lx * b_genA1_Lx + b_genA1_Ly * b_genA1_Ly + b_genA1_Lz * b_genA1_Lz );
 
-        std::cout<<">>> MINIAOD Event #"<<m_events<<std::endl;
-        std::cout<<"GENA mass (0, 1)[GeV]: "<<b_genA0_m    <<", "<<b_genA1_m       << std::endl;
+        //std::cout<<">>> MINIAOD Event #"<<m_events<<std::endl;
+        //std::cout<<"GENA mass (0, 1)[GeV]: "<<b_genA0_m    <<", "<<b_genA1_m       << std::endl;
 
-        std::cout<<"genA0     (x,y,z)[cm]: "<<b_genA0_vx   <<", "<<b_genA0_vy      <<", "<<b_genA0_vz<<std::endl;
-        std::cout<<"      (Lxy, |Lz|)[cm]: "<<b_genA0_Lxy  <<", "<<fabs(b_genA0_Lz)<<std::endl;
-        std::cout<<"genA0 Mu0 (x,y,z)[cm]: "<<b_genA0Mu0_vx<<", "<<b_genA0Mu0_vy   <<", "<<b_genA0Mu0_vz<<std::endl;
-        std::cout<<"          pT    [GeV]: "<<b_genA0Mu0_pt<<"; eta: "<<b_genA0Mu0_eta   <<"; phi: "<<b_genA0Mu0_phi<<std::endl;
-        std::cout<<"genA0 Mu1 (x,y,z)[cm]: "<<b_genA0Mu1_vx<<", "<<b_genA0Mu1_vy   <<", "<<b_genA0Mu1_vz<<std::endl;
-        std::cout<<"          pT    [GeV]: "<<b_genA0Mu1_pt<<"; eta: "<<b_genA0Mu1_eta   <<"; phi: "<<b_genA0Mu1_phi<<std::endl;
+        //std::cout<<"genA0     (x,y,z)[cm]: "<<b_genA0_vx   <<", "<<b_genA0_vy      <<", "<<b_genA0_vz<<std::endl;
+        //std::cout<<"      (Lxy, |Lz|)[cm]: "<<b_genA0_Lxy  <<", "<<fabs(b_genA0_Lz)<<std::endl;
+        //std::cout<<"genA0 Mu0 (x,y,z)[cm]: "<<b_genA0Mu0_vx<<", "<<b_genA0Mu0_vy   <<", "<<b_genA0Mu0_vz<<std::endl;
+        //std::cout<<"          pT    [GeV]: "<<b_genA0Mu0_pt<<"; eta: "<<b_genA0Mu0_eta   <<"; phi: "<<b_genA0Mu0_phi<<std::endl;
+        //std::cout<<"genA0 Mu1 (x,y,z)[cm]: "<<b_genA0Mu1_vx<<", "<<b_genA0Mu1_vy   <<", "<<b_genA0Mu1_vz<<std::endl;
+        //std::cout<<"          pT    [GeV]: "<<b_genA0Mu1_pt<<"; eta: "<<b_genA0Mu1_eta   <<"; phi: "<<b_genA0Mu1_phi<<std::endl;
 
-        std::cout<<"genA1     (x,y,z)[cm]: "<<b_genA1_vx   <<", "<<b_genA1_vy      <<", "<<b_genA1_vz<<std::endl;
-        std::cout<<"      (Lxy, |Lz|)[cm]: "<<b_genA1_Lxy  <<", "<<fabs(b_genA1_Lz)<<std::endl;
-        std::cout<<"genA1 Mu0 (x,y,z)[cm]: "<<b_genA1Mu0_vx<<", "<<b_genA1Mu0_vy   <<", "<<b_genA1Mu0_vz<<std::endl;
-        std::cout<<"          pT    [GeV]: "<<b_genA1Mu0_pt<<"; eta: "<<b_genA1Mu0_eta   <<"; phi: "<<b_genA1Mu0_phi<<std::endl;
-        std::cout<<"genA1 Mu1 (x,y,z)[cm]: "<<b_genA1Mu1_vx<<", "<<b_genA1Mu1_vy   <<", "<<b_genA1Mu1_vz<<std::endl;
-        std::cout<<"          pT    [GeV]: "<<b_genA1Mu1_pt<<"; eta: "<<b_genA1Mu1_eta   <<"; phi: "<<b_genA1Mu1_phi<<std::endl;
-
+        //std::cout<<"genA1     (x,y,z)[cm]: "<<b_genA1_vx   <<", "<<b_genA1_vy      <<", "<<b_genA1_vz<<std::endl;
+        //std::cout<<"      (Lxy, |Lz|)[cm]: "<<b_genA1_Lxy  <<", "<<fabs(b_genA1_Lz)<<std::endl;
+        //std::cout<<"genA1 Mu0 (x,y,z)[cm]: "<<b_genA1Mu0_vx<<", "<<b_genA1Mu0_vy   <<", "<<b_genA1Mu0_vz<<std::endl;
+        //std::cout<<"          pT    [GeV]: "<<b_genA1Mu0_pt<<"; eta: "<<b_genA1Mu0_eta   <<"; phi: "<<b_genA1Mu0_phi<<std::endl;
+        //std::cout<<"genA1 Mu1 (x,y,z)[cm]: "<<b_genA1Mu1_vx<<", "<<b_genA1Mu1_vy   <<", "<<b_genA1Mu1_vz<<std::endl;
+        //std::cout<<"          pT    [GeV]: "<<b_genA1Mu1_pt<<"; eta: "<<b_genA1Mu1_eta   <<"; phi: "<<b_genA1Mu1_phi<<std::endl;
 
       } else {
         std::cout << "WARNING! Muon vertexes are different. No Lxy's are calculated." << std::endl;
@@ -1552,11 +1551,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuonF_FittedVtx_Lxy = diMuonF->vertexLxy(beamSpotPosition);
     b_diMuonF_FittedVtx_L   = diMuonF->vertexL(beamSpotPosition);
 
-	  std::cout << "diMuC vtx         (x,y,z)[cm]: " << b_diMuonC_FittedVtx_vx << ", " << b_diMuonC_FittedVtx_vy << ", " << b_diMuonC_FittedVtx_vz << std::endl;
-    std::cout << "            (Lxy,|Lz|,dz)[cm]: " << b_diMuonC_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonC_FittedVtx_L,2) - pow(b_diMuonC_FittedVtx_Lxy,2) )<<", "<<b_diMuonC_FittedVtx_dz<< std::endl;
-    std::cout << "diMuF vtx         (x,y,z)[cm]: " << b_diMuonF_FittedVtx_vx << ", " << b_diMuonF_FittedVtx_vy << ", " << b_diMuonF_FittedVtx_vz << std::endl;
-    std::cout << "            (Lxy,|Lz|,dz)[cm]: " << b_diMuonF_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonF_FittedVtx_L,2) - pow(b_diMuonF_FittedVtx_Lxy,2) )<<", "<<b_diMuonF_FittedVtx_dz<< std::endl;
-    std::cout << "Dimu vtx mass     (C, F)[GeV]: " << b_diMuonC_FittedVtx_m  << ", " << b_diMuonF_FittedVtx_m  << std::endl;
+	  //std::cout << "diMuC vtx         (x,y,z)[cm]: " << b_diMuonC_FittedVtx_vx << ", " << b_diMuonC_FittedVtx_vy << ", " << b_diMuonC_FittedVtx_vz << std::endl;
+    //std::cout << "            (Lxy,|Lz|,dz)[cm]: " << b_diMuonC_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonC_FittedVtx_L,2) - pow(b_diMuonC_FittedVtx_Lxy,2) )<<", "<<b_diMuonC_FittedVtx_dz<< std::endl;
+    //std::cout << "diMuF vtx         (x,y,z)[cm]: " << b_diMuonF_FittedVtx_vx << ", " << b_diMuonF_FittedVtx_vy << ", " << b_diMuonF_FittedVtx_vz << std::endl;
+    //std::cout << "            (Lxy,|Lz|,dz)[cm]: " << b_diMuonF_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonF_FittedVtx_L,2) - pow(b_diMuonF_FittedVtx_Lxy,2) )<<", "<<b_diMuonF_FittedVtx_dz<< std::endl;
+    //std::cout << "Dimu vtx mass     (C, F)[GeV]: " << b_diMuonC_FittedVtx_m  << ", " << b_diMuonF_FittedVtx_m  << std::endl;
   } else {
     b_diMuonC_FittedVtx_m   = -1000.0;
     b_diMuonC_FittedVtx_px  = -1000.0;
@@ -1714,7 +1713,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(m_tracks, tracks);
 
-  // Calculate isolation - use fitted vertexes
+  // Calculate isolation for dimuon: use fitted vertexes
   b_diMuonC_IsoTk_FittedVtx = -1.;
   b_diMuonF_IsoTk_FittedVtx = -1.;
   b_isoC_1mm = -1.;
@@ -1784,11 +1783,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       if ( diMuonC->muon(k)->innerTrack().isAvailable() ){
         //Directly use muon innerTrack
         const reco::HitPattern& p = diMuonC->muon(k)->innerTrack()->hitPattern();
-        std::cout << "diMuC Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
-        std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
-        std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
-        std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", " << diMuonC->muon(k)->innerTrack()->vy() << ", " << diMuonC->muon(k)->innerTrack()->vz() << std::endl;
-        std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonC->muon(k)->innerTrack()->dxy() << ", " << diMuonC->muon(k)->innerTrack()->dz() << std::endl;
+        //std::cout << "diMuC Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
+        //std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
+        //std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
+        //std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", " << diMuonC->muon(k)->innerTrack()->vy() << ", " << diMuonC->muon(k)->innerTrack()->vz() << std::endl;
+        //std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonC->muon(k)->innerTrack()->dxy() << ", " << diMuonC->muon(k)->innerTrack()->dz() << std::endl;
 
         if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
             p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
@@ -1821,11 +1820,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       if ( diMuonF->muon(k)->innerTrack().isAvailable() ){
         //Directly use muon innerTrack
         const reco::HitPattern& p = diMuonF->muon(k)->innerTrack()->hitPattern();
-        std::cout << "diMuF Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
-        std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
-        std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
-        std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", " << diMuonF->muon(k)->innerTrack()->vy() << ", " << diMuonF->muon(k)->innerTrack()->vz() << std::endl;
-        std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonF->muon(k)->innerTrack()->dxy() << ", " << diMuonF->muon(k)->innerTrack()->dz() << std::endl;
+        //std::cout << "diMuF Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
+        //std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
+        //std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
+        //std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", " << diMuonF->muon(k)->innerTrack()->vy() << ", " << diMuonF->muon(k)->innerTrack()->vz() << std::endl;
+        //std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonF->muon(k)->innerTrack()->dxy() << ", " << diMuonF->muon(k)->innerTrack()->dz() << std::endl;
 
         if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
             p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
@@ -1854,11 +1853,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
     }//end loop for 2 muons
 
-    std::cout<<"ValidHit  PixelLayers: C_m1 = "<<b_diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_hitpix_Phase1<<std::endl;
+    //std::cout<<"ValidHit  PixelLayers: C_m1 = "<<b_diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_hitpix_Phase1<<std::endl;
     //std::cout<<"Non-Zero    PixelHits: C_m1 = "<<b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits<<std::endl;
     //std::cout<<"Non-Zero PixelMeasure: C_m1 = "<<b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<std::endl;
 
-    std::cout<<"ValidHit  PixelLayers: F_m1 = "<<b_diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_hitpix_Phase1<<std::endl;
+    //std::cout<<"ValidHit  PixelLayers: F_m1 = "<<b_diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_hitpix_Phase1<<std::endl;
     //std::cout<<"Non-Zero    PixelHits: F_m1 = "<<b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits<<std::endl;
     //std::cout<<"Non-Zero PixelMeasure: F_m1 = "<<b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<std::endl;
 
@@ -1880,10 +1879,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   iEvent.getByToken(m_secondaryVertices, secondaryVertices);
   //Check if muon tracks belong to the secondary vertices, if so check the vertex position
   for (reco::VertexCollection::const_iterator sv = secondaryVertices->begin();  sv != secondaryVertices->end();  ++sv) {
-    std::cout<<"SV (x,y,z)[cm]: "<<sv->x()<<", "<<sv->y()<<", "<<sv->z()<<std::endl;
-    std::cout<<"SV tracksSize : "<<sv->tracksSize()<<std::endl;
+    //std::cout<<"SV (x,y,z)[cm]: "<<sv->x()<<", "<<sv->y()<<", "<<sv->z()<<std::endl;
+    //std::cout<<"SV tracksSize : "<<sv->tracksSize()<<std::endl;
     for(reco::Vertex::trackRef_iterator tt = sv->tracks_begin(); tt != sv->tracks_end(); ++tt) {
-      std::cout<<"trk pT   [GeV]: "<<tt->castTo<reco::TrackRef>()->pt()<<std::endl;
+      //std::cout<<"trk pT   [GeV]: "<<tt->castTo<reco::TrackRef>()->pt()<<std::endl;
     }
   }
 
