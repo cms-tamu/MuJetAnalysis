@@ -400,11 +400,11 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     if ( mui->innerTrack().isAvailable() ) {
     //std::cout << " innerTrk ValidPixelHits: " << mui->innerTrack()->hitPattern().numberOfValidPixelHits() << std::endl;
     }
-
+    /*
     const pat::PackedCandidate* Candmui = dynamic_cast<const pat::PackedCandidate*>(mui->sourceCandidatePtr(0).get());
     if ( Candmui != 0 && Candmui->hasTrackDetails() ){
       const reco::HitPattern& pi = Candmui->pseudoTrack().hitPattern();
-      std::cout << "Cast Hit BPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
+      //std::cout << "Cast Hit BPix layer #1: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) <<std::endl;
       //std::cout << "                    #2: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) <<std::endl;
       //std::cout << "                    #3: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) <<std::endl;
       //std::cout << "                    #4: "<< pi.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) <<std::endl;
@@ -415,6 +415,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     else{
       //std::cout <<"Didn't find a PFCandidates the muon was made from..."<<std::endl;
     }
+    */
     //MC truth
     if(mui->genParticle() != 0){
       //std::cout << "Matched GEN: (x,y,z)[cm]: "<< mui->genParticle()->vx() << ", " <<mui->genParticle()->vy() <<", "<< mui->genParticle()->vz() <<std::endl;
