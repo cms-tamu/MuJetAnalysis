@@ -61,7 +61,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   bool CheckRecoVtx(false);
   bool ModelBKGShape(false);
   bool ModelSRWidth(false);
-  bool PlotIso(false);
+  bool PlotIso(true);
   bool PerEventTriggerEff(false);
   //	TString dirname(fileName);
   TChain* chain = new TChain("dummy");
@@ -242,8 +242,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 		  continue;
 		}
 
-    int nentries;
-    int mentries;
+    int nentries;//entries in main tree
+    int mentries;//entries in orphan tree
 
 		t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
 		t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
@@ -339,6 +339,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 		for( int i = 0; i < nentries; i++ ){
 		  t->GetEntry(i);
 		  counter[k][0]++;
+      if (verbose) std::cout << "end 0: " << counter[k][0]<< std::endl;
 
       //Check vtx significance without any selections
       if ( CheckRecoVtx ){
@@ -347,8 +348,11 @@ void efficiency(const std::vector<std::string>& dirNames)
       }//end CheckRecoVtx
 
 		  if( is1GenMu17 ) counter[k][1]++;
+      if (verbose) std::cout << "end 1: " << counter[k][1]<<std::endl;
 		  if( is2GenMu8 ) counter[k][2]++;
+      if (verbose) std::cout << "end 2: " << counter[k][2]<<std::endl;
 		  if( is3GenMu8 ) counter[k][3]++;
+      if (verbose) std::cout << "end 3: " << counter[k][3]<<std::endl;
 		  if( is4GenMu8 ){
 		    counter[k][4]++;
         //Phase-0 pixel system (Pre2017): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.2 cm; Lz = 48.5 cm
@@ -362,10 +366,14 @@ void efficiency(const std::vector<std::string>& dirNames)
             }
 
 		  }//End GEN Level
+      if (verbose) std::cout << "end 5: " << counter[k][5]<< std::endl;
 
 		  if( is1SelMu17 ) counter[k][6]++;
+      if (verbose) std::cout << "end 6: " << counter[k][6]<<std::endl;
 		  if( is2SelMu8 ) counter[k][7]++;
+      if (verbose) std::cout << "end 7: " << counter[k][7]<<std::endl;
 		  if( is3SelMu8 ) counter[k][8]++;
+      if (verbose) std::cout << "end 8: " << counter[k][8]<<std::endl;
 		  if( is4SelMu8 ){
         counter[k][9]++;
         //**********************************************
@@ -403,10 +411,6 @@ void efficiency(const std::vector<std::string>& dirNames)
               //!!! Note: this needs to match counter[k][5] geometry
               counter[k][12]++;
 
-              //**********************************************
-              // Placeholder for dz, iso distributions for dark SUSY samples,
-              // especially for large displaced ones
-              //**********************************************
               if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
                 counter[k][13]++;
 
@@ -468,7 +472,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                         IsoDimuFMu1_dR0p4->Fill(diMuonFMu1_IsoTk0p4_FittedVtx);
                         IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
                       }
-
+                      if (verbose) std::cout << "end 16: " << counter[k][16]<< std::endl;
                     }//end 16: mass consistent
                     else{
                       //************************************************
@@ -485,14 +489,21 @@ void efficiency(const std::vector<std::string>& dirNames)
                       }//end if ModelBKGShape
 
                     }//end else
-
+                    if (verbose) std::cout << "end 15: " << counter[k][15]<< std::endl;
                   }//end 15
+                  if (verbose) std::cout << "end 14: " << counter[k][14]<<std::endl;
                 }//end 14
+                if (verbose) std::cout << "end 13: " << counter[k][13]<<std::endl;
               }//end 13
+              if (verbose) std::cout << "end 12: " << counter[k][12]<<std::endl;
             }//end 12
+            if (verbose) std::cout << "end 11: " << counter[k][11]<<std::endl;
           }//end 11
+          if (verbose) std::cout << "end 10: " << counter[k][10]<<std::endl;
         }//end 10
+        if (verbose) std::cout << "end 9: " << counter[k][9]<<std::endl;
       }//end 9
+      if (verbose) std::cout << "end for i: " << i<< std::endl;
     }//end for i entries
 
     //Loop over orphan-dimuon tree
@@ -507,8 +518,10 @@ void efficiency(const std::vector<std::string>& dirNames)
     }//end for j entries
 
     myfile->Close();
+    if (verbose) std::cout << "myfile->Close(); " << std::endl;
 
   }//end while next
+  if (verbose) std::cout << "end while next" << std::endl;
 
   RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
   for(int m=0;m<17;m++){
@@ -525,6 +538,7 @@ void efficiency(const std::vector<std::string>& dirNames)
       }
     }
   }//end for
+  if (verbose) std::cout << "end Eff calc. " << std::endl;
 
   epsvsalph[k] = counter[k][16]/(counter[k][5]*1.0); //mainvalue of epsilob_rec/alpha_gen
   cout<<" Here is the cut-flow-table:"<<endl;
@@ -720,7 +734,7 @@ void efficiency(const std::vector<std::string>& dirNames)
      if ( IsoDimuFMu0_dR0p3->Integral() > 0 ){ Double_t scaleFMu0_dR0p3 = 1./IsoDimuFMu0_dR0p3->Integral(); IsoDimuFMu0_dR0p3_Normalized->Scale(scaleFMu0_dR0p3); IsoDimuFMu0_dR0p3_Normalized->Write(); }
      if ( IsoDimuFMu0_dR0p4->Integral() > 0 ){ Double_t scaleFMu0_dR0p4 = 1./IsoDimuFMu0_dR0p4->Integral(); IsoDimuFMu0_dR0p4_Normalized->Scale(scaleFMu0_dR0p4); IsoDimuFMu0_dR0p4_Normalized->Write(); }
      if ( IsoDimuFMu0_dR0p5->Integral() > 0 ){ Double_t scaleFMu0_dR0p5 = 1./IsoDimuFMu0_dR0p5->Integral(); IsoDimuFMu0_dR0p5_Normalized->Scale(scaleFMu0_dR0p5); IsoDimuFMu0_dR0p5_Normalized->Write(); }
-     
+
      if ( IsoDimuFMu1_dR0p3->Integral() > 0 ){ Double_t scaleFMu1_dR0p3 = 1./IsoDimuFMu1_dR0p3->Integral(); IsoDimuFMu1_dR0p3_Normalized->Scale(scaleFMu1_dR0p3); IsoDimuFMu1_dR0p3_Normalized->Write(); }
      if ( IsoDimuFMu1_dR0p4->Integral() > 0 ){ Double_t scaleFMu1_dR0p4 = 1./IsoDimuFMu1_dR0p4->Integral(); IsoDimuFMu1_dR0p4_Normalized->Scale(scaleFMu1_dR0p4); IsoDimuFMu1_dR0p4_Normalized->Write(); }
      if ( IsoDimuFMu1_dR0p5->Integral() > 0 ){ Double_t scaleFMu1_dR0p5 = 1./IsoDimuFMu1_dR0p5->Integral(); IsoDimuFMu1_dR0p5_Normalized->Scale(scaleFMu1_dR0p5); IsoDimuFMu1_dR0p5_Normalized->Write(); }
@@ -740,6 +754,7 @@ void efficiency(const std::vector<std::string>& dirNames)
    }//end if ( PlotIso )
 
    myPlot.Close();
+   if (verbose) std::cout << "end myPlot.Close()" << std::endl;
 }//end efficiency function
 
 void analysis(const std::string txtfile)

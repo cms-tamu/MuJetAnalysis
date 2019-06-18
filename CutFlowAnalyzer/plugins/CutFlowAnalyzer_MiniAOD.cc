@@ -399,8 +399,6 @@ private:
   //Bool_t b_is2DiMuonsMassOK_ConsistentVtx;
   Bool_t b_isVertexOK;
 
-  Float_t b_Mass4Mu;
-
   // Reco branches in ROOT tree (they all start with b_)
   Int_t b_nRecoMu;
   Int_t b_nMuPairs;
@@ -690,8 +688,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
   b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
   b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
-
-  b_Mass4Mu = -999.;
 
   //****************************************************************************
   //                          EVENT LEVEL
@@ -2537,7 +2533,6 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);
-  m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
 
   // Orpahn Muon
   if(runBBestimation_){
