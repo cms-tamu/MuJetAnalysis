@@ -28,30 +28,6 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
   }
 }
 
-/* void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root") */
-/* { */
-/*   bool verbose(false); */
-/*   for(std::string dirname : v) { */
-/*     TSystemDirectory dir(dirname.c_str(), dirname.c_str()); */
-/*     TList *files = dir.GetListOfFiles(); */
-/*     if (files) { */
-/*       if (verbose) std::cout << "Found files" << std::endl; */
-/*       TSystemFile *file; */
-/*       TString fname; */
-/*       TIter next(files); */
-/*       while ((file=(TSystemFile*)next())) { */
-/* 	fname = file->GetName(); */
-/* 	if (verbose) std::cout << "found fname " << dirname + fname << std::endl; */
-/* 	if (!file->IsDirectory() && fname.BeginsWith(ext)) { */
-/* 	  if (verbose) std::cout << "adding fname " << dirname + fname << std::endl; */
-/* 	  ch->Add(dirname + fname); */
-/* 	} */
-/*       } */
-/*     } */
-/*   } */
-/* } */
-
-
 void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root")
 {
   bool verbose(true);
@@ -137,13 +113,3 @@ void readTextFileWithSamples(const std::string fileName, std::vector< std::vecto
   v.push_back(vv);
   infile.close();
 }
-
-/* void printFileNames(const std::vector< std::vector<string> >& vec) */
-/* { */
-/*   for (int i = 0; i < vec.size(); i++){ */
-/*     for (int j = 0; j < vec[i].size(); j++){ */
-/*       cout << vec[i][j] <<endl; */
-/*     } */
-/*     cout <<endl; */
-/*   } */
-/* } */
