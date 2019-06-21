@@ -483,7 +483,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   */
 
   //end DEBUG @Wei SHI 2019.04.18
-  double PairCount=-1;
+  //double PairCount=-1;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {
 	    for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
@@ -493,7 +493,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           pairOfMuons.push_back(&*one);
           pairOfMuons.push_back(&*two);
 
-          PairCount++;
+          //PairCount++;
           //std::cout <<"----------"<<std::endl;
           //std::cout << "Pair #"<<PairCount<<std::endl;
           pat::MultiMuon muonPair( pairOfMuons,

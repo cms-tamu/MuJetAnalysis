@@ -403,6 +403,7 @@ private:
   Int_t b_nRecoMu;
   Int_t b_nMuPairs;
   Int_t b_nMuJets;
+  Int_t b_nOrphans;
   Float_t b_nDaughterPerMuPair;
   Float_t b_nDaughterPerMuJet;
 
@@ -1413,10 +1414,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //Check all formed mu pairs in each event
   edm::Handle<pat::MultiMuonCollection> muPairs;
   iEvent.getByToken(m_muPairs, muPairs);
-  b_nDaughterPerMuPair = 0.;
+  b_nDaughterPerMuPair = -999.;
   b_nMuPairs = muPairs->size();
   if ( m_debug > 10 ) std::cout << ">>> Tot No. of Mu pairs: " << b_nMuPairs << std::endl;
   if ( b_nMuPairs!=0 ){
+    b_nDaughterPerMuPair = 0.;
     for ( int i = 0; i < b_nMuPairs; i++ ) {
       //Sanity check: should always equal 2
       b_nDaughterPerMuPair = b_nDaughterPerMuPair + (*muPairs)[i].numberOfDaughters();
@@ -1429,11 +1431,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   edm::Handle<pat::MultiMuonCollection> muJets;
   iEvent.getByToken(m_muJets, muJets);
+  edm::Handle<pat::MuonCollection> orphans;
+  iEvent.getByToken(m_muJetOrphans, orphans);
   const pat::MultiMuon *muJetC = NULL;
   const pat::MultiMuon *muJetF = NULL;
   int nMuJetsContainMu17 = 0;
-  b_nDaughterPerMuJet  = 0.;
+  b_nDaughterPerMuJet  = -999.;
   b_nMuJets = muJets->size();
+  b_nOrphans = orphans->size();
   b_massC = -999.;
   b_massF = -999.;
   b_muJetC_Mu0_pt = -999.;
@@ -1453,6 +1458,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   if ( m_debug > 10 ) std::cout << ">>> Tot No. of Mu Jets: " << b_nMuJets << std::endl;
   //Store average no. of daughters in one mujet
   if ( b_nMuJets!=0 ) {
+    b_nDaughterPerMuJet  = 0.;
     for ( int d = 0; d < b_nMuJets; d++ ) {
       b_nDaughterPerMuJet = b_nDaughterPerMuJet + (*muJets)[d].numberOfDaughters();
       if ( m_debug > 10 ) std::cout << "Mu Jet #" << d+1 <<" mass: "<< (*muJets)[d].mass() << "; No. of Daughters: "<< (*muJets)[d].numberOfDaughters() << std::endl;
@@ -2056,11 +2062,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     m_orphan_dimu_z = -999.;
     m_dimuorphan_containstrig = 0;
     m_dimuorphan_containstrig2 = 0;
-    edm::Handle<pat::MuonCollection> orphans;
-    iEvent.getByToken(m_muJetOrphans, orphans);
     float mu1788 = 0;
     //bb estimation event selection
-    if (b_nMuJets == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
+    if (b_nMuJets == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  b_nOrphans == 1 ) {
       m_orphan_passOffLineSel = true;
       pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
       pat::MuonCollection::const_iterator orphan = orphans->begin();
@@ -2111,8 +2115,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
            muJet->muon(1)->innerTrack().isNonnull() &&
            orphan->isTrackerMuon() &&
            orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true;
-      if( m_orphan_passOffLineSelPtEta &&
-          m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
+      if( m_orphan_passOffLineSelPtEta && m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
 
       //Check whether orphan muon or dimu muons fired high pT leg
       for (auto iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
@@ -2404,6 +2407,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("nMuPairs",  &b_nMuPairs,  "nMuPairs/I");
   m_ttree->Branch("nDaughterPerMuPair",  &b_nDaughterPerMuPair,  "nDaughterPerMuPair/F");
   m_ttree->Branch("nMuJets",  &b_nMuJets,  "nMuJets/I");
+  m_ttree->Branch("nOrphans",  &b_nOrphans,  "nOrphans/I");
   m_ttree->Branch("nDaughterPerMuJet",  &b_nDaughterPerMuJet,  "nDaughterPerMuJet/F");
 
   m_ttree->Branch("selMu0_px",  &b_selMu0_px,  "selMu0_px/F");

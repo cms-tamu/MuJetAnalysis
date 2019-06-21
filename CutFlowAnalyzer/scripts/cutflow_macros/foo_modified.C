@@ -62,8 +62,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   bool ModelSRWidth(false);
   bool PlotIso(true);
   bool PerEventTriggerEff(false);
-  //	TString dirname(fileName);
-  //TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
 
   cout<<" dirNames  "<<dirNames[0]<<endl;
@@ -305,7 +303,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
 	for( int i = 0; i < nentries; i++ ){
     t->GetEntry(i);
-    if ( (i % 100000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
+    if ( (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
 		counter[k][0]++;
 
     //Check vtx significance without any selections
@@ -455,9 +453,10 @@ void efficiency(const std::vector<std::string>& dirNames)
     }//end for i entries
 
     //Loop over orphan-dimuon tree
+
     mentries = o->GetEntries();
 		for( int j = 0; j < mentries; j++ ){
-      if ( (j % 100000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
+      if ( (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
 		  o->GetEntry(j);
       //Pass offline basic selections, same as signal
 		  if(orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu){
@@ -466,21 +465,21 @@ void efficiency(const std::vector<std::string>& dirNames)
       }
     }//end for j entries
 
-  RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
-  for(int m=0;m<17;m++){
-    TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
-    TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
-    if(m>0){
-      if(m==6){
-        RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
-        RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
+    RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
+    for(int m=0;m<17;m++){
+      TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
+      TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
+      if(m>0){
+        if(m==6){
+          RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
+          RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
+        }
+        else{
+          RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
+          RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
+        }
       }
-      else{
-        RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
-        RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
-      }
-    }
-  }//end Eff calc.
+    }//end Eff calc.
 
   epsvsalph[k] = counter[k][16]/(counter[k][5]*1.0); //mainvalue of epsilob_rec/alpha_gen
   cout<<"Here is the cut-flow-table:"<<endl;
@@ -680,11 +679,7 @@ void efficiency(const std::vector<std::string>& dirNames)
      IsoOrphanDimu->Write();
      TH1F *IsoOrphanDimuNormalized = (TH1F*)IsoOrphanDimu->Clone("IsoOrphanDimuNormalized");
      //Protect against 0 entry
-     if ( IsoOrphanDimu->Integral() > 0 ){
-       Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral();
-       IsoOrphanDimuNormalized->Scale(scaleOrphanDimu);
-       IsoOrphanDimuNormalized->Write();
-     }
+     if ( IsoOrphanDimu->Integral() > 0 ){ Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral(); IsoOrphanDimuNormalized->Scale(scaleOrphanDimu); IsoOrphanDimuNormalized->Write(); }
 
    }//end if ( PlotIso )
 

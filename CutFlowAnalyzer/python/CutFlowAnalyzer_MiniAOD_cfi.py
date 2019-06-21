@@ -8,7 +8,7 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     muPairs = cms.InputTag("PFMuJetProducer05", "Pairs"),
     muJets = cms.InputTag("PFMuJetProducer05"),
     muJetOrphans = cms.InputTag("PFMuJetProducer05", "Orphans"),
-    tracks = cms.InputTag("unpackedTracksAndVertices"),#Does this contain displaced tracks?
+    tracks = cms.InputTag("unpackedTracksAndVertices"),
     TriggerResults = cms.InputTag("TriggerResults","","HLT"),
     # Access L1 decision: Method 1 input
     #L1Results = cms.InputTag("gtDigis"),
