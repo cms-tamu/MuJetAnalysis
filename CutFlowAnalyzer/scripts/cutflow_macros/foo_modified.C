@@ -527,7 +527,7 @@ void efficiency(const std::vector<std::string>& dirNames)
    }//end CheckRecoVtx
 
    if ( PerEventTriggerEff ) {
-     //Per-event Efficiency for signal HLT and L1 seeds after basic offline pT selections
+     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "BASIC" offline pT selections
      if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
        TEfficiency* eff_HLT_leading_pt_pass_basic  = new TEfficiency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic);
        eff_HLT_leading_pt_pass_basic->SetTitle("HLT efficiency vs leading pT (after basic offline pT selections);Leading pT [GeV];#epsilon");
@@ -559,7 +559,7 @@ void efficiency(const std::vector<std::string>& dirNames)
        eff_L1_leading_phi_pass_basic->Write();
      }
 
-     //Per-event Efficiency for signal HLT and L1 seeds after all offline selections
+     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "ALL" offline selections
      if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_all, *leading_pt_pass_all) ) {
        TEfficiency* eff_HLT_leading_pt_pass_all  = new TEfficiency(*HLT_leading_pt_pass_all, *leading_pt_pass_all);
        eff_HLT_leading_pt_pass_all->SetTitle("HLT efficiency vs leading pT (after all offline selections);Leading pT [GeV];#epsilon");
