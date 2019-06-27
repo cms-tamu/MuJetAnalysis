@@ -396,7 +396,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   for (pat::MuonCollection::const_iterator mui = muons->begin();  mui != muons->end();  ++mui) {
 
     std::cout << "Muon     #"<<MuonCount<<": (x,y,z)[cm]: "<< mui->vx() <<", "<< mui->vy() <<", "<< mui->vz() <<std::endl;
-    std::cout << "                 pT[GeV]: "<< mui->pt() <<"; eta: "<< mui->eta() <<"; phi: "<< mui->phi() << "; Q: " << mui->charge()<<"; Tracker Muon: "<< mui->isTrackerMuon()<< "; Global Muon: "<< mui->isGlobalMuon() <<std::endl;
+    std::cout << "                 pT[GeV]: " << mui->pt() << "; eta: " << mui->eta() << "; phi: " << mui->phi() << "; q: " << mui->charge() << "; Tracker Mu: " << mui->isTrackerMuon() << "; Global Mu: " << mui->isGlobalMuon() << "; PF Mu:" << mui->isPFMuon() <<std::endl;
     if ( mui->innerTrack().isAvailable() ) {
     //std::cout << " innerTrk ValidPixelHits: " << mui->innerTrack()->hitPattern().numberOfValidPixelHits() << std::endl;
     }
