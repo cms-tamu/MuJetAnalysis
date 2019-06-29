@@ -46,7 +46,6 @@ process.source = cms.Source(
         #'file:/afs/cern.ch/work/w/wshi/public/INPUT/HIG-RunIIFall17MiniAODv2-03562_noPU.root' # Same as above except no PU simulation
         #'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD.root' # Private: 2017 MSSMD ReMiniAODed under CMSSW_10_2_5(with displaceStandaloneMuon collection) (mN1=10, mGammaD=5, cT=50)
         #'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD_noPU.root' # Same as above except no PU simulation
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/Private_out_miniaod_noPU.root' # From privately produced LHE (without using gridpack)
         )
 )
 

@@ -1,7 +1,16 @@
+//===========================================================================
+//Note: ( @Wei SHI, Jun 28, 2019 )
+//This program may be terminated in the case of large number of events,
+//      depending on running cluster limit settings on CPU time, etc
+//To check settings:
+//      Bash: ulimit -H -a, ulimit -S -a; tcsh: limit -h, limit
+//To resolve this on TAMU Brazos, use sintr or srun to get interactive node
+//===========================================================================
+
 #include <iostream>
 #include <iomanip>
 using namespace std;
-#include <algorithm>    // std::max
+#include <algorithm>
 #include <stdlib.h>
 #include <math.h>
 #include <TFile.h>

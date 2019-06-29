@@ -784,8 +784,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     int counterGenParticle = 0;
     for(reco::GenParticleCollection::const_iterator iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
       counterGenParticle++;
-      std::cout << "#" <<counterGenParticle << " id: " << iGenParticle->pdgId() << "; status: " << iGenParticle->status() <<"; pT: "<< iGenParticle->pt() <<"; eta: "<<
-                iGenParticle->eta() << "; phi: " << iGenParticle->phi() << "; vx: " << iGenParticle->vx()<<"; vy: "<<iGenParticle->vy()<<"; vz: "<<iGenParticle->vz()<< std::endl;
+      //std::cout << "#" <<counterGenParticle << " id: " << iGenParticle->pdgId() << "; status: " << iGenParticle->status() <<"; pT: "<< iGenParticle->pt() <<"; eta: "<< iGenParticle->eta() << "; phi: " << iGenParticle->phi() << "; vx: " << iGenParticle->vx()<<"; vy: "<<iGenParticle->vy()<<"; vz: "<<iGenParticle->vz()<< std::endl;
 
       // Check if gen particle is muon
       if ( fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1 ) {

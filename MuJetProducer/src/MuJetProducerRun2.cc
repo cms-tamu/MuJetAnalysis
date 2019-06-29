@@ -77,8 +77,6 @@ class MuJetProducerRun2 : public edm::EDProducer {
   //edm::InputTag m_caloTowers;
   double m_minPt;
   double m_maxAbsEta;
-  bool m_selectTrackerMuons;
-  bool m_selectGlobalMuons;
   int m_minTrackerHits;
   double m_maxTrackerNormChi2;
   double m_maxTrackerDxy;
@@ -148,8 +146,6 @@ MuJetProducerRun2::MuJetProducerRun2(const edm::ParameterSet& iConfig)
    //, m_caloTowers(                      iConfig.getParameter<edm::InputTag>("caloTowers"))
    , m_minPt(                           iConfig.getParameter<double>("minPt"))
    , m_maxAbsEta(                       iConfig.getParameter<double>("maxAbsEta"))
-   , m_selectTrackerMuons(              iConfig.getParameter<bool>("selectTrackerMuons"))
-   , m_selectGlobalMuons(               iConfig.getParameter<bool>("selectGlobalMuons"))
    , m_minTrackerHits(                  iConfig.getParameter<int>("minTrackerHits"))
    , m_maxTrackerNormChi2(              iConfig.getParameter<double>("maxTrackerNormChi2"))
    , m_maxTrackerDxy(                   iConfig.getParameter<double>("maxTrackerDxy"))
@@ -260,10 +256,8 @@ MuJetProducerRun2::~MuJetProducerRun2()
 bool MuJetProducerRun2::muonOkay(const pat::Muon &muon) {
   if (muon.pt() < m_minPt ||  fabs(muon.eta()) > m_maxAbsEta) return false;
 
-  if (m_selectTrackerMuons  &&  !muon.isTrackerMuon() ) return false;
-  if (m_selectGlobalMuons   &&  !muon.isGlobalMuon()  ) return false;
-  //if ( !muon.isTrackerMuon() ) return false;//Want tracker muon only
-  //if ( muon.isGlobalMuon()  ) return false;//Don't want global muon
+  if ( !muon.isPFMuon() ) return false;
+  if ( (!muon.isTrackerMuon()) && (!muon.isGlobalMuon()) ) return false;
 
   if (m_minTrackerHits > 0) {
     if (muon.innerTrack().isNull()) return false;
@@ -395,8 +389,8 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   double MuonCount=0;
   for (pat::MuonCollection::const_iterator mui = muons->begin();  mui != muons->end();  ++mui) {
 
-    std::cout << "Muon     #"<<MuonCount<<": (x,y,z)[cm]: "<< mui->vx() <<", "<< mui->vy() <<", "<< mui->vz() <<std::endl;
-    std::cout << "                 pT[GeV]: " << mui->pt() << "; eta: " << mui->eta() << "; phi: " << mui->phi() << "; q: " << mui->charge() << "; Tracker Mu: " << mui->isTrackerMuon() << "; Global Mu: " << mui->isGlobalMuon() << "; PF Mu:" << mui->isPFMuon() <<std::endl;
+    //std::cout << "Muon     #"<<MuonCount<<": (x,y,z)[cm]: "<< mui->vx() <<", "<< mui->vy() <<", "<< mui->vz() <<std::endl;
+    //std::cout << "                 pT[GeV]: " << mui->pt() << "; eta: " << mui->eta() << "; phi: " << mui->phi() << "; q: " << mui->charge() << "; Tracker Mu: " << mui->isTrackerMuon() << "; Global Mu: " << mui->isGlobalMuon() << "; PF Mu:" << mui->isPFMuon() <<std::endl;
     if ( mui->innerTrack().isAvailable() ) {
     //std::cout << " innerTrk ValidPixelHits: " << mui->innerTrack()->hitPattern().numberOfValidPixelHits() << std::endl;
     }
@@ -418,9 +412,9 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     */
     //MC truth
     if(mui->genParticle() != 0){
-      std::cout << "Matched GEN: (x,y,z)[cm]: "<< mui->genParticle()->vx() << ", " <<mui->genParticle()->vy() <<", "<< mui->genParticle()->vz() <<std::endl;
-      std::cout << "                 pT[GeV]: "<< mui->genParticle()->pt() << "; eta: " << mui->genParticle()->eta() <<"; phi: "<< mui->genParticle()->phi() <<std::endl;
-      std::cout << "                  PDG ID: "<< mui->genParticle()->pdgId() << "; Status: " << mui->genParticle()->status() <<std::endl;
+      //std::cout << "Matched GEN: (x,y,z)[cm]: "<< mui->genParticle()->vx() << ", " <<mui->genParticle()->vy() <<", "<< mui->genParticle()->vz() <<std::endl;
+      //std::cout << "                 pT[GeV]: "<< mui->genParticle()->pt() << "; eta: " << mui->genParticle()->eta() <<"; phi: "<< mui->genParticle()->phi() <<std::endl;
+      //std::cout << "                  PDG ID: "<< mui->genParticle()->pdgId() << "; Status: " << mui->genParticle()->status() <<std::endl;
     }
     if (muonOkay(*mui)) {
       //std::cout <<"muonOkay"<<std::endl;
@@ -440,7 +434,6 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     std::cout << "         FPix layer #1: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) <<std::endl;
     std::cout << "                    #2: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) <<std::endl;
     std::cout << "                    #3: "<< pj.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) <<std::endl;
-
 
   }
 
@@ -481,8 +474,8 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     }//end for TWO
   }//end for One
   */
-
   //end DEBUG @Wei SHI 2019.04.18
+
   //double PairCount=-1;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {
@@ -537,7 +530,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           else if (m_groupByCharge == kGroupBySameCharge    ) satisfied = satisfied  &&  (one->charge() == two->charge());
 
           if (satisfied) {
-            Pairs->push_back(muonPair);
+            Pairs->push_back(muonPair);//All possible pairs
             jets.push_back(muonPair);//tmp jets/pairs, to be cleaned further
           }//end if satisfied
 
@@ -546,62 +539,101 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     }//end if muon one okay
   }//end for loop over muon one
 
-  // Pick two pairs/jets (at this moment jets are pairs only) with closest inv. mass
-  pat::MultiMuon PairOne;//same type as muonPair
+  //Select two jets with min |dM| (jets are the same as Pairs, just a different name)
+  pat::MultiMuon PairOne;
   pat::MultiMuon PairTwo;
-  std::vector<pat::MultiMuon> FinalJets;
-  std::map<const pat::Muon*,bool> used;//Mark muons used in FinalJets
-  double MinDeltaMass = 999.;
-  double deltaMassTmp = 9999.;
-  unsigned int  m_randomSeed;
-  TRandom3      m_trandom3;
-  m_randomSeed = 1234;
-  m_trandom3   = TRandom3(m_randomSeed);
+  std::vector<pat::MultiMuon> FinalJets;//Final selected two pairs delivered to CutFlowAnalyzer_MiniAOD
+  std::map<const pat::Muon*, bool> used;//Mark muons in FinalJets
+  double deltaMassTmp = 13000.;
+
+  //delta mass b/t each two pairs
+  std::vector<float> AbsdMass;//value: AbsdMass.at(X)
+  std::vector<int> Alice;//1st pair index in jets: Alice.at(X)
+  std::vector<int> Bob;//2nd pair index in jets: Bob.at(X)
+
+  //std::cout << "=================" << std::endl;
+  //std::cout << "pairs.size() = "<< jets.size() << std::endl;
   if ( jets.size() > 1 ){
+    //std::cout << " pairs.size() > 1" << std::endl;
+    //Store |dM| b/t each two pairs
+    for (unsigned int Ajet = 0;  Ajet < jets.size();  Ajet++) {
+      for (unsigned int Bjet = Ajet+1;  Bjet < jets.size();  Bjet++) {
 
-    for (unsigned int i = 0;  i < jets.size();  i++) {
-      for (unsigned int j = i+1;  j < jets.size();  j++) {
-        //closest mass
-        deltaMassTmp = fabs( jets[i].mass() - jets[j].mass() );
-        if (deltaMassTmp < MinDeltaMass){
-          MinDeltaMass = deltaMassTmp;
-          PairOne = jets[i];
-          PairTwo = jets[j];
-        }//end if
+        deltaMassTmp = fabs( jets[Ajet].mass() - jets[Bjet].mass() );
+        AbsdMass.push_back(deltaMassTmp);
+        Alice.push_back(Ajet);
+        Bob.push_back(Bjet);
+        //std::cout << "  [pair #"<< Ajet<<", pair #"<<Bjet<<", |dm|] = ["<< jets[Ajet].mass()<<", "<<jets[Bjet].mass()<<", "<< deltaMassTmp <<"]"<< std::endl;
 
-      }//end loop over pair j
-    }//end loop over pair i
+      }//end loop over pair A
+    }//end loop over pair B
 
-    // Check if the two picked pairs share
-    if ( PairOne.overlaps(PairTwo) ) {
-      //pick one randomly
-      //@May9: Pick the pair with higher leading pT muon?
-      if (m_trandom3.Integer(2) == 0) {
-        FinalJets.push_back(PairOne);
-        used[&*(PairOne.muon(0))] = true;
-        used[&*(PairOne.muon(1))] = true;
-      } else {
-        FinalJets.push_back(PairTwo);
-        used[&*(PairTwo.muon(0))] = true;
-        used[&*(PairTwo.muon(1))] = true;
-      }//end random pick
-    }//end if overlap
-    else {
-      FinalJets.push_back(PairOne);
-      FinalJets.push_back(PairTwo);
-      used[&*(PairOne.muon(0))] = true;
-      used[&*(PairOne.muon(1))] = true;
-      used[&*(PairTwo.muon(0))] = true;
-      used[&*(PairTwo.muon(1))] = true;
-    }//end else
+    //std::cout << "=====" << std::endl;
+    //std::cout << "AbsdMass size = "<< AbsdMass.size() << "; Alice size = " << Alice.size() << "; Bob size = " << Bob.size() << std::endl;
+    //Find two distinct pairs with min |dM|
+    //(i.e. don't have overlapping muon)
+    //Sanity Check
+    if( ( AbsdMass.size() == Alice.size() ) &&
+        ( AbsdMass.size() == Bob.size()   )   ){
+
+      //std::cout << "FinalJets size = "<< FinalJets.size() << std::endl;
+      unsigned int FindCount = 0;//count how many times we find two pairs, terminate when it exceeds AbsdMass.size()-1 times
+      while( FinalJets.size() != 2 && FindCount < AbsdMass.size() ){
+
+        //std::cout << ">>> FinalJets size != 2" << std::endl;
+
+        //find two pairs with min |dM|
+        double MinDeltaMass = 13000.;
+        unsigned int Index = -1;
+        FindCount++;
+        for (unsigned int X = 0; X < AbsdMass.size(); X++) {
+          //std::cout << ">>>>>> AbsdMass.at("<<X<<") = "<< AbsdMass.at(X) << std::endl;
+          if( AbsdMass.at(X) < MinDeltaMass){
+            MinDeltaMass = AbsdMass.at(X);
+            PairOne = jets[Alice.at(X)];
+            PairTwo = jets[Bob.at(X)];
+            Index = X;
+          }//end if
+        }//end find pairs with min |dM|
+
+        //std::cout << ">>> Found two pairs with min |dM|, [mass #"<<Alice.at(Index)<<", mass #"<<Bob.at(Index)<<", |dm|, Index] = ["<< PairOne.mass() <<", "<< PairTwo.mass() << ", "<<AbsdMass.at(Index)<<", " << Index <<"]"<< std::endl;
+
+        //check if two pairs overlap
+        if ( PairOne.overlaps(PairTwo) ) {
+          //std::cout << ">>>>>> Two pairs overlap!" << std::endl;
+          AbsdMass.at(Index) = 13001.;
+          continue;
+        }//overlap pairs
+        else{
+          FinalJets.push_back(PairOne);
+          FinalJets.push_back(PairTwo);
+          used[&*(PairOne.muon(0))] = true;
+          used[&*(PairOne.muon(1))] = true;
+          used[&*(PairTwo.muon(0))] = true;
+          used[&*(PairTwo.muon(1))] = true;
+          //std::cout << ">>>>>> Two distinct pairs!" << std::endl;
+        }//distinct pairs
+
+      }//end while
+
+      //If still can't find two distinct pairs,
+      //Do nothing: TBD
+      //if( FinalJets.size() != 2 && FindCount == AbsdMass.size() ){???}
+
+    }
+    else{
+      std::cout << "WARNING! Alice and Bob don't have the same size." << std::endl;
+    }//end sanity check
 
   }//end jets.size()>1
 
   if ( jets.size() == 1 ){
+    //std::cout << "jets.size() == 1" << std::endl;
     FinalJets.push_back(jets[0]);
     PairOne = jets[0];
     used[&*(PairOne.muon(0))] = true;
     used[&*(PairOne.muon(1))] = true;
+    //std::cout << ">>> mass = "<< PairOne.mass() << std::endl;
   }
 
   // output #2: a collection of muons not belonging to any surviving pair
@@ -609,7 +641,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
     if (muonOkay(*muon)) {
       bool isUsed = false;
-      for (std::map<const pat::Muon*,bool>::const_iterator iter = used.begin();  iter != used.end();  ++iter) {
+      for (std::map<const pat::Muon*, bool>::const_iterator iter = used.begin();  iter != used.end();  ++iter) {
         if (&*muon == iter->first) isUsed = true;
       }
 
@@ -618,9 +650,9 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
         Orphans->push_back(newMuon);
       }
     }
-  }
+  }//end output #2
 
-  // output #3: a collection of equivalence classes of shared daughters
+  // output #3: a collection of equivalence classes
   std::unique_ptr<pat::MultiMuonCollection> EquivalenceClasses(new pat::MultiMuonCollection);
   for (unsigned int i = 0;  i < FinalJets.size();  i++) {
     EquivalenceClasses->push_back(FinalJets[i]);
