@@ -165,7 +165,14 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   Float_t orph_dimu_mass;
   Float_t orph_dimu_isoTk;
+  Float_t orph_dimu_Mu0_isoTk0p3;
+  Float_t orph_dimu_Mu0_isoTk0p4;
+  Float_t orph_dimu_Mu0_isoTk0p5;
+  Float_t orph_dimu_Mu1_isoTk0p3;
+  Float_t orph_dimu_Mu1_isoTk0p4;
+  Float_t orph_dimu_Mu1_isoTk0p5;
   Float_t orph_dimu_z;
+  Float_t orph_isoTk;
   Bool_t  orph_passOffLineSelPtEta;
   Bool_t  orph_passOffLineSelPt1788;
   Bool_t  orph_AllTrackerMu;
@@ -222,7 +229,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *IsoDimuFMu1_dR0p3 = new TH1F("IsoDimuFMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoDimuFMu1_dR0p4 = new TH1F("IsoDimuFMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoDimuFMu1_dR0p5 = new TH1F("IsoDimuFMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+
   TH1F *IsoOrphanDimu = new TH1F("IsoOrphanDimu","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu0_dR0p3 = new TH1F("IsoOrphanDimuMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu0_dR0p4 = new TH1F("IsoOrphanDimuMu0_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu0_dR0p5 = new TH1F("IsoOrphanDimuMu0_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu1_dR0p3 = new TH1F("IsoOrphanDimuMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu1_dR0p4 = new TH1F("IsoOrphanDimuMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu1_dR0p5 = new TH1F("IsoOrphanDimuMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphan = new TH1F("IsoOrphan","",1000,0.0,100.0);//binning 0.1 GeV
 
   k++;//Print k
 
@@ -302,6 +317,13 @@ void efficiency(const std::vector<std::string>& dirNames)
   //Get branch from orphan-dimuon tree
   o->SetBranchAddress("orph_dimu_mass",&orph_dimu_mass);
   o->SetBranchAddress("orph_dimu_isoTk",&orph_dimu_isoTk);
+  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p3",&orph_dimu_Mu0_isoTk0p3);
+  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p4",&orph_dimu_Mu0_isoTk0p4);
+  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p5",&orph_dimu_Mu0_isoTk0p5);
+  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p3",&orph_dimu_Mu1_isoTk0p3);
+  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p4",&orph_dimu_Mu1_isoTk0p4);
+  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p5",&orph_dimu_Mu1_isoTk0p5);
+  o->SetBranchAddress("orph_isoTk",&orph_isoTk);
   o->SetBranchAddress("orph_dimu_z",&orph_dimu_z);
   o->SetBranchAddress("orph_passOffLineSelPtEta",&orph_passOffLineSelPtEta);//offline high pT mu in barrel
   o->SetBranchAddress("orph_passOffLineSelPt1788",&orph_passOffLineSelPt1788);//offline pT sel
@@ -469,8 +491,15 @@ void efficiency(const std::vector<std::string>& dirNames)
 		  o->GetEntry(j);
       //Pass offline basic selections, same as signal
 		  if(orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu){
-        IsoOrphanDimu->Fill(orph_dimu_isoTk);
         OrphanDimuMass->Fill(orph_dimu_mass);
+        IsoOrphanDimu->Fill(orph_dimu_isoTk);
+        IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
+        IsoOrphanDimuMu0_dR0p4->Fill(orph_dimu_Mu0_isoTk0p4);
+        IsoOrphanDimuMu0_dR0p5->Fill(orph_dimu_Mu0_isoTk0p5);
+        IsoOrphanDimuMu1_dR0p3->Fill(orph_dimu_Mu1_isoTk0p3);
+        IsoOrphanDimuMu1_dR0p4->Fill(orph_dimu_Mu1_isoTk0p4);
+        IsoOrphanDimuMu1_dR0p5->Fill(orph_dimu_Mu1_isoTk0p5);
+        IsoOrphan->Fill(orph_isoTk);
       }
     }//end for j entries
 
@@ -506,7 +535,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" is3GenMu8               & "<<left<< setw(11)<< counter[k][3]  <<" & "<<left << setw(13) << TotEff[k][3]  << " & " << left << setw(13) << RelEff[k][3] <<" & "<< left << setw(16) << TotEffErr[k][3]   <<" & "<< left << setw(16) << RelEffErr[k][3]    <<" hline "<<endl;
   cout<<" is4GenMu8               & "<<left<< setw(11)<< counter[k][4]  <<" & "<<left << setw(13) << TotEff[k][4]  << " & " << left << setw(13) << RelEff[k][4] <<" & "<< left << setw(16) << TotEffErr[k][4]   <<" & "<< left << setw(16) << RelEffErr[k][4]    <<" hline "<<endl;
   cout<<" Lxy<16.0cm && Lz<51.6cm & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) << TotEff[k][5]  << " & " << left << setw(13) << RelEff[k][5] <<" & "<< left << setw(16) << TotEffErr[k][5]   <<" & "<< left << setw(16) << RelEffErr[k][5]    <<" hline "<<endl;
-  cout<<"                                                                                                                                                                                                                                                      " <<" hline "<<endl;
+  cout<<"                                                                                                                         " << " hline "<< endl;
 
   cout<<" is1SelMu17              & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) << TotEff[k][6]  << " & " << left << setw(13) << RelEff[k][6] <<" & "<< left << setw(16) << TotEffErr[k][6]   <<" & "<< left << setw(16) << RelEffErr[k][6]    <<" hline "<<endl;
   cout<<" is2SelMu8               & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) << TotEff[k][7]  << " & " << left << setw(13) << RelEff[k][7] <<" & "<< left << setw(16) << TotEffErr[k][7]   <<" & "<< left << setw(16) << RelEffErr[k][7]    <<" hline "<<endl;
@@ -519,7 +548,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" is2DiMuonsIsoTkOK       & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) << TotEff[k][14] << " & " << left << setw(13) << RelEff[k][14]<<" & "<< left << setw(16) << TotEffErr[k][14]  <<" & "<< left << setw(16) << RelEffErr[k][14]   <<" hline "<<endl;
   cout<<" isSignalHLTFired        & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) << TotEff[k][15] << " & " << left << setw(13) << RelEff[k][15]<<" & "<< left << setw(16) << TotEffErr[k][15]  <<" & "<< left << setw(16) << RelEffErr[k][15]   <<" hline "<<endl;
   cout<<" is2DiMuonsMassOK        & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) << TotEff[k][16] << " & " << left << setw(13) << RelEff[k][16]<<" & "<< left << setw(16) << TotEffErr[k][16]  <<" & "<< left << setw(16) << RelEffErr[k][16]   <<" hline "<<endl;
-  cout<<"                                                                                                                                                                                                                                                       "<<" hline "<<endl;
+  cout<<"                                                                                                                         " << " hline "<< endl;
   cout<<" epsilon_rec/alpha_gen   & "<< epsvsalph[k]<<"$\\pm$ "<< Err[k]<<" hline "<<endl;
 
   cout<<"end{tabular}"<<endl;
@@ -648,6 +677,7 @@ void efficiency(const std::vector<std::string>& dirNames)
      IsoDimuFMu1_dR0p3->Write();
      IsoDimuFMu1_dR0p4->Write();
      IsoDimuFMu1_dR0p5->Write();
+
      //Normalize iso
      TH1F *IsoDimuCNormalized = (TH1F*)IsoDimuC->Clone("IsoDimuCNormalized");
      TH1F *IsoDimuFNormalized = (TH1F*)IsoDimuF->Clone("IsoDimuFNormalized");
@@ -686,9 +716,31 @@ void efficiency(const std::vector<std::string>& dirNames)
      OrphanDimuMass->GetYaxis()->SetTitle("Events/0.2GeV");
      OrphanDimuMass->Write();
      IsoOrphanDimu->Write();
+     IsoOrphanDimuMu0_dR0p3->Write();
+     IsoOrphanDimuMu0_dR0p4->Write();
+     IsoOrphanDimuMu0_dR0p5->Write();
+     IsoOrphanDimuMu1_dR0p3->Write();
+     IsoOrphanDimuMu1_dR0p4->Write();
+     IsoOrphanDimuMu1_dR0p5->Write();
+     IsoOrphan->Write();
+
      TH1F *IsoOrphanDimuNormalized = (TH1F*)IsoOrphanDimu->Clone("IsoOrphanDimuNormalized");
+     TH1F *IsoOrphanDimuMu0_dR0p3_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p3->Clone("IsoOrphanDimuMu0_dR0p3_Normalized");
+     TH1F *IsoOrphanDimuMu0_dR0p4_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p4->Clone("IsoOrphanDimuMu0_dR0p4_Normalized");
+     TH1F *IsoOrphanDimuMu0_dR0p5_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p5->Clone("IsoOrphanDimuMu0_dR0p5_Normalized");
+     TH1F *IsoOrphanDimuMu1_dR0p3_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p3->Clone("IsoOrphanDimuMu1_dR0p3_Normalized");
+     TH1F *IsoOrphanDimuMu1_dR0p4_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p4->Clone("IsoOrphanDimuMu1_dR0p4_Normalized");
+     TH1F *IsoOrphanDimuMu1_dR0p5_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p5->Clone("IsoOrphanDimuMu1_dR0p5_Normalized");
+     TH1F *IsoOrphanNormalized = (TH1F*)IsoOrphan->Clone("IsoOrphanNormalized");
      //Protect against 0 entry
      if ( IsoOrphanDimu->Integral() > 0 ){ Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral(); IsoOrphanDimuNormalized->Scale(scaleOrphanDimu); IsoOrphanDimuNormalized->Write(); }
+     if ( IsoOrphanDimuMu0_dR0p3->Integral() > 0 ){ Double_t scaleMu0_dR0p3 = 1./IsoOrphanDimuMu0_dR0p3->Integral(); IsoOrphanDimuMu0_dR0p3_Normalized->Scale(scaleMu0_dR0p3); IsoOrphanDimuMu0_dR0p3_Normalized->Write(); }
+     if ( IsoOrphanDimuMu0_dR0p4->Integral() > 0 ){ Double_t scaleMu0_dR0p4 = 1./IsoOrphanDimuMu0_dR0p4->Integral(); IsoOrphanDimuMu0_dR0p4_Normalized->Scale(scaleMu0_dR0p4); IsoOrphanDimuMu0_dR0p4_Normalized->Write(); }
+     if ( IsoOrphanDimuMu0_dR0p5->Integral() > 0 ){ Double_t scaleMu0_dR0p5 = 1./IsoOrphanDimuMu0_dR0p5->Integral(); IsoOrphanDimuMu0_dR0p5_Normalized->Scale(scaleMu0_dR0p5); IsoOrphanDimuMu0_dR0p5_Normalized->Write(); }
+     if ( IsoOrphanDimuMu1_dR0p3->Integral() > 0 ){ Double_t scaleMu1_dR0p3 = 1./IsoOrphanDimuMu1_dR0p3->Integral(); IsoOrphanDimuMu1_dR0p3_Normalized->Scale(scaleMu1_dR0p3); IsoOrphanDimuMu1_dR0p3_Normalized->Write(); }
+     if ( IsoOrphanDimuMu1_dR0p4->Integral() > 0 ){ Double_t scaleMu1_dR0p4 = 1./IsoOrphanDimuMu1_dR0p4->Integral(); IsoOrphanDimuMu1_dR0p4_Normalized->Scale(scaleMu1_dR0p4); IsoOrphanDimuMu1_dR0p4_Normalized->Write(); }
+     if ( IsoOrphanDimuMu1_dR0p5->Integral() > 0 ){ Double_t scaleMu1_dR0p5 = 1./IsoOrphanDimuMu1_dR0p5->Integral(); IsoOrphanDimuMu1_dR0p5_Normalized->Scale(scaleMu1_dR0p5); IsoOrphanDimuMu1_dR0p5_Normalized->Write(); }
+     if ( IsoOrphan->Integral() > 0 ){ Double_t scaleOrphan = 1./IsoOrphan->Integral(); IsoOrphanNormalized->Scale(scaleOrphan); IsoOrphanNormalized->Write(); }
 
    }//end if ( PlotIso )
 

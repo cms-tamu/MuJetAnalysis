@@ -486,9 +486,6 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           pairOfMuons.push_back(&*one);
           pairOfMuons.push_back(&*two);
 
-          //PairCount++;
-          //std::cout <<"----------"<<std::endl;
-          //std::cout << "Pair #"<<PairCount<<std::endl;
           pat::MultiMuon muonPair( pairOfMuons,
                                    transientTrackBuilder_ptr,
                                    //tracks_ptr,
@@ -532,6 +529,13 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           if (satisfied) {
             Pairs->push_back(muonPair);//All possible pairs
             jets.push_back(muonPair);//tmp jets/pairs, to be cleaned further
+            //PairCount++;
+            //std::cout <<"----------"<<std::endl;
+            //std::cout << "Pair #"<<PairCount<<std::endl;
+            //std::cout << "Muon one (x,y,z)[cm]: " << one->vx() <<", "<< one->vy() <<", "<< one->vz() <<std::endl;
+            //std::cout << "             pT[GeV]: " << one->pt() << "; eta: " << one->eta() << "; phi: " << one->phi() << "; q: " << one->charge() << "; Tracker Mu: " << one->isTrackerMuon() << "; Global Mu: " << one->isGlobalMuon() << "; PF Mu:" << one->isPFMuon() <<std::endl;
+            //std::cout << "Muon two (x,y,z)[cm]: " << two->vx() <<", "<< two->vy() <<", "<< two->vz() <<std::endl;
+            //std::cout << "             pT[GeV]: " << two->pt() << "; eta: " << two->eta() << "; phi: " << two->phi() << "; q: " << two->charge() << "; Tracker Mu: " << two->isTrackerMuon() << "; Global Mu: " << two->isGlobalMuon() << "; PF Mu:" << two->isPFMuon() <<std::endl;
           }//end if satisfied
 
 	      }//end if muon two okay
@@ -543,7 +547,6 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   pat::MultiMuon PairOne;
   pat::MultiMuon PairTwo;
   std::vector<pat::MultiMuon> FinalJets;//Final selected two pairs delivered to CutFlowAnalyzer_MiniAOD
-  std::map<const pat::Muon*, bool> used;//Mark muons in FinalJets
   double deltaMassTmp = 13000.;
 
   //delta mass b/t each two pairs
@@ -607,18 +610,13 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
         else{
           FinalJets.push_back(PairOne);
           FinalJets.push_back(PairTwo);
-          used[&*(PairOne.muon(0))] = true;
-          used[&*(PairOne.muon(1))] = true;
-          used[&*(PairTwo.muon(0))] = true;
-          used[&*(PairTwo.muon(1))] = true;
           //std::cout << ">>>>>> Two distinct pairs!" << std::endl;
         }//distinct pairs
 
       }//end while
 
-      //If still can't find two distinct pairs,
-      //Do nothing: TBD
-      //if( FinalJets.size() != 2 && FindCount == AbsdMass.size() ){???}
+      //If still can't find two distinct pairs, do nothing: TBD
+      //if( FinalJets.size() != 2 && FindCount == AbsdMass.size() ){}
 
     }
     else{
@@ -631,8 +629,6 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     //std::cout << "jets.size() == 1" << std::endl;
     FinalJets.push_back(jets[0]);
     PairOne = jets[0];
-    used[&*(PairOne.muon(0))] = true;
-    used[&*(PairOne.muon(1))] = true;
     //std::cout << ">>> mass = "<< PairOne.mass() << std::endl;
   }
 
@@ -641,15 +637,35 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
     if (muonOkay(*muon)) {
       bool isUsed = false;
-      for (std::map<const pat::Muon*, bool>::const_iterator iter = used.begin();  iter != used.end();  ++iter) {
-        if (&*muon == iter->first) isUsed = true;
+      //std::cout << "muon okay "<< std::endl;
+      //std::cout << "     (x,y,z)[cm]: " << muon->vx() <<", "<< muon->vy() <<", "<< muon->vz() <<std::endl;
+      //std::cout << "         pT[GeV]: " << muon->pt() << "; eta: " << muon->eta() << "; phi: " << muon->phi() << "; q: " << muon->charge() << "; Tracker Mu: " << muon->isTrackerMuon() << "; Global Mu: " << muon->isGlobalMuon() << "; PF Mu:" << muon->isPFMuon() <<std::endl;
+
+      if ( FinalJets.size() == 2 ){
+        if ( muon->pt() == FinalJets.at(0).muon(0)->pt() ||
+             muon->pt() == FinalJets.at(0).muon(1)->pt() ||
+             muon->pt() == FinalJets.at(1).muon(0)->pt() ||
+             muon->pt() == FinalJets.at(1).muon(1)->pt()
+           ) {
+             isUsed = true;
+             //std::cout << ">>> Used "<< std::endl;
+           }
+      }
+      else if ( FinalJets.size() == 1 ){
+        if ( muon->pt() == FinalJets.at(0).muon(0)->pt() ||
+             muon->pt() == FinalJets.at(0).muon(1)->pt()
+           ) {
+             isUsed = true;
+             //std::cout << ">>> Used "<< std::endl;
+           }
       }
 
       if (!isUsed) {
         pat::Muon newMuon(*muon);
         Orphans->push_back(newMuon);
       }
-    }
+
+    }//end muon ok
   }//end output #2
 
   // output #3: a collection of equivalence classes
