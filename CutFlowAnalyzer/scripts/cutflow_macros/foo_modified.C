@@ -399,8 +399,8 @@ void efficiency(const std::vector<std::string>& dirNames)
               if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
                 counter[k][13]++;
 
-                if( diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonCMu1_IsoTk0p3_FittedVtx < 1.5 &&
-                    diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu1_IsoTk0p3_FittedVtx < 1.5 ){
+                if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 &&
+                    diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
                   counter[k][14]++;
 
                   if( PerEventTriggerEff ) {
