@@ -1731,14 +1731,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   // Cut on dimuon masses - use fitted vertexes
   //2016 and before: fabs(massC-massF) < 5 * [0.026+0.013*(m1+m2)/2]
-  //Run2 (2017+2018): fabs(massC-massF) < 3 * {0.003044 + 0.007025 * (massC+massF)/2 + 0.000053 * [(massC+massF)/2]^2}
+  //Run2 (2017+2018): fabs(massC-massF) < 3 * {0.003756 + 0.008613 * (massC+massF)/2 }
   b_is2DiMuonsMassOK_FittedVtx = false;
   if ( b_is2DiMuonsFittedVtxOK ) {
     double massC = b_diMuonC_FittedVtx_m;
     double massF = b_diMuonF_FittedVtx_m;
-    if (
-      fabs(massC-massF) < 3*(0.003044 + 0.007025*(massC+massF)/2.0 + 0.000053*(massC+massF)*(massC+massF)/4.0)
-    ) {
+    if ( fabs(massC-massF) < 3*(0.003756 + 0.008613*(massC+massF)/2.0) ) {
       b_is2DiMuonsMassOK_FittedVtx = true;
     }
   }

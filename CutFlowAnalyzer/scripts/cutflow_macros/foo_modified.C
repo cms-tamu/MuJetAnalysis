@@ -428,11 +428,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                   if( is2DiMuonHLTFired ) {
                     counter[k][15]++;
 
-                    //if( is2DiMuonsMassOK){//this is an equivalent conditon to the one below
-                    if(
-                      is2DiMuonsFittedVtxOK &&
-                      fabs(massC-massF) < 3*(0.003044 + 0.007025*(massC+massF)/2.0 + 0.000053*(massC+massF)*(massC+massF)/4.0)
-                    ){
+                    if( is2DiMuonsMassOK ) {
                       counter[k][16]++;
                       //==============================================
                       // All offline analysis selections finished
