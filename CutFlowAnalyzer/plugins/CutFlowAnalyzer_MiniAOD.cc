@@ -779,7 +779,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     //(2) MSSMD (Dark SUSY): Higgs={25}, new light boson={3000022}, muons={13,-13}
     //(3) ALP: Higgs={25}, new light boson={9000005}, muons={13,-13}
     //(4) Scalar Model from Mehdi: Higgs like ZD={5000002}, new light boson SD={5000512, -5000512}, muons={13,-13}
-    //(5) Fermionic Model from Mehdi: Higgs like ZD={5000002}, new light boson ZD={5000002}, muons={13,-13}
+    //(5) Fermionic Model from Mehdi: Higgs like ZD={5000002}, new light fermion? F11&F12?={5000521}, muons={13,-13}
     std::vector<const reco::GenParticle*> genH;
     std::vector<const reco::GenParticle*> genA_unsorted;
     std::vector<const reco::GenParticle*> genA;
@@ -819,7 +819,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             genMuonCand->mother(iMother)->pdgId() == 3000022 ||
             genMuonCand->mother(iMother)->pdgId() == 9000005 ||
             fabs( genMuonCand->mother(iMother)->pdgId() ) == 5000512 ||
-            genMuonCand->mother(iMother)->pdgId() == 5000002
+            genMuonCand->mother(iMother)->pdgId() == 5000521
           ) {
             // Store the muon (stable, first in chain) into vector
             genMuons.push_back(&(*iGenParticle));
@@ -845,7 +845,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 3000022 ) ||
 	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 9000005 ) ||
         ( iGenParticle->status() == 22 && fabs( iGenParticle->pdgId() ) == 5000512 ) ||
-        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 5000002 )
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 5000521 )
       ) {
         genA_unsorted.push_back(&(*iGenParticle));
       }
@@ -1733,13 +1733,19 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   }
 
   // Cut on dimuon masses - use fitted vertexes
-  //2016 and before: fabs(massC-massF) < 5 * [0.026+0.013*(m1+m2)/2]
-  //Run2 (2017+2018): fabs(massC-massF) < 3 * {0.003756 + 0.008613 * (massC+massF)/2 }
+  //* 2016 and before: fabs(massC-massF) < 5 * [0.026+0.013*(m1+m2)/2]
+  //* Run2 (2017+2018): Poly-1 Fit (relaxed) by combining all MSSMD, NMSSM and ALP mass points:
+  //  fabs(massC-massF) < 3 * {0.003756 + 0.008613 * (massC+massF)/2 }
+  //  https://docs.google.com/spreadsheets/d/10qXKHSw9QLrpPm2s0pASCbB27k6kVyEtTEwYi_oTra0/edit?usp=sharing
+  //* Run2 (2017+2018): Poly-2 Fit from 2017 ALP signal samples (currently adopted below):
+  //  fabs(massC-massF) < 3 * {0.003044 + 0.007025 * (massC+massF)/2 + 0.000053 * [(massC+massF)/2]^2}
   b_is2DiMuonsMassOK_FittedVtx = false;
   if ( b_is2DiMuonsFittedVtxOK ) {
     double massC = b_diMuonC_FittedVtx_m;
     double massF = b_diMuonF_FittedVtx_m;
-    if ( fabs(massC-massF) < 3*(0.003756 + 0.008613*(massC+massF)/2.0) ) {
+    if (
+      fabs(massC-massF) < 3*(0.003044 + 0.007025*(massC+massF)/2.0 + 0.000053*(massC+massF)*(massC+massF)/4.0)
+    ) {
       b_is2DiMuonsMassOK_FittedVtx = true;
     }
   }
