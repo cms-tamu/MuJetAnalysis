@@ -829,6 +829,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         }
       }//end check if gen particle is muon
 
+      //=======================================================================
+      // !!!Note: Wei SHI @Aug 1, 2019
+      // Below status code 22 is PYTHIA8 convention for intermediate partiles, this should be changed
+      // if one uses another showering program, for example, Herwig7 uses status code 11 for intermediate particles
+      //=======================================================================
       // Check if gen particle is Higgs(like), these branches are not used at the moment
       if (
         ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 25 ) ||
@@ -839,6 +844,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       }
 
       // Check if gen particle is new light boson
+
       if (
         ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36 ) ||
 	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 54 ) ||
