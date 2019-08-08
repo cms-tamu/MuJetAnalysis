@@ -428,15 +428,15 @@ void efficiency(const std::vector<std::string>& dirNames)
                   if( is2DiMuonHLTFired ) {
                     counter[k][15]++;
 
+                    if( ModelSRWidth ) {
+                      DimuMass->Fill( (massC+massF)/2 );
+                    }//end if ModelSRWidth
+
                     if( is2DiMuonsMassOK ) {
                       counter[k][16]++;
                       //==============================================
                       // All offline analysis selections finished
                       //==============================================
-
-                      if( ModelSRWidth ) {
-                        DimuMass->Fill( (massC+massF)/2 );
-                      }//end if ModelSRWidth
 
                       //Note to eliminate/relax Iso cut at counter 14, e.g. Iso<50 GeV or Iso>0
                       if( PlotIso ) {
