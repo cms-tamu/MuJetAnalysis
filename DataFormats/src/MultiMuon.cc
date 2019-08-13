@@ -1,8 +1,8 @@
 //
 // $Id: MultiMuon.cc,v 1.12 2013/08/04 21:36:36 pakhotin Exp $
-// 
+//
 // Jim Pivarski <pivarski@physics.tamu.edu>
-// 
+//
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 
@@ -10,8 +10,12 @@
 #include "TrackingTools/TransientTrack/interface/TransientTrackBuilder.h"
 #include "TrackingTools/TransientTrack/interface/TransientTrack.h"
 #include "RecoVertex/KalmanVertexFit/interface/KalmanVertexFitter.h"
+#include "RecoVertex/VertexTools/interface/SequentialVertexFitter.h"
 #include "TrackingTools/PatternTools/interface/ClosestApproachInRPhi.h"
 #include "TrackingTools/PatternTools/interface/TwoTrackMinimumDistance.h"
+#include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
+
+#include "TLorentzVector.h"
 
 #else
 class TransientTrackBuilder {};
@@ -20,19 +24,19 @@ class TransientTrackBuilder {};
 /// constructor with muons
 pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
 		const TransientTrackBuilder    *transientTrackBuilder,
-		const reco::TrackCollection    *tracks,
-		const pat::MuonCollection      *allmuons,
-		const CaloTowerCollection      *caloTowers,
-		double centralTrackIsolationCone,
-		double unionTrackIsolationCone,
-		double centralTrackThresholdPt,
-		double unionTrackThresholdPt,
-		double centralCaloIsolationCone,
-		double unionCaloIsolationCone,
-		double centralNumberAboveThresholdCone,
-		double unionNumberAboveThresholdCone,
-		double centralNumberAboveThresholdPt,
-		double unionNumberAboveThresholdPt,
+		//const reco::TrackCollection    *tracks,
+		//const pat::MuonCollection      *allmuons,
+		//const CaloTowerCollection      *caloTowers,
+		//double centralTrackIsolationCone,
+		//double unionTrackIsolationCone,
+		//double centralTrackThresholdPt,
+		//double unionTrackThresholdPt,
+		//double centralCaloIsolationCone,
+		//double unionCaloIsolationCone,
+		//double centralNumberAboveThresholdCone,
+		//double unionNumberAboveThresholdCone,
+		//double centralNumberAboveThresholdPt,
+		//double unionNumberAboveThresholdPt,
 		int barrelPixelLayer,
 		int endcapPixelLayer)
 
@@ -41,20 +45,20 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
 
   int charge = 0;
   LorentzVector lorentzVector;
-  
+
   for (std::vector<const pat::Muon*>::const_iterator muon = muons.begin();  muon != muons.end();  ++muon) {
     addDaughter(**muon);
     charge += (*muon)->charge();
     lorentzVector += (*muon)->p4();
   }
-  
-  setCharge(charge);
-  setP4( PolarLorentzVector(lorentzVector.pt(),lorentzVector.eta(),lorentzVector.phi(),lorentzVector.mass()));
 
+	// Wei SHI@03.28.2019: Set charge for the multi-muon, doesn't seem to be useful
+  setCharge(charge);
+  setP4( PolarLorentzVector(lorentzVector.pt(),lorentzVector.eta(),lorentzVector.phi(),lorentzVector.mass()) );
 
   std::map<const reco::Candidate*,unsigned int> ancestorCounter;
   for (std::vector<const pat::Muon*>::const_iterator muon = muons.begin();  muon != muons.end();  ++muon) {
-    const reco::GenParticle *genParticle = (*muon)->genParticle();
+    const reco::GenParticle *genParticle = (*muon)->genParticle();//For MC ONLY
     if (genParticle != NULL) {
       const reco::Candidate *mother = genParticle->mother();
       while (mother != NULL) {
@@ -86,6 +90,7 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
     const reco::GenParticle *asGenParticle = dynamic_cast<const reco::GenParticle*>(youngestCommonAncestor);
     setGenParticle(*asGenParticle);
   }
+
   // Fitted vertex
   m_vertexValid = false;
   m_vertexValid_fitted = false;
@@ -98,22 +103,30 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
   m_vtx_y_scan=0.;
   m_vtx_z_scan=0.;
 
-  
-  if (transientTrackBuilder != NULL) {
-	  calculateVertex(transientTrackBuilder, barrelPixelLayer, endcapPixelLayer);
-  }
 
+  if (transientTrackBuilder != NULL) {
+	  calculateVertex(transientTrackBuilder,
+			              barrelPixelLayer,
+										endcapPixelLayer);
+  }
+/*
   // Consistent vertex
   m_consistentVtxValid = false;
-  
   m_centralTrackIsolationCone = 0.;
   m_unionTrackIsolationCone   = 0.;
   m_centralTrackThresholdPt   = 0.;
   m_unionTrackThresholdPt     = 0.;
   m_centralTrackIsolation     = 0.;
   m_unionTrackIsolation       = 0.;
+
+	//Recommended
   if (tracks != NULL) {
-    calculateTrackIsolation(tracks, allmuons, centralTrackIsolationCone, unionTrackIsolationCone, centralTrackThresholdPt, unionTrackThresholdPt);
+    calculateTrackIsolation(tracks,
+			                      allmuons,
+														centralTrackIsolationCone,
+														unionTrackIsolationCone,
+														centralTrackThresholdPt,
+														unionTrackThresholdPt);
   }
 
   m_centralCaloIsolationCone = 0.;
@@ -123,7 +136,9 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
   m_centralHCALIsolation     = 0.;
   m_unionHCALIsolation       = 0.;
   if (caloTowers != NULL) {
-    calculateCaloIsolation(caloTowers, centralCaloIsolationCone, unionCaloIsolationCone);
+    calculateCaloIsolation(caloTowers,
+			                     centralCaloIsolationCone,
+													 unionCaloIsolationCone);
   }
 
   m_centralNumberAboveThresholdCone = 0.;
@@ -132,17 +147,21 @@ pat::MultiMuon::MultiMuon( std::vector<const pat::Muon*> &muons,
   m_unionNumberAboveThresholdPt = 0.;
   m_centralNumberAboveThreshold = 0;
   m_unionNumberAboveThreshold = 0;
+
   if (tracks != NULL) {
-    calculateNumberAboveThresholdIsolation(tracks, allmuons, centralNumberAboveThresholdCone,
-                                                             unionNumberAboveThresholdCone,
-                                                             centralNumberAboveThresholdPt, 
-                                                             unionNumberAboveThresholdPt);
+    calculateNumberAboveThresholdIsolation(tracks,
+			                                     allmuons,
+																					 centralNumberAboveThresholdCone,
+                                           unionNumberAboveThresholdCone,
+                                           centralNumberAboveThresholdPt,
+                                           unionNumberAboveThresholdPt);
   }
+	*/
+
   m_barrelPixelLayer = barrelPixelLayer;
-  //m_barrelPixelLayer = 10;
   m_endcapPixelLayer = endcapPixelLayer;
-  //m_endcapPixelLayer = 10;
-}
+
+}//end MultiMuon constructor
 
 /// constructor from MultiMuonType
 pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandidate(aMultiMuon) {
@@ -156,7 +175,6 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
   m_chi2 = aMultiMuon.m_chi2;
   m_ndof = aMultiMuon.m_ndof;
   m_mindisttrack = aMultiMuon.m_mindisttrack;
-  m_mindisttrack = aMultiMuon.m_mindisttrack;
   m_mindisttrack_scan = aMultiMuon.m_mindisttrack_scan;
   m_vtx_x_scan = aMultiMuon.m_vtx_x_scan;
   m_vtx_y_scan = aMultiMuon.m_vtx_y_scan;
@@ -168,28 +186,28 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
     m_vertexPCACovarianceMatrix.push_back(aMultiMuon.m_vertexPCACovarianceMatrix[i]);
     m_vertexP4.push_back(aMultiMuon.m_vertexP4[i]);
   }
-  
-  m_consistentVtxValid = aMultiMuon.m_consistentVtxValid;
-  
-  m_centralTrackIsolationCone       = aMultiMuon.m_centralTrackIsolationCone;
-  m_unionTrackIsolationCone         = aMultiMuon.m_unionTrackIsolationCone;
-  m_centralTrackThresholdPt         = aMultiMuon.m_centralTrackThresholdPt;
-  m_unionTrackThresholdPt           = aMultiMuon.m_unionTrackThresholdPt;
-  m_centralCaloIsolationCone        = aMultiMuon.m_centralCaloIsolationCone;
-  m_unionCaloIsolationCone          = aMultiMuon.m_unionCaloIsolationCone;
-  m_centralNumberAboveThresholdCone = aMultiMuon.m_centralNumberAboveThresholdCone;
-  m_unionNumberAboveThresholdCone   = aMultiMuon.m_unionNumberAboveThresholdCone;
-  m_centralNumberAboveThresholdPt   = aMultiMuon.m_centralNumberAboveThresholdPt;
-  m_unionNumberAboveThresholdPt     = aMultiMuon.m_unionNumberAboveThresholdPt;
 
-  m_centralTrackIsolation       = aMultiMuon.m_centralTrackIsolation;
-  m_unionTrackIsolation         = aMultiMuon.m_unionTrackIsolation;
-  m_centralECALIsolation        = aMultiMuon.m_centralECALIsolation;
-  m_unionECALIsolation          = aMultiMuon.m_unionECALIsolation;
-  m_centralHCALIsolation        = aMultiMuon.m_centralHCALIsolation;
-  m_unionHCALIsolation          = aMultiMuon.m_unionHCALIsolation;
-  m_centralNumberAboveThreshold = aMultiMuon.m_centralNumberAboveThreshold;
-  m_unionNumberAboveThreshold   = aMultiMuon.m_unionNumberAboveThreshold;
+  //m_consistentVtxValid = aMultiMuon.m_consistentVtxValid;
+
+  //m_centralTrackIsolationCone       = aMultiMuon.m_centralTrackIsolationCone;
+  //m_unionTrackIsolationCone         = aMultiMuon.m_unionTrackIsolationCone;
+  //m_centralTrackThresholdPt         = aMultiMuon.m_centralTrackThresholdPt;
+  //m_unionTrackThresholdPt           = aMultiMuon.m_unionTrackThresholdPt;
+  //m_centralCaloIsolationCone        = aMultiMuon.m_centralCaloIsolationCone;
+  //m_unionCaloIsolationCone          = aMultiMuon.m_unionCaloIsolationCone;
+  //m_centralNumberAboveThresholdCone = aMultiMuon.m_centralNumberAboveThresholdCone;
+  //m_unionNumberAboveThresholdCone   = aMultiMuon.m_unionNumberAboveThresholdCone;
+  //m_centralNumberAboveThresholdPt   = aMultiMuon.m_centralNumberAboveThresholdPt;
+  //m_unionNumberAboveThresholdPt     = aMultiMuon.m_unionNumberAboveThresholdPt;
+
+  //m_centralTrackIsolation       = aMultiMuon.m_centralTrackIsolation;
+  //m_unionTrackIsolation         = aMultiMuon.m_unionTrackIsolation;
+  //m_centralECALIsolation        = aMultiMuon.m_centralECALIsolation;
+  //m_unionECALIsolation          = aMultiMuon.m_unionECALIsolation;
+  //m_centralHCALIsolation        = aMultiMuon.m_centralHCALIsolation;
+  //m_unionHCALIsolation          = aMultiMuon.m_unionHCALIsolation;
+  //m_centralNumberAboveThreshold = aMultiMuon.m_centralNumberAboveThreshold;
+  //m_unionNumberAboveThreshold   = aMultiMuon.m_unionNumberAboveThreshold;
   m_barrelPixelLayer = aMultiMuon.m_barrelPixelLayer;
   m_endcapPixelLayer = aMultiMuon.m_endcapPixelLayer;
 }
@@ -197,7 +215,9 @@ pat::MultiMuon::MultiMuon(const pat::MultiMuon &aMultiMuon): pat::CompositeCandi
 /// destructor
 pat::MultiMuon::~MultiMuon() {}
 
-/// calculate the vertex from TransientTracks; return true iff successful
+/// calculate the vertex from TransientTracks; return true if successful
+//Refer to:[1]https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookVertexFittingTutorial
+//[2] https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideTransientTracks
 bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrackBuilder, int barrelLayer, int endcapLayer) {
 #ifdef MULTIMUONCANDIDATE_FOR_FWLITE
   return false;
@@ -205,212 +225,196 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 #ifndef MULTIMUONCANDIDATE_FOR_FWLITE
   std::vector<reco::TransientTrack> tracksToVertex;
   std::vector<const reco::Track*> muonTracks;
+
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
     if (muon(i) == NULL) {
       throw cms::Exception("MultiMuon") << "MultiMuons should only contain pat::Muons";
     }
-    if (muon(i)->innerTrack().isAvailable()) {
+    if (muon(i)->innerTrack().isAvailable()) {//i.e. tracker track
+			//std::cout <<"muon "<< i <<": inner track"<<std::endl;
       tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->innerTrack()));
       muonTracks.push_back(&*muon(i)->innerTrack()); //&*track
     }
-    else if (muon(i)->outerTrack().isAvailable()) {
+    else if (muon(i)->outerTrack().isAvailable()) {//i.e. muon detector only
+			//std::cout <<"muon "<< i <<": outer track"<<std::endl;
       tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->outerTrack()));
       muonTracks.push_back(&*muon(i)->outerTrack()); //&*track
     }
   }
-  if (tracksToVertex.size() < 2) return false;
 
+  if (tracksToVertex.size() < 2) return false;
+	if (muonTracks.size() < 2) return false;
+	//std::cout << "muonTrk 0      (x,y,z)[cm]: " << muonTracks[0]->vx()    << ", " << muonTracks[0]->vy()    << ", " << muonTracks[0]->vz()    <<std::endl;
+	//std::cout << "muonTrk 1      (x,y,z)[cm]: " << muonTracks[1]->vx()    << ", " << muonTracks[1]->vy()    << ", " << muonTracks[1]->vz()    <<std::endl;
+
+	TLorentzVector p4one, p4two;
+	p4one.SetPtEtaPhiM(muonTracks[0]->pt(), muonTracks[0]->eta(), muonTracks[0]->phi(), 0.105);
+	p4two.SetPtEtaPhiM(muonTracks[1]->pt(), muonTracks[1]->eta(), muonTracks[1]->phi(), 0.105);
+  //std::cout << "            Pair mass[GeV]: " << (p4one + p4two).M() <<std::endl;
+
+	//Here it's fitting muons with IP constraints, so it will always be giving a vertex at IP
+	//Which is not true in this case
   KalmanVertexFitter vertexFitter;
   CachingVertex<5> fittedVertex = vertexFitter.vertex(tracksToVertex);
 
-  // if (!fittedVertex.isValid()  ||  fittedVertex.totalChiSquared() < 0.) return false;
+  //Another method: KalmanVertexFitter kvf(kvfPSet)
+  //TransientVertex tv = vertexFitter.vertex(tracksToVertex);
+	//if( tv.isValid() ) std::cout << "TransientVertex Position: " <<tv.position().x() << ", " << tv.position().y() << ", " <<tv.position().z()<<std::endl;
 
-  // m_vertexValid = true;
-  // m_chi2 = fittedVertex.totalChiSquared();
-  // m_ndof = fittedVertex.degreesOfFreedom();
-
-  if(fittedVertex.isValid()){
+  if( fittedVertex.isValid() ){
+		//std::cout << " *** FittedVertex valid!" <<std::endl;
     setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
+
+		//std::cout << " Fitted vtx (x,y,z)[cm]: " <<fittedVertex.position().x() << ", " << fittedVertex.position().y() << ", " <<fittedVertex.position().z()<<std::endl;
+
     double covarianceMatrixArray[6] = {
-      fittedVertex.error().cxx(), 
-      fittedVertex.error().cyx(), 
-      fittedVertex.error().cyy(), 
-      fittedVertex.error().czx(), 
-      fittedVertex.error().czy(), 
-      fittedVertex.error().czz() 
-    }; // YP: FIXME! Check if this definition is correct
+      fittedVertex.error().cxx(),
+      fittedVertex.error().cyx(),
+      fittedVertex.error().cyy(),
+      fittedVertex.error().czx(),
+      fittedVertex.error().czy(),
+      fittedVertex.error().czz()
+    }; // YP: Check if this definition is correct
+
     m_chi2 = fittedVertex.totalChiSquared();
     m_ndof = fittedVertex.degreesOfFreedom();
     m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
     m_vertexValid_fitted = true;
-    
+
+		/*
     FreeTrajectoryState const & posState2 = tracksToVertex[0].impactPointTSCP().theState();
     FreeTrajectoryState const & negState2 = tracksToVertex[1].impactPointTSCP().theState();
-    
+
     TwoTrackMinimumDistance cApp2;
-    cApp2.calculate(posState2, negState2);
-    //    float dca2 = fabs( cApp2.distance() );
-    
-    //    m_mindisttrack = dca2;
-    
-    //     std::cout<<" Fitted Vtx   "<<
-    //       "  vx    "<<fittedVertex.position().x()<<
-    //       "  vy    "<<fittedVertex.position().y()<<
-    //      "  vz    "<<fittedVertex.position().z()<<std::endl;    
+    cApp2.calculate(posState2, negState2);*/
+
   }
   else if( !fittedVertex.isValid()){
-    
+		//std::cout << " @@@ FittedVertex not valid!"<<std::endl;
+		//This doesn't look like necessary
+    /*
     FreeTrajectoryState const & posState = tracksToVertex[0].impactPointTSCP().theState();
     FreeTrajectoryState const & negState = tracksToVertex[1].impactPointTSCP().theState();
-    
-    //    ClosestApproachInRPhi cApp;
+
     TwoTrackMinimumDistance cApp;
     cApp.calculate(posState, negState);
-    //    if( cApp.status() )     m_vertexValid_mindist = true;
     float dca = fabs( cApp.distance() );
-    // GlobalPoint cxPt = cApp.crossingPoint(); -- not used
-    
+
     m_mindisttrack = dca;
-    
-    if (muonTracks.size() > 0){
-      
+		*/
+
+		//Need 2 muon tracks, closeby muon tracks
+    if (muonTracks.size() > 1){
+
       double newx1 = 0.0;
       double newy1 = 0.0;
       double newz1 = 0.0;
-      
+
       double newx2 = 0.0;
       double newy2 = 0.0;
       double newz2 = 0.0;
-      
+
+			int final_i = -1;
+			int final_j = -1;
+
       float minSeparation = std::numeric_limits<float>::max();
-      
-      // GlobalPoint v1(muonTracks[0]->vx(), muonTracks[0]->vy(), muonTracks[0]->vz());
-      // GlobalPoint v2(muonTracks[1]->vx(), muonTracks[1]->vy(), muonTracks[1]->vz());
-      
-      // GlobalVector p1(muonTracks[0]->px(), muonTracks[0]->py(), muonTracks[0]->pz());
-      // GlobalVector p2(muonTracks[1]->px(), muonTracks[1]->py(), muonTracks[1]->pz());
-      
-      // Distance between tracks at x = 4.4 cm
-      // double xy_boundary_x = 4.4;
-      // double xy_boundary_y = 4.4;
-      
+
       double current_x_bdy1 = 0.0;
       double current_x_bdy2 = 0.0;
-      
+
       // setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
       const double pixelBarrelR(pat::pixelBarrelR(barrelLayer));
       const double pixelEndcapZ(pat::pixelEndcapZ(endcapLayer));
       const int maxR(pixelBarrelR*100);
 
       for (int i = 0; i < maxR; ++i){
-	if (muonTracks[0]->px() < 0){
-	  current_x_bdy1 = -(i/(1000*1.0)) + muonTracks[0]->vx();
-	}
-	if (muonTracks[0]->px() > 0){
-	  current_x_bdy1 = (i/(1000*1.0)) + muonTracks[0]->vx();
-	}
+				if (muonTracks[0]->px() < 0){
+					current_x_bdy1 = -(i/(1000*1.0)) + muonTracks[0]->vx();
+				}
+				if (muonTracks[0]->px() > 0){
+					current_x_bdy1 = (i/(1000*1.0)) + muonTracks[0]->vx();
+				}
 
-	//   double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyy(), fittedVertex.error().czz(), fittedVertex.error().cyx(), fittedVertex.error().czx(), fittedVertex.error().czy()};
-	// double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyx(), fittedVertex.error().cyy(), fittedVertex.error().czx(), fittedVertex.error().czy(), fittedVertex.error().czz() }; // YP: FIXME! Check if this definition is correct
-	// m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
-	
-	double xscale_1 = (current_x_bdy1 - muonTracks[0]->vx())  / muonTracks[0]->px();
-	double y_at_x_1 = muonTracks[0]->vy() + (muonTracks[0]->py()*xscale_1);
-	double z_at_x_1 = muonTracks[0]->vz() + (muonTracks[0]->pz()*xscale_1);
-	
-	double euclid1 = sqrt( pow(current_x_bdy1, 2) + pow(y_at_x_1, 2));
+				double xscale_1 = (current_x_bdy1 - muonTracks[0]->vx())  / muonTracks[0]->px();
+				double y_at_x_1 = muonTracks[0]->vy() + (muonTracks[0]->py()*xscale_1);
+				double z_at_x_1 = muonTracks[0]->vz() + (muonTracks[0]->pz()*xscale_1);
+				double euclid1 = sqrt( pow(current_x_bdy1, 2) + pow(y_at_x_1, 2));
 
-	// FIXME: add parameters in this section!!!	
-	if (fabs(z_at_x_1) > pixelEndcapZ) break;
-	if (euclid1 > pixelBarrelR) break;
-	
-	for (int j = 0; j < maxR; ++j){
-	  if (muonTracks[1]->px() < 0){
-	    current_x_bdy2 = -(j/(1000*1.0)) + muonTracks[1]->vx();
-	  }
-	  if (muonTracks[1]->px() > 0){
-	    current_x_bdy2 = (j/(1000*1.0)) + muonTracks[1]->vx();
-	  }
-	  
-	  double xscale_2 = (current_x_bdy2 - muonTracks[1]->vx()) / muonTracks[1]->px();
-	  double y_at_x_2 = muonTracks[1]->vy() + (muonTracks[1]->py()*xscale_2);
-	  double z_at_x_2 = muonTracks[1]->vz() + (muonTracks[1]->pz()*xscale_2);
-	  double euclid2 = sqrt( pow(current_x_bdy2, 2) + pow(y_at_x_2, 2));
-	  
-	  if (euclid2 > pixelBarrelR) continue;
-	  if (fabs(z_at_x_2) > pixelEndcapZ) continue;
-	  
-	  float separation = sqrt( pow(current_x_bdy2 - current_x_bdy1 , 2) + pow(y_at_x_2 - y_at_x_1, 2) + pow(z_at_x_2 - z_at_x_1, 2));
-	  
-	  if (separation < minSeparation){
-	    minSeparation = separation;
-	    //std::cout << "new xyz1 " << i << ": " << current_x_bdy1 << ", " <<  y_at_x_1 << ", " << z_at_x_1 << std::endl;
-	    //std::cout << "new xyz2 " << j << ": " << current_x_bdy2 << ", " <<  y_at_x_2 << ", " << z_at_x_2 << std::endl;
-	    newx1 = current_x_bdy1;
-	    newy1 = y_at_x_1;
-	    newz1 = z_at_x_1;
-	    newx2 = current_x_bdy2;
-	    newy2 = y_at_x_2;
-	    newz2 = z_at_x_2;
-	    // std::cout << "separation: " << separation << ", min: " << minSeparation << std::endl;
-	  }
-	}
-      }
-      
-       std::cout<<"  scan  vertex 1   "<<"   vx   "<<newx1<<"   vy   "<<newy1<<"   vz   "<<newz1<<std::endl;      
-       std::cout<<"  scan  vertex 2   "<<"   vx   "<<newx2<<"   vy   "<<newy2<<"   vz   "<<newz2<<std::endl;      
-       std::cout << "min: " << minSeparation << std::endl;
-      
+				// Add parameters in this section!!!
+				if (fabs(z_at_x_1) > pixelEndcapZ) break;
+				if (euclid1 > pixelBarrelR) break;
+
+				for (int j = 0; j < maxR; ++j){
+
+					if (muonTracks[1]->px() < 0){
+						current_x_bdy2 = -(j/(1000*1.0)) + muonTracks[1]->vx();
+					}
+					if (muonTracks[1]->px() > 0){
+						current_x_bdy2 = (j/(1000*1.0)) + muonTracks[1]->vx();
+					}
+
+					double xscale_2 = (current_x_bdy2 - muonTracks[1]->vx()) / muonTracks[1]->px();
+					double y_at_x_2 = muonTracks[1]->vy() + (muonTracks[1]->py()*xscale_2);
+					double z_at_x_2 = muonTracks[1]->vz() + (muonTracks[1]->pz()*xscale_2);
+					double euclid2 = sqrt( pow(current_x_bdy2, 2) + pow(y_at_x_2, 2));
+
+					if (euclid2 > pixelBarrelR) continue;
+					if (fabs(z_at_x_2) > pixelEndcapZ) continue;
+
+					float separation = sqrt( pow(current_x_bdy2 - current_x_bdy1 , 2) + pow(y_at_x_2 - y_at_x_1, 2) + pow(z_at_x_2 - z_at_x_1, 2));
+
+					if (separation < minSeparation){
+						minSeparation = separation;
+						newx1 = current_x_bdy1;
+						newy1 = y_at_x_1;
+						newz1 = z_at_x_1;
+						newx2 = current_x_bdy2;
+						newy2 = y_at_x_2;
+						newz2 = z_at_x_2;
+						final_i = i;
+						final_j = j;
+					}//end if separation
+
+				}//end for j maxR
+			}//end for i maxR
+			std::cout << " Scan vtx i = " <<final_i << "; j = "<< final_j <<std::endl;
+
       m_mindisttrack_scan = minSeparation;
-      
+
       m_vtx_x_scan = (newx1+newx2)/2.;
       m_vtx_y_scan = (newy1+newy2)/2.;
       m_vtx_z_scan = (newz1+newz2)/2.;
-    }
-    
-    // for (std::vector<const reco::Track*>::const_iterator MuonIter = muonTracks.begin(); MuonIter != muonTracks.end(); ++MuonIter){
-    // }
-    
-    // Global3DPoint test_vtx(2.2,0,0);
-    
-    // double test_dxy1 = (*MuonIter)->dxy(test_vtx);
-    // MuonIter++;
-    // double test_dxy2 = (*MuonIter)->dxy(test_vtx);
-    
-    
-    // std::cout << "test_dxy1: " << test_dxy1 << std::endl;
-    // std::cout << "test_dxy2: " << test_dxy2 << std::endl;
-    
-    //     std::cout<<" minimim distance   "<<dca<<std::endl;
-    
-    
-    // std::cout<<"  dca vertex   "<<"   vx   "<<cxPt.x()<<"   vy   "<<cxPt.y()<<"   vz   "<<cxPt.z()<<std::endl;
-        
-    setVertex(Point(m_vtx_x_scan,m_vtx_y_scan,m_vtx_z_scan));
-    // setVertex(Point(cxPt.x(),cxPt.y(),cxPt.z()));
-    
-    //    GlobalError error = TSCTP.theState().cartesianError().position();    
-    //    double covarianceMatrixArray[6] = {error().cxx(), error().cyx(), error().cyy(), error().czx(), error().czy(), error().czz() }; // YP: FIXME! Check if this definition is correct
-    
-    if( m_mindisttrack_scan < 0.05 ) m_vertexValid_mindist = true;    
-  }
-  
-  
-  if(m_vertexValid_fitted || m_vertexValid_mindist) m_vertexValid = true;
-  else{ return false;}
-  
-  
+		}//end if muonTracks.size() > 0
+
+    setVertex( Point(m_vtx_x_scan, m_vtx_y_scan, m_vtx_z_scan) );
+		//std::cout << " Scan vtx (x,y,z)[cm]: " << m_vtx_x_scan << ", " << m_vtx_y_scan << ", " << m_vtx_z_scan <<std::endl;
+
+    if( m_mindisttrack_scan < 0.05 ) m_vertexValid_mindist = true;
+
+  }//end elif !fittedVertex.isValid()
+
+  if(m_vertexValid_fitted || m_vertexValid_mindist) {
+		m_vertexValid = true;
+	}
+	else{
+		return false;
+	}
+
+
   m_vertexPCA.clear();
   m_vertexPCACovarianceMatrix.clear();
   m_vertexP4.clear();
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
     TrajectoryStateClosestToPoint TSCTP = tracksToVertex[i].trajectoryStateClosestToPoint(vertexPoint());
 
+    //std::cout << " TSCTP (x,y,z)[cm]: " << TSCTP.position().x() << ", " << TSCTP.position().y() << ", " << TSCTP.position().z() <<std::endl;
+
     m_vertexPCA.push_back(TSCTP.position());
 
-    GlobalError error = TSCTP.theState().cartesianError().position();    
-//    double covarianceMatrixArray2[6] = {error.cxx(), error.cyy(), error.czz(), error.cyx(), error.czx(), error.czy()};
-    double covarianceMatrixArray2[6] = {error.cxx(), error.cyx(), error.cyy(), error.czx(), error.czy(), error.czz()}; // YP: FIXME! Check if this definition is correct
+    GlobalError error = TSCTP.theState().cartesianError().position();
+		//{error.cxx(), error.cyy(), error.czz(), error.cyx(), error.czx(), error.czy()};
+    double covarianceMatrixArray2[6] = {error.cxx(), error.cyx(), error.cyy(), error.czx(), error.czy(), error.czz()};
+		// YP: Check if this definition is correct
     CovarianceMatrix covarianceMatrix2 = CovarianceMatrix(covarianceMatrixArray2, 6);
     m_vertexPCACovarianceMatrix.push_back(covarianceMatrix2);
 
@@ -418,42 +422,12 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     m_vertexP4.push_back( LorentzVector( momentum.x(), momentum.y(), momentum.z(), sqrt( momentum.mag2() + daughter(i)->mass()*daughter(i)->mass() ) ) );
   }
 
-  //   if (!fittedVertex.isValid()  ||  fittedVertex.totalChiSquared() < 0.) return false;
-
-  //   m_vertexValid = true;
-  //   m_chi2 = fittedVertex.totalChiSquared();
-  //   m_ndof = fittedVertex.degreesOfFreedom();
-  
-  //    setVertex(Point(fittedVertex.position().x(), fittedVertex.position().y(), fittedVertex.position().z()));
-  
-  // //   double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyy(), fittedVertex.error().czz(), fittedVertex.error().cyx(), fittedVertex.error().czx(), fittedVertex.error().czy()};
-  //   double covarianceMatrixArray[6] = {fittedVertex.error().cxx(), fittedVertex.error().cyx(), fittedVertex.error().cyy(), fittedVertex.error().czx(), fittedVertex.error().czy(), fittedVertex.error().czz() }; // YP: FIXME! Check if this definition is correct
-  //   m_covarianceMatrix = CovarianceMatrix(covarianceMatrixArray, 6);
-  
-  //   m_vertexPCA.clear();
-  //   m_vertexPCACovarianceMatrix.clear();
-  //   m_vertexP4.clear();
-  //   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
-  //     TrajectoryStateClosestToPoint TSCTP = tracksToVertex[i].trajectoryStateClosestToPoint(vertexPoint());
-  
-  //     m_vertexPCA.push_back(TSCTP.position());
-
-  //     GlobalError error = TSCTP.theState().cartesianError().position();    
-  // //    double covarianceMatrixArray2[6] = {error.cxx(), error.cyy(), error.czz(), error.cyx(), error.czx(), error.czy()};
-  //     double covarianceMatrixArray2[6] = {error.cxx(), error.cyx(), error.cyy(), error.czx(), error.czy(), error.czz()}; // YP: FIXME! Check if this definition is correct
-  //     CovarianceMatrix covarianceMatrix2 = CovarianceMatrix(covarianceMatrixArray2, 6);
-  //     m_vertexPCACovarianceMatrix.push_back(covarianceMatrix2);
-  
-  //     GlobalVector momentum = TSCTP.momentum();
-  //     m_vertexP4.push_back( LorentzVector( momentum.x(), momentum.y(), momentum.z(), sqrt( momentum.mag2() + daughter(i)->mass()*daughter(i)->mass() ) ) );
-  //}
-  
-  
    return true;
 #endif // MULTIMUONCANDIDATE_FOR_FWLITE
-}
+}//end calculateVertex
 
-void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *tracks,
+/*
+void pat::MultiMuon::calculateTrackIsolation(  const reco::TrackCollection *tracks,
                                                const pat::MuonCollection   *allmuons,
                                                double centralCone,
                                                double unionCone,
@@ -461,7 +435,7 @@ void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *track
                                                double unionThreshold,
                                                TTree   *diagnosticTTree,
                                                Float_t *diagnosticdR,
-                                               Float_t *diagnosticpT) {
+                                               Float_t *diagnosticpT ) {
   m_centralTrackIsolationCone = centralCone;
   m_unionTrackIsolationCone   = unionCone;
   m_centralTrackThresholdPt   = centralThreshold;
@@ -472,7 +446,7 @@ void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *track
   std::vector<const reco::Track*> nonMuons;
   for (reco::TrackCollection::const_iterator track = tracks->begin();  track != tracks->end();  ++track) {
     bool matchesMuon = false;
-    
+
     for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
       const pat::Muon *muon = dynamic_cast<const pat::Muon*>(daughter(i));
       if (muon->innerTrack().isAvailable()  &&  sameTrack(&*track, &*(muon->innerTrack()))) {
@@ -480,20 +454,20 @@ void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *track
         break;
       }
     }
-    
+
     for (pat::MuonCollection::const_iterator muon = allmuons->begin();  muon != allmuons->end();  ++muon) {
       if (muon->innerTrack().isAvailable()  &&  sameTrack(&*track, &*(muon->innerTrack()))) {
         matchesMuon = true;
         break;
       }
     }
-    
+
     if (!matchesMuon) nonMuons.push_back(&*track);
   }
 
   for (std::vector<const reco::Track*>::const_iterator nonMuon = nonMuons.begin();  nonMuon != nonMuons.end();  ++nonMuon) {
     bool inUnionCone = false;
-    
+
     for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
       double dphi = daughter(i)->phi() - (*nonMuon)->phi();
       while (dphi > M_PI)  dphi -= 2.*M_PI;
@@ -505,7 +479,7 @@ void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *track
         break;
       }
     }
-    
+
     if (inUnionCone  &&  (*nonMuon)->pt() > m_unionTrackThresholdPt) {
       m_unionTrackIsolation += (*nonMuon)->pt();
     }
@@ -525,9 +499,12 @@ void pat::MultiMuon::calculateTrackIsolation( const reco::TrackCollection *track
       diagnosticTTree->Fill();
     }
   }
-}
 
-void pat::MultiMuon::calculateNumberAboveThresholdIsolation( const reco::TrackCollection *tracks,
+}//end calculateTrackIsolation
+*/
+
+/*
+void pat::MultiMuon::calculateNumberAboveThresholdIsolation(  const reco::TrackCollection *tracks,
                                                               const pat::MuonCollection *allmuons,
                                                               double centralCone,
                                                               double unionCone,
@@ -535,7 +512,7 @@ void pat::MultiMuon::calculateNumberAboveThresholdIsolation( const reco::TrackCo
                                                               double unionThreshold,
                                                               TTree *diagnosticTTree,
                                                               Float_t *diagnosticdR,
-                                                              Float_t *diagnosticpT) {
+                                                              Float_t *diagnosticpT ) {
   m_centralNumberAboveThresholdCone = centralCone;
   m_unionNumberAboveThresholdCone   = unionCone;
   m_centralNumberAboveThresholdPt   = centralThreshold;
@@ -546,7 +523,7 @@ void pat::MultiMuon::calculateNumberAboveThresholdIsolation( const reco::TrackCo
   std::vector<const reco::Track*> nonMuons;
   for (reco::TrackCollection::const_iterator track = tracks->begin();  track != tracks->end();  ++track) {
     bool matchesMuon = false;
-    
+
     for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
       const pat::Muon *muon = dynamic_cast<const pat::Muon*>(daughter(i));
       if (muon->innerTrack().isAvailable()  &&  sameTrack(&*track, &*(muon->innerTrack()))) {
@@ -554,20 +531,21 @@ void pat::MultiMuon::calculateNumberAboveThresholdIsolation( const reco::TrackCo
         break;
       }
     }
-    
+
     for (pat::MuonCollection::const_iterator muon = allmuons->begin();  muon != allmuons->end();  ++muon) {
       if (muon->innerTrack().isAvailable()  &&  sameTrack(&*track, &*(muon->innerTrack()))) {
         matchesMuon = true;
         break;
       }
     }
-    
+
     if (!matchesMuon) nonMuons.push_back(&*track);
   }
 
   for (std::vector<const reco::Track*>::const_iterator nonMuon = nonMuons.begin();  nonMuon != nonMuons.end();  ++nonMuon) {
     if ((*nonMuon)->pt() > unionThreshold) {
       bool inUnionCone = false;
+
       for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
         double dphi = daughter(i)->phi() - (*nonMuon)->phi();
         while (dphi > M_PI) dphi -= 2.*M_PI;
@@ -579,9 +557,11 @@ void pat::MultiMuon::calculateNumberAboveThresholdIsolation( const reco::TrackCo
           break;
         }
       }
+
       if (inUnionCone) {
         m_unionNumberAboveThreshold++;
       }
+
     }
 
     double dphi = phi() - (*nonMuon)->phi();
@@ -599,8 +579,11 @@ void pat::MultiMuon::calculateNumberAboveThresholdIsolation( const reco::TrackCo
       diagnosticTTree->Fill();
     }
   }
-}
 
+}//end calculateNumberAboveThresholdIsolation
+*/
+
+/*
 void pat::MultiMuon::calculateCaloIsolation(const CaloTowerCollection *caloTowers, double centralCone, double unionCone) {
   m_centralCaloIsolationCone = centralCone;
   m_unionCaloIsolationCone   = unionCone;
@@ -663,7 +646,9 @@ void pat::MultiMuon::calculateCaloIsolation(const CaloTowerCollection *caloTower
       m_centralHCALIsolation += HCALcontribution;
     }
   }
-}
+
+}//end calculateCaloIsolation
+*/
 
 bool pat::MultiMuon::overlaps(const pat::MultiMuon &aMultiMuon) const {
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
@@ -698,21 +683,22 @@ bool pat::MultiMuon::contains(const pat::Muon &aMuon) const {
 }
 
 pat::MultiMuon pat::MultiMuon::merge( const pat::MultiMuon &aMultiMuon,
-                                      const TransientTrackBuilder *transientTrackBuilder,
-                                      const reco::TrackCollection *tracks,
-                                      const pat::MuonCollection *allmuons,
-                                      const CaloTowerCollection *caloTowers,
-                                      double centralTrackIsolationCone,
-                                      double unionTrackIsolationCone,
-                                      double centralTrackThresholdPt,
-                                      double unionTrackThresholdPt,
-                                      double centralCaloIsolationCone,
-                                      double unionCaloIsolationCone,
-                                      double centralNumberAboveThresholdCone,
-                                      double unionNumberAboveThresholdCone,
-                                      double centralNumberAboveThresholdPt,
-                                      double unionNumberAboveThresholdPt) {
-  
+                                      const TransientTrackBuilder *transientTrackBuilder
+                                      //const reco::TrackCollection *tracks,
+                                      //const pat::MuonCollection *allmuons,
+                                      //const CaloTowerCollection *caloTowers,
+                                      //double centralTrackIsolationCone,
+                                      //double unionTrackIsolationCone,
+                                      //double centralTrackThresholdPt,
+                                      //double unionTrackThresholdPt,
+                                      //double centralCaloIsolationCone,
+                                      //double unionCaloIsolationCone,
+                                      //double centralNumberAboveThresholdCone,
+                                      //double unionNumberAboveThresholdCone,
+                                      //double centralNumberAboveThresholdPt,
+                                      //double unionNumberAboveThresholdPt
+																			) {
+
   std::vector<const pat::Muon*> muons;
 
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
@@ -741,25 +727,41 @@ pat::MultiMuon pat::MultiMuon::merge( const pat::MultiMuon &aMultiMuon,
     }
 
     if (!same) muons.push_back(daughter_j);
-  }
+  }//end j aMultiMuon.numberOfDaughters()
 
-  return pat::MultiMuon(muons, transientTrackBuilder, tracks, allmuons, caloTowers, centralTrackIsolationCone, unionTrackIsolationCone, centralTrackThresholdPt, unionTrackThresholdPt, centralCaloIsolationCone, unionCaloIsolationCone, centralNumberAboveThresholdCone, unionNumberAboveThresholdCone, centralNumberAboveThresholdPt, unionNumberAboveThresholdPt);
-}
+  return pat::MultiMuon(muons,
+		                    transientTrackBuilder
+												//tracks,
+												//allmuons,
+												//caloTowers,
+												//centralTrackIsolationCone,
+												//unionTrackIsolationCone,
+												//centralTrackThresholdPt,
+												//unionTrackThresholdPt,
+												//centralCaloIsolationCone,
+												//unionCaloIsolationCone,
+												//centralNumberAboveThresholdCone,
+												//unionNumberAboveThresholdCone,
+												//centralNumberAboveThresholdPt,
+												//unionNumberAboveThresholdPt
+												);
+}//end merge
 
 void pat::MultiMuon::checkVertex() const {
   if (!m_vertexValid) {
     throw cms::Exception("MultiMuon") << "Request for vertex information, but no vertex has been calculated.";
   }
 }
-
+/*
 void pat::MultiMuon::checkConsistentVtx() const {
   if (!m_consistentVtxValid) {
     throw cms::Exception("MultiMuon") << "Request for consistent vertex information, but no vertex has been calculated.";
   }
 }
+*/
 
 bool pat::MultiMuon::sameTrack(const reco::Track *one, const reco::Track *two) const {
-  return (fabs(one->px() - two->px()) < 1e-10  &&
+  return ( fabs(one->px() - two->px()) < 1e-10  &&
            fabs(one->py() - two->py()) < 1e-10  &&
            fabs(one->pz() - two->pz()) < 1e-10  &&
            fabs(one->vx() - two->vx()) < 1e-10  &&
@@ -767,6 +769,7 @@ bool pat::MultiMuon::sameTrack(const reco::Track *one, const reco::Track *two) c
            fabs(one->vz() - two->vz()) < 1e-10    );
 }
 
+/*
 double pat::MultiMuon::noiseEcal(const CaloTower &tower) const {
   const double theNoiseTow_EB = 0.04;
   const double theNoiseTow_EE = 0.15;
@@ -783,6 +786,7 @@ double pat::MultiMuon::noiseHOcal(const CaloTower &tower) const {
   const double theNoise_HO = 0.2;
   return theNoise_HO;
 }
+*/
 
 GlobalVector pat::MultiMuon::daughterCOM(int i, bool vertex) const {
   double betax = 0.;
@@ -838,6 +842,7 @@ double pat::MultiMuon::daughterCOMcosTheta(int i, bool vertex) const {
   return d.z() / d.mag();
 }
 
+/*
 std::vector<std::pair<int,int> > pat::MultiMuon::consistentPairs(bool vertex) const {
   std::vector<int> positives, negatives;
   for (unsigned int i = 0;  i < numberOfDaughters();  i++) {
@@ -879,7 +884,7 @@ std::vector<std::pair<int,int> > pat::MultiMuon::consistentPairs(bool vertex) co
           muon1 = GlobalVector(v1.x(), v1.y(), v1.z());
           muon2 = GlobalVector(v2.x(), v2.y(), v2.z());
         }
-        
+
         double muon_mass    = daughter(largerset[*largerset_index])->mass();  // get the muon mass from CMSSW
         double total_energy = sqrt(muon1.mag2() + pow(muon_mass, 2)) + sqrt(muon2.mag2() + pow(muon_mass, 2));
         double total_px     = muon1.x() + muon2.x();
@@ -907,17 +912,20 @@ std::vector<std::pair<int,int> > pat::MultiMuon::consistentPairs(bool vertex) co
   std::vector<std::pair<int,int> > output;
   unsigned int smallerset_index = 0;
   for (std::vector<int>::const_iterator largerset_index = bestPermutation.begin();  largerset_index != bestPermutation.end();  ++largerset_index, ++smallerset_index) {
-    if (smallerset_index < smallerset.size()) {
+
+		if (smallerset_index < smallerset.size()) {
 	     if (daughter(largerset[*largerset_index])->charge() > 0) {
 	        output.push_back(std::pair<int,int>(largerset[*largerset_index], smallerset[smallerset_index]));
 	     } else {
 	        output.push_back(std::pair<int,int>(smallerset[smallerset_index], largerset[*largerset_index]));
 	     }
     }
+
   }
-  
+
   return output;
-}
+}//end consistentPairs
+*/
 
 void pat::MultiMuon::buildPermutation(std::vector<std::vector<int> > &results, std::vector<int> working, int where, int value) const {
   std::vector<int>::iterator iter = working.begin();
@@ -933,6 +941,7 @@ void pat::MultiMuon::buildPermutation(std::vector<std::vector<int> > &results, s
   }
 }
 
+/*
 std::vector<double> pat::MultiMuon::consistentPairMasses(bool vertex) const {
   std::vector<std::pair<int,int> > pairIndicies = consistentPairs(vertex);
   std::vector<double> output;
@@ -964,20 +973,26 @@ std::vector<double> pat::MultiMuon::consistentPairMasses(bool vertex) const {
 
   return output;
 }
+*/
 
 
 // functions that define fiducial volume
-// http://arxiv.org/pdf/0904.4761v1.pdf
-// units are in [cm]
+// http://arxiv.org/pdf/0904.4761v1.pdf (Phase-0 Pixel)
+// Wei SHI @03.28.2019: Updated to Phase-1 Pixel(2017+2018)
+// [1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
+// [2]TDR Chapter3: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
+// Units are in [cm]
 double pat::pixelBarrelR(int pixelBarrelLayer)
 {
   switch(pixelBarrelLayer){
   case 1:
-    return 4.0; //Documentation shows detector center at 4.4 cm
+    return 2.9;
   case 2:
-    return 6.9; //Documentation shows detector center 7.3 cm
+    return 6.8;
   case 3:
-    return 9.8; //Documentation shows detector center at 10.2 cm
+    return 10.9;
+	case 4:
+	  return 16.0;
   default:
       return -99;
   };
@@ -992,9 +1007,11 @@ double pat::pixelEndcapZ(int pixelEndcapLayer)
 {
   switch(pixelEndcapLayer){
   case 1:
-    return 34.5; 
+    return 29.1;
   case 2:
-    return 46.5;
+    return 39.6;
+	case 3:
+	  return 51.6;
   default:
       return -99;
   };

@@ -28,33 +28,10 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
   }
 }
 
-/* void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root") */
-/* { */
-/*   bool verbose(false); */
-/*   for(std::string dirname : v) { */
-/*     TSystemDirectory dir(dirname.c_str(), dirname.c_str()); */
-/*     TList *files = dir.GetListOfFiles(); */
-/*     if (files) { */
-/*       if (verbose) std::cout << "Found files" << std::endl; */
-/*       TSystemFile *file; */
-/*       TString fname; */
-/*       TIter next(files); */
-/*       while ((file=(TSystemFile*)next())) { */
-/* 	fname = file->GetName(); */
-/* 	if (verbose) std::cout << "found fname " << dirname + fname << std::endl; */
-/* 	if (!file->IsDirectory() && fname.BeginsWith(ext)) { */
-/* 	  if (verbose) std::cout << "adding fname " << dirname + fname << std::endl; */
-/* 	  ch->Add(dirname + fname); */
-/* 	} */
-/*       } */
-/*     } */
-/*   } */
-/* } */
-
-
 void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root")
 {
   bool verbose(true);
+  int nfiles=0;
   for(std::string dirname : v) {
     TSystemDirectory dir(dirname.c_str(), dirname.c_str());
     TList *files = dir.GetListOfFiles();
@@ -65,9 +42,10 @@ void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".
       TIter next(files);
       while ((file=(TSystemFile*)next())) {
         fname = file->GetName();
-        if (verbose) std::cout << "found fname " << dirname + fname << std::endl;
+        if (verbose) std::cout << "found file name: " << dirname + fname << std::endl;
         if (!file->IsDirectory() && fname.BeginsWith(ext)) {
-          if (verbose) std::cout << "adding fname " << dirname + fname << std::endl;
+          nfiles++;
+          if (verbose) std::cout << "adding file #"<<nfiles<<", name: " << dirname + fname << std::endl;
           ch->Add(dirname + fname);
         }
       }
@@ -107,7 +85,7 @@ void decodeFileNameMany(const std::vector<string>& v, TString& mass_string, TStr
 
 void decodeFileNameManyJpsi(const std::vector<string>& v, TString& period)
 {
-  //Get the Run period                                                                          
+  //Get the Run period
   TString str(v[0]);
   TString str2 = "MuOnia_Run2016";
   Ssiz_t first = str.Index(str2);
@@ -135,13 +113,3 @@ void readTextFileWithSamples(const std::string fileName, std::vector< std::vecto
   v.push_back(vv);
   infile.close();
 }
-
-/* void printFileNames(const std::vector< std::vector<string> >& vec) */
-/* { */
-/*   for (int i = 0; i < vec.size(); i++){ */
-/*     for (int j = 0; j < vec[i].size(); j++){ */
-/*       cout << vec[i][j] <<endl; */
-/*     } */
-/*     cout <<endl; */
-/*   } */
-/* } */

@@ -33,8 +33,6 @@
 #include "TrackingTools/PatternTools/interface/Trajectory.h"
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
-#include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
-#include "MuJetAnalysis/AnalysisTools/interface/DisplacedVertexFinder.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
 // user include files
@@ -278,6 +276,10 @@ private:
   Float_t b_genA1Mu_dR;
   Float_t b_genA0Mu_dCharge;
   Float_t b_genA1Mu_dCharge;//Should be 2 or -2
+  Float_t b_genA0Mu_dPt;
+  Float_t b_genA1Mu_dPt;
+  Float_t b_genA0Mu_RPt;
+  Float_t b_genA1Mu_RPt;
 
   //Geometry of dimu
   //Use muons from the same A
@@ -325,9 +327,10 @@ private:
 
   // Labels to access
   edm::EDGetTokenT<pat::MuonCollection> m_muons;        // reconstructed muons
-  edm::EDGetTokenT<pat::MultiMuonCollection> m_muJets;       // muon jets built from reconstructed muons
+  edm::EDGetTokenT<pat::MultiMuonCollection> m_muPairs;
+  edm::EDGetTokenT<pat::MultiMuonCollection> m_muJets;
+  edm::EDGetTokenT<pat::MuonCollection> m_muJetOrphans;
   edm::EDGetTokenT<reco::BeamSpot> m_beamSpot;
-  edm::EDGetTokenT<pat::MuonCollection> m_muJetOrphans; // muon orphan, not found in any group
   edm::EDGetTokenT<reco::TrackCollection> m_tracks;
   edm::EDGetTokenT<reco::GenParticleCollection> m_genParticles;
   edm::EDGetTokenT<edm::TriggerResults> m_trigRes;
@@ -335,6 +338,7 @@ private:
   edm::EDGetTokenT<reco::TrackCollection> m_trackRef;
   edm::EDGetTokenT< std::vector<Trajectory> > m_traj;
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
+  edm::EDGetTokenT<reco::VertexCollection> m_secondaryVertices;
   edm::EDGetTokenT<std::vector<pat::Jet> > m_PATJet;
 
   Int_t         m_nThrowsConsistentVertexesCalculator;
@@ -385,22 +389,6 @@ private:
   Int_t  m_events2DiMuons; // ... with 2 dimuons (dimuon = muon jet with 2 muons)
 
   Bool_t b_is2DiMuonsFittedVtxOK;
-  //Bool_t b_is2DiMuonsFittedVtxOK_KF;
-  //Bool_t b_is2DiMuonsFittedVtxOK_VS;
-  //Bool_t b_is2DiMuonsConsistentVtxOK;
-
-/*
-  //For vertex finding sanity checks
-  Int_t hitsBeforeVertex_diMuonC_FittedVTX;
-  Int_t hitsBeforeVertex_diMuonF_FittedVTX;
-  Int_t hitsBeforeVertex_diMuonC_ConsistentVTX;
-  Int_t hitsBeforeVertex_diMuonF_ConsistentVTX;
-
-  Int_t missingHitsAfterVertex_diMuonC_FittedVTX;
-  Int_t missingHitsAfterVertex_diMuonF_FittedVTX;
-  Int_t missingHitsAfterVertex_diMuonC_ConsistentVTX;
-  Int_t missingHitsAfterVertex_diMuonF_ConsistentVTX;
-*/
 
   Bool_t b_isDiMuonHLTFired;
   Bool_t b_isControlHLT16Fired;
@@ -411,11 +399,12 @@ private:
   //Bool_t b_is2DiMuonsMassOK_ConsistentVtx;
   Bool_t b_isVertexOK;
 
-  Float_t b_Mass4Mu;
-
   // Reco branches in ROOT tree (they all start with b_)
   Int_t b_nRecoMu;
+  Int_t b_nMuPairs;
   Int_t b_nMuJets;
+  Int_t b_nOrphans;
+  Float_t b_nDaughterPerMuPair;
   Float_t b_nDaughterPerMuJet;
 
   Float_t b_selMu0_px;
@@ -458,30 +447,20 @@ private:
   Float_t b_diMuonC_FittedVtx_vy;
   Float_t b_diMuonC_FittedVtx_vz;
 
-  Int_t b_diMuonC_m1_FittedVtx_hitpix;
-  Int_t b_diMuonC_m2_FittedVtx_hitpix;
-  Int_t b_diMuonF_m1_FittedVtx_hitpix;
-  Int_t b_diMuonF_m2_FittedVtx_hitpix;
+  Int_t b_diMuonC_m1_FittedVtx_hitpix_Phase1;
+  Int_t b_diMuonC_m2_FittedVtx_hitpix_Phase1;
+  Int_t b_diMuonF_m1_FittedVtx_hitpix_Phase1;
+  Int_t b_diMuonF_m2_FittedVtx_hitpix_Phase1;
 
-  Int_t b_diMuonC_m1_FittedVtx_hitpix_l2inc;
-  Int_t b_diMuonC_m2_FittedVtx_hitpix_l2inc;
-  Int_t b_diMuonF_m1_FittedVtx_hitpix_l2inc;
-  Int_t b_diMuonF_m2_FittedVtx_hitpix_l2inc;
+  Int_t b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits;
+  Int_t b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits;
+  Int_t b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits;
+  Int_t b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits;
 
-  Int_t b_diMuonC_m1_FittedVtx_hitpix_l3inc;
-  Int_t b_diMuonC_m2_FittedVtx_hitpix_l3inc;
-  Int_t b_diMuonF_m1_FittedVtx_hitpix_l3inc;
-  Int_t b_diMuonF_m2_FittedVtx_hitpix_l3inc;
-
-  Int_t b_diMuonC_m1_FittedVtx_HBV;
-  Int_t b_diMuonC_m2_FittedVtx_HBV;
-  Int_t b_diMuonF_m1_FittedVtx_HBV;
-  Int_t b_diMuonF_m2_FittedVtx_HBV;
-
-  Int_t b_diMuonC_m1_FittedVtx_MHAV;
-  Int_t b_diMuonC_m2_FittedVtx_MHAV;
-  Int_t b_diMuonF_m1_FittedVtx_MHAV;
-  Int_t b_diMuonF_m2_FittedVtx_MHAV;
+  Int_t b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
 
   Float_t b_diMuonC_FittedVtx_Lxy;
   Float_t b_diMuonC_FittedVtx_L;
@@ -500,44 +479,25 @@ private:
   Float_t b_diMuonF_FittedVtx_Lxy;
   Float_t b_diMuonF_FittedVtx_L;
   Float_t b_diMuonF_FittedVtx_dz;
-/*
-  Float_t b_diMuonC_ConsistentVtx_m;
-  Float_t b_diMuonC_ConsistentVtx_px;
-  Float_t b_diMuonC_ConsistentVtx_py;
-  Float_t b_diMuonC_ConsistentVtx_pz;
-  Float_t b_diMuonC_ConsistentVtx_eta;
-  Float_t b_diMuonC_ConsistentVtx_phi;
-  Float_t b_diMuonC_ConsistentVtx_vx;
-  Float_t b_diMuonC_ConsistentVtx_vy;
-  Float_t b_diMuonC_ConsistentVtx_vz;
 
-  Float_t b_diMuonC_ConsistentVtx_Lxy;
-  Float_t b_diMuonC_ConsistentVtx_L;
-  Float_t b_diMuonC_ConsistentVtx_dz;
-
-  Float_t b_diMuonF_ConsistentVtx_m;
-  Float_t b_diMuonF_ConsistentVtx_px;
-  Float_t b_diMuonF_ConsistentVtx_py;
-  Float_t b_diMuonF_ConsistentVtx_pz;
-  Float_t b_diMuonF_ConsistentVtx_eta;
-  Float_t b_diMuonF_ConsistentVtx_phi;
-  Float_t b_diMuonF_ConsistentVtx_vx;
-  Float_t b_diMuonF_ConsistentVtx_vy;
-  Float_t b_diMuonF_ConsistentVtx_vz;
-
-  Float_t b_diMuonF_ConsistentVtx_Lxy;
-  Float_t b_diMuonF_ConsistentVtx_L;
-  Float_t b_diMuonF_ConsistentVtx_dz;
-*/
   Float_t b_diMuons_dz_FittedVtx;
-  //Float_t b_diMuons_dz_ConsistentVtx;
 
   Float_t b_diMuonC_IsoTk_FittedVtx;
   Float_t b_diMuonF_IsoTk_FittedVtx;
-  //Float_t b_diMuonC_IsoTk_ConsistentVtx;
-  //Float_t b_diMuonF_IsoTk_ConsistentVtx;
+  Float_t b_diMuonCMu0_IsoTk0p3_FittedVtx;
+  Float_t b_diMuonCMu0_IsoTk0p4_FittedVtx;
+  Float_t b_diMuonCMu0_IsoTk0p5_FittedVtx;
+  Float_t b_diMuonCMu1_IsoTk0p3_FittedVtx;
+  Float_t b_diMuonCMu1_IsoTk0p4_FittedVtx;
+  Float_t b_diMuonCMu1_IsoTk0p5_FittedVtx;
+  Float_t b_diMuonFMu0_IsoTk0p3_FittedVtx;
+  Float_t b_diMuonFMu0_IsoTk0p4_FittedVtx;
+  Float_t b_diMuonFMu0_IsoTk0p5_FittedVtx;
+  Float_t b_diMuonFMu1_IsoTk0p3_FittedVtx;
+  Float_t b_diMuonFMu1_IsoTk0p4_FittedVtx;
+  Float_t b_diMuonFMu1_IsoTk0p5_FittedVtx;
 
-  bool runDisplacedVtxFinder_;
+  //bool runDisplacedVtxFinder_;
   bool skimOutput_; //fill only events with 2 good dimuons
   bool useFinalDecision_;//L1 fin-OR
 
@@ -553,14 +513,19 @@ private:
 
   //BB estimation
   Bool_t runBBestimation_;
-  Float_t m_orphan_dimu_mass;
-  Float_t m_orphan_mass;
   Int_t m_dimuorphan_containstrig;
   Int_t m_dimuorphan_containstrig2;
-  Float_t m_orphan_z;
+  Float_t m_orphan_dimu_mass;
   Float_t m_orphan_dimu_z;
-  Float_t m_orphan_isoTk;
+  Float_t m_orphan_z;
   Float_t m_orphan_dimu_isoTk;
+  Float_t m_orphan_dimu_Mu0_isoTk0p3;
+  Float_t m_orphan_dimu_Mu0_isoTk0p4;
+  Float_t m_orphan_dimu_Mu0_isoTk0p5;
+  Float_t m_orphan_dimu_Mu1_isoTk0p3;
+  Float_t m_orphan_dimu_Mu1_isoTk0p4;
+  Float_t m_orphan_dimu_Mu1_isoTk0p5;
+  Float_t m_orphan_isoTk;
   Bool_t  m_orphan_passOffLineSel;
   Bool_t  m_orphan_passOffLineSelPt;
   Bool_t  m_orphan_passOffLineSelPtEta;
@@ -640,9 +605,10 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   //****************************************************************************
 
   m_muons           = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muons"));
+  m_muPairs         = consumes<pat::MultiMuonCollection>(iConfig.getParameter<edm::InputTag>("muPairs"));
   m_muJets          = consumes<pat::MultiMuonCollection>(iConfig.getParameter<edm::InputTag>("muJets"));
-  m_beamSpot        = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
   m_muJetOrphans    = consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muJetOrphans"));
+  m_beamSpot        = consumes<reco::BeamSpot>(iConfig.getParameter<edm::InputTag>("beamSpot"));
   m_tracks          = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("tracks"));
   m_genParticles    = consumes<reco::GenParticleCollection>(iConfig.getParameter<edm::InputTag>("PrunedGenParticles"));
   m_trigRes         = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("TriggerResults"));
@@ -650,6 +616,7 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   m_trackRef        = consumes<reco::TrackCollection>(iConfig.getParameter<edm::InputTag>("TrackRefitter"));
   m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
+  m_secondaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("secondaryVertices"));
   m_PATJet          = consumes<std::vector<pat::Jet> >(iConfig.getParameter<edm::InputTag>("PATJet"));
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
@@ -671,7 +638,7 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   histo_name = true;
   NameAndNumb.clear();
 
-  runDisplacedVtxFinder_ = iConfig.getParameter<bool>("runDisplacedVtxFinder");
+  //runDisplacedVtxFinder_ = iConfig.getParameter<bool>("runDisplacedVtxFinder");
 
   param_ = iConfig;
   measurementTrkToken_ = consumes<MeasurementTrackerEvent>(iConfig.getParameter<edm::InputTag>("MeasurementTrackerEvent"));
@@ -713,32 +680,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   using namespace edm;
   double eq = 0.000001; // small number used below to compare variables
 
-  b_diMuonC_m1_FittedVtx_hitpix=-1000;
-  b_diMuonC_m2_FittedVtx_hitpix=-1000;
-  b_diMuonF_m1_FittedVtx_hitpix=-1000;
-  b_diMuonF_m2_FittedVtx_hitpix=-1000;
+  b_diMuonC_m1_FittedVtx_hitpix_Phase1=-1000;
+  b_diMuonC_m2_FittedVtx_hitpix_Phase1=-1000;
+  b_diMuonF_m1_FittedVtx_hitpix_Phase1=-1000;
+  b_diMuonF_m2_FittedVtx_hitpix_Phase1=-1000;
 
-  b_diMuonC_m1_FittedVtx_hitpix_l2inc=-1000;
-  b_diMuonC_m2_FittedVtx_hitpix_l2inc=-1000;
-  b_diMuonF_m1_FittedVtx_hitpix_l2inc=-1000;
-  b_diMuonF_m2_FittedVtx_hitpix_l2inc=-1000;
+  b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits=-1000;
+  b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits=-1000;
+  b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits=-1000;
+  b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits=-1000;
 
-  b_diMuonC_m1_FittedVtx_hitpix_l3inc=-1000;
-  b_diMuonC_m2_FittedVtx_hitpix_l3inc=-1000;
-  b_diMuonF_m1_FittedVtx_hitpix_l3inc=-1000;
-  b_diMuonF_m2_FittedVtx_hitpix_l3inc=-1000;
-
-  b_diMuonC_m1_FittedVtx_HBV = -1000;
-  b_diMuonC_m2_FittedVtx_HBV = -1000;
-  b_diMuonF_m1_FittedVtx_HBV = -1000;
-  b_diMuonF_m2_FittedVtx_HBV = -1000;
-
-  b_diMuonC_m1_FittedVtx_MHAV = -1000;
-  b_diMuonC_m2_FittedVtx_MHAV = -1000;
-  b_diMuonF_m1_FittedVtx_MHAV = -1000;
-  b_diMuonF_m2_FittedVtx_MHAV = -1000;
-
-  b_Mass4Mu = -1.;
+  b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
+  b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
+  b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
+  b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement=-1000;
 
   //****************************************************************************
   //                          EVENT LEVEL
@@ -817,12 +772,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     edm::Handle<reco::GenParticleCollection> genParticles;
     iEvent.getByToken(m_genParticles, genParticles);
 
-    //@Wei SHI 07.26.2018
-    //Note for PDG ID in three benchmark models:
+    //@Wei SHI
+    //Note for PDG ID in benchmark models:
     //(1) NMSSM: Higgs={35}, new light boson={36,54}, muons={13,-13},
     //    '54' is the corner case in pythia when '36' doesn't work for some mass points
     //(2) MSSMD (Dark SUSY): Higgs={25}, new light boson={3000022}, muons={13,-13}
     //(3) ALP: Higgs={25}, new light boson={9000005}, muons={13,-13}
+    //(4) Scalar Model from Mehdi: Higgs like ZD={5000002}, new light boson SD={5000512, -5000512}, muons={13,-13}
+    //(5) Fermionic Model from Mehdi: Higgs like ZD={5000002}, new light fermion? F11&F12?={5000521}, muons={13,-13}
     std::vector<const reco::GenParticle*> genH;
     std::vector<const reco::GenParticle*> genA_unsorted;
     std::vector<const reco::GenParticle*> genA;
@@ -833,16 +790,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     int counterGenParticle = 0;
     for(reco::GenParticleCollection::const_iterator iGenParticle = genParticles->begin();  iGenParticle != genParticles->end();  ++iGenParticle) {
       counterGenParticle++;
-      if(m_debug > 10) std::cout << "#" <<counterGenParticle << " id: " << iGenParticle->pdgId() << "; status: " << iGenParticle->status() <<"; px: "<< iGenParticle->px() << "; py: "<< iGenParticle->py() << "; pz: "<< iGenParticle->pz() << std::endl;
+      //std::cout << "#" <<counterGenParticle << " id: " << iGenParticle->pdgId() << "; status: " << iGenParticle->status() <<"; pT: "<< iGenParticle->pt() <<"; eta: "<< iGenParticle->eta() << "; phi: " << iGenParticle->phi() << "; vx: " << iGenParticle->vx()<<"; vy: "<<iGenParticle->vy()<<"; vz: "<<iGenParticle->vz()<< std::endl;
 
       // Check if gen particle is muon
       if ( fabs( iGenParticle->pdgId() ) == 13 && iGenParticle->status() == 1 ) {
 
-	//This example below looks super suspicious to me. Does it really exist? @Wei SHI 07.26.2018
         // Mother of the muon can be muon. Find the last muon in this chain: genMuonCand
         // Example: a1 -> mu+ (status = 3) mu- (status = 3)
         //          mu- (status = 3) -> mu- (status = 2) -> mu- (status = 1)
-
         const reco::Candidate *genMuonCand = &(*iGenParticle);
         bool isMuonMother = true;
         while(isMuonMother) {
@@ -858,32 +813,50 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         // Loop over all real (non-muon) mothers of the muon (here we use genMuonCand)
         for ( size_t iMother = 0; iMother < genMuonCand->numberOfMothers(); iMother++ ) {
 
-          if ( genMuonCand->mother(iMother)->pdgId() == 36 ||
-	       genMuonCand->mother(iMother)->pdgId() == 54 ||
-	       genMuonCand->mother(iMother)->pdgId() == 3000022 ||
-	       genMuonCand->mother(iMother)->pdgId() == 9000005  ) {
+          if (
+            genMuonCand->mother(iMother)->pdgId() == 36 ||
+            genMuonCand->mother(iMother)->pdgId() == 54 ||
+            genMuonCand->mother(iMother)->pdgId() == 3000022 ||
+            genMuonCand->mother(iMother)->pdgId() == 9000005 ||
+            fabs( genMuonCand->mother(iMother)->pdgId() ) == 5000512 ||
+            genMuonCand->mother(iMother)->pdgId() == 5000521
+          ) {
             // Store the muon (stable, first in chain) into vector
             genMuons.push_back(&(*iGenParticle));
             // Store mother of the muon into vector. We need this to group muons into dimuons later
             genMuonMothers.push_back(genMuonCand->mother(iMother));
           }
         }
-      }
+      }//end check if gen particle is muon
 
-      // Check if gen particle is Higgs
-      if ( ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 25 ) ||
-	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 35 )  ) {
+      //=======================================================================
+      // !!!Note: Wei SHI @Aug 1, 2019
+      // Below status code 22 is PYTHIA8 convention for intermediate partiles, this should be changed
+      // if one uses another showering program, for example, Herwig7 uses status code 11 for intermediate particles
+      //=======================================================================
+      // Check if gen particle is Higgs(like), these branches are not used at the moment
+      if (
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 25 ) ||
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 35 ) ||
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 5000002 )
+       ) {
         genH.push_back(&(*iGenParticle));
       }
 
       // Check if gen particle is new light boson
-      if ( ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36 ) ||
-	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 54 ) ||
-	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 3000022 ) ||
-	   ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 9000005 )  ) {
+
+      if (
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36 ) ||
+	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 54 ) ||
+	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 3000022 ) ||
+	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 9000005 ) ||
+        ( iGenParticle->status() == 22 && fabs( iGenParticle->pdgId() ) == 5000512 ) ||
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 5000521 )
+      ) {
         genA_unsorted.push_back(&(*iGenParticle));
       }
-    }
+
+    }//end loop over gen particle
 
     if ( genH.size() == 1 ) {
       b_genH_m   = genH[0]->mass();
@@ -896,13 +869,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_genH_vy  = genH[0]->vy() - b_beamSpot_y;
       b_genH_vz  = genH[0]->vz() - b_beamSpot_z;
     } else {
-      //    std::cout << "WARNING! genH.size() != 1" << std::endl;
+      std::cout << "WARNING! genH.size() != 1" << std::endl;
     }
 
-    if ( genA_unsorted.size() >= 2 ) {
-      // Sort genA by pT (leading pT first)
-      std::sort (genA_unsorted.begin(), genA_unsorted.end(), tamu::helpers::PtOrder);
-    }
+    // Sort genA by pT (leading pT first)
+    if ( genA_unsorted.size() >= 2 ) std::sort (genA_unsorted.begin(), genA_unsorted.end(), tamu::helpers::PtOrder);
 
     genA = genA_unsorted;
 
@@ -930,6 +901,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_genA_dEta = b_genA0_eta - b_genA1_eta;
       b_genA_dPhi = tamu::helpers::My_dPhi( b_genA0_phi, b_genA1_phi );
       b_genA_dR   = sqrt(b_genA_dEta*b_genA_dEta + b_genA_dPhi*b_genA_dPhi);
+
+      //std::cout << "* Check genA pt order *"<< std::endl;
+      //std::cout << "genA[0] pT: " <<genA[0]->pt()<< std::endl;
+      //std::cout << "genA[1] pT: " <<genA[1]->pt()<< std::endl;
 
     } else {
       std::cout << "WARNING! genA.size() < 2" << std::endl;
@@ -1059,6 +1034,23 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         b_genA0_L = sqrt( b_genA0_Lx * b_genA0_Lx + b_genA0_Ly * b_genA0_Ly + b_genA0_Lz * b_genA0_Lz );
         b_genA1_L = sqrt( b_genA1_Lx * b_genA1_Lx + b_genA1_Ly * b_genA1_Ly + b_genA1_Lz * b_genA1_Lz );
 
+        //std::cout<<">>> MINIAOD Event #"<<m_events<<std::endl;
+        //std::cout<<"GENA mass (0, 1)[GeV]: "<<b_genA0_m    <<", "<<b_genA1_m       << std::endl;
+
+        //std::cout<<"genA0     (x,y,z)[cm]: "<<b_genA0_vx   <<", "<<b_genA0_vy      <<", "<<b_genA0_vz<<std::endl;
+        //std::cout<<"      (Lxy, |Lz|)[cm]: "<<b_genA0_Lxy  <<", "<<fabs(b_genA0_Lz)<<std::endl;
+        //std::cout<<"genA0 Mu0 (x,y,z)[cm]: "<<b_genA0Mu0_vx<<", "<<b_genA0Mu0_vy   <<", "<<b_genA0Mu0_vz<<std::endl;
+        //std::cout<<"          pT    [GeV]: "<<b_genA0Mu0_pt<<"; eta: "<<b_genA0Mu0_eta   <<"; phi: "<<b_genA0Mu0_phi<<std::endl;
+        //std::cout<<"genA0 Mu1 (x,y,z)[cm]: "<<b_genA0Mu1_vx<<", "<<b_genA0Mu1_vy   <<", "<<b_genA0Mu1_vz<<std::endl;
+        //std::cout<<"          pT    [GeV]: "<<b_genA0Mu1_pt<<"; eta: "<<b_genA0Mu1_eta   <<"; phi: "<<b_genA0Mu1_phi<<std::endl;
+
+        //std::cout<<"genA1     (x,y,z)[cm]: "<<b_genA1_vx   <<", "<<b_genA1_vy      <<", "<<b_genA1_vz<<std::endl;
+        //std::cout<<"      (Lxy, |Lz|)[cm]: "<<b_genA1_Lxy  <<", "<<fabs(b_genA1_Lz)<<std::endl;
+        //std::cout<<"genA1 Mu0 (x,y,z)[cm]: "<<b_genA1Mu0_vx<<", "<<b_genA1Mu0_vy   <<", "<<b_genA1Mu0_vz<<std::endl;
+        //std::cout<<"          pT    [GeV]: "<<b_genA1Mu0_pt<<"; eta: "<<b_genA1Mu0_eta   <<"; phi: "<<b_genA1Mu0_phi<<std::endl;
+        //std::cout<<"genA1 Mu1 (x,y,z)[cm]: "<<b_genA1Mu1_vx<<", "<<b_genA1Mu1_vy   <<", "<<b_genA1Mu1_vz<<std::endl;
+        //std::cout<<"          pT    [GeV]: "<<b_genA1Mu1_pt<<"; eta: "<<b_genA1Mu1_eta   <<"; phi: "<<b_genA1Mu1_phi<<std::endl;
+
       } else {
         std::cout << "WARNING! Muon vertexes are different. No Lxy's are calculated." << std::endl;
         b_genA0_Lx  = -1000.0;
@@ -1083,6 +1075,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       //they should be as they are generated this way
       b_genA0Mu_dCharge = b_genA0Mu0_charge - b_genA0Mu1_charge;
       b_genA1Mu_dCharge = b_genA1Mu0_charge - b_genA1Mu1_charge;
+      //pT difference/ratio of two muons inside one dimuon
+      b_genA0Mu_dPt = b_genA0Mu0_pt - b_genA0Mu1_pt;
+      b_genA1Mu_dPt = b_genA1Mu0_pt - b_genA1Mu1_pt;
+      if( b_genA0Mu1_pt != 0 ) b_genA0Mu_RPt = b_genA0Mu0_pt/b_genA0Mu1_pt;
+      if( b_genA1Mu1_pt != 0 ) b_genA1Mu_RPt = b_genA1Mu0_pt/b_genA1Mu1_pt;
 
       TLorentzVector A0Mu0, A0Mu1, A1Mu0, A1Mu1;
       A0Mu0.SetPtEtaPhiM(b_genA0Mu0_pt, b_genA0Mu0_eta, b_genA0Mu0_phi, 0.105);
@@ -1345,6 +1342,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_eta = -100.0;
     b_selMu0_phi = -100.0;
   }
+
   if ( selMuons.size() > 1 ) {
     b_selMu1_px  = selMuons[1]->px();
     b_selMu1_py  = selMuons[1]->py();
@@ -1360,6 +1358,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_eta = -100.0;
     b_selMu1_phi = -100.0;
   }
+
   if ( selMuons.size() > 2 ) {
     b_selMu2_px  = selMuons[2]->px();
     b_selMu2_py  = selMuons[2]->py();
@@ -1375,6 +1374,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_eta = -100.0;
     b_selMu2_phi = -100.0;
   }
+
   if ( selMuons.size() > 3 ) {
     b_selMu3_px  = selMuons[3]->px();
     b_selMu3_py  = selMuons[3]->py();
@@ -1382,6 +1382,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_pT  = selMuons[3]->pt();
     b_selMu3_eta = selMuons[3]->eta();
     b_selMu3_phi = selMuons[3]->phi();
+    //std::cout << "* Check selMuons pt order *"<< std::endl;
+    //std::cout << "selMuons[0] pT: " <<selMuons[0]->pt()<< std::endl;
+    //std::cout << "selMuons[1] pT: " <<selMuons[1]->pt()<< std::endl;
+    //std::cout << "selMuons[2] pT: " <<selMuons[2]->pt()<< std::endl;
+    //std::cout << "selMuons[3] pT: " <<selMuons[3]->pt()<< std::endl;
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1425,15 +1430,36 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
   }
 
-  if ( m_debug > 10 ) std::cout << m_events << " Build RECO muon jets" << std::endl;
+  if ( m_debug > 10 ) std::cout <<"---------------------"<< std::endl;
+  if ( m_debug > 10 ) std::cout <<"Event #"<< m_events << ": build RECO muon pairs" << std::endl;
+
+  //Check all formed mu pairs in each event
+  edm::Handle<pat::MultiMuonCollection> muPairs;
+  iEvent.getByToken(m_muPairs, muPairs);
+  b_nMuPairs = muPairs->size();
+  b_nDaughterPerMuPair = -999.;
+
+  if ( m_debug > 10 ) std::cout << ">>> Tot No. of Mu pairs: " << b_nMuPairs << std::endl;
+  if ( b_nMuPairs!=0 ){
+    b_nDaughterPerMuPair = 0.;
+    for ( int i = 0; i < b_nMuPairs; i++ ) {
+      //Sanity check: should always equal 2
+      b_nDaughterPerMuPair = b_nDaughterPerMuPair + (*muPairs)[i].numberOfDaughters();
+      //print out mu pair masses
+      if ( m_debug > 10 ) std::cout << "Mu pair #" << i+1 <<" mass: "<< (*muPairs)[i].mass() <<"; No. of Daughters: "<< (*muPairs)[i].numberOfDaughters() << std::endl;
+    }
+    b_nDaughterPerMuPair = b_nDaughterPerMuPair / b_nMuPairs;
+    if ( m_debug > 10 ) std::cout << "Avg. No. of Daughter per Mu pair: " << b_nDaughterPerMuPair << std::endl;
+  }
 
   edm::Handle<pat::MultiMuonCollection> muJets;
   iEvent.getByToken(m_muJets, muJets);
+  b_nMuJets = muJets->size();
+  b_nDaughterPerMuJet  = -999.;
+
   const pat::MultiMuon *muJetC = NULL;
   const pat::MultiMuon *muJetF = NULL;
   int nMuJetsContainMu17 = 0;
-  b_nDaughterPerMuJet  = 0.;
-  b_nMuJets = muJets->size();
   b_massC = -999.;
   b_massF = -999.;
   b_muJetC_Mu0_pt = -999.;
@@ -1442,7 +1468,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_muJetC_Mu1_pt = -999.;
   b_muJetC_Mu1_eta = -999.;
   b_muJetC_Mu1_phi = -999.;
-
   b_muJetF_Mu0_pt = -999.;
   b_muJetF_Mu0_eta = -999.;
   b_muJetF_Mu0_phi = -999.;
@@ -1450,12 +1475,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_muJetF_Mu1_eta = -999.;
   b_muJetF_Mu1_phi = -999.;
   b_is2MuJets = false;
+  if ( m_debug > 10 ) std::cout << ">>> Tot No. of Mu Jets: " << b_nMuJets << std::endl;
   //Store average no. of daughters in one mujet
-  for ( int d = 0; d < b_nMuJets; d++ ) {
-    b_nDaughterPerMuJet = b_nDaughterPerMuJet + (*muJets)[d].numberOfDaughters();
+  if ( b_nMuJets!=0 ) {
+    b_nDaughterPerMuJet  = 0.;
+    for ( int d = 0; d < b_nMuJets; d++ ) {
+      b_nDaughterPerMuJet = b_nDaughterPerMuJet + (*muJets)[d].numberOfDaughters();
+      if ( m_debug > 10 ) std::cout << "Mu Jet #" << d+1 <<" mass: "<< (*muJets)[d].mass() << "; No. of Daughters: "<< (*muJets)[d].numberOfDaughters() << std::endl;
+    }
+    b_nDaughterPerMuJet = b_nDaughterPerMuJet / b_nMuJets;
+    if ( m_debug > 10 ) std::cout << "Avg. No. of Daughter per Mu Jet: " << b_nDaughterPerMuJet << std::endl;
   }
-  b_nDaughterPerMuJet = b_nDaughterPerMuJet / b_nMuJets;
+
   if ( b_nMuJets == 2) {
+    if ( m_debug > 10 ) std::cout << "Exactly two mu jets !! PairOne mass: "<< (*muJets)[0].mass() << "; PairTwo mass: "<< (*muJets)[1].mass() << std::endl;
     for ( int j = 0; j < b_nMuJets; j++ ) {
       bool isMuJetContainMu17 = false;
       for ( unsigned int m = 0; m < (*muJets)[j].numberOfDaughters(); m++ ) {
@@ -1515,8 +1548,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_muJetF_Mu1_pt = muJetF->muon(1)->pt();
     b_muJetF_Mu1_eta = muJetF->muon(1)->eta();
     b_muJetF_Mu1_phi = muJetF->muon(1)->phi();
+
   }
-  // "Old" fitted vertexes
+  // fitted vertexes
   b_is2DiMuonsFittedVtxOK = false;
   if ( diMuonC != NULL && diMuonF != NULL ) {
     if ( diMuonC->vertexValid() && diMuonF->vertexValid() ) {
@@ -1524,53 +1558,48 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
   }
 
-/*
-  b_is2DiMuonsFittedVtxOK_KF = false;
-  if ( diMuonC != NULL && diMuonF != NULL ) {
-    if ( diMuonC->vertexValid_fitted() && diMuonF->vertexValid_fitted() ) {
-      b_is2DiMuonsFittedVtxOK_KF = true;
-    }
-  }
-  b_is2DiMuonsFittedVtxOK_VS = false;
-  if ( diMuonC != NULL && diMuonF != NULL ) {
-    if ( diMuonC->vertexValid_mindist() && diMuonF->vertexValid_mindist() ) {
-      b_is2DiMuonsFittedVtxOK_VS = true;
-    }
-  }
-  */
-
   // Fill branches with variables calculated with "old" fitted vertexes
   if ( b_is2DiMuonsFittedVtxOK ) {
-    b_diMuonC_FittedVtx_m   = diMuonC->vertexMass();
+    //All vertex* functions below defined in MuJetAnalysis/DataFormats/interface/MultiMuon.h
+    b_diMuonC_FittedVtx_m   = diMuonC->vertexMass();//seems ok
+    //This should propagate back to the beam line, looks right
+    b_diMuonC_FittedVtx_dz  = diMuonC->vertexDz(beamSpot->position());
+
+    //variables below are relevant when calculate dimu iso
     b_diMuonC_FittedVtx_px  = diMuonC->vertexMomentum().x();
     b_diMuonC_FittedVtx_py  = diMuonC->vertexMomentum().y();
     b_diMuonC_FittedVtx_pz  = diMuonC->vertexMomentum().z();
     b_diMuonC_FittedVtx_eta = diMuonC->vertexMomentum().eta();
     b_diMuonC_FittedVtx_phi = diMuonC->vertexMomentum().phi();
+    //vx,y,z seem to be propagated back to the beam line/IP, they shouldn't be! TO BE FIXED
     b_diMuonC_FittedVtx_vx  = diMuonC->vertexPoint().x();
     b_diMuonC_FittedVtx_vy  = diMuonC->vertexPoint().y();
     b_diMuonC_FittedVtx_vz  = diMuonC->vertexPoint().z();
-
     b_diMuonC_FittedVtx_Lxy = diMuonC->vertexLxy(beamSpotPosition);
     b_diMuonC_FittedVtx_L   = diMuonC->vertexL(beamSpotPosition);
-    b_diMuonC_FittedVtx_dz  = diMuonC->vertexDz(beamSpot->position());
 
-    b_diMuonF_FittedVtx_m   = diMuonF->vertexMass();
+    b_diMuonF_FittedVtx_m   = diMuonF->vertexMass();//seems ok
+    //This should propagate back to the beam line, looks right
+    b_diMuonF_FittedVtx_dz  = diMuonF->vertexDz(beamSpot->position());
+
+    //variables below are relevant when calculate dimu iso
     b_diMuonF_FittedVtx_px  = diMuonF->vertexMomentum().x();
     b_diMuonF_FittedVtx_py  = diMuonF->vertexMomentum().y();
     b_diMuonF_FittedVtx_pz  = diMuonF->vertexMomentum().z();
     b_diMuonF_FittedVtx_eta = diMuonF->vertexMomentum().eta();
     b_diMuonF_FittedVtx_phi = diMuonF->vertexMomentum().phi();
+    //vx,y,z seem to be propagated back to the beam line/IP, they shouldn't be! TO BE FIXED
     b_diMuonF_FittedVtx_vx  = diMuonF->vertexPoint().x();
     b_diMuonF_FittedVtx_vy  = diMuonF->vertexPoint().y();
     b_diMuonF_FittedVtx_vz  = diMuonF->vertexPoint().z();
-
     b_diMuonF_FittedVtx_Lxy = diMuonF->vertexLxy(beamSpotPosition);
     b_diMuonF_FittedVtx_L   = diMuonF->vertexL(beamSpotPosition);
-    b_diMuonF_FittedVtx_dz  = diMuonF->vertexDz(beamSpot->position());
 
-	  if ( m_debug > 10 ) std::cout << "diMuonC vtx (x, y, z): " << diMuonC->vertexPoint().x() << ", " << diMuonC->vertexPoint().y() << ", " << diMuonC->vertexPoint().z() << std::endl;
-	  if ( m_debug > 10 ) std::cout << "diMuonF vtx (x, y, z): " << diMuonF->vertexPoint().x() << ", " << diMuonF->vertexPoint().y() << ", " << diMuonF->vertexPoint().z() << std::endl;
+	  //std::cout << "diMuC vtx         (x,y,z)[cm]: " << b_diMuonC_FittedVtx_vx << ", " << b_diMuonC_FittedVtx_vy << ", " << b_diMuonC_FittedVtx_vz << std::endl;
+    //std::cout << "            (Lxy,|Lz|,dz)[cm]: " << b_diMuonC_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonC_FittedVtx_L,2) - pow(b_diMuonC_FittedVtx_Lxy,2) )<<", "<<b_diMuonC_FittedVtx_dz<< std::endl;
+    //std::cout << "diMuF vtx         (x,y,z)[cm]: " << b_diMuonF_FittedVtx_vx << ", " << b_diMuonF_FittedVtx_vy << ", " << b_diMuonF_FittedVtx_vz << std::endl;
+    //std::cout << "            (Lxy,|Lz|,dz)[cm]: " << b_diMuonF_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonF_FittedVtx_L,2) - pow(b_diMuonF_FittedVtx_Lxy,2) )<<", "<<b_diMuonF_FittedVtx_dz<< std::endl;
+    //std::cout << "Dimu vtx mass     (C, F)[GeV]: " << b_diMuonC_FittedVtx_m  << ", " << b_diMuonF_FittedVtx_m  << std::endl;
   } else {
     b_diMuonC_FittedVtx_m   = -1000.0;
     b_diMuonC_FittedVtx_px  = -1000.0;
@@ -1601,109 +1630,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuonF_FittedVtx_dz  = -1000.0;
   }
 
-/*
-  // "New" consistent vertexes
-  b_is2DiMuonsConsistentVtxOK = false;
-  if ( diMuonC != NULL && diMuonF != NULL ) {
-    if ( m_debug > 10 ) std::cout << "Two good dimuons" << std::endl;
-    edm::ESHandle<TransientTrackBuilder> transientTrackBuilder;
-    const TransientTrackBuilder *transientTrackBuilder_ptr = NULL;
-    try {
-      iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder", transientTrackBuilder);
-      transientTrackBuilder_ptr = &*transientTrackBuilder;
-
-      ConsistentVertexesCalculator ConsistentVtx(transientTrackBuilder_ptr, beamSpotPosition);
-      ConsistentVtx.SetNThrows(m_nThrowsConsistentVertexesCalculator);
-      ConsistentVtx.SetDebug(0);
-      ConsistentVtx.setBarrelPixelLayer(m_barrelPixelLayer);
-      ConsistentVtx.setEndcapPixelLayer(m_endcapPixelLayer);
-
-      b_is2DiMuonsConsistentVtxOK = ConsistentVtx.Calculate(diMuonC, diMuonF);
-
-      if (runDisplacedVtxFinder_) {
-        DisplacedVertexFinder displacedVtx(transientTrackBuilder_ptr, beamSpotPosition);
-        displacedVtx.setDebug(0);
-        displacedVtx.findDisplacedVertex(diMuonC, diMuonF);
-      }
-    } catch (...) {
-      std::cout << ">>>> WARNING!!! TransientTrackRecord is not available!!! <<<<" << std::endl;
-    }
-  }
-  // Fill branches with variables calculated with "new" consistent vertexes
-  if ( b_is2DiMuonsConsistentVtxOK ) {
-    b_diMuonC_ConsistentVtx_m   = diMuonC->consistentVtxMass();
-    b_diMuonC_ConsistentVtx_px  = diMuonC->consistentVtxMomentum().x();
-    b_diMuonC_ConsistentVtx_py  = diMuonC->consistentVtxMomentum().y();
-    b_diMuonC_ConsistentVtx_pz  = diMuonC->consistentVtxMomentum().z();
-    b_diMuonC_ConsistentVtx_eta = diMuonC->consistentVtxMomentum().eta();
-    b_diMuonC_ConsistentVtx_phi = diMuonC->consistentVtxMomentum().phi();
-    b_diMuonC_ConsistentVtx_vx  = diMuonC->consistentVtxPoint().x();
-    b_diMuonC_ConsistentVtx_vy  = diMuonC->consistentVtxPoint().y();
-    b_diMuonC_ConsistentVtx_vz  = diMuonC->consistentVtxPoint().z();
-
-    b_diMuonC_ConsistentVtx_Lxy = diMuonC->consistentVtxLxy(beamSpotPosition);
-    b_diMuonC_ConsistentVtx_L   = diMuonC->consistentVtxL(beamSpotPosition);
-    b_diMuonC_ConsistentVtx_dz  = diMuonC->consistentVtxDz(beamSpotPosition);
-
-    b_diMuonF_ConsistentVtx_m   = diMuonF->consistentVtxMass();
-    b_diMuonF_ConsistentVtx_px  = diMuonF->consistentVtxMomentum().x();
-    b_diMuonF_ConsistentVtx_py  = diMuonF->consistentVtxMomentum().y();
-    b_diMuonF_ConsistentVtx_pz  = diMuonF->consistentVtxMomentum().z();
-    b_diMuonF_ConsistentVtx_eta = diMuonF->consistentVtxMomentum().eta();
-    b_diMuonF_ConsistentVtx_phi = diMuonF->consistentVtxMomentum().phi();
-    b_diMuonF_ConsistentVtx_vx  = diMuonF->consistentVtxPoint().x();
-    b_diMuonF_ConsistentVtx_vy  = diMuonF->consistentVtxPoint().y();
-    b_diMuonF_ConsistentVtx_vz  = diMuonF->consistentVtxPoint().z();
-
-    b_diMuonF_ConsistentVtx_Lxy = diMuonF->consistentVtxLxy(beamSpotPosition);
-    b_diMuonF_ConsistentVtx_L   = diMuonF->consistentVtxL(beamSpotPosition);
-    b_diMuonF_ConsistentVtx_dz  = diMuonF->consistentVtxDz(beamSpotPosition);
-  } else {
-    b_diMuonC_ConsistentVtx_m   = -1000.0;
-    b_diMuonC_ConsistentVtx_px  = -1000.0;
-    b_diMuonC_ConsistentVtx_py  = -1000.0;
-    b_diMuonC_ConsistentVtx_pz  = -1000.0;
-    b_diMuonC_ConsistentVtx_eta = -1000.0;
-    b_diMuonC_ConsistentVtx_phi = -1000.0;
-    b_diMuonC_ConsistentVtx_vx  = -1000.0;
-    b_diMuonC_ConsistentVtx_vy  = -1000.0;
-    b_diMuonC_ConsistentVtx_vz  = -1000.0;
-
-    b_diMuonC_ConsistentVtx_Lxy = -1000.0;
-    b_diMuonC_ConsistentVtx_L   = -1000.0;
-    b_diMuonC_ConsistentVtx_dz  = -1000.0;
-
-    b_diMuonF_ConsistentVtx_m   = -1000.0;
-    b_diMuonF_ConsistentVtx_px  = -1000.0;
-    b_diMuonF_ConsistentVtx_py  = -1000.0;
-    b_diMuonF_ConsistentVtx_pz  = -1000.0;
-    b_diMuonF_ConsistentVtx_eta = -1000.0;
-    b_diMuonF_ConsistentVtx_phi = -1000.0;
-    b_diMuonF_ConsistentVtx_vx  = -1000.0;
-    b_diMuonF_ConsistentVtx_vy  = -1000.0;
-    b_diMuonF_ConsistentVtx_vz  = -1000.0;
-
-    b_diMuonF_ConsistentVtx_Lxy = -1000.0;
-    b_diMuonF_ConsistentVtx_L   = -1000.0;
-    b_diMuonF_ConsistentVtx_dz  = -1000.0;
-  }
-*/
-
   // Calculate dz between dimuons - use fitted vertexes
   if ( b_is2DiMuonsFittedVtxOK ) {
     b_diMuons_dz_FittedVtx = b_diMuonC_FittedVtx_dz - b_diMuonF_FittedVtx_dz;
   } else {
     b_diMuons_dz_FittedVtx = -1000.0;
   }
-
-  /*
-  // Calculate dz between dimuons - use consistent vertexes
-  if ( b_is2DiMuonsConsistentVtxOK ) {
-    b_diMuons_dz_ConsistentVtx = b_diMuonC_ConsistentVtx_dz - b_diMuonF_ConsistentVtx_dz;
-  } else {
-    b_diMuons_dz_ConsistentVtx = -1000.0;
-  }
-  */
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
 
@@ -1729,12 +1661,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
       // check if this event was fired by the signal trigger!
       for (const auto& p: signalHltPaths_){
-	if ( m_debug > 10 ) std::cout << "Signal trigger is "<< p << std::endl;
+        if ( m_debug > 10 ) std::cout << "Signal trigger is "<< p << std::endl;
         if (trigNameStr.find(p) != std::string::npos) {
         if ( m_debug > 10 ) std::cout << "Signal trigger " << p << " fired!" << std::endl;
           b_isDiMuonHLTFired = true;
         }
-      }
+      }//end for signal hlt
 
       const std::string& p0 = controlHltPaths_[0];
       const std::string& p1 = controlHltPaths_[1];
@@ -1750,9 +1682,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       }
 
     }
-  }
-
-  if ( m_debug > 10 ) std::cout << m_events << " Apply cut on HLT" << std::endl;
+  }//end for trig
+  if ( m_debug > 10 )  std::cout << m_events << " Apply cut on HLT" << std::endl;
 
   //get L1 decisions for signal HLT L1 seeds
   b_isSignalHLTL1Fired = false;
@@ -1808,203 +1739,254 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   }
 
   // Cut on dimuon masses - use fitted vertexes
+  //* 2016 and before: fabs(massC-massF) < 5 * [0.026+0.013*(m1+m2)/2]
+  //* Run2 (2017+2018): Poly-1 Fit (relaxed) by combining all MSSMD, NMSSM and ALP mass points:
+  //  fabs(massC-massF) < 3 * {0.003756 + 0.008613 * (massC+massF)/2 }
+  //  https://docs.google.com/spreadsheets/d/10qXKHSw9QLrpPm2s0pASCbB27k6kVyEtTEwYi_oTra0/edit?usp=sharing
+  //* Run2 (2017+2018): Poly-2 Fit from 2017 ALP signal samples (currently adopted below):
+  //  fabs(massC-massF) < 3 * {0.003044 + 0.007025 * (massC+massF)/2 + 0.000053 * [(massC+massF)/2]^2}
   b_is2DiMuonsMassOK_FittedVtx = false;
   if ( b_is2DiMuonsFittedVtxOK ) {
     double massC = b_diMuonC_FittedVtx_m;
     double massF = b_diMuonF_FittedVtx_m;
-    if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_is2DiMuonsMassOK_FittedVtx = true;
+    if (
+      fabs(massC-massF) < 3*(0.003044 + 0.007025*(massC+massF)/2.0 + 0.000053*(massC+massF)*(massC+massF)/4.0)
+    ) {
+      b_is2DiMuonsMassOK_FittedVtx = true;
+    }
   }
-
-/*
-  // Cut on dimuon masses - use consistent vertexes
-  b_is2DiMuonsMassOK_ConsistentVtx = false;
-  if ( b_is2DiMuonsConsistentVtxOK ) {
-    double massC = b_diMuonC_ConsistentVtx_m;
-    double massF = b_diMuonF_ConsistentVtx_m;
-    if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_is2DiMuonsMassOK_ConsistentVtx = true;
-  }
-*/
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon mass" << std::endl;
 
-  // Cut on isolation
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(m_tracks, tracks);
 
-  // Cut on isolation - use fitted vertexes
-  b_diMuonC_IsoTk_FittedVtx = -1.;
-  b_diMuonF_IsoTk_FittedVtx = -1.;
-  b_isoC_1mm = -1.;
-  b_isoF_1mm = -1.;
+  // Calculate isolation for dimuon and single muons inside: require valid fitted vertexes
+  b_diMuonC_IsoTk_FittedVtx = -999.;
+  b_diMuonF_IsoTk_FittedVtx = -999.;
+  b_isoC_1mm = -999.;
+  b_isoF_1mm = -999.;
+  b_diMuonCMu0_IsoTk0p3_FittedVtx = -999.;
+  b_diMuonCMu0_IsoTk0p4_FittedVtx = -999.;
+  b_diMuonCMu0_IsoTk0p5_FittedVtx = -999.;
+  b_diMuonCMu1_IsoTk0p3_FittedVtx = -999.;
+  b_diMuonCMu1_IsoTk0p4_FittedVtx = -999.;
+  b_diMuonCMu1_IsoTk0p5_FittedVtx = -999.;
+  b_diMuonFMu0_IsoTk0p3_FittedVtx = -999.;
+  b_diMuonFMu0_IsoTk0p4_FittedVtx = -999.;
+  b_diMuonFMu0_IsoTk0p5_FittedVtx = -999.;
+  b_diMuonFMu1_IsoTk0p3_FittedVtx = -999.;
+  b_diMuonFMu1_IsoTk0p4_FittedVtx = -999.;
+  b_diMuonFMu1_IsoTk0p5_FittedVtx = -999.;
+
   if ( b_is2DiMuonsFittedVtxOK ) {
-    double diMuonC_IsoTk_FittedVtx = 0.0;
-    double diMuonF_IsoTk_FittedVtx = 0.0;
 
-    const pat::MultiMuon *diMuonTmp = NULL;
-    for ( unsigned int i = 1; i <= 2; i++ ) {
-      double diMuonTmp_IsoTk_FittedVtx = 0.0;
-      if ( i == 1 ) diMuonTmp = diMuonC;
-      if ( i == 2 ) diMuonTmp = diMuonF;
+    double diMuonC_IsoTk_FittedVtx = -999.;
+    double diMuonCMu0_IsoTk0p3_FittedVtx = -999.;
+    double diMuonCMu0_IsoTk0p4_FittedVtx = -999.;
+    double diMuonCMu0_IsoTk0p5_FittedVtx = -999.;
+    double diMuonCMu1_IsoTk0p3_FittedVtx = -999.;
+    double diMuonCMu1_IsoTk0p4_FittedVtx = -999.;
+    double diMuonCMu1_IsoTk0p5_FittedVtx = -999.;
 
-      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-        bool trackIsMuon = false;
-        const pat::PackedCandidate* candFittedVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
-        const pat::PackedCandidate* candFittedVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
-        if ( m_debug > 10 ) std::cout << "track_px: " <<track->px() << "; track_py: "<<track->py() <<"; track_pz: "<<track->pz()<< "; track_vx: " <<track->vx() << "; track_vy: "<<track->vy() <<"; track_vz: "<<track->vz()<<std::endl;
-        if (  tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu0->pseudoTrack()) )
-	         || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonTmpMu1->pseudoTrack()) ) ){
-          trackIsMuon = true;
-          if ( m_debug > 10 ) std::cout << "Track is muon!>>> "<<std::endl;
-          if ( m_debug > 10 ) std::cout <<"muon0_px: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().px() << "; muon0_py: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().py() <<"; muon0_pz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().pz()<< "; muon0_vx: " <<candFittedVtx_diMuonTmpMu0->pseudoTrack().vx() << "; muon0_vy: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vy() <<"; muon0_vz: "<<candFittedVtx_diMuonTmpMu0->pseudoTrack().vz()<<std::endl;
-          if ( m_debug > 10 ) std::cout <<"muon1_px: " <<candFittedVtx_diMuonTmpMu1->pseudoTrack().px() << "; muon1_py: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().py() <<"; muon1_pz: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().pz()<< "; muon1_vx: " <<candFittedVtx_diMuonTmpMu1->pseudoTrack().vx() << "; muon1_vy: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().vy() <<"; muon1_vz: "<<candFittedVtx_diMuonTmpMu1->pseudoTrack().vz()<<std::endl;
-          if ( m_debug > 10 ) std::cout <<"muon0_inner_px: " <<diMuonTmp->muon(0)->innerTrack()->px() << "; muon0_inner_py: "<<diMuonTmp->muon(0)->innerTrack()->py()<< "; muon0_inner_pz: "<<diMuonTmp->muon(0)->innerTrack()->pz()<< "; muon0_inner_vx: "<<diMuonTmp->muon(0)->innerTrack()->vx()<< "; muon0_inner_vy: "<<diMuonTmp->muon(0)->innerTrack()->vy()<< "; muon0_inner_vz: "<<diMuonTmp->muon(0)->innerTrack()->vz()<<std::endl;
-          if ( m_debug > 10 ) std::cout <<"muon1_inner_px: " <<diMuonTmp->muon(1)->innerTrack()->px() << "; muon1_inner_py: "<<diMuonTmp->muon(1)->innerTrack()->py()<< "; muon1_inner_pz: "<<diMuonTmp->muon(1)->innerTrack()->pz()<< "; muon1_inner_vx: "<<diMuonTmp->muon(1)->innerTrack()->vx()<< "; muon1_inner_vy: "<<diMuonTmp->muon(1)->innerTrack()->vy()<< "; muon1_inner_vz: "<<diMuonTmp->muon(1)->innerTrack()->vz()<<std::endl;
-        }
-        if ( trackIsMuon == false ) {
-          double dPhi = tamu::helpers::My_dPhi( diMuonTmp->vertexMomentum().phi(), track->phi() );
-          double dEta = diMuonTmp->vertexMomentum().eta() - track->eta();
-          double dR   = sqrt( dPhi*dPhi + dEta*dEta );
-          double dz   = diMuonTmp->vertexDz(beamSpot->position()) - track->dz(beamSpot->position());
-          if (    dR          < m_threshold_DiMuons_Iso_dR
-		           && track->pt() > m_threshold_DiMuons_Iso_pT
-		           && fabs( dz )  < m_threshold_DiMuons_Iso_dz ) {
-            diMuonTmp_IsoTk_FittedVtx += track->pt();
-          }
-        }
-      }
-      if ( i == 1 ) {
-        diMuonC_IsoTk_FittedVtx = diMuonTmp_IsoTk_FittedVtx;
-      }
-      if ( i == 2 ) {
-        diMuonF_IsoTk_FittedVtx = diMuonTmp_IsoTk_FittedVtx;
-      }
-    }
-    b_diMuonC_IsoTk_FittedVtx = diMuonC_IsoTk_FittedVtx;
-    b_diMuonF_IsoTk_FittedVtx = diMuonF_IsoTk_FittedVtx;
-    b_isoC_1mm = b_diMuonC_IsoTk_FittedVtx;
-    b_isoF_1mm = b_diMuonF_IsoTk_FittedVtx;
+    double diMuonF_IsoTk_FittedVtx = -999.;
+    double diMuonFMu0_IsoTk0p3_FittedVtx = -999.;
+    double diMuonFMu0_IsoTk0p4_FittedVtx = -999.;
+    double diMuonFMu0_IsoTk0p5_FittedVtx = -999.;
+    double diMuonFMu1_IsoTk0p3_FittedVtx = -999.;
+    double diMuonFMu1_IsoTk0p4_FittedVtx = -999.;
+    double diMuonFMu1_IsoTk0p5_FittedVtx = -999.;
 
-  }
+    const pat::PackedCandidate* candFittedVtx_diMuonCMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(0)->sourceCandidatePtr(0).get());
+    const pat::PackedCandidate* candFittedVtx_diMuonCMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(1)->sourceCandidatePtr(0).get());
+    const pat::PackedCandidate* candFittedVtx_diMuonFMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(0)->sourceCandidatePtr(0).get());
+    const pat::PackedCandidate* candFittedVtx_diMuonFMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(1)->sourceCandidatePtr(0).get());
 
-/*
-  // Cut on isolation - use consistent vertexes
-  b_diMuonC_IsoTk_ConsistentVtx = -1.;
-  b_diMuonF_IsoTk_ConsistentVtx = -1.;
-  if ( b_is2DiMuonsConsistentVtxOK ) {
-    double diMuonC_IsoTk_ConsistentVtx = 0.0;
-    double diMuonF_IsoTk_ConsistentVtx = 0.0;
+    //Avoid null dynamic cast: casuing segmentation violation error
+    //In cases no dynamic cast exists, the event shouldn't be considered
+    //since the track couldn't be matched to the muons in the dimuon, this will lead to wrong iso.
+    if ( candFittedVtx_diMuonCMu0 != 0               && candFittedVtx_diMuonCMu1 != 0               && candFittedVtx_diMuonFMu0!=0                 && candFittedVtx_diMuonFMu1!=0 &&
+         candFittedVtx_diMuonCMu0->hasTrackDetails() && candFittedVtx_diMuonCMu1->hasTrackDetails() && candFittedVtx_diMuonFMu0->hasTrackDetails() && candFittedVtx_diMuonFMu1->hasTrackDetails() ){
 
-    const pat::MultiMuon *diMuonTmp = NULL;
-    for ( unsigned int i = 1; i <= 2; i++ ) {
-      double diMuonTmp_IsoTk_ConsistentVtx = 0.0;
-      if ( i == 1 ) diMuonTmp = diMuonC;
-      if ( i == 2 ) diMuonTmp = diMuonF;
+        diMuonC_IsoTk_FittedVtx = 0.0;
+        diMuonCMu0_IsoTk0p3_FittedVtx = 0.0;
+        diMuonCMu0_IsoTk0p4_FittedVtx = 0.0;
+        diMuonCMu0_IsoTk0p5_FittedVtx = 0.0;
+        diMuonCMu1_IsoTk0p3_FittedVtx = 0.0;
+        diMuonCMu1_IsoTk0p4_FittedVtx = 0.0;
+        diMuonCMu1_IsoTk0p5_FittedVtx = 0.0;
 
-      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
-        bool trackIsMuon = false;
-	const pat::PackedCandidate* candConsistentVtx_diMuonTmpMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(0)->sourceCandidatePtr(0).get());
-	const pat::PackedCandidate* candConsistentVtx_diMuonTmpMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonTmp->muon(1)->sourceCandidatePtr(0).get());
-        if (   tamu::helpers::sameTrack( &*track, &(candConsistentVtx_diMuonTmpMu0->pseudoTrack()) )
-	    || tamu::helpers::sameTrack( &*track, &(candConsistentVtx_diMuonTmpMu1->pseudoTrack()) ) ) trackIsMuon = true;
-        if ( trackIsMuon == false ) {
-          double dPhi = tamu::helpers::My_dPhi( diMuonTmp->consistentVtxMomentum().phi(), track->phi() );
-          double dEta = diMuonTmp->consistentVtxMomentum().eta() - track->eta();
-          double dR   = sqrt( dPhi*dPhi + dEta*dEta );
-          double dz   = diMuonTmp->consistentVtxDz(beamSpotPosition) - track->dz(beamSpot->position());
-          if (    dR          < m_threshold_DiMuons_Iso_dR
-		  && track->pt() > m_threshold_DiMuons_Iso_pT
-		  && fabs( dz )  < m_threshold_DiMuons_Iso_dz ) {
-            diMuonTmp_IsoTk_ConsistentVtx += track->pt();
-          }
-        }
-      }
-      if ( i == 1 ) {
-        diMuonC_IsoTk_ConsistentVtx = diMuonTmp_IsoTk_ConsistentVtx;
-      }
-      if ( i == 2 ) {
-        diMuonF_IsoTk_ConsistentVtx = diMuonTmp_IsoTk_ConsistentVtx;
-      }
-    }
-    b_diMuonC_IsoTk_ConsistentVtx = diMuonC_IsoTk_ConsistentVtx;
-    b_diMuonF_IsoTk_ConsistentVtx = diMuonF_IsoTk_ConsistentVtx;
-  }
-*/
+        diMuonF_IsoTk_FittedVtx = 0.0;
+        diMuonFMu0_IsoTk0p3_FittedVtx = 0.0;
+        diMuonFMu0_IsoTk0p4_FittedVtx = 0.0;
+        diMuonFMu0_IsoTk0p5_FittedVtx = 0.0;
+        diMuonFMu1_IsoTk0p3_FittedVtx = 0.0;
+        diMuonFMu1_IsoTk0p4_FittedVtx = 0.0;
+        diMuonFMu1_IsoTk0p5_FittedVtx = 0.0;
+
+        for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+          bool trackIsMuon = false;
+          if ( m_debug > 10 ) std::cout << "track_px: " <<track->px() << "; track_py: "<<track->py() <<"; track_pz: "<<track->pz()<< "; track_vx: " <<track->vx() << "; track_vy: "<<track->vy() <<"; track_vz: "<<track->vz()<<std::endl;
+
+          //Track used for iso calculation can't be from four signal muons
+          if (  tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonCMu0->pseudoTrack()) )
+  	         || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonCMu1->pseudoTrack()) )
+             || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonFMu0->pseudoTrack()) )
+             || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonFMu1->pseudoTrack()) )
+           ){ trackIsMuon = true; }
+
+          if ( trackIsMuon == false ) {
+            //dimuC iso
+            double dPhiC = tamu::helpers::My_dPhi( diMuonC->vertexMomentum().phi(), track->phi() );
+            double dEtaC = diMuonC->vertexMomentum().eta() - track->eta();
+            double dRC   = sqrt( dPhiC*dPhiC + dEtaC*dEtaC );
+            double dzC   = b_diMuonC_FittedVtx_dz - track->dz(beamSpot->position());
+            if (    dRC       < m_threshold_DiMuons_Iso_dR
+              && track->pt()  > m_threshold_DiMuons_Iso_pT
+		          && fabs( dzC )  < m_threshold_DiMuons_Iso_dz ) { diMuonC_IsoTk_FittedVtx += track->pt(); }//end dimuC iso calculation
+
+            //dimuF iso
+            double dPhiF = tamu::helpers::My_dPhi( diMuonF->vertexMomentum().phi(), track->phi() );
+            double dEtaF = diMuonF->vertexMomentum().eta() - track->eta();
+            double dRF   = sqrt( dPhiF*dPhiF + dEtaF*dEtaF );
+            double dzF   = b_diMuonF_FittedVtx_dz - track->dz(beamSpot->position());
+            if (    dRF       < m_threshold_DiMuons_Iso_dR
+              && track->pt()  > m_threshold_DiMuons_Iso_pT
+  		        && fabs( dzF )  < m_threshold_DiMuons_Iso_dz ) { diMuonF_IsoTk_FittedVtx += track->pt(); }//end dimuF iso calculation
+
+            //dimuC mu0 iso
+            double dPhiC0 = tamu::helpers::My_dPhi( candFittedVtx_diMuonCMu0->pseudoTrack().phi(), track->phi() );
+            double dEtaC0 = candFittedVtx_diMuonCMu0->pseudoTrack().eta() - track->eta();
+            double dRC0   = sqrt( dPhiC0*dPhiC0 + dEtaC0*dEtaC0 );
+            double dzC0   = candFittedVtx_diMuonCMu0->pseudoTrack().dz(beamSpot->position()) - track->dz(beamSpot->position());
+            if ( dRC0 < 0.3 && track->pt() > 0.5 && fabs( dzC0 ) < 0.1 ) { diMuonCMu0_IsoTk0p3_FittedVtx += track->pt(); }//cone size: 0.3
+            if ( dRC0 < 0.4 && track->pt() > 0.5 && fabs( dzC0 ) < 0.1 ) { diMuonCMu0_IsoTk0p4_FittedVtx += track->pt(); }//cone size: 0.4
+            if ( dRC0 < 0.5 && track->pt() > 0.5 && fabs( dzC0 ) < 0.1 ) { diMuonCMu0_IsoTk0p5_FittedVtx += track->pt(); }//cone size: 0.5
+
+            //dimuC mu1 iso
+            double dPhiC1 = tamu::helpers::My_dPhi( candFittedVtx_diMuonCMu1->pseudoTrack().phi(), track->phi() );
+            double dEtaC1 = candFittedVtx_diMuonCMu1->pseudoTrack().eta() - track->eta();
+            double dRC1   = sqrt( dPhiC1*dPhiC1 + dEtaC1*dEtaC1 );
+            double dzC1   = candFittedVtx_diMuonCMu1->pseudoTrack().dz(beamSpot->position()) - track->dz(beamSpot->position());
+            if ( dRC1 < 0.3 && track->pt() > 0.5 && fabs( dzC1 ) < 0.1 ) { diMuonCMu1_IsoTk0p3_FittedVtx += track->pt(); }//cone size: 0.3
+            if ( dRC1 < 0.4 && track->pt() > 0.5 && fabs( dzC1 ) < 0.1 ) { diMuonCMu1_IsoTk0p4_FittedVtx += track->pt(); }//cone size: 0.4
+            if ( dRC1 < 0.5 && track->pt() > 0.5 && fabs( dzC1 ) < 0.1 ) { diMuonCMu1_IsoTk0p5_FittedVtx += track->pt(); }//cone size: 0.5
+
+            //dimuF mu0 iso
+            double dPhiF0 = tamu::helpers::My_dPhi( candFittedVtx_diMuonFMu0->pseudoTrack().phi(), track->phi() );
+            double dEtaF0 = candFittedVtx_diMuonFMu0->pseudoTrack().eta() - track->eta();
+            double dRF0   = sqrt( dPhiF0*dPhiF0 + dEtaF0*dEtaF0 );
+            double dzF0   = candFittedVtx_diMuonCMu0->pseudoTrack().dz(beamSpot->position()) - track->dz(beamSpot->position());
+            if ( dRF0 < 0.3 && track->pt() > 0.5 && fabs( dzF0 ) < 0.1 ) { diMuonFMu0_IsoTk0p3_FittedVtx += track->pt(); }//cone size: 0.3
+            if ( dRF0 < 0.4 && track->pt() > 0.5 && fabs( dzF0 ) < 0.1 ) { diMuonFMu0_IsoTk0p4_FittedVtx += track->pt(); }//cone size: 0.4
+            if ( dRF0 < 0.5 && track->pt() > 0.5 && fabs( dzF0 ) < 0.1 ) { diMuonFMu0_IsoTk0p5_FittedVtx += track->pt(); }//cone size: 0.5
+
+            //dimuF mu1 iso
+            double dPhiF1 = tamu::helpers::My_dPhi( candFittedVtx_diMuonFMu1->pseudoTrack().phi(), track->phi() );
+            double dEtaF1 = candFittedVtx_diMuonFMu1->pseudoTrack().eta() - track->eta();
+            double dRF1   = sqrt( dPhiF1*dPhiF1 + dEtaF1*dEtaF1 );
+            double dzF1   = candFittedVtx_diMuonFMu1->pseudoTrack().dz(beamSpot->position()) - track->dz(beamSpot->position());
+            if ( dRF1 < 0.3 && track->pt() > 0.5 && fabs( dzF1 ) < 0.1 ) { diMuonFMu1_IsoTk0p3_FittedVtx += track->pt(); }//cone size: 0.3
+            if ( dRF1 < 0.4 && track->pt() > 0.5 && fabs( dzF1 ) < 0.1 ) { diMuonFMu1_IsoTk0p4_FittedVtx += track->pt(); }//cone size: 0.4
+            if ( dRF1 < 0.5 && track->pt() > 0.5 && fabs( dzF1 ) < 0.1 ) { diMuonFMu1_IsoTk0p5_FittedVtx += track->pt(); }//cone size: 0.5
+
+          }//end trackIsMuon
+
+        }//end loop over tracks
+
+      }//end if cast exists
+
+      b_diMuonC_IsoTk_FittedVtx = diMuonC_IsoTk_FittedVtx;
+      b_diMuonF_IsoTk_FittedVtx = diMuonF_IsoTk_FittedVtx;
+      b_isoC_1mm = b_diMuonC_IsoTk_FittedVtx;
+      b_isoF_1mm = b_diMuonF_IsoTk_FittedVtx;
+      b_diMuonCMu0_IsoTk0p3_FittedVtx = diMuonCMu0_IsoTk0p3_FittedVtx;
+      b_diMuonCMu0_IsoTk0p4_FittedVtx = diMuonCMu0_IsoTk0p4_FittedVtx;
+      b_diMuonCMu0_IsoTk0p5_FittedVtx = diMuonCMu0_IsoTk0p5_FittedVtx;
+      b_diMuonCMu1_IsoTk0p3_FittedVtx = diMuonCMu1_IsoTk0p3_FittedVtx;
+      b_diMuonCMu1_IsoTk0p4_FittedVtx = diMuonCMu1_IsoTk0p4_FittedVtx;
+      b_diMuonCMu1_IsoTk0p5_FittedVtx = diMuonCMu1_IsoTk0p5_FittedVtx;
+      b_diMuonFMu0_IsoTk0p3_FittedVtx = diMuonFMu0_IsoTk0p3_FittedVtx;
+      b_diMuonFMu0_IsoTk0p4_FittedVtx = diMuonFMu0_IsoTk0p4_FittedVtx;
+      b_diMuonFMu0_IsoTk0p5_FittedVtx = diMuonFMu0_IsoTk0p5_FittedVtx;
+      b_diMuonFMu1_IsoTk0p3_FittedVtx = diMuonFMu1_IsoTk0p3_FittedVtx;
+      b_diMuonFMu1_IsoTk0p4_FittedVtx = diMuonFMu1_IsoTk0p4_FittedVtx;
+      b_diMuonFMu1_IsoTk0p5_FittedVtx = diMuonFMu1_IsoTk0p5_FittedVtx;
+
+    }//end dimuon has good fitted vertex
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon isolation" << std::endl;
 
   if ( b_is2DiMuonsFittedVtxOK ) {
+    //loop over two muons
     for(uint32_t k=0;k<2;k++){
-      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
 
-	const pat::PackedCandidate* canddiMuonC = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(k)->sourceCandidatePtr(0).get());
-        if( tamu::helpers::sameTrack(&*track,&(canddiMuonC->pseudoTrack())) ){
-          const reco::HitPattern& p = track->hitPattern();
+      if ( diMuonC->muon(k)->innerTrack().isAvailable() ){
+        //Directly use muon innerTrack
+        const reco::HitPattern& p = diMuonC->muon(k)->innerTrack()->hitPattern();
+        //std::cout << "diMuC Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
+        //std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
+        //std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
+        //std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", " << diMuonC->muon(k)->innerTrack()->vy() << ", " << diMuonC->muon(k)->innerTrack()->vz() << std::endl;
+        //std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonC->muon(k)->innerTrack()->dxy() << ", " << diMuonC->muon(k)->innerTrack()->dz() << std::endl;
 
-          static CheckHitPattern checkHitPattern;
-          GlobalPoint pos(diMuonC->vertexPoint().x(), diMuonC->vertexPoint().y(), diMuonC->vertexPoint().z());
-          VertexState trueDecVert(pos, GlobalError());
-	  CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
-          //@Wei SHI 08.07.2018
-          //Function usage changes to lines below starting CMSSW_10_1_X: https://github.com/cms-sw/cmssw/blob/CMSSW_10_1_X/PhysicsTools/RecoUtils/src/CheckHitPattern.cc#L94
-	  //checkHitPattern.init(iSetup);
-          //CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
-
-          if(k==0) b_diMuonC_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
-          if(k==0) b_diMuonC_m1_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
-          if(k==1) b_diMuonC_m2_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
-          if(k==1) b_diMuonC_m2_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
-
-          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
-            if(k==0) b_diMuonC_m1_FittedVtx_hitpix = 1;
-            if(k==1) b_diMuonC_m2_FittedVtx_hitpix = 1;
-          }
-          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
-	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
-            if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l2inc = 1;
-            if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l2inc = 1;
-          }
-          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
-	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) ||
-	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
-            if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l3inc = 1;
-            if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l3inc = 1;
-          }
+        if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
+              if(k==0) b_diMuonC_m1_FittedVtx_hitpix_Phase1 = 1;
+              if(k==1) b_diMuonC_m2_FittedVtx_hitpix_Phase1 = 1;
+            }
+        //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
+        if ( p.numberOfValidPixelHits() > 0 ){
+          if(k==0) b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits = 1;
+          if(k==1) b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits = 1;
         }
-	const pat::PackedCandidate* canddiMuonF = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(k)->sourceCandidatePtr(0).get());
-        if( tamu::helpers::sameTrack(&*track,&(canddiMuonF->pseudoTrack())) ){
-          const reco::HitPattern& p = track->hitPattern();
-
-          static CheckHitPattern checkHitPattern;
-          GlobalPoint pos(diMuonF->vertexPoint().x(), diMuonF->vertexPoint().y(), diMuonF->vertexPoint().z());
-          VertexState trueDecVert(pos, GlobalError());
-          CheckHitPattern::Result hitInfo = checkHitPattern.analyze(iSetup, *track, trueDecVert , true);
-          //checkHitPattern.init(iSetup);
-	  //CheckHitPattern::Result hitInfo = checkHitPattern.operator()(*track, trueDecVert);
-
-          if(k==0) b_diMuonF_m1_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
-          if(k==0) b_diMuonF_m1_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
-          if(k==1) b_diMuonF_m2_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
-          if(k==1) b_diMuonF_m2_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
-
-          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
-            if(k==0) b_diMuonF_m1_FittedVtx_hitpix = 1;
-            if(k==1) b_diMuonF_m2_FittedVtx_hitpix = 1;
-          }
-          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
-	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2)){
-            if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l2inc = 1;
-            if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l2inc = 1;
-          }
-          if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) ||
-	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) ||
-	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3)){
-            if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l3inc = 1;
-            if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l3inc = 1;
-          }
+        if ( p.pixelLayersWithMeasurement() > 0 ){
+          if(k==0) b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
+          if(k==1) b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
         }
-      }
-    }
-  }
+
+      }//C innerTrack available
+
+      if ( diMuonF->muon(k)->innerTrack().isAvailable() ){
+        //Directly use muon innerTrack
+        const reco::HitPattern& p = diMuonF->muon(k)->innerTrack()->hitPattern();
+        //std::cout << "diMuF Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
+        //std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
+        //std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
+        //std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", " << diMuonF->muon(k)->innerTrack()->vy() << ", " << diMuonF->muon(k)->innerTrack()->vz() << std::endl;
+        //std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonF->muon(k)->innerTrack()->dxy() << ", " << diMuonF->muon(k)->innerTrack()->dz() << std::endl;
+
+        if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
+              if(k==0) b_diMuonF_m1_FittedVtx_hitpix_Phase1 = 1;
+              if(k==1) b_diMuonF_m2_FittedVtx_hitpix_Phase1 = 1;
+            }
+        if ( p.numberOfValidPixelHits() > 0 ){
+          if(k==0) b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits = 1;
+          if(k==1) b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits = 1;
+        }
+        if ( p.pixelLayersWithMeasurement() > 0 ){
+          if(k==0) b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
+          if(k==1) b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement = 1;
+        }
+
+      }//F innerTrack available
+
+    }//end loop for 2 muons
+
+    //std::cout<<"ValidHit  PixelLayers: C_m1 = "<<b_diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_hitpix_Phase1<<std::endl;
+    //std::cout<<"Non-Zero    PixelHits: C_m1 = "<<b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits<<std::endl;
+    //std::cout<<"Non-Zero PixelMeasure: C_m1 = "<<b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<std::endl;
+
+    //std::cout<<"ValidHit  PixelLayers: F_m1 = "<<b_diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_hitpix_Phase1<<std::endl;
+    //std::cout<<"Non-Zero    PixelHits: F_m1 = "<<b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits<<std::endl;
+    //std::cout<<"Non-Zero PixelMeasure: F_m1 = "<<b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement<<std::endl;
+
+  }//end b_is2DiMuonsFittedVtxOK
 
   // Cut on primary vertex in event
   edm::Handle<reco::VertexCollection> primaryVertices;
@@ -2017,14 +1999,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
   }
 
-  if ( m_debug > 10 ) std::cout << m_events << " Stop RECO Level" << std::endl;
-
-  if (m_debug>10 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons && b_is2DiMuonsFittedVtxOK){
-    std::cout<<"  hitpix diMuonF m1   "<<b_diMuonF_m1_FittedVtx_hitpix_l3inc<<std::endl;
-    std::cout<<"  hitpix diMuonF m2   "<<b_diMuonF_m2_FittedVtx_hitpix_l3inc<<std::endl;
-    std::cout<<"  hitpix diMuonC m1   "<<b_diMuonC_m1_FittedVtx_hitpix_l3inc<<std::endl;
-    std::cout<<"  hitpix diMuonC m2   "<<b_diMuonC_m2_FittedVtx_hitpix_l3inc<<std::endl;
+  // Check secondary vertices
+  edm::Handle<reco::VertexCollection> secondaryVertices;
+  iEvent.getByToken(m_secondaryVertices, secondaryVertices);
+  //Check if muon tracks belong to the secondary vertices, if so check the vertex position
+  for (reco::VertexCollection::const_iterator sv = secondaryVertices->begin();  sv != secondaryVertices->end();  ++sv) {
+    //std::cout<<"SV (x,y,z)[cm]: "<<sv->x()<<", "<<sv->y()<<", "<<sv->z()<<std::endl;
+    //std::cout<<"SV tracksSize : "<<sv->tracksSize()<<std::endl;
+    for(reco::Vertex::trackRef_iterator tt = sv->tracks_begin(); tt != sv->tracks_end(); ++tt) {
+      //std::cout<<"trk pT   [GeV]: "<<tt->castTo<reco::TrackRef>()->pt()<<std::endl;
+    }
   }
+
+
+  if ( m_debug > 10 ) std::cout << m_events << " Stop RECO Level" << std::endl;
 
   //****************************************************************************
   //                          B-Bbar Estimation
@@ -2042,8 +2030,24 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     m_orphan_EtaMu0  = -99.;
     m_orphan_PtMu1   = -99.;
     m_orphan_EtaMu1  = -99.;
+    //Orphan-dimu branches
+    m_orphan_dimu_mass = -999.;
+    m_orphan_dimu_isoTk = -999.;
+    m_orphan_dimu_Mu0_isoTk0p3 = -999.;
+    m_orphan_dimu_Mu0_isoTk0p4 = -999.;
+    m_orphan_dimu_Mu0_isoTk0p5 = -999.;
+    m_orphan_dimu_Mu1_isoTk0p3 = -999.;
+    m_orphan_dimu_Mu1_isoTk0p4 = -999.;
+    m_orphan_dimu_Mu1_isoTk0p5 = -999.;
+    m_orphan_isoTk = -999.;
+    m_orphan_z = -999.;
+    m_orphan_dimu_z = -999.;
+    m_dimuorphan_containstrig = 0;
+    m_dimuorphan_containstrig2 = 0;
+    float mu1788 = 0;
 
     // B-Jets
+    //Note: b-tagging itself is from MVA which could probably introduce bias
     int NPATJet        = 0;
     int NPATJetTightB  = 0;
     int NPATJetMediumB = 0;
@@ -2087,45 +2091,62 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           hightrigmuons.push_back(muon);
         }
       }
+    }//end high pT mu matching to trigger objects
+
+    edm::Handle<pat::MuonCollection> orphans_unsorted;
+    iEvent.getByToken(m_muJetOrphans, orphans_unsorted);
+
+    std::vector<const pat::Muon*> orphans;
+    for (pat::MuonCollection::const_iterator iOrph = orphans_unsorted->begin();  iOrph != orphans_unsorted->end();  ++iOrph) {
+      orphans.push_back( &(*iOrph) );
     }
 
-    //Orphan branches
-    m_orphan_dimu_mass = -999.;
-    m_orphan_mass = -999.;
-    m_orphan_isoTk = -999.;
-    m_orphan_dimu_isoTk = -999.;
-    m_orphan_z = -999.;
-    m_orphan_dimu_z = -999.;
-    m_dimuorphan_containstrig = 0;
-    m_dimuorphan_containstrig2 = 0;
-    edm::Handle<pat::MuonCollection> orphans;
-    iEvent.getByToken(m_muJetOrphans, orphans);
-    float mu1788 = 0;
+    // Sort orphan muons by pT (leading pT first)
+    if ( orphans.size() > 1 ) std::sort( orphans.begin(), orphans.end(), tamu::helpers::PtOrderPFMu );
+    b_nOrphans = orphans.size();
+
+    /*
+    if (b_nOrphans > 0){
+      std::cout << "* Check orphans pt order *"<< std::endl;
+      for ( int ph = 0; ph < b_nOrphans; ph++ ) {
+        std::cout << "Orphan #" << ph+1 <<" pT: "<< orphans[ph]->pt() << "; eta: " << orphans[ph]->eta() << "; phi: "<< orphans[ph]->phi() << std::endl;
+      }
+    }//end if b_nOrphans>0
+    */
+
+    //==========================================================================
     //bb estimation event selection
-    if (b_nMuJets == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  orphans->size() == 1 ) {
+    //Changed for Run 2: one dimuon and at least one orphan muon
+    //(Need at least 3 muon to fire the signal HLT)
+    //==========================================================================
+
+    if (b_nMuJets == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  b_nOrphans >= 1 ) {
       m_orphan_passOffLineSel = true;
       pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
-      pat::MuonCollection::const_iterator orphan = orphans->begin();
-      if( muJet->muon(0)->pt() > m_threshold_Mu17_pT ||
-          muJet->muon(1)->pt() > m_threshold_Mu17_pT ||
-          orphan->pt() > m_threshold_Mu17_pT )
-        m_orphan_passOffLineSelPt = true;
-
-      if((muJet->muon(0)->pt() > m_threshold_Mu17_pT && fabs(muJet->muon(0)->eta())<0.9) ||
-         (muJet->muon(1)->pt() > m_threshold_Mu17_pT && fabs(muJet->muon(1)->eta())<0.9) ||
-         (orphan->pt() > m_threshold_Mu17_pT && fabs(orphan->eta())<0.9))
-        m_orphan_passOffLineSelPtEta = true;
-
-      m_orphan_PtOrph  = orphan->pt();
-      m_orphan_EtaOrph = orphan->eta();
+      m_orphan_PtOrph  = orphans[0]->pt();
+      m_orphan_EtaOrph = orphans[0]->eta();
       m_orphan_PtMu0   = muJet->muon(0)->pt();
-      m_orphan_EtaMu0  = muJet->muon(0)->eta();
-      //m_orphan_PhiMu0  = muJet->muon(0)->phi();
       m_orphan_PtMu1   = muJet->muon(1)->pt();
+      m_orphan_EtaMu0  = muJet->muon(0)->eta();
       m_orphan_EtaMu1  = muJet->muon(1)->eta();
+      //m_orphan_PhiMu0  = muJet->muon(0)->phi();
       //m_orphan_PhiMu1  = muJet->muon(1)->phi();
+      m_orphan_dimu_mass = muJet->mass();
+
+      //std::cout << "orphans[0] innerTrack dz: " <<orphans[0]->innerTrack()->dz(beamSpot->position())<<"; isTrackerMuon: "<< orphans[0]->isTrackerMuon() << std::endl;
+      m_orphan_z = orphans[0]->innerTrack()->dz(beamSpot->position());
+      m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
+
+      if( m_orphan_PtMu0  > m_threshold_Mu17_pT ||
+          m_orphan_PtMu1  > m_threshold_Mu17_pT ||
+          m_orphan_PtOrph > m_threshold_Mu17_pT ) m_orphan_passOffLineSelPt = true;
+
+      if( ( m_orphan_PtMu0  > m_threshold_Mu17_pT && fabs( m_orphan_EtaMu0 ) < 0.9 ) ||
+          ( m_orphan_PtMu1  > m_threshold_Mu17_pT && fabs( m_orphan_EtaMu1 ) < 0.9 ) ||
+          ( m_orphan_PtOrph > m_threshold_Mu17_pT && fabs( m_orphan_EtaOrph) < 0.9 )
+        ) m_orphan_passOffLineSelPtEta = true;
+
 /*
-      //What's the point of this lorentz vector?
       TLorentzVector mymu0, mymu1;
       mymu0.SetPtEtaPhiM(m_orphan_PtMu0,m_orphan_EtaMu0,m_orphan_PhiMu0,0);
       mymu1.SetPtEtaPhiM(m_orphan_PtMu1,m_orphan_EtaMu1,m_orphan_PhiMu1,0);
@@ -2134,11 +2155,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       m_orphan_PhiMu01  = (mymu0+mymu1).Phi();
       m_orphan_DRdiMuOrph  = sqrt( pow(m_orphan_EtaMu01-m_orphan_EtaOrph,2) + pow(TVector2::Phi_mpi_pi(m_orphan_PhiMu01-m_orphan_PhiOrph),2) );
 */
-      m_orphan_z = orphan->innerTrack()->dz(beamSpot->position());
-      m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
 
-      double triPt[3]  = {muJet->muon(0)->pt(), muJet->muon(1)->pt(), orphan->pt()};
-      double triEta[3] = {fabs(muJet->muon(0)->eta()), fabs(muJet->muon(1)->eta()), fabs(orphan->eta())};
+      double triPt[3]  = {m_orphan_PtMu0, m_orphan_PtMu1, m_orphan_PtOrph};
+      double triEta[3] = {fabs( m_orphan_EtaMu0 ), fabs( m_orphan_EtaMu1 ), fabs( m_orphan_EtaOrph)};
       int Index17=-1;
       for(int i=0; i<3; i++){
         if(triPt[i]>m_threshold_Mu17_pT && triEta[i]<0.9) Index17 = i;
@@ -2151,16 +2170,16 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
            muJet->muon(0)->innerTrack().isNonnull() &&
            muJet->muon(1)->isTrackerMuon() &&
            muJet->muon(1)->innerTrack().isNonnull() &&
-           orphan->isTrackerMuon() &&
-           orphan->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true;
-      if( m_orphan_passOffLineSelPtEta &&
-          m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
+           orphans[0]->isTrackerMuon() &&
+           orphans[0]->innerTrack().isNonnull()
+         ) m_orphan_AllTrackerMu = true;
+      if( m_orphan_passOffLineSelPtEta && m_orphan_passOffLineSelPt1788 ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
 
       //Check whether orphan muon or dimu muons fired high pT leg
       for (auto iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-        if( orphan->innerTrack().isAvailable() &&
+        if( orphans[0]->innerTrack().isAvailable() &&
             (*iter)->innerTrack().isAvailable() &&
-            tamu::helpers::sameTrack(&*(orphan->innerTrack()), &*((*iter)->innerTrack()))){
+            tamu::helpers::sameTrack(&*(orphans[0]->innerTrack()), &*((*iter)->innerTrack()))){
            m_dimuorphan_containstrig++;
         }
       }
@@ -2177,54 +2196,83 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         }
       }
 
-      m_orphan_dimu_mass = muJet->mass();
-      m_orphan_mass = orphan->mass();
-      m_orphan_isoTk = 0.;
-      m_orphan_dimu_isoTk = 0.;
+      //Can't use the old method in AOD below since MiniAOD has different precision for the two collections:
+      /*if (tamu::helpers::sameTrack(&*track,&*(muJet->muon(0)->innerTrack()))
+        || tamu::helpers::sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
+      */
+      //Instead, get the packed PF candidate associated to the slimmedMuons, and then use the pseudoTrack pointer, this is essentially
+      //what was done for the unpackedTracksAndVertices collection(i.e., tracks here)
+      //Refer to MiniAOD workbook: https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2017#Pointers_and_navigation
+      //and https://github.com/cms-sw/cmssw/blob/CMSSW_9_4_X/PhysicsTools/PatAlgos/plugins/TrackAndVertexUnpacker.cc#L87
+      const pat::PackedCandidate* candOrphanDimu0 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(0)->sourceCandidatePtr(0).get());
+      const pat::PackedCandidate* candOrphanDimu1 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(1)->sourceCandidatePtr(0).get());
+      const pat::PackedCandidate* candOrphan = dynamic_cast<const pat::PackedCandidate*>(orphans[0]->sourceCandidatePtr(0).get());
+      //Wei Shi 10.25.2018
+      if ( candOrphanDimu0 != 0               && candOrphanDimu1 != 0               && candOrphan != 0 &&
+           candOrphanDimu0->hasTrackDetails() && candOrphanDimu1->hasTrackDetails() && candOrphan->hasTrackDetails() ){
+             m_orphan_isoTk = 0.;
+             m_orphan_dimu_isoTk = 0.;
+             m_orphan_dimu_Mu0_isoTk0p3 = 0.;
+             m_orphan_dimu_Mu0_isoTk0p4 = 0.;
+             m_orphan_dimu_Mu0_isoTk0p5 = 0.;
+             m_orphan_dimu_Mu1_isoTk0p3 = 0.;
+             m_orphan_dimu_Mu1_isoTk0p4 = 0.;
+             m_orphan_dimu_Mu1_isoTk0p5 = 0.;
 
-      for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+             for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+               bool track_is_muon = false;
 
-	/*Iso for orphan muon*/
-	const pat::PackedCandidate* candOrphan = dynamic_cast<const pat::PackedCandidate*>(orphan->sourceCandidatePtr(0).get());
-        if ( !tamu::helpers::sameTrack(&*track,&(candOrphan->pseudoTrack())) ) {
-	  double dphi = tamu::helpers::My_dPhi( orphan->innerTrack()->phi(), track->phi() );
-          double deta = orphan->innerTrack()->eta() - track->eta();
-          double dR = sqrt(pow(dphi, 2) + pow(deta, 2));
-          if (dR < iso_track_dR_threshold && track->pt() > iso_track_pt_threshold) {
-            double dz = fabs( track->dz(beamSpot->position()) - orphan->innerTrack()->dz(beamSpot->position()) );
-            if (dz < iso_track_dz_threshold){ m_orphan_isoTk += track->pt(); }
-          }
-        }//End iso for orphan muon
+               if ( tamu::helpers::sameTrack( &*track, &(candOrphanDimu0->pseudoTrack()) ) ||
+                    tamu::helpers::sameTrack( &*track, &(candOrphanDimu1->pseudoTrack()) ) ||
+                    tamu::helpers::sameTrack( &*track, &(candOrphan->pseudoTrack()     ) )
+                  ){ track_is_muon = true; }
 
-	/*Iso for orphan associated dimuon*/
-	bool track_is_muon = false;
-	//Can't use the old method in AOD below since MiniAOD has different precision for the two collections:
-        /*if (tamu::helpers::sameTrack(&*track,&*(muJet->muon(0)->innerTrack()))
-	     || tamu::helpers::sameTrack(&*track,&*(muJet->muon(1)->innerTrack()))) track_is_muon = true;
-        */
-	//Instead, get the packed PF candidate associated to the slimmedMuons, and then use the pseudoTrack pointer, this is essentially
-	//what was done for the unpackedTracksAndVertices collection(i.e., tracks here)
-	//Refer to MiniAOD workbook: https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2017#Pointers_and_navigation
-	//and https://github.com/cms-sw/cmssw/blob/CMSSW_9_4_X/PhysicsTools/PatAlgos/plugins/TrackAndVertexUnpacker.cc#L87
-	const pat::PackedCandidate* candOrphanDimu0 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(0)->sourceCandidatePtr(0).get());
-	const pat::PackedCandidate* candOrphanDimu1 = dynamic_cast<const pat::PackedCandidate*>(muJet->muon(1)->sourceCandidatePtr(0).get());
-	//Wei Shi 10.25.2018
-	 if (   tamu::helpers::sameTrack(&*track,&(candOrphanDimu0->pseudoTrack()))
-	     || tamu::helpers::sameTrack(&*track,&(candOrphanDimu1->pseudoTrack())) ) track_is_muon = true;
-         if (!track_is_muon) {
-	   double dphi = tamu::helpers::My_dPhi( muJet->phi(), track->phi() );
-           double deta = muJet->eta() - track->eta();
-           double dR   = sqrt(pow(dphi, 2) + pow(deta, 2));
-           if (dR < iso_track_dR_threshold && track->pt() > iso_track_pt_threshold) {
-             double dz = fabs( track->dz(beamSpot->position()) - muJet->vertexDz(beamSpot->position()) );
-             if (dz < iso_track_dz_threshold){ m_orphan_dimu_isoTk += track->pt(); }
-           }
-         }//End iso for orphan associated dimuon
+               if ( track_is_muon == false ) {
+                 /*Iso for orphan associated dimuon*/
+                 double dphi = tamu::helpers::My_dPhi( muJet->phi(), track->phi() );
+                 double deta = muJet->eta() - track->eta();
+                 double dR   = sqrt(pow(dphi, 2) + pow(deta, 2));
+                 double dz   = track->dz(beamSpot->position()) - m_orphan_dimu_z;
+                 if ( dR          < iso_track_dR_threshold
+                   && track->pt() > iso_track_pt_threshold
+                   && fabs(dz)    < iso_track_dz_threshold ) m_orphan_dimu_isoTk += track->pt(); //end orphan associated dimu iso calculation
 
-      }//End loop over tracks
+                 /*Iso for orphan associated dimu mu0*/
+                 double dPhiMu0 = tamu::helpers::My_dPhi( candOrphanDimu0->pseudoTrack().phi(), track->phi() );
+                 double dEtaMu0 = candOrphanDimu0->pseudoTrack().eta() - track->eta();
+                 double dRMu0   = sqrt( dPhiMu0*dPhiMu0 + dEtaMu0*dEtaMu0 );
+                 double dzMu0   = candOrphanDimu0->pseudoTrack().dz(beamSpot->position()) - track->dz(beamSpot->position());
+                 if ( dRMu0 < 0.3 && track->pt() > 0.5 && fabs( dzMu0 ) < 0.1 ) m_orphan_dimu_Mu0_isoTk0p3 += track->pt(); //cone size: 0.3
+                 if ( dRMu0 < 0.4 && track->pt() > 0.5 && fabs( dzMu0 ) < 0.1 ) m_orphan_dimu_Mu0_isoTk0p4 += track->pt(); //cone size: 0.4
+                 if ( dRMu0 < 0.5 && track->pt() > 0.5 && fabs( dzMu0 ) < 0.1 ) m_orphan_dimu_Mu0_isoTk0p5 += track->pt(); //cone size: 0.5
 
-    }//end bbbar event selection: one dimuon + one orphan
-   }//end runBBestimation
+                 /*Iso for orphan associated dimu mu1*/
+                 double dPhiMu1 = tamu::helpers::My_dPhi( candOrphanDimu1->pseudoTrack().phi(), track->phi() );
+                 double dEtaMu1 = candOrphanDimu1->pseudoTrack().eta() - track->eta();
+                 double dRMu1   = sqrt( dPhiMu1*dPhiMu1 + dEtaMu1*dEtaMu1 );
+                 double dzMu1   = candOrphanDimu1->pseudoTrack().dz(beamSpot->position()) - track->dz(beamSpot->position());
+                 if ( dRMu1 < 0.3 && track->pt() > 0.5 && fabs( dzMu1 ) < 0.1 ) m_orphan_dimu_Mu1_isoTk0p3 += track->pt(); //cone size: 0.3
+                 if ( dRMu1 < 0.4 && track->pt() > 0.5 && fabs( dzMu1 ) < 0.1 ) m_orphan_dimu_Mu1_isoTk0p4 += track->pt(); //cone size: 0.4
+                 if ( dRMu1 < 0.5 && track->pt() > 0.5 && fabs( dzMu1 ) < 0.1 ) m_orphan_dimu_Mu1_isoTk0p5 += track->pt(); //cone size: 0.5
+
+                 /*Iso for orphan muon*/
+                 double dphiOrph = tamu::helpers::My_dPhi( candOrphan->pseudoTrack().phi(), track->phi() );
+                 double detaOrph = candOrphan->pseudoTrack().eta() - track->eta();
+                 double dROrph = sqrt(pow(dphiOrph, 2) + pow(detaOrph, 2));
+                 double dzOrph = m_orphan_z - track->dz(beamSpot->position());
+                 if ( dROrph       < iso_track_dR_threshold
+                   && track->pt()  > iso_track_pt_threshold
+                   && fabs(dzOrph) < iso_track_dz_threshold) m_orphan_isoTk += track->pt(); //end orphan mu iso calculation
+
+              }//End if track_is_muon
+
+            }//End loop over tracks
+
+          }//end if cast exists
+
+        }//end event selection: one dimuon + one orphan
+
+      }//end runBBestimation
   //****************************************************************************
   //                          RECO LEVEL ANALYSIS FINISH
   //****************************************************************************
@@ -2371,6 +2419,10 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("genA1Mu_dR",   &b_genA1Mu_dR,   "genA1Mu_dR/F");
   m_ttree->Branch("genA0Mu_dCharge",   &b_genA0Mu_dCharge,   "genA0Mu_dCharge/F");
   m_ttree->Branch("genA1Mu_dCharge",   &b_genA1Mu_dCharge,   "genA1Mu_dCharge/F");
+  m_ttree->Branch("genA0Mu_dPt",   &b_genA0Mu_dPt,   "genA0Mu_dPt/F");
+  m_ttree->Branch("genA1Mu_dPt",   &b_genA1Mu_dPt,   "genA1Mu_dPt/F");
+  m_ttree->Branch("genA0Mu_RPt",   &b_genA0Mu_RPt,   "genA0Mu_RPt/F");
+  m_ttree->Branch("genA1Mu_RPt",   &b_genA1Mu_RPt,   "genA1Mu_RPt/F");
 
   m_ttree->Branch("genDiMu0_Eta",  &b_genDiMu0_Eta,  "genDiMu0_Eta/F");
   m_ttree->Branch("genDiMu0_Phi",  &b_genDiMu0_Phi,  "genDiMu0_Phi/F");
@@ -2431,9 +2483,11 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   // Reco Muons
   m_ttree->Branch("nRecoMu",  &b_nRecoMu,  "nRecoMu/I");
+  m_ttree->Branch("nMuPairs",  &b_nMuPairs,  "nMuPairs/I");
+  m_ttree->Branch("nDaughterPerMuPair",  &b_nDaughterPerMuPair,  "nDaughterPerMuPair/F");
   m_ttree->Branch("nMuJets",  &b_nMuJets,  "nMuJets/I");
+  m_ttree->Branch("nOrphans",  &b_nOrphans,  "nOrphans/I");
   m_ttree->Branch("nDaughterPerMuJet",  &b_nDaughterPerMuJet,  "nDaughterPerMuJet/F");
-
 
   m_ttree->Branch("selMu0_px",  &b_selMu0_px,  "selMu0_px/F");
   m_ttree->Branch("selMu1_px",  &b_selMu1_px,  "selMu1_px/F");
@@ -2475,7 +2529,6 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("diMuonC_FittedVtx_vx",  &b_diMuonC_FittedVtx_vx,  "diMuonC_FittedVtx_vx/F");
   m_ttree->Branch("diMuonC_FittedVtx_vy",  &b_diMuonC_FittedVtx_vy,  "diMuonC_FittedVtx_vy/F");
   m_ttree->Branch("diMuonC_FittedVtx_vz",  &b_diMuonC_FittedVtx_vz,  "diMuonC_FittedVtx_vz/F");
-
   m_ttree->Branch("diMuonC_FittedVtx_Lxy", &b_diMuonC_FittedVtx_Lxy, "diMuonC_FittedVtx_Lxy/F");
   m_ttree->Branch("diMuonC_FittedVtx_L",   &b_diMuonC_FittedVtx_L,   "diMuonC_FittedVtx_L/F");
   m_ttree->Branch("diMuonC_FittedVtx_dz",  &b_diMuonC_FittedVtx_dz,  "diMuonC_FittedVtx_dz/F");
@@ -2489,72 +2542,42 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("diMuonF_FittedVtx_vx",  &b_diMuonF_FittedVtx_vx,  "diMuonF_FittedVtx_vx/F");
   m_ttree->Branch("diMuonF_FittedVtx_vy",  &b_diMuonF_FittedVtx_vy,  "diMuonF_FittedVtx_vy/F");
   m_ttree->Branch("diMuonF_FittedVtx_vz",  &b_diMuonF_FittedVtx_vz,  "diMuonF_FittedVtx_vz/F");
-
   m_ttree->Branch("diMuonF_FittedVtx_Lxy", &b_diMuonF_FittedVtx_Lxy, "diMuonF_FittedVtx_Lxy/F");
   m_ttree->Branch("diMuonF_FittedVtx_L",   &b_diMuonF_FittedVtx_L,   "diMuonF_FittedVtx_L/F");
   m_ttree->Branch("diMuonF_FittedVtx_dz",  &b_diMuonF_FittedVtx_dz,  "diMuonF_FittedVtx_dz/F");
-/*
-  m_ttree->Branch("diMuonC_ConsistentVtx_m",   &b_diMuonC_ConsistentVtx_m,   "diMuonC_ConsistentVtx_m/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_px",  &b_diMuonC_ConsistentVtx_px,  "diMuonC_ConsistentVtx_px/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_py",  &b_diMuonC_ConsistentVtx_py,  "diMuonC_ConsistentVtx_py/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_pz",  &b_diMuonC_ConsistentVtx_pz,  "diMuonC_ConsistentVtx_pz/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_eta", &b_diMuonC_ConsistentVtx_eta, "diMuonC_ConsistentVtx_eta/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_phi", &b_diMuonC_ConsistentVtx_phi, "diMuonC_ConsistentVtx_phi/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_vx",  &b_diMuonC_ConsistentVtx_vx,  "diMuonC_ConsistentVtx_vx/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_vy",  &b_diMuonC_ConsistentVtx_vy,  "diMuonC_ConsistentVtx_vy/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_vz",  &b_diMuonC_ConsistentVtx_vz,  "diMuonC_ConsistentVtx_vz/F");
-
-  m_ttree->Branch("diMuonC_ConsistentVtx_Lxy", &b_diMuonC_ConsistentVtx_Lxy, "diMuonC_ConsistentVtx_Lxy/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_L",   &b_diMuonC_ConsistentVtx_L,   "diMuonC_ConsistentVtx_L/F");
-  m_ttree->Branch("diMuonC_ConsistentVtx_dz",  &b_diMuonC_ConsistentVtx_dz,  "diMuonC_ConsistentVtx_dz/F");
-
-  m_ttree->Branch("diMuonF_ConsistentVtx_m",   &b_diMuonF_ConsistentVtx_m,   "diMuonF_ConsistentVtx_m/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_px",  &b_diMuonF_ConsistentVtx_px,  "diMuonF_ConsistentVtx_px/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_py",  &b_diMuonF_ConsistentVtx_py,  "diMuonF_ConsistentVtx_py/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_pz",  &b_diMuonF_ConsistentVtx_pz,  "diMuonF_ConsistentVtx_pz/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_eta", &b_diMuonF_ConsistentVtx_eta, "diMuonF_ConsistentVtx_eta/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_phi", &b_diMuonF_ConsistentVtx_phi, "diMuonF_ConsistentVtx_phi/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_vx",  &b_diMuonF_ConsistentVtx_vx,  "diMuonF_ConsistentVtx_vx/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_vy",  &b_diMuonF_ConsistentVtx_vy,  "diMuonF_ConsistentVtx_vy/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_vz",  &b_diMuonF_ConsistentVtx_vz,  "diMuonF_ConsistentVtx_vz/F");
-
-  m_ttree->Branch("diMuonF_ConsistentVtx_Lxy", &b_diMuonF_ConsistentVtx_Lxy, "diMuonF_ConsistentVtx_Lxy/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_L",   &b_diMuonF_ConsistentVtx_L,   "diMuonF_ConsistentVtx_L/F");
-  m_ttree->Branch("diMuonF_ConsistentVtx_dz",  &b_diMuonF_ConsistentVtx_dz,  "diMuonF_ConsistentVtx_dz/F");
-  */
 
   m_ttree->Branch("diMuonC_IsoTk_FittedVtx", &b_diMuonC_IsoTk_FittedVtx, "diMuonC_IsoTk_FittedVtx/F");
+  m_ttree->Branch("diMuonCMu0_IsoTk0p3_FittedVtx", &b_diMuonCMu0_IsoTk0p3_FittedVtx, "diMuonCMu0_IsoTk0p3_FittedVtx/F");
+  m_ttree->Branch("diMuonCMu0_IsoTk0p4_FittedVtx", &b_diMuonCMu0_IsoTk0p4_FittedVtx, "diMuonCMu0_IsoTk0p4_FittedVtx/F");
+  m_ttree->Branch("diMuonCMu0_IsoTk0p5_FittedVtx", &b_diMuonCMu0_IsoTk0p5_FittedVtx, "diMuonCMu0_IsoTk0p5_FittedVtx/F");
+  m_ttree->Branch("diMuonCMu1_IsoTk0p3_FittedVtx", &b_diMuonCMu1_IsoTk0p3_FittedVtx, "diMuonCMu1_IsoTk0p3_FittedVtx/F");
+  m_ttree->Branch("diMuonCMu1_IsoTk0p4_FittedVtx", &b_diMuonCMu1_IsoTk0p4_FittedVtx, "diMuonCMu1_IsoTk0p4_FittedVtx/F");
+  m_ttree->Branch("diMuonCMu1_IsoTk0p5_FittedVtx", &b_diMuonCMu1_IsoTk0p5_FittedVtx, "diMuonCMu1_IsoTk0p5_FittedVtx/F");
+
   m_ttree->Branch("diMuonF_IsoTk_FittedVtx", &b_diMuonF_IsoTk_FittedVtx, "diMuonF_IsoTk_FittedVtx/F");
+  m_ttree->Branch("diMuonFMu0_IsoTk0p3_FittedVtx", &b_diMuonFMu0_IsoTk0p3_FittedVtx, "diMuonFMu0_IsoTk0p3_FittedVtx/F");
+  m_ttree->Branch("diMuonFMu0_IsoTk0p4_FittedVtx", &b_diMuonFMu0_IsoTk0p4_FittedVtx, "diMuonFMu0_IsoTk0p4_FittedVtx/F");
+  m_ttree->Branch("diMuonFMu0_IsoTk0p5_FittedVtx", &b_diMuonFMu0_IsoTk0p5_FittedVtx, "diMuonFMu0_IsoTk0p5_FittedVtx/F");
+  m_ttree->Branch("diMuonFMu1_IsoTk0p3_FittedVtx", &b_diMuonFMu1_IsoTk0p3_FittedVtx, "diMuonFMu1_IsoTk0p3_FittedVtx/F");
+  m_ttree->Branch("diMuonFMu1_IsoTk0p4_FittedVtx", &b_diMuonFMu1_IsoTk0p4_FittedVtx, "diMuonFMu1_IsoTk0p4_FittedVtx/F");
+  m_ttree->Branch("diMuonFMu1_IsoTk0p5_FittedVtx", &b_diMuonFMu1_IsoTk0p5_FittedVtx, "diMuonFMu1_IsoTk0p5_FittedVtx/F");
 
   m_ttree->Branch("diMuons_dz_FittedVtx", &b_diMuons_dz_FittedVtx, "diMuons_dz_FittedVtx/F");
 
-  //m_ttree->Branch("diMuons_dz_ConsistentVtx", &b_diMuons_dz_ConsistentVtx, "diMuons_dz_ConsistentVtx/F");
-  //m_ttree->Branch("diMuonC_IsoTk_ConsistentVtx", &b_diMuonC_IsoTk_ConsistentVtx, "diMuonC_IsoTk_ConsistentVtx/F");
-  //m_ttree->Branch("diMuonF_IsoTk_ConsistentVtx", &b_diMuonF_IsoTk_ConsistentVtx, "diMuonF_IsoTk_ConsistentVtx/F");
+  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_Phase1", &b_diMuonC_m1_FittedVtx_hitpix_Phase1, "diMuonC_m1_FittedVtx_hitpix_Phase1/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_Phase1", &b_diMuonC_m2_FittedVtx_hitpix_Phase1, "diMuonC_m2_FittedVtx_hitpix_Phase1/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_Phase1", &b_diMuonF_m1_FittedVtx_hitpix_Phase1, "diMuonF_m1_FittedVtx_hitpix_Phase1/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_Phase1", &b_diMuonF_m2_FittedVtx_hitpix_Phase1, "diMuonF_m2_FittedVtx_hitpix_Phase1/I");
 
-  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix", &b_diMuonC_m1_FittedVtx_hitpix, "diMuonC_m1_FittedVtx_hitpix/I");
-  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix", &b_diMuonC_m2_FittedVtx_hitpix, "diMuonC_m2_FittedVtx_hitpix/I");
-  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix", &b_diMuonF_m1_FittedVtx_hitpix, "diMuonF_m1_FittedVtx_hitpix/I");
-  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix", &b_diMuonF_m2_FittedVtx_hitpix, "diMuonF_m2_FittedVtx_hitpix/I");
+  m_ttree->Branch("diMuonC_m1_FittedVtx_NonZero_ValidPixelHits", &b_diMuonC_m1_FittedVtx_NonZero_ValidPixelHits, "diMuonC_m1_FittedVtx_NonZero_ValidPixelHits/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_NonZero_ValidPixelHits", &b_diMuonC_m2_FittedVtx_NonZero_ValidPixelHits, "diMuonC_m2_FittedVtx_NonZero_ValidPixelHits/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_NonZero_ValidPixelHits", &b_diMuonF_m1_FittedVtx_NonZero_ValidPixelHits, "diMuonF_m1_FittedVtx_NonZero_ValidPixelHits/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_NonZero_ValidPixelHits", &b_diMuonF_m2_FittedVtx_NonZero_ValidPixelHits, "diMuonF_m2_FittedVtx_NonZero_ValidPixelHits/I");
 
-  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l2inc", &b_diMuonC_m1_FittedVtx_hitpix_l2inc, "diMuonC_m1_FittedVtx_hitpix_l2inc/I");
-  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l2inc", &b_diMuonC_m2_FittedVtx_hitpix_l2inc, "diMuonC_m2_FittedVtx_hitpix_l2inc/I");
-  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l2inc", &b_diMuonF_m1_FittedVtx_hitpix_l2inc, "diMuonF_m1_FittedVtx_hitpix_l2inc/I");
-  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l2inc", &b_diMuonF_m2_FittedVtx_hitpix_l2inc, "diMuonF_m2_FittedVtx_hitpix_l2inc/I");
-
-  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_l3inc", &b_diMuonC_m1_FittedVtx_hitpix_l3inc, "diMuonC_m1_FittedVtx_hitpix_l3inc/I");
-  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_l3inc", &b_diMuonC_m2_FittedVtx_hitpix_l3inc, "diMuonC_m2_FittedVtx_hitpix_l3inc/I");
-  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l3inc", &b_diMuonF_m1_FittedVtx_hitpix_l3inc, "diMuonF_m1_FittedVtx_hitpix_l3inc/I");
-  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l3inc", &b_diMuonF_m2_FittedVtx_hitpix_l3inc, "diMuonF_m2_FittedVtx_hitpix_l3inc/I");
-
-  m_ttree->Branch("b_diMuonC_m1_FittedVtx_HBV", &b_diMuonC_m1_FittedVtx_HBV, "diMuonC_m1_FittedVtx_HBV/I");
-  m_ttree->Branch("b_diMuonC_m2_FittedVtx_HBV", &b_diMuonC_m2_FittedVtx_HBV, "diMuonC_m2_FittedVtx_HBV/I");
-  m_ttree->Branch("b_diMuonF_m1_FittedVtx_HBV", &b_diMuonF_m1_FittedVtx_HBV, "diMuonF_m1_FittedVtx_HBV/I");
-  m_ttree->Branch("b_diMuonF_m2_FittedVtx_HBV", &b_diMuonF_m2_FittedVtx_HBV, "diMuonF_m2_FittedVtx_HBV/I");
-  m_ttree->Branch("b_diMuonC_m1_FittedVtx_MHAV", &b_diMuonC_m1_FittedVtx_MHAV, "diMuonC_m1_FittedVtx_MHAV/I");
-  m_ttree->Branch("b_diMuonC_m2_FittedVtx_MHAV", &b_diMuonC_m2_FittedVtx_MHAV, "diMuonC_m2_FittedVtx_MHAV/I");
-  m_ttree->Branch("b_diMuonF_m1_FittedVtx_MHAV", &b_diMuonF_m1_FittedVtx_MHAV, "diMuonF_m1_FittedVtx_MHAV/I");
-  m_ttree->Branch("b_diMuonF_m2_FittedVtx_MHAV", &b_diMuonF_m2_FittedVtx_MHAV, "diMuonF_m2_FittedVtx_MHAV/I");
+  m_ttree->Branch("diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement", &b_diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement, "diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement", &b_diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement, "diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement", &b_diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement, "diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement", &b_diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement, "diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement/I");
 
   m_ttree->Branch("massC",                          &b_massC,                          "massC/F");
   m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
@@ -2585,20 +2608,14 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
   m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
 
-  //m_ttree->Branch("is2DiMuonsFittedVtxOK_KF",       &b_is2DiMuonsFittedVtxOK_KF,       "is2DiMuonsFittedVtxOK_KF/O");
-  //m_ttree->Branch("is2DiMuonsFittedVtxOK_VS",       &b_is2DiMuonsFittedVtxOK_VS,       "is2DiMuonsFittedVtxOK_VS/O");
-  //m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
-
   m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
   m_ttree->Branch("isControlHLT16Fired",            &b_isControlHLT16Fired,            "isControlHLT16Fired/O");
   m_ttree->Branch("isControlHLT6Fired",             &b_isControlHLT6Fired,             "isControlHLT6Fired/O");
   m_ttree->Branch("isSignalHLTL1Fired",             &b_isSignalHLTL1Fired,             "isSignalHLTL1Fired/O");
   m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
-  //m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);
-  m_ttree->Branch("Mass4Mu",&b_Mass4Mu,"Mass4Mu/F");
 
   // Orpahn Muon
   if(runBBestimation_){
@@ -2606,7 +2623,6 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
     m_ttree_orphan->Branch("run", &b_run, "run/I");
     m_ttree_orphan->Branch("lumi", &b_lumi, "lumi/I");
     m_ttree_orphan->Branch("event", &b_event, "event/I");
-    m_ttree_orphan->Branch("orph_mass", &m_orphan_mass, "orph_mass/F");
     m_ttree_orphan->Branch("orph_dimu_mass", &m_orphan_dimu_mass, "orph_dimu_mass/F");
     m_ttree_orphan->Branch("containstrig", &m_dimuorphan_containstrig, "containstrig/I");
     m_ttree_orphan->Branch("containstrig2", &m_dimuorphan_containstrig2, "containstrig2/I");
@@ -2614,6 +2630,12 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
     m_ttree_orphan->Branch("orph_dimu_z", &m_orphan_dimu_z, "orph_dimu_z/F");
     m_ttree_orphan->Branch("orph_isoTk", &m_orphan_isoTk, "orph_isoTk/F");
     m_ttree_orphan->Branch("orph_dimu_isoTk", &m_orphan_dimu_isoTk, "orph_dimu_isoTk/F");
+    m_ttree_orphan->Branch("orph_dimu_Mu0_isoTk0p3", &m_orphan_dimu_Mu0_isoTk0p3, "orph_dimu_Mu0_isoTk0p3/F");
+    m_ttree_orphan->Branch("orph_dimu_Mu0_isoTk0p4", &m_orphan_dimu_Mu0_isoTk0p4, "orph_dimu_Mu0_isoTk0p4/F");
+    m_ttree_orphan->Branch("orph_dimu_Mu0_isoTk0p5", &m_orphan_dimu_Mu0_isoTk0p5, "orph_dimu_Mu0_isoTk0p5/F");
+    m_ttree_orphan->Branch("orph_dimu_Mu1_isoTk0p3", &m_orphan_dimu_Mu1_isoTk0p3, "orph_dimu_Mu1_isoTk0p3/F");
+    m_ttree_orphan->Branch("orph_dimu_Mu1_isoTk0p4", &m_orphan_dimu_Mu1_isoTk0p4, "orph_dimu_Mu1_isoTk0p4/F");
+    m_ttree_orphan->Branch("orph_dimu_Mu1_isoTk0p5", &m_orphan_dimu_Mu1_isoTk0p5, "orph_dimu_Mu1_isoTk0p5/F");
     m_ttree_orphan->Branch("orph_passOffLineSel", &m_orphan_passOffLineSel, "orph_passOffLineSel/O");
     m_ttree_orphan->Branch("orph_passOffLineSelPt", &m_orphan_passOffLineSelPt, "orph_passOffLineSelPt/O");
     m_ttree_orphan->Branch("orph_passOffLineSelPtEta", &m_orphan_passOffLineSelPtEta, "orph_passOffLineSelPtEta/O");
@@ -2667,37 +2689,6 @@ CutFlowAnalyzer_MiniAOD::endJob()
 
    cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << endl;
    cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << endl;
-
-   cout << " *** FITTED VERTEXES *** " << endl;
-
-
-   cout << " *** CONSISTENT VERTEXES *** " << endl;
-
-   cout << " *** FITTED VERTEXES *** " << endl;
-  cout << m_events << endl;
-  cout << m_events1GenMu17                  << endl;
-  cout << m_events2GenMu8                   << endl;
-  cout << m_events3GenMu8                   << endl;
-  cout << m_events4GenMu8                   << endl;
-  cout << m_events1SelMu17                  << endl;
-  cout << m_events2SelMu8                   << endl;
-  cout << m_events3SelMu8                   << endl;
-  cout << m_events4SelMu8                   << endl;
-  cout << m_events2MuJets                   << endl;
-  cout << m_events2DiMuons                  << endl;
-
-   cout << " *** CONSISTENT VERTEXES *** " << endl;
-  cout << m_events << endl;
-  cout << m_events1GenMu17                      << endl;
-  cout << m_events2GenMu8                       << endl;
-  cout << m_events3GenMu8                       << endl;
-  cout << m_events4GenMu8                       << endl;
-  cout << m_events1SelMu17                      << endl;
-  cout << m_events2SelMu8                       << endl;
-  cout << m_events3SelMu8                       << endl;
-  cout << m_events4SelMu8                       << endl;
-  cout << m_events2MuJets                       << endl;
-  cout << m_events2DiMuons                      << endl;
 }
 
 void CutFlowAnalyzer_MiniAOD::FillTrigInfo( TH1F * h1, const edm::TriggerNames& triggerNames, std::map<int,std::string> nameAndNumb )

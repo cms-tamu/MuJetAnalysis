@@ -27,8 +27,8 @@
 #include "TrackingTools/PatternTools/interface/Trajectory.h"
 
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
-#include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
-#include "MuJetAnalysis/AnalysisTools/interface/DisplacedVertexFinder.h"
+//#include "MuJetAnalysis/AnalysisTools/interface/ConsistentVertexesCalculator.h"
+//#include "MuJetAnalysis/AnalysisTools/interface/DisplacedVertexFinder.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
 // user include files
@@ -270,7 +270,7 @@ private:
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
   edm::EDGetTokenT<std::vector<pat::Jet> > m_PATJet;
 
-  Int_t         m_nThrowsConsistentVertexesCalculator;
+  //Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
   Int_t         m_endcapPixelLayer;
 
@@ -305,24 +305,24 @@ private:
   Bool_t b_is2DiMuonsFittedVtxOK;
   Bool_t b_is2DiMuonsFittedVtxOK_KF;
   Bool_t b_is2DiMuonsFittedVtxOK_VS;
-  Bool_t b_is2DiMuonsConsistentVtxOK;
+  //Bool_t b_is2DiMuonsConsistentVtxOK;
 
   //BAM: added for vertex finding sanity checks
   Int_t hitsBeforeVertex_diMuonC_FittedVTX;
   Int_t hitsBeforeVertex_diMuonF_FittedVTX;
-  Int_t hitsBeforeVertex_diMuonC_ConsistentVTX;
-  Int_t hitsBeforeVertex_diMuonF_ConsistentVTX;
+//  Int_t hitsBeforeVertex_diMuonC_ConsistentVTX;
+  //Int_t hitsBeforeVertex_diMuonF_ConsistentVTX;
 
   Int_t missingHitsAfterVertex_diMuonC_FittedVTX;
   Int_t missingHitsAfterVertex_diMuonF_FittedVTX;
-  Int_t missingHitsAfterVertex_diMuonC_ConsistentVTX;
-  Int_t missingHitsAfterVertex_diMuonF_ConsistentVTX;
+//  Int_t missingHitsAfterVertex_diMuonC_ConsistentVTX;
+  //Int_t missingHitsAfterVertex_diMuonF_ConsistentVTX;
 
   Bool_t b_isDiMuonHLTFired;
 
   Bool_t b_is2DiMuonsMassOK_FittedVtx;
 
-  Bool_t b_is2DiMuonsMassOK_ConsistentVtx;
+  //Bool_t b_is2DiMuonsMassOK_ConsistentVtx;
 
   Bool_t b_isVertexOK;
 
@@ -406,6 +406,12 @@ private:
   Int_t b_diMuonF_m1_FittedVtx_hitpix_l3inc;
   Int_t b_diMuonF_m2_FittedVtx_hitpix_l3inc;
 
+  Int_t b_diMuonC_m1_FittedVtx_hitpix_Phase1;
+  Int_t b_diMuonC_m2_FittedVtx_hitpix_Phase1;
+  Int_t b_diMuonF_m1_FittedVtx_hitpix_Phase1;
+  Int_t b_diMuonF_m2_FittedVtx_hitpix_Phase1;
+
+/*
   Int_t b_pixelhitfailure_C;
   Int_t b_pixelhitfailure_F;
 
@@ -418,6 +424,7 @@ private:
   Int_t b_diMuonC_m2_FittedVtx_MHAV;
   Int_t b_diMuonF_m1_FittedVtx_MHAV;
   Int_t b_diMuonF_m2_FittedVtx_MHAV;
+  */
 
   Float_t b_diMuonC_FittedVtx_Lxy;
   Float_t b_diMuonC_FittedVtx_Lxy_rclstvtx;
@@ -438,7 +445,7 @@ private:
   Float_t b_diMuonF_FittedVtx_Lxy_rclstvtx; // respect to closest vertex
   Float_t b_diMuonF_FittedVtx_L;
   Float_t b_diMuonF_FittedVtx_dz;
-
+/*
   Float_t b_diMuonC_ConsistentVtx_m;
   Float_t b_diMuonC_ConsistentVtx_px;
   Float_t b_diMuonC_ConsistentVtx_py;
@@ -466,16 +473,16 @@ private:
   Float_t b_diMuonF_ConsistentVtx_Lxy;
   Float_t b_diMuonF_ConsistentVtx_L;
   Float_t b_diMuonF_ConsistentVtx_dz;
-
+*/
   Float_t b_diMuons_dz_FittedVtx;
-  Float_t b_diMuons_dz_ConsistentVtx;
+  //Float_t b_diMuons_dz_ConsistentVtx;
 
   Float_t b_diMuonC_IsoTk_FittedVtx;
   Float_t b_diMuonF_IsoTk_FittedVtx;
-  Float_t b_diMuonC_IsoTk_ConsistentVtx;
-  Float_t b_diMuonF_IsoTk_ConsistentVtx;
+  //Float_t b_diMuonC_IsoTk_ConsistentVtx;
+  //Float_t b_diMuonF_IsoTk_ConsistentVtx;
 
-  bool runDisplacedVtxFinder_;
+  //bool runDisplacedVtxFinder_;
   bool skimOutput_; //fill only events with 2 good dimuons
 
   //PixelHitRecovery
@@ -739,7 +746,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   //m_traj            = consumes< std::vector<Trajectory> >(iConfig.getParameter<edm::InputTag>("Traj"));
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
   m_PATJet          = consumes<std::vector<pat::Jet> >(iConfig.getParameter<edm::InputTag>("PATJet"));
-  m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
+  //m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
   runBBestimation_ = iConfig.getParameter<bool>("runBBestimation");
@@ -758,7 +765,7 @@ CutFlowAnalyzer::CutFlowAnalyzer(const edm::ParameterSet& iConfig)
   histo_name = true;
   NameAndNumb.clear();
 
-  runDisplacedVtxFinder_ = iConfig.getParameter<bool>("runDisplacedVtxFinder");
+  //runDisplacedVtxFinder_ = iConfig.getParameter<bool>("runDisplacedVtxFinder");
   //measurementTrkToken_ = consumes<MeasurementTrackerEvent>(iConfig.getParameter<edm::InputTag>("MeasurementTrackerEvent"));
 }
 
@@ -800,6 +807,12 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_diMuonF_m1_FittedVtx_hitpix_l3inc=-1000;
   b_diMuonF_m2_FittedVtx_hitpix_l3inc=-1000;
 
+  b_diMuonC_m1_FittedVtx_hitpix_Phase1=-1000;
+  b_diMuonC_m2_FittedVtx_hitpix_Phase1=-1000;
+  b_diMuonF_m1_FittedVtx_hitpix_Phase1=-1000;
+  b_diMuonF_m2_FittedVtx_hitpix_Phase1=-1000;
+
+/*
   b_diMuonC_m1_FittedVtx_HBV = -1000;
   b_diMuonC_m2_FittedVtx_HBV = -1000;
   b_diMuonF_m1_FittedVtx_HBV = -1000;
@@ -809,7 +822,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   b_diMuonC_m2_FittedVtx_MHAV = -1000;
   b_diMuonF_m1_FittedVtx_MHAV = -1000;
   b_diMuonF_m2_FittedVtx_MHAV = -1000;
-
+*/
 
   //Pixel Hit Recovery
   muJetC_muon1_track_minchi2=-10000000;
@@ -1297,6 +1310,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         b_genA0_L = sqrt( b_genA0_Lx * b_genA0_Lx + b_genA0_Ly * b_genA0_Ly + b_genA0_Lz * b_genA0_Lz );
         b_genA1_L = sqrt( b_genA1_Lx * b_genA1_Lx + b_genA1_Ly * b_genA1_Ly + b_genA1_Lz * b_genA1_Lz );
 
+        std::cout<<">>> AOD Event #"<<m_events<<std::endl;
+        std::cout<<"GENA mass (0, 1)[GeV]: "<<b_genA0_m    <<", "<<b_genA1_m       << std::endl;
+        std::cout<<"genA0     (x,y,z)[cm]: "<<b_genA0_vx   <<", "<<b_genA0_vy      <<", "<<b_genA0_vz<<std::endl;
+        std::cout<<"genA0 Mu0 (x,y,z)[cm]: "<<b_genA0Mu0_vx<<", "<<b_genA0Mu0_vy   <<", "<<b_genA0Mu0_vz<<std::endl;
+        std::cout<<"genA0 Mu1 (x,y,z)[cm]: "<<b_genA0Mu1_vx<<", "<<b_genA0Mu1_vy   <<", "<<b_genA0Mu1_vz<<std::endl;
+        std::cout<<"genA0 (Lxy, |Lz|)[cm]: "<<b_genA0_Lxy  <<", "<<fabs(b_genA0_Lz)<<std::endl;
+        std::cout<<"genA1     (x,y,z)[cm]: "<<b_genA1_vx   <<", "<<b_genA1_vy      <<", "<<b_genA1_vz<<std::endl;
+        std::cout<<"genA1 Mu0 (x,y,z)[cm]: "<<b_genA1Mu0_vx<<", "<<b_genA1Mu0_vy   <<", "<<b_genA1Mu0_vz<<std::endl;
+        std::cout<<"genA1 Mu1 (x,y,z)[cm]: "<<b_genA1Mu1_vx<<", "<<b_genA1Mu1_vy   <<", "<<b_genA1Mu1_vz<<std::endl;
+        std::cout<<"genA1 (Lxy, |Lz|)[cm]: "<<b_genA1_Lxy  <<", "<<fabs(b_genA1_Lz)<<std::endl;
+
       } else {
         std::cout << "WARNING! Muon vertexes are different. No Lxy's are calculated." << std::endl;
         b_genA0_Lx  = -1000.0;
@@ -1700,8 +1724,17 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonF_FittedVtx_L   = diMuonF->vertexL(beamSpotPosition);
     b_diMuonF_FittedVtx_dz  = diMuonF->vertexDz(beamSpot->position());
 
-	std::cout << "diMuonC vtx (x, y, z): " << diMuonC->vertexPoint().x() << ", " << diMuonC->vertexPoint().y() << ", " << diMuonC->vertexPoint().z() << std::endl;
-	std::cout << "diMuonF vtx (x, y, z): " << diMuonF->vertexPoint().x() << ", " << diMuonF->vertexPoint().y() << ", " << diMuonF->vertexPoint().z() << std::endl;
+  std::cout << "diMuC vtx         (x,y,z)[cm]: " << b_diMuonC_FittedVtx_vx << ", " << b_diMuonC_FittedVtx_vy << ", " << b_diMuonC_FittedVtx_vz << std::endl;
+  std::cout << "diMuC Mu0 innerTrk(x,y,z)[cm]: " << diMuonC->muon(0)->innerTrack()->vx() << ", " << diMuonC->muon(0)->innerTrack()->vy() << ", " << diMuonC->muon(0)->innerTrack()->vz() << std::endl;
+  std::cout << "diMuC Mu1 innerTrk(x,y,z)[cm]: " << diMuonC->muon(1)->innerTrack()->vx() << ", " << diMuonC->muon(1)->innerTrack()->vy() << ", " << diMuonC->muon(1)->innerTrack()->vz() << std::endl;
+  std::cout << "diMuC vtx   (Lxy,|Lz|,dz)[cm]: " << b_diMuonC_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonC_FittedVtx_L,2) - pow(b_diMuonC_FittedVtx_Lxy,2) )<<", "<<b_diMuonC_FittedVtx_dz<< std::endl;
+
+  std::cout << "diMuF vtx         (x,y,z)[cm]: " << b_diMuonF_FittedVtx_vx << ", " << b_diMuonF_FittedVtx_vy << ", " << b_diMuonF_FittedVtx_vz << std::endl;
+  std::cout << "diMuF Mu0 innerTrk(x,y,z)[cm]: " << diMuonF->muon(0)->innerTrack()->vx() << ", " << diMuonF->muon(0)->innerTrack()->vy() << ", " << diMuonF->muon(0)->innerTrack()->vz() << std::endl;
+  std::cout << "diMuF Mu1 innerTrk(x,y,z)[cm]: " << diMuonF->muon(1)->innerTrack()->vx() << ", " << diMuonF->muon(1)->innerTrack()->vy() << ", " << diMuonF->muon(1)->innerTrack()->vz() << std::endl;
+  std::cout << "diMuF vtx   (Lxy,|Lz|,dz)[cm]: " << b_diMuonF_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonF_FittedVtx_L,2) - pow(b_diMuonF_FittedVtx_Lxy,2) )<<", "<<b_diMuonF_FittedVtx_dz<< std::endl;
+
+  std::cout << "Dimu vtx mass     (C, F)[GeV]: " << b_diMuonC_FittedVtx_m  << ", " << b_diMuonF_FittedVtx_m  << std::endl;
   } else {
     b_diMuonC_FittedVtx_m   = -1000.0;
     b_diMuonC_FittedVtx_px  = -1000.0;
@@ -1733,7 +1766,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonF_FittedVtx_L   = -1000.0;
     b_diMuonF_FittedVtx_dz  = -1000.0;
   }
-
+/*
   // "New" consistent vertexes
   b_is2DiMuonsConsistentVtxOK = false;
   if ( diMuonC != NULL && diMuonF != NULL ) {
@@ -1761,6 +1794,8 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
       std::cout << ">>>> WARNING!!! TransientTrackRecord is not available!!! <<<<" << std::endl;
     }
   }
+  */
+  /*
   // Fill branches with variables calculated with "new" consistent vertexes
   if ( b_is2DiMuonsConsistentVtxOK ) {
     b_diMuonC_ConsistentVtx_m   = diMuonC->consistentVtxMass();
@@ -1819,7 +1854,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_diMuonF_ConsistentVtx_L   = -1000.0;
     b_diMuonF_ConsistentVtx_dz  = -1000.0;
   }
-
+*/
 
   // Calculate dz between dimuons - use fitted vertexes
   if ( b_is2DiMuonsFittedVtxOK ) {
@@ -1827,13 +1862,14 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   } else {
     b_diMuons_dz_FittedVtx = -1000.0;
   }
-
+/*
   // Calculate dz between dimuons - use consistent vertexes
   if ( b_is2DiMuonsConsistentVtxOK ) {
     b_diMuons_dz_ConsistentVtx = b_diMuonC_ConsistentVtx_dz - b_diMuonF_ConsistentVtx_dz;
   } else {
     b_diMuons_dz_ConsistentVtx = -1000.0;
   }
+  */
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
 
@@ -1858,7 +1894,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     if ( triggerEvent->path(trigNameStr)->wasAccept() ) {
       if ( m_debug > 10 ) std::cout << trigNameStr << " is present in patTriggerEvent!" << std::endl;
     }
-    
+
     if (trRes->accept(triggerNames.triggerIndex(trigNameStr))){
       b_hltPaths.push_back(trigNameStr);
       if ( m_debug > 10 ) std::cout << trigNameStr << " is present in edmTriggerResults!" << std::endl;
@@ -1883,7 +1919,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     double massF = b_diMuonF_FittedVtx_m;
     if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_is2DiMuonsMassOK_FittedVtx = true;
   }
-
+/*
   // Cut on dimuon masses - use consistent vertexes
   b_is2DiMuonsMassOK_ConsistentVtx = false;
   if ( b_is2DiMuonsConsistentVtxOK ) {
@@ -1891,6 +1927,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     double massF = b_diMuonF_ConsistentVtx_m;
     if ( fabs(massC-massF) < (0.13 + 0.065*(massC+massF)/2.0) ) b_is2DiMuonsMassOK_ConsistentVtx = true;
   }
+  */
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon mass" << std::endl;
 
@@ -1942,7 +1979,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
     b_isoF_1mm = b_diMuonF_IsoTk_FittedVtx;
 
   }
-
+/*
   // Cut on isolation - use consistent vertexes
   b_diMuonC_IsoTk_ConsistentVtx = -1.;
   b_diMuonF_IsoTk_ConsistentVtx = -1.;
@@ -1984,6 +2021,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
 
 
   }
+  */
 
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon isolation" << std::endl;
 
@@ -1995,6 +2033,9 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         if(tamu::helpers::sameTrack(&*track,&*(diMuonC->muon(k)->innerTrack()))){
           const reco::HitPattern& p = track->hitPattern();
 
+          std::cout << "diMuC Mu"<<k<<" innerTrk(x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", "<< diMuonC->muon(k)->innerTrack()->vy() <<", "<< diMuonC->muon(k)->innerTrack()->vz() <<std::endl;
+
+          /*
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonC->vertexPoint().x(), diMuonC->vertexPoint().y(), diMuonC->vertexPoint().z());
           VertexState trueDecVert(pos, GlobalError());
@@ -2007,6 +2048,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
           if(k==0) b_diMuonC_m1_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
           if(k==1) b_diMuonC_m2_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
           if(k==1) b_diMuonC_m2_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
+          */
 
           if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
             if(k==0) b_diMuonC_m1_FittedVtx_hitpix = 1;
@@ -2023,10 +2065,21 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
             if(k==0) b_diMuonC_m1_FittedVtx_hitpix_l3inc = 1;
             if(k==1) b_diMuonC_m2_FittedVtx_hitpix_l3inc = 1;
           }
+          if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
+       p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
+            if(k==0) b_diMuonC_m1_FittedVtx_hitpix_Phase1 = 1;
+            if(k==1) b_diMuonC_m2_FittedVtx_hitpix_Phase1 = 1;
+          }
+
         }
+
         if(tamu::helpers::sameTrack(&*track,&*(diMuonF->muon(k)->innerTrack()))){
           const reco::HitPattern& p = track->hitPattern();
-
+          std::cout << "diMuF Mu"<<k<<" innerTrk(x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", "<< diMuonF->muon(k)->innerTrack()->vy() <<", "<< diMuonF->muon(k)->innerTrack()->vz() <<std::endl;
+        
+          /*
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonF->vertexPoint().x(), diMuonF->vertexPoint().y(), diMuonF->vertexPoint().z());
           VertexState trueDecVert(pos, GlobalError());
@@ -2039,7 +2092,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
           if(k==0) b_diMuonF_m1_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
           if(k==1) b_diMuonF_m2_FittedVtx_HBV = hitInfo.hitsInFrontOfVert;
           if(k==1) b_diMuonF_m2_FittedVtx_MHAV = hitInfo.missHitsAfterVert;
-
+          */
           if(p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1)){
             if(k==0) b_diMuonF_m1_FittedVtx_hitpix = 1;
             if(k==1) b_diMuonF_m2_FittedVtx_hitpix = 1;
@@ -2055,9 +2108,19 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
             if(k==0) b_diMuonF_m1_FittedVtx_hitpix_l3inc = 1;
             if(k==1) b_diMuonF_m2_FittedVtx_hitpix_l3inc = 1;
           }
+          if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
+	     p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
+       p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
+            if(k==0) b_diMuonF_m1_FittedVtx_hitpix_Phase1 = 1;
+            if(k==1) b_diMuonF_m2_FittedVtx_hitpix_Phase1 = 1;
+          }
+
         }
       }
     }
+    std::cout<<"ValidHit  PixelLayers: C_m1 = "<<b_diMuonC_m1_FittedVtx_hitpix_Phase1<<"; C_m2 = "<<b_diMuonC_m2_FittedVtx_hitpix_Phase1<<std::endl;
+    std::cout<<"ValidHit  PixelLayers: F_m1 = "<<b_diMuonF_m1_FittedVtx_hitpix_Phase1<<"; F_m2 = "<<b_diMuonF_m2_FittedVtx_hitpix_Phase1<<std::endl;
   }
 
 
@@ -2475,7 +2538,7 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonF_FittedVtx_Lxy_rclstvtx", &b_diMuonF_FittedVtx_Lxy_rclstvtx, "diMuonF_FittedVtx_Lxy_rclstvtx/F");
   m_ttree->Branch("diMuonF_FittedVtx_L",   &b_diMuonF_FittedVtx_L,   "diMuonF_FittedVtx_L/F");
   m_ttree->Branch("diMuonF_FittedVtx_dz",  &b_diMuonF_FittedVtx_dz,  "diMuonF_FittedVtx_dz/F");
-
+/*
   m_ttree->Branch("diMuonC_ConsistentVtx_m",   &b_diMuonC_ConsistentVtx_m,   "diMuonC_ConsistentVtx_m/F");
   m_ttree->Branch("diMuonC_ConsistentVtx_px",  &b_diMuonC_ConsistentVtx_px,  "diMuonC_ConsistentVtx_px/F");
   m_ttree->Branch("diMuonC_ConsistentVtx_py",  &b_diMuonC_ConsistentVtx_py,  "diMuonC_ConsistentVtx_py/F");
@@ -2503,15 +2566,15 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonF_ConsistentVtx_Lxy", &b_diMuonF_ConsistentVtx_Lxy, "diMuonF_ConsistentVtx_Lxy/F");
   m_ttree->Branch("diMuonF_ConsistentVtx_L",   &b_diMuonF_ConsistentVtx_L,   "diMuonF_ConsistentVtx_L/F");
   m_ttree->Branch("diMuonF_ConsistentVtx_dz",  &b_diMuonF_ConsistentVtx_dz,  "diMuonF_ConsistentVtx_dz/F");
-
+*/
   m_ttree->Branch("diMuonC_IsoTk_FittedVtx", &b_diMuonC_IsoTk_FittedVtx, "diMuonC_IsoTk_FittedVtx/F");
   m_ttree->Branch("diMuonF_IsoTk_FittedVtx", &b_diMuonF_IsoTk_FittedVtx, "diMuonF_IsoTk_FittedVtx/F");
 
   m_ttree->Branch("diMuons_dz_FittedVtx", &b_diMuons_dz_FittedVtx, "diMuons_dz_FittedVtx/F");
-  m_ttree->Branch("diMuons_dz_ConsistentVtx", &b_diMuons_dz_ConsistentVtx, "diMuons_dz_ConsistentVtx/F");
+  //m_ttree->Branch("diMuons_dz_ConsistentVtx", &b_diMuons_dz_ConsistentVtx, "diMuons_dz_ConsistentVtx/F");
 
-  m_ttree->Branch("diMuonC_IsoTk_ConsistentVtx", &b_diMuonC_IsoTk_ConsistentVtx, "diMuonC_IsoTk_ConsistentVtx/F");
-  m_ttree->Branch("diMuonF_IsoTk_ConsistentVtx", &b_diMuonF_IsoTk_ConsistentVtx, "diMuonF_IsoTk_ConsistentVtx/F");
+  //m_ttree->Branch("diMuonC_IsoTk_ConsistentVtx", &b_diMuonC_IsoTk_ConsistentVtx, "diMuonC_IsoTk_ConsistentVtx/F");
+  //m_ttree->Branch("diMuonF_IsoTk_ConsistentVtx", &b_diMuonF_IsoTk_ConsistentVtx, "diMuonF_IsoTk_ConsistentVtx/F");
 
   m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix", &b_diMuonC_m1_FittedVtx_hitpix, "diMuonC_m1_FittedVtx_hitpix/I");
   m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix", &b_diMuonC_m2_FittedVtx_hitpix, "diMuonC_m2_FittedVtx_hitpix/I");
@@ -2528,6 +2591,11 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_l3inc", &b_diMuonF_m1_FittedVtx_hitpix_l3inc, "diMuonF_m1_FittedVtx_hitpix_l3inc/I");
   m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_l3inc", &b_diMuonF_m2_FittedVtx_hitpix_l3inc, "diMuonF_m2_FittedVtx_hitpix_l3inc/I");
 
+  m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_Phase1", &b_diMuonC_m1_FittedVtx_hitpix_Phase1, "diMuonC_m1_FittedVtx_hitpix_Phase1/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_Phase1", &b_diMuonC_m2_FittedVtx_hitpix_Phase1, "diMuonC_m2_FittedVtx_hitpix_Phase1/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_Phase1", &b_diMuonF_m1_FittedVtx_hitpix_Phase1, "diMuonF_m1_FittedVtx_hitpix_Phase1/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_hitpix_Phase1", &b_diMuonF_m2_FittedVtx_hitpix_Phase1, "diMuonF_m2_FittedVtx_hitpix_Phase1/I");
+/*
   m_ttree->Branch("b_diMuonC_m1_FittedVtx_HBV", &b_diMuonC_m1_FittedVtx_HBV, "diMuonC_m1_FittedVtx_HBV/I");
   m_ttree->Branch("b_diMuonC_m2_FittedVtx_HBV", &b_diMuonC_m2_FittedVtx_HBV, "diMuonC_m2_FittedVtx_HBV/I");
   m_ttree->Branch("b_diMuonF_m1_FittedVtx_HBV", &b_diMuonF_m1_FittedVtx_HBV, "diMuonF_m1_FittedVtx_HBV/I");
@@ -2536,7 +2604,7 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("b_diMuonC_m2_FittedVtx_MHAV", &b_diMuonC_m2_FittedVtx_MHAV, "diMuonC_m2_FittedVtx_MHAV/I");
   m_ttree->Branch("b_diMuonF_m1_FittedVtx_MHAV", &b_diMuonF_m1_FittedVtx_MHAV, "diMuonF_m1_FittedVtx_MHAV/I");
   m_ttree->Branch("b_diMuonF_m2_FittedVtx_MHAV", &b_diMuonF_m2_FittedVtx_MHAV, "diMuonF_m2_FittedVtx_MHAV/I");
-
+*/
   // bb Estimation
   m_ttree->Branch("massC",                          &b_massC,                          "massC/F");
   m_ttree->Branch("massF",                          &b_massF,                          "massF/F");
@@ -2556,10 +2624,10 @@ CutFlowAnalyzer::beginJob() {
   m_ttree->Branch("is2DiMuonsFittedVtxOK_VS",       &b_is2DiMuonsFittedVtxOK_VS,       "is2DiMuonsFittedVtxOK_VS/O");
 
 
-  m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
+  //m_ttree->Branch("is2DiMuonsConsistentVtxOK",      &b_is2DiMuonsConsistentVtxOK,      "is2DiMuonsConsistentVtxOK/O");
   m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
   m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
-  m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
+  //m_ttree->Branch("is2DiMuonsMassOK_ConsistentVtx", &b_is2DiMuonsMassOK_ConsistentVtx, "is2DiMuonsMassOK_ConsistentVtx/O");
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
 
   m_ttree->Branch("hltPaths",  &b_hltPaths);
@@ -2647,11 +2715,6 @@ CutFlowAnalyzer::endJob()
    cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << endl;
 
    cout << " *** FITTED VERTEXES *** " << endl;
-
-
-   cout << " *** CONSISTENT VERTEXES *** " << endl;
-
-   cout << " *** FITTED VERTEXES *** " << endl;
   cout << m_events << endl;
   cout << m_events1GenMu17                  << endl;
   cout << m_events2GenMu8                   << endl;
@@ -2663,19 +2726,6 @@ CutFlowAnalyzer::endJob()
   cout << m_events4SelMu8                   << endl;
   cout << m_events2MuJets                   << endl;
   cout << m_events2DiMuons                  << endl;
-
-   cout << " *** CONSISTENT VERTEXES *** " << endl;
-  cout << m_events << endl;
-  cout << m_events1GenMu17                      << endl;
-  cout << m_events2GenMu8                       << endl;
-  cout << m_events3GenMu8                       << endl;
-  cout << m_events4GenMu8                       << endl;
-  cout << m_events1SelMu17                      << endl;
-  cout << m_events2SelMu8                       << endl;
-  cout << m_events3SelMu8                       << endl;
-  cout << m_events4SelMu8                       << endl;
-  cout << m_events2MuJets                       << endl;
-  cout << m_events2DiMuons                      << endl;
 }
 
 void CutFlowAnalyzer::FillTrigInfo( TH1F * h1, const edm::TriggerNames& triggerNames, std::map<int,std::string> nameAndNumb )

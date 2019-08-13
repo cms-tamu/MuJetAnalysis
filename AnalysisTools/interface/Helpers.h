@@ -8,7 +8,7 @@
 #include "DataFormats/MuonReco/interface/Muon.h"
 
 //******************************************************************************
-//              Auxiliary function: Order objects by pT                         
+//              Auxiliary function: Order objects by pT
 //******************************************************************************
 namespace tamu{
 
@@ -19,7 +19,7 @@ double cotan(double i);
 bool PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2);
 
 bool PtOrderPFMu (const reco::Muon* p1, const reco::Muon* p2);
-  
+
 bool sameTrack(const reco::Track *one, const reco::Track *two);
 
 bool sameTrackRF(const reco::Track *one, const reco::Track *two);
@@ -29,7 +29,7 @@ bool matchorder(const std::pair<Int_t,Float_t>  &v1, const std::pair<Int_t,Float
 bool order(Float_t v1, Float_t v2);
 
 //******************************************************************************
-// Auxiliary function: Calculate difference between two angles: -PI < phi < PI  
+// Auxiliary function: Calculate difference between two angles: -PI < phi < PI
 //******************************************************************************
 double My_dPhi (double phi1, double phi2);
 

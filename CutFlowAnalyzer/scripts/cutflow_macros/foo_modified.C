@@ -1,7 +1,16 @@
+//===========================================================================
+//Note: ( @Wei SHI, Jun 28, 2019 )
+//This program may be terminated in the case of large number of events,
+//      depending on running cluster limit settings on CPU time, etc
+//To check settings:
+//      Bash: ulimit -H -a, ulimit -S -a; tcsh: limit -h, limit
+//To resolve this on TAMU Brazos, use sintr or srun to get interactive node
+//===========================================================================
+
 #include <iostream>
 #include <iomanip>
 using namespace std;
-#include <algorithm>    // std::max
+#include <algorithm>
 #include <stdlib.h>
 #include <math.h>
 #include <TFile.h>
@@ -24,18 +33,18 @@ using namespace std;
 #include <TMath.h>
 #include "Helpers.h"
 
-Float_t counter[20][18];//samples; selections
-Float_t TotEff[20][18];
-Float_t TotEffErr[20][18];
-Float_t RelEff[20][18];
-Float_t RelEffErr[20][18];
+int counter[20][17];//samples:20; selections
+Float_t TotEff[20][17];
+Float_t TotEffErr[20][17];
+Float_t RelEff[20][17];
+Float_t RelEffErr[20][17];
 Float_t epsvsalph1[20] = {0.0};
 Float_t Err[20] = {0.0};
 Float_t epsvsalph2[20] = {0.0};
 Float_t epsvsalph[20] = {0.0};
 Float_t epsvalp[20] = {0.0};
 Float_t epsvalp2[20] = {0.0};
-Float_t weight2017 = 36.734*56.36/1000000;//weight2017 = (lumi * Xsection) / 2017 MC events
+Float_t weight2017 = 36.734*56.36/1000000;//weight2017 = (lumi[fb-1] * Xsection of the process[fb]) / # of MC events for the process
 Float_t weight2018 = 1.0;//TBD
 Float_t FitMean = 0.0;
 Float_t FitSigma = 0.0;
@@ -43,7 +52,7 @@ Float_t FitSigma = 0.0;
 void setup()
 {
 for(int i=0;i<20;i++){
-  for(int j=0;j<18;j++){
+  for(int j=0;j<17;j++){
     counter[i][j]=0;
     TotEff[i][j]=0.0;
     RelEff[i][j]=0.0;
@@ -51,23 +60,26 @@ for(int i=0;i<20;i++){
     RelEffErr[i][j]=0.0;
   }
  }
-}
+}//end setup
 
 int k = -1;
 void efficiency(const std::vector<std::string>& dirNames)
 {
-
   bool verbose(true);
-  bool ModelEWKShape(false);
+  bool CheckRecoVtx(false);
+  bool ModelBKGShape(false);
   bool ModelSRWidth(false);
+  bool PlotIso(false);
   bool PerEventTriggerEff(false);
-  //	TString dirname(fileName);
-  TChain* chain = new TChain("dummy");
   TString ext("out_ana_");
 
   cout<<" dirNames  "<<dirNames[0]<<endl;
+
+  TChain *t = new TChain("cutFlowAnalyzerPXBL4PXFL3/Events");
+  TChain *o = new TChain("cutFlowAnalyzerPXBL4PXFL3/Events_orphan");
   // add files to the chain
-  addfilesMany(chain, dirNames, ext);
+  addfilesMany(t, dirNames, ext);
+  addfilesMany(o, dirNames, ext);
 
   Float_t diMuonC_Mass;//allows for effective use of architecture with wider formats
   Float_t diMuonF_Mass;
@@ -110,6 +122,19 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  isSignalHLTL1Fired;
   Float_t diMuonC_IsoTk_FittedVtx;
   Float_t diMuonF_IsoTk_FittedVtx;
+  Float_t diMuonCMu0_IsoTk0p3_FittedVtx;
+  Float_t diMuonCMu0_IsoTk0p4_FittedVtx;
+  Float_t diMuonCMu0_IsoTk0p5_FittedVtx;
+  Float_t diMuonCMu1_IsoTk0p3_FittedVtx;
+  Float_t diMuonCMu1_IsoTk0p4_FittedVtx;
+  Float_t diMuonCMu1_IsoTk0p5_FittedVtx;
+
+  Float_t diMuonFMu0_IsoTk0p3_FittedVtx;
+  Float_t diMuonFMu0_IsoTk0p4_FittedVtx;
+  Float_t diMuonFMu0_IsoTk0p5_FittedVtx;
+  Float_t diMuonFMu1_IsoTk0p3_FittedVtx;
+  Float_t diMuonFMu1_IsoTk0p4_FittedVtx;
+  Float_t diMuonFMu1_IsoTk0p5_FittedVtx;
 
   Float_t  genA0_Lxy;//A0:dark photon that contains the most energetic muon; redt: wrt detector
   Float_t  genA1_Lxy;
@@ -117,11 +142,43 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t  genA1_Lz;
   Float_t  diMuons_dz_FittedVtx;
 
-  Int_t  diMuonC_m1_FittedVtx_hitpix_l3inc;
-  Int_t  diMuonC_m2_FittedVtx_hitpix_l3inc;
-  Int_t  diMuonF_m1_FittedVtx_hitpix_l3inc;
-  Int_t  diMuonF_m2_FittedVtx_hitpix_l3inc;
+  Int_t  diMuonC_m1_FittedVtx_hitpix_Phase1;
+  Int_t  diMuonC_m2_FittedVtx_hitpix_Phase1;
+  Int_t  diMuonF_m1_FittedVtx_hitpix_Phase1;
+  Int_t  diMuonF_m2_FittedVtx_hitpix_Phase1;
+
+  Int_t diMuonC_m1_FittedVtx_NonZero_ValidPixelHits;
+  Int_t diMuonC_m2_FittedVtx_NonZero_ValidPixelHits;
+  Int_t diMuonF_m1_FittedVtx_NonZero_ValidPixelHits;
+  Int_t diMuonF_m2_FittedVtx_NonZero_ValidPixelHits;
+
+  Int_t diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
+
+  Float_t  diMuonC_FittedVtx_Lxy;
+  Float_t  diMuonC_FittedVtx_L;
+  Float_t  diMuonF_FittedVtx_Lxy;
+  Float_t  diMuonF_FittedVtx_L;
   Int_t  nRecoMu;
+
+  Float_t orph_dimu_mass;
+  Float_t orph_dimu_isoTk;
+  Float_t orph_dimu_Mu0_isoTk0p3;
+  Float_t orph_dimu_Mu0_isoTk0p4;
+  Float_t orph_dimu_Mu0_isoTk0p5;
+  Float_t orph_dimu_Mu1_isoTk0p3;
+  Float_t orph_dimu_Mu1_isoTk0p4;
+  Float_t orph_dimu_Mu1_isoTk0p5;
+  Float_t orph_dimu_z;
+  Float_t orph_isoTk;
+  Bool_t  orph_passOffLineSelPtEta;
+  Bool_t  orph_passOffLineSelPt1788;
+  Bool_t  orph_AllTrackerMu;
+
+  TH2F* Lxy_Residual_GEN_leading_pT = new TH2F("Lxy_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);//cm
+  TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH2F("Abs_Lz_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);
 
   TH1F* leading_pt_pass_basic = new TH1F("leading_pt_pass_basic","",50,0.,50.);
   TH1F* leading_eta_pass_basic = new TH1F("leading_eta_pass_basic","",50,-2.5,2.5);
@@ -143,295 +200,372 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* L1_leading_eta_pass_all = new TH1F("L1_leading_eta_pass_all","",50,-2.5,2.5);
   TH1F* L1_leading_phi_pass_all = new TH1F("L1_leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
 
-  TH2F *EWKShape2D = new TH2F("EWKShape2D","",120,0.0,60.0,120,0.0,60.0);//From MC, actual dimu mass starts from 0.2113, ends at 58 GeV
-  TH2F *EWKShapeSR = new TH2F("EWKShapeSR","",120,0.0,60.0,120,0.0,60.0);//consistent mass
-  TH1F *EWKShape2DmassC = new TH1F("EWKShape2DmassC","",120,0.0,60.0);
-  TH1F *EWKShape2DmassF = new TH1F("EWKShape2DmassF","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassC = new TH1F("EWKShapeSRmassC","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassF = new TH1F("EWKShapeSRmassF","",120,0.0,60.0);
+  //Actual dimu mass starts from 0.2113, ends at 58 GeV; binning 0.2GeV
+  TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",300,0.0,60.0,300,0.0,60.0);
+  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",300,0.0,60.0);
+  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",300,0.0,60.0);
+  //Scaled to Run2 lumi
+  TH2F *BKGShapeCRScaled = new TH2F("BKGShapeCRScaled","",300,0.0,60.0,300,0.0,60.0);
+  TH1F *BKGShapeCRmassCScaled = new TH1F("BKGShapeCRmassCScaled","",300,0.0,60.0);
+  TH1F *BKGShapeCRmassFScaled = new TH1F("BKGShapeCRmassFScaled","",300,0.0,60.0);
 
-  TH2F *EWKShape2DScaled = new TH2F("EWKShape2DScaled","",120,0.0,60.0,120,0.0,60.0);//Scaled to Run2 lumi
-  TH2F *EWKShapeSRScaled = new TH2F("EWKShapeSRScaled","",120,0.0,60.0,120,0.0,60.0);
-  TH1F *EWKShape2DmassCScaled = new TH1F("EWKShape2DmassCScaled","",120,0.0,60.0);
-  TH1F *EWKShape2DmassFScaled = new TH1F("EWKShape2DmassFScaled","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassCScaled = new TH1F("EWKShapeSRmassCScaled","",120,0.0,60.0);
-  TH1F *EWKShapeSRmassFScaled = new TH1F("EWKShapeSRmassFScaled","",120,0.0,60.0);
+  TH1F *DimuMass = new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
 
-  TH1F *DimuMass= new TH1F("DimuMass","",6000,0.0,60.0);//bin width 0.01 GeV
+  TH1F *MassC = new TH1F("MassC","",600,0.0,60.0);//binning 0.1 GeV
+  TH1F *MassF = new TH1F("MassF","",600,0.0,60.0);//binning 0.1 GeV
+  TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass","",600,0.0,60.0);//binning 0.2GeV
 
-  TObjArray *fileElements=chain->GetListOfFiles();
-  TIter next(fileElements);
-  TChainElement *chEl=0;
+  TH1F *IsoDimuC = new TH1F("IsoDimuC","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuF = new TH1F("IsoDimuF","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu0_dR0p3 = new TH1F("IsoDimuCMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu0_dR0p4 = new TH1F("IsoDimuCMu0_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu0_dR0p5 = new TH1F("IsoDimuCMu0_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu1_dR0p3 = new TH1F("IsoDimuCMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu1_dR0p4 = new TH1F("IsoDimuCMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuCMu1_dR0p5 = new TH1F("IsoDimuCMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu0_dR0p3 = new TH1F("IsoDimuFMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu0_dR0p4 = new TH1F("IsoDimuFMu0_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu0_dR0p5 = new TH1F("IsoDimuFMu0_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu1_dR0p3 = new TH1F("IsoDimuFMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu1_dR0p4 = new TH1F("IsoDimuFMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoDimuFMu1_dR0p5 = new TH1F("IsoDimuFMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
 
-  k++;
+  TH1F *IsoOrphanDimu = new TH1F("IsoOrphanDimu","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu0_dR0p3 = new TH1F("IsoOrphanDimuMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu0_dR0p4 = new TH1F("IsoOrphanDimuMu0_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu0_dR0p5 = new TH1F("IsoOrphanDimuMu0_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu1_dR0p3 = new TH1F("IsoOrphanDimuMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu1_dR0p4 = new TH1F("IsoOrphanDimuMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu1_dR0p5 = new TH1F("IsoOrphanDimuMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *IsoOrphan = new TH1F("IsoOrphan","",1000,0.0,100.0);//binning 0.1 GeV
 
-  while ((chEl=(TChainElement*)next())) {
-    if (verbose) std::cout << "running on file " << chEl->GetTitle() << std::endl;
-    TFile* myfile = new TFile(chEl->GetTitle());
-    if (!myfile) {
-      if (verbose) std::cout << "File " << chEl->GetTitle() << " does not exist" << std::endl;
-      continue;
-    }
-		myfile->cd("cutFlowAnalyzerPXBL3PXFL2");
+  k++;//Print k
 
-		TTree *t = (TTree*)myfile->Get("cutFlowAnalyzerPXBL3PXFL2/Events");
-		if (!t) {
-		  if (verbose) std::cout << "Tree cutFlowAnalyzerPXBL3PXFL2/Events does not exist" << std::endl;
-		  continue;
-		}
+  int nentries;//entries in main tree
+  int mentries;//entries in orphan tree
 
-    //if (verbose) cout<<"  Events  "<<t->GetEntries()<<endl;
-    int nentries;
+  t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
+	t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
+	t->SetBranchAddress("nRecoMu",&nRecoMu);
+  t->SetBranchAddress("is1GenMu17",&is1GenMu17);
+	t->SetBranchAddress("is2GenMu8",&is2GenMu8);
+	t->SetBranchAddress("is3GenMu8",&is3GenMu8);
+	t->SetBranchAddress("is4GenMu8",&is4GenMu8);
+	t->SetBranchAddress("is1SelMu17",&is1SelMu17);
+	t->SetBranchAddress("is2SelMu8",&is2SelMu8);
+	t->SetBranchAddress("is3SelMu8",&is3SelMu8);
+	t->SetBranchAddress("is4SelMu8",&is4SelMu8);
+	t->SetBranchAddress("selMu0_pT",&selMu0_pT);
+	t->SetBranchAddress("selMu1_pT",&selMu1_pT);
+	t->SetBranchAddress("selMu2_pT",&selMu2_pT);
+	t->SetBranchAddress("selMu3_pT",&selMu3_pT);
+	t->SetBranchAddress("selMu0_eta",&selMu0_eta);
+	t->SetBranchAddress("selMu1_eta",&selMu1_eta);
+	t->SetBranchAddress("selMu2_eta",&selMu2_eta);
+	t->SetBranchAddress("selMu3_eta",&selMu3_eta);
+  t->SetBranchAddress("selMu0_phi",&selMu0_phi);
+	t->SetBranchAddress("selMu1_phi",&selMu1_phi);
+	t->SetBranchAddress("selMu2_phi",&selMu2_phi);
+	t->SetBranchAddress("selMu3_phi",&selMu3_phi);
+  t->SetBranchAddress("massC",&massC);
+	t->SetBranchAddress("massF",&massF);
+	t->SetBranchAddress("isVertexOK",&isVtxOK);
+	t->SetBranchAddress("is2DiMuons",&is2DiMuons);
+	t->SetBranchAddress("is2MuJets",&is2MuJets);
+	t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
+	t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
+	t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
+	t->SetBranchAddress("isDiMuonHLTFired",&is2DiMuonHLTFired);
+  t->SetBranchAddress("isSignalHLTL1Fired",&isSignalHLTL1Fired);
+	t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
+	t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
+  t->SetBranchAddress("diMuonCMu0_IsoTk0p3_FittedVtx",&diMuonCMu0_IsoTk0p3_FittedVtx);
+  t->SetBranchAddress("diMuonCMu0_IsoTk0p4_FittedVtx",&diMuonCMu0_IsoTk0p4_FittedVtx);
+  t->SetBranchAddress("diMuonCMu0_IsoTk0p5_FittedVtx",&diMuonCMu0_IsoTk0p5_FittedVtx);
+  t->SetBranchAddress("diMuonCMu1_IsoTk0p3_FittedVtx",&diMuonCMu1_IsoTk0p3_FittedVtx);
+  t->SetBranchAddress("diMuonCMu1_IsoTk0p4_FittedVtx",&diMuonCMu1_IsoTk0p4_FittedVtx);
+  t->SetBranchAddress("diMuonCMu1_IsoTk0p5_FittedVtx",&diMuonCMu1_IsoTk0p5_FittedVtx);
+  t->SetBranchAddress("diMuonFMu0_IsoTk0p3_FittedVtx",&diMuonFMu0_IsoTk0p3_FittedVtx);
+  t->SetBranchAddress("diMuonFMu0_IsoTk0p4_FittedVtx",&diMuonFMu0_IsoTk0p4_FittedVtx);
+  t->SetBranchAddress("diMuonFMu0_IsoTk0p5_FittedVtx",&diMuonFMu0_IsoTk0p5_FittedVtx);
+  t->SetBranchAddress("diMuonFMu1_IsoTk0p3_FittedVtx",&diMuonFMu1_IsoTk0p3_FittedVtx);
+  t->SetBranchAddress("diMuonFMu1_IsoTk0p4_FittedVtx",&diMuonFMu1_IsoTk0p4_FittedVtx);
+  t->SetBranchAddress("diMuonFMu1_IsoTk0p5_FittedVtx",&diMuonFMu1_IsoTk0p5_FittedVtx);
+  t->SetBranchAddress("genA0_Lxy",&genA0_Lxy);
+	t->SetBranchAddress("genA1_Lxy",&genA1_Lxy);
+	t->SetBranchAddress("genA0_Lz",&genA0_Lz);
+	t->SetBranchAddress("genA1_Lz",&genA1_Lz);
+  //To be used for Run2
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_Phase1",&diMuonC_m1_FittedVtx_hitpix_Phase1);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1",&diMuonC_m2_FittedVtx_hitpix_Phase1);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1",&diMuonF_m1_FittedVtx_hitpix_Phase1);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1",&diMuonF_m2_FittedVtx_hitpix_Phase1);
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_NonZero_ValidPixelHits",&diMuonC_m1_FittedVtx_NonZero_ValidPixelHits);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_NonZero_ValidPixelHits",&diMuonC_m2_FittedVtx_NonZero_ValidPixelHits);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_NonZero_ValidPixelHits",&diMuonF_m1_FittedVtx_NonZero_ValidPixelHits);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_NonZero_ValidPixelHits",&diMuonF_m2_FittedVtx_NonZero_ValidPixelHits);
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement);
+  //For checking pixel Hit
+  t->SetBranchAddress("diMuonC_FittedVtx_Lxy",&diMuonC_FittedVtx_Lxy);
+	t->SetBranchAddress("diMuonC_FittedVtx_L",&diMuonC_FittedVtx_L);
+	t->SetBranchAddress("diMuonF_FittedVtx_Lxy",&diMuonF_FittedVtx_Lxy);
+	t->SetBranchAddress("diMuonF_FittedVtx_L",&diMuonF_FittedVtx_L);
 
-		t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
-		t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
+  //Get branch from orphan-dimuon tree
+  o->SetBranchAddress("orph_dimu_mass",&orph_dimu_mass);
+  o->SetBranchAddress("orph_dimu_isoTk",&orph_dimu_isoTk);
+  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p3",&orph_dimu_Mu0_isoTk0p3);
+  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p4",&orph_dimu_Mu0_isoTk0p4);
+  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p5",&orph_dimu_Mu0_isoTk0p5);
+  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p3",&orph_dimu_Mu1_isoTk0p3);
+  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p4",&orph_dimu_Mu1_isoTk0p4);
+  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p5",&orph_dimu_Mu1_isoTk0p5);
+  o->SetBranchAddress("orph_isoTk",&orph_isoTk);
+  o->SetBranchAddress("orph_dimu_z",&orph_dimu_z);
+  o->SetBranchAddress("orph_passOffLineSelPtEta",&orph_passOffLineSelPtEta);//offline high pT mu in barrel
+  o->SetBranchAddress("orph_passOffLineSelPt1788",&orph_passOffLineSelPt1788);//offline pT sel
+  o->SetBranchAddress("orph_AllTrackerMu",&orph_AllTrackerMu);//tracker mu
 
-		t->SetBranchAddress("nRecoMu",&nRecoMu);
+	nentries = t->GetEntries();
+  if (verbose) std::cout << "nentries: "<< nentries << std::endl;
 
-		t->SetBranchAddress("is1GenMu17",&is1GenMu17);
-		t->SetBranchAddress("is2GenMu8",&is2GenMu8);
-		t->SetBranchAddress("is3GenMu8",&is3GenMu8);
-		t->SetBranchAddress("is4GenMu8",&is4GenMu8);
+	for( int i = 0; i < nentries; i++ ){
+    t->GetEntry(i);
+    if ( (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
+		counter[k][0]++;
 
-		t->SetBranchAddress("is1SelMu17",&is1SelMu17);
-		t->SetBranchAddress("is2SelMu8",&is2SelMu8);
-		t->SetBranchAddress("is3SelMu8",&is3SelMu8);
-		t->SetBranchAddress("is4SelMu8",&is4SelMu8);
+    //Check vtx significance without any selections
+    if ( CheckRecoVtx ){
+      Lxy_Residual_GEN_leading_pT->Fill(genA0_Lxy, genA0_Lxy-diMuonC_FittedVtx_Lxy);//assume they match
+      Abs_Lz_Residual_GEN_leading_pT->Fill(genA0_Lz, genA0_Lz-sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
+    }//end CheckRecoVtx
 
-		t->SetBranchAddress("selMu0_pT",&selMu0_pT);
-		t->SetBranchAddress("selMu1_pT",&selMu1_pT);
-		t->SetBranchAddress("selMu2_pT",&selMu2_pT);
-		t->SetBranchAddress("selMu3_pT",&selMu3_pT);
-		t->SetBranchAddress("selMu0_eta",&selMu0_eta);
-		t->SetBranchAddress("selMu1_eta",&selMu1_eta);
-		t->SetBranchAddress("selMu2_eta",&selMu2_eta);
-		t->SetBranchAddress("selMu3_eta",&selMu3_eta);
-    t->SetBranchAddress("selMu0_phi",&selMu0_phi);
-		t->SetBranchAddress("selMu1_phi",&selMu1_phi);
-		t->SetBranchAddress("selMu2_phi",&selMu2_phi);
-		t->SetBranchAddress("selMu3_phi",&selMu3_phi);
+    if( is1GenMu17 ) counter[k][1]++;
+		if( is2GenMu8  )  counter[k][2]++;
+		if( is3GenMu8  )  counter[k][3]++;
+		if( is4GenMu8  ){
+      counter[k][4]++;
+      //Phase-0 pixel system (Pre2017): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.2 cm; Lz = 48.5 cm
+      //Phase-1 pixel system (2017+2018): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.9 cm; Lz = 39.6 cm
+      //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm //To be used for Run2
+      //[1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
+      //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
+		  if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) &&
+          ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) { counter[k][5]++; }
+    }//End GEN Level
 
-    t->SetBranchAddress("massC",&massC);
-		t->SetBranchAddress("massF",&massF);
+		if( is1SelMu17 ) counter[k][6]++;
+		if( is2SelMu8  ) counter[k][7]++;
+		if( is3SelMu8  ) counter[k][8]++;
+		if( is4SelMu8  ){
+      counter[k][9]++;
+      //==============================================
+      // Basic offline pT selections finished
+      //==============================================
 
-		t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
-		t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
+      if( PerEventTriggerEff ) {//pass basic offline pT selections
+        leading_pt_pass_basic->Fill(selMu0_pT);
+        leading_eta_pass_basic->Fill(selMu0_eta);
+        leading_phi_pass_basic->Fill(selMu0_phi);
 
-		t->SetBranchAddress("isVertexOK",&isVtxOK);
-		t->SetBranchAddress("is2DiMuons",&is2DiMuons);
-		t->SetBranchAddress("is2MuJets",&is2MuJets);
-		t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
-		t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
-		t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
-		t->SetBranchAddress("isDiMuonHLTFired",&is2DiMuonHLTFired);
-    t->SetBranchAddress("isSignalHLTL1Fired",&isSignalHLTL1Fired);
-		t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
-		t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
-		t->SetBranchAddress("genA0_Lxy",&genA0_Lxy);
-		t->SetBranchAddress("genA1_Lxy",&genA1_Lxy);
-		t->SetBranchAddress("genA0_Lz",&genA0_Lz);
-		t->SetBranchAddress("genA1_Lz",&genA1_Lz);
+        if ( is2DiMuonHLTFired ) {
+          HLT_leading_pt_pass_basic->Fill(selMu0_pT);
+          HLT_leading_eta_pass_basic->Fill(selMu0_eta);
+          HLT_leading_phi_pass_basic->Fill(selMu0_phi);
+        }//HLT fired
 
-		t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_l3inc",&diMuonC_m1_FittedVtx_hitpix_l3inc);
-		t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_l3inc",&diMuonC_m2_FittedVtx_hitpix_l3inc);
-		t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_l3inc",&diMuonF_m1_FittedVtx_hitpix_l3inc);
-		t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_l3inc",&diMuonF_m2_FittedVtx_hitpix_l3inc);
+        if ( isSignalHLTL1Fired ) {
+          L1_leading_pt_pass_basic->Fill(selMu0_pT);
+          L1_leading_eta_pass_basic->Fill(selMu0_eta);
+          L1_leading_phi_pass_basic->Fill(selMu0_phi);
+        }//L1 seeds fired
 
-		nentries = t->GetEntries();
+      }//end if PerEventTriggerEff
 
-		for( int i = 0; i < nentries; i++ ){
-		  t->GetEntry(i);
-		  counter[k][0]++;
+      if( isVtxOK ){
+        counter[k][10]++;
 
-		  if( is1GenMu17 ) counter[k][1]++;
-		  if( is2GenMu8 ) counter[k][2]++;
-		  if( is3GenMu8 ) counter[k][3]++;
-		  if( is4GenMu8 ){
-		    counter[k][4]++;
-		    if( ( genA0_Lxy < 9.8 && fabs(genA0_Lz) < 46.5 ) &&
-            ( genA1_Lxy < 9.8 && fabs(genA1_Lz) < 46.5 ) ) counter[k][5]++;
-		  }
+        if( is2DiMuons ){
+          counter[k][11]++;
 
-		  if( is1SelMu17 ) counter[k][6]++;
-		  if( is2SelMu8 ) counter[k][7]++;
-		  if( is3SelMu8 ) counter[k][8]++;
-		  if( is4SelMu8 ){
-
-        counter[k][9]++;
-
-        //**********************************************
-        // Basic offline pT selections finished
-        //**********************************************
-
-        if( PerEventTriggerEff ) {//pass basic offline pT selections
-
-          leading_pt_pass_basic->Fill(selMu0_pT);
-          leading_eta_pass_basic->Fill(selMu0_eta);
-          leading_phi_pass_basic->Fill(selMu0_phi);
-
-          if ( is2DiMuonHLTFired ) {
-            HLT_leading_pt_pass_basic->Fill(selMu0_pT);
-            HLT_leading_eta_pass_basic->Fill(selMu0_eta);
-            HLT_leading_phi_pass_basic->Fill(selMu0_phi);
-          }//HLT fired
-
-          if ( isSignalHLTL1Fired ) {
-            L1_leading_pt_pass_basic->Fill(selMu0_pT);
-            L1_leading_eta_pass_basic->Fill(selMu0_eta);
-            L1_leading_phi_pass_basic->Fill(selMu0_phi);
-          }//L1 seeds fired
-
-        }//end if PerEventTriggerEff
-
-        if( isVtxOK ){
-          counter[k][10]++;
-
-          if( is2MuJets ){
-            counter[k][11]++;
-
-            if( is2DiMuons ){
+          if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
+              ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
+              //!!! Note: this needs to match counter[k][5] geometry
               counter[k][12]++;
 
-              if( ( diMuonC_m1_FittedVtx_hitpix_l3inc == 1 || diMuonC_m2_FittedVtx_hitpix_l3inc == 1 ) &&
-                  ( diMuonF_m1_FittedVtx_hitpix_l3inc == 1 || diMuonF_m2_FittedVtx_hitpix_l3inc == 1 ) ){
-                    counter[k][13]++;
+              if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
+                counter[k][13]++;
 
-                    if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
-                      counter[k][14]++;
+                if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 &&
+                    diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
+                  counter[k][14]++;
 
-                      if( diMuonC_IsoTk_FittedVtx < 2.0 && diMuonF_IsoTk_FittedVtx < 2.0  ){
-                        counter[k][15]++;
+                  if( PerEventTriggerEff ) {
+                    //pass all offline selections (except HLT fired, otherwise will show 100% all-time for L1 and HLT)
+                    // !!!Note: to be more precise, need to put isSignalHLTFired as the last counter and this section in
+                    //the second to last counter for these plots to make sense
+                    leading_pt_pass_all->Fill(selMu0_pT);
+                    leading_eta_pass_all->Fill(selMu0_eta);
+                    leading_phi_pass_all->Fill(selMu0_phi);
 
-                        if( PerEventTriggerEff ) {
-                          //pass all offline selections (except HLT fired, otherwise will show 100% all-time for L1 and HLT)
-                          // !!!Note: to be more precise, need to put isSignalHLTFired as the last counter and this section in
-                          //the second to last counter for these plots to make sense
-                          leading_pt_pass_all->Fill(selMu0_pT);
-                          leading_eta_pass_all->Fill(selMu0_eta);
-                          leading_phi_pass_all->Fill(selMu0_phi);
+                    if ( is2DiMuonHLTFired ) {
+                      HLT_leading_pt_pass_all->Fill(selMu0_pT);
+                      HLT_leading_eta_pass_all->Fill(selMu0_eta);
+                      HLT_leading_phi_pass_all->Fill(selMu0_phi);
+                    }//HLT fired
 
-                          if ( is2DiMuonHLTFired ) {
-                            HLT_leading_pt_pass_all->Fill(selMu0_pT);
-                            HLT_leading_eta_pass_all->Fill(selMu0_eta);
-                            HLT_leading_phi_pass_all->Fill(selMu0_phi);
-                          }//HLT fired
+                    if ( isSignalHLTL1Fired ) {
+                      L1_leading_pt_pass_all->Fill(selMu0_pT);
+                      L1_leading_eta_pass_all->Fill(selMu0_eta);
+                      L1_leading_phi_pass_all->Fill(selMu0_phi);
+                    }//L1 seeds fired
 
-                          if ( isSignalHLTL1Fired ) {
-                            L1_leading_pt_pass_all->Fill(selMu0_pT);
-                            L1_leading_eta_pass_all->Fill(selMu0_eta);
-                            L1_leading_phi_pass_all->Fill(selMu0_phi);
-                          }//L1 seeds fired
+                  }//end if PerEventTriggerEff
 
-                        }//end if PerEventTriggerEff
+                  if( is2DiMuonHLTFired ) {
+                    counter[k][15]++;
 
-                        if( is2DiMuonHLTFired ) {
-                          counter[k][16]++;
+                    if( ModelSRWidth ) {
+                      DimuMass->Fill( (massC+massF)/2 );
+                    }//end if ModelSRWidth
 
-                          if( ModelEWKShape ) {
-                            EWKShape2D->Fill(massC,massF);
-                            EWKShape2DmassC->Fill(massC);
-                            EWKShape2DmassF->Fill(massF);
-                            EWKShape2DScaled->Fill(massC,massF,weight2017);
-                            EWKShape2DmassCScaled->Fill(massC,weight2017);
-                            EWKShape2DmassFScaled->Fill(massF,weight2017);
-                          }//end if ModelEWKShape
+                    if( is2DiMuonsMassOK ) {
+                      counter[k][16]++;
+                      //==============================================
+                      // All offline analysis selections finished
+                      //==============================================
 
-                          if( is2DiMuonsMassOK ){
-                            counter[k][17]++;
+                      //Note to eliminate/relax Iso cut at counter 14, e.g. Iso<50 GeV or Iso>0
+                      if( PlotIso ) {
+                        MassC->Fill(massC);
+                        MassF->Fill(massF);
+                        IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
+                        IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
+                        IsoDimuCMu0_dR0p3->Fill(diMuonCMu0_IsoTk0p3_FittedVtx);
+                        IsoDimuCMu0_dR0p4->Fill(diMuonCMu0_IsoTk0p4_FittedVtx);
+                        IsoDimuCMu0_dR0p5->Fill(diMuonCMu0_IsoTk0p5_FittedVtx);
+                        IsoDimuCMu1_dR0p3->Fill(diMuonCMu1_IsoTk0p3_FittedVtx);
+                        IsoDimuCMu1_dR0p4->Fill(diMuonCMu1_IsoTk0p4_FittedVtx);
+                        IsoDimuCMu1_dR0p5->Fill(diMuonCMu1_IsoTk0p5_FittedVtx);
+                        IsoDimuFMu0_dR0p3->Fill(diMuonFMu0_IsoTk0p3_FittedVtx);
+                        IsoDimuFMu0_dR0p4->Fill(diMuonFMu0_IsoTk0p4_FittedVtx);
+                        IsoDimuFMu0_dR0p5->Fill(diMuonFMu0_IsoTk0p5_FittedVtx);
+                        IsoDimuFMu1_dR0p3->Fill(diMuonFMu1_IsoTk0p3_FittedVtx);
+                        IsoDimuFMu1_dR0p4->Fill(diMuonFMu1_IsoTk0p4_FittedVtx);
+                        IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
+                      }//end PlotIso
 
-                            //**********************************************
-                            // All offline analysis selections finished
-                            //**********************************************
-                            if( ModelEWKShape ) {
-                              EWKShapeSR->Fill(massC,massF);
-                              EWKShapeSRmassC->Fill(massC);
-                              EWKShapeSRmassF->Fill(massF);
-                              EWKShapeSRScaled->Fill(massC,massF,weight2017);
-                              EWKShapeSRmassCScaled->Fill(massC,weight2017);
-                              EWKShapeSRmassFScaled->Fill(massF,weight2017);
-                            }//end if ModelEWKShape
+                    }//end 16: mass consistent
+                    else{
+                      //==============================================
+                      //Control region: for bkg comparison on data and MC
+                      //plot BKG shape on mmumu1 and mmumu2
+                      //==============================================
+                      if( ModelBKGShape ) {
+                        BKGShapeCR->Fill(massC,massF);
+                        BKGShapeCRmassC->Fill(massC);
+                        BKGShapeCRmassF->Fill(massF);
+                        BKGShapeCRScaled->Fill(massC,massF,weight2017);
+                        BKGShapeCRmassCScaled->Fill(massC,weight2017);
+                        BKGShapeCRmassFScaled->Fill(massF,weight2017);
+                      }//end if ModelBKGShape
 
-                            if( ModelSRWidth ) {
-                    		      DimuMass->Fill( (massC+massF)/2 );
-                    		    }//end if ModelSRWidth
+                    }//end else
+                  }//end 15
+                }//end 14
+              }//end 13
+            }//end 12
+          }//end 11
+        }//end 10
+      }//end 9
+    }//end for i entries
 
-                          }//end 17
-                        }//end 16
-                      }//end 15
-                    }//end 14
-                  }//end 13
-                }//end 12
-              }//end 11
-            }//end 10
-          }//end 9
-        }//end for entries
-        myfile->Close();
-  }
+    //Loop over orphan-dimuon tree
 
-  RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
-  for(int m=0;m<18;m++){
-    TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
-    TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
-    if(m>0){
-      if(m==6){
-	RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
-	RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
+    mentries = o->GetEntries();
+		for( int j = 0; j < mentries; j++ ){
+      if ( (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
+		  o->GetEntry(j);
+      //Pass offline basic selections, same as signal
+		  if(orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu){
+        OrphanDimuMass->Fill(orph_dimu_mass);
+        IsoOrphanDimu->Fill(orph_dimu_isoTk);
+        IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
+        IsoOrphanDimuMu0_dR0p4->Fill(orph_dimu_Mu0_isoTk0p4);
+        IsoOrphanDimuMu0_dR0p5->Fill(orph_dimu_Mu0_isoTk0p5);
+        IsoOrphanDimuMu1_dR0p3->Fill(orph_dimu_Mu1_isoTk0p3);
+        IsoOrphanDimuMu1_dR0p4->Fill(orph_dimu_Mu1_isoTk0p4);
+        IsoOrphanDimuMu1_dR0p5->Fill(orph_dimu_Mu1_isoTk0p5);
+        IsoOrphan->Fill(orph_isoTk);
       }
-      else{
-	RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
-	RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
-      }
-    }
-  }
+    }//end for j entries
 
-  epsvsalph[k] = counter[k][17]/(counter[k][5]*1.0); //mainvalue of epsilob_rec/alpha_gen
-  cout<<" Here is the cut-flow-table:"<<endl;
-  cout<<" epsvsalph[k]  "<<epsvsalph[k]<<endl;
+    RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
+    for(int m=0;m<17;m++){
+      TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
+      TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
+      if(m>0){
+        if(m==6){
+          RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
+          RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
+        }
+        else{
+          RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
+          RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
+        }
+      }
+    }//end Eff calc.
+
+  epsvsalph[k] = counter[k][16]/(counter[k][5]*1.0); //mainvalue of epsilob_rec/alpha_gen
+  cout<<"Here is the cut-flow-table:"<<endl;
+  cout<<"epsvsalph[k]:  "<<epsvsalph[k]<<endl;
   Err[k]=   sqrt( (epsvsalph[k]*(1-epsvsalph[k]))/(counter[k][5]*1.0));
   cout<<"        "<<endl;
   cout<<"begin{landscape}"<<endl;
   cout<<"centering"<<endl;
   cout<<"begin{tabular}{ c| c | c | c | c | c }"<<endl;
 
-  cout<<" Selection   "<<" \\# Events   "<<"   Total Efficiency  "<<" Relative Efficiency   "<<" TotalEffError   "<<" RelEffError "<<" hline "<<endl;
+  cout<<" Selection               & "<<left<< setw(11)<<" \\# Evts "    <<" & "<<left << setw(13) << " Tot. Eff. " << " & " << left << setw(13) << " Rel. Eff. "<<" & "<< left << setw(16) << " Tot. Eff. Err. "<<" & "<< left << setw(16) << " Rel. Eff. Err. " <<" hline "<<endl;
+  cout<<" No cut                  & "<<left<< setw(11)<< counter[k][0]  <<" & "<<left << setw(13) << TotEff[k][0]  << " & " << left << setw(13) << RelEff[k][0] <<" & "<< left << setw(16) << TotEffErr[k][0]   <<" & "<< left << setw(16) << RelEffErr[k][0]    <<" hline "<<endl;
+  cout<<" is1GenMu17Barrel        & "<<left<< setw(11)<< counter[k][1]  <<" & "<<left << setw(13) << TotEff[k][1]  << " & " << left << setw(13) << RelEff[k][1] <<" & "<< left << setw(16) << TotEffErr[k][1]   <<" & "<< left << setw(16) << RelEffErr[k][1]    <<" hline "<<endl;
+  cout<<" is2GenMu8               & "<<left<< setw(11)<< counter[k][2]  <<" & "<<left << setw(13) << TotEff[k][2]  << " & " << left << setw(13) << RelEff[k][2] <<" & "<< left << setw(16) << TotEffErr[k][2]   <<" & "<< left << setw(16) << RelEffErr[k][2]    <<" hline "<<endl;
+  cout<<" is3GenMu8               & "<<left<< setw(11)<< counter[k][3]  <<" & "<<left << setw(13) << TotEff[k][3]  << " & " << left << setw(13) << RelEff[k][3] <<" & "<< left << setw(16) << TotEffErr[k][3]   <<" & "<< left << setw(16) << RelEffErr[k][3]    <<" hline "<<endl;
+  cout<<" is4GenMu8               & "<<left<< setw(11)<< counter[k][4]  <<" & "<<left << setw(13) << TotEff[k][4]  << " & " << left << setw(13) << RelEff[k][4] <<" & "<< left << setw(16) << TotEffErr[k][4]   <<" & "<< left << setw(16) << RelEffErr[k][4]    <<" hline "<<endl;
+  cout<<" Lxy<16.0cm && Lz<51.6cm & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) << TotEff[k][5]  << " & " << left << setw(13) << RelEff[k][5] <<" & "<< left << setw(16) << TotEffErr[k][5]   <<" & "<< left << setw(16) << RelEffErr[k][5]    <<" hline "<<endl;
+  cout<<"                                                                                                                         " << " hline "<< endl;
 
-  cout<<" No cut      &   "<<left<< setw(7)<< counter[k][0]<<"     &   "<<fixed<< std::setprecision(3)<< TotEff[k][0]<<"         &     "<< RelEff[k][0]<<"           &   "<<left<< setw(7)<< TotEffErr[k][0]<<"      &   "<< RelEffErr[k][0]<<" hline "<<endl;
-  cout<<" is1GenMu17  &   "<<left<< setw(7)<< counter[k][1]<<"    &    "<<left<< setw(7)<< TotEff[k][1]<<"      &        "<<left<< setw(7)<<  RelEff[k][1]<<"    &    "<<fixed<<std::setprecision(3)<< TotEffErr[k][1]<<" &   "<<left<< setw(7)<<  RelEffErr[k][1]<<" hline "<<endl;
-  cout<<" is2GenMu8   &   "<<left<< setw(7)<< counter[k][2]<<"    &    "<<left<< setw(7)<< TotEff[k][2]<<"      &        "<<left<< setw(7)<<  RelEff[k][2]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][2]<<" & "<<left<< setw(7)<< RelEffErr[k][2]<<" hline "<<endl;
-  cout<<" is3GenMu8   &   "<<left<< setw(7)<< counter[k][3]<<"    &    "<<left<< setw(7)<< TotEff[k][3]<<"      &        "<<left<< setw(7)<<  RelEff[k][3]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][3]<<" & "<<left<< setw(7)<<  RelEffErr[k][3]<<" hline "<<endl;
-  cout<<" is4GenMu8   &   "<<left<< setw(7)<< counter[k][4]<<"    &    "<<left<< setw(7)<< TotEff[k][4]<<"      &        "<<left<< setw(7)<<  RelEff[k][4]<<"    &     "<<left<< setw(7)<<  TotEffErr[k][4]<<" & "<<left<< setw(7)<<  RelEffErr[k][4]<<" hline "<<endl;
-
-  cout<<" Lxy<9.8 && Lz<48.5 & "<<left<< setw(7)<< counter[k][5]<<"  &  "<<left<< setw(7)<<  TotEff[k][5]<<"     &     "<<left<< setw(7)<<  RelEff[k][5]<<"       &    "<<fixed<<std::setprecision(4) << TotEffErr[k][5]<<" &   "<<fixed<<std::setprecision(3) << RelEffErr[k][5]<<" hline "<<endl;
-  cout<<"                                                                          "<<" hline "<<endl;
-
-  cout<<" is1SelMu17   &    "<<left<< setw(7)<< counter[k][6]<<"  &    "<<left<< setw(7)<< TotEff[k][6] <<setw(10)<<"   &    "<<left<< setw(7)<<  RelEff[k][6]<<"  &    "<<left<< setw(7)<<  TotEffErr[k][6]<<" &  " <<  RelEffErr[k][6]<<" hline "<<endl;
-  cout<< setprecision(3);
-  cout<<" is2SelMu8    &    "<< counter[k][7]<<"  &    "<< TotEff[k][7] <<setw(10)<<"   &   "<< RelEff[k][7]<<"   &   "<< TotEffErr[k][7]<<"  & "<< RelEffErr[k][7]<<" hline "<<endl;
-  cout<<" is3SelMu8    &    "<< counter[k][8]<<"  &    "<< TotEff[k][8]<<"   &    "<< RelEff[k][8]<<"   &   "<< TotEffErr[k][8]<<" &  "<< RelEffErr[k][8]<<" hline "<<endl;
-  cout<<" is4SelMu8    &    "<< counter[k][9]<<"  &    "<< TotEff[k][9]<<"   &    "<< RelEff[k][9]<<"   &   "<< TotEffErr[k][9]<<" &  "<< RelEffErr[k][9]<<" hline "<<endl;
-  cout<<"                                                                        "<<" hline "<<endl;
-  cout<<" isVertexOK            &  "<< counter[k][10]<<"  &    "<< TotEff[k][10]<<" &    "<< RelEff[k][10]<<"  &   "<<fixed<<std::setprecision(4) << TotEffErr[k][10]<<" &  "<< RelEffErr[k][10]<<" hline "<<endl;
-  cout<<" is2MuJets            &  "<< counter[k][11]<<"  &    "<< TotEff[k][11]<<" &    "<< RelEff[k][11]<<"  &   "<<fixed<<std::setprecision(4) << TotEffErr[k][11]<<" &  "<< RelEffErr[k][11]<<" hline "<<endl;
-  cout<<" is2dimuon            &  "<< counter[k][12]<<"  &    "<< TotEff[k][12]<<" &    "<< RelEff[k][12]<<"  &   "<<fixed<<std::setprecision(4) << TotEffErr[k][12]<<" &  "<< RelEffErr[k][12]<<" hline "<<endl;
-
-  cout<<" is2DiMuonsPixHitOk  &  "<< counter[k][13]<<"  &    "<< TotEff[k][13]<<" &     "<< RelEff[k][13]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][13]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][13]<<" hline "<<endl;
-  cout<<" is2DiMuonsFittedDzOk    &  "<< counter[k][14]<<"  &    "<< TotEff[k][14]<<" &     "<< RelEff[k][14]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][14]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][14]<<" hline "<<endl;
-  cout<<" is2DiMuonsIsoTkOK   &  "<< counter[k][15]<<"  &    "<< TotEff[k][15]<<" &     "<< RelEff[k][15]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][15]<<" &  "<<fixed<<std::setprecision(3) << RelEffErr[k][15]<<" hline "<<endl;
-  cout<<" isSignalHLTFired    &  "<< counter[k][16] <<" &    "<< TotEff[k][16]<<" &     "<< RelEff[k][16]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][16]<<" &  " <<fixed<<std::setprecision(3) << RelEffErr[k][16]<<" hline "<<endl;
-  cout<<" is2DiMuonsMassOK    &  "<< counter[k][17] <<" &    "<< TotEff[k][17]<<" &     "<< RelEff[k][17]<<" &   "<<fixed<<std::setprecision(4) << TotEffErr[k][17]<<" &  " <<fixed<<std::setprecision(3) << RelEffErr[k][17]<<" hline "<<endl;
-
-  cout
-    <<"                                                           "<<" hline "<<endl;
-  cout<<" epsilon_rec/alpha_gen  & "<< epsvsalph[k]<<"$\\pm$ "<< Err[k]<<" hline "<<endl;
+  cout<<" is1SelMu17              & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) << TotEff[k][6]  << " & " << left << setw(13) << RelEff[k][6] <<" & "<< left << setw(16) << TotEffErr[k][6]   <<" & "<< left << setw(16) << RelEffErr[k][6]    <<" hline "<<endl;
+  cout<<" is2SelMu8               & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) << TotEff[k][7]  << " & " << left << setw(13) << RelEff[k][7] <<" & "<< left << setw(16) << TotEffErr[k][7]   <<" & "<< left << setw(16) << RelEffErr[k][7]    <<" hline "<<endl;
+  cout<<" is3SelMu8               & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) << TotEff[k][8]  << " & " << left << setw(13) << RelEff[k][8] <<" & "<< left << setw(16) << TotEffErr[k][8]   <<" & "<< left << setw(16) << RelEffErr[k][8]    <<" hline "<<endl;
+  cout<<" is4SelMu8               & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) << TotEff[k][9]  << " & " << left << setw(13) << RelEff[k][9] <<" & "<< left << setw(16) << TotEffErr[k][9]   <<" & "<< left << setw(16) << RelEffErr[k][9]    <<" hline "<<endl;
+  cout<<" isVertexOK              & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) << TotEff[k][10] << " & " << left << setw(13) << RelEff[k][10]<<" & "<< left << setw(16) << TotEffErr[k][10]  <<" & "<< left << setw(16) << RelEffErr[k][10]   <<" hline "<<endl;
+  cout<<" is2Dimuons              & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) << TotEff[k][11] << " & " << left << setw(13) << RelEff[k][11]<<" & "<< left << setw(16) << TotEffErr[k][11]  <<" & "<< left << setw(16) << RelEffErr[k][11]   <<" hline "<<endl;
+  cout<<" is2DiMuonsPixHitOk      & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) << TotEff[k][12] << " & " << left << setw(13) << RelEff[k][12]<<" & "<< left << setw(16) << TotEffErr[k][12]  <<" & "<< left << setw(16) << RelEffErr[k][12]   <<" hline "<<endl;
+  cout<<" is2DiMuonsFittedDzOk    & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) << TotEff[k][13] << " & " << left << setw(13) << RelEff[k][13]<<" & "<< left << setw(16) << TotEffErr[k][13]  <<" & "<< left << setw(16) << RelEffErr[k][13]   <<" hline "<<endl;
+  cout<<" is4MuonsIsolationOK     & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) << TotEff[k][14] << " & " << left << setw(13) << RelEff[k][14]<<" & "<< left << setw(16) << TotEffErr[k][14]  <<" & "<< left << setw(16) << RelEffErr[k][14]   <<" hline "<<endl;
+  cout<<" isSignalHLTFired        & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) << TotEff[k][15] << " & " << left << setw(13) << RelEff[k][15]<<" & "<< left << setw(16) << TotEffErr[k][15]  <<" & "<< left << setw(16) << RelEffErr[k][15]   <<" hline "<<endl;
+  cout<<" is2DiMuonsMassOK        & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) << TotEff[k][16] << " & " << left << setw(13) << RelEff[k][16]<<" & "<< left << setw(16) << TotEffErr[k][16]  <<" & "<< left << setw(16) << RelEffErr[k][16]   <<" hline "<<endl;
+  cout<<"                                                                                                                         " << " hline "<< endl;
+  cout<<" epsilon_rec/alpha_gen   & "<< epsvsalph[k]<<"$\\pm$ "<< Err[k]<<" hline "<<endl;
 
   cout<<"end{tabular}"<<endl;
   cout<<"end{landscape}"<<endl;
 
-  TString output="./foo_modified.root";
+  //kth sample
+  TString output="";
+  output = output + "./foo_modified_sample_" + Form("%d", k)+ ".root";
   TFile myPlot(output,"RECREATE");
 
+   if ( CheckRecoVtx ){
+     Lxy_Residual_GEN_leading_pT->Write();
+     Abs_Lz_Residual_GEN_leading_pT->Write();
+   }//end CheckRecoVtx
+
    if ( PerEventTriggerEff ) {
-     //Per-event Efficiency for signal HLT and L1 seeds after basic offline pT selections
+     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "BASIC" offline pT selections
      if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
        TEfficiency* eff_HLT_leading_pt_pass_basic  = new TEfficiency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic);
        eff_HLT_leading_pt_pass_basic->SetTitle("HLT efficiency vs leading pT (after basic offline pT selections);Leading pT [GeV];#epsilon");
@@ -463,7 +597,7 @@ void efficiency(const std::vector<std::string>& dirNames)
        eff_L1_leading_phi_pass_basic->Write();
      }
 
-     //Per-event Efficiency for signal HLT and L1 seeds after all offline selections
+     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "ALL" offline selections
      if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_all, *leading_pt_pass_all) ) {
        TEfficiency* eff_HLT_leading_pt_pass_all  = new TEfficiency(*HLT_leading_pt_pass_all, *leading_pt_pass_all);
        eff_HLT_leading_pt_pass_all->SetTitle("HLT efficiency vs leading pT (after all offline selections);Leading pT [GeV];#epsilon");
@@ -497,25 +631,20 @@ void efficiency(const std::vector<std::string>& dirNames)
 
    }//end if (PerEventTriggerEff)
 
-   if ( ModelEWKShape ) {
-     EWKShape2D->Write();
-     EWKShape2DmassC->Write();
-     EWKShape2DmassF->Write();
-     EWKShape2DScaled->Write();
-     EWKShape2DmassCScaled->Write();
-     EWKShape2DmassFScaled->Write();
+   if ( ModelBKGShape ) {
+     BKGShapeCR->Write();
+     BKGShapeCRmassC->Write();
+     BKGShapeCRmassF->Write();
+     BKGShapeCRScaled->Write();
+     BKGShapeCRmassCScaled->Write();
+     BKGShapeCRmassFScaled->Write();
+   } //end if ( ModelBKGShape )
 
-     EWKShapeSR->Write();
-     EWKShapeSRmassC->Write();
-     EWKShapeSRmassF->Write();
-     EWKShapeSRScaled->Write();
-     EWKShapeSRmassCScaled->Write();
-     EWKShapeSRmassFScaled->Write();
-   } //end if ( ModelEWKShape )
-
-   if ( ModelSRWidth ) {
+   if ( ModelSRWidth && DimuMass->Integral() > 0 ) {
      DimuMass->SetLineColor(kBlue);
      DimuMass->SetLineWidth(2);
+     DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
+     DimuMass->GetYaxis()->SetTitle("Events/0.01GeV");
      DimuMass->Fit("gaus","","",0,60);
      FitMean = DimuMass->GetFunction("gaus")->GetParameter(1);//get 2nd parameter Mean
      FitSigma = DimuMass->GetFunction("gaus")->GetParameter(2);//get 3rd parameter Sigma
@@ -527,8 +656,97 @@ void efficiency(const std::vector<std::string>& dirNames)
      cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
    }//end if ( ModelSRWidth )
 
+   if ( PlotIso ) {
+     MassC->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]");
+     MassC->GetYaxis()->SetTitle("Events/0.1GeV");
+     MassF->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]");
+     MassF->GetYaxis()->SetTitle("Events/0.1GeV");
+     MassC->Write();
+     MassF->Write();
+     IsoDimuC->Write();
+     IsoDimuF->Write();
+     IsoDimuCMu0_dR0p3->Write();
+     IsoDimuCMu0_dR0p4->Write();
+     IsoDimuCMu0_dR0p5->Write();
+     IsoDimuCMu1_dR0p3->Write();
+     IsoDimuCMu1_dR0p4->Write();
+     IsoDimuCMu1_dR0p5->Write();
+     IsoDimuFMu0_dR0p3->Write();
+     IsoDimuFMu0_dR0p4->Write();
+     IsoDimuFMu0_dR0p5->Write();
+     IsoDimuFMu1_dR0p3->Write();
+     IsoDimuFMu1_dR0p4->Write();
+     IsoDimuFMu1_dR0p5->Write();
+
+     //Normalize iso
+     TH1F *IsoDimuCNormalized = (TH1F*)IsoDimuC->Clone("IsoDimuCNormalized");
+     TH1F *IsoDimuFNormalized = (TH1F*)IsoDimuF->Clone("IsoDimuFNormalized");
+     TH1F *IsoDimuCMu0_dR0p3_Normalized = (TH1F*)IsoDimuCMu0_dR0p3->Clone("IsoDimuCMu0_dR0p3_Normalized");
+     TH1F *IsoDimuCMu0_dR0p4_Normalized = (TH1F*)IsoDimuCMu0_dR0p4->Clone("IsoDimuCMu0_dR0p4_Normalized");
+     TH1F *IsoDimuCMu0_dR0p5_Normalized = (TH1F*)IsoDimuCMu0_dR0p5->Clone("IsoDimuCMu0_dR0p5_Normalized");
+     TH1F *IsoDimuCMu1_dR0p3_Normalized = (TH1F*)IsoDimuCMu1_dR0p3->Clone("IsoDimuCMu1_dR0p3_Normalized");
+     TH1F *IsoDimuCMu1_dR0p4_Normalized = (TH1F*)IsoDimuCMu1_dR0p4->Clone("IsoDimuCMu1_dR0p4_Normalized");
+     TH1F *IsoDimuCMu1_dR0p5_Normalized = (TH1F*)IsoDimuCMu1_dR0p5->Clone("IsoDimuCMu1_dR0p5_Normalized");
+     TH1F *IsoDimuFMu0_dR0p3_Normalized = (TH1F*)IsoDimuFMu0_dR0p3->Clone("IsoDimuFMu0_dR0p3_Normalized");
+     TH1F *IsoDimuFMu0_dR0p4_Normalized = (TH1F*)IsoDimuFMu0_dR0p4->Clone("IsoDimuFMu0_dR0p4_Normalized");
+     TH1F *IsoDimuFMu0_dR0p5_Normalized = (TH1F*)IsoDimuFMu0_dR0p5->Clone("IsoDimuFMu0_dR0p5_Normalized");
+     TH1F *IsoDimuFMu1_dR0p3_Normalized = (TH1F*)IsoDimuFMu1_dR0p3->Clone("IsoDimuFMu1_dR0p3_Normalized");
+     TH1F *IsoDimuFMu1_dR0p4_Normalized = (TH1F*)IsoDimuFMu1_dR0p4->Clone("IsoDimuFMu1_dR0p4_Normalized");
+     TH1F *IsoDimuFMu1_dR0p5_Normalized = (TH1F*)IsoDimuFMu1_dR0p5->Clone("IsoDimuFMu1_dR0p5_Normalized");
+     //Protect against 0 entry
+     if ( IsoDimuC->Integral() > 0 ){ Double_t scaleC = 1./IsoDimuC->Integral(); IsoDimuCNormalized->Scale(scaleC); IsoDimuCNormalized->Write(); }
+     if ( IsoDimuF->Integral() > 0 ){ Double_t scaleF = 1./IsoDimuF->Integral(); IsoDimuFNormalized->Scale(scaleF); IsoDimuFNormalized->Write(); }
+     if ( IsoDimuCMu0_dR0p3->Integral() > 0 ){ Double_t scaleCMu0_dR0p3 = 1./IsoDimuCMu0_dR0p3->Integral(); IsoDimuCMu0_dR0p3_Normalized->Scale(scaleCMu0_dR0p3); IsoDimuCMu0_dR0p3_Normalized->Write(); }
+     if ( IsoDimuCMu0_dR0p4->Integral() > 0 ){ Double_t scaleCMu0_dR0p4 = 1./IsoDimuCMu0_dR0p4->Integral(); IsoDimuCMu0_dR0p4_Normalized->Scale(scaleCMu0_dR0p4); IsoDimuCMu0_dR0p4_Normalized->Write(); }
+     if ( IsoDimuCMu0_dR0p5->Integral() > 0 ){ Double_t scaleCMu0_dR0p5 = 1./IsoDimuCMu0_dR0p5->Integral(); IsoDimuCMu0_dR0p5_Normalized->Scale(scaleCMu0_dR0p5); IsoDimuCMu0_dR0p5_Normalized->Write(); }
+
+     if ( IsoDimuCMu1_dR0p3->Integral() > 0 ){ Double_t scaleCMu1_dR0p3 = 1./IsoDimuCMu1_dR0p3->Integral(); IsoDimuCMu1_dR0p3_Normalized->Scale(scaleCMu1_dR0p3); IsoDimuCMu1_dR0p3_Normalized->Write(); }
+     if ( IsoDimuCMu1_dR0p4->Integral() > 0 ){ Double_t scaleCMu1_dR0p4 = 1./IsoDimuCMu1_dR0p4->Integral(); IsoDimuCMu1_dR0p4_Normalized->Scale(scaleCMu1_dR0p4); IsoDimuCMu1_dR0p4_Normalized->Write(); }
+     if ( IsoDimuCMu1_dR0p5->Integral() > 0 ){ Double_t scaleCMu1_dR0p5 = 1./IsoDimuCMu1_dR0p5->Integral(); IsoDimuCMu1_dR0p5_Normalized->Scale(scaleCMu1_dR0p5); IsoDimuCMu1_dR0p5_Normalized->Write(); }
+
+     if ( IsoDimuFMu0_dR0p3->Integral() > 0 ){ Double_t scaleFMu0_dR0p3 = 1./IsoDimuFMu0_dR0p3->Integral(); IsoDimuFMu0_dR0p3_Normalized->Scale(scaleFMu0_dR0p3); IsoDimuFMu0_dR0p3_Normalized->Write(); }
+     if ( IsoDimuFMu0_dR0p4->Integral() > 0 ){ Double_t scaleFMu0_dR0p4 = 1./IsoDimuFMu0_dR0p4->Integral(); IsoDimuFMu0_dR0p4_Normalized->Scale(scaleFMu0_dR0p4); IsoDimuFMu0_dR0p4_Normalized->Write(); }
+     if ( IsoDimuFMu0_dR0p5->Integral() > 0 ){ Double_t scaleFMu0_dR0p5 = 1./IsoDimuFMu0_dR0p5->Integral(); IsoDimuFMu0_dR0p5_Normalized->Scale(scaleFMu0_dR0p5); IsoDimuFMu0_dR0p5_Normalized->Write(); }
+
+     if ( IsoDimuFMu1_dR0p3->Integral() > 0 ){ Double_t scaleFMu1_dR0p3 = 1./IsoDimuFMu1_dR0p3->Integral(); IsoDimuFMu1_dR0p3_Normalized->Scale(scaleFMu1_dR0p3); IsoDimuFMu1_dR0p3_Normalized->Write(); }
+     if ( IsoDimuFMu1_dR0p4->Integral() > 0 ){ Double_t scaleFMu1_dR0p4 = 1./IsoDimuFMu1_dR0p4->Integral(); IsoDimuFMu1_dR0p4_Normalized->Scale(scaleFMu1_dR0p4); IsoDimuFMu1_dR0p4_Normalized->Write(); }
+     if ( IsoDimuFMu1_dR0p5->Integral() > 0 ){ Double_t scaleFMu1_dR0p5 = 1./IsoDimuFMu1_dR0p5->Integral(); IsoDimuFMu1_dR0p5_Normalized->Scale(scaleFMu1_dR0p5); IsoDimuFMu1_dR0p5_Normalized->Write(); }
+
+     OrphanDimuMass->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
+     OrphanDimuMass->GetYaxis()->SetTitle("Events/0.2GeV");
+     OrphanDimuMass->Write();
+     IsoOrphanDimu->Write();
+     IsoOrphanDimuMu0_dR0p3->Write();
+     IsoOrphanDimuMu0_dR0p4->Write();
+     IsoOrphanDimuMu0_dR0p5->Write();
+     IsoOrphanDimuMu1_dR0p3->Write();
+     IsoOrphanDimuMu1_dR0p4->Write();
+     IsoOrphanDimuMu1_dR0p5->Write();
+     IsoOrphan->Write();
+
+     TH1F *IsoOrphanDimuNormalized = (TH1F*)IsoOrphanDimu->Clone("IsoOrphanDimuNormalized");
+     TH1F *IsoOrphanDimuMu0_dR0p3_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p3->Clone("IsoOrphanDimuMu0_dR0p3_Normalized");
+     TH1F *IsoOrphanDimuMu0_dR0p4_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p4->Clone("IsoOrphanDimuMu0_dR0p4_Normalized");
+     TH1F *IsoOrphanDimuMu0_dR0p5_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p5->Clone("IsoOrphanDimuMu0_dR0p5_Normalized");
+     TH1F *IsoOrphanDimuMu1_dR0p3_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p3->Clone("IsoOrphanDimuMu1_dR0p3_Normalized");
+     TH1F *IsoOrphanDimuMu1_dR0p4_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p4->Clone("IsoOrphanDimuMu1_dR0p4_Normalized");
+     TH1F *IsoOrphanDimuMu1_dR0p5_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p5->Clone("IsoOrphanDimuMu1_dR0p5_Normalized");
+     TH1F *IsoOrphanNormalized = (TH1F*)IsoOrphan->Clone("IsoOrphanNormalized");
+     //Protect against 0 entry
+     if ( IsoOrphanDimu->Integral() > 0 ){ Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral(); IsoOrphanDimuNormalized->Scale(scaleOrphanDimu); IsoOrphanDimuNormalized->Write(); }
+     if ( IsoOrphanDimuMu0_dR0p3->Integral() > 0 ){ Double_t scaleMu0_dR0p3 = 1./IsoOrphanDimuMu0_dR0p3->Integral(); IsoOrphanDimuMu0_dR0p3_Normalized->Scale(scaleMu0_dR0p3); IsoOrphanDimuMu0_dR0p3_Normalized->Write(); }
+     if ( IsoOrphanDimuMu0_dR0p4->Integral() > 0 ){ Double_t scaleMu0_dR0p4 = 1./IsoOrphanDimuMu0_dR0p4->Integral(); IsoOrphanDimuMu0_dR0p4_Normalized->Scale(scaleMu0_dR0p4); IsoOrphanDimuMu0_dR0p4_Normalized->Write(); }
+     if ( IsoOrphanDimuMu0_dR0p5->Integral() > 0 ){ Double_t scaleMu0_dR0p5 = 1./IsoOrphanDimuMu0_dR0p5->Integral(); IsoOrphanDimuMu0_dR0p5_Normalized->Scale(scaleMu0_dR0p5); IsoOrphanDimuMu0_dR0p5_Normalized->Write(); }
+     if ( IsoOrphanDimuMu1_dR0p3->Integral() > 0 ){ Double_t scaleMu1_dR0p3 = 1./IsoOrphanDimuMu1_dR0p3->Integral(); IsoOrphanDimuMu1_dR0p3_Normalized->Scale(scaleMu1_dR0p3); IsoOrphanDimuMu1_dR0p3_Normalized->Write(); }
+     if ( IsoOrphanDimuMu1_dR0p4->Integral() > 0 ){ Double_t scaleMu1_dR0p4 = 1./IsoOrphanDimuMu1_dR0p4->Integral(); IsoOrphanDimuMu1_dR0p4_Normalized->Scale(scaleMu1_dR0p4); IsoOrphanDimuMu1_dR0p4_Normalized->Write(); }
+     if ( IsoOrphanDimuMu1_dR0p5->Integral() > 0 ){ Double_t scaleMu1_dR0p5 = 1./IsoOrphanDimuMu1_dR0p5->Integral(); IsoOrphanDimuMu1_dR0p5_Normalized->Scale(scaleMu1_dR0p5); IsoOrphanDimuMu1_dR0p5_Normalized->Write(); }
+     if ( IsoOrphan->Integral() > 0 ){ Double_t scaleOrphan = 1./IsoOrphan->Integral(); IsoOrphanNormalized->Scale(scaleOrphan); IsoOrphanNormalized->Write(); }
+
+   }//end if ( PlotIso )
+
    myPlot.Close();
-}
+
+}//end efficiency function
 
 void analysis(const std::string txtfile)
 {

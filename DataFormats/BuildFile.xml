@@ -2,6 +2,7 @@
 <use   name="DataFormats/GeometryVector"/>
 <use   name="TrackingTools/TransientTrack"/>
 <use   name="RecoVertex/KalmanVertexFit"/>
+<use   name="RecoVertex/VertexTools"/>
 <use   name="DataFormats/PatCandidates"/>
 <use   name="DataFormats/TrackReco"/>
 <use   name="DataFormats/CaloTowers"/>
