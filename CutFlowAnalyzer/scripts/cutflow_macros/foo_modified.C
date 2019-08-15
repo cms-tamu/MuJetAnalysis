@@ -504,7 +504,7 @@ void efficiency(const std::vector<std::string>& dirNames)
       }
       //Pass same cut as signal, for study 1-D template distribution
       if(Model1DTemplate && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu &&
-         isSignalHLTFired && IsoOrphanDimuMu0_dR0p3 >= 0.0 && IsoOrphanDimuMu0_dR0p3 < 1.5){
+         isSignalHLTFired && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5){
            Mass1DTemplate->Fill(orph_dimu_mass);
       }
     }//end for j entries
