@@ -66,6 +66,7 @@ int k = -1;
 void efficiency(const std::vector<std::string>& dirNames)
 {
   bool verbose(true);
+  bool CutFlowTable(true);
   bool CheckRecoVtx(false);
   bool ModelBKGShape(false);
   bool Model1DTemplate(false);
@@ -332,68 +333,71 @@ void efficiency(const std::vector<std::string>& dirNames)
   o->SetBranchAddress("orph_AllTrackerMu",&orph_AllTrackerMu);//tracker mu
 
 	nentries = t->GetEntries();
-  if (verbose) std::cout << "nentries: "<< nentries << std::endl;
+  if( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
 
-	for( int i = 0; i < nentries; i++ ){
-    t->GetEntry(i);
-    if ( (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
-		counter[k][0]++;
+  if( CutFlowTable ){
+    for( int i = 0; i < nentries; i++ ){
+      t->GetEntry(i);
+      if ( (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
+      counter[k][0]++;
 
-    //Check vtx significance without any selections
-    if ( CheckRecoVtx ){
-      Lxy_Residual_GEN_leading_pT->Fill(genA0_Lxy, genA0_Lxy-diMuonC_FittedVtx_Lxy);//assume they match
-      Abs_Lz_Residual_GEN_leading_pT->Fill(genA0_Lz, genA0_Lz-sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
-    }//end CheckRecoVtx
+      //Check vtx significance without any selections
+      if ( CheckRecoVtx ){
+        Lxy_Residual_GEN_leading_pT->Fill(genA0_Lxy, genA0_Lxy-diMuonC_FittedVtx_Lxy);//assume they match
+        Abs_Lz_Residual_GEN_leading_pT->Fill(genA0_Lz, genA0_Lz-sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
+      }//end CheckRecoVtx
 
-    if( is1GenMu17 ) counter[k][1]++;
-		if( is2GenMu8  )  counter[k][2]++;
-		if( is3GenMu8  )  counter[k][3]++;
-		if( is4GenMu8  ){
-      counter[k][4]++;
-      //Phase-0 pixel system (Pre2017): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.2 cm; Lz = 48.5 cm
-      //Phase-1 pixel system (2017+2018): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.9 cm; Lz = 39.6 cm
-      //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm //To be used for Run2
-      //[1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
-      //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
-		  if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) &&
-          ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) { counter[k][5]++; }
-    }//End GEN Level
+      if( is1GenMu17 ) counter[k][1]++;
+      if( is2GenMu8  ) counter[k][2]++;
+      if( is3GenMu8  ) counter[k][3]++;
+      if( is4GenMu8  ){
+        counter[k][4]++;
+        //Phase-0 pixel system (Pre2017): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.2 cm; Lz = 48.5 cm
+        //Phase-1 pixel system (2017+2018): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.9 cm; Lz = 39.6 cm
+        //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm //To be used for Run2
+        //[1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
+        //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
+        if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) &&
+          ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
+            counter[k][5]++;
+        }
+      }//End GEN Level
 
-		if( is1SelMu17 ) counter[k][6]++;
-		if( is2SelMu8  ) counter[k][7]++;
-		if( is3SelMu8  ) counter[k][8]++;
-		if( is4SelMu8  ){
-      counter[k][9]++;
-      //==============================================
-      // Basic offline pT selections finished
-      //==============================================
+      if( is1SelMu17 ) counter[k][6]++;
+      if( is2SelMu8  ) counter[k][7]++;
+      if( is3SelMu8  ) counter[k][8]++;
+      if( is4SelMu8  ){
+        counter[k][9]++;
+        //==============================================
+        // Basic offline pT selections finished
+        //==============================================
+        //pass basic offline pT selections
+        if( PerEventTriggerEff ) {
+          leading_pt_pass_basic->Fill(selMu0_pT);
+          leading_eta_pass_basic->Fill(selMu0_eta);
+          leading_phi_pass_basic->Fill(selMu0_phi);
 
-      if( PerEventTriggerEff ) {//pass basic offline pT selections
-        leading_pt_pass_basic->Fill(selMu0_pT);
-        leading_eta_pass_basic->Fill(selMu0_eta);
-        leading_phi_pass_basic->Fill(selMu0_phi);
+          if ( isSignalHLTFired ) {
+            HLT_leading_pt_pass_basic->Fill(selMu0_pT);
+            HLT_leading_eta_pass_basic->Fill(selMu0_eta);
+            HLT_leading_phi_pass_basic->Fill(selMu0_phi);
+          }//HLT fired
 
-        if ( isSignalHLTFired ) {
-          HLT_leading_pt_pass_basic->Fill(selMu0_pT);
-          HLT_leading_eta_pass_basic->Fill(selMu0_eta);
-          HLT_leading_phi_pass_basic->Fill(selMu0_phi);
-        }//HLT fired
+          if ( isSignalHLTL1Fired ) {
+            L1_leading_pt_pass_basic->Fill(selMu0_pT);
+            L1_leading_eta_pass_basic->Fill(selMu0_eta);
+            L1_leading_phi_pass_basic->Fill(selMu0_phi);
+          }//L1 seeds fired
 
-        if ( isSignalHLTL1Fired ) {
-          L1_leading_pt_pass_basic->Fill(selMu0_pT);
-          L1_leading_eta_pass_basic->Fill(selMu0_eta);
-          L1_leading_phi_pass_basic->Fill(selMu0_phi);
-        }//L1 seeds fired
+        }//end if PerEventTriggerEff
 
-      }//end if PerEventTriggerEff
+        if( isVtxOK ){
+          counter[k][10]++;
 
-      if( isVtxOK ){
-        counter[k][10]++;
+          if( is2DiMuons ){
+            counter[k][11]++;
 
-        if( is2DiMuons ){
-          counter[k][11]++;
-
-          if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
+            if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
               ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
               //!!! Note: this needs to match counter[k][5] geometry
               counter[k][12]++;
@@ -484,46 +488,50 @@ void efficiency(const std::vector<std::string>& dirNames)
         }//end 10
       }//end 9
     }//end for i entries
+  }//end if( CutFlowTable )
 
-    //Loop over orphan-dimuon tree
-    mentries = o->GetEntries();
-		for( int j = 0; j < mentries; j++ ){
-      if ( (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
-		  o->GetEntry(j);
-      //Pass offline basic selections, same as signal for isolation cut study
-		  if(PlotIso && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu){
-        OrphanDimuMass->Fill(orph_dimu_mass);
-        IsoOrphanDimu->Fill(orph_dimu_isoTk);
-        IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
-        IsoOrphanDimuMu0_dR0p4->Fill(orph_dimu_Mu0_isoTk0p4);
-        IsoOrphanDimuMu0_dR0p5->Fill(orph_dimu_Mu0_isoTk0p5);
-        IsoOrphanDimuMu1_dR0p3->Fill(orph_dimu_Mu1_isoTk0p3);
-        IsoOrphanDimuMu1_dR0p4->Fill(orph_dimu_Mu1_isoTk0p4);
-        IsoOrphanDimuMu1_dR0p5->Fill(orph_dimu_Mu1_isoTk0p5);
-        IsoOrphan->Fill(orph_isoTk);
-      }
-      //Pass same cut as signal, for study 1-D template distribution
-      if(Model1DTemplate && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu &&
-         isSignalHLTFired && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5){
-           Mass1DTemplate->Fill(orph_dimu_mass);
-      }
-    }//end for j entries
+  //Loop over orphan-dimuon tree
+  mentries = o->GetEntries();
+  if( verbose ) std::cout << "orphan-dimu tree entries: "<< mentries << std::endl;
+  for( int j = 0; j < mentries; j++ ){
+    if ( (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
+    o->GetEntry(j);
 
-    RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
-    for(int m=0;m<17;m++){
-      TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
-      TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
-      if(m>0){
-        if(m==6){
-          RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
-          RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
-        }
-        else{
-          RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
-          RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
-        }
+    //Pass offline basic selections, same as signal for isolation cut study
+    if( PlotIso && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu ){
+      OrphanDimuMass->Fill(orph_dimu_mass);
+      IsoOrphanDimu->Fill(orph_dimu_isoTk);
+      IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
+      IsoOrphanDimuMu0_dR0p4->Fill(orph_dimu_Mu0_isoTk0p4);
+      IsoOrphanDimuMu0_dR0p5->Fill(orph_dimu_Mu0_isoTk0p5);
+      IsoOrphanDimuMu1_dR0p3->Fill(orph_dimu_Mu1_isoTk0p3);
+      IsoOrphanDimuMu1_dR0p4->Fill(orph_dimu_Mu1_isoTk0p4);
+      IsoOrphanDimuMu1_dR0p5->Fill(orph_dimu_Mu1_isoTk0p5);
+      IsoOrphan->Fill(orph_isoTk);
+    }
+
+    //Pass same cut as signal, for study 1-D template distribution
+    if( Model1DTemplate && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu &&
+      isSignalHLTFired && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
+        Mass1DTemplate->Fill(orph_dimu_mass);
+    }
+  }//end for j entries
+
+  RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
+  for(int m=0;m<17;m++){
+    TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
+    TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
+    if( m>0 ){
+      if( m==6 ){
+        RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
+        RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
       }
-    }//end Eff calc.
+      else{
+        RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
+        RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
+      }
+    }
+  }//end Eff calc.
 
   epsvsalph[k] = counter[k][16]/(counter[k][5]*1.0); //mainvalue of epsilob_rec/alpha_gen
   cout<<"Here is the cut-flow-table:"<<endl;
@@ -565,200 +573,198 @@ void efficiency(const std::vector<std::string>& dirNames)
   output = output + "./foo_modified_sample_" + Form("%d", k)+ ".root";
   TFile myPlot(output,"RECREATE");
 
-   if ( CheckRecoVtx ){
-     Lxy_Residual_GEN_leading_pT->Write();
-     Abs_Lz_Residual_GEN_leading_pT->Write();
-   }//end CheckRecoVtx
+  if ( CheckRecoVtx ){
+    Lxy_Residual_GEN_leading_pT->Write();
+    Abs_Lz_Residual_GEN_leading_pT->Write();
+  }//end CheckRecoVtx
 
-   if ( PerEventTriggerEff ) {
-     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "BASIC" offline pT selections
-     if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
-       TEfficiency* eff_HLT_leading_pt_pass_basic  = new TEfficiency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic);
-       eff_HLT_leading_pt_pass_basic->SetTitle("HLT efficiency vs leading pT (after basic offline pT selections);Leading pT [GeV];#epsilon");
-       eff_HLT_leading_pt_pass_basic->Write();
-     }
-     if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
-       TEfficiency* eff_HLT_leading_eta_pass_basic = new TEfficiency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic);
-       eff_HLT_leading_eta_pass_basic->SetTitle("HLT efficiency vs leading eta (after basic offline pT selections);Leading eta;#epsilon");
-       eff_HLT_leading_eta_pass_basic->Write();
-     }
-     if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
-       TEfficiency* eff_HLT_leading_phi_pass_basic = new TEfficiency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic);
-       eff_HLT_leading_phi_pass_basic->SetTitle("HLT efficiency vs leading phi (after basic offline pT selections);Leading phi;#epsilon");
-       eff_HLT_leading_phi_pass_basic->Write();
-     }
-     if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
-       TEfficiency* eff_L1_leading_pt_past_basic  = new TEfficiency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic);
-       eff_L1_leading_pt_past_basic->SetTitle("L1 efficiency vs leading pT (after basic offline pT selections);Leading pT[GeV];#epsilon");
-       eff_L1_leading_pt_past_basic->Write();
-     }
-     if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
-       TEfficiency* eff_L1_leading_eta_past_basic = new TEfficiency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic);
-       eff_L1_leading_eta_past_basic->SetTitle("L1 efficiency vs leading eta (after basic offline pT selections);Leading eta;#epsilon");
-       eff_L1_leading_eta_past_basic->Write();
-     }
-     if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
-       TEfficiency* eff_L1_leading_phi_pass_basic = new TEfficiency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic);
-       eff_L1_leading_phi_pass_basic->SetTitle("L1 efficiency vs leading phi (after basic offline pT selections);Leading phi;#epsilon");
-       eff_L1_leading_phi_pass_basic->Write();
-     }
+  if ( PerEventTriggerEff ) {
+    //Per-event Efficiency for signal "HLT" and "L1 seeds" after "BASIC" offline pT selections
+    if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
+      TEfficiency* eff_HLT_leading_pt_pass_basic  = new TEfficiency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic);
+      eff_HLT_leading_pt_pass_basic->SetTitle("HLT efficiency vs leading pT (after basic offline pT selections);Leading pT [GeV];#epsilon");
+      eff_HLT_leading_pt_pass_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
+      TEfficiency* eff_HLT_leading_eta_pass_basic = new TEfficiency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic);
+      eff_HLT_leading_eta_pass_basic->SetTitle("HLT efficiency vs leading eta (after basic offline pT selections);Leading eta;#epsilon");
+      eff_HLT_leading_eta_pass_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
+      TEfficiency* eff_HLT_leading_phi_pass_basic = new TEfficiency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic);
+      eff_HLT_leading_phi_pass_basic->SetTitle("HLT efficiency vs leading phi (after basic offline pT selections);Leading phi;#epsilon");
+      eff_HLT_leading_phi_pass_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
+      TEfficiency* eff_L1_leading_pt_past_basic  = new TEfficiency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic);
+      eff_L1_leading_pt_past_basic->SetTitle("L1 efficiency vs leading pT (after basic offline pT selections);Leading pT[GeV];#epsilon");
+      eff_L1_leading_pt_past_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
+      TEfficiency* eff_L1_leading_eta_past_basic = new TEfficiency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic);
+      eff_L1_leading_eta_past_basic->SetTitle("L1 efficiency vs leading eta (after basic offline pT selections);Leading eta;#epsilon");
+      eff_L1_leading_eta_past_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
+      TEfficiency* eff_L1_leading_phi_pass_basic = new TEfficiency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic);
+      eff_L1_leading_phi_pass_basic->SetTitle("L1 efficiency vs leading phi (after basic offline pT selections);Leading phi;#epsilon");
+      eff_L1_leading_phi_pass_basic->Write();
+    }
 
-     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "ALL" offline selections
-     if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_all, *leading_pt_pass_all) ) {
-       TEfficiency* eff_HLT_leading_pt_pass_all  = new TEfficiency(*HLT_leading_pt_pass_all, *leading_pt_pass_all);
-       eff_HLT_leading_pt_pass_all->SetTitle("HLT efficiency vs leading pT (after all offline selections);Leading pT [GeV];#epsilon");
-       eff_HLT_leading_pt_pass_all->Write();
-     }
-     if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_all, *leading_eta_pass_all) ) {
-       TEfficiency* eff_HLT_leading_eta_pass_all = new TEfficiency(*HLT_leading_eta_pass_all, *leading_eta_pass_all);
-       eff_HLT_leading_eta_pass_all->SetTitle("HLT efficiency vs leading eta (after all offline selections);Leading eta;#epsilon");
-       eff_HLT_leading_eta_pass_all->Write();
-     }
-     if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_all, *leading_phi_pass_all) ) {
-       TEfficiency* eff_HLT_leading_phi_pass_all = new TEfficiency(*HLT_leading_phi_pass_all, *leading_phi_pass_all);
-       eff_HLT_leading_phi_pass_all->SetTitle("HLT efficiency vs leading phi (after all offline selections);Leading phi;#epsilon");
-       eff_HLT_leading_phi_pass_all->Write();
-     }
-     if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_all, *leading_pt_pass_all) ) {
-       TEfficiency* eff_L1_leading_pt_past_all  = new TEfficiency(*L1_leading_pt_pass_all, *leading_pt_pass_all);
-       eff_L1_leading_pt_past_all->SetTitle("L1 efficiency vs leading pT (after all offline selections);Leading pT [GeV];#epsilon");
-       eff_L1_leading_pt_past_all->Write();
-     }
-     if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_all, *leading_eta_pass_all) ) {
-       TEfficiency* eff_L1_leading_eta_past_all = new TEfficiency(*L1_leading_eta_pass_all, *leading_eta_pass_all);
-       eff_L1_leading_eta_past_all->SetTitle("L1 efficiency vs leading eta (after all offline selections);Leading eta;#epsilon");
-       eff_L1_leading_eta_past_all->Write();
-     }
-     if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_all, *leading_phi_pass_all) ) {
-       TEfficiency* eff_L1_leading_phi_pass_all = new TEfficiency(*L1_leading_phi_pass_all, *leading_phi_pass_all);
-       eff_L1_leading_phi_pass_all->SetTitle("L1 efficiency vs leading phi (after all offline selections);Leading phi;#epsilon");
-       eff_L1_leading_phi_pass_all->Write();
-     }
+    //Per-event Efficiency for signal "HLT" and "L1 seeds" after "ALL" offline selections
+    if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_all, *leading_pt_pass_all) ) {
+      TEfficiency* eff_HLT_leading_pt_pass_all  = new TEfficiency(*HLT_leading_pt_pass_all, *leading_pt_pass_all);
+      eff_HLT_leading_pt_pass_all->SetTitle("HLT efficiency vs leading pT (after all offline selections);Leading pT [GeV];#epsilon");
+      eff_HLT_leading_pt_pass_all->Write();
+    }
+    if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_all, *leading_eta_pass_all) ) {
+      TEfficiency* eff_HLT_leading_eta_pass_all = new TEfficiency(*HLT_leading_eta_pass_all, *leading_eta_pass_all);
+      eff_HLT_leading_eta_pass_all->SetTitle("HLT efficiency vs leading eta (after all offline selections);Leading eta;#epsilon");
+      eff_HLT_leading_eta_pass_all->Write();
+    }
+    if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_all, *leading_phi_pass_all) ) {
+      TEfficiency* eff_HLT_leading_phi_pass_all = new TEfficiency(*HLT_leading_phi_pass_all, *leading_phi_pass_all);
+      eff_HLT_leading_phi_pass_all->SetTitle("HLT efficiency vs leading phi (after all offline selections);Leading phi;#epsilon");
+      eff_HLT_leading_phi_pass_all->Write();
+    }
+    if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_all, *leading_pt_pass_all) ) {
+      TEfficiency* eff_L1_leading_pt_past_all  = new TEfficiency(*L1_leading_pt_pass_all, *leading_pt_pass_all);
+      eff_L1_leading_pt_past_all->SetTitle("L1 efficiency vs leading pT (after all offline selections);Leading pT [GeV];#epsilon");
+      eff_L1_leading_pt_past_all->Write();
+    }
+    if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_all, *leading_eta_pass_all) ) {
+      TEfficiency* eff_L1_leading_eta_past_all = new TEfficiency(*L1_leading_eta_pass_all, *leading_eta_pass_all);
+      eff_L1_leading_eta_past_all->SetTitle("L1 efficiency vs leading eta (after all offline selections);Leading eta;#epsilon");
+      eff_L1_leading_eta_past_all->Write();
+    }
+    if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_all, *leading_phi_pass_all) ) {
+      TEfficiency* eff_L1_leading_phi_pass_all = new TEfficiency(*L1_leading_phi_pass_all, *leading_phi_pass_all);
+      eff_L1_leading_phi_pass_all->SetTitle("L1 efficiency vs leading phi (after all offline selections);Leading phi;#epsilon");
+      eff_L1_leading_phi_pass_all->Write();
+    }
+  }//end if (PerEventTriggerEff)
 
-   }//end if (PerEventTriggerEff)
+  if ( ModelBKGShape ) {
+    BKGShapeCR->Write();
+    BKGShapeCRmassC->Write();
+    BKGShapeCRmassF->Write();
+    BKGShapeCRScaled->Write();
+    BKGShapeCRmassCScaled->Write();
+    BKGShapeCRmassFScaled->Write();
+  } //end if ( ModelBKGShape )
 
-   if ( ModelBKGShape ) {
-     BKGShapeCR->Write();
-     BKGShapeCRmassC->Write();
-     BKGShapeCRmassF->Write();
-     BKGShapeCRScaled->Write();
-     BKGShapeCRmassCScaled->Write();
-     BKGShapeCRmassFScaled->Write();
-   } //end if ( ModelBKGShape )
+  if ( ModelSRWidth && DimuMass->Integral() > 0 ) {
+    DimuMass->SetLineColor(kBlue);
+    DimuMass->SetLineWidth(2);
+    DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
+    DimuMass->GetYaxis()->SetTitle("Events/0.01GeV");
+    DimuMass->Fit("gaus","","",0,60);
+    FitMean = DimuMass->GetFunction("gaus")->GetParameter(1);//get 2nd parameter Mean
+    FitSigma = DimuMass->GetFunction("gaus")->GetParameter(2);//get 3rd parameter Sigma
+    DimuMass->GetFunction("gaus")->SetLineColor(kBlue);
+    DimuMass->GetFunction("gaus")->SetLineStyle(2);
+    gStyle->SetOptStat(0);
+    DimuMass->Write();
 
-   if ( ModelSRWidth && DimuMass->Integral() > 0 ) {
-     DimuMass->SetLineColor(kBlue);
-     DimuMass->SetLineWidth(2);
-     DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
-     DimuMass->GetYaxis()->SetTitle("Events/0.01GeV");
-     DimuMass->Fit("gaus","","",0,60);
-     FitMean = DimuMass->GetFunction("gaus")->GetParameter(1);//get 2nd parameter Mean
-     FitSigma = DimuMass->GetFunction("gaus")->GetParameter(2);//get 3rd parameter Sigma
-     DimuMass->GetFunction("gaus")->SetLineColor(kBlue);
-     DimuMass->GetFunction("gaus")->SetLineStyle(2);
-     gStyle->SetOptStat(0);
-     DimuMass->Write();
+    cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
+  }//end if ( ModelSRWidth )
 
-     cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
-   }//end if ( ModelSRWidth )
+  if ( PlotIso ) {
+    MassC->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]");
+    MassC->GetYaxis()->SetTitle("Events/0.1GeV");
+    MassF->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]");
+    MassF->GetYaxis()->SetTitle("Events/0.1GeV");
+    MassC->Write();
+    MassF->Write();
+    IsoDimuC->Write();
+    IsoDimuF->Write();
+    IsoDimuCMu0_dR0p3->Write();
+    IsoDimuCMu0_dR0p4->Write();
+    IsoDimuCMu0_dR0p5->Write();
+    IsoDimuCMu1_dR0p3->Write();
+    IsoDimuCMu1_dR0p4->Write();
+    IsoDimuCMu1_dR0p5->Write();
+    IsoDimuFMu0_dR0p3->Write();
+    IsoDimuFMu0_dR0p4->Write();
+    IsoDimuFMu0_dR0p5->Write();
+    IsoDimuFMu1_dR0p3->Write();
+    IsoDimuFMu1_dR0p4->Write();
+    IsoDimuFMu1_dR0p5->Write();
 
-   if ( PlotIso ) {
-     MassC->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]");
-     MassC->GetYaxis()->SetTitle("Events/0.1GeV");
-     MassF->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]");
-     MassF->GetYaxis()->SetTitle("Events/0.1GeV");
-     MassC->Write();
-     MassF->Write();
-     IsoDimuC->Write();
-     IsoDimuF->Write();
-     IsoDimuCMu0_dR0p3->Write();
-     IsoDimuCMu0_dR0p4->Write();
-     IsoDimuCMu0_dR0p5->Write();
-     IsoDimuCMu1_dR0p3->Write();
-     IsoDimuCMu1_dR0p4->Write();
-     IsoDimuCMu1_dR0p5->Write();
-     IsoDimuFMu0_dR0p3->Write();
-     IsoDimuFMu0_dR0p4->Write();
-     IsoDimuFMu0_dR0p5->Write();
-     IsoDimuFMu1_dR0p3->Write();
-     IsoDimuFMu1_dR0p4->Write();
-     IsoDimuFMu1_dR0p5->Write();
+    //Normalize iso
+    TH1F *IsoDimuCNormalized = (TH1F*)IsoDimuC->Clone("IsoDimuCNormalized");
+    TH1F *IsoDimuFNormalized = (TH1F*)IsoDimuF->Clone("IsoDimuFNormalized");
+    TH1F *IsoDimuCMu0_dR0p3_Normalized = (TH1F*)IsoDimuCMu0_dR0p3->Clone("IsoDimuCMu0_dR0p3_Normalized");
+    TH1F *IsoDimuCMu0_dR0p4_Normalized = (TH1F*)IsoDimuCMu0_dR0p4->Clone("IsoDimuCMu0_dR0p4_Normalized");
+    TH1F *IsoDimuCMu0_dR0p5_Normalized = (TH1F*)IsoDimuCMu0_dR0p5->Clone("IsoDimuCMu0_dR0p5_Normalized");
+    TH1F *IsoDimuCMu1_dR0p3_Normalized = (TH1F*)IsoDimuCMu1_dR0p3->Clone("IsoDimuCMu1_dR0p3_Normalized");
+    TH1F *IsoDimuCMu1_dR0p4_Normalized = (TH1F*)IsoDimuCMu1_dR0p4->Clone("IsoDimuCMu1_dR0p4_Normalized");
+    TH1F *IsoDimuCMu1_dR0p5_Normalized = (TH1F*)IsoDimuCMu1_dR0p5->Clone("IsoDimuCMu1_dR0p5_Normalized");
+    TH1F *IsoDimuFMu0_dR0p3_Normalized = (TH1F*)IsoDimuFMu0_dR0p3->Clone("IsoDimuFMu0_dR0p3_Normalized");
+    TH1F *IsoDimuFMu0_dR0p4_Normalized = (TH1F*)IsoDimuFMu0_dR0p4->Clone("IsoDimuFMu0_dR0p4_Normalized");
+    TH1F *IsoDimuFMu0_dR0p5_Normalized = (TH1F*)IsoDimuFMu0_dR0p5->Clone("IsoDimuFMu0_dR0p5_Normalized");
+    TH1F *IsoDimuFMu1_dR0p3_Normalized = (TH1F*)IsoDimuFMu1_dR0p3->Clone("IsoDimuFMu1_dR0p3_Normalized");
+    TH1F *IsoDimuFMu1_dR0p4_Normalized = (TH1F*)IsoDimuFMu1_dR0p4->Clone("IsoDimuFMu1_dR0p4_Normalized");
+    TH1F *IsoDimuFMu1_dR0p5_Normalized = (TH1F*)IsoDimuFMu1_dR0p5->Clone("IsoDimuFMu1_dR0p5_Normalized");
+    //Protect against 0 entry
+    if ( IsoDimuC->Integral() > 0 ){ Double_t scaleC = 1./IsoDimuC->Integral(); IsoDimuCNormalized->Scale(scaleC); IsoDimuCNormalized->Write(); }
+    if ( IsoDimuF->Integral() > 0 ){ Double_t scaleF = 1./IsoDimuF->Integral(); IsoDimuFNormalized->Scale(scaleF); IsoDimuFNormalized->Write(); }
+    if ( IsoDimuCMu0_dR0p3->Integral() > 0 ){ Double_t scaleCMu0_dR0p3 = 1./IsoDimuCMu0_dR0p3->Integral(); IsoDimuCMu0_dR0p3_Normalized->Scale(scaleCMu0_dR0p3); IsoDimuCMu0_dR0p3_Normalized->Write(); }
+    if ( IsoDimuCMu0_dR0p4->Integral() > 0 ){ Double_t scaleCMu0_dR0p4 = 1./IsoDimuCMu0_dR0p4->Integral(); IsoDimuCMu0_dR0p4_Normalized->Scale(scaleCMu0_dR0p4); IsoDimuCMu0_dR0p4_Normalized->Write(); }
+    if ( IsoDimuCMu0_dR0p5->Integral() > 0 ){ Double_t scaleCMu0_dR0p5 = 1./IsoDimuCMu0_dR0p5->Integral(); IsoDimuCMu0_dR0p5_Normalized->Scale(scaleCMu0_dR0p5); IsoDimuCMu0_dR0p5_Normalized->Write(); }
 
-     //Normalize iso
-     TH1F *IsoDimuCNormalized = (TH1F*)IsoDimuC->Clone("IsoDimuCNormalized");
-     TH1F *IsoDimuFNormalized = (TH1F*)IsoDimuF->Clone("IsoDimuFNormalized");
-     TH1F *IsoDimuCMu0_dR0p3_Normalized = (TH1F*)IsoDimuCMu0_dR0p3->Clone("IsoDimuCMu0_dR0p3_Normalized");
-     TH1F *IsoDimuCMu0_dR0p4_Normalized = (TH1F*)IsoDimuCMu0_dR0p4->Clone("IsoDimuCMu0_dR0p4_Normalized");
-     TH1F *IsoDimuCMu0_dR0p5_Normalized = (TH1F*)IsoDimuCMu0_dR0p5->Clone("IsoDimuCMu0_dR0p5_Normalized");
-     TH1F *IsoDimuCMu1_dR0p3_Normalized = (TH1F*)IsoDimuCMu1_dR0p3->Clone("IsoDimuCMu1_dR0p3_Normalized");
-     TH1F *IsoDimuCMu1_dR0p4_Normalized = (TH1F*)IsoDimuCMu1_dR0p4->Clone("IsoDimuCMu1_dR0p4_Normalized");
-     TH1F *IsoDimuCMu1_dR0p5_Normalized = (TH1F*)IsoDimuCMu1_dR0p5->Clone("IsoDimuCMu1_dR0p5_Normalized");
-     TH1F *IsoDimuFMu0_dR0p3_Normalized = (TH1F*)IsoDimuFMu0_dR0p3->Clone("IsoDimuFMu0_dR0p3_Normalized");
-     TH1F *IsoDimuFMu0_dR0p4_Normalized = (TH1F*)IsoDimuFMu0_dR0p4->Clone("IsoDimuFMu0_dR0p4_Normalized");
-     TH1F *IsoDimuFMu0_dR0p5_Normalized = (TH1F*)IsoDimuFMu0_dR0p5->Clone("IsoDimuFMu0_dR0p5_Normalized");
-     TH1F *IsoDimuFMu1_dR0p3_Normalized = (TH1F*)IsoDimuFMu1_dR0p3->Clone("IsoDimuFMu1_dR0p3_Normalized");
-     TH1F *IsoDimuFMu1_dR0p4_Normalized = (TH1F*)IsoDimuFMu1_dR0p4->Clone("IsoDimuFMu1_dR0p4_Normalized");
-     TH1F *IsoDimuFMu1_dR0p5_Normalized = (TH1F*)IsoDimuFMu1_dR0p5->Clone("IsoDimuFMu1_dR0p5_Normalized");
-     //Protect against 0 entry
-     if ( IsoDimuC->Integral() > 0 ){ Double_t scaleC = 1./IsoDimuC->Integral(); IsoDimuCNormalized->Scale(scaleC); IsoDimuCNormalized->Write(); }
-     if ( IsoDimuF->Integral() > 0 ){ Double_t scaleF = 1./IsoDimuF->Integral(); IsoDimuFNormalized->Scale(scaleF); IsoDimuFNormalized->Write(); }
-     if ( IsoDimuCMu0_dR0p3->Integral() > 0 ){ Double_t scaleCMu0_dR0p3 = 1./IsoDimuCMu0_dR0p3->Integral(); IsoDimuCMu0_dR0p3_Normalized->Scale(scaleCMu0_dR0p3); IsoDimuCMu0_dR0p3_Normalized->Write(); }
-     if ( IsoDimuCMu0_dR0p4->Integral() > 0 ){ Double_t scaleCMu0_dR0p4 = 1./IsoDimuCMu0_dR0p4->Integral(); IsoDimuCMu0_dR0p4_Normalized->Scale(scaleCMu0_dR0p4); IsoDimuCMu0_dR0p4_Normalized->Write(); }
-     if ( IsoDimuCMu0_dR0p5->Integral() > 0 ){ Double_t scaleCMu0_dR0p5 = 1./IsoDimuCMu0_dR0p5->Integral(); IsoDimuCMu0_dR0p5_Normalized->Scale(scaleCMu0_dR0p5); IsoDimuCMu0_dR0p5_Normalized->Write(); }
+    if ( IsoDimuCMu1_dR0p3->Integral() > 0 ){ Double_t scaleCMu1_dR0p3 = 1./IsoDimuCMu1_dR0p3->Integral(); IsoDimuCMu1_dR0p3_Normalized->Scale(scaleCMu1_dR0p3); IsoDimuCMu1_dR0p3_Normalized->Write(); }
+    if ( IsoDimuCMu1_dR0p4->Integral() > 0 ){ Double_t scaleCMu1_dR0p4 = 1./IsoDimuCMu1_dR0p4->Integral(); IsoDimuCMu1_dR0p4_Normalized->Scale(scaleCMu1_dR0p4); IsoDimuCMu1_dR0p4_Normalized->Write(); }
+    if ( IsoDimuCMu1_dR0p5->Integral() > 0 ){ Double_t scaleCMu1_dR0p5 = 1./IsoDimuCMu1_dR0p5->Integral(); IsoDimuCMu1_dR0p5_Normalized->Scale(scaleCMu1_dR0p5); IsoDimuCMu1_dR0p5_Normalized->Write(); }
 
-     if ( IsoDimuCMu1_dR0p3->Integral() > 0 ){ Double_t scaleCMu1_dR0p3 = 1./IsoDimuCMu1_dR0p3->Integral(); IsoDimuCMu1_dR0p3_Normalized->Scale(scaleCMu1_dR0p3); IsoDimuCMu1_dR0p3_Normalized->Write(); }
-     if ( IsoDimuCMu1_dR0p4->Integral() > 0 ){ Double_t scaleCMu1_dR0p4 = 1./IsoDimuCMu1_dR0p4->Integral(); IsoDimuCMu1_dR0p4_Normalized->Scale(scaleCMu1_dR0p4); IsoDimuCMu1_dR0p4_Normalized->Write(); }
-     if ( IsoDimuCMu1_dR0p5->Integral() > 0 ){ Double_t scaleCMu1_dR0p5 = 1./IsoDimuCMu1_dR0p5->Integral(); IsoDimuCMu1_dR0p5_Normalized->Scale(scaleCMu1_dR0p5); IsoDimuCMu1_dR0p5_Normalized->Write(); }
+    if ( IsoDimuFMu0_dR0p3->Integral() > 0 ){ Double_t scaleFMu0_dR0p3 = 1./IsoDimuFMu0_dR0p3->Integral(); IsoDimuFMu0_dR0p3_Normalized->Scale(scaleFMu0_dR0p3); IsoDimuFMu0_dR0p3_Normalized->Write(); }
+    if ( IsoDimuFMu0_dR0p4->Integral() > 0 ){ Double_t scaleFMu0_dR0p4 = 1./IsoDimuFMu0_dR0p4->Integral(); IsoDimuFMu0_dR0p4_Normalized->Scale(scaleFMu0_dR0p4); IsoDimuFMu0_dR0p4_Normalized->Write(); }
+    if ( IsoDimuFMu0_dR0p5->Integral() > 0 ){ Double_t scaleFMu0_dR0p5 = 1./IsoDimuFMu0_dR0p5->Integral(); IsoDimuFMu0_dR0p5_Normalized->Scale(scaleFMu0_dR0p5); IsoDimuFMu0_dR0p5_Normalized->Write(); }
 
-     if ( IsoDimuFMu0_dR0p3->Integral() > 0 ){ Double_t scaleFMu0_dR0p3 = 1./IsoDimuFMu0_dR0p3->Integral(); IsoDimuFMu0_dR0p3_Normalized->Scale(scaleFMu0_dR0p3); IsoDimuFMu0_dR0p3_Normalized->Write(); }
-     if ( IsoDimuFMu0_dR0p4->Integral() > 0 ){ Double_t scaleFMu0_dR0p4 = 1./IsoDimuFMu0_dR0p4->Integral(); IsoDimuFMu0_dR0p4_Normalized->Scale(scaleFMu0_dR0p4); IsoDimuFMu0_dR0p4_Normalized->Write(); }
-     if ( IsoDimuFMu0_dR0p5->Integral() > 0 ){ Double_t scaleFMu0_dR0p5 = 1./IsoDimuFMu0_dR0p5->Integral(); IsoDimuFMu0_dR0p5_Normalized->Scale(scaleFMu0_dR0p5); IsoDimuFMu0_dR0p5_Normalized->Write(); }
+    if ( IsoDimuFMu1_dR0p3->Integral() > 0 ){ Double_t scaleFMu1_dR0p3 = 1./IsoDimuFMu1_dR0p3->Integral(); IsoDimuFMu1_dR0p3_Normalized->Scale(scaleFMu1_dR0p3); IsoDimuFMu1_dR0p3_Normalized->Write(); }
+    if ( IsoDimuFMu1_dR0p4->Integral() > 0 ){ Double_t scaleFMu1_dR0p4 = 1./IsoDimuFMu1_dR0p4->Integral(); IsoDimuFMu1_dR0p4_Normalized->Scale(scaleFMu1_dR0p4); IsoDimuFMu1_dR0p4_Normalized->Write(); }
+    if ( IsoDimuFMu1_dR0p5->Integral() > 0 ){ Double_t scaleFMu1_dR0p5 = 1./IsoDimuFMu1_dR0p5->Integral(); IsoDimuFMu1_dR0p5_Normalized->Scale(scaleFMu1_dR0p5); IsoDimuFMu1_dR0p5_Normalized->Write(); }
 
-     if ( IsoDimuFMu1_dR0p3->Integral() > 0 ){ Double_t scaleFMu1_dR0p3 = 1./IsoDimuFMu1_dR0p3->Integral(); IsoDimuFMu1_dR0p3_Normalized->Scale(scaleFMu1_dR0p3); IsoDimuFMu1_dR0p3_Normalized->Write(); }
-     if ( IsoDimuFMu1_dR0p4->Integral() > 0 ){ Double_t scaleFMu1_dR0p4 = 1./IsoDimuFMu1_dR0p4->Integral(); IsoDimuFMu1_dR0p4_Normalized->Scale(scaleFMu1_dR0p4); IsoDimuFMu1_dR0p4_Normalized->Write(); }
-     if ( IsoDimuFMu1_dR0p5->Integral() > 0 ){ Double_t scaleFMu1_dR0p5 = 1./IsoDimuFMu1_dR0p5->Integral(); IsoDimuFMu1_dR0p5_Normalized->Scale(scaleFMu1_dR0p5); IsoDimuFMu1_dR0p5_Normalized->Write(); }
+    OrphanDimuMass->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
+    OrphanDimuMass->GetYaxis()->SetTitle("Events/0.1GeV");
+    OrphanDimuMass->Write();
+    IsoOrphanDimu->Write();
+    IsoOrphanDimuMu0_dR0p3->Write();
+    IsoOrphanDimuMu0_dR0p4->Write();
+    IsoOrphanDimuMu0_dR0p5->Write();
+    IsoOrphanDimuMu1_dR0p3->Write();
+    IsoOrphanDimuMu1_dR0p4->Write();
+    IsoOrphanDimuMu1_dR0p5->Write();
+    IsoOrphan->Write();
 
-     OrphanDimuMass->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
-     OrphanDimuMass->GetYaxis()->SetTitle("Events/0.1GeV");
-     OrphanDimuMass->Write();
-     IsoOrphanDimu->Write();
-     IsoOrphanDimuMu0_dR0p3->Write();
-     IsoOrphanDimuMu0_dR0p4->Write();
-     IsoOrphanDimuMu0_dR0p5->Write();
-     IsoOrphanDimuMu1_dR0p3->Write();
-     IsoOrphanDimuMu1_dR0p4->Write();
-     IsoOrphanDimuMu1_dR0p5->Write();
-     IsoOrphan->Write();
+    TH1F *IsoOrphanDimuNormalized = (TH1F*)IsoOrphanDimu->Clone("IsoOrphanDimuNormalized");
+    TH1F *IsoOrphanDimuMu0_dR0p3_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p3->Clone("IsoOrphanDimuMu0_dR0p3_Normalized");
+    TH1F *IsoOrphanDimuMu0_dR0p4_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p4->Clone("IsoOrphanDimuMu0_dR0p4_Normalized");
+    TH1F *IsoOrphanDimuMu0_dR0p5_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p5->Clone("IsoOrphanDimuMu0_dR0p5_Normalized");
+    TH1F *IsoOrphanDimuMu1_dR0p3_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p3->Clone("IsoOrphanDimuMu1_dR0p3_Normalized");
+    TH1F *IsoOrphanDimuMu1_dR0p4_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p4->Clone("IsoOrphanDimuMu1_dR0p4_Normalized");
+    TH1F *IsoOrphanDimuMu1_dR0p5_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p5->Clone("IsoOrphanDimuMu1_dR0p5_Normalized");
+    TH1F *IsoOrphanNormalized = (TH1F*)IsoOrphan->Clone("IsoOrphanNormalized");
+    //Protect against 0 entry
+    if ( IsoOrphanDimu->Integral() > 0 ){ Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral(); IsoOrphanDimuNormalized->Scale(scaleOrphanDimu); IsoOrphanDimuNormalized->Write(); }
+    if ( IsoOrphanDimuMu0_dR0p3->Integral() > 0 ){ Double_t scaleMu0_dR0p3 = 1./IsoOrphanDimuMu0_dR0p3->Integral(); IsoOrphanDimuMu0_dR0p3_Normalized->Scale(scaleMu0_dR0p3); IsoOrphanDimuMu0_dR0p3_Normalized->Write(); }
+    if ( IsoOrphanDimuMu0_dR0p4->Integral() > 0 ){ Double_t scaleMu0_dR0p4 = 1./IsoOrphanDimuMu0_dR0p4->Integral(); IsoOrphanDimuMu0_dR0p4_Normalized->Scale(scaleMu0_dR0p4); IsoOrphanDimuMu0_dR0p4_Normalized->Write(); }
+    if ( IsoOrphanDimuMu0_dR0p5->Integral() > 0 ){ Double_t scaleMu0_dR0p5 = 1./IsoOrphanDimuMu0_dR0p5->Integral(); IsoOrphanDimuMu0_dR0p5_Normalized->Scale(scaleMu0_dR0p5); IsoOrphanDimuMu0_dR0p5_Normalized->Write(); }
+    if ( IsoOrphanDimuMu1_dR0p3->Integral() > 0 ){ Double_t scaleMu1_dR0p3 = 1./IsoOrphanDimuMu1_dR0p3->Integral(); IsoOrphanDimuMu1_dR0p3_Normalized->Scale(scaleMu1_dR0p3); IsoOrphanDimuMu1_dR0p3_Normalized->Write(); }
+    if ( IsoOrphanDimuMu1_dR0p4->Integral() > 0 ){ Double_t scaleMu1_dR0p4 = 1./IsoOrphanDimuMu1_dR0p4->Integral(); IsoOrphanDimuMu1_dR0p4_Normalized->Scale(scaleMu1_dR0p4); IsoOrphanDimuMu1_dR0p4_Normalized->Write(); }
+    if ( IsoOrphanDimuMu1_dR0p5->Integral() > 0 ){ Double_t scaleMu1_dR0p5 = 1./IsoOrphanDimuMu1_dR0p5->Integral(); IsoOrphanDimuMu1_dR0p5_Normalized->Scale(scaleMu1_dR0p5); IsoOrphanDimuMu1_dR0p5_Normalized->Write(); }
+    if ( IsoOrphan->Integral() > 0 ){ Double_t scaleOrphan = 1./IsoOrphan->Integral(); IsoOrphanNormalized->Scale(scaleOrphan); IsoOrphanNormalized->Write(); }
+  }//end if ( PlotIso )
 
-     TH1F *IsoOrphanDimuNormalized = (TH1F*)IsoOrphanDimu->Clone("IsoOrphanDimuNormalized");
-     TH1F *IsoOrphanDimuMu0_dR0p3_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p3->Clone("IsoOrphanDimuMu0_dR0p3_Normalized");
-     TH1F *IsoOrphanDimuMu0_dR0p4_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p4->Clone("IsoOrphanDimuMu0_dR0p4_Normalized");
-     TH1F *IsoOrphanDimuMu0_dR0p5_Normalized = (TH1F*)IsoOrphanDimuMu0_dR0p5->Clone("IsoOrphanDimuMu0_dR0p5_Normalized");
-     TH1F *IsoOrphanDimuMu1_dR0p3_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p3->Clone("IsoOrphanDimuMu1_dR0p3_Normalized");
-     TH1F *IsoOrphanDimuMu1_dR0p4_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p4->Clone("IsoOrphanDimuMu1_dR0p4_Normalized");
-     TH1F *IsoOrphanDimuMu1_dR0p5_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p5->Clone("IsoOrphanDimuMu1_dR0p5_Normalized");
-     TH1F *IsoOrphanNormalized = (TH1F*)IsoOrphan->Clone("IsoOrphanNormalized");
-     //Protect against 0 entry
-     if ( IsoOrphanDimu->Integral() > 0 ){ Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral(); IsoOrphanDimuNormalized->Scale(scaleOrphanDimu); IsoOrphanDimuNormalized->Write(); }
-     if ( IsoOrphanDimuMu0_dR0p3->Integral() > 0 ){ Double_t scaleMu0_dR0p3 = 1./IsoOrphanDimuMu0_dR0p3->Integral(); IsoOrphanDimuMu0_dR0p3_Normalized->Scale(scaleMu0_dR0p3); IsoOrphanDimuMu0_dR0p3_Normalized->Write(); }
-     if ( IsoOrphanDimuMu0_dR0p4->Integral() > 0 ){ Double_t scaleMu0_dR0p4 = 1./IsoOrphanDimuMu0_dR0p4->Integral(); IsoOrphanDimuMu0_dR0p4_Normalized->Scale(scaleMu0_dR0p4); IsoOrphanDimuMu0_dR0p4_Normalized->Write(); }
-     if ( IsoOrphanDimuMu0_dR0p5->Integral() > 0 ){ Double_t scaleMu0_dR0p5 = 1./IsoOrphanDimuMu0_dR0p5->Integral(); IsoOrphanDimuMu0_dR0p5_Normalized->Scale(scaleMu0_dR0p5); IsoOrphanDimuMu0_dR0p5_Normalized->Write(); }
-     if ( IsoOrphanDimuMu1_dR0p3->Integral() > 0 ){ Double_t scaleMu1_dR0p3 = 1./IsoOrphanDimuMu1_dR0p3->Integral(); IsoOrphanDimuMu1_dR0p3_Normalized->Scale(scaleMu1_dR0p3); IsoOrphanDimuMu1_dR0p3_Normalized->Write(); }
-     if ( IsoOrphanDimuMu1_dR0p4->Integral() > 0 ){ Double_t scaleMu1_dR0p4 = 1./IsoOrphanDimuMu1_dR0p4->Integral(); IsoOrphanDimuMu1_dR0p4_Normalized->Scale(scaleMu1_dR0p4); IsoOrphanDimuMu1_dR0p4_Normalized->Write(); }
-     if ( IsoOrphanDimuMu1_dR0p5->Integral() > 0 ){ Double_t scaleMu1_dR0p5 = 1./IsoOrphanDimuMu1_dR0p5->Integral(); IsoOrphanDimuMu1_dR0p5_Normalized->Scale(scaleMu1_dR0p5); IsoOrphanDimuMu1_dR0p5_Normalized->Write(); }
-     if ( IsoOrphan->Integral() > 0 ){ Double_t scaleOrphan = 1./IsoOrphan->Integral(); IsoOrphanNormalized->Scale(scaleOrphan); IsoOrphanNormalized->Write(); }
+  if( Model1DTemplate ){
+    Mass1DTemplate->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
+    Mass1DTemplate->GetYaxis()->SetTitle("Events/0.1GeV");
+    Mass1DTemplate->Write();
+    TH1F *Mass1DTemplateNormalized = (TH1F*)Mass1DTemplate->Clone("Mass1DTemplateNormalized");
+    if ( Mass1DTemplate->Integral() > 0 ){ Double_t scale1DTemplate = 1./Mass1DTemplate->Integral(); Mass1DTemplateNormalized->Scale(scale1DTemplate); Mass1DTemplateNormalized->Write(); }
+  }//end if ( Model1DTemplate )
 
-   }//end if ( PlotIso )
-
-   if(Model1DTemplate){
-     Mass1DTemplate->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
-     Mass1DTemplate->GetYaxis()->SetTitle("Events/0.1GeV");
-     Mass1DTemplate->Write();
-     TH1F *Mass1DTemplateNormalized = (TH1F*)Mass1DTemplate->Clone("Mass1DTemplateNormalized");
-     if ( Mass1DTemplate->Integral() > 0 ){ Double_t scale1DTemplate = 1./Mass1DTemplate->Integral(); Mass1DTemplateNormalized->Scale(scale1DTemplate); Mass1DTemplateNormalized->Write(); }
-   }//end if ( Model1DTemplate )
-
-   myPlot.Close();
+  myPlot.Close();
 
 }//end efficiency function
 
