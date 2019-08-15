@@ -68,6 +68,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   bool verbose(true);
   bool CheckRecoVtx(false);
   bool ModelBKGShape(false);
+  bool Model1DTemplate(false);
   bool ModelSRWidth(false);
   bool PlotIso(false);
   bool PerEventTriggerEff(false);
@@ -118,7 +119,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  is2DiMuonsFittedVtxOK;
   Bool_t  is2DiMuonsMassOK;
 
-  Bool_t  is2DiMuonHLTFired;
+  Bool_t  isSignalHLTFired;
   Bool_t  isSignalHLTL1Fired;
   Float_t diMuonC_IsoTk_FittedVtx;
   Float_t diMuonF_IsoTk_FittedVtx;
@@ -210,10 +211,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *BKGShapeCRmassFScaled = new TH1F("BKGShapeCRmassFScaled","",300,0.0,60.0);
 
   TH1F *DimuMass = new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
-
   TH1F *MassC = new TH1F("MassC","",600,0.0,60.0);//binning 0.1 GeV
   TH1F *MassF = new TH1F("MassF","",600,0.0,60.0);//binning 0.1 GeV
-  TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass","",600,0.0,60.0);//binning 0.2GeV
 
   TH1F *IsoDimuC = new TH1F("IsoDimuC","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoDimuF = new TH1F("IsoDimuF","",1000,0.0,100.0);//binning 0.1 GeV
@@ -229,6 +228,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *IsoDimuFMu1_dR0p3 = new TH1F("IsoDimuFMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoDimuFMu1_dR0p4 = new TH1F("IsoDimuFMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoDimuFMu1_dR0p5 = new TH1F("IsoDimuFMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+
+  TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass","",600,0.0,60.0);//binning 0.1GeV
+  TH1F *Mass1DTemplate = new TH1F("Mass1DTemplate","",600,0.0,60.0);//binning 0.1GeV
 
   TH1F *IsoOrphanDimu = new TH1F("IsoOrphanDimu","",1000,0.0,100.0);//binning 0.1 GeV
   TH1F *IsoOrphanDimuMu0_dR0p3 = new TH1F("IsoOrphanDimuMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
@@ -275,7 +277,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 	t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
 	t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
 	t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
-	t->SetBranchAddress("isDiMuonHLTFired",&is2DiMuonHLTFired);
+	t->SetBranchAddress("isDiMuonHLTFired",&isSignalHLTFired);
   t->SetBranchAddress("isSignalHLTL1Fired",&isSignalHLTL1Fired);
 	t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
 	t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
@@ -371,7 +373,7 @@ void efficiency(const std::vector<std::string>& dirNames)
         leading_eta_pass_basic->Fill(selMu0_eta);
         leading_phi_pass_basic->Fill(selMu0_phi);
 
-        if ( is2DiMuonHLTFired ) {
+        if ( isSignalHLTFired ) {
           HLT_leading_pt_pass_basic->Fill(selMu0_pT);
           HLT_leading_eta_pass_basic->Fill(selMu0_eta);
           HLT_leading_phi_pass_basic->Fill(selMu0_phi);
@@ -411,7 +413,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                     leading_eta_pass_all->Fill(selMu0_eta);
                     leading_phi_pass_all->Fill(selMu0_phi);
 
-                    if ( is2DiMuonHLTFired ) {
+                    if ( isSignalHLTFired ) {
                       HLT_leading_pt_pass_all->Fill(selMu0_pT);
                       HLT_leading_eta_pass_all->Fill(selMu0_eta);
                       HLT_leading_phi_pass_all->Fill(selMu0_phi);
@@ -425,7 +427,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
                   }//end if PerEventTriggerEff
 
-                  if( is2DiMuonHLTFired ) {
+                  if( isSignalHLTFired ) {
                     counter[k][15]++;
 
                     if( ModelSRWidth ) {
@@ -484,13 +486,12 @@ void efficiency(const std::vector<std::string>& dirNames)
     }//end for i entries
 
     //Loop over orphan-dimuon tree
-
     mentries = o->GetEntries();
 		for( int j = 0; j < mentries; j++ ){
       if ( (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
 		  o->GetEntry(j);
-      //Pass offline basic selections, same as signal
-		  if(orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu){
+      //Pass offline basic selections, same as signal for isolation cut study
+		  if(PlotIso && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu){
         OrphanDimuMass->Fill(orph_dimu_mass);
         IsoOrphanDimu->Fill(orph_dimu_isoTk);
         IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
@@ -500,6 +501,11 @@ void efficiency(const std::vector<std::string>& dirNames)
         IsoOrphanDimuMu1_dR0p4->Fill(orph_dimu_Mu1_isoTk0p4);
         IsoOrphanDimuMu1_dR0p5->Fill(orph_dimu_Mu1_isoTk0p5);
         IsoOrphan->Fill(orph_isoTk);
+      }
+      //Pass same cut as signal, for study 1-D template distribution
+      if(Model1DTemplate && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu &&
+         isSignalHLTFired && IsoOrphanDimuMu0_dR0p3 >= 0.0 && IsoOrphanDimuMu0_dR0p3 < 1.5){
+           Mass1DTemplate->Fill(orph_dimu_mass);
       }
     }//end for j entries
 
@@ -713,7 +719,7 @@ void efficiency(const std::vector<std::string>& dirNames)
      if ( IsoDimuFMu1_dR0p5->Integral() > 0 ){ Double_t scaleFMu1_dR0p5 = 1./IsoDimuFMu1_dR0p5->Integral(); IsoDimuFMu1_dR0p5_Normalized->Scale(scaleFMu1_dR0p5); IsoDimuFMu1_dR0p5_Normalized->Write(); }
 
      OrphanDimuMass->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
-     OrphanDimuMass->GetYaxis()->SetTitle("Events/0.2GeV");
+     OrphanDimuMass->GetYaxis()->SetTitle("Events/0.1GeV");
      OrphanDimuMass->Write();
      IsoOrphanDimu->Write();
      IsoOrphanDimuMu0_dR0p3->Write();
@@ -743,6 +749,14 @@ void efficiency(const std::vector<std::string>& dirNames)
      if ( IsoOrphan->Integral() > 0 ){ Double_t scaleOrphan = 1./IsoOrphan->Integral(); IsoOrphanNormalized->Scale(scaleOrphan); IsoOrphanNormalized->Write(); }
 
    }//end if ( PlotIso )
+
+   if(Model1DTemplate){
+     Mass1DTemplate->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
+     Mass1DTemplate->GetYaxis()->SetTitle("Events/0.1GeV");
+     Mass1DTemplate->Write();
+     TH1F *Mass1DTemplateNormalized = (TH1F*)Mass1DTemplate->Clone("Mass1DTemplateNormalized");
+     if ( Mass1DTemplate->Integral() > 0 ){ Double_t scale1DTemplate = 1./Mass1DTemplate->Integral(); Mass1DTemplateNormalized->Scale(scale1DTemplate); Mass1DTemplateNormalized->Write(); }
+   }//end if ( Model1DTemplate )
 
    myPlot.Close();
 

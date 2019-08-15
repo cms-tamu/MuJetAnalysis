@@ -377,10 +377,10 @@ private:
   Int_t  m_events2SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
 
   Bool_t b_is3SelMu8;
-  Int_t  m_events3SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
+  Int_t  m_events3SelMu8;  // ... with 3 selected reco muon: pT > 8 GeV,  |eta| < 2.4
 
   Bool_t b_is4SelMu8;
-  Int_t  m_events4SelMu8;  // ... with 2 selected reco muon: pT > 8 GeV,  |eta| < 2.4
+  Int_t  m_events4SelMu8;  // ... with 4 selected reco muon: pT > 8 GeV,  |eta| < 2.4
 
   Bool_t b_is2MuJets;
   Int_t  m_events2MuJets;  // ... with 2 muon jets
@@ -396,7 +396,6 @@ private:
   Bool_t b_isSignalHLTL1Fired;
 
   Bool_t b_is2DiMuonsMassOK_FittedVtx;
-  //Bool_t b_is2DiMuonsMassOK_ConsistentVtx;
   Bool_t b_isVertexOK;
 
   // Reco branches in ROOT tree (they all start with b_)
@@ -497,7 +496,6 @@ private:
   Float_t b_diMuonFMu1_IsoTk0p4_FittedVtx;
   Float_t b_diMuonFMu1_IsoTk0p5_FittedVtx;
 
-  //bool runDisplacedVtxFinder_;
   bool skimOutput_; //fill only events with 2 good dimuons
   bool useFinalDecision_;//L1 fin-OR
 
@@ -533,17 +531,10 @@ private:
   Bool_t  m_orphan_AllTrackerMu;
   Float_t  m_orphan_PtOrph;
   Float_t  m_orphan_EtaOrph;
-  //Float_t  m_orphan_PhiOrph;
   Float_t  m_orphan_PtMu0;
   Float_t  m_orphan_EtaMu0;
-  //Float_t  m_orphan_PhiMu0;
   Float_t  m_orphan_PtMu1;
   Float_t  m_orphan_EtaMu1;
-  //Float_t  m_orphan_PhiMu1;
-  //Float_t  m_orphan_PtMu01;
-  //Float_t  m_orphan_EtaMu01;
-  //Float_t  m_orphan_PhiMu01;
-  //Float_t  m_orphan_DRdiMuOrph;
 };
 
 CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfig):
@@ -637,8 +628,6 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   //Fill trigger histo
   histo_name = true;
   NameAndNumb.clear();
-
-  //runDisplacedVtxFinder_ = iConfig.getParameter<bool>("runDisplacedVtxFinder");
 
   param_ = iConfig;
   measurementTrkToken_ = consumes<MeasurementTrackerEvent>(iConfig.getParameter<edm::InputTag>("MeasurementTrackerEvent"));
@@ -844,7 +833,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       }
 
       // Check if gen particle is new light boson
-
       if (
         ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 36 ) ||
 	      ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 54 ) ||
@@ -855,7 +843,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       ) {
         genA_unsorted.push_back(&(*iGenParticle));
       }
-
     }//end loop over gen particle
 
     if ( genH.size() == 1 ) {
@@ -1571,7 +1558,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuonC_FittedVtx_pz  = diMuonC->vertexMomentum().z();
     b_diMuonC_FittedVtx_eta = diMuonC->vertexMomentum().eta();
     b_diMuonC_FittedVtx_phi = diMuonC->vertexMomentum().phi();
-    //vx,y,z seem to be propagated back to the beam line/IP, they shouldn't be! TO BE FIXED
     b_diMuonC_FittedVtx_vx  = diMuonC->vertexPoint().x();
     b_diMuonC_FittedVtx_vy  = diMuonC->vertexPoint().y();
     b_diMuonC_FittedVtx_vz  = diMuonC->vertexPoint().z();
@@ -1588,7 +1574,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuonF_FittedVtx_pz  = diMuonF->vertexMomentum().z();
     b_diMuonF_FittedVtx_eta = diMuonF->vertexMomentum().eta();
     b_diMuonF_FittedVtx_phi = diMuonF->vertexMomentum().phi();
-    //vx,y,z seem to be propagated back to the beam line/IP, they shouldn't be! TO BE FIXED
     b_diMuonF_FittedVtx_vx  = diMuonF->vertexPoint().x();
     b_diMuonF_FittedVtx_vy  = diMuonF->vertexPoint().y();
     b_diMuonF_FittedVtx_vz  = diMuonF->vertexPoint().z();
@@ -1740,9 +1725,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   // Cut on dimuon masses - use fitted vertexes
   //* 2016 and before: fabs(massC-massF) < 5 * [0.026+0.013*(m1+m2)/2]
-  //* Run2 (2017+2018): Poly-1 Fit (relaxed) by combining all MSSMD, NMSSM and ALP mass points:
-  //  fabs(massC-massF) < 3 * {0.003756 + 0.008613 * (massC+massF)/2 }
-  //  https://docs.google.com/spreadsheets/d/10qXKHSw9QLrpPm2s0pASCbB27k6kVyEtTEwYi_oTra0/edit?usp=sharing
   //* Run2 (2017+2018): Poly-2 Fit from 2017 ALP signal samples (currently adopted below):
   //  fabs(massC-massF) < 3 * {0.003044 + 0.007025 * (massC+massF)/2 + 0.000053 * [(massC+massF)/2]^2}
   b_is2DiMuonsMassOK_FittedVtx = false;
@@ -2129,8 +2111,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       m_orphan_PtMu1   = muJet->muon(1)->pt();
       m_orphan_EtaMu0  = muJet->muon(0)->eta();
       m_orphan_EtaMu1  = muJet->muon(1)->eta();
-      //m_orphan_PhiMu0  = muJet->muon(0)->phi();
-      //m_orphan_PhiMu1  = muJet->muon(1)->phi();
       m_orphan_dimu_mass = muJet->mass();
 
       //std::cout << "orphans[0] innerTrack dz: " <<orphans[0]->innerTrack()->dz(beamSpot->position())<<"; isTrackerMuon: "<< orphans[0]->isTrackerMuon() << std::endl;
@@ -2145,16 +2125,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           ( m_orphan_PtMu1  > m_threshold_Mu17_pT && fabs( m_orphan_EtaMu1 ) < 0.9 ) ||
           ( m_orphan_PtOrph > m_threshold_Mu17_pT && fabs( m_orphan_EtaOrph) < 0.9 )
         ) m_orphan_passOffLineSelPtEta = true;
-
-/*
-      TLorentzVector mymu0, mymu1;
-      mymu0.SetPtEtaPhiM(m_orphan_PtMu0,m_orphan_EtaMu0,m_orphan_PhiMu0,0);
-      mymu1.SetPtEtaPhiM(m_orphan_PtMu1,m_orphan_EtaMu1,m_orphan_PhiMu1,0);
-      m_orphan_PtMu01   = (mymu0+mymu1).Pt();
-      m_orphan_EtaMu01  = (mymu0+mymu1).Eta();
-      m_orphan_PhiMu01  = (mymu0+mymu1).Phi();
-      m_orphan_DRdiMuOrph  = sqrt( pow(m_orphan_EtaMu01-m_orphan_EtaOrph,2) + pow(TVector2::Phi_mpi_pi(m_orphan_PhiMu01-m_orphan_PhiOrph),2) );
-*/
 
       double triPt[3]  = {m_orphan_PtMu0, m_orphan_PtMu1, m_orphan_PtOrph};
       double triEta[3] = {fabs( m_orphan_EtaMu0 ), fabs( m_orphan_EtaMu1 ), fabs( m_orphan_EtaOrph)};
