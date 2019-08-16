@@ -166,6 +166,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  nRecoMu;
 
   Float_t orph_dimu_mass;
+  Int_t containstrig;//high pT trigger mu obj is the orphan
+  Int_t containstrig2;//high pT trigger mu obj is in the dimu
   Float_t orph_dimu_isoTk;
   Float_t orph_dimu_Mu0_isoTk0p3;
   Float_t orph_dimu_Mu0_isoTk0p4;
@@ -278,7 +280,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 	t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
 	t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
 	t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
-	t->SetBranchAddress("isDiMuonHLTFired",&isSignalHLTFired);
+	t->SetBranchAddress("isSignalHLTFired",&isSignalHLTFired);
   t->SetBranchAddress("isSignalHLTL1Fired",&isSignalHLTL1Fired);
 	t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
 	t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
@@ -319,6 +321,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   //Get branch from orphan-dimuon tree
   o->SetBranchAddress("orph_dimu_mass",&orph_dimu_mass);
+  o->SetBranchAddress("containstrig",&containstrig);
+  o->SetBranchAddress("containstrig2",&containstrig2);
   o->SetBranchAddress("orph_dimu_isoTk",&orph_dimu_isoTk);
   o->SetBranchAddress("orph_dimu_Mu0_isoTk0p3",&orph_dimu_Mu0_isoTk0p3);
   o->SetBranchAddress("orph_dimu_Mu0_isoTk0p4",&orph_dimu_Mu0_isoTk0p4);
@@ -512,7 +516,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
     //Pass same cut as signal, for study 1-D template distribution
     if( Model1DTemplate && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu &&
-      isSignalHLTFired && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
+       (containstrig > 0 || containstrig2 > 0) && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
         Mass1DTemplate->Fill(orph_dimu_mass);
     }
   }//end for j entries

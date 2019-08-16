@@ -390,7 +390,7 @@ private:
 
   Bool_t b_is2DiMuonsFittedVtxOK;
 
-  Bool_t b_isDiMuonHLTFired;
+  Bool_t b_isSignalHLTFired;
   Bool_t b_isControlHLT16Fired;
   Bool_t b_isControlHLT6Fired;
   Bool_t b_isSignalHLTL1Fired;
@@ -1625,7 +1625,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
 
   // HLT cut
-  b_isDiMuonHLTFired = false;
+  b_isSignalHLTFired = false;
   b_isControlHLT16Fired = false;
   b_isControlHLT6Fired = false;
   b_hltPaths.clear();
@@ -1649,7 +1649,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         if ( m_debug > 10 ) std::cout << "Signal trigger is "<< p << std::endl;
         if (trigNameStr.find(p) != std::string::npos) {
         if ( m_debug > 10 ) std::cout << "Signal trigger " << p << " fired!" << std::endl;
-          b_isDiMuonHLTFired = true;
+          b_isSignalHLTFired = true;
         }
       }//end for signal hlt
 
@@ -2578,7 +2578,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
   m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
 
-  m_ttree->Branch("isDiMuonHLTFired",               &b_isDiMuonHLTFired,               "isDiMuonHLTFired/O");
+  m_ttree->Branch("isSignalHLTFired",               &b_isSignalHLTFired,               "isSignalHLTFired/O");
   m_ttree->Branch("isControlHLT16Fired",            &b_isControlHLT16Fired,            "isControlHLT16Fired/O");
   m_ttree->Branch("isControlHLT6Fired",             &b_isControlHLT6Fired,             "isControlHLT6Fired/O");
   m_ttree->Branch("isSignalHLTL1Fired",             &b_isSignalHLTL1Fired,             "isSignalHLTL1Fired/O");
@@ -2596,6 +2596,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
     m_ttree_orphan->Branch("orph_dimu_mass", &m_orphan_dimu_mass, "orph_dimu_mass/F");
     m_ttree_orphan->Branch("containstrig", &m_dimuorphan_containstrig, "containstrig/I");
     m_ttree_orphan->Branch("containstrig2", &m_dimuorphan_containstrig2, "containstrig2/I");
+    m_ttree_orphan->Branch("orph_isSignalHLTFired", &b_isSignalHLTFired, "orph_isSignalHLTFired/O");
     m_ttree_orphan->Branch("orph_z", &m_orphan_z, "orph_z/F");
     m_ttree_orphan->Branch("orph_dimu_z", &m_orphan_dimu_z, "orph_dimu_z/F");
     m_ttree_orphan->Branch("orph_isoTk", &m_orphan_isoTk, "orph_isoTk/F");
