@@ -44,7 +44,7 @@ Float_t epsvsalph2[20] = {0.0};
 Float_t epsvsalph[20] = {0.0};
 Float_t epsvalp[20] = {0.0};
 Float_t epsvalp2[20] = {0.0};
-Float_t weight2017 = 36.734*56.36/1000000;//weight2017 = (lumi[fb-1] * Xsection of the process[fb]) / # of MC events for the process
+Float_t weight2017 = 1.0;//weight2017 = (lumi[fb-1] * Xsection of the process[fb]) / # of MC events for the process
 Float_t weight2018 = 1.0;//TBD
 Float_t FitMean = 0.0;
 Float_t FitSigma = 0.0;
@@ -65,6 +65,9 @@ for(int i=0;i<20;i++){
 int k = -1;
 void efficiency(const std::vector<std::string>& dirNames)
 {
+  //=============================================================
+  // Flags to run different plots, by default runs cut-flow-table
+  //=============================================================
   bool verbose(true);
   bool CutFlowTable(true);
   bool CheckRecoVtx(false);
@@ -149,25 +152,31 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  diMuonF_m1_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m2_FittedVtx_hitpix_Phase1;
 
-  Int_t diMuonC_m1_FittedVtx_NonZero_ValidPixelHits;
-  Int_t diMuonC_m2_FittedVtx_NonZero_ValidPixelHits;
-  Int_t diMuonF_m1_FittedVtx_NonZero_ValidPixelHits;
-  Int_t diMuonF_m2_FittedVtx_NonZero_ValidPixelHits;
+  Int_t diMuonC_m1_FittedVtx_ValidPixelHits;
+  Int_t diMuonC_m2_FittedVtx_ValidPixelHits;
+  Int_t diMuonF_m1_FittedVtx_ValidPixelHits;
+  Int_t diMuonF_m2_FittedVtx_ValidPixelHits;
 
-  Int_t diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement;
-  Int_t diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
-  Int_t diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement;
-  Int_t diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement;
+  Int_t diMuonC_m1_FittedVtx_pixelLayersWithMeasurement;
+  Int_t diMuonC_m2_FittedVtx_pixelLayersWithMeasurement;
+  Int_t diMuonF_m1_FittedVtx_pixelLayersWithMeasurement;
+  Int_t diMuonF_m2_FittedVtx_pixelLayersWithMeasurement;
 
-  Float_t  diMuonC_FittedVtx_Lxy;
-  Float_t  diMuonC_FittedVtx_L;
-  Float_t  diMuonF_FittedVtx_Lxy;
-  Float_t  diMuonF_FittedVtx_L;
-  Int_t  nRecoMu;
+  Float_t diMuonC_FittedVtx_Lxy;
+  Float_t diMuonC_FittedVtx_L;
+  Float_t diMuonF_FittedVtx_Lxy;
+  Float_t diMuonF_FittedVtx_L;
+  Int_t nRecoMu;
 
-  Float_t orph_dimu_mass;
+  Bool_t orph_passOffLineSelPtEta;
+  Bool_t orph_AllTrackerMu;
+  Bool_t orph_isSignalHLTFired;
+  Bool_t orph_isVertexOK;
+  Int_t orph_dimu_Mu0_hitpix_Phase1;
+  Int_t orph_dimu_Mu1_hitpix_Phase1;
   Int_t containstrig;//high pT trigger mu obj is the orphan
   Int_t containstrig2;//high pT trigger mu obj is in the dimu
+  Float_t orph_dimu_mass;
   Float_t orph_dimu_isoTk;
   Float_t orph_dimu_Mu0_isoTk0p3;
   Float_t orph_dimu_Mu0_isoTk0p4;
@@ -177,9 +186,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t orph_dimu_Mu1_isoTk0p5;
   Float_t orph_dimu_z;
   Float_t orph_isoTk;
-  Bool_t  orph_passOffLineSelPtEta;
-  Bool_t  orph_passOffLineSelPt1788;
-  Bool_t  orph_AllTrackerMu;
 
   TH2F* Lxy_Residual_GEN_leading_pT = new TH2F("Lxy_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);//cm
   TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH2F("Abs_Lz_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);
@@ -305,14 +311,14 @@ void efficiency(const std::vector<std::string>& dirNames)
 	t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1",&diMuonC_m2_FittedVtx_hitpix_Phase1);
 	t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1",&diMuonF_m1_FittedVtx_hitpix_Phase1);
 	t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1",&diMuonF_m2_FittedVtx_hitpix_Phase1);
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_NonZero_ValidPixelHits",&diMuonC_m1_FittedVtx_NonZero_ValidPixelHits);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_NonZero_ValidPixelHits",&diMuonC_m2_FittedVtx_NonZero_ValidPixelHits);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_NonZero_ValidPixelHits",&diMuonF_m1_FittedVtx_NonZero_ValidPixelHits);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_NonZero_ValidPixelHits",&diMuonF_m2_FittedVtx_NonZero_ValidPixelHits);
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonC_m1_FittedVtx_NonZero_pixelLayersWithMeasurement);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonC_m2_FittedVtx_NonZero_pixelLayersWithMeasurement);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonF_m1_FittedVtx_NonZero_pixelLayersWithMeasurement);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement",&diMuonF_m2_FittedVtx_NonZero_pixelLayersWithMeasurement);
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelHits",&diMuonC_m1_FittedVtx_ValidPixelHits);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelHits",&diMuonC_m2_FittedVtx_ValidPixelHits);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelHits",&diMuonF_m1_FittedVtx_ValidPixelHits);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelHits",&diMuonF_m2_FittedVtx_ValidPixelHits);
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_pixelLayersWithMeasurement",&diMuonC_m1_FittedVtx_pixelLayersWithMeasurement);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_pixelLayersWithMeasurement",&diMuonC_m2_FittedVtx_pixelLayersWithMeasurement);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_pixelLayersWithMeasurement",&diMuonF_m1_FittedVtx_pixelLayersWithMeasurement);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_pixelLayersWithMeasurement",&diMuonF_m2_FittedVtx_pixelLayersWithMeasurement);
   //For checking pixel Hit
   t->SetBranchAddress("diMuonC_FittedVtx_Lxy",&diMuonC_FittedVtx_Lxy);
 	t->SetBranchAddress("diMuonC_FittedVtx_L",&diMuonC_FittedVtx_L);
@@ -320,9 +326,16 @@ void efficiency(const std::vector<std::string>& dirNames)
 	t->SetBranchAddress("diMuonF_FittedVtx_L",&diMuonF_FittedVtx_L);
 
   //Get branch from orphan-dimuon tree
-  o->SetBranchAddress("orph_dimu_mass",&orph_dimu_mass);
+  o->SetBranchAddress("orph_passOffLineSelPtEta",&orph_passOffLineSelPtEta);//offline pT, eta selection same as signal
+  o->SetBranchAddress("orph_AllTrackerMu",&orph_AllTrackerMu);//tracker mu
+  o->SetBranchAddress("orph_isSignalHLTFired",&orph_isSignalHLTFired);
+  o->SetBranchAddress("orph_isVertexOK",&orph_isVertexOK);
+  o->SetBranchAddress("orph_dimu_Mu0_hitpix_Phase1",&orph_dimu_Mu0_hitpix_Phase1);
+  o->SetBranchAddress("orph_dimu_Mu1_hitpix_Phase1",&orph_dimu_Mu1_hitpix_Phase1);
   o->SetBranchAddress("containstrig",&containstrig);
   o->SetBranchAddress("containstrig2",&containstrig2);
+  o->SetBranchAddress("orph_dimu_mass",&orph_dimu_mass);
+  o->SetBranchAddress("orph_dimu_z",&orph_dimu_z);
   o->SetBranchAddress("orph_dimu_isoTk",&orph_dimu_isoTk);
   o->SetBranchAddress("orph_dimu_Mu0_isoTk0p3",&orph_dimu_Mu0_isoTk0p3);
   o->SetBranchAddress("orph_dimu_Mu0_isoTk0p4",&orph_dimu_Mu0_isoTk0p4);
@@ -331,10 +344,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   o->SetBranchAddress("orph_dimu_Mu1_isoTk0p4",&orph_dimu_Mu1_isoTk0p4);
   o->SetBranchAddress("orph_dimu_Mu1_isoTk0p5",&orph_dimu_Mu1_isoTk0p5);
   o->SetBranchAddress("orph_isoTk",&orph_isoTk);
-  o->SetBranchAddress("orph_dimu_z",&orph_dimu_z);
-  o->SetBranchAddress("orph_passOffLineSelPtEta",&orph_passOffLineSelPtEta);//offline high pT mu in barrel
-  o->SetBranchAddress("orph_passOffLineSelPt1788",&orph_passOffLineSelPt1788);//offline pT sel
-  o->SetBranchAddress("orph_AllTrackerMu",&orph_AllTrackerMu);//tracker mu
 
 	nentries = t->GetEntries();
   if( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
@@ -470,10 +479,10 @@ void efficiency(const std::vector<std::string>& dirNames)
 
                     }//end 16: mass consistent
                     else{
-                      //==============================================
-                      //Control region: for bkg comparison on data and MC
-                      //plot BKG shape on mmumu1 and mmumu2
-                      //==============================================
+                      //=====================================================================
+                      //                     2D mass control region
+                      //BKG validation on data and MC for high mass range
+                      //=====================================================================
                       if( ModelBKGShape ) {
                         BKGShapeCR->Fill(massC,massF);
                         BKGShapeCRmassC->Fill(massC);
@@ -502,7 +511,7 @@ void efficiency(const std::vector<std::string>& dirNames)
     o->GetEntry(j);
 
     //Pass offline basic selections, same as signal for isolation cut study
-    if( PlotIso && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu ){
+    if( PlotIso && orph_passOffLineSelPtEta && orph_AllTrackerMu ){
       OrphanDimuMass->Fill(orph_dimu_mass);
       IsoOrphanDimu->Fill(orph_dimu_isoTk);
       IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
@@ -515,7 +524,10 @@ void efficiency(const std::vector<std::string>& dirNames)
     }
 
     //Pass same cut as signal, for study 1-D template distribution
-    if( Model1DTemplate && orph_passOffLineSelPtEta && orph_passOffLineSelPt1788 && orph_AllTrackerMu &&
+    //Note: May need to add orph_dimu_z cut in the future
+    if( Model1DTemplate && orph_passOffLineSelPtEta && orph_AllTrackerMu &&
+        orph_isSignalHLTFired && orph_isVertexOK &&
+        ( orph_dimu_Mu0_hitpix_Phase1 ==1 || orph_dimu_Mu0_hitpix_Phase1==1 ) &&
         orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
         Mass1DTemplate->Fill(orph_dimu_mass);
     }
@@ -563,7 +575,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" is2Dimuons              & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) << TotEff[k][11] << " & " << left << setw(13) << RelEff[k][11]<<" & "<< left << setw(16) << TotEffErr[k][11]  <<" & "<< left << setw(16) << RelEffErr[k][11]   <<" hline "<<endl;
   cout<<" is2DiMuonsPixHitOk      & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) << TotEff[k][12] << " & " << left << setw(13) << RelEff[k][12]<<" & "<< left << setw(16) << TotEffErr[k][12]  <<" & "<< left << setw(16) << RelEffErr[k][12]   <<" hline "<<endl;
   cout<<" is2DiMuonsFittedDzOk    & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) << TotEff[k][13] << " & " << left << setw(13) << RelEff[k][13]<<" & "<< left << setw(16) << TotEffErr[k][13]  <<" & "<< left << setw(16) << RelEffErr[k][13]   <<" hline "<<endl;
-  cout<<" is4MuonsIsolationOK     & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) << TotEff[k][14] << " & " << left << setw(13) << RelEff[k][14]<<" & "<< left << setw(16) << TotEffErr[k][14]  <<" & "<< left << setw(16) << RelEffErr[k][14]   <<" hline "<<endl;
+  cout<<" is2MuonsIsolationOK     & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) << TotEff[k][14] << " & " << left << setw(13) << RelEff[k][14]<<" & "<< left << setw(16) << TotEffErr[k][14]  <<" & "<< left << setw(16) << RelEffErr[k][14]   <<" hline "<<endl;
   cout<<" isSignalHLTFired        & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) << TotEff[k][15] << " & " << left << setw(13) << RelEff[k][15]<<" & "<< left << setw(16) << TotEffErr[k][15]  <<" & "<< left << setw(16) << RelEffErr[k][15]   <<" hline "<<endl;
   cout<<" is2DiMuonsMassOK        & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) << TotEff[k][16] << " & " << left << setw(13) << RelEff[k][16]<<" & "<< left << setw(16) << TotEffErr[k][16]  <<" & "<< left << setw(16) << RelEffErr[k][16]   <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;
