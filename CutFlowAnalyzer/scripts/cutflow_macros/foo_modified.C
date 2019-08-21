@@ -422,10 +422,34 @@ void efficiency(const std::vector<std::string>& dirNames)
                     diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
                   counter[k][14]++;
 
+                  //Note: for this study need to eliminate/relax Iso cut at counter 14, e.g. Iso<100 GeV or Iso>0
+                  if( PlotIso ) {
+                    MassC->Fill(massC);
+                    MassF->Fill(massF);
+                    IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
+                    IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
+                    IsoDimuCMu0_dR0p3->Fill(diMuonCMu0_IsoTk0p3_FittedVtx);
+                    IsoDimuCMu0_dR0p4->Fill(diMuonCMu0_IsoTk0p4_FittedVtx);
+                    IsoDimuCMu0_dR0p5->Fill(diMuonCMu0_IsoTk0p5_FittedVtx);
+                    IsoDimuCMu1_dR0p3->Fill(diMuonCMu1_IsoTk0p3_FittedVtx);
+                    IsoDimuCMu1_dR0p4->Fill(diMuonCMu1_IsoTk0p4_FittedVtx);
+                    IsoDimuCMu1_dR0p5->Fill(diMuonCMu1_IsoTk0p5_FittedVtx);
+                    IsoDimuFMu0_dR0p3->Fill(diMuonFMu0_IsoTk0p3_FittedVtx);
+                    IsoDimuFMu0_dR0p4->Fill(diMuonFMu0_IsoTk0p4_FittedVtx);
+                    IsoDimuFMu0_dR0p5->Fill(diMuonFMu0_IsoTk0p5_FittedVtx);
+                    IsoDimuFMu1_dR0p3->Fill(diMuonFMu1_IsoTk0p3_FittedVtx);
+                    IsoDimuFMu1_dR0p4->Fill(diMuonFMu1_IsoTk0p4_FittedVtx);
+                    IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
+                  }//end PlotIso
+
+                  //========================================================
+                  //PerEventTriggerEff after pass all offline selections except HLT fired
+                  // !!!Note: To be more precise, need to put isSignalHLTFired
+                  //          as the last counter and this section in the second to
+                  //          last counter for these plots to make sense
+                  //========================================================
                   if( PerEventTriggerEff ) {
-                    //pass all offline selections (except HLT fired, otherwise will show 100% all-time for L1 and HLT)
-                    // !!!Note: to be more precise, need to put isSignalHLTFired as the last counter and this section in
-                    //the second to last counter for these plots to make sense
+
                     leading_pt_pass_all->Fill(selMu0_pT);
                     leading_eta_pass_all->Fill(selMu0_eta);
                     leading_phi_pass_all->Fill(selMu0_phi);
@@ -457,32 +481,12 @@ void efficiency(const std::vector<std::string>& dirNames)
                       // All offline analysis selections finished
                       //==============================================
 
-                      //Note to eliminate/relax Iso cut at counter 14, e.g. Iso<50 GeV or Iso>0
-                      if( PlotIso ) {
-                        MassC->Fill(massC);
-                        MassF->Fill(massF);
-                        IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
-                        IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
-                        IsoDimuCMu0_dR0p3->Fill(diMuonCMu0_IsoTk0p3_FittedVtx);
-                        IsoDimuCMu0_dR0p4->Fill(diMuonCMu0_IsoTk0p4_FittedVtx);
-                        IsoDimuCMu0_dR0p5->Fill(diMuonCMu0_IsoTk0p5_FittedVtx);
-                        IsoDimuCMu1_dR0p3->Fill(diMuonCMu1_IsoTk0p3_FittedVtx);
-                        IsoDimuCMu1_dR0p4->Fill(diMuonCMu1_IsoTk0p4_FittedVtx);
-                        IsoDimuCMu1_dR0p5->Fill(diMuonCMu1_IsoTk0p5_FittedVtx);
-                        IsoDimuFMu0_dR0p3->Fill(diMuonFMu0_IsoTk0p3_FittedVtx);
-                        IsoDimuFMu0_dR0p4->Fill(diMuonFMu0_IsoTk0p4_FittedVtx);
-                        IsoDimuFMu0_dR0p5->Fill(diMuonFMu0_IsoTk0p5_FittedVtx);
-                        IsoDimuFMu1_dR0p3->Fill(diMuonFMu1_IsoTk0p3_FittedVtx);
-                        IsoDimuFMu1_dR0p4->Fill(diMuonFMu1_IsoTk0p4_FittedVtx);
-                        IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
-                      }//end PlotIso
-
                     }//end 16: mass consistent
                     else{
-                      //=====================================================================
-                      //                     2D mass control region
+                      //================================================
+                      //               2D mass control region
                       //BKG validation on data and MC for high mass range
-                      //=====================================================================
+                      //=================================================
                       if( ModelBKGShape ) {
                         BKGShapeCR->Fill(massC,massF);
                         BKGShapeCRmassC->Fill(massC);
