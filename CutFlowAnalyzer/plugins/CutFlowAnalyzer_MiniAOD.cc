@@ -1906,61 +1906,53 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement=-1000;
   b_diMuonF_m2_FittedVtx_pixelLayersWithMeasurement=-1000;
 
-  for(uint32_t k=0;k<2;k++){
+  //Note: here probably onlu need to specify diMuC/F !=NULL,
+  //vertexValid requirement is too strong?
+  if ( b_is2DiMuonsFittedVtxOK ) {
+    for(uint32_t k=0;k<2;k++){
 
-    if ( diMuonC->muon(k)->innerTrack().isAvailable() ){
-      const reco::HitPattern& p = diMuonC->muon(k)->innerTrack()->hitPattern();
-      //std::cout << "diMuC Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
-      //std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
-      //std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
-      //std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonC->muon(k)->innerTrack()->vx() << ", " << diMuonC->muon(k)->innerTrack()->vy() << ", " << diMuonC->muon(k)->innerTrack()->vz() << std::endl;
-      //std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonC->muon(k)->innerTrack()->dxy() << ", " << diMuonC->muon(k)->innerTrack()->dz() << std::endl;
+      if ( diMuonC->muon(k)->innerTrack().isAvailable() ){
+        const reco::HitPattern& p = diMuonC->muon(k)->innerTrack()->hitPattern();
 
-      if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
-          p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
-          p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
-          p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
-            if(k==0) b_diMuonC_m1_FittedVtx_hitpix_Phase1 = 1;
-            if(k==1) b_diMuonC_m2_FittedVtx_hitpix_Phase1 = 1;
-      }
-      //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
-      if ( p.numberOfValidPixelHits() > 0 ){
-        if(k==0) b_diMuonC_m1_FittedVtx_ValidPixelHits = 1;
-        if(k==1) b_diMuonC_m2_FittedVtx_ValidPixelHits = 1;
-      }
-      if ( p.pixelLayersWithMeasurement() > 0 ){
-        if(k==0) b_diMuonC_m1_FittedVtx_pixelLayersWithMeasurement = 1;
-        if(k==1) b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement = 1;
-      }
+        if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
+              if(k==0) b_diMuonC_m1_FittedVtx_hitpix_Phase1 = 1;
+              if(k==1) b_diMuonC_m2_FittedVtx_hitpix_Phase1 = 1;
+        }
+        //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
+        if ( p.numberOfValidPixelHits() > 0 ){
+          if(k==0) b_diMuonC_m1_FittedVtx_ValidPixelHits = 1;
+          if(k==1) b_diMuonC_m2_FittedVtx_ValidPixelHits = 1;
+        }
+        if ( p.pixelLayersWithMeasurement() > 0 ){
+          if(k==0) b_diMuonC_m1_FittedVtx_pixelLayersWithMeasurement = 1;
+          if(k==1) b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement = 1;
+        }
+      }//C innerTrack available
 
-    }//C innerTrack available
+      if ( diMuonF->muon(k)->innerTrack().isAvailable() ){
+        const reco::HitPattern& p = diMuonF->muon(k)->innerTrack()->hitPattern();
 
-    if ( diMuonF->muon(k)->innerTrack().isAvailable() ){
-      const reco::HitPattern& p = diMuonF->muon(k)->innerTrack()->hitPattern();
-      //std::cout << "diMuF Mu" << k << "         innerTrk ValidHits: " << p.numberOfValidHits() <<std::endl;
-      //std::cout << "         "     << "           ValidTrackerHits: " << p.numberOfValidTrackerHits() <<std::endl;
-      //std::cout << "         "     << "             ValidPixelHits: " << p.numberOfValidPixelHits() <<std::endl;
-      //std::cout << "         "     << "                (x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", " << diMuonF->muon(k)->innerTrack()->vy() << ", " << diMuonF->muon(k)->innerTrack()->vz() << std::endl;
-      //std::cout << "         "     << "               (dxy,dz)[cm]: " << diMuonF->muon(k)->innerTrack()->dxy() << ", " << diMuonF->muon(k)->innerTrack()->dz() << std::endl;
-
-      if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
-          p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
-          p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
-          p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
-            if(k==0) b_diMuonF_m1_FittedVtx_hitpix_Phase1 = 1;
-            if(k==1) b_diMuonF_m2_FittedVtx_hitpix_Phase1 = 1;
-      }
-      if ( p.numberOfValidPixelHits() > 0 ){
-        if(k==0) b_diMuonF_m1_FittedVtx_ValidPixelHits = 1;
-        if(k==1) b_diMuonF_m2_FittedVtx_ValidPixelHits = 1;
-      }
-      if ( p.pixelLayersWithMeasurement() > 0 ){
-        if(k==0) b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement = 1;
-        if(k==1) b_diMuonF_m2_FittedVtx_pixelLayersWithMeasurement = 1;
-      }
-
-    }//F innerTrack available
-  }//end loop k
+        if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
+            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
+              if(k==0) b_diMuonF_m1_FittedVtx_hitpix_Phase1 = 1;
+              if(k==1) b_diMuonF_m2_FittedVtx_hitpix_Phase1 = 1;
+        }
+        if ( p.numberOfValidPixelHits() > 0 ){
+          if(k==0) b_diMuonF_m1_FittedVtx_ValidPixelHits = 1;
+          if(k==1) b_diMuonF_m2_FittedVtx_ValidPixelHits = 1;
+        }
+        if ( p.pixelLayersWithMeasurement() > 0 ){
+          if(k==0) b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement = 1;
+          if(k==1) b_diMuonF_m2_FittedVtx_pixelLayersWithMeasurement = 1;
+        }
+      }//F innerTrack available
+    }//end loop k
+  }//end b_is2DiMuonsFittedVtxOK
 
   //****************************************************************************
   //                    Control Region Events for BKG Modeling
@@ -2050,9 +2042,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //                      Control Region Event Selection
   //Run 2: 1 dimuon and >=1 orphan muon, need at least 3 muons to fire the HLT
   //===============================================================================
+  const pat::MultiMuon *orphanMuJet = NULL;
   if (b_nMuJets == 1  &&  (*muJets)[0].numberOfDaughters() == 2  &&  b_nOrphans >= 1 ) {
     m_orphan_passOffLineSel = true;
     pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
+    orphanMuJet = &((*muJets)[0]);
     m_orphan_PtOrph  = orphans[0]->pt();
     m_orphan_EtaOrph = orphans[0]->eta();
     m_orphan_PtMu0   = muJet->muon(0)->pt();
@@ -2186,31 +2180,32 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     m_orphan_dimu_Mu0_pixelLayersWithMeasurement=-1000;
     m_orphan_dimu_Mu1_pixelLayersWithMeasurement=-1000;
 
-    for(uint32_t l=0;l<2;l++){
+    if ( orphanMuJet != NULL &&  orphanMuJet->vertexValid() ) {
 
-      if ( muJet->muon(l)->innerTrack().isAvailable() ){
-        const reco::HitPattern& p = muJet->muon(l)->innerTrack()->hitPattern();
+      for(uint32_t l=0;l<2;l++){
+        if ( muJet->muon(l)->innerTrack().isAvailable() ){
+          const reco::HitPattern& p = muJet->muon(l)->innerTrack()->hitPattern();
 
-        if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
-            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
-            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
-            p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
-              if(l==0) m_orphan_dimu_Mu0_hitpix_Phase1 = 1;
-              if(l==1) m_orphan_dimu_Mu1_hitpix_Phase1 = 1;
-        }
-        //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
-        if ( p.numberOfValidPixelHits() > 0 ){
-          if(l==0) m_orphan_dimu_Mu0_ValidPixelHits = 1;
-          if(l==1) m_orphan_dimu_Mu1_ValidPixelHits = 1;
-        }
-        if ( p.pixelLayersWithMeasurement() > 0 ){
-          if(l==0) m_orphan_dimu_Mu0_pixelLayersWithMeasurement = 1;
-          if(l==1) m_orphan_dimu_Mu1_pixelLayersWithMeasurement = 1;
-        }
+          if( p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) ||
+              p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
+              p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
+              p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
+                if(l==0) m_orphan_dimu_Mu0_hitpix_Phase1 = 1;
+                if(l==1) m_orphan_dimu_Mu1_hitpix_Phase1 = 1;
+          }
+          //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
+          if ( p.numberOfValidPixelHits() > 0 ){
+            if(l==0) m_orphan_dimu_Mu0_ValidPixelHits = 1;
+            if(l==1) m_orphan_dimu_Mu1_ValidPixelHits = 1;
+          }
+          if ( p.pixelLayersWithMeasurement() > 0 ){
+            if(l==0) m_orphan_dimu_Mu0_pixelLayersWithMeasurement = 1;
+            if(l==1) m_orphan_dimu_Mu1_pixelLayersWithMeasurement = 1;
+          }
+        }//orphan-dimu innerTrack available
+      }//end for loop l
 
-      }//orphan-dimu innerTrack available
-
-    }//end for loop l
+    }//end if mujet != NULL && has valid vertex
 
   }//end event selection: one dimuon + one orphan
 
