@@ -531,7 +531,7 @@ void efficiency(const std::vector<std::string>& dirNames)
     //Note: May need to add orph_dimu_z cut in the future
     if( Model1DTemplate && orph_passOffLineSelPtEta && orph_AllTrackerMu &&
         orph_isSignalHLTFired && orph_isVertexOK &&
-        ( orph_dimu_Mu0_hitpix_Phase1 ==1 || orph_dimu_Mu0_hitpix_Phase1==1 ) &&
+        ( orph_dimu_Mu0_hitpix_Phase1 == 1 || orph_dimu_Mu1_hitpix_Phase1 == 1 ) &&
         orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
         Mass1DTemplate->Fill(orph_dimu_mass);
     }
