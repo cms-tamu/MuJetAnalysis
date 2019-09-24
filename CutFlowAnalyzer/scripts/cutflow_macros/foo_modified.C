@@ -4,7 +4,7 @@
 //      depending on running cluster limit settings on CPU time, etc
 //To check settings:
 //      Bash: ulimit -H -a, ulimit -S -a; tcsh: limit -h, limit
-//To resolve this on TAMU Brazos, use sintr or srun to get interactive node
+//To resolve this on TAMU Brazos, use sintr --help or srun to get interactive node
 //===========================================================================
 
 #include <iostream>
@@ -44,8 +44,6 @@ Float_t epsvsalph2[20] = {0.0};
 Float_t epsvsalph[20] = {0.0};
 Float_t epsvalp[20] = {0.0};
 Float_t epsvalp2[20] = {0.0};
-Float_t weight2017 = 1.0;//weight2017 = (lumi[fb-1] * Xsection of the process[fb]) / # of MC events for the process
-Float_t weight2018 = 1.0;//TBD
 Float_t FitMean = 0.0;
 Float_t FitSigma = 0.0;
 
@@ -210,14 +208,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* L1_leading_eta_pass_all = new TH1F("L1_leading_eta_pass_all","",50,-2.5,2.5);
   TH1F* L1_leading_phi_pass_all = new TH1F("L1_leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
 
-  //Actual dimu mass starts from 0.2113, ends at 58 GeV; binning 0.2GeV
-  TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",300,0.0,60.0,300,0.0,60.0);
-  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",300,0.0,60.0);
-  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",300,0.0,60.0);
-  //Scaled to Run2 lumi
-  TH2F *BKGShapeCRScaled = new TH2F("BKGShapeCRScaled","",300,0.0,60.0,300,0.0,60.0);
-  TH1F *BKGShapeCRmassCScaled = new TH1F("BKGShapeCRmassCScaled","",300,0.0,60.0);
-  TH1F *BKGShapeCRmassFScaled = new TH1F("BKGShapeCRmassFScaled","",300,0.0,60.0);
+  //For BKG modeling at high mass
+  //Control Region/Validation Region
+  TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",30,0.0,60.0,30,0.0,60.0);
+  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",30,0.0,60.0);
+  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",30,0.0,60.0);
+  //Signal Region
+  TH2F *BKGShapeSR = new TH2F("BKGShapeSR","",30,0.0,60.0,30,0.0,60.0);
+  TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC","",30,0.0,60.0);
+  TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF","",30,0.0,60.0);
 
   TH1F *DimuMass = new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
   TH1F *MassC = new TH1F("MassC","",600,0.0,60.0);//binning 0.1 GeV
@@ -480,20 +479,21 @@ void efficiency(const std::vector<std::string>& dirNames)
                       //==============================================
                       // All offline analysis selections finished
                       //==============================================
-
+                      if( ModelBKGShape ) {
+                        BKGShapeSR->Fill(massC,massF);
+                        BKGShapeSRmassC->Fill(massC);
+                        BKGShapeSRmassF->Fill(massF);
+                      }
                     }//end 16: mass consistent
                     else{
                       //================================================
                       //               2D mass control region
-                      //BKG validation on data and MC for high mass range
+                      //Validation region on data and MC for high mass BKG
                       //=================================================
                       if( ModelBKGShape ) {
                         BKGShapeCR->Fill(massC,massF);
                         BKGShapeCRmassC->Fill(massC);
                         BKGShapeCRmassF->Fill(massF);
-                        BKGShapeCRScaled->Fill(massC,massF,weight2017);
-                        BKGShapeCRmassCScaled->Fill(massC,weight2017);
-                        BKGShapeCRmassFScaled->Fill(massF,weight2017);
                       }//end if ModelBKGShape
 
                     }//end else
@@ -668,9 +668,9 @@ void efficiency(const std::vector<std::string>& dirNames)
     BKGShapeCR->Write();
     BKGShapeCRmassC->Write();
     BKGShapeCRmassF->Write();
-    BKGShapeCRScaled->Write();
-    BKGShapeCRmassCScaled->Write();
-    BKGShapeCRmassFScaled->Write();
+    BKGShapeSR->Write();
+    BKGShapeSRmassC->Write();
+    BKGShapeSRmassF->Write();
   } //end if ( ModelBKGShape )
 
   if ( ModelSRWidth && DimuMass->Integral() > 0 ) {
