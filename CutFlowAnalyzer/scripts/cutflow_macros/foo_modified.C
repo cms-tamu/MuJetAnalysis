@@ -210,13 +210,13 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   //For BKG modeling at high mass 11-59 GeV
   //Control Region/Validation Region
-  TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",24,11.0,59.0,24,11.0,59.0);
-  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",24,11.0,59.0);
-  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",24,11.0,59.0);
+  TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",12,11.0,59.0,12,11.0,59.0);
+  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",12,11.0,59.0);
+  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",12,11.0,59.0);
   //Signal Region
-  TH2F *BKGShapeSR = new TH2F("BKGShapeSR","",24,11.0,59.0,24,11.0,59.0);
-  TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC","",24,11.0,59.0);
-  TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF","",24,11.0,59.0);
+  TH2F *BKGShapeSR = new TH2F("BKGShapeSR","",12,11.0,59.0,12,11.0,59.0);
+  TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC","",12,11.0,59.0);
+  TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF","",12,11.0,59.0);
 
   TH1F *DimuMass = new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
   TH1F *MassC = new TH1F("MassC","",600,0.0,60.0);//binning 0.1 GeV
