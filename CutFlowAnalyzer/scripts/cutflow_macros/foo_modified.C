@@ -84,8 +84,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   addfilesMany(t, dirNames, ext);
   addfilesMany(o, dirNames, ext);
 
-  Float_t diMuonC_Mass;//allows for effective use of architecture with wider formats
-  Float_t diMuonF_Mass;
+  Int_t run;
+  Int_t lumi;
+  Int_t event;
+
   Bool_t  is1GenMu17;
   Bool_t  is2GenMu8;
   Bool_t  is3GenMu8;
@@ -254,8 +256,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   int nentries;//entries in main tree
   int mentries;//entries in orphan tree
 
-  t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
-	t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
+  t->SetBranchAddress("run",&run);
+  t->SetBranchAddress("lumi",&lumi);
+	t->SetBranchAddress("event",&event);
 	t->SetBranchAddress("nRecoMu",&nRecoMu);
   t->SetBranchAddress("is1GenMu17",&is1GenMu17);
 	t->SetBranchAddress("is2GenMu8",&is2GenMu8);
@@ -350,7 +353,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   if( CutFlowTable ){
     for( int i = 0; i < nentries; i++ ){
       t->GetEntry(i);
-      if ( (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
+      if ( verbose && (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
       counter[k][0]++;
 
       //Check vtx significance without any selections
@@ -476,6 +479,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
                     if( is2DiMuonsMassOK ) {
                       counter[k][16]++;
+
                       //==============================================
                       // All offline analysis selections finished
                       //==============================================
@@ -484,6 +488,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                         BKGShapeSRmassC->Fill(massC);
                         BKGShapeSRmassF->Fill(massF);
                       }
+                      //std::cout << "SR run: "<< run << "; lumi: "<< lumi << "; event: "<< event << std::endl;
                     }//end 16: mass consistent
                     else{
                       //================================================
@@ -511,7 +516,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   mentries = o->GetEntries();
   if( verbose ) std::cout << "orphan-dimu tree entries: "<< mentries << std::endl;
   for( int j = 0; j < mentries; j++ ){
-    if ( (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
+    if ( verbose && (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
     o->GetEntry(j);
 
     //Pass offline basic selections, same as signal for isolation cut study
@@ -571,7 +576,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" Lxy<16.0cm && Lz<51.6cm & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) << TotEff[k][5]  << " & " << left << setw(13) << RelEff[k][5] <<" & "<< left << setw(16) << TotEffErr[k][5]   <<" & "<< left << setw(16) << RelEffErr[k][5]    <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;
 
-  cout<<" is1SelMu17              & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) << TotEff[k][6]  << " & " << left << setw(13) << RelEff[k][6] <<" & "<< left << setw(16) << TotEffErr[k][6]   <<" & "<< left << setw(16) << RelEffErr[k][6]    <<" hline "<<endl;
+  cout<<" is1SelMu17Barrel        & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) << TotEff[k][6]  << " & " << left << setw(13) << RelEff[k][6] <<" & "<< left << setw(16) << TotEffErr[k][6]   <<" & "<< left << setw(16) << RelEffErr[k][6]    <<" hline "<<endl;
   cout<<" is2SelMu8               & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) << TotEff[k][7]  << " & " << left << setw(13) << RelEff[k][7] <<" & "<< left << setw(16) << TotEffErr[k][7]   <<" & "<< left << setw(16) << RelEffErr[k][7]    <<" hline "<<endl;
   cout<<" is3SelMu8               & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) << TotEff[k][8]  << " & " << left << setw(13) << RelEff[k][8] <<" & "<< left << setw(16) << TotEffErr[k][8]   <<" & "<< left << setw(16) << RelEffErr[k][8]    <<" hline "<<endl;
   cout<<" is4SelMu8               & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) << TotEff[k][9]  << " & " << left << setw(13) << RelEff[k][9] <<" & "<< left << setw(16) << TotEffErr[k][9]   <<" & "<< left << setw(16) << RelEffErr[k][9]    <<" hline "<<endl;
