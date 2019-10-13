@@ -348,23 +348,43 @@ private:
   unsigned int  m_randomSeed;
   TRandom3      m_trandom3;
 
-  // bb Estimation
   Float_t b_massC;
   Float_t b_massF;
 
   Float_t b_muJetC_Mu0_pt;
-  Float_t b_muJetC_Mu0_eta;
-  Float_t b_muJetC_Mu0_phi;
   Float_t b_muJetC_Mu1_pt;
-  Float_t b_muJetC_Mu1_eta;
-  Float_t b_muJetC_Mu1_phi;
-
   Float_t b_muJetF_Mu0_pt;
-  Float_t b_muJetF_Mu0_eta;
-  Float_t b_muJetF_Mu0_phi;
   Float_t b_muJetF_Mu1_pt;
+
+  Float_t b_muJetC_Mu0_eta;
+  Float_t b_muJetC_Mu1_eta;
+  Float_t b_muJetF_Mu0_eta;
   Float_t b_muJetF_Mu1_eta;
+
+  Float_t b_muJetC_Mu0_phi;
+  Float_t b_muJetC_Mu1_phi;
+  Float_t b_muJetF_Mu0_phi;
   Float_t b_muJetF_Mu1_phi;
+
+  Float_t b_muJetC_Mu0_charge;
+  Float_t b_muJetC_Mu1_charge;
+  Float_t b_muJetF_Mu0_charge;
+  Float_t b_muJetF_Mu1_charge;
+
+  Float_t b_reco4mu_pt;
+  Float_t b_reco4mu_eta;
+  Float_t b_reco4mu_phi;
+  Float_t b_reco4mu_m;
+
+  Float_t b_recoFakeDiMu0_pt;
+  Float_t b_recoFakeDiMu0_eta;
+  Float_t b_recoFakeDiMu0_phi;
+  Float_t b_recoFakeDiMu0_m;
+
+  Float_t b_recoFakeDiMu1_pt;
+  Float_t b_recoFakeDiMu1_eta;
+  Float_t b_recoFakeDiMu1_phi;
+  Float_t b_recoFakeDiMu1_m;
 
   Float_t b_isoC_1mm;
   Float_t b_isoF_1mm;
@@ -1438,22 +1458,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   const pat::MultiMuon *muJetC = NULL;
   const pat::MultiMuon *muJetF = NULL;
   int nMuJetsContainMu17 = 0;
-  b_massC = -999.;
-  b_massF = -999.;
-  b_muJetC_Mu0_pt = -999.;
-  b_muJetC_Mu0_eta = -999.;
-  b_muJetC_Mu0_phi = -999.;
-  b_muJetC_Mu1_pt = -999.;
-  b_muJetC_Mu1_eta = -999.;
-  b_muJetC_Mu1_phi = -999.;
-  b_muJetF_Mu0_pt = -999.;
-  b_muJetF_Mu0_eta = -999.;
-  b_muJetF_Mu0_phi = -999.;
-  b_muJetF_Mu1_pt = -999.;
-  b_muJetF_Mu1_eta = -999.;
-  b_muJetF_Mu1_phi = -999.;
   b_is2MuJets = false;
+
   if ( m_debug > 10 ) std::cout << ">>> Tot No. of Mu Jets: " << b_nMuJets << std::endl;
+
   //Store average no. of daughters in one mujet
   if ( b_nMuJets!=0 ) {
     b_nDaughterPerMuJet  = 0.;
@@ -1509,25 +1517,109 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   }
 
   if ( m_debug > 10 ) std::cout << m_events << " Check if 2 muon jets are dimuons" << std::endl;
+
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons){
     m_events2DiMuons++;
     b_massC = muJetC->mass();
-    b_muJetC_Mu0_pt = muJetC->muon(0)->pt();
-    b_muJetC_Mu0_eta = muJetC->muon(0)->eta();
-    b_muJetC_Mu0_phi = muJetC->muon(0)->phi();
-    b_muJetC_Mu1_pt = muJetC->muon(1)->pt();
-    b_muJetC_Mu1_eta = muJetC->muon(1)->eta();
-    b_muJetC_Mu1_phi = muJetC->muon(1)->phi();
-
     b_massF = muJetF->mass();
+
+    b_muJetC_Mu0_pt = muJetC->muon(0)->pt();
+    b_muJetC_Mu1_pt = muJetC->muon(1)->pt();
     b_muJetF_Mu0_pt = muJetF->muon(0)->pt();
-    b_muJetF_Mu0_eta = muJetF->muon(0)->eta();
-    b_muJetF_Mu0_phi = muJetF->muon(0)->phi();
     b_muJetF_Mu1_pt = muJetF->muon(1)->pt();
+
+    b_muJetC_Mu0_eta = muJetC->muon(0)->eta();
+    b_muJetC_Mu1_eta = muJetC->muon(1)->eta();
+    b_muJetF_Mu0_eta = muJetF->muon(0)->eta();
     b_muJetF_Mu1_eta = muJetF->muon(1)->eta();
+
+    b_muJetC_Mu0_phi = muJetC->muon(0)->phi();
+    b_muJetC_Mu1_phi = muJetC->muon(1)->phi();
+    b_muJetF_Mu0_phi = muJetF->muon(0)->phi();
     b_muJetF_Mu1_phi = muJetF->muon(1)->phi();
 
+    b_muJetC_Mu0_charge = muJetC->muon(0)->charge();
+    b_muJetC_Mu1_charge = muJetC->muon(1)->charge();
+    b_muJetF_Mu0_charge = muJetF->muon(0)->charge();
+    b_muJetF_Mu1_charge = muJetF->muon(1)->charge();
+  } else {
+    b_massC = -999.;
+    b_massF = -999.;
+
+    b_muJetC_Mu0_pt = -999.;
+    b_muJetC_Mu1_pt = -999.;
+    b_muJetF_Mu0_pt = -999.;
+    b_muJetF_Mu1_pt = -999.;
+
+    b_muJetC_Mu0_eta = -999.;
+    b_muJetC_Mu1_eta = -999.;
+    b_muJetF_Mu0_eta = -999.;
+    b_muJetF_Mu1_eta = -999.;
+
+    b_muJetC_Mu1_phi = -999.;
+    b_muJetF_Mu0_phi = -999.;
+    b_muJetC_Mu0_phi = -999.;
+    b_muJetF_Mu1_phi = -999.;
+
+    b_muJetC_Mu0_charge = 0.;
+    b_muJetC_Mu1_charge = 0.;
+    b_muJetF_Mu0_charge = 0.;
+    b_muJetF_Mu1_charge = 0.;
   }
+
+  //Now we have two distinct dimuons, we do a sanity check to reject rare events
+  //where DY muons come with additional muons from FSR/ISR photon,
+  //which could radiate from: (I) protons; (II) DY muons
+  //An example: DY produced mu: #1(+) #2(-); FSR/ISR mu: #3(+) #4(-)
+  //For case (I), reject it by requring the two OS muons from different dimuons
+  //has mass outside the Z range: 81-101 GeV
+  //For case (II), reject it by requiring 4mu mass outside the Z range: 81-101 GeV
+  TLorentzVector diMuonCMu0_4Vect, diMuonCMu1_4Vect, diMuonFMu0_4Vect, diMuonFMu1_4Vect;
+  diMuonCMu0_4Vect.SetPtEtaPhiM(b_muJetC_Mu0_pt, b_muJetC_Mu0_eta, b_muJetC_Mu0_phi, 0.105);
+  diMuonCMu1_4Vect.SetPtEtaPhiM(b_muJetC_Mu1_pt, b_muJetC_Mu1_eta, b_muJetC_Mu1_phi, 0.105);
+  diMuonFMu0_4Vect.SetPtEtaPhiM(b_muJetF_Mu0_pt, b_muJetF_Mu0_eta, b_muJetF_Mu0_phi, 0.105);
+  diMuonFMu1_4Vect.SetPtEtaPhiM(b_muJetF_Mu1_pt, b_muJetF_Mu1_eta, b_muJetF_Mu1_phi, 0.105);
+
+  b_reco4mu_pt  = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).Pt();
+  b_reco4mu_eta = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).Eta();
+  b_reco4mu_phi = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).Phi();
+  b_reco4mu_m   = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).M();
+
+  //Form new dimuons 4-v using muons with oppo. charge from diMuonC and diMuonF
+  if ( (b_muJetC_Mu0_charge * b_muJetF_Mu0_charge < 0) && (b_muJetC_Mu1_charge * b_muJetF_Mu1_charge < 0) ) {
+    b_recoFakeDiMu0_pt  = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).Pt();
+    b_recoFakeDiMu1_pt  = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).Pt();
+    b_recoFakeDiMu0_eta = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).Eta();
+    b_recoFakeDiMu1_eta = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).Eta();
+    b_recoFakeDiMu0_phi = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).Phi();
+    b_recoFakeDiMu1_phi = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).Phi();
+    b_recoFakeDiMu0_m   = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).M();
+    b_recoFakeDiMu1_m   = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).M();
+
+  }
+  else if ( (b_muJetC_Mu0_charge * b_muJetF_Mu1_charge < 0) && (b_muJetC_Mu1_charge * b_muJetF_Mu0_charge < 0) ) {
+    b_recoFakeDiMu0_pt  = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Pt();
+    b_recoFakeDiMu1_pt  = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Pt();
+    b_recoFakeDiMu0_eta = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Eta();
+    b_recoFakeDiMu1_eta = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Eta();
+    b_recoFakeDiMu0_phi = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Phi();
+    b_recoFakeDiMu1_phi = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Phi();
+    b_recoFakeDiMu0_m   = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).M();
+    b_recoFakeDiMu1_m   = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).M();
+  }
+  else {
+    b_recoFakeDiMu0_pt  = -999.;
+    b_recoFakeDiMu1_pt  = -999.;
+    b_recoFakeDiMu0_eta = -999.;
+    b_recoFakeDiMu1_eta = -999.;
+    b_recoFakeDiMu0_phi = -999.;
+    b_recoFakeDiMu1_phi = -999.;
+    b_recoFakeDiMu0_m   = -999.;
+    b_recoFakeDiMu1_m   = -999.;
+  }
+
+  //To do: add selectors for rejecting DY
+
   // fitted vertexes
   b_is2DiMuonsFittedVtxOK = false;
   if ( diMuonC != NULL && diMuonF != NULL ) {
@@ -2554,6 +2646,8 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("muJetC_Mu1_eta",                 &b_muJetC_Mu1_eta,                 "muJetC_Mu1_eta/F");
   m_ttree->Branch("muJetC_Mu0_phi",                 &b_muJetC_Mu0_phi,                 "muJetC_Mu0_phi/F");
   m_ttree->Branch("muJetC_Mu1_phi",                 &b_muJetC_Mu1_phi,                 "muJetC_Mu1_phi/F");
+  m_ttree->Branch("muJetC_Mu0_charge",              &b_muJetC_Mu0_charge,              "muJetC_Mu0_charge/F");
+  m_ttree->Branch("muJetC_Mu1_charge",              &b_muJetC_Mu1_charge,              "muJetC_Mu1_charge/F");
 
   m_ttree->Branch("muJetF_Mu0_pt",                  &b_muJetF_Mu0_pt,                  "muJetF_Mu0_pt/F");
   m_ttree->Branch("muJetF_Mu1_pt",                  &b_muJetF_Mu1_pt,                  "muJetF_Mu1_pt/F");
@@ -2561,6 +2655,22 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("muJetF_Mu1_eta",                 &b_muJetF_Mu1_eta,                 "muJetF_Mu1_eta/F");
   m_ttree->Branch("muJetF_Mu0_phi",                 &b_muJetF_Mu0_phi,                 "muJetF_Mu0_phi/F");
   m_ttree->Branch("muJetF_Mu1_phi",                 &b_muJetF_Mu1_phi,                 "muJetF_Mu1_phi/F");
+  m_ttree->Branch("muJetF_Mu0_charge",              &b_muJetF_Mu0_charge,              "muJetF_Mu0_charge/F");
+  m_ttree->Branch("muJetF_Mu1_charge",              &b_muJetF_Mu1_charge,              "muJetF_Mu1_charge/F");
+
+  m_ttree->Branch("reco4mu_pt",                     &b_reco4mu_pt,                     "reco4mu_pt/F");
+  m_ttree->Branch("reco4mu_eta",                    &b_reco4mu_eta,                    "reco4mu_eta/F");
+  m_ttree->Branch("reco4mu_phi",                    &b_reco4mu_phi,                    "reco4mu_phi/F");
+  m_ttree->Branch("reco4mu_m",                      &b_reco4mu_m,                      "reco4mu_m/F");
+
+  m_ttree->Branch("recoFakeDiMu0_pt",               &b_recoFakeDiMu0_pt,               "recoFakeDiMu0_pt/F");
+  m_ttree->Branch("recoFakeDiMu1_pt",               &b_recoFakeDiMu1_pt,               "recoFakeDiMu1_pt/F");
+  m_ttree->Branch("recoFakeDiMu0_eta",              &b_recoFakeDiMu0_eta,              "recoFakeDiMu0_eta/F");
+  m_ttree->Branch("recoFakeDiMu1_eta",              &b_recoFakeDiMu1_eta,              "recoFakeDiMu1_eta/F");
+  m_ttree->Branch("recoFakeDiMu0_phi",              &b_recoFakeDiMu0_phi,              "recoFakeDiMu0_phi/F");
+  m_ttree->Branch("recoFakeDiMu1_phi",              &b_recoFakeDiMu1_phi,              "recoFakeDiMu1_phi/F");
+  m_ttree->Branch("recoFakeDiMu0_m",                &b_recoFakeDiMu0_m,                "recoFakeDiMu0_m/F");
+  m_ttree->Branch("recoFakeDiMu1_m",                &b_recoFakeDiMu1_m,                "recoFakeDiMu1_m/F");
 
   // RECO Level Selectors
   m_ttree->Branch("is1SelMu17",                     &b_is1SelMu17,                     "is1SelMu17/O");
