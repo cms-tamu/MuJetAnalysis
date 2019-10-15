@@ -1575,40 +1575,46 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //For case (I), reject it by requring the two OS muons from different dimuons
   //has mass outside the Z range: 81-101 GeV
   //For case (II), reject it by requiring 4mu mass outside the Z range: 81-101 GeV
-  TLorentzVector diMuonCMu0_4Vect, diMuonCMu1_4Vect, diMuonFMu0_4Vect, diMuonFMu1_4Vect;
-  diMuonCMu0_4Vect.SetPtEtaPhiM(b_muJetC_Mu0_pt, b_muJetC_Mu0_eta, b_muJetC_Mu0_phi, 0.105);
-  diMuonCMu1_4Vect.SetPtEtaPhiM(b_muJetC_Mu1_pt, b_muJetC_Mu1_eta, b_muJetC_Mu1_phi, 0.105);
-  diMuonFMu0_4Vect.SetPtEtaPhiM(b_muJetF_Mu0_pt, b_muJetF_Mu0_eta, b_muJetF_Mu0_phi, 0.105);
-  diMuonFMu1_4Vect.SetPtEtaPhiM(b_muJetF_Mu1_pt, b_muJetF_Mu1_eta, b_muJetF_Mu1_phi, 0.105);
+  if ( b_is2DiMuons ){//Need to have two dimuons at least
+    TLorentzVector diMuonCMu0_4Vect, diMuonCMu1_4Vect, diMuonFMu0_4Vect, diMuonFMu1_4Vect;
+    diMuonCMu0_4Vect.SetPtEtaPhiM(b_muJetC_Mu0_pt, b_muJetC_Mu0_eta, b_muJetC_Mu0_phi, 0.105);
+    diMuonCMu1_4Vect.SetPtEtaPhiM(b_muJetC_Mu1_pt, b_muJetC_Mu1_eta, b_muJetC_Mu1_phi, 0.105);
+    diMuonFMu0_4Vect.SetPtEtaPhiM(b_muJetF_Mu0_pt, b_muJetF_Mu0_eta, b_muJetF_Mu0_phi, 0.105);
+    diMuonFMu1_4Vect.SetPtEtaPhiM(b_muJetF_Mu1_pt, b_muJetF_Mu1_eta, b_muJetF_Mu1_phi, 0.105);
 
-  b_reco4mu_pt  = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).Pt();
-  b_reco4mu_eta = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).Eta();
-  b_reco4mu_phi = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).Phi();
-  b_reco4mu_m   = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).M();
+    b_reco4mu_pt  = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).Pt();
+    b_reco4mu_eta = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).Eta();
+    b_reco4mu_phi = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).Phi();
+    b_reco4mu_m   = (diMuonCMu0_4Vect + diMuonCMu1_4Vect + diMuonFMu0_4Vect + diMuonFMu1_4Vect).M();
 
-  //Form new dimuons 4-v using muons with oppo. charge from diMuonC and diMuonF
-  if ( (b_muJetC_Mu0_charge * b_muJetF_Mu0_charge < 0) && (b_muJetC_Mu1_charge * b_muJetF_Mu1_charge < 0) ) {
-    b_recoFakeDiMu0_pt  = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).Pt();
-    b_recoFakeDiMu1_pt  = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).Pt();
-    b_recoFakeDiMu0_eta = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).Eta();
-    b_recoFakeDiMu1_eta = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).Eta();
-    b_recoFakeDiMu0_phi = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).Phi();
-    b_recoFakeDiMu1_phi = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).Phi();
-    b_recoFakeDiMu0_m   = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).M();
-    b_recoFakeDiMu1_m   = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).M();
+    //Form new dimuons 4-v using muons with oppo. charge from diMuonC and diMuonF
+    if ( (b_muJetC_Mu0_charge * b_muJetF_Mu0_charge < 0) && (b_muJetC_Mu1_charge * b_muJetF_Mu1_charge < 0) ) {
+      b_recoFakeDiMu0_pt  = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).Pt();
+      b_recoFakeDiMu1_pt  = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).Pt();
+      b_recoFakeDiMu0_eta = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).Eta();
+      b_recoFakeDiMu1_eta = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).Eta();
+      b_recoFakeDiMu0_phi = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).Phi();
+      b_recoFakeDiMu1_phi = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).Phi();
+      b_recoFakeDiMu0_m   = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).M();
+      b_recoFakeDiMu1_m   = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).M();
 
+    }
+    else if ( (b_muJetC_Mu0_charge * b_muJetF_Mu1_charge < 0) && (b_muJetC_Mu1_charge * b_muJetF_Mu0_charge < 0) ) {
+      b_recoFakeDiMu0_pt  = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Pt();
+      b_recoFakeDiMu1_pt  = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Pt();
+      b_recoFakeDiMu0_eta = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Eta();
+      b_recoFakeDiMu1_eta = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Eta();
+      b_recoFakeDiMu0_phi = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Phi();
+      b_recoFakeDiMu1_phi = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Phi();
+      b_recoFakeDiMu0_m   = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).M();
+      b_recoFakeDiMu1_m   = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).M();
+    }
   }
-  else if ( (b_muJetC_Mu0_charge * b_muJetF_Mu1_charge < 0) && (b_muJetC_Mu1_charge * b_muJetF_Mu0_charge < 0) ) {
-    b_recoFakeDiMu0_pt  = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Pt();
-    b_recoFakeDiMu1_pt  = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Pt();
-    b_recoFakeDiMu0_eta = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Eta();
-    b_recoFakeDiMu1_eta = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Eta();
-    b_recoFakeDiMu0_phi = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Phi();
-    b_recoFakeDiMu1_phi = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Phi();
-    b_recoFakeDiMu0_m   = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).M();
-    b_recoFakeDiMu1_m   = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).M();
-  }
-  else {
+  else{
+    b_reco4mu_pt  = -999.;
+    b_reco4mu_eta = -999.;
+    b_reco4mu_phi = -999.;
+    b_reco4mu_m   = -999.;
     b_recoFakeDiMu0_pt  = -999.;
     b_recoFakeDiMu1_pt  = -999.;
     b_recoFakeDiMu0_eta = -999.;
