@@ -33,11 +33,11 @@ using namespace std;
 #include <TMath.h>
 #include "Helpers.h"
 
-int counter[20][17];//samples:20; selections
-Float_t TotEff[20][17];
-Float_t TotEffErr[20][17];
-Float_t RelEff[20][17];
-Float_t RelEffErr[20][17];
+int counter[20][18];//samples:20; selections
+Float_t TotEff[20][18];
+Float_t TotEffErr[20][18];
+Float_t RelEff[20][18];
+Float_t RelEffErr[20][18];
 Float_t epsvsalph1[20] = {0.0};
 Float_t Err[20] = {0.0};
 Float_t epsvsalph2[20] = {0.0};
@@ -50,7 +50,7 @@ Float_t FitSigma = 0.0;
 void setup()
 {
 for(int i=0;i<20;i++){
-  for(int j=0;j<17;j++){
+  for(int j=0;j<18;j++){
     counter[i][j]=0;
     TotEff[i][j]=0.0;
     RelEff[i][j]=0.0;
@@ -547,7 +547,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   }//end for j entries
 
   RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
-  for(int m=0;m<17;m++){
+  for(int m=0;m<18;m++){
     TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
     TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
     if( m>0 ){
