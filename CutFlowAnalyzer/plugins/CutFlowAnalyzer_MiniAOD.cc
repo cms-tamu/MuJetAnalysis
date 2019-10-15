@@ -408,6 +408,7 @@ private:
   Bool_t b_is2DiMuons;
   Int_t  m_events2DiMuons; // ... with 2 dimuons (dimuon = muon jet with 2 muons)
 
+  Bool_t b_isDrellYan;
   Bool_t b_is2DiMuonsFittedVtxOK;
 
   Bool_t b_isSignalHLTFired;
@@ -1618,7 +1619,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_recoFakeDiMu1_m   = -999.;
   }
 
-  //To do: add selectors for rejecting DY
+  //Selectors for rejecting DY events from Z: 81-101 GeV
+  b_isDrellYan = false;
+  if ( (b_recoFakeDiMu0_m > 81 && b_recoFakeDiMu0_m < 101) ||
+       (b_recoFakeDiMu1_m > 81 && b_recoFakeDiMu1_m < 101) ||
+       (b_reco4mu_m > 81 && b_reco4mu_m < 101) ){
+    b_isDrellYan = true;
+  }
 
   // fitted vertexes
   b_is2DiMuonsFittedVtxOK = false;
@@ -2680,6 +2687,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   m_ttree->Branch("is2MuJets",                      &b_is2MuJets,                      "is2MuJets/O");
   m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
+  m_ttree->Branch("isDrellYan",                     &b_isDrellYan,                     "isDrellYan/O");
   m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
 
   m_ttree->Branch("isSignalHLTFired",               &b_isSignalHLTFired,               "isSignalHLTFired/O");
