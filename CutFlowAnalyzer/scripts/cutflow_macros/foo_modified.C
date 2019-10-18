@@ -4,7 +4,7 @@
 //      depending on running cluster limit settings on CPU time, etc
 //To check settings:
 //      Bash: ulimit -H -a, ulimit -S -a; tcsh: limit -h, limit
-//To resolve this on TAMU Brazos, use sintr or srun to get interactive node
+//To resolve this on TAMU Brazos, use sintr --help or srun to get interactive node
 //===========================================================================
 
 #include <iostream>
@@ -33,26 +33,24 @@ using namespace std;
 #include <TMath.h>
 #include "Helpers.h"
 
-int counter[20][17];//samples:20; selections
-Float_t TotEff[20][17];
-Float_t TotEffErr[20][17];
-Float_t RelEff[20][17];
-Float_t RelEffErr[20][17];
+int counter[20][18];//samples:20; selections
+Float_t TotEff[20][18];
+Float_t TotEffErr[20][18];
+Float_t RelEff[20][18];
+Float_t RelEffErr[20][18];
 Float_t epsvsalph1[20] = {0.0};
 Float_t Err[20] = {0.0};
 Float_t epsvsalph2[20] = {0.0};
 Float_t epsvsalph[20] = {0.0};
 Float_t epsvalp[20] = {0.0};
 Float_t epsvalp2[20] = {0.0};
-Float_t weight2017 = 1.0;//weight2017 = (lumi[fb-1] * Xsection of the process[fb]) / # of MC events for the process
-Float_t weight2018 = 1.0;//TBD
 Float_t FitMean = 0.0;
 Float_t FitSigma = 0.0;
 
 void setup()
 {
 for(int i=0;i<20;i++){
-  for(int j=0;j<17;j++){
+  for(int j=0;j<18;j++){
     counter[i][j]=0;
     TotEff[i][j]=0.0;
     RelEff[i][j]=0.0;
@@ -86,8 +84,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   addfilesMany(t, dirNames, ext);
   addfilesMany(o, dirNames, ext);
 
-  Float_t diMuonC_Mass;//allows for effective use of architecture with wider formats
-  Float_t diMuonF_Mass;
+  Int_t run;
+  Int_t lumi;
+  Int_t event;
+
   Bool_t  is1GenMu17;
   Bool_t  is2GenMu8;
   Bool_t  is3GenMu8;
@@ -116,8 +116,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t selMu2_phi;
   Float_t selMu3_phi;
 
-  Bool_t  is2DiMuons;
   Bool_t  is2MuJets;
+  Bool_t  is2DiMuons;
+  Bool_t  isDrellYan;
   Bool_t  isVtxOK;
 
   Bool_t  is2DiMuonsFittedVtxOK;
@@ -210,14 +211,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* L1_leading_eta_pass_all = new TH1F("L1_leading_eta_pass_all","",50,-2.5,2.5);
   TH1F* L1_leading_phi_pass_all = new TH1F("L1_leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
 
-  //Actual dimu mass starts from 0.2113, ends at 58 GeV; binning 0.2GeV
-  TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",300,0.0,60.0,300,0.0,60.0);
-  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",300,0.0,60.0);
-  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",300,0.0,60.0);
-  //Scaled to Run2 lumi
-  TH2F *BKGShapeCRScaled = new TH2F("BKGShapeCRScaled","",300,0.0,60.0,300,0.0,60.0);
-  TH1F *BKGShapeCRmassCScaled = new TH1F("BKGShapeCRmassCScaled","",300,0.0,60.0);
-  TH1F *BKGShapeCRmassFScaled = new TH1F("BKGShapeCRmassFScaled","",300,0.0,60.0);
+  //For BKG modeling at high mass 11-59 GeV
+  //Control Region/Validation Region
+  TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",12,11.0,59.0,12,11.0,59.0);
+  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",12,11.0,59.0);
+  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",12,11.0,59.0);
+  //Signal Region
+  TH2F *BKGShapeSR = new TH2F("BKGShapeSR","",12,11.0,59.0,12,11.0,59.0);
+  TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC","",12,11.0,59.0);
+  TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF","",12,11.0,59.0);
 
   TH1F *DimuMass = new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
   TH1F *MassC = new TH1F("MassC","",600,0.0,60.0);//binning 0.1 GeV
@@ -255,8 +257,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   int nentries;//entries in main tree
   int mentries;//entries in orphan tree
 
-  t->SetBranchAddress("diMuonC_FittedVtx_m",&diMuonC_Mass);
-	t->SetBranchAddress("diMuonF_FittedVtx_m",&diMuonF_Mass);
+  t->SetBranchAddress("run",&run);
+  t->SetBranchAddress("lumi",&lumi);
+	t->SetBranchAddress("event",&event);
 	t->SetBranchAddress("nRecoMu",&nRecoMu);
   t->SetBranchAddress("is1GenMu17",&is1GenMu17);
 	t->SetBranchAddress("is2GenMu8",&is2GenMu8);
@@ -280,9 +283,10 @@ void efficiency(const std::vector<std::string>& dirNames)
 	t->SetBranchAddress("selMu3_phi",&selMu3_phi);
   t->SetBranchAddress("massC",&massC);
 	t->SetBranchAddress("massF",&massF);
-	t->SetBranchAddress("isVertexOK",&isVtxOK);
-	t->SetBranchAddress("is2DiMuons",&is2DiMuons);
 	t->SetBranchAddress("is2MuJets",&is2MuJets);
+  t->SetBranchAddress("is2DiMuons",&is2DiMuons);
+  t->SetBranchAddress("isDrellYan",&isDrellYan);
+  t->SetBranchAddress("isVertexOK",&isVtxOK);
 	t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
 	t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
 	t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
@@ -351,7 +355,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   if( CutFlowTable ){
     for( int i = 0; i < nentries; i++ ){
       t->GetEntry(i);
-      if ( (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
+      if ( verbose && (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
       counter[k][0]++;
 
       //Check vtx significance without any selections
@@ -410,93 +414,98 @@ void efficiency(const std::vector<std::string>& dirNames)
           if( is2DiMuons ){
             counter[k][11]++;
 
-            if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
-              ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
-              //!!! Note: this needs to match counter[k][5] geometry
+            if( !isDrellYan ){
               counter[k][12]++;
 
-              if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
+              if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
+                  ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
+                //!!! Note: this needs to match counter[k][5] geometry
                 counter[k][13]++;
 
-                if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 &&
-                    diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
+                if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
                   counter[k][14]++;
 
-                  //Note: for this study need to eliminate/relax Iso cut at counter 14, e.g. Iso<100 GeV or Iso>0
-                  if( PlotIso ) {
-                    MassC->Fill(massC);
-                    MassF->Fill(massF);
-                    IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
-                    IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
-                    IsoDimuCMu0_dR0p3->Fill(diMuonCMu0_IsoTk0p3_FittedVtx);
-                    IsoDimuCMu0_dR0p4->Fill(diMuonCMu0_IsoTk0p4_FittedVtx);
-                    IsoDimuCMu0_dR0p5->Fill(diMuonCMu0_IsoTk0p5_FittedVtx);
-                    IsoDimuCMu1_dR0p3->Fill(diMuonCMu1_IsoTk0p3_FittedVtx);
-                    IsoDimuCMu1_dR0p4->Fill(diMuonCMu1_IsoTk0p4_FittedVtx);
-                    IsoDimuCMu1_dR0p5->Fill(diMuonCMu1_IsoTk0p5_FittedVtx);
-                    IsoDimuFMu0_dR0p3->Fill(diMuonFMu0_IsoTk0p3_FittedVtx);
-                    IsoDimuFMu0_dR0p4->Fill(diMuonFMu0_IsoTk0p4_FittedVtx);
-                    IsoDimuFMu0_dR0p5->Fill(diMuonFMu0_IsoTk0p5_FittedVtx);
-                    IsoDimuFMu1_dR0p3->Fill(diMuonFMu1_IsoTk0p3_FittedVtx);
-                    IsoDimuFMu1_dR0p4->Fill(diMuonFMu1_IsoTk0p4_FittedVtx);
-                    IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
-                  }//end PlotIso
-
-                  //========================================================
-                  //PerEventTriggerEff after pass all offline selections except HLT fired
-                  // !!!Note: To be more precise, need to put isSignalHLTFired
-                  //          as the last counter and this section in the second to
-                  //          last counter for these plots to make sense
-                  //========================================================
-                  if( PerEventTriggerEff ) {
-
-                    leading_pt_pass_all->Fill(selMu0_pT);
-                    leading_eta_pass_all->Fill(selMu0_eta);
-                    leading_phi_pass_all->Fill(selMu0_phi);
-
-                    if ( isSignalHLTFired ) {
-                      HLT_leading_pt_pass_all->Fill(selMu0_pT);
-                      HLT_leading_eta_pass_all->Fill(selMu0_eta);
-                      HLT_leading_phi_pass_all->Fill(selMu0_phi);
-                    }//HLT fired
-
-                    if ( isSignalHLTL1Fired ) {
-                      L1_leading_pt_pass_all->Fill(selMu0_pT);
-                      L1_leading_eta_pass_all->Fill(selMu0_eta);
-                      L1_leading_phi_pass_all->Fill(selMu0_phi);
-                    }//L1 seeds fired
-
-                  }//end if PerEventTriggerEff
-
-                  if( isSignalHLTFired ) {
+                  if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 &&
+                      diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
                     counter[k][15]++;
 
-                    if( ModelSRWidth ) {
-                      DimuMass->Fill( (massC+massF)/2 );
-                    }//end if ModelSRWidth
+                    //Note: for this study need to eliminate/relax Iso cut at counter 14, e.g. Iso<100 GeV or Iso>0
+                    if( PlotIso ) {
+                      MassC->Fill(massC);
+                      MassF->Fill(massF);
+                      IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
+                      IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
+                      IsoDimuCMu0_dR0p3->Fill(diMuonCMu0_IsoTk0p3_FittedVtx);
+                      IsoDimuCMu0_dR0p4->Fill(diMuonCMu0_IsoTk0p4_FittedVtx);
+                      IsoDimuCMu0_dR0p5->Fill(diMuonCMu0_IsoTk0p5_FittedVtx);
+                      IsoDimuCMu1_dR0p3->Fill(diMuonCMu1_IsoTk0p3_FittedVtx);
+                      IsoDimuCMu1_dR0p4->Fill(diMuonCMu1_IsoTk0p4_FittedVtx);
+                      IsoDimuCMu1_dR0p5->Fill(diMuonCMu1_IsoTk0p5_FittedVtx);
+                      IsoDimuFMu0_dR0p3->Fill(diMuonFMu0_IsoTk0p3_FittedVtx);
+                      IsoDimuFMu0_dR0p4->Fill(diMuonFMu0_IsoTk0p4_FittedVtx);
+                      IsoDimuFMu0_dR0p5->Fill(diMuonFMu0_IsoTk0p5_FittedVtx);
+                      IsoDimuFMu1_dR0p3->Fill(diMuonFMu1_IsoTk0p3_FittedVtx);
+                      IsoDimuFMu1_dR0p4->Fill(diMuonFMu1_IsoTk0p4_FittedVtx);
+                      IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
+                    }//end PlotIso
 
-                    if( is2DiMuonsMassOK ) {
+                    //========================================================
+                    //PerEventTriggerEff after pass all offline selections except HLT fired
+                    // !!!Note: To be more precise, need to put isSignalHLTFired
+                    //          as the last counter and this section in the second to
+                    //          last counter for these plots to make sense
+                    //========================================================
+                    if( PerEventTriggerEff ) {
+                      leading_pt_pass_all->Fill(selMu0_pT);
+                      leading_eta_pass_all->Fill(selMu0_eta);
+                      leading_phi_pass_all->Fill(selMu0_phi);
+
+                      if( isSignalHLTFired ) {
+                        HLT_leading_pt_pass_all->Fill(selMu0_pT);
+                        HLT_leading_eta_pass_all->Fill(selMu0_eta);
+                        HLT_leading_phi_pass_all->Fill(selMu0_phi);
+                      }//HLT fired
+
+                      if ( isSignalHLTL1Fired ) {
+                        L1_leading_pt_pass_all->Fill(selMu0_pT);
+                        L1_leading_eta_pass_all->Fill(selMu0_eta);
+                        L1_leading_phi_pass_all->Fill(selMu0_phi);
+                      }//L1 seeds fired
+                    }//end if PerEventTriggerEff
+
+                    if( isSignalHLTFired ) {
                       counter[k][16]++;
-                      //==============================================
-                      // All offline analysis selections finished
-                      //==============================================
 
-                    }//end 16: mass consistent
-                    else{
-                      //================================================
-                      //               2D mass control region
-                      //BKG validation on data and MC for high mass range
-                      //=================================================
-                      if( ModelBKGShape ) {
-                        BKGShapeCR->Fill(massC,massF);
-                        BKGShapeCRmassC->Fill(massC);
-                        BKGShapeCRmassF->Fill(massF);
-                        BKGShapeCRScaled->Fill(massC,massF,weight2017);
-                        BKGShapeCRmassCScaled->Fill(massC,weight2017);
-                        BKGShapeCRmassFScaled->Fill(massF,weight2017);
-                      }//end if ModelBKGShape
+                      if( ModelSRWidth ) {
+                        DimuMass->Fill( (massC+massF)/2 );
+                      }//end if ModelSRWidth
 
-                    }//end else
+                      if( is2DiMuonsMassOK ) {
+                        counter[k][17]++;
+
+                        //==============================================
+                        // All offline analysis selections finished
+                        //==============================================
+                        if( ModelBKGShape ) {
+                          BKGShapeSR->Fill(massC,massF);
+                          BKGShapeSRmassC->Fill(massC);
+                          BKGShapeSRmassF->Fill(massF);
+                        }
+                        //std::cout << "SR run: "<< run << "; lumi: "<< lumi << "; event: "<< event << std::endl;
+                      }//end 17: mass consistent
+                      else{
+                        //================================================
+                        //               2D mass control region
+                        //Validation region on data and MC for high mass BKG
+                        //=================================================
+                        if( ModelBKGShape ) {
+                          BKGShapeCR->Fill(massC,massF);
+                          BKGShapeCRmassC->Fill(massC);
+                          BKGShapeCRmassF->Fill(massF);
+                        }//end if ModelBKGShape
+
+                      }//end else
+                    }//end 16
                   }//end 15
                 }//end 14
               }//end 13
@@ -511,7 +520,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   mentries = o->GetEntries();
   if( verbose ) std::cout << "orphan-dimu tree entries: "<< mentries << std::endl;
   for( int j = 0; j < mentries; j++ ){
-    if ( (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
+    if ( verbose && (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
     o->GetEntry(j);
 
     //Pass offline basic selections, same as signal for isolation cut study
@@ -531,14 +540,14 @@ void efficiency(const std::vector<std::string>& dirNames)
     //Note: May need to add orph_dimu_z cut in the future
     if( Model1DTemplate && orph_passOffLineSelPtEta && orph_AllTrackerMu &&
         orph_isSignalHLTFired && orph_isVertexOK &&
-        ( orph_dimu_Mu0_hitpix_Phase1 ==1 || orph_dimu_Mu0_hitpix_Phase1==1 ) &&
+        ( orph_dimu_Mu0_hitpix_Phase1 == 1 || orph_dimu_Mu1_hitpix_Phase1 == 1 ) &&
         orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
         Mass1DTemplate->Fill(orph_dimu_mass);
     }
   }//end for j entries
 
   RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
-  for(int m=0;m<17;m++){
+  for(int m=0;m<18;m++){
     TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
     TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
     if( m>0 ){
@@ -553,7 +562,7 @@ void efficiency(const std::vector<std::string>& dirNames)
     }
   }//end Eff calc.
 
-  epsvsalph[k] = counter[k][16]/(counter[k][5]*1.0); //mainvalue of epsilob_rec/alpha_gen
+  epsvsalph[k] = counter[k][17]/(counter[k][5]*1.0); //mainvalue of epsilob_rec/alpha_gen
   cout<<"Here is the cut-flow-table:"<<endl;
   cout<<"epsvsalph[k]:  "<<epsvsalph[k]<<endl;
   Err[k]=   sqrt( (epsvsalph[k]*(1-epsvsalph[k]))/(counter[k][5]*1.0));
@@ -571,17 +580,18 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" Lxy<16.0cm && Lz<51.6cm & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) << TotEff[k][5]  << " & " << left << setw(13) << RelEff[k][5] <<" & "<< left << setw(16) << TotEffErr[k][5]   <<" & "<< left << setw(16) << RelEffErr[k][5]    <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;
 
-  cout<<" is1SelMu17              & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) << TotEff[k][6]  << " & " << left << setw(13) << RelEff[k][6] <<" & "<< left << setw(16) << TotEffErr[k][6]   <<" & "<< left << setw(16) << RelEffErr[k][6]    <<" hline "<<endl;
+  cout<<" is1SelMu17Barrel        & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) << TotEff[k][6]  << " & " << left << setw(13) << RelEff[k][6] <<" & "<< left << setw(16) << TotEffErr[k][6]   <<" & "<< left << setw(16) << RelEffErr[k][6]    <<" hline "<<endl;
   cout<<" is2SelMu8               & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) << TotEff[k][7]  << " & " << left << setw(13) << RelEff[k][7] <<" & "<< left << setw(16) << TotEffErr[k][7]   <<" & "<< left << setw(16) << RelEffErr[k][7]    <<" hline "<<endl;
   cout<<" is3SelMu8               & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) << TotEff[k][8]  << " & " << left << setw(13) << RelEff[k][8] <<" & "<< left << setw(16) << TotEffErr[k][8]   <<" & "<< left << setw(16) << RelEffErr[k][8]    <<" hline "<<endl;
   cout<<" is4SelMu8               & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) << TotEff[k][9]  << " & " << left << setw(13) << RelEff[k][9] <<" & "<< left << setw(16) << TotEffErr[k][9]   <<" & "<< left << setw(16) << RelEffErr[k][9]    <<" hline "<<endl;
   cout<<" isVertexOK              & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) << TotEff[k][10] << " & " << left << setw(13) << RelEff[k][10]<<" & "<< left << setw(16) << TotEffErr[k][10]  <<" & "<< left << setw(16) << RelEffErr[k][10]   <<" hline "<<endl;
   cout<<" is2Dimuons              & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) << TotEff[k][11] << " & " << left << setw(13) << RelEff[k][11]<<" & "<< left << setw(16) << TotEffErr[k][11]  <<" & "<< left << setw(16) << RelEffErr[k][11]   <<" hline "<<endl;
-  cout<<" is2DiMuonsPixHitOk      & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) << TotEff[k][12] << " & " << left << setw(13) << RelEff[k][12]<<" & "<< left << setw(16) << TotEffErr[k][12]  <<" & "<< left << setw(16) << RelEffErr[k][12]   <<" hline "<<endl;
-  cout<<" is2DiMuonsFittedDzOk    & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) << TotEff[k][13] << " & " << left << setw(13) << RelEff[k][13]<<" & "<< left << setw(16) << TotEffErr[k][13]  <<" & "<< left << setw(16) << RelEffErr[k][13]   <<" hline "<<endl;
-  cout<<" is2MuonsIsolationOK     & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) << TotEff[k][14] << " & " << left << setw(13) << RelEff[k][14]<<" & "<< left << setw(16) << TotEffErr[k][14]  <<" & "<< left << setw(16) << RelEffErr[k][14]   <<" hline "<<endl;
-  cout<<" isSignalHLTFired        & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) << TotEff[k][15] << " & " << left << setw(13) << RelEff[k][15]<<" & "<< left << setw(16) << TotEffErr[k][15]  <<" & "<< left << setw(16) << RelEffErr[k][15]   <<" hline "<<endl;
-  cout<<" is2DiMuonsMassOK        & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) << TotEff[k][16] << " & " << left << setw(13) << RelEff[k][16]<<" & "<< left << setw(16) << TotEffErr[k][16]  <<" & "<< left << setw(16) << RelEffErr[k][16]   <<" hline "<<endl;
+  cout<<" isNotDrell-Yan          & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) << TotEff[k][12] << " & " << left << setw(13) << RelEff[k][12]<<" & "<< left << setw(16) << TotEffErr[k][12]  <<" & "<< left << setw(16) << RelEffErr[k][12]   <<" hline "<<endl;
+  cout<<" is2DiMuonsPixHitOk      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) << TotEff[k][13] << " & " << left << setw(13) << RelEff[k][13]<<" & "<< left << setw(16) << TotEffErr[k][13]  <<" & "<< left << setw(16) << RelEffErr[k][13]   <<" hline "<<endl;
+  cout<<" is2DiMuonsFittedDzOk    & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) << TotEff[k][14] << " & " << left << setw(13) << RelEff[k][14]<<" & "<< left << setw(16) << TotEffErr[k][14]  <<" & "<< left << setw(16) << RelEffErr[k][14]   <<" hline "<<endl;
+  cout<<" is2MuonsIsolationOK     & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) << TotEff[k][15] << " & " << left << setw(13) << RelEff[k][15]<<" & "<< left << setw(16) << TotEffErr[k][15]  <<" & "<< left << setw(16) << RelEffErr[k][15]   <<" hline "<<endl;
+  cout<<" isSignalHLTAccepted     & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) << TotEff[k][16] << " & " << left << setw(13) << RelEff[k][16]<<" & "<< left << setw(16) << TotEffErr[k][16]  <<" & "<< left << setw(16) << RelEffErr[k][16]   <<" hline "<<endl;
+  cout<<" is2DiMuonsMassOK        & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) << TotEff[k][17] << " & " << left << setw(13) << RelEff[k][17]<<" & "<< left << setw(16) << TotEffErr[k][17]  <<" & "<< left << setw(16) << RelEffErr[k][17]   <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;
   cout<<" epsilon_rec/alpha_gen   & "<< epsvsalph[k]<<"$\\pm$ "<< Err[k]<<" hline "<<endl;
 
@@ -668,9 +678,9 @@ void efficiency(const std::vector<std::string>& dirNames)
     BKGShapeCR->Write();
     BKGShapeCRmassC->Write();
     BKGShapeCRmassF->Write();
-    BKGShapeCRScaled->Write();
-    BKGShapeCRmassCScaled->Write();
-    BKGShapeCRmassFScaled->Write();
+    BKGShapeSR->Write();
+    BKGShapeSRmassC->Write();
+    BKGShapeSRmassF->Write();
   } //end if ( ModelBKGShape )
 
   if ( ModelSRWidth && DimuMass->Integral() > 0 ) {

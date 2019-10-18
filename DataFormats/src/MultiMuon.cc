@@ -252,8 +252,6 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
 	p4two.SetPtEtaPhiM(muonTracks[1]->pt(), muonTracks[1]->eta(), muonTracks[1]->phi(), 0.105);
   //std::cout << "            Pair mass[GeV]: " << (p4one + p4two).M() <<std::endl;
 
-	//Here it's fitting muons with IP constraints, so it will always be giving a vertex at IP
-	//Which is not true in this case
   KalmanVertexFitter vertexFitter;
   CachingVertex<5> fittedVertex = vertexFitter.vertex(tracksToVertex);
 
