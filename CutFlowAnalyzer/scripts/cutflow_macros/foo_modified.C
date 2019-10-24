@@ -429,9 +429,9 @@ void efficiency(const std::vector<std::string>& dirNames)
             }//end ModelBKGShape
 
             //if( !isDrellYan ){
-            if( !(b_recoFakeDiMu0_m > 81 && b_recoFakeDiMu0_m < 101) &&
-                !(b_recoFakeDiMu1_m > 81 && b_recoFakeDiMu1_m < 101) &&
-                !(b_reco4mu_m > 81 && b_reco4mu_m < 101) ){
+            if( !(recoFakeDiMu0_m > 81 && recoFakeDiMu0_m < 101) &&
+                !(recoFakeDiMu1_m > 81 && recoFakeDiMu1_m < 101) &&
+                !(reco4mu_m > 81 && reco4mu_m < 101) ){
               counter[k][12]++;
 
               if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
