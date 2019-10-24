@@ -33,7 +33,7 @@ using namespace std;
 #include <TMath.h>
 #include "Helpers.h"
 
-int counter[20][18];//samples:20; selections
+int counter[20][18];//samples:20; selections:18
 Float_t TotEff[20][18];
 Float_t TotEffErr[20][18];
 Float_t RelEff[20][18];
@@ -92,25 +92,23 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  is2GenMu8;
   Bool_t  is3GenMu8;
   Bool_t  is4GenMu8;
+  Float_t  genA0_Lxy;//A0:dark photon that contains the most energetic muon; redt: wrt detector
+  Float_t  genA1_Lxy;
+  Float_t  genA0_Lz;
+  Float_t  genA1_Lz;
 
   Bool_t  is1SelMu17;
   Bool_t  is2SelMu8;
   Bool_t  is3SelMu8;
   Bool_t  is4SelMu8;
-
   Float_t selMu0_pT;
   Float_t selMu1_pT;
   Float_t selMu2_pT;
   Float_t selMu3_pT;
-
-  Float_t massC;
-  Float_t massF;
-
   Float_t selMu0_eta;
   Float_t selMu1_eta;
   Float_t selMu2_eta;
   Float_t selMu3_eta;
-
   Float_t selMu0_phi;
   Float_t selMu1_phi;
   Float_t selMu2_phi;
@@ -118,14 +116,19 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   Bool_t  is2MuJets;
   Bool_t  is2DiMuons;
+  Float_t massC;
+  Float_t massF;
+  Float_t reco4mu_m;
+  Float_t recoFakeDiMu0_m;
+  Float_t recoFakeDiMu1_m;
   Bool_t  isDrellYan;
   Bool_t  isVtxOK;
-
-  Bool_t  is2DiMuonsFittedVtxOK;
+  Float_t  diMuons_dz_FittedVtx;
   Bool_t  is2DiMuonsMassOK;
 
   Bool_t  isSignalHLTFired;
   Bool_t  isSignalHLTL1Fired;
+
   Float_t diMuonC_IsoTk_FittedVtx;
   Float_t diMuonF_IsoTk_FittedVtx;
   Float_t diMuonCMu0_IsoTk0p3_FittedVtx;
@@ -134,19 +137,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t diMuonCMu1_IsoTk0p3_FittedVtx;
   Float_t diMuonCMu1_IsoTk0p4_FittedVtx;
   Float_t diMuonCMu1_IsoTk0p5_FittedVtx;
-
   Float_t diMuonFMu0_IsoTk0p3_FittedVtx;
   Float_t diMuonFMu0_IsoTk0p4_FittedVtx;
   Float_t diMuonFMu0_IsoTk0p5_FittedVtx;
   Float_t diMuonFMu1_IsoTk0p3_FittedVtx;
   Float_t diMuonFMu1_IsoTk0p4_FittedVtx;
   Float_t diMuonFMu1_IsoTk0p5_FittedVtx;
-
-  Float_t  genA0_Lxy;//A0:dark photon that contains the most energetic muon; redt: wrt detector
-  Float_t  genA1_Lxy;
-  Float_t  genA0_Lz;
-  Float_t  genA1_Lz;
-  Float_t  diMuons_dz_FittedVtx;
 
   Int_t  diMuonC_m1_FittedVtx_hitpix_Phase1;
   Int_t  diMuonC_m2_FittedVtx_hitpix_Phase1;
@@ -167,7 +163,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t diMuonC_FittedVtx_L;
   Float_t diMuonF_FittedVtx_Lxy;
   Float_t diMuonF_FittedVtx_L;
-  Int_t nRecoMu;
 
   Bool_t orph_passOffLineSelPtEta;
   Bool_t orph_AllTrackerMu;
@@ -175,8 +170,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t orph_isVertexOK;
   Int_t orph_dimu_Mu0_hitpix_Phase1;
   Int_t orph_dimu_Mu1_hitpix_Phase1;
-  Int_t containstrig;//high pT trigger mu obj is the orphan
-  Int_t containstrig2;//high pT trigger mu obj is in the dimu
   Float_t orph_dimu_mass;
   Float_t orph_dimu_isoTk;
   Float_t orph_dimu_Mu0_isoTk0p3;
@@ -188,166 +181,175 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t orph_dimu_z;
   Float_t orph_isoTk;
 
-  TH2F* Lxy_Residual_GEN_leading_pT = new TH2F("Lxy_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);//cm
-  TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH2F("Abs_Lz_Residual_GEN_leading_pT","",150,0.01,300.,300,-300.,300.);
+  TH2F* Lxy_Residual_GEN_leading_pT    = new TH2F("Lxy_Residual_GEN_leading_pT",   "", 150, 0.01, 300., 300, -300., 300.);//cm
+  TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH2F("Abs_Lz_Residual_GEN_leading_pT","", 150, 0.01, 300., 300, -300., 300.);
 
-  TH1F* leading_pt_pass_basic = new TH1F("leading_pt_pass_basic","",50,0.,50.);
-  TH1F* leading_eta_pass_basic = new TH1F("leading_eta_pass_basic","",50,-2.5,2.5);
-  TH1F* leading_phi_pass_basic = new TH1F("leading_phi_pass_basic","",60,-TMath::Pi(),TMath::Pi());
-  TH1F* HLT_leading_pt_pass_basic = new TH1F("HLT_leading_pt_pass_basic","",50,0.,50.);
-  TH1F* HLT_leading_eta_pass_basic = new TH1F("HLT_leading_eta_pass_basic","",50,-2.5,2.5);
-  TH1F* HLT_leading_phi_pass_basic = new TH1F("HLT_leading_phi_pass_basic","",60,-TMath::Pi(),TMath::Pi());
-  TH1F* L1_leading_pt_pass_basic = new TH1F("L1_leading_pt_pass_basic","",50,0.,50.);
-  TH1F* L1_leading_eta_pass_basic = new TH1F("L1_leading_eta_pass_basic","",50,-2.5,2.5);
-  TH1F* L1_leading_phi_pass_basic = new TH1F("L1_leading_phi_pass_basic","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* leading_pt_pass_basic          = new TH1F("leading_pt_pass_basic",         "", 50, 0.,           50.);
+  TH1F* leading_eta_pass_basic         = new TH1F("leading_eta_pass_basic",        "", 50, -2.5,         2.5);
+  TH1F* leading_phi_pass_basic         = new TH1F("leading_phi_pass_basic",        "", 60, -TMath::Pi(), TMath::Pi());
+  TH1F* HLT_leading_pt_pass_basic      = new TH1F("HLT_leading_pt_pass_basic",     "", 50, 0.,           50.);
+  TH1F* HLT_leading_eta_pass_basic     = new TH1F("HLT_leading_eta_pass_basic",    "", 50, -2.5,         2.5);
+  TH1F* HLT_leading_phi_pass_basic     = new TH1F("HLT_leading_phi_pass_basic",    "", 60, -TMath::Pi(), TMath::Pi());
+  TH1F* L1_leading_pt_pass_basic       = new TH1F("L1_leading_pt_pass_basic",      "", 50, 0.,           50.);
+  TH1F* L1_leading_eta_pass_basic      = new TH1F("L1_leading_eta_pass_basic",     "", 50, -2.5,         2.5);
+  TH1F* L1_leading_phi_pass_basic      = new TH1F("L1_leading_phi_pass_basic",     "", 60, -TMath::Pi(), TMath::Pi());
 
-  TH1F* leading_pt_pass_all = new TH1F("leading_pt_pass_all","",50,0.,50.);
-  TH1F* leading_eta_pass_all = new TH1F("leading_eta_pass_all","",50,-2.5,2.5);
-  TH1F* leading_phi_pass_all = new TH1F("leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
-  TH1F* HLT_leading_pt_pass_all = new TH1F("HLT_leading_pt_pass_all","",50,0.,50.);
-  TH1F* HLT_leading_eta_pass_all = new TH1F("HLT_leading_eta_pass_all","",50,-2.5,2.5);
-  TH1F* HLT_leading_phi_pass_all = new TH1F("HLT_leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
-  TH1F* L1_leading_pt_pass_all = new TH1F("L1_leading_pt_pass_all","",50,0.,50.);
-  TH1F* L1_leading_eta_pass_all = new TH1F("L1_leading_eta_pass_all","",50,-2.5,2.5);
-  TH1F* L1_leading_phi_pass_all = new TH1F("L1_leading_phi_pass_all","",60,-TMath::Pi(),TMath::Pi());
+  TH1F* leading_pt_pass_all            = new TH1F("leading_pt_pass_all",           "", 50, 0.,           50.);
+  TH1F* leading_eta_pass_all           = new TH1F("leading_eta_pass_all",          "", 50, -2.5,         2.5);
+  TH1F* leading_phi_pass_all           = new TH1F("leading_phi_pass_all",          "", 60, -TMath::Pi(), TMath::Pi());
+  TH1F* HLT_leading_pt_pass_all        = new TH1F("HLT_leading_pt_pass_all",       "", 50, 0.,           50.);
+  TH1F* HLT_leading_eta_pass_all       = new TH1F("HLT_leading_eta_pass_all",      "", 50, -2.5,         2.5);
+  TH1F* HLT_leading_phi_pass_all       = new TH1F("HLT_leading_phi_pass_all",      "", 60, -TMath::Pi(), TMath::Pi());
+  TH1F* L1_leading_pt_pass_all         = new TH1F("L1_leading_pt_pass_all",        "", 50, 0.,           50.);
+  TH1F* L1_leading_eta_pass_all        = new TH1F("L1_leading_eta_pass_all",       "", 50, -2.5,         2.5);
+  TH1F* L1_leading_phi_pass_all        = new TH1F("L1_leading_phi_pass_all",       "", 60, -TMath::Pi(), TMath::Pi());
 
   //For BKG modeling at high mass 11-59 GeV
   //Control Region/Validation Region
-  TH2F *BKGShapeCR = new TH2F("BKGShapeCR","",12,11.0,59.0,12,11.0,59.0);
-  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC","",12,11.0,59.0);
-  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF","",12,11.0,59.0);
+  TH2F *BKGShapeCR      = new TH2F("BKGShapeCR",      "", 12, 11., 59., 12, 11., 59.);//binning 4 GeV
+  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC", "", 12, 11., 59.);
+  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF", "", 12, 11., 59.);
   //Signal Region
-  TH2F *BKGShapeSR = new TH2F("BKGShapeSR","",12,11.0,59.0,12,11.0,59.0);
-  TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC","",12,11.0,59.0);
-  TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF","",12,11.0,59.0);
+  TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 12, 11., 59., 12, 11., 59.);
+  TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
+  TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 12, 11., 59.);
 
-  TH1F *DimuMass = new TH1F("DimuMass","",6000,0.0,60.0);//binning 0.01 GeV
-  TH1F *MassC = new TH1F("MassC","",600,0.0,60.0);//binning 0.1 GeV
-  TH1F *MassF = new TH1F("MassF","",600,0.0,60.0);//binning 0.1 GeV
+  TH1F *DimuMass = new TH1F("DimuMass", "", 6000, 0., 60.);//binning 0.01 GeV
+  TH1F *MassC    = new TH1F("MassC",    "", 600,  0., 60.);//binning 0.1 GeV
+  TH1F *MassF    = new TH1F("MassF",    "", 600,  0., 60.);
 
-  TH1F *IsoDimuC = new TH1F("IsoDimuC","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuF = new TH1F("IsoDimuF","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuCMu0_dR0p3 = new TH1F("IsoDimuCMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuCMu0_dR0p4 = new TH1F("IsoDimuCMu0_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuCMu0_dR0p5 = new TH1F("IsoDimuCMu0_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuCMu1_dR0p3 = new TH1F("IsoDimuCMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuCMu1_dR0p4 = new TH1F("IsoDimuCMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuCMu1_dR0p5 = new TH1F("IsoDimuCMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuFMu0_dR0p3 = new TH1F("IsoDimuFMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuFMu0_dR0p4 = new TH1F("IsoDimuFMu0_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuFMu0_dR0p5 = new TH1F("IsoDimuFMu0_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuFMu1_dR0p3 = new TH1F("IsoDimuFMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuFMu1_dR0p4 = new TH1F("IsoDimuFMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoDimuFMu1_dR0p5 = new TH1F("IsoDimuFMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *RECO4muMass             = new TH1F("RECO4muMass",             "", 200,  0., 200.);//binning 1 GeV
+  TH1F *RECOFakeLeading2MuMass  = new TH1F("RECOFakeLeading2MuMass",  "", 200,  0., 200.);
+  TH1F *RECOFakeTrailing2MuMass = new TH1F("RECOFakeTrailing2MuMass", "", 200,  0., 200.);
 
-  TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass","",600,0.0,60.0);//binning 0.1GeV
-  TH1F *Mass1DTemplate = new TH1F("Mass1DTemplate","",600,0.0,60.0);//binning 0.1GeV
+  TH1F *IsoDimuC          = new TH1F("IsoDimuC",          "", 1000, 0., 100.);//binning 0.1 GeV
+  TH1F *IsoDimuF          = new TH1F("IsoDimuF",          "", 1000, 0., 100.);
+  TH1F *IsoDimuCMu0_dR0p3 = new TH1F("IsoDimuCMu0_dR0p3", "", 1000, 0., 100.);
+  TH1F *IsoDimuCMu0_dR0p4 = new TH1F("IsoDimuCMu0_dR0p4", "", 1000, 0., 100.);
+  TH1F *IsoDimuCMu0_dR0p5 = new TH1F("IsoDimuCMu0_dR0p5", "", 1000, 0., 100.);
+  TH1F *IsoDimuCMu1_dR0p3 = new TH1F("IsoDimuCMu1_dR0p3", "", 1000, 0., 100.);
+  TH1F *IsoDimuCMu1_dR0p4 = new TH1F("IsoDimuCMu1_dR0p4", "", 1000, 0., 100.);
+  TH1F *IsoDimuCMu1_dR0p5 = new TH1F("IsoDimuCMu1_dR0p5", "", 1000, 0., 100.);
+  TH1F *IsoDimuFMu0_dR0p3 = new TH1F("IsoDimuFMu0_dR0p3", "", 1000, 0., 100.);
+  TH1F *IsoDimuFMu0_dR0p4 = new TH1F("IsoDimuFMu0_dR0p4", "", 1000, 0., 100.);
+  TH1F *IsoDimuFMu0_dR0p5 = new TH1F("IsoDimuFMu0_dR0p5", "", 1000, 0., 100.);
+  TH1F *IsoDimuFMu1_dR0p3 = new TH1F("IsoDimuFMu1_dR0p3", "", 1000, 0., 100.);
+  TH1F *IsoDimuFMu1_dR0p4 = new TH1F("IsoDimuFMu1_dR0p4", "", 1000, 0., 100.);
+  TH1F *IsoDimuFMu1_dR0p5 = new TH1F("IsoDimuFMu1_dR0p5", "", 1000, 0., 100.);
 
-  TH1F *IsoOrphanDimu = new TH1F("IsoOrphanDimu","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoOrphanDimuMu0_dR0p3 = new TH1F("IsoOrphanDimuMu0_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoOrphanDimuMu0_dR0p4 = new TH1F("IsoOrphanDimuMu0_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoOrphanDimuMu0_dR0p5 = new TH1F("IsoOrphanDimuMu0_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoOrphanDimuMu1_dR0p3 = new TH1F("IsoOrphanDimuMu1_dR0p3","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoOrphanDimuMu1_dR0p4 = new TH1F("IsoOrphanDimuMu1_dR0p4","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoOrphanDimuMu1_dR0p5 = new TH1F("IsoOrphanDimuMu1_dR0p5","",1000,0.0,100.0);//binning 0.1 GeV
-  TH1F *IsoOrphan = new TH1F("IsoOrphan","",1000,0.0,100.0);//binning 0.1 GeV
+  TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass", "", 600, 0., 60.0);//binning 0.1GeV
+  TH1F *Mass1DTemplate = new TH1F("Mass1DTemplate", "", 600, 0., 60.0);
+
+  TH1F *IsoOrphanDimu          = new TH1F("IsoOrphanDimu",          "", 1000, 0., 100.);//binning 0.1 GeV
+  TH1F *IsoOrphanDimuMu0_dR0p3 = new TH1F("IsoOrphanDimuMu0_dR0p3", "", 1000, 0., 100.);
+  TH1F *IsoOrphanDimuMu0_dR0p4 = new TH1F("IsoOrphanDimuMu0_dR0p4", "", 1000, 0., 100.);
+  TH1F *IsoOrphanDimuMu0_dR0p5 = new TH1F("IsoOrphanDimuMu0_dR0p5", "", 1000, 0., 100.);
+  TH1F *IsoOrphanDimuMu1_dR0p3 = new TH1F("IsoOrphanDimuMu1_dR0p3", "", 1000, 0., 100.);
+  TH1F *IsoOrphanDimuMu1_dR0p4 = new TH1F("IsoOrphanDimuMu1_dR0p4", "", 1000, 0., 100.);
+  TH1F *IsoOrphanDimuMu1_dR0p5 = new TH1F("IsoOrphanDimuMu1_dR0p5", "", 1000, 0., 100.);
+  TH1F *IsoOrphan              = new TH1F("IsoOrphan",              "", 1000, 0., 100.);
 
   k++;//Print k
 
   int nentries;//entries in main tree
   int mentries;//entries in orphan tree
 
-  t->SetBranchAddress("run",&run);
-  t->SetBranchAddress("lumi",&lumi);
-	t->SetBranchAddress("event",&event);
-	t->SetBranchAddress("nRecoMu",&nRecoMu);
-  t->SetBranchAddress("is1GenMu17",&is1GenMu17);
-	t->SetBranchAddress("is2GenMu8",&is2GenMu8);
-	t->SetBranchAddress("is3GenMu8",&is3GenMu8);
-	t->SetBranchAddress("is4GenMu8",&is4GenMu8);
-	t->SetBranchAddress("is1SelMu17",&is1SelMu17);
-	t->SetBranchAddress("is2SelMu8",&is2SelMu8);
-	t->SetBranchAddress("is3SelMu8",&is3SelMu8);
-	t->SetBranchAddress("is4SelMu8",&is4SelMu8);
-	t->SetBranchAddress("selMu0_pT",&selMu0_pT);
-	t->SetBranchAddress("selMu1_pT",&selMu1_pT);
-	t->SetBranchAddress("selMu2_pT",&selMu2_pT);
-	t->SetBranchAddress("selMu3_pT",&selMu3_pT);
-	t->SetBranchAddress("selMu0_eta",&selMu0_eta);
-	t->SetBranchAddress("selMu1_eta",&selMu1_eta);
-	t->SetBranchAddress("selMu2_eta",&selMu2_eta);
-	t->SetBranchAddress("selMu3_eta",&selMu3_eta);
-  t->SetBranchAddress("selMu0_phi",&selMu0_phi);
-	t->SetBranchAddress("selMu1_phi",&selMu1_phi);
-	t->SetBranchAddress("selMu2_phi",&selMu2_phi);
-	t->SetBranchAddress("selMu3_phi",&selMu3_phi);
-  t->SetBranchAddress("massC",&massC);
-	t->SetBranchAddress("massF",&massF);
-	t->SetBranchAddress("is2MuJets",&is2MuJets);
-  t->SetBranchAddress("is2DiMuons",&is2DiMuons);
-  t->SetBranchAddress("isDrellYan",&isDrellYan);
-  t->SetBranchAddress("isVertexOK",&isVtxOK);
-	t->SetBranchAddress("is2DiMuonsFittedVtxOK",&is2DiMuonsFittedVtxOK);
-	t->SetBranchAddress("diMuons_dz_FittedVtx",&diMuons_dz_FittedVtx);
-	t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",&is2DiMuonsMassOK);
-	t->SetBranchAddress("isSignalHLTFired",&isSignalHLTFired);
-  t->SetBranchAddress("isSignalHLTL1Fired",&isSignalHLTL1Fired);
-	t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",&diMuonC_IsoTk_FittedVtx);
-	t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",&diMuonF_IsoTk_FittedVtx);
-  t->SetBranchAddress("diMuonCMu0_IsoTk0p3_FittedVtx",&diMuonCMu0_IsoTk0p3_FittedVtx);
-  t->SetBranchAddress("diMuonCMu0_IsoTk0p4_FittedVtx",&diMuonCMu0_IsoTk0p4_FittedVtx);
-  t->SetBranchAddress("diMuonCMu0_IsoTk0p5_FittedVtx",&diMuonCMu0_IsoTk0p5_FittedVtx);
-  t->SetBranchAddress("diMuonCMu1_IsoTk0p3_FittedVtx",&diMuonCMu1_IsoTk0p3_FittedVtx);
-  t->SetBranchAddress("diMuonCMu1_IsoTk0p4_FittedVtx",&diMuonCMu1_IsoTk0p4_FittedVtx);
-  t->SetBranchAddress("diMuonCMu1_IsoTk0p5_FittedVtx",&diMuonCMu1_IsoTk0p5_FittedVtx);
-  t->SetBranchAddress("diMuonFMu0_IsoTk0p3_FittedVtx",&diMuonFMu0_IsoTk0p3_FittedVtx);
-  t->SetBranchAddress("diMuonFMu0_IsoTk0p4_FittedVtx",&diMuonFMu0_IsoTk0p4_FittedVtx);
-  t->SetBranchAddress("diMuonFMu0_IsoTk0p5_FittedVtx",&diMuonFMu0_IsoTk0p5_FittedVtx);
-  t->SetBranchAddress("diMuonFMu1_IsoTk0p3_FittedVtx",&diMuonFMu1_IsoTk0p3_FittedVtx);
-  t->SetBranchAddress("diMuonFMu1_IsoTk0p4_FittedVtx",&diMuonFMu1_IsoTk0p4_FittedVtx);
-  t->SetBranchAddress("diMuonFMu1_IsoTk0p5_FittedVtx",&diMuonFMu1_IsoTk0p5_FittedVtx);
-  t->SetBranchAddress("genA0_Lxy",&genA0_Lxy);
-	t->SetBranchAddress("genA1_Lxy",&genA1_Lxy);
-	t->SetBranchAddress("genA0_Lz",&genA0_Lz);
-	t->SetBranchAddress("genA1_Lz",&genA1_Lz);
-  //To be used for Run2
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_Phase1",&diMuonC_m1_FittedVtx_hitpix_Phase1);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1",&diMuonC_m2_FittedVtx_hitpix_Phase1);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1",&diMuonF_m1_FittedVtx_hitpix_Phase1);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1",&diMuonF_m2_FittedVtx_hitpix_Phase1);
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelHits",&diMuonC_m1_FittedVtx_ValidPixelHits);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelHits",&diMuonC_m2_FittedVtx_ValidPixelHits);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelHits",&diMuonF_m1_FittedVtx_ValidPixelHits);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelHits",&diMuonF_m2_FittedVtx_ValidPixelHits);
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_pixelLayersWithMeasurement",&diMuonC_m1_FittedVtx_pixelLayersWithMeasurement);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_pixelLayersWithMeasurement",&diMuonC_m2_FittedVtx_pixelLayersWithMeasurement);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_pixelLayersWithMeasurement",&diMuonF_m1_FittedVtx_pixelLayersWithMeasurement);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_pixelLayersWithMeasurement",&diMuonF_m2_FittedVtx_pixelLayersWithMeasurement);
+  t->SetBranchAddress("run",   &run);
+  t->SetBranchAddress("lumi",  &lumi);
+	t->SetBranchAddress("event", &event);
+
+  t->SetBranchAddress("is1GenMu17", &is1GenMu17);
+	t->SetBranchAddress("is2GenMu8",  &is2GenMu8);
+	t->SetBranchAddress("is3GenMu8",  &is3GenMu8);
+	t->SetBranchAddress("is4GenMu8",  &is4GenMu8);
+  t->SetBranchAddress("genA0_Lxy",  &genA0_Lxy);
+	t->SetBranchAddress("genA1_Lxy",  &genA1_Lxy);
+	t->SetBranchAddress("genA0_Lz",   &genA0_Lz);
+	t->SetBranchAddress("genA1_Lz",   &genA1_Lz);
+
+	t->SetBranchAddress("is1SelMu17", &is1SelMu17);
+	t->SetBranchAddress("is2SelMu8",  &is2SelMu8);
+	t->SetBranchAddress("is3SelMu8",  &is3SelMu8);
+	t->SetBranchAddress("is4SelMu8",  &is4SelMu8);
+	t->SetBranchAddress("selMu0_pT",  &selMu0_pT);
+	t->SetBranchAddress("selMu1_pT",  &selMu1_pT);
+	t->SetBranchAddress("selMu2_pT",  &selMu2_pT);
+	t->SetBranchAddress("selMu3_pT",  &selMu3_pT);
+	t->SetBranchAddress("selMu0_eta", &selMu0_eta);
+	t->SetBranchAddress("selMu1_eta", &selMu1_eta);
+	t->SetBranchAddress("selMu2_eta", &selMu2_eta);
+	t->SetBranchAddress("selMu3_eta", &selMu3_eta);
+  t->SetBranchAddress("selMu0_phi", &selMu0_phi);
+	t->SetBranchAddress("selMu1_phi", &selMu1_phi);
+	t->SetBranchAddress("selMu2_phi", &selMu2_phi);
+	t->SetBranchAddress("selMu3_phi", &selMu3_phi);
+
+  t->SetBranchAddress("isVertexOK", &isVtxOK);
+	t->SetBranchAddress("is2MuJets",  &is2MuJets);
+  t->SetBranchAddress("is2DiMuons", &is2DiMuons);
+  t->SetBranchAddress("massC",      &massC);
+	t->SetBranchAddress("massF",      &massF);
+
+  t->SetBranchAddress("reco4mu_m",       &reco4mu_m);
+  t->SetBranchAddress("recoFakeDiMu0_m", &recoFakeDiMu0_m);//mass not ordered
+  t->SetBranchAddress("recoFakeDiMu1_m", &recoFakeDiMu1_m);
+  t->SetBranchAddress("isDrellYan",      &isDrellYan);
+
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_Phase1",              &diMuonC_m1_FittedVtx_hitpix_Phase1);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1",              &diMuonC_m2_FittedVtx_hitpix_Phase1);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1",              &diMuonF_m1_FittedVtx_hitpix_Phase1);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1",              &diMuonF_m2_FittedVtx_hitpix_Phase1);
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelHits",             &diMuonC_m1_FittedVtx_ValidPixelHits);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelHits",             &diMuonC_m2_FittedVtx_ValidPixelHits);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelHits",             &diMuonF_m1_FittedVtx_ValidPixelHits);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelHits",             &diMuonF_m2_FittedVtx_ValidPixelHits);
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_pixelLayersWithMeasurement", &diMuonC_m1_FittedVtx_pixelLayersWithMeasurement);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_pixelLayersWithMeasurement", &diMuonC_m2_FittedVtx_pixelLayersWithMeasurement);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_pixelLayersWithMeasurement", &diMuonF_m1_FittedVtx_pixelLayersWithMeasurement);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_pixelLayersWithMeasurement", &diMuonF_m2_FittedVtx_pixelLayersWithMeasurement);
   //For checking pixel Hit
-  t->SetBranchAddress("diMuonC_FittedVtx_Lxy",&diMuonC_FittedVtx_Lxy);
-	t->SetBranchAddress("diMuonC_FittedVtx_L",&diMuonC_FittedVtx_L);
-	t->SetBranchAddress("diMuonF_FittedVtx_Lxy",&diMuonF_FittedVtx_Lxy);
-	t->SetBranchAddress("diMuonF_FittedVtx_L",&diMuonF_FittedVtx_L);
+  t->SetBranchAddress("diMuonC_FittedVtx_Lxy", &diMuonC_FittedVtx_Lxy);
+	t->SetBranchAddress("diMuonC_FittedVtx_L",   &diMuonC_FittedVtx_L);
+	t->SetBranchAddress("diMuonF_FittedVtx_Lxy", &diMuonF_FittedVtx_Lxy);
+	t->SetBranchAddress("diMuonF_FittedVtx_L",   &diMuonF_FittedVtx_L);
+
+  t->SetBranchAddress("diMuons_dz_FittedVtx",          &diMuons_dz_FittedVtx);
+  t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",       &diMuonC_IsoTk_FittedVtx);
+	t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",       &diMuonF_IsoTk_FittedVtx);
+  t->SetBranchAddress("diMuonCMu0_IsoTk0p3_FittedVtx", &diMuonCMu0_IsoTk0p3_FittedVtx);
+  t->SetBranchAddress("diMuonCMu0_IsoTk0p4_FittedVtx", &diMuonCMu0_IsoTk0p4_FittedVtx);
+  t->SetBranchAddress("diMuonCMu0_IsoTk0p5_FittedVtx", &diMuonCMu0_IsoTk0p5_FittedVtx);
+  t->SetBranchAddress("diMuonCMu1_IsoTk0p3_FittedVtx", &diMuonCMu1_IsoTk0p3_FittedVtx);
+  t->SetBranchAddress("diMuonCMu1_IsoTk0p4_FittedVtx", &diMuonCMu1_IsoTk0p4_FittedVtx);
+  t->SetBranchAddress("diMuonCMu1_IsoTk0p5_FittedVtx", &diMuonCMu1_IsoTk0p5_FittedVtx);
+  t->SetBranchAddress("diMuonFMu0_IsoTk0p3_FittedVtx", &diMuonFMu0_IsoTk0p3_FittedVtx);
+  t->SetBranchAddress("diMuonFMu0_IsoTk0p4_FittedVtx", &diMuonFMu0_IsoTk0p4_FittedVtx);
+  t->SetBranchAddress("diMuonFMu0_IsoTk0p5_FittedVtx", &diMuonFMu0_IsoTk0p5_FittedVtx);
+  t->SetBranchAddress("diMuonFMu1_IsoTk0p3_FittedVtx", &diMuonFMu1_IsoTk0p3_FittedVtx);
+  t->SetBranchAddress("diMuonFMu1_IsoTk0p4_FittedVtx", &diMuonFMu1_IsoTk0p4_FittedVtx);
+  t->SetBranchAddress("diMuonFMu1_IsoTk0p5_FittedVtx", &diMuonFMu1_IsoTk0p5_FittedVtx);
+  t->SetBranchAddress("isSignalHLTFired",              &isSignalHLTFired);
+  t->SetBranchAddress("isSignalHLTL1Fired",            &isSignalHLTL1Fired);
+  t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",    &is2DiMuonsMassOK);
 
   //Get branch from orphan-dimuon tree
-  o->SetBranchAddress("orph_passOffLineSelPtEta",&orph_passOffLineSelPtEta);//offline pT, eta selection same as signal
-  o->SetBranchAddress("orph_AllTrackerMu",&orph_AllTrackerMu);//tracker mu
-  o->SetBranchAddress("orph_isSignalHLTFired",&orph_isSignalHLTFired);
-  o->SetBranchAddress("orph_isVertexOK",&orph_isVertexOK);
-  o->SetBranchAddress("orph_dimu_Mu0_hitpix_Phase1",&orph_dimu_Mu0_hitpix_Phase1);
-  o->SetBranchAddress("orph_dimu_Mu1_hitpix_Phase1",&orph_dimu_Mu1_hitpix_Phase1);
-  o->SetBranchAddress("containstrig",&containstrig);
-  o->SetBranchAddress("containstrig2",&containstrig2);
-  o->SetBranchAddress("orph_dimu_mass",&orph_dimu_mass);
-  o->SetBranchAddress("orph_dimu_z",&orph_dimu_z);
-  o->SetBranchAddress("orph_dimu_isoTk",&orph_dimu_isoTk);
-  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p3",&orph_dimu_Mu0_isoTk0p3);
-  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p4",&orph_dimu_Mu0_isoTk0p4);
-  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p5",&orph_dimu_Mu0_isoTk0p5);
-  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p3",&orph_dimu_Mu1_isoTk0p3);
-  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p4",&orph_dimu_Mu1_isoTk0p4);
-  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p5",&orph_dimu_Mu1_isoTk0p5);
-  o->SetBranchAddress("orph_isoTk",&orph_isoTk);
+  o->SetBranchAddress("orph_passOffLineSelPtEta",    &orph_passOffLineSelPtEta);//offline pT, eta selection same as signal
+  o->SetBranchAddress("orph_AllTrackerMu",           &orph_AllTrackerMu);//tracker mu
+  o->SetBranchAddress("orph_isSignalHLTFired",       &orph_isSignalHLTFired);
+  o->SetBranchAddress("orph_isVertexOK",             &orph_isVertexOK);
+  o->SetBranchAddress("orph_dimu_Mu0_hitpix_Phase1", &orph_dimu_Mu0_hitpix_Phase1);
+  o->SetBranchAddress("orph_dimu_Mu1_hitpix_Phase1", &orph_dimu_Mu1_hitpix_Phase1);
+  o->SetBranchAddress("orph_dimu_mass",              &orph_dimu_mass);
+  o->SetBranchAddress("orph_dimu_z",                 &orph_dimu_z);
+
+  o->SetBranchAddress("orph_dimu_isoTk",        &orph_dimu_isoTk);
+  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p3", &orph_dimu_Mu0_isoTk0p3);
+  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p4", &orph_dimu_Mu0_isoTk0p4);
+  o->SetBranchAddress("orph_dimu_Mu0_isoTk0p5", &orph_dimu_Mu0_isoTk0p5);
+  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p3", &orph_dimu_Mu1_isoTk0p3);
+  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p4", &orph_dimu_Mu1_isoTk0p4);
+  o->SetBranchAddress("orph_dimu_Mu1_isoTk0p5", &orph_dimu_Mu1_isoTk0p5);
+  o->SetBranchAddress("orph_isoTk",             &orph_isoTk);
 
 	nentries = t->GetEntries();
   if( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
@@ -414,7 +416,22 @@ void efficiency(const std::vector<std::string>& dirNames)
           if( is2DiMuons ){
             counter[k][11]++;
 
-            if( !isDrellYan ){
+            if( ModelBKGShape ) {
+              RECO4muMass->Fill(reco4mu_m);
+              if(recoFakeDiMu0_m >= recoFakeDiMu1_m){
+                RECOFakeLeading2MuMass->Fill(recoFakeDiMu0_m);
+                RECOFakeTrailing2MuMass->Fill(recoFakeDiMu1_m);
+              }
+              else{
+                RECOFakeLeading2MuMass->Fill(recoFakeDiMu1_m);
+                RECOFakeTrailing2MuMass->Fill(recoFakeDiMu0_m);
+              }
+            }//end ModelBKGShape
+
+            //if( !isDrellYan ){
+            if( !(b_recoFakeDiMu0_m > 81 && b_recoFakeDiMu0_m < 101) &&
+                !(b_recoFakeDiMu1_m > 81 && b_recoFakeDiMu1_m < 101) &&
+                !(b_reco4mu_m > 81 && b_reco4mu_m < 101) ){
               counter[k][12]++;
 
               if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
@@ -675,6 +692,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   }//end if (PerEventTriggerEff)
 
   if ( ModelBKGShape ) {
+    RECO4muMass->Write();
+    RECOFakeLeading2MuMass->Write();
+    RECOFakeTrailing2MuMass->Write();
     BKGShapeCR->Write();
     BKGShapeCRmassC->Write();
     BKGShapeCRmassF->Write();
