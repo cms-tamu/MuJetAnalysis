@@ -456,24 +456,24 @@ void efficiency(const std::vector<std::string>& dirNames)
                 RECOFakeTrailing2MuMass->Fill(recoFakeDiMu0_m);
               }
 
-              Float_t dEtaRePairedDimuA = -999.
-              Float_t dEtaRePairedDimuB = -999.
-              Float_t dPhiRePairedDimuA = -999.
-              Float_t dPhiRePairedDimuB = -999.
-              Float_t dRrePairedDimuA = -999.
-              Float_t dRrePairedDimuB = -999.
+              Float_t dEtaRePairedDimuA = -999.;
+              Float_t dEtaRePairedDimuB = -999.;
+              Float_t dPhiRePairedDimuA = -999.;
+              Float_t dPhiRePairedDimuB = -999.;
+              Float_t dRrePairedDimuA = -999.;
+              Float_t dRrePairedDimuB = -999.;
               //dR of two muons in Re-Paired Dimu A and B
               if ( (muJetC_Mu0_charge * muJetF_Mu0_charge < 0) && (muJetC_Mu1_charge * muJetF_Mu1_charge < 0) ) {
                 dEtaRePairedDimuA = muJetC_Mu0_eta - muJetF_Mu0_eta;
                 dEtaRePairedDimuB = muJetC_Mu1_eta - muJetF_Mu1_eta;
-                dPhiRePairedDimuA = tamu::helpers::My_dPhi( muJetC_Mu0_phi, muJetF_Mu0_phi );
-                dPhiRePairedDimuB = tamu::helpers::My_dPhi( muJetC_Mu1_phi, muJetF_Mu1_phi );
+                dPhiRePairedDimuA = My_dPhi( muJetC_Mu0_phi, muJetF_Mu0_phi );
+                dPhiRePairedDimuB = My_dPhi( muJetC_Mu1_phi, muJetF_Mu1_phi );
               }
               else if ( (muJetC_Mu0_charge * muJetF_Mu1_charge < 0) && (muJetC_Mu1_charge * muJetF_Mu0_charge < 0) ) {
                 dEtaRePairedDimuA = muJetC_Mu0_eta - muJetF_Mu1_eta;
                 dEtaRePairedDimuB = muJetC_Mu1_eta - muJetF_Mu0_eta;
-                dPhiRePairedDimuA = tamu::helpers::My_dPhi( muJetC_Mu0_phi, muJetF_Mu1_phi );
-                dPhiRePairedDimuB = tamu::helpers::My_dPhi( muJetC_Mu1_phi, muJetF_Mu0_phi );
+                dPhiRePairedDimuA = My_dPhi( muJetC_Mu0_phi, muJetF_Mu1_phi );
+                dPhiRePairedDimuB = My_dPhi( muJetC_Mu1_phi, muJetF_Mu0_phi );
               }
               dRrePairedDimuA   = sqrt(dEtaRePairedDimuA*dEtaRePairedDimuA + dPhiRePairedDimuA*dPhiRePairedDimuA);
               dRrePairedDimuB   = sqrt(dEtaRePairedDimuB*dEtaRePairedDimuB + dPhiRePairedDimuB*dPhiRePairedDimuB);

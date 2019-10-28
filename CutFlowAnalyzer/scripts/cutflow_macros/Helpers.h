@@ -28,6 +28,13 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
   }
 }
 
+double My_dPhi (double phi1, double phi2) {
+  double dPhi = phi1 - phi2;
+  if (dPhi >  M_PI) dPhi -= 2.*M_PI;
+  if (dPhi < -M_PI) dPhi += 2.*M_PI;
+  return dPhi;
+}
+
 void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".root")
 {
   bool verbose(true);
