@@ -118,6 +118,18 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  is2DiMuons;
   Float_t massC;
   Float_t massF;
+  Float_t muJetC_Mu0_charge;
+  Float_t muJetC_Mu1_charge;
+  Float_t muJetF_Mu0_charge;
+  Float_t muJetF_Mu1_charge;
+  Float_t muJetC_Mu0_eta;
+  Float_t muJetC_Mu1_eta;
+  Float_t muJetF_Mu0_eta;
+  Float_t muJetF_Mu1_eta;
+  Float_t muJetC_Mu0_phi;
+  Float_t muJetC_Mu1_phi;
+  Float_t muJetF_Mu0_phi;
+  Float_t muJetF_Mu1_phi;
   Float_t reco4mu_m;
   Float_t recoFakeDiMu0_m;
   Float_t recoFakeDiMu1_m;
@@ -222,6 +234,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *RECOFakeLeading2MuMass  = new TH1F("RECOFakeLeading2MuMass",  "", 200,  0., 200.);
   TH1F *RECOFakeTrailing2MuMass = new TH1F("RECOFakeTrailing2MuMass", "", 200,  0., 200.);
 
+  TH1F *RECOrePaired2muLeadingdR   = new TH1F("RECOrePaired2muLeadingdR",   "", 800,  0., 8.);//binning 0.01
+  TH1F *RECOrePaired2muTrailingdR  = new TH1F("RECOrePaired2muTrailingdR",  "", 800,  0., 8.);//binning 0.01
+
   TH1F *IsoDimuC          = new TH1F("IsoDimuC",          "", 1000, 0., 100.);//binning 0.1 GeV
   TH1F *IsoDimuF          = new TH1F("IsoDimuF",          "", 1000, 0., 100.);
   TH1F *IsoDimuCMu0_dR0p3 = new TH1F("IsoDimuCMu0_dR0p3", "", 1000, 0., 100.);
@@ -289,6 +304,19 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("is2DiMuons", &is2DiMuons);
   t->SetBranchAddress("massC",      &massC);
 	t->SetBranchAddress("massF",      &massF);
+
+  t->SetBranchAddress("muJetC_Mu0_charge",  &muJetC_Mu0_charge);
+  t->SetBranchAddress("muJetC_Mu1_charge",  &muJetC_Mu1_charge);
+  t->SetBranchAddress("muJetF_Mu0_charge",  &muJetF_Mu0_charge);
+  t->SetBranchAddress("muJetF_Mu1_charge",  &muJetF_Mu1_charge);
+  t->SetBranchAddress("muJetC_Mu0_eta",  &muJetC_Mu0_eta);
+  t->SetBranchAddress("muJetC_Mu1_eta",  &muJetC_Mu1_eta);
+  t->SetBranchAddress("muJetF_Mu0_eta",  &muJetF_Mu0_eta);
+  t->SetBranchAddress("muJetF_Mu1_eta",  &muJetF_Mu1_eta);
+  t->SetBranchAddress("muJetC_Mu0_phi",  &muJetC_Mu0_phi);
+  t->SetBranchAddress("muJetC_Mu1_phi",  &muJetC_Mu1_phi);
+  t->SetBranchAddress("muJetF_Mu0_phi",  &muJetF_Mu0_phi);
+  t->SetBranchAddress("muJetF_Mu1_phi",  &muJetF_Mu1_phi);
 
   t->SetBranchAddress("reco4mu_m",       &reco4mu_m);
   t->SetBranchAddress("recoFakeDiMu0_m", &recoFakeDiMu0_m);//mass not ordered
@@ -417,6 +445,7 @@ void efficiency(const std::vector<std::string>& dirNames)
             counter[k][11]++;
 
             if( ModelBKGShape ) {
+
               RECO4muMass->Fill(reco4mu_m);
               if(recoFakeDiMu0_m >= recoFakeDiMu1_m){
                 RECOFakeLeading2MuMass->Fill(recoFakeDiMu0_m);
@@ -426,12 +455,45 @@ void efficiency(const std::vector<std::string>& dirNames)
                 RECOFakeLeading2MuMass->Fill(recoFakeDiMu1_m);
                 RECOFakeTrailing2MuMass->Fill(recoFakeDiMu0_m);
               }
+
+              Float_t dEtaRePairedDimuA = -999.
+              Float_t dEtaRePairedDimuB = -999.
+              Float_t dPhiRePairedDimuA = -999.
+              Float_t dPhiRePairedDimuB = -999.
+              Float_t dRrePairedDimuA = -999.
+              Float_t dRrePairedDimuB = -999.
+              //dR of two muons in Re-Paired Dimu A and B
+              if ( (muJetC_Mu0_charge * muJetF_Mu0_charge < 0) && (muJetC_Mu1_charge * muJetF_Mu1_charge < 0) ) {
+                dEtaRePairedDimuA = muJetC_Mu0_eta - muJetF_Mu0_eta;
+                dEtaRePairedDimuB = muJetC_Mu1_eta - muJetF_Mu1_eta;
+                dPhiRePairedDimuA = tamu::helpers::My_dPhi( muJetC_Mu0_phi, muJetF_Mu0_phi );
+                dPhiRePairedDimuB = tamu::helpers::My_dPhi( muJetC_Mu1_phi, muJetF_Mu1_phi );
+              }
+              else if ( (muJetC_Mu0_charge * muJetF_Mu1_charge < 0) && (muJetC_Mu1_charge * muJetF_Mu0_charge < 0) ) {
+                dEtaRePairedDimuA = muJetC_Mu0_eta - muJetF_Mu1_eta;
+                dEtaRePairedDimuB = muJetC_Mu1_eta - muJetF_Mu0_eta;
+                dPhiRePairedDimuA = tamu::helpers::My_dPhi( muJetC_Mu0_phi, muJetF_Mu1_phi );
+                dPhiRePairedDimuB = tamu::helpers::My_dPhi( muJetC_Mu1_phi, muJetF_Mu0_phi );
+              }
+              dRrePairedDimuA   = sqrt(dEtaRePairedDimuA*dEtaRePairedDimuA + dPhiRePairedDimuA*dPhiRePairedDimuA);
+              dRrePairedDimuB   = sqrt(dEtaRePairedDimuB*dEtaRePairedDimuB + dPhiRePairedDimuB*dPhiRePairedDimuB);
+              //Order dR
+              if(dRrePairedDimuA >= dRrePairedDimuB){
+                RECOrePaired2muLeadingdR->Fill(dRrePairedDimuA);
+                RECOrePaired2muTrailingdR->Fill(dRrePairedDimuB);
+              }
+              else{
+                RECOrePaired2muLeadingdR->Fill(dRrePairedDimuB);
+                RECOrePaired2muTrailingdR->Fill(dRrePairedDimuA);
+              }
+
             }//end ModelBKGShape
 
             //if( !isDrellYan ){
-            if( !(recoFakeDiMu0_m > 81 && recoFakeDiMu0_m < 101) &&
-                !(recoFakeDiMu1_m > 81 && recoFakeDiMu1_m < 101) &&
-                !(reco4mu_m > 81 && reco4mu_m < 101) ){
+            //if( !(recoFakeDiMu0_m > 81 && recoFakeDiMu0_m < 101) &&
+            //    !(recoFakeDiMu1_m > 81 && recoFakeDiMu1_m < 101) &&
+            //    !(reco4mu_m > 81 && reco4mu_m < 101) ){
+            if( TMath::Min(recoFakeDiMu0_m, recoFakeDiMu1_m) >= 10 ){//Trailing mass large than 10
               counter[k][12]++;
 
               if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
@@ -692,9 +754,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   }//end if (PerEventTriggerEff)
 
   if ( ModelBKGShape ) {
-    RECO4muMass->Write();
-    RECOFakeLeading2MuMass->Write();
-    RECOFakeTrailing2MuMass->Write();
+    RECO4muMass->GetXaxis()->SetTitle("m_{4#mu}[GeV]"); RECO4muMass->GetYaxis()->SetTitle("Events/GeV"); RECO4muMass->Write();
+    RECOFakeLeading2MuMass->GetXaxis()->SetTitle("Leading mass of re-paired OS di-#mu} [GeV]"); RECOFakeLeading2MuMass->GetYaxis()->SetTitle("Events/GeV"); RECOFakeLeading2MuMass->Write();
+    RECOFakeTrailing2MuMass->GetXaxis()->SetTitle("Trailing mass of re-paired OS di-#mu} [GeV]"); RECOFakeTrailing2MuMass->GetYaxis()->SetTitle("Events/GeV"); RECOFakeTrailing2MuMass->Write();
+    RECOrePaired2muLeadingdR->GetXaxis()->SetTitle("Leading dR of re-paired OS di-#mu"); RECOrePaired2muLeadingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muLeadingdR->Write();
+    RECOrePaired2muTrailingdR->GetXaxis()->SetTitle("Trailing dR of re-paired OS di-#mu"); RECOrePaired2muTrailingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muTrailingdR->Write();
     BKGShapeCR->Write();
     BKGShapeCRmassC->Write();
     BKGShapeCRmassF->Write();
