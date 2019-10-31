@@ -444,6 +444,13 @@ void efficiency(const std::vector<std::string>& dirNames)
           if( is2DiMuons ){
             counter[k][11]++;
 
+            Float_t dEtaRePairedDimuA = -999.;
+            Float_t dEtaRePairedDimuB = -999.;
+            Float_t dPhiRePairedDimuA = -999.;
+            Float_t dPhiRePairedDimuB = -999.;
+            Float_t dRrePairedDimuA = -999.;
+            Float_t dRrePairedDimuB = -999.;
+            
             if( ModelBKGShape ) {
 
               RECO4muMass->Fill(reco4mu_m);
@@ -456,12 +463,6 @@ void efficiency(const std::vector<std::string>& dirNames)
                 RECOFakeTrailing2MuMass->Fill(recoFakeDiMu0_m);
               }
 
-              Float_t dEtaRePairedDimuA = -999.;
-              Float_t dEtaRePairedDimuB = -999.;
-              Float_t dPhiRePairedDimuA = -999.;
-              Float_t dPhiRePairedDimuB = -999.;
-              Float_t dRrePairedDimuA = -999.;
-              Float_t dRrePairedDimuB = -999.;
               //dR of two muons in Re-Paired Dimu A and B
               if ( (muJetC_Mu0_charge * muJetF_Mu0_charge < 0) && (muJetC_Mu1_charge * muJetF_Mu1_charge < 0) ) {
                 dEtaRePairedDimuA = muJetC_Mu0_eta - muJetF_Mu0_eta;
@@ -497,7 +498,7 @@ void efficiency(const std::vector<std::string>& dirNames)
             //    !(reco4mu_m > 81 && reco4mu_m < 101) ){
             //Cut on Trailing mass
             //if( TMath::Min(recoFakeDiMu0_m, recoFakeDiMu1_m) >= 10 ){
-            //Cut on Trailing dR 
+            //Cut on Trailing dR
             if( TMath::Min(dRrePairedDimuA, dRrePairedDimuB) >= 0.2 ){
               counter[k][12]++;
 
