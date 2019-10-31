@@ -230,12 +230,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *MassC    = new TH1F("MassC",    "", 600,  0., 60.);//binning 0.1 GeV
   TH1F *MassF    = new TH1F("MassF",    "", 600,  0., 60.);
 
-  TH1F *RECO4muMass             = new TH1F("RECO4muMass",             "", 200,  0., 200.);//binning 1 GeV
-  TH1F *RECOFakeLeading2MuMass  = new TH1F("RECOFakeLeading2MuMass",  "", 200,  0., 200.);
-  TH1F *RECOFakeTrailing2MuMass = new TH1F("RECOFakeTrailing2MuMass", "", 200,  0., 200.);
+  TH1F *RECO4muMass             = new TH1F("RECO4muMass",             "", 180,  0., 180.);//binning 1 GeV
+  TH1F *RECOFakeLeading2MuMass  = new TH1F("RECOFakeLeading2MuMass",  "", 180,  0., 180.);
+  TH1F *RECOFakeTrailing2MuMass = new TH1F("RECOFakeTrailing2MuMass", "", 180,  0., 180.);
 
-  TH1F *RECOrePaired2muLeadingdR   = new TH1F("RECOrePaired2muLeadingdR",   "", 800,  0., 8.);//binning 0.01
-  TH1F *RECOrePaired2muTrailingdR  = new TH1F("RECOrePaired2muTrailingdR",  "", 800,  0., 8.);//binning 0.01
+  TH1F *RECOrePaired2muLeadingdR   = new TH1F("RECOrePaired2muLeadingdR",   "", 450,  0., 4.5);//binning 0.01
+  TH1F *RECOrePaired2muTrailingdR  = new TH1F("RECOrePaired2muTrailingdR",  "", 450,  0., 4.5);
 
   TH1F *IsoDimuC          = new TH1F("IsoDimuC",          "", 1000, 0., 100.);//binning 0.1 GeV
   TH1F *IsoDimuF          = new TH1F("IsoDimuF",          "", 1000, 0., 100.);
@@ -754,9 +754,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   }//end if (PerEventTriggerEff)
 
   if ( ModelBKGShape ) {
-    RECO4muMass->GetXaxis()->SetTitle("m_{4#mu}[GeV]"); RECO4muMass->GetYaxis()->SetTitle("Events/GeV"); RECO4muMass->Write();
-    RECOFakeLeading2MuMass->GetXaxis()->SetTitle("Leading mass of re-paired OS di-#mu} [GeV]"); RECOFakeLeading2MuMass->GetYaxis()->SetTitle("Events/GeV"); RECOFakeLeading2MuMass->Write();
-    RECOFakeTrailing2MuMass->GetXaxis()->SetTitle("Trailing mass of re-paired OS di-#mu} [GeV]"); RECOFakeTrailing2MuMass->GetYaxis()->SetTitle("Events/GeV"); RECOFakeTrailing2MuMass->Write();
+    RECO4muMass->GetXaxis()->SetTitle("m_{4#mu} [GeV]"); RECO4muMass->GetYaxis()->SetTitle("Events/GeV"); RECO4muMass->Write();
+    RECOFakeLeading2MuMass->GetXaxis()->SetTitle("Leading mass of re-paired OS di-#mu [GeV]"); RECOFakeLeading2MuMass->GetYaxis()->SetTitle("Events/GeV"); RECOFakeLeading2MuMass->Write();
+    RECOFakeTrailing2MuMass->GetXaxis()->SetTitle("Trailing mass of re-paired OS di-#mu [GeV]"); RECOFakeTrailing2MuMass->GetYaxis()->SetTitle("Events/GeV"); RECOFakeTrailing2MuMass->Write();
     RECOrePaired2muLeadingdR->GetXaxis()->SetTitle("Leading dR of re-paired OS di-#mu"); RECOrePaired2muLeadingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muLeadingdR->Write();
     RECOrePaired2muTrailingdR->GetXaxis()->SetTitle("Trailing dR of re-paired OS di-#mu"); RECOrePaired2muTrailingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muTrailingdR->Write();
     BKGShapeCR->Write();
