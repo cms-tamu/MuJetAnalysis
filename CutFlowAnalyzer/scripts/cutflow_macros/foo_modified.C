@@ -489,11 +489,16 @@ void efficiency(const std::vector<std::string>& dirNames)
 
             }//end ModelBKGShape
 
+            //Placeholder
             //if( !isDrellYan ){
+            //Cut on 4mu mass and 2mu mass
             //if( !(recoFakeDiMu0_m > 81 && recoFakeDiMu0_m < 101) &&
             //    !(recoFakeDiMu1_m > 81 && recoFakeDiMu1_m < 101) &&
             //    !(reco4mu_m > 81 && reco4mu_m < 101) ){
-            if( TMath::Min(recoFakeDiMu0_m, recoFakeDiMu1_m) >= 10 ){//Trailing mass large than 10
+            //Cut on Trailing mass
+            //if( TMath::Min(recoFakeDiMu0_m, recoFakeDiMu1_m) >= 10 ){
+            //Cut on Trailing dR 
+            if( TMath::Min(dRrePairedDimuA, dRrePairedDimuB) >= 0.2 ){
               counter[k][12]++;
 
               if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
