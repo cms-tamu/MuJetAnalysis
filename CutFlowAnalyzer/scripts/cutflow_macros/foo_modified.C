@@ -34,16 +34,12 @@ using namespace std;
 #include "Helpers.h"
 
 int counter[20][18];//samples:20; selections:18
-Float_t TotEff[20][18];
+Float_t TotEff[20][18];//Total efficiency at each selection
 Float_t TotEffErr[20][18];
-Float_t RelEff[20][18];
+Float_t RelEff[20][18];//Relative efficiency to previous selection
 Float_t RelEffErr[20][18];
-Float_t epsvsalph1[20] = {0.0};
+Float_t epsvsalph[20] = {0.0};//Model independence indicator: offline reconstruction efficiency over generator level cut efficiency
 Float_t Err[20] = {0.0};
-Float_t epsvsalph2[20] = {0.0};
-Float_t epsvsalph[20] = {0.0};
-Float_t epsvalp[20] = {0.0};
-Float_t epsvalp2[20] = {0.0};
 Float_t FitMean = 0.0;
 Float_t FitSigma = 0.0;
 
@@ -69,7 +65,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   bool verbose(true);
   bool CutFlowTable(true);
   bool CheckRecoVtx(false);
-  bool ModelBKGShape(false);
+  bool ModelBKGShape(true);
   bool Model1DTemplate(false);
   bool ModelSRWidth(false);
   bool PlotIso(false);
@@ -450,7 +446,7 @@ void efficiency(const std::vector<std::string>& dirNames)
             Float_t dPhiRePairedDimuB = -999.;
             Float_t dRrePairedDimuA = -999.;
             Float_t dRrePairedDimuB = -999.;
-            
+
             if( ModelBKGShape ) {
 
               RECO4muMass->Fill(reco4mu_m);
@@ -496,10 +492,12 @@ void efficiency(const std::vector<std::string>& dirNames)
             //if( !(recoFakeDiMu0_m > 81 && recoFakeDiMu0_m < 101) &&
             //    !(recoFakeDiMu1_m > 81 && recoFakeDiMu1_m < 101) &&
             //    !(reco4mu_m > 81 && reco4mu_m < 101) ){
-            //Cut on Trailing mass
+            //Cut on trailing mass
             //if( TMath::Min(recoFakeDiMu0_m, recoFakeDiMu1_m) >= 10 ){
-            //Cut on Trailing dR
-            if( TMath::Min(dRrePairedDimuA, dRrePairedDimuB) >= 0.2 ){
+            //Cut on trailing dR
+            //if( TMath::Min(dRrePairedDimuA, dRrePairedDimuB) >= 0.2 ){
+            //Cut on trailing dR and trailing mass: reject trailing dR<X and mass<Y
+            if( TMath::Min(dRrePairedDimuA, dRrePairedDimuB) >= 0.2 || TMath::Min(recoFakeDiMu0_m, recoFakeDiMu1_m) >= 10 ){
               counter[k][12]++;
 
               if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
