@@ -38,6 +38,7 @@ Float_t TotEff[20][18];//Total efficiency at each selection
 Float_t TotEffErr[20][18];
 Float_t RelEff[20][18];//Relative efficiency to previous selection
 Float_t RelEffErr[20][18];
+
 Float_t epsvsalph[20] = {0.0};//Model independence indicator: offline reconstruction efficiency over generator level cut efficiency
 Float_t Err[20] = {0.0};
 Float_t FitMean = 0.0;
@@ -647,7 +648,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   epsvsalph[k] = counter[k][17]/(counter[k][5]*1.0); //mainvalue of epsilob_rec/alpha_gen
   cout<<"Here is the cut-flow-table:"<<endl;
-  cout<<"epsvsalph[k]:  "<<epsvsalph[k]<<endl;
+  cout<<"epsvsalph[k]: "<<epsvsalph[k]<<endl;
   Err[k]=   sqrt( (epsvsalph[k]*(1-epsvsalph[k]))/(counter[k][5]*1.0));
   cout<<"        "<<endl;
   cout<<"begin{landscape}"<<endl;
@@ -655,28 +656,28 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<"begin{tabular}{ c| c | c | c | c | c }"<<endl;
 
   cout<<" Selection               & "<<left<< setw(11)<<" \\# Evts "    <<" & "<<left << setw(13) << " Tot. Eff. " << " & " << left << setw(13) << " Rel. Eff. "<<" & "<< left << setw(16) << " Tot. Eff. Err. "<<" & "<< left << setw(16) << " Rel. Eff. Err. " <<" hline "<<endl;
-  cout<<" No cut                  & "<<left<< setw(11)<< counter[k][0]  <<" & "<<left << setw(13) << TotEff[k][0]  << " & " << left << setw(13) << RelEff[k][0] <<" & "<< left << setw(16) << TotEffErr[k][0]   <<" & "<< left << setw(16) << RelEffErr[k][0]    <<" hline "<<endl;
-  cout<<" is1GenMu17Barrel        & "<<left<< setw(11)<< counter[k][1]  <<" & "<<left << setw(13) << TotEff[k][1]  << " & " << left << setw(13) << RelEff[k][1] <<" & "<< left << setw(16) << TotEffErr[k][1]   <<" & "<< left << setw(16) << RelEffErr[k][1]    <<" hline "<<endl;
-  cout<<" is2GenMu8               & "<<left<< setw(11)<< counter[k][2]  <<" & "<<left << setw(13) << TotEff[k][2]  << " & " << left << setw(13) << RelEff[k][2] <<" & "<< left << setw(16) << TotEffErr[k][2]   <<" & "<< left << setw(16) << RelEffErr[k][2]    <<" hline "<<endl;
-  cout<<" is3GenMu8               & "<<left<< setw(11)<< counter[k][3]  <<" & "<<left << setw(13) << TotEff[k][3]  << " & " << left << setw(13) << RelEff[k][3] <<" & "<< left << setw(16) << TotEffErr[k][3]   <<" & "<< left << setw(16) << RelEffErr[k][3]    <<" hline "<<endl;
-  cout<<" is4GenMu8               & "<<left<< setw(11)<< counter[k][4]  <<" & "<<left << setw(13) << TotEff[k][4]  << " & " << left << setw(13) << RelEff[k][4] <<" & "<< left << setw(16) << TotEffErr[k][4]   <<" & "<< left << setw(16) << RelEffErr[k][4]    <<" hline "<<endl;
-  cout<<" Lxy<16.0cm && Lz<51.6cm & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) << TotEff[k][5]  << " & " << left << setw(13) << RelEff[k][5] <<" & "<< left << setw(16) << TotEffErr[k][5]   <<" & "<< left << setw(16) << RelEffErr[k][5]    <<" hline "<<endl;
+  cout<<" No cut                  & "<<left<< setw(11)<< counter[k][0]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][0]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][0] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][0]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][0]    <<" hline "<<endl;
+  cout<<" is1GenMu17Barrel        & "<<left<< setw(11)<< counter[k][1]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][1]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][1] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][1]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][1]    <<" hline "<<endl;
+  cout<<" is2GenMu8               & "<<left<< setw(11)<< counter[k][2]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][2]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][2] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][2]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][2]    <<" hline "<<endl;
+  cout<<" is3GenMu8               & "<<left<< setw(11)<< counter[k][3]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][3]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][3] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][3]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][3]    <<" hline "<<endl;
+  cout<<" is4GenMu8               & "<<left<< setw(11)<< counter[k][4]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][4]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][4] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][4]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][4]    <<" hline "<<endl;
+  cout<<" Lxy<16.0cm && Lz<51.6cm & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][5]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][5] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][5]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][5]    <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;
 
-  cout<<" is1SelMu17Barrel        & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) << TotEff[k][6]  << " & " << left << setw(13) << RelEff[k][6] <<" & "<< left << setw(16) << TotEffErr[k][6]   <<" & "<< left << setw(16) << RelEffErr[k][6]    <<" hline "<<endl;
-  cout<<" is2SelMu8               & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) << TotEff[k][7]  << " & " << left << setw(13) << RelEff[k][7] <<" & "<< left << setw(16) << TotEffErr[k][7]   <<" & "<< left << setw(16) << RelEffErr[k][7]    <<" hline "<<endl;
-  cout<<" is3SelMu8               & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) << TotEff[k][8]  << " & " << left << setw(13) << RelEff[k][8] <<" & "<< left << setw(16) << TotEffErr[k][8]   <<" & "<< left << setw(16) << RelEffErr[k][8]    <<" hline "<<endl;
-  cout<<" is4SelMu8               & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) << TotEff[k][9]  << " & " << left << setw(13) << RelEff[k][9] <<" & "<< left << setw(16) << TotEffErr[k][9]   <<" & "<< left << setw(16) << RelEffErr[k][9]    <<" hline "<<endl;
-  cout<<" isVertexOK              & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) << TotEff[k][10] << " & " << left << setw(13) << RelEff[k][10]<<" & "<< left << setw(16) << TotEffErr[k][10]  <<" & "<< left << setw(16) << RelEffErr[k][10]   <<" hline "<<endl;
-  cout<<" is2Dimuons              & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) << TotEff[k][11] << " & " << left << setw(13) << RelEff[k][11]<<" & "<< left << setw(16) << TotEffErr[k][11]  <<" & "<< left << setw(16) << RelEffErr[k][11]   <<" hline "<<endl;
-  cout<<" isNotDrell-Yan          & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) << TotEff[k][12] << " & " << left << setw(13) << RelEff[k][12]<<" & "<< left << setw(16) << TotEffErr[k][12]  <<" & "<< left << setw(16) << RelEffErr[k][12]   <<" hline "<<endl;
-  cout<<" is2DiMuonsPixHitOk      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) << TotEff[k][13] << " & " << left << setw(13) << RelEff[k][13]<<" & "<< left << setw(16) << TotEffErr[k][13]  <<" & "<< left << setw(16) << RelEffErr[k][13]   <<" hline "<<endl;
-  cout<<" is2DiMuonsFittedDzOk    & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) << TotEff[k][14] << " & " << left << setw(13) << RelEff[k][14]<<" & "<< left << setw(16) << TotEffErr[k][14]  <<" & "<< left << setw(16) << RelEffErr[k][14]   <<" hline "<<endl;
-  cout<<" is2MuonsIsolationOK     & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) << TotEff[k][15] << " & " << left << setw(13) << RelEff[k][15]<<" & "<< left << setw(16) << TotEffErr[k][15]  <<" & "<< left << setw(16) << RelEffErr[k][15]   <<" hline "<<endl;
-  cout<<" isSignalHLTAccepted     & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) << TotEff[k][16] << " & " << left << setw(13) << RelEff[k][16]<<" & "<< left << setw(16) << TotEffErr[k][16]  <<" & "<< left << setw(16) << RelEffErr[k][16]   <<" hline "<<endl;
-  cout<<" is2DiMuonsMassOK        & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) << TotEff[k][17] << " & " << left << setw(13) << RelEff[k][17]<<" & "<< left << setw(16) << TotEffErr[k][17]  <<" & "<< left << setw(16) << RelEffErr[k][17]   <<" hline "<<endl;
+  cout<<" is1SelMu17Barrel        & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][6]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][6] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][6]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][6]    <<" hline "<<endl;
+  cout<<" is2SelMu8               & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][7]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][7] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][7]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][7]    <<" hline "<<endl;
+  cout<<" is3SelMu8               & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][8]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][8] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][8]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][8]    <<" hline "<<endl;
+  cout<<" is4SelMu8               & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][9]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][9] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][9]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][9]    <<" hline "<<endl;
+  cout<<" isVertexOK              & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][10] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][10]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][10]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][10]   <<" hline "<<endl;
+  cout<<" is2Dimuons              & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][11] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][11]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][11]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][11]   <<" hline "<<endl;
+  cout<<" isNotDrell-Yan          & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][12] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][12]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][12]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][12]   <<" hline "<<endl;
+  cout<<" is2DiMuonsPixHitOk      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
+  cout<<" is2DiMuonsFittedDzOk    & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
+  cout<<" is2MuonsIsolationOK     & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
+  cout<<" isSignalHLTAccepted     & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][16] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][16]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][16]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][16]   <<" hline "<<endl;
+  cout<<" is2DiMuonsMassOK        & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][17] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][17]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][17]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][17]   <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;
-  cout<<" epsilon_rec/alpha_gen   & "<< epsvsalph[k]<<"$\\pm$ "<< Err[k]<<" hline "<<endl;
+  cout<<" epsilon_rec/alpha_gen   & "<<setprecision(3)<< epsvsalph[k]  << " $\\pm$ "  << Err[k]<<" hline "<<endl;
 
   cout<<"end{tabular}"<<endl;
   cout<<"end{landscape}"<<endl;
@@ -893,6 +894,8 @@ std::vector< std::vector<string> > NtuplePaths;
 // // cout << "Vector Created" << endl;
 readTextFileWithSamples(txtfile, NtuplePaths);
 // // cout << "Samples read" << endl;
-for(auto v: NtuplePaths) efficiency(v);
-// // cout << "For Loop completes" << endl;
+for(auto v: NtuplePaths) {
+  cout << "v: " << v << endl;
+  efficiency(v);
+}
 }
