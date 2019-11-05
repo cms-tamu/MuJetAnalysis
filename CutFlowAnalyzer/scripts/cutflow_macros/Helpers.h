@@ -13,15 +13,15 @@ void addfiles(TChain *ch, const TString dirname=".", const TString ext=".root")
   TSystemDirectory dir(dirname, dirname);
   TList *files = dir.GetListOfFiles();
   if (files) {
-    if (verbose) std::cout << "Found files" << std::endl;
+    if (verbose) std::cout << " Found files" << std::endl;
     TSystemFile *file;
     TString fname;
     TIter next(files);
     while ((file=(TSystemFile*)next())) {
       fname = file->GetName();
-      if (verbose) std::cout << "found fname " << fname << std::endl;
+      if (verbose) std::cout << " found fname " << fname << std::endl;
       if (!file->IsDirectory() && fname.BeginsWith(ext)) {
-        if (verbose) std::cout << "adding fname " << fname << std::endl;
+        if (verbose) std::cout << " adding fname " << fname << std::endl;
         ch->Add(fname);
       }
     }
@@ -43,16 +43,16 @@ void addfilesMany(TChain *ch, const std::vector<string>& v, const TString ext=".
     TSystemDirectory dir(dirname.c_str(), dirname.c_str());
     TList *files = dir.GetListOfFiles();
     if (files) {
-      if (verbose) std::cout << "Found files" << std::endl;
+      if (verbose) std::cout << " Found files" << std::endl;
       TSystemFile *file;
       TString fname;
       TIter next(files);
       while ((file=(TSystemFile*)next())) {
         fname = file->GetName();
-        if (verbose) std::cout << "found file name: " << dirname + fname << std::endl;
+        if (verbose) std::cout << " file name: " << dirname + fname << std::endl;
         if (!file->IsDirectory() && fname.BeginsWith(ext)) {
           nfiles++;
-          if (verbose) std::cout << "adding file #"<<nfiles<<", name: " << dirname + fname << std::endl;
+          if (verbose) std::cout << " adding #" << nfiles << ": " << dirname + fname << std::endl;
           ch->Add(dirname + fname);
         }
       }
