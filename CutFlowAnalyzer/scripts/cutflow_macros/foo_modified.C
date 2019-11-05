@@ -894,8 +894,11 @@ std::vector< std::vector<string> > NtuplePaths;
 // // cout << "Vector Created" << endl;
 readTextFileWithSamples(txtfile, NtuplePaths);
 // // cout << "Samples read" << endl;
+int vi=-1;
 for(auto v: NtuplePaths) {
-  cout << "v: " << v << endl;
+  vi++;
+  cout << vi<<": " << v[vi] << endl;
+  cout << "NtuplePaths[0][0]: " << NtuplePaths[0][0] << endl;
   efficiency(v);
 }
 }
