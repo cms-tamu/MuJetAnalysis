@@ -33,14 +33,14 @@ using namespace std;
 #include "Helpers.h"
 
 int k = -1;
-int counter[200][18];//limit # of samples: 200; 18 total selections per sample
-Float_t TotEff[200][18];//Total efficiency at each selection
-Float_t TotEffErr[200][18];
-Float_t RelEff[200][18];//Relative efficiency to previous selection
-Float_t RelEffErr[200][18];
+int counter[500][18];//limit # of samples: 500; 18 total selections per sample
+Float_t TotEff[500][18];//Total efficiency at each selection
+Float_t TotEffErr[500][18];
+Float_t RelEff[500][18];//Relative efficiency to previous selection
+Float_t RelEffErr[500][18];
 
-Float_t epsvsalph[200] = {0.0};//Model independence indicator: offline reconstruction efficiency over generator level cut efficiency
-Float_t Err[200] = {0.0};
+Float_t epsvsalph[500] = {0.0};//Model independence indicator: offline reconstruction efficiency over generator level cut efficiency
+Float_t Err[500] = {0.0};
 Float_t FitMean = 0.0;
 Float_t FitSigma = 0.0;
 
@@ -221,6 +221,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH2F *BKGShapeCR      = new TH2F("BKGShapeCR",      "", 12, 11., 59., 12, 11., 59.);//binning 4 GeV
   TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF", "", 12, 11., 59.);
+  TH1F *BKGShapeOrphDimumass = new TH1F("BKGShapeOrphDimumass", "", 12, 11., 59.);//Use events in orphan_dimu tree
   //Signal Region
   TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 12, 11., 59., 12, 11., 59.);
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
@@ -623,11 +624,11 @@ void efficiency(const std::vector<std::string>& dirNames)
 
     //Pass same cut as signal, for study 1-D template distribution
     //Note: May need to add orph_dimu_z cut in the future
-    if( Model1DTemplate && orph_passOffLineSelPtEta && orph_AllTrackerMu &&
-        orph_isSignalHLTFired && orph_isVertexOK &&
+    if( ( ModelBKGShape || Model1DTemplate ) && orph_passOffLineSelPtEta && orph_AllTrackerMu && orph_isSignalHLTFired && orph_isVertexOK &&
         ( orph_dimu_Mu0_hitpix_Phase1 == 1 || orph_dimu_Mu1_hitpix_Phase1 == 1 ) &&
         orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
-        Mass1DTemplate->Fill(orph_dimu_mass);
+            Mass1DTemplate->Fill(orph_dimu_mass);
+            BKGShapeOrphDimumass->Fill(orph_dimu_mass);
     }
   }//end for j entries
 
@@ -768,6 +769,7 @@ void efficiency(const std::vector<std::string>& dirNames)
     BKGShapeCR->Write();
     BKGShapeCRmassC->Write();
     BKGShapeCRmassF->Write();
+    BKGShapeOrphDimumass->Write();
     BKGShapeSR->Write();
     BKGShapeSRmassC->Write();
     BKGShapeSRmassF->Write();
@@ -910,6 +912,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete BKGShapeCR;
   delete BKGShapeCRmassC;
   delete BKGShapeCRmassF;
+  delete BKGShapeOrphDimumass;
   delete BKGShapeSR;
   delete BKGShapeSRmassC;
   delete BKGShapeSRmassF;
@@ -972,14 +975,22 @@ void analysis(const std::string SamplesList)
   //Smaller SD indicate better performance on model independence for the selection
   cout << "Tot. # of samples: "<< linecount << endl;
   if ( linecount >= 1 ){
-    TH1F *ratio = new TH1F("ratio", "", 100, 0., 1.);//binning 0.01
+    TH1F *finalratio  = new TH1F("finalratio", "", 100, 0., 1.);//binning 0.01
+    TH1F *cut12releff = new TH1F("cut12releff","", 100, 0., 1.);
+    TH1F *cut12ratio  = new TH1F("cut12ratio", "", 100, 0., 1.);
     for (int iline = 0; iline < linecount; iline++) {
-      cout << iline+1 <<": "<< epsvsalph[iline] << endl;
-      ratio->Fill(epsvsalph[iline]);
+      cout << iline+1 << ": final ratio = "<< epsvsalph[iline] << "; cut12 releff = " << RelEff[iline][12] << "; cut12 ratio = "<< counter[iline][12]*1.0/counter[iline][5] << endl;
+      finalratio->Fill(epsvsalph[iline]);
+      cut12releff->Fill(RelEff[iline][12]);
+      cut12ratio->Fill(counter[iline][12]*1.0/counter[iline][5]);
     }
-    cout << "ratio SD: " << ratio->GetStdDev() << endl;
+    cout << "final ratio  Sigma: " << finalratio->GetStdDev()  << "; Mean: " << finalratio->GetMean() << endl;
+    cout << "cut12 releff Sigma: " << cut12releff->GetStdDev() << "; Mean: " << cut12releff->GetMean() << endl;
+    cout << "cut12 ratio  Sigma: " << cut12ratio->GetStdDev()  << "; Mean: " << cut12ratio->GetMean() << endl;
     TFile finalPlot("analysis.root","RECREATE");
-    ratio->Write();
+    finalratio->Write();
+    cut12releff->Write();
+    cut12ratio->Write();
     finalPlot.Close();
   }
 
