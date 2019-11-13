@@ -92,50 +92,32 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  is2GenMu8;
   Bool_t  is3GenMu8;
   Bool_t  is4GenMu8;
-  Float_t  genA0_Lxy;//A0:dark photon that contains the most energetic muon; redt: wrt detector
-  Float_t  genA1_Lxy;
-  Float_t  genA0_Lz;
-  Float_t  genA1_Lz;
+  Float_t genA0_Lxy;//A0:dark photon that contains the most energetic muon; redt: wrt detector
+  Float_t genA1_Lxy;
+  Float_t genA0_Lz;
+  Float_t genA1_Lz;
 
   Bool_t  is1SelMu17;
   Bool_t  is2SelMu8;
   Bool_t  is3SelMu8;
   Bool_t  is4SelMu8;
-  Float_t selMu0_pT;
-  Float_t selMu1_pT;
-  Float_t selMu2_pT;
-  Float_t selMu3_pT;
+  Float_t selMu0_pT;//leading mu
   Float_t selMu0_eta;
-  Float_t selMu1_eta;
-  Float_t selMu2_eta;
-  Float_t selMu3_eta;
   Float_t selMu0_phi;
-  Float_t selMu1_phi;
-  Float_t selMu2_phi;
-  Float_t selMu3_phi;
 
   Bool_t  is2MuJets;
   Bool_t  is2DiMuons;
   Float_t massC;
   Float_t massF;
-  Float_t muJetC_Mu0_charge;
-  Float_t muJetC_Mu1_charge;
-  Float_t muJetF_Mu0_charge;
-  Float_t muJetF_Mu1_charge;
-  Float_t muJetC_Mu0_eta;
-  Float_t muJetC_Mu1_eta;
-  Float_t muJetF_Mu0_eta;
-  Float_t muJetF_Mu1_eta;
-  Float_t muJetC_Mu0_phi;
-  Float_t muJetC_Mu1_phi;
-  Float_t muJetF_Mu0_phi;
-  Float_t muJetF_Mu1_phi;
+
   Float_t reco4mu_m;
-  Float_t recoFakeDiMu0_m;
-  Float_t recoFakeDiMu1_m;
-  Bool_t  isDrellYan;
+  Float_t recoRePaired2muleading_m;
+  Float_t recoRePaired2mutrailing_m;
+  Float_t recoRePaired2muleading_dR;
+  Float_t recoRePaired2mutrailing_dR;
+
   Bool_t  isVtxOK;
-  Float_t  diMuons_dz_FittedVtx;
+  Float_t diMuons_dz_FittedVtx;
   Bool_t  is2DiMuonsMassOK;
 
   Bool_t  isSignalHLTFired;
@@ -160,16 +142,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  diMuonC_m2_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m1_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m2_FittedVtx_hitpix_Phase1;
-
-  Int_t diMuonC_m1_FittedVtx_ValidPixelHits;
-  Int_t diMuonC_m2_FittedVtx_ValidPixelHits;
-  Int_t diMuonF_m1_FittedVtx_ValidPixelHits;
-  Int_t diMuonF_m2_FittedVtx_ValidPixelHits;
-
-  Int_t diMuonC_m1_FittedVtx_pixelLayersWithMeasurement;
-  Int_t diMuonC_m2_FittedVtx_pixelLayersWithMeasurement;
-  Int_t diMuonF_m1_FittedVtx_pixelLayersWithMeasurement;
-  Int_t diMuonF_m2_FittedVtx_pixelLayersWithMeasurement;
 
   Float_t diMuonC_FittedVtx_Lxy;
   Float_t diMuonC_FittedVtx_L;
@@ -232,8 +204,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *MassF    = new TH1F("MassF",    "", 600,  0., 60.);
 
   TH1F *RECO4muMass             = new TH1F("RECO4muMass",             "", 180,  0., 180.);//binning 1 GeV
-  TH1F *RECOFakeLeading2MuMass  = new TH1F("RECOFakeLeading2MuMass",  "", 180,  0., 180.);
-  TH1F *RECOFakeTrailing2MuMass = new TH1F("RECOFakeTrailing2MuMass", "", 180,  0., 180.);
+  TH1F *RECOrePaired2muLeadingMass  = new TH1F("RECOrePaired2muLeadingMass",  "", 180,  0., 180.);
+  TH1F *RECOrePaired2muTrailingMass = new TH1F("RECOrePaired2muTrailingMass", "", 180,  0., 180.);
 
   TH1F *RECOrePaired2muLeadingdR   = new TH1F("RECOrePaired2muLeadingdR",   "", 450,  0., 4.5);//binning 0.01
   TH1F *RECOrePaired2muTrailingdR  = new TH1F("RECOrePaired2muTrailingdR",  "", 450,  0., 4.5);
@@ -286,17 +258,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 	t->SetBranchAddress("is3SelMu8",  &is3SelMu8);
 	t->SetBranchAddress("is4SelMu8",  &is4SelMu8);
 	t->SetBranchAddress("selMu0_pT",  &selMu0_pT);
-	t->SetBranchAddress("selMu1_pT",  &selMu1_pT);
-	t->SetBranchAddress("selMu2_pT",  &selMu2_pT);
-	t->SetBranchAddress("selMu3_pT",  &selMu3_pT);
 	t->SetBranchAddress("selMu0_eta", &selMu0_eta);
-	t->SetBranchAddress("selMu1_eta", &selMu1_eta);
-	t->SetBranchAddress("selMu2_eta", &selMu2_eta);
-	t->SetBranchAddress("selMu3_eta", &selMu3_eta);
   t->SetBranchAddress("selMu0_phi", &selMu0_phi);
-	t->SetBranchAddress("selMu1_phi", &selMu1_phi);
-	t->SetBranchAddress("selMu2_phi", &selMu2_phi);
-	t->SetBranchAddress("selMu3_phi", &selMu3_phi);
 
   t->SetBranchAddress("isVertexOK", &isVtxOK);
 	t->SetBranchAddress("is2MuJets",  &is2MuJets);
@@ -304,36 +267,16 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("massC",      &massC);
 	t->SetBranchAddress("massF",      &massF);
 
-  t->SetBranchAddress("muJetC_Mu0_charge",  &muJetC_Mu0_charge);
-  t->SetBranchAddress("muJetC_Mu1_charge",  &muJetC_Mu1_charge);
-  t->SetBranchAddress("muJetF_Mu0_charge",  &muJetF_Mu0_charge);
-  t->SetBranchAddress("muJetF_Mu1_charge",  &muJetF_Mu1_charge);
-  t->SetBranchAddress("muJetC_Mu0_eta",  &muJetC_Mu0_eta);
-  t->SetBranchAddress("muJetC_Mu1_eta",  &muJetC_Mu1_eta);
-  t->SetBranchAddress("muJetF_Mu0_eta",  &muJetF_Mu0_eta);
-  t->SetBranchAddress("muJetF_Mu1_eta",  &muJetF_Mu1_eta);
-  t->SetBranchAddress("muJetC_Mu0_phi",  &muJetC_Mu0_phi);
-  t->SetBranchAddress("muJetC_Mu1_phi",  &muJetC_Mu1_phi);
-  t->SetBranchAddress("muJetF_Mu0_phi",  &muJetF_Mu0_phi);
-  t->SetBranchAddress("muJetF_Mu1_phi",  &muJetF_Mu1_phi);
-
-  t->SetBranchAddress("reco4mu_m",       &reco4mu_m);
-  t->SetBranchAddress("recoFakeDiMu0_m", &recoFakeDiMu0_m);//mass not ordered
-  t->SetBranchAddress("recoFakeDiMu1_m", &recoFakeDiMu1_m);
-  t->SetBranchAddress("isDrellYan",      &isDrellYan);
+  t->SetBranchAddress("reco4mu_m",                  &reco4mu_m);
+  t->SetBranchAddress("recoRePaired2muleading_m",   &recoRePaired2muleading_m);
+  t->SetBranchAddress("recoRePaired2mutrailing_m",  &recoRePaired2mutrailing_m);
+  t->SetBranchAddress("recoRePaired2muleading_dR",  &recoRePaired2muleading_dR);
+  t->SetBranchAddress("recoRePaired2mutrailing_dR", &recoRePaired2mutrailing_dR);
 
   t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_Phase1",              &diMuonC_m1_FittedVtx_hitpix_Phase1);
 	t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1",              &diMuonC_m2_FittedVtx_hitpix_Phase1);
 	t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1",              &diMuonF_m1_FittedVtx_hitpix_Phase1);
 	t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1",              &diMuonF_m2_FittedVtx_hitpix_Phase1);
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelHits",             &diMuonC_m1_FittedVtx_ValidPixelHits);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelHits",             &diMuonC_m2_FittedVtx_ValidPixelHits);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelHits",             &diMuonF_m1_FittedVtx_ValidPixelHits);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelHits",             &diMuonF_m2_FittedVtx_ValidPixelHits);
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_pixelLayersWithMeasurement", &diMuonC_m1_FittedVtx_pixelLayersWithMeasurement);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_pixelLayersWithMeasurement", &diMuonC_m2_FittedVtx_pixelLayersWithMeasurement);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_pixelLayersWithMeasurement", &diMuonF_m1_FittedVtx_pixelLayersWithMeasurement);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_pixelLayersWithMeasurement", &diMuonF_m2_FittedVtx_pixelLayersWithMeasurement);
   //For checking pixel Hit
   t->SetBranchAddress("diMuonC_FittedVtx_Lxy", &diMuonC_FittedVtx_Lxy);
 	t->SetBranchAddress("diMuonC_FittedVtx_L",   &diMuonC_FittedVtx_L);
@@ -443,64 +386,15 @@ void efficiency(const std::vector<std::string>& dirNames)
           if( is2DiMuons ){
             counter[k][11]++;
 
-            Float_t dEtaRePairedDimuA = -999.;
-            Float_t dEtaRePairedDimuB = -999.;
-            Float_t dPhiRePairedDimuA = -999.;
-            Float_t dPhiRePairedDimuB = -999.;
-            Float_t dRrePairedDimuA = -999.;
-            Float_t dRrePairedDimuB = -999.;
-
             if( ModelBKGShape ) {
-
               RECO4muMass->Fill(reco4mu_m);
-              if(recoFakeDiMu0_m >= recoFakeDiMu1_m){
-                RECOFakeLeading2MuMass->Fill(recoFakeDiMu0_m);
-                RECOFakeTrailing2MuMass->Fill(recoFakeDiMu1_m);
-              }
-              else{
-                RECOFakeLeading2MuMass->Fill(recoFakeDiMu1_m);
-                RECOFakeTrailing2MuMass->Fill(recoFakeDiMu0_m);
-              }
-
-              //dR of two muons in Re-Paired Dimu A and B
-              if ( (muJetC_Mu0_charge * muJetF_Mu0_charge < 0) && (muJetC_Mu1_charge * muJetF_Mu1_charge < 0) ) {
-                dEtaRePairedDimuA = muJetC_Mu0_eta - muJetF_Mu0_eta;
-                dEtaRePairedDimuB = muJetC_Mu1_eta - muJetF_Mu1_eta;
-                dPhiRePairedDimuA = My_dPhi( muJetC_Mu0_phi, muJetF_Mu0_phi );
-                dPhiRePairedDimuB = My_dPhi( muJetC_Mu1_phi, muJetF_Mu1_phi );
-              }
-              else if ( (muJetC_Mu0_charge * muJetF_Mu1_charge < 0) && (muJetC_Mu1_charge * muJetF_Mu0_charge < 0) ) {
-                dEtaRePairedDimuA = muJetC_Mu0_eta - muJetF_Mu1_eta;
-                dEtaRePairedDimuB = muJetC_Mu1_eta - muJetF_Mu0_eta;
-                dPhiRePairedDimuA = My_dPhi( muJetC_Mu0_phi, muJetF_Mu1_phi );
-                dPhiRePairedDimuB = My_dPhi( muJetC_Mu1_phi, muJetF_Mu0_phi );
-              }
-              dRrePairedDimuA   = sqrt(dEtaRePairedDimuA*dEtaRePairedDimuA + dPhiRePairedDimuA*dPhiRePairedDimuA);
-              dRrePairedDimuB   = sqrt(dEtaRePairedDimuB*dEtaRePairedDimuB + dPhiRePairedDimuB*dPhiRePairedDimuB);
-              //Order dR
-              if(dRrePairedDimuA >= dRrePairedDimuB){
-                RECOrePaired2muLeadingdR->Fill(dRrePairedDimuA);
-                RECOrePaired2muTrailingdR->Fill(dRrePairedDimuB);
-              }
-              else{
-                RECOrePaired2muLeadingdR->Fill(dRrePairedDimuB);
-                RECOrePaired2muTrailingdR->Fill(dRrePairedDimuA);
-              }
-
+              RECOrePaired2muLeadingMass->Fill(recoRePaired2muleading_m);
+              RECOrePaired2muTrailingMass->Fill(recoRePaired2mutrailing_m);
+              RECOrePaired2muLeadingdR->Fill(recoRePaired2muleading_dR);
+              RECOrePaired2muTrailingdR->Fill(recoRePaired2mutrailing_dR);
             }//end ModelBKGShape
 
-            //Placeholder
-            //if( !isDrellYan ){
-            //Cut on 4mu mass and 2mu mass
-            //if( !(recoFakeDiMu0_m > 81 && recoFakeDiMu0_m < 101) &&
-            //    !(recoFakeDiMu1_m > 81 && recoFakeDiMu1_m < 101) &&
-            //    !(reco4mu_m > 81 && reco4mu_m < 101) ){
-            //Cut on trailing mass
-            //if( TMath::Min(recoFakeDiMu0_m, recoFakeDiMu1_m) >= 10 ){
-            //Cut on trailing dR
-            //if( TMath::Min(dRrePairedDimuA, dRrePairedDimuB) >= 0.2 ){
-            //Cut on trailing dR and trailing mass: reject trailing dR<X and mass<Y
-            if( TMath::Min(dRrePairedDimuA, dRrePairedDimuB) >= 0.2 || TMath::Min(recoFakeDiMu0_m, recoFakeDiMu1_m) >= 10 ){
+            if( RECOrePaired2muTrailingdR >= 0.2 || RECOrePaired2muTrailingMass >= 3 ){
               counter[k][12]++;
 
               if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
@@ -762,8 +656,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   if ( ModelBKGShape ) {
     RECO4muMass->GetXaxis()->SetTitle("m_{4#mu} [GeV]"); RECO4muMass->GetYaxis()->SetTitle("Events/GeV"); RECO4muMass->Write();
-    RECOFakeLeading2MuMass->GetXaxis()->SetTitle("Leading mass of re-paired OS di-#mu [GeV]"); RECOFakeLeading2MuMass->GetYaxis()->SetTitle("Events/GeV"); RECOFakeLeading2MuMass->Write();
-    RECOFakeTrailing2MuMass->GetXaxis()->SetTitle("Trailing mass of re-paired OS di-#mu [GeV]"); RECOFakeTrailing2MuMass->GetYaxis()->SetTitle("Events/GeV"); RECOFakeTrailing2MuMass->Write();
+    RECOrePaired2muLeadingMass->GetXaxis()->SetTitle("Leading mass of re-paired OS di-#mu [GeV]"); RECOrePaired2muLeadingMass->GetYaxis()->SetTitle("Events/GeV"); RECOrePaired2muLeadingMass->Write();
+    RECOrePaired2muTrailingMass->GetXaxis()->SetTitle("Trailing mass of re-paired OS di-#mu [GeV]"); RECOrePaired2muTrailingMass->GetYaxis()->SetTitle("Events/GeV"); RECOrePaired2muTrailingMass->Write();
     RECOrePaired2muLeadingdR->GetXaxis()->SetTitle("Leading dR of re-paired OS di-#mu"); RECOrePaired2muLeadingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muLeadingdR->Write();
     RECOrePaired2muTrailingdR->GetXaxis()->SetTitle("Trailing dR of re-paired OS di-#mu"); RECOrePaired2muTrailingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muTrailingdR->Write();
     BKGShapeCR->Write();
@@ -920,8 +814,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete MassC;
   delete MassF;
   delete RECO4muMass;
-  delete RECOFakeLeading2MuMass;
-  delete RECOFakeTrailing2MuMass;
+  delete RECOrePaired2muLeadingMass;
+  delete RECOrePaired2muTrailingMass;
   delete RECOrePaired2muLeadingdR;
   delete RECOrePaired2muTrailingdR;
   delete IsoDimuC;

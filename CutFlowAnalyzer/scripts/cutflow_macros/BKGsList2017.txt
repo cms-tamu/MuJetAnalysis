@@ -1,0 +1,7 @@
+./2017Ntuples/HighMassBKGs/DY0J.txt
+./2017Ntuples/HighMassBKGs/DY1J.txt
+./2017Ntuples/HighMassBKGs/DY2J.txt
+./2017Ntuples/HighMassBKGs/qqToZZTo4L.txt
+./2017Ntuples/HighMassBKGs/TTJets_DiLept.txt
+./2017Ntuples/HighMassBKGs/ggHToZZTo4L.txt
+./2017Ntuples/HighMassBKGs/ggToZZTo4mu.txt

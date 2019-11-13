@@ -386,6 +386,18 @@ private:
   Float_t b_recoFakeDiMu1_phi;
   Float_t b_recoFakeDiMu1_m;
 
+  Float_t b_dEtaRePairedDimuA;
+  Float_t b_dEtaRePairedDimuB;
+  Float_t b_dPhiRePairedDimuA;
+  Float_t b_dPhiRePairedDimuB;
+  Float_t b_dRrePairedDimuA;
+  Float_t b_dRrePairedDimuB;
+
+  Float_t b_recoRePaired2muleading_m;
+  Float_t b_recoRePaired2mutrailing_m;
+  Float_t b_recoRePaired2muleading_dR;
+  Float_t b_recoRePaired2mutrailing_dR;
+
   Float_t b_isoC_1mm;
   Float_t b_isoF_1mm;
 
@@ -408,7 +420,6 @@ private:
   Bool_t b_is2DiMuons;
   Int_t  m_events2DiMuons; // ... with 2 dimuons (dimuon = muon jet with 2 muons)
 
-  Bool_t b_isDrellYan;
   Bool_t b_is2DiMuonsFittedVtxOK;
 
   Bool_t b_isSignalHLTFired;
@@ -1598,6 +1609,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_recoFakeDiMu0_m   = (diMuonCMu0_4Vect + diMuonFMu0_4Vect).M();
       b_recoFakeDiMu1_m   = (diMuonCMu1_4Vect + diMuonFMu1_4Vect).M();
 
+      b_dEtaRePairedDimuA = b_muJetC_Mu0_eta - b_muJetF_Mu0_eta;
+      b_dEtaRePairedDimuB = b_muJetC_Mu1_eta - b_muJetF_Mu1_eta;
+      b_dPhiRePairedDimuA = tamu::helpers::My_dPhi( b_muJetC_Mu0_phi, b_muJetF_Mu0_phi );
+      b_dPhiRePairedDimuB = tamu::helpers::My_dPhi( b_muJetC_Mu1_phi, b_muJetF_Mu1_phi );
+
     }
     else if ( (b_muJetC_Mu0_charge * b_muJetF_Mu1_charge < 0) && (b_muJetC_Mu1_charge * b_muJetF_Mu0_charge < 0) ) {
       b_recoFakeDiMu0_pt  = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).Pt();
@@ -1608,7 +1624,35 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_recoFakeDiMu1_phi = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).Phi();
       b_recoFakeDiMu0_m   = (diMuonCMu0_4Vect + diMuonFMu1_4Vect).M();
       b_recoFakeDiMu1_m   = (diMuonCMu1_4Vect + diMuonFMu0_4Vect).M();
+
+      b_dEtaRePairedDimuA = b_muJetC_Mu0_eta - b_muJetF_Mu1_eta;
+      b_dEtaRePairedDimuB = b_muJetC_Mu1_eta - b_muJetF_Mu0_eta;
+      b_dPhiRePairedDimuA = tamu::helpers::My_dPhi( b_muJetC_Mu0_phi, b_muJetF_Mu1_phi );
+      b_dPhiRePairedDimuB = tamu::helpers::My_dPhi( b_muJetC_Mu1_phi, b_muJetF_Mu0_phi );
     }
+
+    //re-paired mass order
+    if(b_recoFakeDiMu0_m >= b_recoFakeDiMu1_m){
+      b_recoRePaired2muleading_m = b_recoFakeDiMu0_m;
+      b_recoRePaired2mutrailing_m = b_recoFakeDiMu1_m;
+    }
+    else{
+      b_recoRePaired2muleading_m = b_recoFakeDiMu1_m;
+      b_recoRePaired2mutrailing_m = b_recoFakeDiMu0_m;
+    }
+
+    b_dRrePairedDimuA   = sqrt(b_dEtaRePairedDimuA*b_dEtaRePairedDimuA + b_dPhiRePairedDimuA*b_dPhiRePairedDimuA);
+    b_dRrePairedDimuB   = sqrt(b_dEtaRePairedDimuB*b_dEtaRePairedDimuB + b_dPhiRePairedDimuB*b_dPhiRePairedDimuB);
+    //re-paired dR order
+    if(b_dRrePairedDimuA >= b_dRrePairedDimuB){
+      b_recoRePaired2muleading_dR = b_dRrePairedDimuA;
+      b_recoRePaired2mutrailing_dR = b_dRrePairedDimuB;
+    }
+    else{
+      b_recoRePaired2muleading_dR = b_dRrePairedDimuB;
+      b_recoRePaired2mutrailing_dR = b_dRrePairedDimuA;
+    }
+
   }
   else{
     b_reco4mu_pt  = -999.;
@@ -1623,14 +1667,16 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_recoFakeDiMu1_phi = -999.;
     b_recoFakeDiMu0_m   = -999.;
     b_recoFakeDiMu1_m   = -999.;
-  }
-
-  //Placeholder selector for rejecting DY events from Z: 81-101 GeV TBD
-  b_isDrellYan = false;
-  if ( (b_recoFakeDiMu0_m > 81 && b_recoFakeDiMu0_m < 101) ||
-       (b_recoFakeDiMu1_m > 81 && b_recoFakeDiMu1_m < 101) ||
-       (b_reco4mu_m > 81 && b_reco4mu_m < 101) ){
-    b_isDrellYan = true;
+    b_dEtaRePairedDimuA = -999.;
+    b_dEtaRePairedDimuB = -999.;
+    b_dPhiRePairedDimuA = -999.;
+    b_dPhiRePairedDimuB = -999.;
+    b_dRrePairedDimuA = -999.;
+    b_dRrePairedDimuB = -999.;
+    b_recoRePaired2muleading_m = -999.;
+    b_recoRePaired2mutrailing_m = -999.;
+    b_recoRePaired2muleading_dR = -999.;
+    b_recoRePaired2mutrailing_dR = -999.;
   }
 
   // fitted vertexes
@@ -2685,6 +2731,18 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("recoFakeDiMu0_m",                &b_recoFakeDiMu0_m,                "recoFakeDiMu0_m/F");
   m_ttree->Branch("recoFakeDiMu1_m",                &b_recoFakeDiMu1_m,                "recoFakeDiMu1_m/F");
 
+  m_ttree->Branch("dEtaRePairedDimuA",              &b_dEtaRePairedDimuA,              "dEtaRePairedDimuA/F");
+  m_ttree->Branch("dEtaRePairedDimuB",              &b_dEtaRePairedDimuB,              "dEtaRePairedDimuB/F");
+  m_ttree->Branch("dPhiRePairedDimuA",              &b_dPhiRePairedDimuA,              "dPhiRePairedDimuA/F");
+  m_ttree->Branch("dPhiRePairedDimuB",              &b_dPhiRePairedDimuB,              "dPhiRePairedDimuB/F");
+  m_ttree->Branch("dRrePairedDimuA",                &b_dRrePairedDimuA,                "dRrePairedDimuA/F");
+  m_ttree->Branch("dRrePairedDimuB",                &b_dRrePairedDimuB,                "dRrePairedDimuB/F");
+
+  m_ttree->Branch("recoRePaired2muleading_m",       &b_recoRePaired2muleading_m,       "recoRePaired2muleading_m/F");
+  m_ttree->Branch("recoRePaired2mutrailing_m",      &b_recoRePaired2mutrailing_m,      "recoRePaired2mutrailing_m/F");
+  m_ttree->Branch("recoRePaired2muleading_dR",      &b_recoRePaired2muleading_dR,      "recoRePaired2muleading_dR/F");
+  m_ttree->Branch("recoRePaired2mutrailing_dR",     &b_recoRePaired2mutrailing_dR,     "recoRePaired2mutrailing_dR/F");
+
   // RECO Level Selectors
   m_ttree->Branch("is1SelMu17",                     &b_is1SelMu17,                     "is1SelMu17/O");
   m_ttree->Branch("is2SelMu8",                      &b_is2SelMu8,                      "is2SelMu8/O");
@@ -2693,7 +2751,6 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   m_ttree->Branch("is2MuJets",                      &b_is2MuJets,                      "is2MuJets/O");
   m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
-  m_ttree->Branch("isDrellYan",                     &b_isDrellYan,                     "isDrellYan/O");
   m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
 
   m_ttree->Branch("isSignalHLTFired",               &b_isSignalHLTFired,               "isSignalHLTFired/O");

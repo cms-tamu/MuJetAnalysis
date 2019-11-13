@@ -1,0 +1,4 @@
+./2017Ntuples/DATA/2017C.txt
+./2017Ntuples/DATA/2017D.txt
+./2017Ntuples/DATA/2017E.txt
+./2017Ntuples/DATA/2017F.txt
