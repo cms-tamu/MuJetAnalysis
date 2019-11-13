@@ -394,7 +394,7 @@ void efficiency(const std::vector<std::string>& dirNames)
               RECOrePaired2muTrailingdR->Fill(recoRePaired2mutrailing_dR);
             }//end ModelBKGShape
 
-            if( RECOrePaired2muTrailingdR >= 0.2 || RECOrePaired2muTrailingMass >= 3 ){
+            if( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ){
               counter[k][12]++;
 
               if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
