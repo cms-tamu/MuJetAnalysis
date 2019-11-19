@@ -1,0 +1,9 @@
+./2017Ntuples/MSSMD/MSSMD_mH_125_mN1_60_mGammaD_0p25_cT_0.txt
+./2017Ntuples/MSSMD/MSSMD_mH_125_mN1_60_mGammaD_0p4_cT_0.txt
+./2017Ntuples/MSSMD/MSSMD_mH_125_mN1_60_mGammaD_0p7_cT_0.txt
+./2017Ntuples/MSSMD/MSSMD_mH_125_mN1_60_mGammaD_1_cT_0.txt
+./2017Ntuples/MSSMD/MSSMD_mH_125_mN1_60_mGammaD_2_cT_0.txt
+./2017Ntuples/MSSMD/MSSMD_mH_125_mN1_60_mGammaD_8p5_cT_0.txt
+./2017Ntuples/MSSMD/MSSMD_mH_125_mN1_60_mGammaD_10_cT_0.txt
+./2017Ntuples/MSSMD/MSSMD_mH_125_mN1_60_mGammaD_25_cT_0.txt
+./2017Ntuples/MSSMD/MSSMD_mH_125_mN1_60_mGammaD_58_cT_0.txt

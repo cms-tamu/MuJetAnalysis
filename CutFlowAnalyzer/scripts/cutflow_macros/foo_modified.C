@@ -64,7 +64,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   //=======================================================================
   bool verbose(true);
   bool CutFlowTable(true);
-  bool CheckRecoVtx(false);
+  bool CheckDisplacement(true);
   bool ModelBKGShape(true);
   bool Model1DTemplate(false);
   bool ModelSRWidth(false);
@@ -199,6 +199,20 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 12, 11., 59.);
 
+  TH1F* L_DimuC_CR = new TH1F("L_DimuC_CR", "", 350, 0., 350.);//cm
+  TH1F* L_DimuF_CR = new TH1F("L_DimuF_CR", "", 350, 0., 350.);
+  TH1F* Lxy_DimuC_CR = new TH1F("Lxy_DimuC_CR", "", 150, 0., 150.);
+  TH1F* Lxy_DimuF_CR = new TH1F("Lxy_DimuF_CR", "", 150, 0., 150.);
+  TH1F* Lz_DimuC_CR = new TH1F("Lz_DimuC_CR", "", 300, 0., 300.);
+  TH1F* Lz_DimuF_CR = new TH1F("Lz_DimuF_CR", "", 300, 0., 300.);
+
+  TH1F* L_DimuC_SR = new TH1F("L_DimuC_SR", "", 350, 0., 350.);
+  TH1F* L_DimuF_SR = new TH1F("L_DimuF_SR", "", 350, 0., 350.);
+  TH1F* Lxy_DimuC_SR = new TH1F("Lxy_DimuC_SR", "", 150, 0., 150.);
+  TH1F* Lxy_DimuF_SR = new TH1F("Lxy_DimuF_SR", "", 150, 0., 150.);
+  TH1F* Lz_DimuC_SR = new TH1F("Lz_DimuC_SR", "", 300, 0., 300.);
+  TH1F* Lz_DimuF_SR = new TH1F("Lz_DimuF_SR", "", 300, 0., 300.);
+
   TH1F *DimuMass = new TH1F("DimuMass", "", 6000, 0., 60.);//binning 0.01 GeV
   TH1F *MassC    = new TH1F("MassC",    "", 600,  0., 60.);//binning 0.1 GeV
   TH1F *MassF    = new TH1F("MassF",    "", 600,  0., 60.);
@@ -331,10 +345,10 @@ void efficiency(const std::vector<std::string>& dirNames)
       counter[k][0]++;
 
       //Check vtx significance without any selections
-      if ( CheckRecoVtx ){
+      if ( CheckDisplacement ){
         Lxy_Residual_GEN_leading_pT->Fill(genA0_Lxy, genA0_Lxy-diMuonC_FittedVtx_Lxy);//assume they match
         Abs_Lz_Residual_GEN_leading_pT->Fill(genA0_Lz, genA0_Lz-sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
-      }//end CheckRecoVtx
+      }//end CheckDisplacement
 
       if( is1GenMu17 ) counter[k][1]++;
       if( is2GenMu8  ) counter[k][2]++;
@@ -472,6 +486,15 @@ void efficiency(const std::vector<std::string>& dirNames)
                           BKGShapeSRmassF->Fill(massF);
                         }
                         //std::cout << "SR run: "<< run << "; lumi: "<< lumi << "; event: "<< event << std::endl;
+                        //check background events displacement
+                        if( CheckDisplacement ) {
+                          L_DimuC_SR->Fill(diMuonC_FittedVtx_L);
+                          Lxy_DimuC_SR->Fill(diMuonC_FittedVtx_Lxy);
+                          Lz_DimuC_SR->Fill( sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
+                          L_DimuF_SR->Fill(diMuonF_FittedVtx_L);
+                          Lxy_DimuF_SR->Fill(diMuonF_FittedVtx_Lxy);
+                          Lz_DimuF_SR->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
+                        }
                       }//end 17: mass consistent
                       else{
                         //================================================
@@ -483,6 +506,15 @@ void efficiency(const std::vector<std::string>& dirNames)
                           BKGShapeCRmassC->Fill(massC);
                           BKGShapeCRmassF->Fill(massF);
                         }//end if ModelBKGShape
+                        //check background events displacement
+                        if( CheckDisplacement ) {
+                          L_DimuC_CR->Fill(diMuonC_FittedVtx_L);
+                          Lxy_DimuC_CR->Fill(diMuonC_FittedVtx_Lxy);
+                          Lz_DimuC_CR->Fill( sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
+                          L_DimuF_CR->Fill(diMuonF_FittedVtx_L);
+                          Lxy_DimuF_CR->Fill(diMuonF_FittedVtx_Lxy);
+                          Lz_DimuF_CR->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
+                        }
 
                       }//end else
                     }//end 16
@@ -583,10 +615,22 @@ void efficiency(const std::vector<std::string>& dirNames)
   output = output + "./foo_modified_sample_" + Form("%d", k+1)+ ".root";
   TFile myPlot(output,"RECREATE");
 
-  if ( CheckRecoVtx ){
+  if ( CheckDisplacement ){
     Lxy_Residual_GEN_leading_pT->Write();
     Abs_Lz_Residual_GEN_leading_pT->Write();
-  }//end CheckRecoVtx
+    L_DimuC_SR->Write();
+    L_DimuF_SR->Write();
+    Lxy_DimuC_SR->Write();
+    Lxy_DimuF_SR->Write();
+    Lz_DimuC_SR->Write();
+    Lz_DimuF_SR->Write();
+    L_DimuC_CR->Write();
+    L_DimuF_CR->Write();
+    Lxy_DimuC_CR->Write();
+    Lxy_DimuF_CR->Write();
+    Lz_DimuC_CR->Write();
+    Lz_DimuF_CR->Write();
+  }//end CheckDisplacement
 
   if ( PerEventTriggerEff ) {
     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "BASIC" offline pT selections
