@@ -854,6 +854,18 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete BKGShapeSR;
   delete BKGShapeSRmassC;
   delete BKGShapeSRmassF;
+  delete L_DimuC_CR;
+  delete L_DimuF_CR;
+  delete Lxy_DimuC_CR;
+  delete Lxy_DimuF_CR;
+  delete Lz_DimuC_CR;
+  delete Lz_DimuF_CR;
+  delete L_DimuC_SR;
+  delete L_DimuF_SR;
+  delete Lxy_DimuC_SR;
+  delete Lxy_DimuF_SR;
+  delete Lz_DimuC_SR;
+  delete Lz_DimuF_SR;
   delete DimuMass;
   delete MassC;
   delete MassF;
