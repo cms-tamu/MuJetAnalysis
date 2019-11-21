@@ -199,19 +199,19 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 12, 11., 59.);
 
-  TH1F* L_DimuC_CR = new TH1F("L_DimuC_CR", "", 350, 0., 350.);//cm
-  TH1F* L_DimuF_CR = new TH1F("L_DimuF_CR", "", 350, 0., 350.);
-  TH1F* Lxy_DimuC_CR = new TH1F("Lxy_DimuC_CR", "", 150, 0., 150.);
-  TH1F* Lxy_DimuF_CR = new TH1F("Lxy_DimuF_CR", "", 150, 0., 150.);
-  TH1F* Lz_DimuC_CR = new TH1F("Lz_DimuC_CR", "", 300, 0., 300.);
-  TH1F* Lz_DimuF_CR = new TH1F("Lz_DimuF_CR", "", 300, 0., 300.);
+  TH1F* L_DimuC_CR = new TH1F("L_DimuC_CR", "", 800, 0., 80.);//cm
+  TH1F* L_DimuF_CR = new TH1F("L_DimuF_CR", "", 800, 0., 80.);
+  TH1F* Lxy_DimuC_CR = new TH1F("Lxy_DimuC_CR", "", 500, 0., 50.);
+  TH1F* Lxy_DimuF_CR = new TH1F("Lxy_DimuF_CR", "", 500, 0., 50.);
+  TH1F* Lz_DimuC_CR = new TH1F("Lz_DimuC_CR", "", 600, 0., 60.);
+  TH1F* Lz_DimuF_CR = new TH1F("Lz_DimuF_CR", "", 600, 0., 60.);
 
-  TH1F* L_DimuC_SR = new TH1F("L_DimuC_SR", "", 350, 0., 350.);
-  TH1F* L_DimuF_SR = new TH1F("L_DimuF_SR", "", 350, 0., 350.);
-  TH1F* Lxy_DimuC_SR = new TH1F("Lxy_DimuC_SR", "", 150, 0., 150.);
-  TH1F* Lxy_DimuF_SR = new TH1F("Lxy_DimuF_SR", "", 150, 0., 150.);
-  TH1F* Lz_DimuC_SR = new TH1F("Lz_DimuC_SR", "", 300, 0., 300.);
-  TH1F* Lz_DimuF_SR = new TH1F("Lz_DimuF_SR", "", 300, 0., 300.);
+  TH1F* L_DimuC_SR = new TH1F("L_DimuC_SR", "", 800, 0., 80.);
+  TH1F* L_DimuF_SR = new TH1F("L_DimuF_SR", "", 800, 0., 80.);
+  TH1F* Lxy_DimuC_SR = new TH1F("Lxy_DimuC_SR", "", 500, 0., 50.);
+  TH1F* Lxy_DimuF_SR = new TH1F("Lxy_DimuF_SR", "", 500, 0., 50.);
+  TH1F* Lz_DimuC_SR = new TH1F("Lz_DimuC_SR", "", 600, 0., 60.);
+  TH1F* Lz_DimuF_SR = new TH1F("Lz_DimuF_SR", "", 600, 0., 60.);
 
   TH1F *DimuMass = new TH1F("DimuMass", "", 6000, 0., 60.);//binning 0.01 GeV
   TH1F *MassC    = new TH1F("MassC",    "", 600,  0., 60.);//binning 0.1 GeV
