@@ -199,19 +199,19 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 12, 11., 59.);
 
-  TH1F* L_DimuC_CR = new TH1F("L_DimuC_CR", "", 800, 0., 80.);//cm
-  TH1F* L_DimuF_CR = new TH1F("L_DimuF_CR", "", 800, 0., 80.);
-  TH1F* Lxy_DimuC_CR = new TH1F("Lxy_DimuC_CR", "", 500, 0., 50.);
-  TH1F* Lxy_DimuF_CR = new TH1F("Lxy_DimuF_CR", "", 500, 0., 50.);
-  TH1F* Lz_DimuC_CR = new TH1F("Lz_DimuC_CR", "", 600, 0., 60.);
-  TH1F* Lz_DimuF_CR = new TH1F("Lz_DimuF_CR", "", 600, 0., 60.);
+  TH1F* L_DimuC_CR_HighMass = new TH1F("L_DimuC_CR_HighMass", "", 800, 0., 80.);//cm
+  TH1F* L_DimuF_CR_HighMass = new TH1F("L_DimuF_CR_HighMass", "", 800, 0., 80.);
+  TH1F* Lxy_DimuC_CR_HighMass = new TH1F("Lxy_DimuC_CR_HighMass", "", 500, 0., 50.);
+  TH1F* Lxy_DimuF_CR_HighMass = new TH1F("Lxy_DimuF_CR_HighMass", "", 500, 0., 50.);
+  TH1F* Lz_DimuC_CR_HighMass = new TH1F("Lz_DimuC_CR_HighMass", "", 600, 0., 60.);
+  TH1F* Lz_DimuF_CR_HighMass = new TH1F("Lz_DimuF_CR_HighMass", "", 600, 0., 60.);
 
-  TH1F* L_DimuC_SR = new TH1F("L_DimuC_SR", "", 800, 0., 80.);
-  TH1F* L_DimuF_SR = new TH1F("L_DimuF_SR", "", 800, 0., 80.);
-  TH1F* Lxy_DimuC_SR = new TH1F("Lxy_DimuC_SR", "", 500, 0., 50.);
-  TH1F* Lxy_DimuF_SR = new TH1F("Lxy_DimuF_SR", "", 500, 0., 50.);
-  TH1F* Lz_DimuC_SR = new TH1F("Lz_DimuC_SR", "", 600, 0., 60.);
-  TH1F* Lz_DimuF_SR = new TH1F("Lz_DimuF_SR", "", 600, 0., 60.);
+  TH1F* L_DimuC_SR_HighMass = new TH1F("L_DimuC_SR_HighMass", "", 800, 0., 80.);
+  TH1F* L_DimuF_SR_HighMass = new TH1F("L_DimuF_SR_HighMass", "", 800, 0., 80.);
+  TH1F* Lxy_DimuC_SR_HighMass = new TH1F("Lxy_DimuC_SR_HighMass", "", 500, 0., 50.);
+  TH1F* Lxy_DimuF_SR_HighMass = new TH1F("Lxy_DimuF_SR_HighMass", "", 500, 0., 50.);
+  TH1F* Lz_DimuC_SR_HighMass = new TH1F("Lz_DimuC_SR_HighMass", "", 600, 0., 60.);
+  TH1F* Lz_DimuF_SR_HighMass = new TH1F("Lz_DimuF_SR_HighMass", "", 600, 0., 60.);
 
   TH1F *DimuMass = new TH1F("DimuMass", "", 6000, 0., 60.);//binning 0.01 GeV
   TH1F *MassC    = new TH1F("MassC",    "", 600,  0., 60.);//binning 0.1 GeV
@@ -488,13 +488,16 @@ void efficiency(const std::vector<std::string>& dirNames)
                         //std::cout << "SR run: "<< run << "; lumi: "<< lumi << "; event: "<< event << std::endl;
                         //check background events displacement
                         if( CheckDisplacement ) {
-                          L_DimuC_SR->Fill(diMuonC_FittedVtx_L);
-                          Lxy_DimuC_SR->Fill(diMuonC_FittedVtx_Lxy);
-                          Lz_DimuC_SR->Fill( sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
-                          L_DimuF_SR->Fill(diMuonF_FittedVtx_L);
-                          Lxy_DimuF_SR->Fill(diMuonF_FittedVtx_Lxy);
-                          Lz_DimuF_SR->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
+                          if (massC >= 11.0 && massC < 59.0 && massF >= 11.0 && massF < 59.0){
+                            L_DimuC_SR_HighMass->Fill(fabs(diMuonC_FittedVtx_L));
+                            Lxy_DimuC_SR_HighMass->Fill(fabs(diMuonC_FittedVtx_Lxy));
+                            Lz_DimuC_SR_HighMass->Fill( sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
+                            L_DimuF_SR_HighMass->Fill(fabs(diMuonF_FittedVtx_L));
+                            Lxy_DimuF_SR_HighMass->Fill(fabs(diMuonF_FittedVtx_Lxy));
+                            Lz_DimuF_SR_HighMass->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
+                          }
                         }
+
                       }//end 17: mass consistent
                       else{
                         //================================================
@@ -508,12 +511,14 @@ void efficiency(const std::vector<std::string>& dirNames)
                         }//end if ModelBKGShape
                         //check background events displacement
                         if( CheckDisplacement ) {
-                          L_DimuC_CR->Fill(diMuonC_FittedVtx_L);
-                          Lxy_DimuC_CR->Fill(diMuonC_FittedVtx_Lxy);
-                          Lz_DimuC_CR->Fill( sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
-                          L_DimuF_CR->Fill(diMuonF_FittedVtx_L);
-                          Lxy_DimuF_CR->Fill(diMuonF_FittedVtx_Lxy);
-                          Lz_DimuF_CR->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
+                          if (massC >= 11.0 && massC < 59.0 && massF >= 11.0 && massF < 59.0){
+                            L_DimuC_CR_HighMass->Fill(fabs(diMuonC_FittedVtx_L));
+                            Lxy_DimuC_CR_HighMass->Fill(fabs(diMuonC_FittedVtx_Lxy));
+                            Lz_DimuC_CR_HighMass->Fill( sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
+                            L_DimuF_CR_HighMass->Fill(fabs(diMuonF_FittedVtx_L));
+                            Lxy_DimuF_CR_HighMass->Fill(fabs(diMuonF_FittedVtx_Lxy));
+                            Lz_DimuF_CR_HighMass->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
+                          }
                         }
 
                       }//end else
@@ -618,18 +623,18 @@ void efficiency(const std::vector<std::string>& dirNames)
   if ( CheckDisplacement ){
     Lxy_Residual_GEN_leading_pT->Write();
     Abs_Lz_Residual_GEN_leading_pT->Write();
-    L_DimuC_SR->Write();
-    L_DimuF_SR->Write();
-    Lxy_DimuC_SR->Write();
-    Lxy_DimuF_SR->Write();
-    Lz_DimuC_SR->Write();
-    Lz_DimuF_SR->Write();
-    L_DimuC_CR->Write();
-    L_DimuF_CR->Write();
-    Lxy_DimuC_CR->Write();
-    Lxy_DimuF_CR->Write();
-    Lz_DimuC_CR->Write();
-    Lz_DimuF_CR->Write();
+    L_DimuC_SR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuC_SR_HighMass->Write();
+    L_DimuF_SR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuF_SR_HighMass->Write();
+    Lxy_DimuC_SR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lxy_DimuC_SR_HighMass->Write();
+    Lxy_DimuF_SR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lxy_DimuF_SR_HighMass->Write();
+    Lz_DimuC_SR_HighMass->GetXaxis()->SetTitle("Lz [cm]"); Lz_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lz_DimuC_SR_HighMass->Write();
+    Lz_DimuF_SR_HighMass->GetXaxis()->SetTitle("Lz [cm]"); Lz_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lz_DimuF_SR_HighMass->Write();
+    L_DimuC_CR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuC_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuC_CR_HighMass->Write();
+    L_DimuF_CR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuF_CR_HighMass->Write();
+    Lxy_DimuC_CR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuC_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lxy_DimuC_CR_HighMass->Write();
+    Lxy_DimuF_CR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lxy_DimuF_CR_HighMass->Write();
+    Lz_DimuC_CR_HighMass->GetXaxis()->SetTitle("Lz [cm]"); Lz_DimuC_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lz_DimuC_CR_HighMass->Write();
+    Lz_DimuF_CR_HighMass->GetXaxis()->SetTitle("Lz [cm]"); Lz_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lz_DimuF_CR_HighMass->Write();
   }//end CheckDisplacement
 
   if ( PerEventTriggerEff ) {
@@ -854,18 +859,18 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete BKGShapeSR;
   delete BKGShapeSRmassC;
   delete BKGShapeSRmassF;
-  delete L_DimuC_CR;
-  delete L_DimuF_CR;
-  delete Lxy_DimuC_CR;
-  delete Lxy_DimuF_CR;
-  delete Lz_DimuC_CR;
-  delete Lz_DimuF_CR;
-  delete L_DimuC_SR;
-  delete L_DimuF_SR;
-  delete Lxy_DimuC_SR;
-  delete Lxy_DimuF_SR;
-  delete Lz_DimuC_SR;
-  delete Lz_DimuF_SR;
+  delete L_DimuC_CR_HighMass;
+  delete L_DimuF_CR_HighMass;
+  delete Lxy_DimuC_CR_HighMass;
+  delete Lxy_DimuF_CR_HighMass;
+  delete Lz_DimuC_CR_HighMass;
+  delete Lz_DimuF_CR_HighMass;
+  delete L_DimuC_SR_HighMass;
+  delete L_DimuF_SR_HighMass;
+  delete Lxy_DimuC_SR_HighMass;
+  delete Lxy_DimuF_SR_HighMass;
+  delete Lz_DimuC_SR_HighMass;
+  delete Lz_DimuF_SR_HighMass;
   delete DimuMass;
   delete MassC;
   delete MassF;
