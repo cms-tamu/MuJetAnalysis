@@ -1582,10 +1582,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //Now we have two distinct dimuons, we do a sanity check to reject rare events
   //where DY muons come with additional muons from FSR/ISR photon,
   //which could radiate from: (I) protons; (II) DY muons
-  //An example: DY produced mu: #1(+) #2(-); FSR/ISR mu: #3(+) #4(-)
-  //For case (I), reject it by requring the two OS muons from different dimuons
-  //has mass outside the Z range: 81-101 GeV
-  //For case (II), reject it by requiring 4mu mass outside the Z range: 81-101 GeV
   if ( b_is2DiMuons ){//Need to have two dimuons at least
     TLorentzVector diMuonCMu0_4Vect, diMuonCMu1_4Vect, diMuonFMu0_4Vect, diMuonFMu1_4Vect;
     diMuonCMu0_4Vect.SetPtEtaPhiM(b_muJetC_Mu0_pt, b_muJetC_Mu0_eta, b_muJetC_Mu0_phi, 0.105);
