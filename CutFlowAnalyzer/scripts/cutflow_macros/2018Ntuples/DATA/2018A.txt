@@ -1,0 +1,2 @@
+/fdata/hepx/store/user/wshi/DoubleMuon/Run2/200110_213502/0000
+/fdata/hepx/store/user/wshi/DoubleMuon/Run2/200110_213502/0001

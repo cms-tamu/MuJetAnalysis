@@ -2,5 +2,6 @@ Run the following command to get the cut flow table for all signals:
 
     echo 'gROOT->ProcessLine(".L foo_modified.C++"); analysis("SignalsList2017.txt" )' | root -l -b
 
-The "SignalsList2017.txt" file contains a text file for each 2017 signal samples. Each txt file list the Ntuple path for this signal sample.
-Similarly, "BKGsList2017.txt" points to all background samples ntuples; "DataList2017.txt" contains all 2017 data ntuple paths.
+The "SignalsList201*.txt" file list text files for all signal samples in this year (2017/2018). Each text file point to the Ntuple path of a signal sample.
+
+Similarly, the "SignalsList201*.txt" file can be replaced by "BKGsList201*.txt", which is the relevant one for all background Ntuples; and "DataList201*.txt" for data.

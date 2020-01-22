@@ -1,0 +1,4 @@
+./2018Ntuples/DATA/2018A.txt
+./2018Ntuples/DATA/2018B.txt
+./2018Ntuples/DATA/2018C.txt
+./2018Ntuples/DATA/2018D.txt

@@ -1,0 +1,3 @@
+/fdata/hepx/store/user/wshi/DoubleMuon/Run2/200113_234035/0000
+/fdata/hepx/store/user/wshi/DoubleMuon/Run2/200113_234035/0001
+/fdata/hepx/store/user/wshi/DoubleMuon/Run2/200113_234035/0002

@@ -33,13 +33,13 @@ using namespace std;
 #include "Helpers.h"
 
 int k = -1;
-int counter[500][18];//limit # of samples: 500; 18 total selections per sample
+int counter[500][18];//limit # of samples: 500; 18 total selections per sample for run 2
 Float_t TotEff[500][18];//Total efficiency at each selection
 Float_t TotEffErr[500][18];
 Float_t RelEff[500][18];//Relative efficiency to previous selection
 Float_t RelEffErr[500][18];
 
-Float_t epsvsalph[500] = {0.0};//Model independence indicator: offline reconstruction efficiency over generator level cut efficiency
+Float_t epsvsalph[500] = {0.0};//Model independence const.: offline reconstruction efficiency over generator level cut efficiency
 Float_t Err[500] = {0.0};
 Float_t FitMean = 0.0;
 Float_t FitSigma = 0.0;
@@ -59,24 +59,23 @@ void setup()
 
 void efficiency(const std::vector<std::string>& dirNames)
 {
-  //=======================================================================
-  // Flags to configure different plots, by default will run cut-flow-table
-  //=======================================================================
-  bool verbose(true);
-  bool CutFlowTable(true);
-  bool CheckDisplacement(true);
-  bool ModelBKGShape(true);
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //! Flags for USER to configure  !
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  bool verbose(true);//Debug and printout basic info from ntuple
+  bool CutFlowTable(true);//Print cut-flow-table for each selection
+  bool ModelBKGShape(true);//Plot histograms to be used in high mass background estimation
+  bool CheckDisplacement(false);//Plot histograms to check Lxy, Lz
   bool Model1DTemplate(false);
-  bool ModelSRWidth(false);
-  bool PlotIso(false);
-  bool PerEventTriggerEff(false);
+  bool ModelSRWidth(false);//Plot mass and fit to obtain width for 2D signal corridor
+  bool PlotIso(false);//Plot isolation for dimuon(s)
+  bool PerEventTriggerEff(false);//Plot per event trigger eff.
+
   TString ext("out_ana_");
-
   cout<<"Directory Names  "<<dirNames[0]<<endl;
-
   TChain *t = new TChain("cutFlowAnalyzerPXBL4PXFL3/Events");
   TChain *o = new TChain("cutFlowAnalyzerPXBL4PXFL3/Events_orphan");
-  // add files to the chain
+  //add files to the chain
   cout<<" Adding signal tree...  "<<endl;
   addfilesMany(t, dirNames, ext);
   cout<<" Adding orphan tree...  "<<endl;
@@ -509,6 +508,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                           BKGShapeCRmassC->Fill(massC);
                           BKGShapeCRmassF->Fill(massF);
                         }//end if ModelBKGShape
+
                         //check background events displacement
                         if( CheckDisplacement ) {
                           if (massC >= 11.0 && massC < 59.0 && massF >= 11.0 && massF < 59.0){
@@ -519,9 +519,9 @@ void efficiency(const std::vector<std::string>& dirNames)
                             Lxy_DimuF_CR_HighMass->Fill(fabs(diMuonF_FittedVtx_Lxy));
                             Lz_DimuF_CR_HighMass->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
                           }
-                        }
+                        }//end CheckDisplacement
 
-                      }//end else
+                      }//end else in loop 17
                     }//end 16
                   }//end 15
                 }//end 14
