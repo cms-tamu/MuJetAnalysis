@@ -926,10 +926,14 @@ void analysis(const std::string SamplesList)
     cout << "#######################" << endl;
   }//end while
 
-  //Calcaulate standard deviation (SD) for each offline selection efficiency/GEN Acceptance
-  //Smaller SD indicate better performance on model independence for the selection
+  //store selection efficiency plots over all mass points/samples
+  TFile finalPlot("analysis.root", "RECREATE");
   cout << "Tot. # of samples: "<< linecount << endl;
+
+  //at least one sample
   if ( linecount >= 1 ){
+    //Calcaulate standard deviation (SD) for selection 12: DY cut
+    //Smaller SD indicate better performance on model independence for the selection
     TH1F *finalratio  = new TH1F("finalratio", "", 100, 0., 1.);//binning 0.01
     TH1F *cut12releff = new TH1F("cut12releff","", 100, 0., 1.);
     TH1F *cut12ratio  = new TH1F("cut12ratio", "", 100, 0., 1.);
@@ -942,11 +946,14 @@ void analysis(const std::string SamplesList)
     cout << "final ratio  Sigma: " << finalratio->GetStdDev()  << "; Mean: " << finalratio->GetMean() << endl;
     cout << "cut12 releff Sigma: " << cut12releff->GetStdDev() << "; Mean: " << cut12releff->GetMean() << endl;
     cout << "cut12 ratio  Sigma: " << cut12ratio->GetStdDev()  << "; Mean: " << cut12ratio->GetMean() << endl;
-    TFile finalPlot("analysis.root","RECREATE");
+
     finalratio->Write();
     cut12releff->Write();
     cut12ratio->Write();
-    finalPlot.Close();
+
+    //Each offline selection efficiency/GEN Accept.: counter[6-17]/counter[5]
+
   }
+  finalPlot.Close();
 
 }//end analysis
