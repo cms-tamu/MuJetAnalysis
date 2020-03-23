@@ -35,6 +35,8 @@
 #include "MuJetAnalysis/DataFormats/interface/MultiMuon.h"
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
+#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
+
 // user include files
 #include "TTree.h"
 #include "TRandom3.h"
@@ -112,6 +114,8 @@ private:
   Float_t b_beamSpot_x;
   Float_t b_beamSpot_y;
   Float_t b_beamSpot_z;
+
+  Int_t b_npv =-1;
 
   //****************************************************************************
   //                GEN LEVEL BRANCHES, COUNTERS AND SELECTORS
@@ -340,6 +344,8 @@ private:
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
   edm::EDGetTokenT<reco::VertexCollection> m_secondaryVertices;
   edm::EDGetTokenT<std::vector<pat::Jet> > m_PATJet;
+
+  edm::EDGetTokenT<std::vector<PileupSummaryInfo> > m_pileupCollection;
 
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
@@ -653,6 +659,7 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
   skimOutput_ = iConfig.getParameter<bool>("skimOutput");
   //useFinalDecision_ = iConfig.getParameter<bool>("useFinalDecision");
+  m_pileupCollection = consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("pileupCollection"));
 
   m_randomSeed = 1234;
   m_trandom3   = TRandom3(m_randomSeed); // Random generator
@@ -2361,6 +2368,28 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //===============================================================================
 
   // Cut on primary vertex in event
+  std::cout<<"Define PupInfo"<<std::endl;
+  edm::Handle<std::vector<PileupSummaryInfo> > PupInfo;
+  std::cout<<"Get by token"<<std::endl;
+  iEvent.getByToken(m_pileupCollection, PupInfo);
+  std::cout<<"Define iterator"<<std::endl;
+  std::vector<PileupSummaryInfo>::const_iterator PVI;
+  std::cout<<"Enter loop"<<std::endl;
+  for(PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI)
+  {
+        int BX = PVI->getBunchCrossing();
+        std::cout<<"BX is "<<BX<<std::endl;
+        if(BX == 0)
+        {
+                std::cout<<"BX should be 0. BX is "<<BX<<std::endl;
+                b_npv = PVI->getTrueNumInteractions();
+                std::cout<<"b_npv is "<<b_npv<<std::endl;
+                continue;
+        }
+
+  }
+
+
   edm::Handle<reco::VertexCollection> primaryVertices;
   iEvent.getByToken(m_primaryVertices, primaryVertices);
 
@@ -2425,6 +2454,8 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("beamSpot_x", &b_beamSpot_x, "beamSpot_x/F");
   m_ttree->Branch("beamSpot_y", &b_beamSpot_y, "beamSpot_y/F");
   m_ttree->Branch("beamSpot_z", &b_beamSpot_z, "beamSpot_z/F");
+
+  m_ttree->Branch("npv",       &b_npv,       "npv/I");
 
   //****************************************************************************
   //                          GEN LEVEL BRANCHES
