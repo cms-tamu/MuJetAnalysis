@@ -1,1 +1,1 @@
-/fdata/hepx/store/user/wshi/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/Run2/200122_013137/0000
+/scratch/user/ws13/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/Run2/200122_013137/0000

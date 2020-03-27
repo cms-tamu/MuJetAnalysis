@@ -1,1 +1,1 @@
-/fdata/hepx/store/user/wshi/ZZTo4L_13TeV_powheg_pythia8/Run2/191113_205001/0000
+/scratch/user/ws13/ZZTo4L_13TeV_powheg_pythia8/Run2/191113_205001/0000
