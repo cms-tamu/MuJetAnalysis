@@ -952,6 +952,7 @@ void analysis(const std::string SamplesList)
     cut12ratio->Write();
 
     //Each offline selection efficiency/GEN Accept.: counter[6-17]/counter[5]
+    //Plot 2D efficiency for NMSSM MSSMD
 
   }
   finalPlot.Close();
