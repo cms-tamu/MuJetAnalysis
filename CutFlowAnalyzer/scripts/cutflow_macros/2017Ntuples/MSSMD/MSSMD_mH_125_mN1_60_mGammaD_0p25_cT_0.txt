@@ -1,1 +1,1 @@
-/scratch/user/ws13/MSSMD_mH_125_mN1_60_mGammaD_0p25_cT_0_TuneCP5_13TeV-madgraph-pythia8/Run2/191122_183542/0000
+/scratch/user/ws13/2017MSSMDNtuples/MSSMD_mH_125_mN1_60_mGammaD_0p25_cT_0_TuneCP5_13TeV-madgraph-pythia8/Run2/200403_201222/0000

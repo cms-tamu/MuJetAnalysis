@@ -50,5 +50,5 @@ process.p = cms.Path(
     )
 
 process.TFileService = cms.Service("TFileService",
-    fileName = cms.string("out_ana_1.root")
+    fileName = cms.string("out_ana.root")
 )
