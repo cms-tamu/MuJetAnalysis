@@ -14,6 +14,7 @@ using namespace std;
 #include <math.h>
 #include <TFile.h>
 #include <TTree.h>
+#include <TString.h>
 #include <TH1.h>
 #include <TH2.h>
 #include <TF1.h>
@@ -407,15 +408,16 @@ void efficiency(const std::vector<std::string>& dirNames)
               RECOrePaired2muTrailingdR->Fill(recoRePaired2mutrailing_dR);
             }//end ModelBKGShape
 
-            if( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ){
+            if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
+                ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
+              //!!! Note: this needs to match counter[k][5] geometry
               counter[k][12]++;
 
-              if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
-                  ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
-                //!!! Note: this needs to match counter[k][5] geometry
+              if( fabs(diMuons_dz_FittedVtx) < 0.1  ){
+
                 counter[k][13]++;
 
-                if( fabs(diMuons_dz_FittedVtx) < 0.1 ){
+                if( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ){
                   counter[k][14]++;
 
                   if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 &&
@@ -603,9 +605,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" #9  is4SelMu8               & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][9]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][9] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][9]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][9]    <<" hline "<<endl;
   cout<<" #10 isVertexOK              & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][10] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][10]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][10]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][10]   <<" hline "<<endl;
   cout<<" #11 is2Dimuons              & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][11] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][11]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][11]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][11]   <<" hline "<<endl;
-  cout<<" #12 isNotDYLLQEDRadiate     & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][12] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][12]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][12]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][12]   <<" hline "<<endl;
-  cout<<" #13 is2DiMuonsPixHitOk      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
-  cout<<" #14 is2DiMuonsFittedDzOk    & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
+  cout<<" #12 is2DiMuonsPixHitOk      & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][12] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][12]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][12]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][12]   <<" hline "<<endl;
+  cout<<" #13 is2DiMuonsFittedDzOk    & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
+  cout<<" #14 isNotDYLLQEDRadiate     & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
   cout<<" #15 is2MuonsIsolationOK     & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
   cout<<" #16 isSignalHLTAccepted     & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][16] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][16]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][16]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][16]   <<" hline "<<endl;
   cout<<" #17 is2DiMuonsMassOK        & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][17] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][17]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][17]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][17]   <<" hline "<<endl;
@@ -908,16 +910,46 @@ void efficiency(const std::vector<std::string>& dirNames)
 
 void analysis(const std::string SamplesList)
 {
+  setup();
   //SamplesList is a txt file that lists all sample points, one txt file per sample
   //each txt file contains the Ntuples path of this sample
-  setup();
   //Read sample line by line
   ifstream inputlist(SamplesList);
   string sampletxtfile;
   int linecount = 0;
+  //if MSSMD, register mGammaD and cT strings from sampletxtfile
+  std::vector<double> mGammaDarray;
+  std::vector<double> cTauarray;
+  //if NMSSM, register cp-even higgs and cp-odd higgs mass strings from sampletxtfile
+  std::vector<double> CPevenHiggs;
+  std::vector<double> CPoddHiggs;
+
   while (std::getline(inputlist, sampletxtfile)) {
     linecount++;
     cout << "Sample #"<< linecount << ": "<< sampletxtfile << endl;
+
+    //MSSMD: assume file format MSSMD_mH_125_mN1_60_mGammaD_XXX_cT_YYYY.txt
+    if ( sampletxtfile.find("mGammaD_") != string::npos && sampletxtfile.find("_cT_") != string::npos && sampletxtfile.find(".txt") != string::npos ){
+      unsigned delimiterleft  = sampletxtfile.find("mGammaD_");
+      unsigned delimitermiddle = sampletxtfile.find("_cT_");
+      unsigned delimiterright = sampletxtfile.find(".txt");
+      string mass = sampletxtfile.substr(delimiterleft+8, delimitermiddle-delimiterleft-8);
+      string lifetime = sampletxtfile.substr(delimitermiddle+4, delimiterright-delimitermiddle-4);
+      if ( mass.find("p") != string::npos ){ std::replace( mass.begin(), mass.end(), 'p', '.'); }
+      if ( lifetime.find("p") != string::npos ){ std::replace( lifetime.begin(), lifetime.end(), 'p', '.'); }
+      double mGammaD  = std::stod(mass);
+      double cTau  = std::stod(lifetime);
+      mGammaDarray.push_back(mGammaD);
+      cTauarray.push_back(cTau);
+      if(sampletxtfile.find("2017") != string::npos){
+        cout << "This is a 2017 MSSMD MC sample: " << "mass = " << mGammaD << " GeV, cT = " << cTau << " mm" << endl;
+      }
+      if(sampletxtfile.find("2018") != string::npos){
+        cout << "This is a 2018 MSSMD MC sample: " << "mass = " << mGammaD << " GeV, cT = " << cTau << " mm" << endl;
+      }
+
+    }//if sampletxtfile is MSSMD
+
     const std::string txtfile = sampletxtfile;
     std::vector< std::vector<string> > NtuplePaths;
     readTextFileWithSamples(txtfile, NtuplePaths);
@@ -938,23 +970,129 @@ void analysis(const std::string SamplesList)
     TH1F *cut12releff = new TH1F("cut12releff","", 100, 0., 1.);
     TH1F *cut12ratio  = new TH1F("cut12ratio", "", 100, 0., 1.);
     for (int iline = 0; iline < linecount; iline++) {
-      cout << iline+1 << ": final ratio = "<< epsvsalph[iline] << "; cut12 releff = " << RelEff[iline][12] << "; cut12 ratio = "<< counter[iline][12]*1.0/counter[iline][5] << endl;
+      //cout << iline+1 << ": final ratio = "<< epsvsalph[iline] << "; cut12 releff = " << RelEff[iline][12] << "; cut12 ratio = "<< counter[iline][12]*1.0/counter[iline][5] << endl;
       finalratio->Fill(epsvsalph[iline]);
       cut12releff->Fill(RelEff[iline][12]);
       cut12ratio->Fill(counter[iline][12]*1.0/counter[iline][5]);
     }
-    cout << "final ratio  Sigma: " << finalratio->GetStdDev()  << "; Mean: " << finalratio->GetMean() << endl;
-    cout << "cut12 releff Sigma: " << cut12releff->GetStdDev() << "; Mean: " << cut12releff->GetMean() << endl;
-    cout << "cut12 ratio  Sigma: " << cut12ratio->GetStdDev()  << "; Mean: " << cut12ratio->GetMean() << endl;
+    //cout << "final ratio  Sigma: " << finalratio->GetStdDev()  << "; Mean: " << finalratio->GetMean() << endl;
+    //cout << "cut12 releff Sigma: " << cut12releff->GetStdDev() << "; Mean: " << cut12releff->GetMean() << endl;
+    //cout << "cut12 ratio  Sigma: " << cut12ratio->GetStdDev()  << "; Mean: " << cut12ratio->GetMean() << endl;
 
     finalratio->Write();
     cut12releff->Write();
     cut12ratio->Write();
 
-    //Each offline selection efficiency/GEN Accept.: counter[6-17]/counter[5]
-    //Plot 2D efficiency for NMSSM MSSMD
+    //Each offline selection efficiency/GEN Accept.: counter[12-17]/counter[5]
+    //=============================
+    //   Efficiency for MSSMD
+    //=============================
+    double massbin[12] = {0.25, 0.4, 0.7, 1, 2, 5, 8.5, 10, 15, 25, 35, 58};
+    double cTbin[13] = {0, 0.05, 0.1, 0.2, 0.5, 1, 2, 3, 5, 10, 20, 50, 100};
+    int ix, iy;
+    TCanvas *C6 = new TCanvas("C6", "C6", 700, 500);
+    TCanvas *C7 = new TCanvas("C7", "C7", 700, 500);
+    TCanvas *C8 = new TCanvas("C8", "C8", 700, 500);
+    TCanvas *C9 = new TCanvas("C9", "C9", 700, 500);
+    TCanvas *C10 = new TCanvas("C10", "C10", 700, 500);
+    TCanvas *C11 = new TCanvas("C11", "C11", 700, 500);
+    TCanvas *C12 = new TCanvas("C12", "C12", 700, 500);
+    TCanvas *C13 = new TCanvas("C13", "C13", 700, 500);
+    TCanvas *C14 = new TCanvas("C14", "C14", 700, 500);
+    TCanvas *C15 = new TCanvas("C15", "C15", 700, 500);
+    TCanvas *C16 = new TCanvas("C16", "C16", 700, 500);
+    TCanvas *C17 = new TCanvas("C17", "C17", 700, 500);
 
-  }
+    TH2F *Cut6RatioMSSMD = new TH2F("Cut6RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #6 / GEN. Sel. #1}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut7RatioMSSMD = new TH2F("Cut7RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #7 / GEN. Sel. #2}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut8RatioMSSMD = new TH2F("Cut8RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #8 / GEN. Sel. #3}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut9RatioMSSMD = new TH2F("Cut9RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #9 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut10RatioMSSMD = new TH2F("Cut10RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #10 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut11RatioMSSMD = new TH2F("Cut11RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #11 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut12RatioMSSMD = new TH2F("Cut12RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #12 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut13RatioMSSMD = new TH2F("Cut13RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #13 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut14RatioMSSMD = new TH2F("Cut14RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #14 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut15RatioMSSMD = new TH2F("Cut15RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #15 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut16RatioMSSMD = new TH2F("Cut16RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #16 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *Cut17RatioMSSMD = new TH2F("Cut17RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #17 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+
+    if ( mGammaDarray.size() > 0 ){
+
+      for (UInt_t i = 0; i < mGammaDarray.size(); i++) {
+        ix = 0;
+        iy = 0;
+        //loop through all mass to get bin index
+        for(int j=0; j<12; j++){
+          if( mGammaDarray[i] == massbin[j] ){ ix = j+1; }
+        }//end loop mass
+        //loop through all cT to get bin index
+        for(int k=0; k<13; k++){
+          if( cTauarray[i] == cTbin[k] ){ iy = k+1; }
+        }//end loop mass
+        //cout << "ix: " << ix  << "; iy: " << iy << endl;
+        Cut6RatioMSSMD->SetBinContent(ix, iy, counter[i][6]*1.0/counter[i][1] );
+        Cut7RatioMSSMD->SetBinContent(ix, iy, counter[i][7]*1.0/counter[i][2] );
+        Cut8RatioMSSMD->SetBinContent(ix, iy, counter[i][8]*1.0/counter[i][3] );
+        Cut9RatioMSSMD->SetBinContent(ix, iy, counter[i][9]*1.0/counter[i][4] );
+        Cut10RatioMSSMD->SetBinContent(ix, iy, counter[i][10]*1.0/counter[i][4] );
+        Cut11RatioMSSMD->SetBinContent(ix, iy, counter[i][11]*1.0/counter[i][4] );//doesn't make sense to compare to #5
+        Cut12RatioMSSMD->SetBinContent(ix, iy, counter[i][12]*1.0/counter[i][5] );
+        Cut13RatioMSSMD->SetBinContent(ix, iy, counter[i][13]*1.0/counter[i][5] );
+        Cut14RatioMSSMD->SetBinContent(ix, iy, counter[i][14]*1.0/counter[i][5] );
+        Cut15RatioMSSMD->SetBinContent(ix, iy, counter[i][15]*1.0/counter[i][5] );
+        Cut16RatioMSSMD->SetBinContent(ix, iy, counter[i][16]*1.0/counter[i][5] );
+        Cut17RatioMSSMD->SetBinContent(ix, iy, epsvsalph[i] );
+        //cout << "Mass: " << mGammaDarray[i]  << "; cT: " << cTauarray[i] << "; eff: "<< counter[i][12]*1.0/counter[i][5] << endl;
+      }
+
+      for(unsigned int iXL=1; iXL<=12; iXL++){
+        //cout << "iXL: " << iXL  << endl;
+        Cut6RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut7RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut8RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut9RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut10RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut11RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut12RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut13RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut14RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut15RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut16RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        Cut17RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+      }
+
+      for(unsigned int iYL=1; iYL<=13; iYL++){
+        //cout << "iYL: " << iYL  << endl;
+        Cut6RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut7RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut8RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut9RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut10RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut11RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut12RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut13RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut14RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut15RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut16RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        Cut17RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+      }
+
+      C6->cd(); Cut6RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut6RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut6RatioMSSMD->SetStats(0); Cut6RatioMSSMD->Draw("COLZ TEXT"); Cut6RatioMSSMD->SetMinimum(0); Cut6RatioMSSMD->SetMaximum(1); C6->Write();
+      C7->cd(); Cut7RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut7RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut7RatioMSSMD->SetStats(0); Cut7RatioMSSMD->Draw("COLZ TEXT"); Cut7RatioMSSMD->SetMinimum(0); Cut7RatioMSSMD->SetMaximum(1); C7->Write();
+      C8->cd(); Cut8RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut8RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut8RatioMSSMD->SetStats(0); Cut8RatioMSSMD->Draw("COLZ TEXT"); Cut8RatioMSSMD->SetMinimum(0); Cut8RatioMSSMD->SetMaximum(1); C8->Write();
+      C9->cd(); Cut9RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut9RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut9RatioMSSMD->SetStats(0); Cut9RatioMSSMD->Draw("COLZ TEXT"); Cut9RatioMSSMD->SetMinimum(0); Cut9RatioMSSMD->SetMaximum(1); C9->Write();
+      C10->cd(); Cut10RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut10RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut10RatioMSSMD->SetStats(0); Cut10RatioMSSMD->Draw("COLZ TEXT"); Cut10RatioMSSMD->SetMinimum(0); Cut10RatioMSSMD->SetMaximum(1); C10->Write();
+      C11->cd(); Cut11RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut11RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut11RatioMSSMD->SetStats(0); Cut11RatioMSSMD->Draw("COLZ TEXT"); Cut11RatioMSSMD->SetMinimum(0); Cut11RatioMSSMD->SetMaximum(1); C11->Write();
+      C12->cd(); Cut12RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut12RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut12RatioMSSMD->SetStats(0); Cut12RatioMSSMD->Draw("COLZ TEXT"); Cut12RatioMSSMD->SetMinimum(0); Cut12RatioMSSMD->SetMaximum(1); C12->Write();
+      C13->cd(); Cut13RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut13RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut13RatioMSSMD->SetStats(0); Cut13RatioMSSMD->Draw("COLZ TEXT"); Cut13RatioMSSMD->SetMinimum(0); Cut13RatioMSSMD->SetMaximum(1); C13->Write();
+      C14->cd(); Cut14RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut14RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut14RatioMSSMD->SetStats(0); Cut14RatioMSSMD->Draw("COLZ TEXT"); Cut14RatioMSSMD->SetMinimum(0); Cut14RatioMSSMD->SetMaximum(1); C14->Write();
+      C15->cd(); Cut15RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut15RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut15RatioMSSMD->SetStats(0); Cut15RatioMSSMD->Draw("COLZ TEXT"); Cut15RatioMSSMD->SetMinimum(0); Cut15RatioMSSMD->SetMaximum(1); C15->Write();
+      C16->cd(); Cut16RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut16RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut16RatioMSSMD->SetStats(0); Cut16RatioMSSMD->Draw("COLZ TEXT"); Cut16RatioMSSMD->SetMinimum(0); Cut16RatioMSSMD->SetMaximum(1); C16->Write();
+      C17->cd(); Cut17RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut17RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut17RatioMSSMD->SetStats(0); Cut17RatioMSSMD->Draw("COLZ TEXT"); Cut17RatioMSSMD->SetMinimum(0); Cut17RatioMSSMD->SetMaximum(1); C17->Write();
+    }//if MSSMD sample exists
+
+  }//end at least one sample
+
   finalPlot.Close();
 
 }//end analysis
