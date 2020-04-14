@@ -66,7 +66,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   bool verbose(true);//Debug and printout basic info from ntuple
   bool CutFlowTable(true);//Print cut-flow-table for each selection
   bool ModelBKGShape(true);//Plot histograms to be used in high mass background estimation
-  bool CheckDisplacement(false);//Plot histograms to check Lxy, Lz
+  bool CheckDisplacement(true);//Assume the fiducial volume is Phase-1 pixel, check GEN Lxy, Lz and pT of four muons (GEN+RECO)
   bool Model1DTemplate(false);
   bool ModelSRWidth(false);//Plot mass and fit to obtain width for 2D signal corridor
   bool PlotIso(false);//Plot isolation for dimuon(s)
@@ -92,18 +92,47 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  is2GenMu8;
   Bool_t  is3GenMu8;
   Bool_t  is4GenMu8;
-  Float_t genA0_Lxy;//A0:dark photon that contains the most energetic muon; redt: wrt detector
+  Float_t genMu0_pT; //leading mu
+  Float_t genMu1_pT;
+  Float_t genMu2_pT;
+  Float_t genMu3_pT;
+  Float_t genMu0_eta;
+  Float_t genMu1_eta;
+  Float_t genMu2_eta;
+  Float_t genMu3_eta;
+  Float_t genMu0_phi;
+  Float_t genMu1_phi;
+  Float_t genMu2_phi;
+  Float_t genMu3_phi;
+  Float_t genA0_Lxy; //A0:dark photon that contains the most energetic muon; redt: wrt detector
   Float_t genA1_Lxy;
   Float_t genA0_Lz;
   Float_t genA1_Lz;
+  Float_t genA0Mu0_pt;
+  Float_t genA0Mu1_pt;
+  Float_t genA1Mu0_pt;
+  Float_t genA1Mu1_pt;
 
   Bool_t  is1SelMu17;
   Bool_t  is2SelMu8;
   Bool_t  is3SelMu8;
   Bool_t  is4SelMu8;
-  Float_t selMu0_pT;//leading mu
+  Float_t selMu0_pT; //leading mu
+  Float_t selMu1_pT;
+  Float_t selMu2_pT;
+  Float_t selMu3_pT;
   Float_t selMu0_eta;
+  Float_t selMu1_eta;
+  Float_t selMu2_eta;
+  Float_t selMu3_eta;
   Float_t selMu0_phi;
+  Float_t selMu1_phi;
+  Float_t selMu2_phi;
+  Float_t selMu3_phi;
+  Float_t muJetC_Mu0_pt;
+  Float_t muJetC_Mu1_pt;
+  Float_t muJetF_Mu0_pt;
+  Float_t muJetF_Mu1_pt;
 
   Bool_t  is2MuJets;
   Bool_t  is2DiMuons;
@@ -165,8 +194,37 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t orph_dimu_z;
   Float_t orph_isoTk;
 
-  TH2F* Lxy_Residual_GEN_leading_pT    = new TH2F("Lxy_Residual_GEN_leading_pT",   "", 150, 0.01, 300., 300, -300., 300.);//cm
-  TH2F* Abs_Lz_Residual_GEN_leading_pT = new TH2F("Abs_Lz_Residual_GEN_leading_pT","", 150, 0.01, 300., 300, -300., 300.);
+  TCanvas *Lxy = new TCanvas("Lxy", "L_{xy} of A_{0, 1} (GEN) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *Lz = new TCanvas("Lz", "L_{z} of A_{0, 1} (GEN) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *GENMuPt = new TCanvas("GENMuPt", "Muon p_{T} (GEN) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *GENAMuPt = new TCanvas("GENAMuPt", "Signal A Daughter Muon p_{T} (GEN) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *RECOMuPt = new TCanvas("RECOMuPt", "Muon p_{T} (RECO) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *RECODimuMuPt = new TCanvas("RECODimuMuPt", "Candidate Di-#mu Muon p_{T} (RECO) in Phase-1 Pixel Volume", 700, 500);
+
+  TH1F* Phase1Pix_GEN_A0_Lxy = new TH1F("Phase1Pix_GEN_A0_Lxy", "L_{xy} of A0 (GEN) in Phase-1 Pixel Volume", 40, 0., 20.); //per 0.5cm
+  TH1F* Phase1Pix_GEN_A0_Lz = new TH1F("Phase1Pix_GEN_A0_Lz", "L_{z} of A0 (GEN) in Phase-1 Pixel Volume", 240, -60., 60.); //per 0.5cm
+  TH1F* Phase1Pix_GEN_A1_Lxy = new TH1F("Phase1Pix_GEN_A1_Lxy", "L_{xy} of A1 (GEN) in Phase-1 Pixel Volume", 40, 0., 20.);
+  TH1F* Phase1Pix_GEN_A1_Lz = new TH1F("Phase1Pix_GEN_A1_Lz", "L_{z} of A1 (GEN) in Phase-1 Pixel Volume", 240, -60., 60.);
+
+  TH1F* Phase1Pix_GEN_Mu0_pT = new TH1F("Phase1Pix_GEN_Mu0_pT", "p_{T} of 1st Muon (GEN) in Phase-1 Pixel Volume", 130, 0., 130.); //per GeV
+  TH1F* Phase1Pix_GEN_Mu1_pT = new TH1F("Phase1Pix_GEN_Mu1_pT", "p_{T} of 2nd Muon (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_Mu2_pT = new TH1F("Phase1Pix_GEN_Mu2_pT", "p_{T} of 3rd Muon (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_Mu3_pT = new TH1F("Phase1Pix_GEN_Mu3_pT", "p_{T} of 4th Muon (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+
+  TH1F* Phase1Pix_GEN_A0_Mu0_pT = new TH1F("Phase1Pix_GEN_A0_Mu0_pT", "p_{T} of Leading Muon in A0 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_A0_Mu1_pT = new TH1F("Phase1Pix_GEN_A0_Mu1_pT", "p_{T} of Trailing Muon in A0 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_A1_Mu0_pT = new TH1F("Phase1Pix_GEN_A1_Mu0_pT", "p_{T} of Leading Muon in A1 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_A1_Mu1_pT = new TH1F("Phase1Pix_GEN_A1_Mu1_pT", "p_{T} of Trailing Muon in A1 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+
+  TH1F* Phase1Pix_RECO_Mu0_pT = new TH1F("Phase1Pix_RECO_Mu0_pT", "p_{T} of 1st Muon (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_Mu1_pT = new TH1F("Phase1Pix_RECO_Mu1_pT", "p_{T} of 2nd Muon (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_Mu2_pT = new TH1F("Phase1Pix_RECO_Mu2_pT", "p_{T} of 3rd Muon (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_Mu3_pT = new TH1F("Phase1Pix_RECO_Mu3_pT", "p_{T} of 4th Muon (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+
+  TH1F* Phase1Pix_RECO_DimuC_Mu0_pT = new TH1F("Phase1Pix_RECO_DimuC_Mu0_pT", "p_{T} of Leading Muon in 1st Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_DimuC_Mu1_pT = new TH1F("Phase1Pix_RECO_DimuC_Mu1_pT", "p_{T} of Trailing Muon in 1st Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_DimuF_Mu0_pT = new TH1F("Phase1Pix_RECO_DimuF_Mu0_pT", "p_{T} of Leading Muon in 2nd Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_DimuF_Mu1_pT = new TH1F("Phase1Pix_RECO_DimuF_Mu1_pT", "p_{T} of Trailing Muon in 2nd Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
 
   TH1F* leading_pt_pass_basic          = new TH1F("leading_pt_pass_basic",         "", 50, 0.,           50.);
   TH1F* leading_eta_pass_basic         = new TH1F("leading_eta_pass_basic",        "", 50, -2.5,         2.5);
@@ -258,22 +316,52 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("lumi",  &lumi);
 	t->SetBranchAddress("event", &event);
 
-  t->SetBranchAddress("is1GenMu17", &is1GenMu17);
-	t->SetBranchAddress("is2GenMu8",  &is2GenMu8);
-	t->SetBranchAddress("is3GenMu8",  &is3GenMu8);
-	t->SetBranchAddress("is4GenMu8",  &is4GenMu8);
-  t->SetBranchAddress("genA0_Lxy",  &genA0_Lxy);
-	t->SetBranchAddress("genA1_Lxy",  &genA1_Lxy);
-	t->SetBranchAddress("genA0_Lz",   &genA0_Lz);
-	t->SetBranchAddress("genA1_Lz",   &genA1_Lz);
+  t->SetBranchAddress("is1GenMu17",    &is1GenMu17);
+	t->SetBranchAddress("is2GenMu8",     &is2GenMu8);
+	t->SetBranchAddress("is3GenMu8",     &is3GenMu8);
+	t->SetBranchAddress("is4GenMu8",     &is4GenMu8);
+  t->SetBranchAddress("genMu0_pT",     &genMu0_pT); //leading mu
+  t->SetBranchAddress("genMu1_pT",     &genMu1_pT);
+  t->SetBranchAddress("genMu2_pT",     &genMu2_pT);
+  t->SetBranchAddress("genMu3_pT",     &genMu3_pT);
+  t->SetBranchAddress("genMu0_eta",    &genMu0_eta);
+  t->SetBranchAddress("genMu1_eta",    &genMu1_eta);
+  t->SetBranchAddress("genMu2_eta",    &genMu2_eta);
+  t->SetBranchAddress("genMu3_eta",    &genMu3_eta);
+  t->SetBranchAddress("genMu0_phi",    &genMu0_phi);
+  t->SetBranchAddress("genMu1_phi",    &genMu1_phi);
+  t->SetBranchAddress("genMu2_phi",    &genMu2_phi);
+  t->SetBranchAddress("genMu3_phi",    &genMu3_phi);
 
-	t->SetBranchAddress("is1SelMu17", &is1SelMu17);
-	t->SetBranchAddress("is2SelMu8",  &is2SelMu8);
-	t->SetBranchAddress("is3SelMu8",  &is3SelMu8);
-	t->SetBranchAddress("is4SelMu8",  &is4SelMu8);
-	t->SetBranchAddress("selMu0_pT",  &selMu0_pT);
-	t->SetBranchAddress("selMu0_eta", &selMu0_eta);
-  t->SetBranchAddress("selMu0_phi", &selMu0_phi);
+  t->SetBranchAddress("genA0_Lxy",     &genA0_Lxy);
+	t->SetBranchAddress("genA1_Lxy",     &genA1_Lxy);
+	t->SetBranchAddress("genA0_Lz",      &genA0_Lz);
+	t->SetBranchAddress("genA1_Lz",      &genA1_Lz);
+  t->SetBranchAddress("genA0Mu0_pt",   &genA0Mu0_pt);
+  t->SetBranchAddress("genA0Mu1_pt",   &genA0Mu1_pt);
+  t->SetBranchAddress("genA1Mu0_pt",   &genA1Mu0_pt);
+  t->SetBranchAddress("genA1Mu1_pt",   &genA1Mu1_pt);
+
+	t->SetBranchAddress("is1SelMu17",    &is1SelMu17);
+	t->SetBranchAddress("is2SelMu8",     &is2SelMu8);
+	t->SetBranchAddress("is3SelMu8",     &is3SelMu8);
+	t->SetBranchAddress("is4SelMu8",     &is4SelMu8);
+  t->SetBranchAddress("selMu0_pT",     &selMu0_pT); //leading mu
+  t->SetBranchAddress("selMu1_pT",     &selMu1_pT);
+  t->SetBranchAddress("selMu2_pT",     &selMu2_pT);
+  t->SetBranchAddress("selMu3_pT",     &selMu3_pT);
+	t->SetBranchAddress("selMu0_eta",    &selMu0_eta);
+  t->SetBranchAddress("selMu1_eta",    &selMu1_eta);
+  t->SetBranchAddress("selMu2_eta",    &selMu2_eta);
+  t->SetBranchAddress("selMu3_eta",    &selMu3_eta);
+  t->SetBranchAddress("selMu0_phi",    &selMu0_phi);
+  t->SetBranchAddress("selMu1_phi",    &selMu1_phi);
+  t->SetBranchAddress("selMu2_phi",    &selMu2_phi);
+  t->SetBranchAddress("selMu3_phi",    &selMu3_phi);
+  t->SetBranchAddress("muJetC_Mu0_pt", &muJetC_Mu0_pt);
+  t->SetBranchAddress("muJetC_Mu1_pt", &muJetC_Mu1_pt);
+  t->SetBranchAddress("muJetF_Mu0_pt", &muJetF_Mu0_pt);
+  t->SetBranchAddress("muJetF_Mu1_pt", &muJetF_Mu1_pt);
 
   t->SetBranchAddress("isVertexOK", &isVtxOK);
 	t->SetBranchAddress("is2MuJets",  &is2MuJets);
@@ -287,10 +375,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("recoRePaired2muleading_dR",  &recoRePaired2muleading_dR);
   t->SetBranchAddress("recoRePaired2mutrailing_dR", &recoRePaired2mutrailing_dR);
 
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_Phase1",              &diMuonC_m1_FittedVtx_hitpix_Phase1);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1",              &diMuonC_m2_FittedVtx_hitpix_Phase1);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1",              &diMuonF_m1_FittedVtx_hitpix_Phase1);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1",              &diMuonF_m2_FittedVtx_hitpix_Phase1);
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_hitpix_Phase1", &diMuonC_m1_FittedVtx_hitpix_Phase1);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1", &diMuonC_m2_FittedVtx_hitpix_Phase1);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1", &diMuonF_m1_FittedVtx_hitpix_Phase1);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1", &diMuonF_m2_FittedVtx_hitpix_Phase1);
   //For checking pixel Hit
   t->SetBranchAddress("diMuonC_FittedVtx_Lxy", &diMuonC_FittedVtx_Lxy);
 	t->SetBranchAddress("diMuonC_FittedVtx_L",   &diMuonC_FittedVtx_L);
@@ -344,24 +432,54 @@ void efficiency(const std::vector<std::string>& dirNames)
       if ( verbose && (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
       counter[k][0]++;
 
-      //Check vtx significance without any selections
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!         Some Studies         !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //Check Kinematics in Phase-1 Pixel
       if ( CheckDisplacement ){
-        Lxy_Residual_GEN_leading_pT->Fill(genA0_Lxy, genA0_Lxy-diMuonC_FittedVtx_Lxy);//assume they match
-        Abs_Lz_Residual_GEN_leading_pT->Fill(genA0_Lz, genA0_Lz-sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
+
+        if ( is3GenMu8 && ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
+          Phase1Pix_GEN_A0_Lxy->Fill(genA0_Lxy);
+          Phase1Pix_GEN_A0_Lz->Fill(genA0_Lz);
+          Phase1Pix_GEN_A1_Lxy->Fill(genA1_Lxy);
+          Phase1Pix_GEN_A1_Lz->Fill(genA1_Lz);
+          Phase1Pix_GEN_Mu0_pT->Fill(genMu0_pT);
+          Phase1Pix_GEN_Mu1_pT->Fill(genMu1_pT);
+          Phase1Pix_GEN_Mu2_pT->Fill(genMu2_pT);
+          Phase1Pix_GEN_Mu3_pT->Fill(genMu3_pT);
+          Phase1Pix_GEN_A0_Mu0_pT->Fill(genA0Mu0_pt);
+          Phase1Pix_GEN_A0_Mu1_pT->Fill(genA0Mu1_pt);
+          Phase1Pix_GEN_A1_Mu0_pT->Fill(genA1Mu0_pt);
+          Phase1Pix_GEN_A1_Mu1_pT->Fill(genA1Mu1_pt);
+        }//end if GEN
+        if ( is3SelMu8 && ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
+          Phase1Pix_RECO_Mu0_pT->Fill(selMu0_pT);
+          Phase1Pix_RECO_Mu1_pT->Fill(selMu1_pT);
+          Phase1Pix_RECO_Mu2_pT->Fill(selMu2_pT);
+          Phase1Pix_RECO_Mu3_pT->Fill(selMu3_pT);
+          Phase1Pix_RECO_DimuC_Mu0_pT->Fill(muJetC_Mu0_pt);
+          Phase1Pix_RECO_DimuC_Mu1_pT->Fill(muJetC_Mu1_pt);
+          Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
+          Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
+        }//end if RECO
+
       }//end CheckDisplacement
 
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!        Cut Flow Starts       !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if( is1GenMu17 ) counter[k][1]++;
       if( is2GenMu8  ) counter[k][2]++;
       if( is3GenMu8  ) counter[k][3]++;
       if( is4GenMu8  ){
+      //if( is3GenMu8 && genMu3_pT > 0 && fabs(genMu3_eta) < 2.4 ){
         counter[k][4]++;
         //Phase-0 pixel system (Pre2017): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.2 cm; Lz = 48.5 cm
         //Phase-1 pixel system (2017+2018): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.9 cm; Lz = 39.6 cm
         //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm //To be used for Run2
         //[1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
         //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
-        if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) &&
-          ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
+        if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
             counter[k][5]++;
         }
       }//End GEN Level
@@ -370,6 +488,7 @@ void efficiency(const std::vector<std::string>& dirNames)
       if( is2SelMu8  ) counter[k][7]++;
       if( is3SelMu8  ) counter[k][8]++;
       if( is4SelMu8  ){
+      //if( is3SelMu8 && selMu3_pT > 0 && fabs(selMu3_eta) < 2.4 ){
         counter[k][9]++;
         //==============================================
         // Basic offline pT selections finished
@@ -408,8 +527,7 @@ void efficiency(const std::vector<std::string>& dirNames)
               RECOrePaired2muTrailingdR->Fill(recoRePaired2mutrailing_dR);
             }//end ModelBKGShape
 
-            if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) &&
-                ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
+            if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
               //!!! Note: this needs to match counter[k][5] geometry
               counter[k][12]++;
 
@@ -497,7 +615,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                             Lxy_DimuF_SR_HighMass->Fill(fabs(diMuonF_FittedVtx_Lxy));
                             Lz_DimuF_SR_HighMass->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
                           }
-                        }
+                        }//end CheckDisplacement
 
                       }//end 17: mass consistent
                       else{
@@ -532,6 +650,11 @@ void efficiency(const std::vector<std::string>& dirNames)
           }//end 11
         }//end 10
       }//end 9
+
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!        Cut Flow Ends         !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     }//end for i entries
   }//end if( CutFlowTable )
 
@@ -623,8 +746,44 @@ void efficiency(const std::vector<std::string>& dirNames)
   TFile myPlot(output,"RECREATE");
 
   if ( CheckDisplacement ){
-    Lxy_Residual_GEN_leading_pT->Write();
-    Abs_Lz_Residual_GEN_leading_pT->Write();
+    Lxy->cd();
+    Phase1Pix_GEN_A0_Lxy->SetLineColor(2); Phase1Pix_GEN_A0_Lxy->SetLineStyle(1); Phase1Pix_GEN_A0_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A0_Lxy->GetYaxis()->SetTitle("Events/0.5cm"); Phase1Pix_GEN_A0_Lxy->Draw();
+    Phase1Pix_GEN_A1_Lxy->SetLineColor(2); Phase1Pix_GEN_A1_Lxy->SetLineStyle(2); Phase1Pix_GEN_A1_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A1_Lxy->GetYaxis()->SetTitle("Events/0.5cm"); Phase1Pix_GEN_A1_Lxy->Draw("SAME");
+    Lxy->Write();
+
+    Lz->cd();
+    Phase1Pix_GEN_A0_Lz->SetLineColor(4); Phase1Pix_GEN_A0_Lz->SetLineStyle(1); Phase1Pix_GEN_A0_Lz->GetXaxis()->SetTitle("L_{z} [cm]"); Phase1Pix_GEN_A0_Lz->GetYaxis()->SetTitle("Events/0.5cm"); Phase1Pix_GEN_A0_Lz->Draw();
+    Phase1Pix_GEN_A1_Lz->SetLineColor(4); Phase1Pix_GEN_A1_Lz->SetLineStyle(2); Phase1Pix_GEN_A1_Lz->GetXaxis()->SetTitle("L_{z} [cm]"); Phase1Pix_GEN_A1_Lz->GetYaxis()->SetTitle("Events/0.5cm"); Phase1Pix_GEN_A1_Lz->Draw("SAME");
+    Lz->Write();
+
+    GENMuPt->cd();
+    Phase1Pix_GEN_Mu0_pT->SetLineColor(1); Phase1Pix_GEN_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu0_pT->Draw();
+    Phase1Pix_GEN_Mu1_pT->SetLineColor(2); Phase1Pix_GEN_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu1_pT->Draw("SAME");
+    Phase1Pix_GEN_Mu2_pT->SetLineColor(3); Phase1Pix_GEN_Mu2_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu2_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu2_pT->Draw("SAME");
+    Phase1Pix_GEN_Mu3_pT->SetLineColor(4); Phase1Pix_GEN_Mu3_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu3_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu3_pT->Draw("SAME");
+    GENMuPt->Write();
+
+    GENAMuPt->cd();
+    Phase1Pix_GEN_A0_Mu0_pT->SetLineColor(2); Phase1Pix_GEN_A0_Mu0_pT->SetLineStyle(1); Phase1Pix_GEN_A0_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A0_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A0_Mu0_pT->Draw();
+    Phase1Pix_GEN_A0_Mu1_pT->SetLineColor(2); Phase1Pix_GEN_A0_Mu1_pT->SetLineStyle(2); Phase1Pix_GEN_A0_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A0_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A0_Mu1_pT->Draw("SAME");
+    Phase1Pix_GEN_A1_Mu0_pT->SetLineColor(4); Phase1Pix_GEN_A1_Mu0_pT->SetLineStyle(1); Phase1Pix_GEN_A1_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A1_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A1_Mu0_pT->Draw("SAME");
+    Phase1Pix_GEN_A1_Mu1_pT->SetLineColor(4); Phase1Pix_GEN_A1_Mu1_pT->SetLineStyle(2); Phase1Pix_GEN_A1_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A1_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A1_Mu1_pT->Draw("SAME");
+    GENAMuPt->Write();
+
+    RECOMuPt->cd();
+    Phase1Pix_RECO_Mu0_pT->SetLineColor(1); Phase1Pix_RECO_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu0_pT->Draw();
+    Phase1Pix_RECO_Mu1_pT->SetLineColor(2); Phase1Pix_RECO_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu1_pT->Draw("SAME");
+    Phase1Pix_RECO_Mu2_pT->SetLineColor(3); Phase1Pix_RECO_Mu2_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu2_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu2_pT->Draw("SAME");
+    Phase1Pix_RECO_Mu3_pT->SetLineColor(4); Phase1Pix_RECO_Mu3_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu3_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu3_pT->Draw("SAME");
+    RECOMuPt->Write();
+
+    RECODimuMuPt->cd();
+    Phase1Pix_RECO_DimuC_Mu0_pT->SetLineColor(2); Phase1Pix_RECO_DimuC_Mu0_pT->SetLineStyle(1); Phase1Pix_RECO_DimuC_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuC_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuC_Mu0_pT->Draw();
+    Phase1Pix_RECO_DimuC_Mu1_pT->SetLineColor(2); Phase1Pix_RECO_DimuC_Mu1_pT->SetLineStyle(2); Phase1Pix_RECO_DimuC_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuC_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuC_Mu1_pT->Draw("SAME");
+    Phase1Pix_RECO_DimuF_Mu0_pT->SetLineColor(4); Phase1Pix_RECO_DimuF_Mu0_pT->SetLineStyle(1); Phase1Pix_RECO_DimuF_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuF_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuF_Mu0_pT->Draw("SAME");
+    Phase1Pix_RECO_DimuF_Mu1_pT->SetLineColor(4); Phase1Pix_RECO_DimuF_Mu1_pT->SetLineStyle(2); Phase1Pix_RECO_DimuF_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuF_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuF_Mu1_pT->Draw("SAME");
+    RECODimuMuPt->Write();
+
     L_DimuC_SR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuC_SR_HighMass->Write();
     L_DimuF_SR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuF_SR_HighMass->Write();
     Lxy_DimuC_SR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lxy_DimuC_SR_HighMass->Write();
@@ -834,8 +993,32 @@ void efficiency(const std::vector<std::string>& dirNames)
   myPlot.Close();
 
   //Delete objects to avoid potential memory leak
-  delete Lxy_Residual_GEN_leading_pT;
-  delete Abs_Lz_Residual_GEN_leading_pT;
+  delete Phase1Pix_GEN_A0_Lxy;
+  delete Phase1Pix_GEN_A0_Lz;
+  delete Phase1Pix_GEN_A1_Lxy;
+  delete Phase1Pix_GEN_A1_Lz;
+  delete Phase1Pix_GEN_Mu0_pT;
+  delete Phase1Pix_GEN_Mu1_pT;
+  delete Phase1Pix_GEN_Mu2_pT;
+  delete Phase1Pix_GEN_Mu3_pT;
+  delete Phase1Pix_GEN_A0_Mu0_pT;
+  delete Phase1Pix_GEN_A0_Mu1_pT;
+  delete Phase1Pix_GEN_A1_Mu0_pT;
+  delete Phase1Pix_GEN_A1_Mu1_pT;
+  delete Phase1Pix_RECO_Mu0_pT;
+  delete Phase1Pix_RECO_Mu1_pT;
+  delete Phase1Pix_RECO_Mu2_pT;
+  delete Phase1Pix_RECO_Mu3_pT;
+  delete Phase1Pix_RECO_DimuC_Mu0_pT;
+  delete Phase1Pix_RECO_DimuC_Mu1_pT;
+  delete Phase1Pix_RECO_DimuF_Mu0_pT;
+  delete Phase1Pix_RECO_DimuF_Mu1_pT;
+  delete Lxy;
+  delete Lz;
+  delete GENMuPt;
+  delete GENAMuPt;
+  delete RECOMuPt;
+  delete RECODimuMuPt;
   delete leading_pt_pass_basic;
   delete leading_eta_pass_basic;
   delete leading_phi_pass_basic;
