@@ -495,6 +495,16 @@ private:
   Int_t b_diMuonF_m1_FittedVtx_ValidPixelHits;
   Int_t b_diMuonF_m2_FittedVtx_ValidPixelHits;
 
+  Int_t b_diMuonC_m1_FittedVtx_ValidPixelBarrelHits;
+  Int_t b_diMuonC_m2_FittedVtx_ValidPixelBarrelHits;
+  Int_t b_diMuonF_m1_FittedVtx_ValidPixelBarrelHits;
+  Int_t b_diMuonF_m2_FittedVtx_ValidPixelBarrelHits;
+
+  Int_t b_diMuonC_m1_FittedVtx_ValidPixelEndcapHits;
+  Int_t b_diMuonC_m2_FittedVtx_ValidPixelEndcapHits;
+  Int_t b_diMuonF_m1_FittedVtx_ValidPixelEndcapHits;
+  Int_t b_diMuonF_m2_FittedVtx_ValidPixelEndcapHits;
+
   Int_t b_diMuonC_m1_FittedVtx_pixelLayersWithMeasurement;
   Int_t b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement;
   Int_t b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement;
@@ -559,6 +569,10 @@ private:
   Int_t m_orphan_dimu_Mu1_hitpix_Phase1;
   Int_t m_orphan_dimu_Mu0_ValidPixelHits;
   Int_t m_orphan_dimu_Mu1_ValidPixelHits;
+  Int_t m_orphan_dimu_Mu0_ValidPixelBarrelHits;
+  Int_t m_orphan_dimu_Mu1_ValidPixelBarrelHits;
+  Int_t m_orphan_dimu_Mu0_ValidPixelEndcapHits;
+  Int_t m_orphan_dimu_Mu1_ValidPixelEndcapHits;
   Int_t m_orphan_dimu_Mu0_pixelLayersWithMeasurement;
   Int_t m_orphan_dimu_Mu1_pixelLayersWithMeasurement;
 
@@ -2045,22 +2059,32 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon isolation" << std::endl;
 
   //Register pixel hits info for two muons of each dimuon
-  b_diMuonC_m1_FittedVtx_hitpix_Phase1=-1000;
-  b_diMuonC_m2_FittedVtx_hitpix_Phase1=-1000;
-  b_diMuonF_m1_FittedVtx_hitpix_Phase1=-1000;
-  b_diMuonF_m2_FittedVtx_hitpix_Phase1=-1000;
+  b_diMuonC_m1_FittedVtx_hitpix_Phase1 = -1000;
+  b_diMuonC_m2_FittedVtx_hitpix_Phase1 = -1000;
+  b_diMuonF_m1_FittedVtx_hitpix_Phase1 = -1000;
+  b_diMuonF_m2_FittedVtx_hitpix_Phase1 = -1000;
 
-  b_diMuonC_m1_FittedVtx_ValidPixelHits=-1000;
-  b_diMuonC_m2_FittedVtx_ValidPixelHits=-1000;
-  b_diMuonF_m1_FittedVtx_ValidPixelHits=-1000;
-  b_diMuonF_m2_FittedVtx_ValidPixelHits=-1000;
+  b_diMuonC_m1_FittedVtx_ValidPixelHits = -1000;
+  b_diMuonC_m2_FittedVtx_ValidPixelHits = -1000;
+  b_diMuonF_m1_FittedVtx_ValidPixelHits = -1000;
+  b_diMuonF_m2_FittedVtx_ValidPixelHits = -1000;
 
-  b_diMuonC_m1_FittedVtx_pixelLayersWithMeasurement=-1000;
-  b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement=-1000;
-  b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement=-1000;
-  b_diMuonF_m2_FittedVtx_pixelLayersWithMeasurement=-1000;
+  b_diMuonC_m1_FittedVtx_ValidPixelBarrelHits = -1000;
+  b_diMuonC_m2_FittedVtx_ValidPixelBarrelHits = -1000;
+  b_diMuonF_m1_FittedVtx_ValidPixelBarrelHits = -1000;
+  b_diMuonF_m2_FittedVtx_ValidPixelBarrelHits = -1000;
 
-  //Note: here probably onlu need to specify diMuC/F !=NULL,
+  b_diMuonC_m1_FittedVtx_ValidPixelEndcapHits = -1000;
+  b_diMuonC_m2_FittedVtx_ValidPixelEndcapHits = -1000;
+  b_diMuonF_m1_FittedVtx_ValidPixelEndcapHits = -1000;
+  b_diMuonF_m2_FittedVtx_ValidPixelEndcapHits = -1000;
+
+  b_diMuonC_m1_FittedVtx_pixelLayersWithMeasurement = -1000;
+  b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement = -1000;
+  b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement = -1000;
+  b_diMuonF_m2_FittedVtx_pixelLayersWithMeasurement = -1000;
+
+  //Note: here probably only need to specify diMuC/F !=NULL,
   //vertexValid requirement is too strong?
   if ( b_is2DiMuonsFittedVtxOK ) {
     for(uint32_t k=0;k<2;k++){
@@ -2077,12 +2101,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         }
         //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
         if ( p.numberOfValidPixelHits() > 0 ){
-          if(k==0) b_diMuonC_m1_FittedVtx_ValidPixelHits = 1;
-          if(k==1) b_diMuonC_m2_FittedVtx_ValidPixelHits = 1;
+          if(k==0) b_diMuonC_m1_FittedVtx_ValidPixelHits = p.numberOfValidPixelHits();
+          if(k==1) b_diMuonC_m2_FittedVtx_ValidPixelHits = p.numberOfValidPixelHits();
+        }
+        if ( p.numberOfValidPixelBarrelHits() > 0 ){
+          if(k==0) b_diMuonC_m1_FittedVtx_ValidPixelBarrelHits = p.numberOfValidPixelBarrelHits();
+          if(k==1) b_diMuonC_m2_FittedVtx_ValidPixelBarrelHits = p.numberOfValidPixelBarrelHits();
+        }
+        if ( p.numberOfValidPixelEndcapHits() > 0 ){
+          if(k==0) b_diMuonC_m1_FittedVtx_ValidPixelEndcapHits = p.numberOfValidPixelEndcapHits();
+          if(k==1) b_diMuonC_m2_FittedVtx_ValidPixelEndcapHits = p.numberOfValidPixelEndcapHits();
         }
         if ( p.pixelLayersWithMeasurement() > 0 ){
-          if(k==0) b_diMuonC_m1_FittedVtx_pixelLayersWithMeasurement = 1;
-          if(k==1) b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement = 1;
+          if(k==0) b_diMuonC_m1_FittedVtx_pixelLayersWithMeasurement = p.pixelLayersWithMeasurement();
+          if(k==1) b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement = p.pixelLayersWithMeasurement();
         }
       }//C innerTrack available
 
@@ -2097,12 +2129,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
               if(k==1) b_diMuonF_m2_FittedVtx_hitpix_Phase1 = 1;
         }
         if ( p.numberOfValidPixelHits() > 0 ){
-          if(k==0) b_diMuonF_m1_FittedVtx_ValidPixelHits = 1;
-          if(k==1) b_diMuonF_m2_FittedVtx_ValidPixelHits = 1;
+          if(k==0) b_diMuonF_m1_FittedVtx_ValidPixelHits = p.numberOfValidPixelHits();
+          if(k==1) b_diMuonF_m2_FittedVtx_ValidPixelHits = p.numberOfValidPixelHits();
+        }
+        if ( p.numberOfValidPixelBarrelHits() > 0 ){
+          if(k==0) b_diMuonF_m1_FittedVtx_ValidPixelBarrelHits = p.numberOfValidPixelBarrelHits();
+          if(k==1) b_diMuonF_m2_FittedVtx_ValidPixelBarrelHits = p.numberOfValidPixelBarrelHits();
+        }
+        if ( p.numberOfValidPixelEndcapHits() > 0 ){
+          if(k==0) b_diMuonF_m1_FittedVtx_ValidPixelEndcapHits = p.numberOfValidPixelEndcapHits();
+          if(k==1) b_diMuonF_m2_FittedVtx_ValidPixelEndcapHits = p.numberOfValidPixelEndcapHits();
         }
         if ( p.pixelLayersWithMeasurement() > 0 ){
-          if(k==0) b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement = 1;
-          if(k==1) b_diMuonF_m2_FittedVtx_pixelLayersWithMeasurement = 1;
+          if(k==0) b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement = p.pixelLayersWithMeasurement();
+          if(k==1) b_diMuonF_m2_FittedVtx_pixelLayersWithMeasurement = p.pixelLayersWithMeasurement();
         }
       }//F innerTrack available
     }//end loop k
@@ -2327,12 +2367,16 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }//end if cast exists
 
     //Register pixel hits info for the orphan-dimu
-    m_orphan_dimu_Mu0_hitpix_Phase1=-1000;
-    m_orphan_dimu_Mu1_hitpix_Phase1=-1000;
-    m_orphan_dimu_Mu0_ValidPixelHits=-1000;
-    m_orphan_dimu_Mu1_ValidPixelHits=-1000;
-    m_orphan_dimu_Mu0_pixelLayersWithMeasurement=-1000;
-    m_orphan_dimu_Mu1_pixelLayersWithMeasurement=-1000;
+    m_orphan_dimu_Mu0_hitpix_Phase1              = -1000;
+    m_orphan_dimu_Mu1_hitpix_Phase1              = -1000;
+    m_orphan_dimu_Mu0_ValidPixelHits             = -1000;
+    m_orphan_dimu_Mu1_ValidPixelHits             = -1000;
+    m_orphan_dimu_Mu0_ValidPixelBarrelHits       = -1000;
+    m_orphan_dimu_Mu1_ValidPixelBarrelHits       = -1000;
+    m_orphan_dimu_Mu0_ValidPixelEndcapHits       = -1000;
+    m_orphan_dimu_Mu1_ValidPixelEndcapHits       = -1000;
+    m_orphan_dimu_Mu0_pixelLayersWithMeasurement = -1000;
+    m_orphan_dimu_Mu1_pixelLayersWithMeasurement = -1000;
 
     if ( orphanMuJet != NULL &&  orphanMuJet->vertexValid() ) {
 
@@ -2349,12 +2393,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           }
           //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
           if ( p.numberOfValidPixelHits() > 0 ){
-            if(l==0) m_orphan_dimu_Mu0_ValidPixelHits = 1;
-            if(l==1) m_orphan_dimu_Mu1_ValidPixelHits = 1;
+            if(l==0) m_orphan_dimu_Mu0_ValidPixelHits = p.numberOfValidPixelHits();
+            if(l==1) m_orphan_dimu_Mu1_ValidPixelHits = p.numberOfValidPixelHits();
+          }
+          if ( p.numberOfValidPixelBarrelHits() > 0 ){
+            if(l==0) m_orphan_dimu_Mu0_ValidPixelBarrelHits = p.numberOfValidPixelBarrelHits();
+            if(l==1) m_orphan_dimu_Mu1_ValidPixelBarrelHits = p.numberOfValidPixelBarrelHits();
+          }
+          if ( p.numberOfValidPixelEndcapHits() > 0 ){
+            if(l==0) m_orphan_dimu_Mu0_ValidPixelEndcapHits = p.numberOfValidPixelEndcapHits();
+            if(l==1) m_orphan_dimu_Mu1_ValidPixelEndcapHits = p.numberOfValidPixelEndcapHits();
           }
           if ( p.pixelLayersWithMeasurement() > 0 ){
-            if(l==0) m_orphan_dimu_Mu0_pixelLayersWithMeasurement = 1;
-            if(l==1) m_orphan_dimu_Mu1_pixelLayersWithMeasurement = 1;
+            if(l==0) m_orphan_dimu_Mu0_pixelLayersWithMeasurement = p.pixelLayersWithMeasurement();
+            if(l==1) m_orphan_dimu_Mu1_pixelLayersWithMeasurement = p.pixelLayersWithMeasurement();
           }
         }//orphan-dimu innerTrack available
       }//end for loop l
@@ -2368,22 +2420,22 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //===============================================================================
 
   // Cut on primary vertex in event
-  std::cout<<"Define PupInfo"<<std::endl;
+  //std::cout<<"Define PupInfo"<<std::endl;
   edm::Handle<std::vector<PileupSummaryInfo> > PupInfo;
-  std::cout<<"Get by token"<<std::endl;
+  //std::cout<<"Get by token"<<std::endl;
   iEvent.getByToken(m_pileupCollection, PupInfo);
-  std::cout<<"Define iterator"<<std::endl;
+  //std::cout<<"Define iterator"<<std::endl;
   std::vector<PileupSummaryInfo>::const_iterator PVI;
-  std::cout<<"Enter loop"<<std::endl;
+  //std::cout<<"Enter loop"<<std::endl;
   for(PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI)
   {
         int BX = PVI->getBunchCrossing();
-        std::cout<<"BX is "<<BX<<std::endl;
+        //std::cout<<"BX is "<<BX<<std::endl;
         if(BX == 0)
         {
-                std::cout<<"BX should be 0. BX is "<<BX<<std::endl;
+                //std::cout<<"BX should be 0. BX is "<<BX<<std::endl;
                 b_npv = PVI->getTrueNumInteractions();
-                std::cout<<"b_npv is "<<b_npv<<std::endl;
+                //std::cout<<"b_npv is "<<b_npv<<std::endl;
                 continue;
         }
 
@@ -2716,6 +2768,16 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("diMuonF_m1_FittedVtx_ValidPixelHits", &b_diMuonF_m1_FittedVtx_ValidPixelHits, "diMuonF_m1_FittedVtx_ValidPixelHits/I");
   m_ttree->Branch("diMuonF_m2_FittedVtx_ValidPixelHits", &b_diMuonF_m2_FittedVtx_ValidPixelHits, "diMuonF_m2_FittedVtx_ValidPixelHits/I");
 
+  m_ttree->Branch("diMuonC_m1_FittedVtx_ValidPixelBarrelHits", &b_diMuonC_m1_FittedVtx_ValidPixelBarrelHits, "diMuonC_m1_FittedVtx_ValidPixelBarrelHits/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_ValidPixelBarrelHits", &b_diMuonC_m2_FittedVtx_ValidPixelBarrelHits, "diMuonC_m2_FittedVtx_ValidPixelBarrelHits/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_ValidPixelBarrelHits", &b_diMuonF_m1_FittedVtx_ValidPixelBarrelHits, "diMuonF_m1_FittedVtx_ValidPixelBarrelHits/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_ValidPixelBarrelHits", &b_diMuonF_m2_FittedVtx_ValidPixelBarrelHits, "diMuonF_m2_FittedVtx_ValidPixelBarrelHits/I");
+
+  m_ttree->Branch("diMuonC_m1_FittedVtx_ValidPixelEndcapHits", &b_diMuonC_m1_FittedVtx_ValidPixelEndcapHits, "diMuonC_m1_FittedVtx_ValidPixelEndcapHits/I");
+  m_ttree->Branch("diMuonC_m2_FittedVtx_ValidPixelEndcapHits", &b_diMuonC_m2_FittedVtx_ValidPixelEndcapHits, "diMuonC_m2_FittedVtx_ValidPixelEndcapHits/I");
+  m_ttree->Branch("diMuonF_m1_FittedVtx_ValidPixelEndcapHits", &b_diMuonF_m1_FittedVtx_ValidPixelEndcapHits, "diMuonF_m1_FittedVtx_ValidPixelEndcapHits/I");
+  m_ttree->Branch("diMuonF_m2_FittedVtx_ValidPixelEndcapHits", &b_diMuonF_m2_FittedVtx_ValidPixelEndcapHits, "diMuonF_m2_FittedVtx_ValidPixelEndcapHits/I");
+
   m_ttree->Branch("diMuonC_m1_FittedVtx_pixelLayersWithMeasurement", &b_diMuonC_m1_FittedVtx_pixelLayersWithMeasurement, "diMuonC_m1_FittedVtx_pixelLayersWithMeasurement/I");
   m_ttree->Branch("diMuonC_m2_FittedVtx_pixelLayersWithMeasurement", &b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement, "diMuonC_m2_FittedVtx_pixelLayersWithMeasurement/I");
   m_ttree->Branch("diMuonF_m1_FittedVtx_pixelLayersWithMeasurement", &b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement, "diMuonF_m1_FittedVtx_pixelLayersWithMeasurement/I");
@@ -2792,44 +2854,48 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   //                       Main Tree for Control Region Events
   //****************************************************************************
   m_ttree_orphan = tFileService->make<TTree>("Events_orphan", "Events_orphan");
-  m_ttree_orphan->Branch("run", &b_run, "run/I");
-  m_ttree_orphan->Branch("lumi", &b_lumi, "lumi/I");
+  m_ttree_orphan->Branch("run",   &b_run,   "run/I");
+  m_ttree_orphan->Branch("lumi",  &b_lumi,  "lumi/I");
   m_ttree_orphan->Branch("event", &b_event, "event/I");
-  m_ttree_orphan->Branch("orph_isSignalHLTFired", &b_isSignalHLTFired, "orph_isSignalHLTFired/O");
-  m_ttree_orphan->Branch("orph_isVertexOK", &b_orphan_isVertexOK, "orph_isVertexOK/O");
-  m_ttree_orphan->Branch("containstrig", &m_dimuorphan_containstrig, "containstrig/I");
-  m_ttree_orphan->Branch("containstrig2", &m_dimuorphan_containstrig2, "containstrig2/I");
-  m_ttree_orphan->Branch("orph_dimu_Mu0_hitpix_Phase1", &m_orphan_dimu_Mu0_hitpix_Phase1, "orph_dimu_Mu0_hitpix_Phase1/I");
-  m_ttree_orphan->Branch("orph_dimu_Mu1_hitpix_Phase1", &m_orphan_dimu_Mu1_hitpix_Phase1, "orph_dimu_Mu1_hitpix_Phase1/I");
-  m_ttree_orphan->Branch("orph_dimu_Mu0_ValidPixelHits", &m_orphan_dimu_Mu0_ValidPixelHits, "orph_dimu_Mu0_ValidPixelHits/I");
-  m_ttree_orphan->Branch("orph_dimu_Mu1_ValidPixelHits", &m_orphan_dimu_Mu1_ValidPixelHits, "orph_dimu_Mu1_ValidPixelHits/I");
+  m_ttree_orphan->Branch("orph_isSignalHLTFired", &b_isSignalHLTFired,         "orph_isSignalHLTFired/O");
+  m_ttree_orphan->Branch("orph_isVertexOK",       &b_orphan_isVertexOK,        "orph_isVertexOK/O");
+  m_ttree_orphan->Branch("containstrig",          &m_dimuorphan_containstrig,  "containstrig/I");
+  m_ttree_orphan->Branch("containstrig2",         &m_dimuorphan_containstrig2, "containstrig2/I");
+  m_ttree_orphan->Branch("orph_dimu_Mu0_hitpix_Phase1",              &m_orphan_dimu_Mu0_hitpix_Phase1,              "orph_dimu_Mu0_hitpix_Phase1/I");
+  m_ttree_orphan->Branch("orph_dimu_Mu1_hitpix_Phase1",              &m_orphan_dimu_Mu1_hitpix_Phase1,              "orph_dimu_Mu1_hitpix_Phase1/I");
+  m_ttree_orphan->Branch("orph_dimu_Mu0_ValidPixelHits",             &m_orphan_dimu_Mu0_ValidPixelHits,             "orph_dimu_Mu0_ValidPixelHits/I");
+  m_ttree_orphan->Branch("orph_dimu_Mu1_ValidPixelHits",             &m_orphan_dimu_Mu1_ValidPixelHits,             "orph_dimu_Mu1_ValidPixelHits/I");
+  m_ttree_orphan->Branch("orph_dimu_Mu0_ValidPixelBarrelHits",       &m_orphan_dimu_Mu0_ValidPixelBarrelHits,       "orph_dimu_Mu0_ValidPixelBarrelHits/I");
+  m_ttree_orphan->Branch("orph_dimu_Mu1_ValidPixelBarrelHits",       &m_orphan_dimu_Mu1_ValidPixelBarrelHits,       "orph_dimu_Mu1_ValidPixelBarrelHits/I");
+  m_ttree_orphan->Branch("orph_dimu_Mu0_ValidPixelEndcapHits",       &m_orphan_dimu_Mu0_ValidPixelEndcapHits,       "orph_dimu_Mu0_ValidPixelEndcapHits/I");
+  m_ttree_orphan->Branch("orph_dimu_Mu1_ValidPixelEndcapHits",       &m_orphan_dimu_Mu1_ValidPixelEndcapHits,       "orph_dimu_Mu1_ValidPixelEndcapHits/I");
   m_ttree_orphan->Branch("orph_dimu_Mu0_pixelLayersWithMeasurement", &m_orphan_dimu_Mu0_pixelLayersWithMeasurement, "orph_dimu_Mu0_pixelLayersWithMeasurement/I");
   m_ttree_orphan->Branch("orph_dimu_Mu1_pixelLayersWithMeasurement", &m_orphan_dimu_Mu1_pixelLayersWithMeasurement, "orph_dimu_Mu1_pixelLayersWithMeasurement/I");
   m_ttree_orphan->Branch("orph_dimu_mass", &m_orphan_dimu_mass, "orph_dimu_mass/F");
-  m_ttree_orphan->Branch("orph_z", &m_orphan_z, "orph_z/F");
-  m_ttree_orphan->Branch("orph_dimu_z", &m_orphan_dimu_z, "orph_dimu_z/F");
-  m_ttree_orphan->Branch("orph_isoTk", &m_orphan_isoTk, "orph_isoTk/F");
-  m_ttree_orphan->Branch("orph_dimu_isoTk", &m_orphan_dimu_isoTk, "orph_dimu_isoTk/F");
-  m_ttree_orphan->Branch("orph_dimu_Mu0_isoTk0p3", &m_orphan_dimu_Mu0_isoTk0p3, "orph_dimu_Mu0_isoTk0p3/F");
-  m_ttree_orphan->Branch("orph_dimu_Mu0_isoTk0p4", &m_orphan_dimu_Mu0_isoTk0p4, "orph_dimu_Mu0_isoTk0p4/F");
-  m_ttree_orphan->Branch("orph_dimu_Mu0_isoTk0p5", &m_orphan_dimu_Mu0_isoTk0p5, "orph_dimu_Mu0_isoTk0p5/F");
-  m_ttree_orphan->Branch("orph_dimu_Mu1_isoTk0p3", &m_orphan_dimu_Mu1_isoTk0p3, "orph_dimu_Mu1_isoTk0p3/F");
-  m_ttree_orphan->Branch("orph_dimu_Mu1_isoTk0p4", &m_orphan_dimu_Mu1_isoTk0p4, "orph_dimu_Mu1_isoTk0p4/F");
-  m_ttree_orphan->Branch("orph_dimu_Mu1_isoTk0p5", &m_orphan_dimu_Mu1_isoTk0p5, "orph_dimu_Mu1_isoTk0p5/F");
-  m_ttree_orphan->Branch("orph_passOffLineSel", &m_orphan_passOffLineSel, "orph_passOffLineSel/O");
+  m_ttree_orphan->Branch("orph_z",         &m_orphan_z,         "orph_z/F");
+  m_ttree_orphan->Branch("orph_dimu_z",    &m_orphan_dimu_z,    "orph_dimu_z/F");
+  m_ttree_orphan->Branch("orph_isoTk",               &m_orphan_isoTk,               "orph_isoTk/F");
+  m_ttree_orphan->Branch("orph_dimu_isoTk",          &m_orphan_dimu_isoTk,          "orph_dimu_isoTk/F");
+  m_ttree_orphan->Branch("orph_dimu_Mu0_isoTk0p3",   &m_orphan_dimu_Mu0_isoTk0p3,   "orph_dimu_Mu0_isoTk0p3/F");
+  m_ttree_orphan->Branch("orph_dimu_Mu0_isoTk0p4",   &m_orphan_dimu_Mu0_isoTk0p4,   "orph_dimu_Mu0_isoTk0p4/F");
+  m_ttree_orphan->Branch("orph_dimu_Mu0_isoTk0p5",   &m_orphan_dimu_Mu0_isoTk0p5,   "orph_dimu_Mu0_isoTk0p5/F");
+  m_ttree_orphan->Branch("orph_dimu_Mu1_isoTk0p3",   &m_orphan_dimu_Mu1_isoTk0p3,   "orph_dimu_Mu1_isoTk0p3/F");
+  m_ttree_orphan->Branch("orph_dimu_Mu1_isoTk0p4",   &m_orphan_dimu_Mu1_isoTk0p4,   "orph_dimu_Mu1_isoTk0p4/F");
+  m_ttree_orphan->Branch("orph_dimu_Mu1_isoTk0p5",   &m_orphan_dimu_Mu1_isoTk0p5,   "orph_dimu_Mu1_isoTk0p5/F");
+  m_ttree_orphan->Branch("orph_passOffLineSel",      &m_orphan_passOffLineSel,      "orph_passOffLineSel/O");
   m_ttree_orphan->Branch("orph_passOffLineSelPtEta", &m_orphan_passOffLineSelPtEta, "orph_passOffLineSelPtEta/O");
-  m_ttree_orphan->Branch("orph_AllTrackerMu", &m_orphan_AllTrackerMu, "orph_AllTrackerMu/O");
-  m_ttree_orphan->Branch("orph_PtOrph", &m_orphan_PtOrph, "orph_PtOrph/F");
+  m_ttree_orphan->Branch("orph_AllTrackerMu",        &m_orphan_AllTrackerMu,        "orph_AllTrackerMu/O");
+  m_ttree_orphan->Branch("orph_PtOrph",  &m_orphan_PtOrph,  "orph_PtOrph/F");
   m_ttree_orphan->Branch("orph_EtaOrph", &m_orphan_EtaOrph, "orph_EtaOrph/F");
-  m_ttree_orphan->Branch("orph_PtMu0", &m_orphan_PtMu0, "orph_PtMu0/F");
-  m_ttree_orphan->Branch("orph_EtaMu0", &m_orphan_EtaMu0, "orph_EtaMu0/F");
-  m_ttree_orphan->Branch("orph_PtMu1", &m_orphan_PtMu1, "orph_PtMu1/F");
-  m_ttree_orphan->Branch("orph_EtaMu1", &m_orphan_EtaMu1, "orph_EtaMu1/F");
+  m_ttree_orphan->Branch("orph_PtMu0",   &m_orphan_PtMu0,   "orph_PtMu0/F");
+  m_ttree_orphan->Branch("orph_EtaMu0",  &m_orphan_EtaMu0,  "orph_EtaMu0/F");
+  m_ttree_orphan->Branch("orph_PtMu1",   &m_orphan_PtMu1,   "orph_PtMu1/F");
+  m_ttree_orphan->Branch("orph_EtaMu1",  &m_orphan_EtaMu1,  "orph_EtaMu1/F");
 
-  m_ttree_orphan->Branch("NPATJet", &b_NPATJet, "NPATJet/I");
-  m_ttree_orphan->Branch("NPATJetTightB", &b_NPATJetTightB, "NPATJetTightB/I");
+  m_ttree_orphan->Branch("NPATJet",        &b_NPATJet,        "NPATJet/I");
+  m_ttree_orphan->Branch("NPATJetTightB",  &b_NPATJetTightB,  "NPATJetTightB/I");
   m_ttree_orphan->Branch("NPATJetMediumB", &b_NPATJetMediumB, "NPATJetMediumB/I");
-  m_ttree_orphan->Branch("NPATJetLooseB", &b_NPATJetLooseB, "NPATJetLooseB/I");
+  m_ttree_orphan->Branch("NPATJetLooseB",  &b_NPATJetLooseB,  "NPATJetLooseB/I");
 
 }//end beginJob
 

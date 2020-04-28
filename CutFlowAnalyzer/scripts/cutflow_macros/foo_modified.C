@@ -33,12 +33,13 @@ using namespace std;
 #include <TMath.h>
 #include "Helpers.h"
 
-int k = -1;
-int counter[500][18];//limit # of samples: 500; 18 total selections per sample for run 2
+int k = -1;//counts sample number
+int counter[500][18];//limit # of samples: 500; 18 total selections per sample for run 2; will be used in final cut flow
+int counterGENMatch[500][18];//counts events by including GEN selections (GEN Match), for studies on Monte Carlo (signal)
 Float_t TotEff[500][18];//Total efficiency at each selection
-Float_t TotEffErr[500][18];
+Float_t TotEffErr[500][18];//Err. of total efficiency
 Float_t RelEff[500][18];//Relative efficiency to previous selection
-Float_t RelEffErr[500][18];
+Float_t RelEffErr[500][18];//Err. of relative efficiency
 
 Float_t epsvsalph[500] = {0.0};//Model independence const.: offline reconstruction efficiency over generator level cut efficiency
 Float_t Err[500] = {0.0};
@@ -47,9 +48,10 @@ Float_t FitSigma = 0.0;
 
 void setup()
 {
-  for(int i=0;i<20;i++){
+  for(int i=0;i<500;i++){
     for(int j=0;j<18;j++){
       counter[i][j]=0;
+      counterGENMatch[i][j]=0;
       TotEff[i][j]=0.0;
       RelEff[i][j]=0.0;
       TotEffErr[i][j]=0.0;
@@ -64,13 +66,16 @@ void efficiency(const std::vector<std::string>& dirNames)
   //! Flags for USER to configure  !
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   bool verbose(true);//Debug and printout basic info from ntuple
-  bool CutFlowTable(true);//Print cut-flow-table for each selection
+  bool CutFlowTable(true);//Loop 2-dimu events and print cutflow table
+  bool LoopOrphanTree(false);//Loop over orphan-dimu events
+  bool Model1DTemplate(false);//plot dimu mass in orphan-dimu events
+  bool PlotdZ(true);//Plot dZ of two dimuon vtx
+  bool PlotIso(true);//Plot isolation for dimuon(s)
+  bool PerEventTriggerEff(true);//Plot per event trigger eff.
+  bool ModelSRWidth(true);//Plot mass and fit to obtain width for 2D signal corridor
   bool ModelBKGShape(true);//Plot histograms to be used in high mass background estimation
   bool CheckDisplacement(true);//Assume the fiducial volume is Phase-1 pixel, check GEN Lxy, Lz and pT of four muons (GEN+RECO)
-  bool Model1DTemplate(false);
-  bool ModelSRWidth(false);//Plot mass and fit to obtain width for 2D signal corridor
-  bool PlotIso(false);//Plot isolation for dimuon(s)
-  bool PerEventTriggerEff(false);//Plot per event trigger eff.
+
 
   TString ext("out_ana_");
   cout<<"Directory Names  "<<dirNames[0]<<endl;
@@ -194,93 +199,189 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t orph_dimu_z;
   Float_t orph_isoTk;
 
-  TCanvas *Lxy = new TCanvas("Lxy", "L_{xy} of A_{0, 1} (GEN) in Phase-1 Pixel Volume", 700, 500);
-  TCanvas *Lz = new TCanvas("Lz", "L_{z} of A_{0, 1} (GEN) in Phase-1 Pixel Volume", 700, 500);
-  TCanvas *GENMuPt = new TCanvas("GENMuPt", "Muon p_{T} (GEN) in Phase-1 Pixel Volume", 700, 500);
-  TCanvas *GENAMuPt = new TCanvas("GENAMuPt", "Signal A Daughter Muon p_{T} (GEN) in Phase-1 Pixel Volume", 700, 500);
-  TCanvas *RECOMuPt = new TCanvas("RECOMuPt", "Muon p_{T} (RECO) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *Lxy          = new TCanvas("Lxy",          "L_{xy} of A_{0, 1} (GEN) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *Lz           = new TCanvas("Lz",           "L_{z} of A_{0, 1} (GEN) in Phase-1 Pixel Volume",  700, 500);
+  TCanvas *GENMuPt      = new TCanvas("GENMuPt",      "Muon p_{T} (GEN) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *GENMuEta     = new TCanvas("GENMuEta",     "Muon #eta (GEN) in Phase-1 Pixel Volume",  700, 500);
+  TCanvas *GENMuPhi     = new TCanvas("GENMuPhi",     "Muon #phi (GEN) in Phase-1 Pixel Volume",  700, 500);
+  TCanvas *GENAMuPt     = new TCanvas("GENAMuPt",     "Signal A Daughter Muon p_{T} (GEN) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *RECOMuPt     = new TCanvas("RECOMuPt",     "Muon p_{T} (RECO) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *RECOMuEta    = new TCanvas("RECOMuEta",    "Muon #eta (RECO) in Phase-1 Pixel Volume",  700, 500);
+  TCanvas *RECOMuPhi    = new TCanvas("RECOMuPhi",    "Muon #phi (RECO) in Phase-1 Pixel Volume",  700, 500);
   TCanvas *RECODimuMuPt = new TCanvas("RECODimuMuPt", "Candidate Di-#mu Muon p_{T} (RECO) in Phase-1 Pixel Volume", 700, 500);
 
-  TH1F* Phase1Pix_GEN_A0_Lxy = new TH1F("Phase1Pix_GEN_A0_Lxy", "L_{xy} of A0 (GEN) in Phase-1 Pixel Volume", 40, 0., 20.); //per 0.5cm
-  TH1F* Phase1Pix_GEN_A0_Lz = new TH1F("Phase1Pix_GEN_A0_Lz", "L_{z} of A0 (GEN) in Phase-1 Pixel Volume", 240, -60., 60.); //per 0.5cm
-  TH1F* Phase1Pix_GEN_A1_Lxy = new TH1F("Phase1Pix_GEN_A1_Lxy", "L_{xy} of A1 (GEN) in Phase-1 Pixel Volume", 40, 0., 20.);
-  TH1F* Phase1Pix_GEN_A1_Lz = new TH1F("Phase1Pix_GEN_A1_Lz", "L_{z} of A1 (GEN) in Phase-1 Pixel Volume", 240, -60., 60.);
+  TH1F* Phase1Pix_GEN_A0_Lxy = new TH1F("Phase1Pix_GEN_A0_Lxy", "L_{xy} of A0 (GEN) in Phase-1 Pixel Volume", 40,   0., 20.); //per 0.5cm
+  TH1F* Phase1Pix_GEN_A0_Lz  = new TH1F("Phase1Pix_GEN_A0_Lz",  "L_{z} of A0 (GEN) in Phase-1 Pixel Volume", 240, -60., 60.); //per 0.5cm
+  TH1F* Phase1Pix_GEN_A1_Lxy = new TH1F("Phase1Pix_GEN_A1_Lxy", "L_{xy} of A1 (GEN) in Phase-1 Pixel Volume", 40,   0., 20.);
+  TH1F* Phase1Pix_GEN_A1_Lz  = new TH1F("Phase1Pix_GEN_A1_Lz",  "L_{z} of A1 (GEN) in Phase-1 Pixel Volume", 240, -60., 60.);
 
-  TH1F* Phase1Pix_GEN_Mu0_pT = new TH1F("Phase1Pix_GEN_Mu0_pT", "p_{T} of 1st Muon (GEN) in Phase-1 Pixel Volume", 130, 0., 130.); //per GeV
-  TH1F* Phase1Pix_GEN_Mu1_pT = new TH1F("Phase1Pix_GEN_Mu1_pT", "p_{T} of 2nd Muon (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
-  TH1F* Phase1Pix_GEN_Mu2_pT = new TH1F("Phase1Pix_GEN_Mu2_pT", "p_{T} of 3rd Muon (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
-  TH1F* Phase1Pix_GEN_Mu3_pT = new TH1F("Phase1Pix_GEN_Mu3_pT", "p_{T} of 4th Muon (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_Mu0_pT = new TH1F("Phase1Pix_GEN_Mu0_pT", "1st GEN #mu in Phase-1 Pixel Volume", 130, 0., 130.); //per GeV
+  TH1F* Phase1Pix_GEN_Mu1_pT = new TH1F("Phase1Pix_GEN_Mu1_pT", "2nd GEN #mu in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_Mu2_pT = new TH1F("Phase1Pix_GEN_Mu2_pT", "3rd GEN #mu in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_Mu3_pT = new TH1F("Phase1Pix_GEN_Mu3_pT", "4th GEN #mu in Phase-1 Pixel Volume", 130, 0., 130.);
 
-  TH1F* Phase1Pix_GEN_A0_Mu0_pT = new TH1F("Phase1Pix_GEN_A0_Mu0_pT", "p_{T} of Leading Muon in A0 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_Mu0_eta = new TH1F("Phase1Pix_GEN_Mu0_eta", "1st GEN #mu in Phase-1 Pixel Volume", 50, -2.5, 2.5); //per 0.1
+  TH1F* Phase1Pix_GEN_Mu1_eta = new TH1F("Phase1Pix_GEN_Mu1_eta", "2nd GEN #mu in Phase-1 Pixel Volume", 50, -2.5, 2.5);
+  TH1F* Phase1Pix_GEN_Mu2_eta = new TH1F("Phase1Pix_GEN_Mu2_eta", "3rd GEN #mu in Phase-1 Pixel Volume", 50, -2.5, 2.5);
+  TH1F* Phase1Pix_GEN_Mu3_eta = new TH1F("Phase1Pix_GEN_Mu3_eta", "4th GEN #mu in Phase-1 Pixel Volume", 50, -2.5, 2.5);
+
+  TH1F* Phase1Pix_GEN_Mu0_phi = new TH1F("Phase1Pix_GEN_Mu0_phi", "1st GEN #mu in Phase-1 Pixel Volume", 70, -3.5, 3.5); //per 0.1
+  TH1F* Phase1Pix_GEN_Mu1_phi = new TH1F("Phase1Pix_GEN_Mu1_phi", "2nd GEN #mu in Phase-1 Pixel Volume", 70, -3.5, 3.5);
+  TH1F* Phase1Pix_GEN_Mu2_phi = new TH1F("Phase1Pix_GEN_Mu2_phi", "3rd GEN #mu in Phase-1 Pixel Volume", 70, -3.5, 3.5);
+  TH1F* Phase1Pix_GEN_Mu3_phi = new TH1F("Phase1Pix_GEN_Mu3_phi", "4th GEN #mu in Phase-1 Pixel Volume", 70, -3.5, 3.5);
+
+  TH1F* Phase1Pix_GEN_A0_Mu0_pT = new TH1F("Phase1Pix_GEN_A0_Mu0_pT", "p_{T} of Leading Muon in A0 (GEN) in Phase-1 Pixel Volume",  130, 0., 130.);
   TH1F* Phase1Pix_GEN_A0_Mu1_pT = new TH1F("Phase1Pix_GEN_A0_Mu1_pT", "p_{T} of Trailing Muon in A0 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
-  TH1F* Phase1Pix_GEN_A1_Mu0_pT = new TH1F("Phase1Pix_GEN_A1_Mu0_pT", "p_{T} of Leading Muon in A1 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_GEN_A1_Mu0_pT = new TH1F("Phase1Pix_GEN_A1_Mu0_pT", "p_{T} of Leading Muon in A1 (GEN) in Phase-1 Pixel Volume",  130, 0., 130.);
   TH1F* Phase1Pix_GEN_A1_Mu1_pT = new TH1F("Phase1Pix_GEN_A1_Mu1_pT", "p_{T} of Trailing Muon in A1 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
 
-  TH1F* Phase1Pix_RECO_Mu0_pT = new TH1F("Phase1Pix_RECO_Mu0_pT", "p_{T} of 1st Muon (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
-  TH1F* Phase1Pix_RECO_Mu1_pT = new TH1F("Phase1Pix_RECO_Mu1_pT", "p_{T} of 2nd Muon (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
-  TH1F* Phase1Pix_RECO_Mu2_pT = new TH1F("Phase1Pix_RECO_Mu2_pT", "p_{T} of 3rd Muon (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
-  TH1F* Phase1Pix_RECO_Mu3_pT = new TH1F("Phase1Pix_RECO_Mu3_pT", "p_{T} of 4th Muon (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
 
-  TH1F* Phase1Pix_RECO_DimuC_Mu0_pT = new TH1F("Phase1Pix_RECO_DimuC_Mu0_pT", "p_{T} of Leading Muon in 1st Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_Mu0_pT = new TH1F("Phase1Pix_RECO_Mu0_pT", "1st RECO #mu in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_Mu1_pT = new TH1F("Phase1Pix_RECO_Mu1_pT", "2nd RECO #mu in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_Mu2_pT = new TH1F("Phase1Pix_RECO_Mu2_pT", "3rd RECO #mu in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_Mu3_pT = new TH1F("Phase1Pix_RECO_Mu3_pT", "4th RECO #mu in Phase-1 Pixel Volume", 130, 0., 130.);
+
+  TH1F* Phase1Pix_RECO_Mu0_eta = new TH1F("Phase1Pix_RECO_Mu0_eta", "1st RECO #mu in Phase-1 Pixel Volume", 50, -2.5, 2.5); //per 0.1
+  TH1F* Phase1Pix_RECO_Mu1_eta = new TH1F("Phase1Pix_RECO_Mu1_eta", "2nd RECO #mu in Phase-1 Pixel Volume", 50, -2.5, 2.5);
+  TH1F* Phase1Pix_RECO_Mu2_eta = new TH1F("Phase1Pix_RECO_Mu2_eta", "3rd RECO #mu in Phase-1 Pixel Volume", 50, -2.5, 2.5);
+  TH1F* Phase1Pix_RECO_Mu3_eta = new TH1F("Phase1Pix_RECO_Mu3_eta", "4th RECO #mu in Phase-1 Pixel Volume", 50, -2.5, 2.5);
+
+  TH1F* Phase1Pix_RECO_Mu0_phi = new TH1F("Phase1Pix_RECO_Mu0_phi", "1st RECO #mu in Phase-1 Pixel Volume", 70, -3.5, 3.5); //per 0.1
+  TH1F* Phase1Pix_RECO_Mu1_phi = new TH1F("Phase1Pix_RECO_Mu1_phi", "2nd RECO #mu in Phase-1 Pixel Volume", 70, -3.5, 3.5);
+  TH1F* Phase1Pix_RECO_Mu2_phi = new TH1F("Phase1Pix_RECO_Mu2_phi", "3rd RECO #mu in Phase-1 Pixel Volume", 70, -3.5, 3.5);
+  TH1F* Phase1Pix_RECO_Mu3_phi = new TH1F("Phase1Pix_RECO_Mu3_phi", "4th RECO #mu in Phase-1 Pixel Volume", 70, -3.5, 3.5);
+
+  TH1F* Phase1Pix_RECO_DimuC_Mu0_pT = new TH1F("Phase1Pix_RECO_DimuC_Mu0_pT", "p_{T} of Leading Muon in 1st Di-#mu (RECO) in Phase-1 Pixel Volume",  130, 0., 130.);
   TH1F* Phase1Pix_RECO_DimuC_Mu1_pT = new TH1F("Phase1Pix_RECO_DimuC_Mu1_pT", "p_{T} of Trailing Muon in 1st Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
-  TH1F* Phase1Pix_RECO_DimuF_Mu0_pT = new TH1F("Phase1Pix_RECO_DimuF_Mu0_pT", "p_{T} of Leading Muon in 2nd Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+  TH1F* Phase1Pix_RECO_DimuF_Mu0_pT = new TH1F("Phase1Pix_RECO_DimuF_Mu0_pT", "p_{T} of Leading Muon in 2nd Di-#mu (RECO) in Phase-1 Pixel Volume",  130, 0., 130.);
   TH1F* Phase1Pix_RECO_DimuF_Mu1_pT = new TH1F("Phase1Pix_RECO_DimuF_Mu1_pT", "p_{T} of Trailing Muon in 2nd Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
 
-  TH1F* leading_pt_pass_basic          = new TH1F("leading_pt_pass_basic",         "", 50, 0.,           50.);
-  TH1F* leading_eta_pass_basic         = new TH1F("leading_eta_pass_basic",        "", 50, -2.5,         2.5);
-  TH1F* leading_phi_pass_basic         = new TH1F("leading_phi_pass_basic",        "", 60, -TMath::Pi(), TMath::Pi());
-  TH1F* HLT_leading_pt_pass_basic      = new TH1F("HLT_leading_pt_pass_basic",     "", 50, 0.,           50.);
-  TH1F* HLT_leading_eta_pass_basic     = new TH1F("HLT_leading_eta_pass_basic",    "", 50, -2.5,         2.5);
-  TH1F* HLT_leading_phi_pass_basic     = new TH1F("HLT_leading_phi_pass_basic",    "", 60, -TMath::Pi(), TMath::Pi());
-  TH1F* L1_leading_pt_pass_basic       = new TH1F("L1_leading_pt_pass_basic",      "", 50, 0.,           50.);
-  TH1F* L1_leading_eta_pass_basic      = new TH1F("L1_leading_eta_pass_basic",     "", 50, -2.5,         2.5);
-  TH1F* L1_leading_phi_pass_basic      = new TH1F("L1_leading_phi_pass_basic",     "", 60, -TMath::Pi(), TMath::Pi());
+  //Trigger accept eff as function of leading muon pT, eta and phi after cut #9
+  TH1F* leading_pt_pass_basic      = new TH1F("leading_pt_pass_basic",      "", 150,    0, 150); //per 1
+  TH1F* leading_eta_pass_basic     = new TH1F("leading_eta_pass_basic",     "",  50, -2.5, 2.5); //per 0.1
+  TH1F* leading_phi_pass_basic     = new TH1F("leading_phi_pass_basic",     "",  70, -3.5, 3.5); //per 0.1
+  TH1F* HLT_leading_pt_pass_basic  = new TH1F("HLT_leading_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_leading_eta_pass_basic = new TH1F("HLT_leading_eta_pass_basic", "",  50, -2.5, 2.5);
+  TH1F* HLT_leading_phi_pass_basic = new TH1F("HLT_leading_phi_pass_basic", "",  70, -3.5, 3.5);
+  TH1F* L1_leading_pt_pass_basic   = new TH1F("L1_leading_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_leading_eta_pass_basic  = new TH1F("L1_leading_eta_pass_basic",  "",  50, -2.5, 2.5);
+  TH1F* L1_leading_phi_pass_basic  = new TH1F("L1_leading_phi_pass_basic",  "",  70, -3.5, 3.5);
 
-  TH1F* leading_pt_pass_all            = new TH1F("leading_pt_pass_all",           "", 50, 0.,           50.);
-  TH1F* leading_eta_pass_all           = new TH1F("leading_eta_pass_all",          "", 50, -2.5,         2.5);
-  TH1F* leading_phi_pass_all           = new TH1F("leading_phi_pass_all",          "", 60, -TMath::Pi(), TMath::Pi());
-  TH1F* HLT_leading_pt_pass_all        = new TH1F("HLT_leading_pt_pass_all",       "", 50, 0.,           50.);
-  TH1F* HLT_leading_eta_pass_all       = new TH1F("HLT_leading_eta_pass_all",      "", 50, -2.5,         2.5);
-  TH1F* HLT_leading_phi_pass_all       = new TH1F("HLT_leading_phi_pass_all",      "", 60, -TMath::Pi(), TMath::Pi());
-  TH1F* L1_leading_pt_pass_all         = new TH1F("L1_leading_pt_pass_all",        "", 50, 0.,           50.);
-  TH1F* L1_leading_eta_pass_all        = new TH1F("L1_leading_eta_pass_all",       "", 50, -2.5,         2.5);
-  TH1F* L1_leading_phi_pass_all        = new TH1F("L1_leading_phi_pass_all",       "", 60, -TMath::Pi(), TMath::Pi());
+  TH1F* second_pt_pass_basic      = new TH1F("second_pt_pass_basic",      "", 150,    0, 150);
+  TH1F* second_eta_pass_basic     = new TH1F("second_eta_pass_basic",     "",  50, -2.5, 2.5);
+  TH1F* second_phi_pass_basic     = new TH1F("second_phi_pass_basic",     "",  70, -3.5, 3.5);
+  TH1F* HLT_second_pt_pass_basic  = new TH1F("HLT_second_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_second_eta_pass_basic = new TH1F("HLT_second_eta_pass_basic", "",  50, -2.5, 2.5);
+  TH1F* HLT_second_phi_pass_basic = new TH1F("HLT_second_phi_pass_basic", "",  70, -3.5, 3.5);
+  TH1F* L1_second_pt_pass_basic   = new TH1F("L1_second_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_second_eta_pass_basic  = new TH1F("L1_second_eta_pass_basic",  "",  50, -2.5, 2.5);
+  TH1F* L1_second_phi_pass_basic  = new TH1F("L1_second_phi_pass_basic",  "",  70, -3.5, 3.5);
+
+  TH1F* third_pt_pass_basic      = new TH1F("third_pt_pass_basic",      "", 150,    0, 150);
+  TH1F* third_eta_pass_basic     = new TH1F("third_eta_pass_basic",     "",  50, -2.5, 2.5);
+  TH1F* third_phi_pass_basic     = new TH1F("third_phi_pass_basic",     "",  70, -3.5, 3.5);
+  TH1F* HLT_third_pt_pass_basic  = new TH1F("HLT_third_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_third_eta_pass_basic = new TH1F("HLT_third_eta_pass_basic", "",  50, -2.5, 2.5);
+  TH1F* HLT_third_phi_pass_basic = new TH1F("HLT_third_phi_pass_basic", "",  70, -3.5, 3.5);
+  TH1F* L1_third_pt_pass_basic   = new TH1F("L1_third_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_third_eta_pass_basic  = new TH1F("L1_third_eta_pass_basic",  "",  50, -2.5, 2.5);
+  TH1F* L1_third_phi_pass_basic  = new TH1F("L1_third_phi_pass_basic",  "",  70, -3.5, 3.5);
+
+  TH1F* fourth_pt_pass_basic      = new TH1F("fourth_pt_pass_basic",      "", 150,    0, 150);
+  TH1F* fourth_eta_pass_basic     = new TH1F("fourth_eta_pass_basic",     "",  50, -2.5, 2.5);
+  TH1F* fourth_phi_pass_basic     = new TH1F("fourth_phi_pass_basic",     "",  70, -3.5, 3.5);
+  TH1F* HLT_fourth_pt_pass_basic  = new TH1F("HLT_fourth_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_fourth_eta_pass_basic = new TH1F("HLT_fourth_eta_pass_basic", "",  50, -2.5, 2.5);
+  TH1F* HLT_fourth_phi_pass_basic = new TH1F("HLT_fourth_phi_pass_basic", "",  70, -3.5, 3.5);
+  TH1F* L1_fourth_pt_pass_basic   = new TH1F("L1_fourth_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_fourth_eta_pass_basic  = new TH1F("L1_fourth_eta_pass_basic",  "",  50, -2.5, 2.5);
+  TH1F* L1_fourth_phi_pass_basic  = new TH1F("L1_fourth_phi_pass_basic",  "",  70, -3.5, 3.5);
+
+  //Trigger accept eff as function of leading 4 muons pT, eta and phi after cut #15
+  TH1F* leading_pt_pass_all      = new TH1F("leading_pt_pass_all",      "", 150,    0, 150);
+  TH1F* leading_eta_pass_all     = new TH1F("leading_eta_pass_all",     "",  50, -2.5, 2.5);
+  TH1F* leading_phi_pass_all     = new TH1F("leading_phi_pass_all",     "",  70, -3.5, 3.5);
+  TH1F* HLT_leading_pt_pass_all  = new TH1F("HLT_leading_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_leading_eta_pass_all = new TH1F("HLT_leading_eta_pass_all", "",  50, -2.5, 2.5);
+  TH1F* HLT_leading_phi_pass_all = new TH1F("HLT_leading_phi_pass_all", "",  70, -3.5, 3.5);
+  TH1F* L1_leading_pt_pass_all   = new TH1F("L1_leading_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_leading_eta_pass_all  = new TH1F("L1_leading_eta_pass_all",  "",  50, -2.5, 2.5);
+  TH1F* L1_leading_phi_pass_all  = new TH1F("L1_leading_phi_pass_all",  "",  70, -3.5, 3.5);
+
+  TH1F* second_pt_pass_all      = new TH1F("second_pt_pass_all",      "", 150,    0, 150);
+  TH1F* second_eta_pass_all     = new TH1F("second_eta_pass_all",     "",  50, -2.5, 2.5);
+  TH1F* second_phi_pass_all     = new TH1F("second_phi_pass_all",     "",  70, -3.5, 3.5);
+  TH1F* HLT_second_pt_pass_all  = new TH1F("HLT_second_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_second_eta_pass_all = new TH1F("HLT_second_eta_pass_all", "",  50, -2.5, 2.5);
+  TH1F* HLT_second_phi_pass_all = new TH1F("HLT_second_phi_pass_all", "",  70, -3.5, 3.5);
+  TH1F* L1_second_pt_pass_all   = new TH1F("L1_second_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_second_eta_pass_all  = new TH1F("L1_second_eta_pass_all",  "",  50, -2.5, 2.5);
+  TH1F* L1_second_phi_pass_all  = new TH1F("L1_second_phi_pass_all",  "",  70, -3.5, 3.5);
+
+  TH1F* third_pt_pass_all      = new TH1F("third_pt_pass_all",      "", 150,    0, 150);
+  TH1F* third_eta_pass_all     = new TH1F("third_eta_pass_all",     "",  50, -2.5, 2.5);
+  TH1F* third_phi_pass_all     = new TH1F("third_phi_pass_all",     "",  70, -3.5, 3.5);
+  TH1F* HLT_third_pt_pass_all  = new TH1F("HLT_third_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_third_eta_pass_all = new TH1F("HLT_third_eta_pass_all", "",  50, -2.5, 2.5);
+  TH1F* HLT_third_phi_pass_all = new TH1F("HLT_third_phi_pass_all", "",  70, -3.5, 3.5);
+  TH1F* L1_third_pt_pass_all   = new TH1F("L1_third_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_third_eta_pass_all  = new TH1F("L1_third_eta_pass_all",  "",  50, -2.5, 2.5);
+  TH1F* L1_third_phi_pass_all  = new TH1F("L1_third_phi_pass_all",  "",  70, -3.5, 3.5);
+
+  TH1F* fourth_pt_pass_all      = new TH1F("fourth_pt_pass_all",      "", 150,    0, 150);
+  TH1F* fourth_eta_pass_all     = new TH1F("fourth_eta_pass_all",     "",  50, -2.5, 2.5);
+  TH1F* fourth_phi_pass_all     = new TH1F("fourth_phi_pass_all",     "",  70, -3.5, 3.5);
+  TH1F* HLT_fourth_pt_pass_all  = new TH1F("HLT_fourth_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_fourth_eta_pass_all = new TH1F("HLT_fourth_eta_pass_all", "",  50, -2.5, 2.5);
+  TH1F* HLT_fourth_phi_pass_all = new TH1F("HLT_fourth_phi_pass_all", "",  70, -3.5, 3.5);
+  TH1F* L1_fourth_pt_pass_all   = new TH1F("L1_fourth_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_fourth_eta_pass_all  = new TH1F("L1_fourth_eta_pass_all",  "",  50, -2.5, 2.5);
+  TH1F* L1_fourth_phi_pass_all  = new TH1F("L1_fourth_phi_pass_all",  "",  70, -3.5, 3.5);
+
+  //As a function of Lxy at GEN and RECO
+  TH1F* genA_leading_Lxy_pass_all   = new TH1F("genA_leading_Lxy_pass_all",   "",  40, 0., 20.); //per 0.5cm
+  TH1F* genA_leading_Lz_pass_all    = new TH1F("genA_leading_Lz_pass_all",    "", 120, 0., 60.); //per 0.5cm
+  TH1F* diMuon_leading_Lxy_pass_all = new TH1F("diMuon_leading_Lxy_pass_all", "",  40, 0., 20.);
+  TH1F* diMuon_leading_Lz_pass_all  = new TH1F("diMuon_leading_Lz_pass_all",  "", 120, 0., 60.);
+
+  TH1F* HLT_genA_leading_Lxy_pass_all   = new TH1F("HLT_genA_leading_Lxy_pass_all",   "",  40, 0., 20.);
+  TH1F* HLT_genA_leading_Lz_pass_all    = new TH1F("HLT_genA_leading_Lz_pass_all",    "", 120, 0., 60.);
+  TH1F* HLT_diMuon_leading_Lxy_pass_all = new TH1F("HLT_diMuon_leading_Lxy_pass_all", "",  40, 0., 20.);
+  TH1F* HLT_diMuon_leading_Lz_pass_all  = new TH1F("HLT_diMuon_leading_Lz_pass_all",  "", 120, 0., 60.);
 
   //For BKG modeling at high mass 11-59 GeV
   //Control Region/Validation Region
   TH2F *BKGShapeCR      = new TH2F("BKGShapeCR",      "", 12, 11., 59., 12, 11., 59.);//binning 4 GeV
   TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF", "", 12, 11., 59.);
-  TH1F *BKGShapeOrphDimumass = new TH1F("BKGShapeOrphDimumass", "", 12, 11., 59.);//Use events in orphan_dimu tree
   //Signal Region
   TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 12, 11., 59., 12, 11., 59.);
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 12, 11., 59.);
 
-  TH1F* L_DimuC_CR_HighMass = new TH1F("L_DimuC_CR_HighMass", "", 800, 0., 80.);//cm
-  TH1F* L_DimuF_CR_HighMass = new TH1F("L_DimuF_CR_HighMass", "", 800, 0., 80.);
+  TH1F* L_DimuC_CR_HighMass   = new TH1F("L_DimuC_CR_HighMass",   "", 800, 0., 80.);//cm
+  TH1F* L_DimuF_CR_HighMass   = new TH1F("L_DimuF_CR_HighMass",   "", 800, 0., 80.);
   TH1F* Lxy_DimuC_CR_HighMass = new TH1F("Lxy_DimuC_CR_HighMass", "", 500, 0., 50.);
   TH1F* Lxy_DimuF_CR_HighMass = new TH1F("Lxy_DimuF_CR_HighMass", "", 500, 0., 50.);
-  TH1F* Lz_DimuC_CR_HighMass = new TH1F("Lz_DimuC_CR_HighMass", "", 600, 0., 60.);
-  TH1F* Lz_DimuF_CR_HighMass = new TH1F("Lz_DimuF_CR_HighMass", "", 600, 0., 60.);
+  TH1F* Lz_DimuC_CR_HighMass  = new TH1F("Lz_DimuC_CR_HighMass",  "", 600, 0., 60.);
+  TH1F* Lz_DimuF_CR_HighMass  = new TH1F("Lz_DimuF_CR_HighMass",  "", 600, 0., 60.);
 
-  TH1F* L_DimuC_SR_HighMass = new TH1F("L_DimuC_SR_HighMass", "", 800, 0., 80.);
-  TH1F* L_DimuF_SR_HighMass = new TH1F("L_DimuF_SR_HighMass", "", 800, 0., 80.);
+  TH1F* L_DimuC_SR_HighMass   = new TH1F("L_DimuC_SR_HighMass",   "", 800, 0., 80.);
+  TH1F* L_DimuF_SR_HighMass   = new TH1F("L_DimuF_SR_HighMass",   "", 800, 0., 80.);
   TH1F* Lxy_DimuC_SR_HighMass = new TH1F("Lxy_DimuC_SR_HighMass", "", 500, 0., 50.);
   TH1F* Lxy_DimuF_SR_HighMass = new TH1F("Lxy_DimuF_SR_HighMass", "", 500, 0., 50.);
-  TH1F* Lz_DimuC_SR_HighMass = new TH1F("Lz_DimuC_SR_HighMass", "", 600, 0., 60.);
-  TH1F* Lz_DimuF_SR_HighMass = new TH1F("Lz_DimuF_SR_HighMass", "", 600, 0., 60.);
+  TH1F* Lz_DimuC_SR_HighMass  = new TH1F("Lz_DimuC_SR_HighMass",  "", 600, 0., 60.);
+  TH1F* Lz_DimuF_SR_HighMass  = new TH1F("Lz_DimuF_SR_HighMass",  "", 600, 0., 60.);
 
   TH1F *DimuMass = new TH1F("DimuMass", "", 6000, 0., 60.);//binning 0.01 GeV
-  TH1F *MassC    = new TH1F("MassC",    "", 600,  0., 60.);//binning 0.1 GeV
-  TH1F *MassF    = new TH1F("MassF",    "", 600,  0., 60.);
 
-  TH1F *RECO4muMass             = new TH1F("RECO4muMass",             "", 180,  0., 180.);//binning 1 GeV
-  TH1F *RECOrePaired2muLeadingMass  = new TH1F("RECOrePaired2muLeadingMass",  "", 180,  0., 180.);
-  TH1F *RECOrePaired2muTrailingMass = new TH1F("RECOrePaired2muTrailingMass", "", 180,  0., 180.);
+  TH1F *RECO4muMass                 = new TH1F("RECO4muMass",                 "", 180, 0., 180.);//binning 1 GeV
+  TH1F *RECOrePaired2muLeadingMass  = new TH1F("RECOrePaired2muLeadingMass",  "", 180, 0., 180.);
+  TH1F *RECOrePaired2muTrailingMass = new TH1F("RECOrePaired2muTrailingMass", "", 180, 0., 180.);
+  TH1F *RECOrePaired2muLeadingdR    = new TH1F("RECOrePaired2muLeadingdR",    "", 450, 0., 4.5);//binning 0.01
+  TH1F *RECOrePaired2muTrailingdR   = new TH1F("RECOrePaired2muTrailingdR",   "", 450, 0., 4.5);
 
-  TH1F *RECOrePaired2muLeadingdR   = new TH1F("RECOrePaired2muLeadingdR",   "", 450,  0., 4.5);//binning 0.01
-  TH1F *RECOrePaired2muTrailingdR  = new TH1F("RECOrePaired2muTrailingdR",  "", 450,  0., 4.5);
+  TH1F *dZdimuons         = new TH1F("dZdimuons", "Difference in z of Reconstructed Signal Production Vertex at the Beam Line", 24000, -24, 24);//binning 0.002 cm, i.e. 20 microns
 
   TH1F *IsoDimuC          = new TH1F("IsoDimuC",          "", 1000, 0., 100.);//binning 0.1 GeV
   TH1F *IsoDimuF          = new TH1F("IsoDimuF",          "", 1000, 0., 100.);
@@ -297,7 +398,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *IsoDimuFMu1_dR0p4 = new TH1F("IsoDimuFMu1_dR0p4", "", 1000, 0., 100.);
   TH1F *IsoDimuFMu1_dR0p5 = new TH1F("IsoDimuFMu1_dR0p5", "", 1000, 0., 100.);
 
-  TH1F *OrphanDimuMass = new TH1F("OrphanDimuMass", "", 600, 0., 60.0);//binning 0.1GeV
   TH1F *Mass1DTemplate = new TH1F("Mass1DTemplate", "", 600, 0., 60.0);
 
   TH1F *IsoOrphanDimu          = new TH1F("IsoOrphanDimu",          "", 1000, 0., 100.);//binning 0.1 GeV
@@ -405,8 +505,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",    &is2DiMuonsMassOK);
 
   //Get branch from orphan-dimuon tree
-  o->SetBranchAddress("orph_passOffLineSelPtEta",    &orph_passOffLineSelPtEta);//offline pT, eta selection same as signal
-  o->SetBranchAddress("orph_AllTrackerMu",           &orph_AllTrackerMu);//tracker mu
+  o->SetBranchAddress("orph_passOffLineSelPtEta",    &orph_passOffLineSelPtEta); //offline pT, eta selection same as signal
+  o->SetBranchAddress("orph_AllTrackerMu",           &orph_AllTrackerMu); //tracker mu
   o->SetBranchAddress("orph_isSignalHLTFired",       &orph_isSignalHLTFired);
   o->SetBranchAddress("orph_isVertexOK",             &orph_isVertexOK);
   o->SetBranchAddress("orph_dimu_Mu0_hitpix_Phase1", &orph_dimu_Mu0_hitpix_Phase1);
@@ -431,49 +531,18 @@ void efficiency(const std::vector<std::string>& dirNames)
       t->GetEntry(i);
       if ( verbose && (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
       counter[k][0]++;
+      counterGENMatch[k][0]++;
 
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //!         Some Studies         !
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //Check Kinematics in Phase-1 Pixel
-      if ( CheckDisplacement ){
-
-        if ( is3GenMu8 && ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
-          Phase1Pix_GEN_A0_Lxy->Fill(genA0_Lxy);
-          Phase1Pix_GEN_A0_Lz->Fill(genA0_Lz);
-          Phase1Pix_GEN_A1_Lxy->Fill(genA1_Lxy);
-          Phase1Pix_GEN_A1_Lz->Fill(genA1_Lz);
-          Phase1Pix_GEN_Mu0_pT->Fill(genMu0_pT);
-          Phase1Pix_GEN_Mu1_pT->Fill(genMu1_pT);
-          Phase1Pix_GEN_Mu2_pT->Fill(genMu2_pT);
-          Phase1Pix_GEN_Mu3_pT->Fill(genMu3_pT);
-          Phase1Pix_GEN_A0_Mu0_pT->Fill(genA0Mu0_pt);
-          Phase1Pix_GEN_A0_Mu1_pT->Fill(genA0Mu1_pt);
-          Phase1Pix_GEN_A1_Mu0_pT->Fill(genA1Mu0_pt);
-          Phase1Pix_GEN_A1_Mu1_pT->Fill(genA1Mu1_pt);
-        }//end if GEN
-        if ( is3SelMu8 && ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
-          Phase1Pix_RECO_Mu0_pT->Fill(selMu0_pT);
-          Phase1Pix_RECO_Mu1_pT->Fill(selMu1_pT);
-          Phase1Pix_RECO_Mu2_pT->Fill(selMu2_pT);
-          Phase1Pix_RECO_Mu3_pT->Fill(selMu3_pT);
-          Phase1Pix_RECO_DimuC_Mu0_pT->Fill(muJetC_Mu0_pt);
-          Phase1Pix_RECO_DimuC_Mu1_pT->Fill(muJetC_Mu1_pt);
-          Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
-          Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
-        }//end if RECO
-
-      }//end CheckDisplacement
-
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //!        Cut Flow Starts       !
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      if( is1GenMu17 ) counter[k][1]++;
-      if( is2GenMu8  ) counter[k][2]++;
-      if( is3GenMu8  ) counter[k][3]++;
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!        Cut Flow Starts@ GEN Level       !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      if( is1GenMu17 ) {counter[k][1]++; counterGENMatch[k][1]++;} //Ask for one barrel muon pT>17GeV @GEN
+      if( is2GenMu8  ) {counter[k][2]++; counterGENMatch[k][2]++;} //Ask for two muons pT>8GeV (including 1st barrel muon) @GEN
+      if( is3GenMu8  ) {counter[k][3]++; counterGENMatch[k][3]++;} //Ask for three muons pT>8GeV (including 1st barrel muon) @GEN
       if( is4GenMu8  ){
-      //if( is3GenMu8 && genMu3_pT > 0 && fabs(genMu3_eta) < 2.4 ){
         counter[k][4]++;
+        counterGENMatch[k][4]++;
+
         //Phase-0 pixel system (Pre2017): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.2 cm; Lz = 48.5 cm
         //Phase-1 pixel system (2017+2018): 3rd barrel pixel layer and 2nd fwd layer -> Lxy = 10.9 cm; Lz = 39.6 cm
         //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm //To be used for Run2
@@ -481,37 +550,223 @@ void efficiency(const std::vector<std::string>& dirNames)
         //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
         if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
             counter[k][5]++;
-        }
-      }//End GEN Level
+            counterGENMatch[k][5]++;
 
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //+ Start to use GEN Match counter ONLY, for MC studies +
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            Phase1Pix_GEN_Mu0_pT->Fill(genMu0_pT);
+            Phase1Pix_GEN_Mu1_pT->Fill(genMu1_pT);
+            Phase1Pix_GEN_Mu2_pT->Fill(genMu2_pT);
+            Phase1Pix_GEN_Mu3_pT->Fill(genMu3_pT);
+            Phase1Pix_GEN_Mu0_eta->Fill(genMu0_eta);
+            Phase1Pix_GEN_Mu1_eta->Fill(genMu1_eta);
+            Phase1Pix_GEN_Mu2_eta->Fill(genMu2_eta);
+            Phase1Pix_GEN_Mu3_eta->Fill(genMu3_eta);
+            Phase1Pix_GEN_Mu0_phi->Fill(genMu0_phi);
+            Phase1Pix_GEN_Mu1_phi->Fill(genMu1_phi);
+            Phase1Pix_GEN_Mu2_phi->Fill(genMu2_phi);
+            Phase1Pix_GEN_Mu3_phi->Fill(genMu3_phi);
+            Phase1Pix_GEN_A0_Lxy->Fill(genA0_Lxy);
+            Phase1Pix_GEN_A1_Lxy->Fill(genA1_Lxy);
+            Phase1Pix_GEN_A0_Lz->Fill(genA0_Lz);
+            Phase1Pix_GEN_A1_Lz->Fill(genA1_Lz);
+            Phase1Pix_GEN_A0_Mu0_pT->Fill(genA0Mu0_pt);
+            Phase1Pix_GEN_A0_Mu1_pT->Fill(genA0Mu1_pt);
+            Phase1Pix_GEN_A1_Mu0_pT->Fill(genA1Mu0_pt);
+            Phase1Pix_GEN_A1_Mu1_pT->Fill(genA1Mu1_pt);
+
+            Phase1Pix_RECO_Mu0_pT->Fill(selMu0_pT);
+            Phase1Pix_RECO_Mu1_pT->Fill(selMu1_pT);
+            Phase1Pix_RECO_Mu2_pT->Fill(selMu2_pT);
+            Phase1Pix_RECO_Mu3_pT->Fill(selMu3_pT);
+            Phase1Pix_RECO_Mu0_eta->Fill(selMu0_eta);
+            Phase1Pix_RECO_Mu1_eta->Fill(selMu1_eta);
+            Phase1Pix_RECO_Mu2_eta->Fill(selMu2_eta);
+            Phase1Pix_RECO_Mu3_eta->Fill(selMu3_eta);
+            Phase1Pix_RECO_Mu0_phi->Fill(selMu0_phi);
+            Phase1Pix_RECO_Mu1_phi->Fill(selMu1_phi);
+            Phase1Pix_RECO_Mu2_phi->Fill(selMu2_phi);
+            Phase1Pix_RECO_Mu3_phi->Fill(selMu3_phi);
+            Phase1Pix_RECO_DimuC_Mu0_pT->Fill(muJetC_Mu0_pt);
+            Phase1Pix_RECO_DimuC_Mu1_pT->Fill(muJetC_Mu1_pt);
+            Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
+            Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
+
+            if( is1SelMu17 ) counterGENMatch[k][6]++;
+            if( is2SelMu8  ) counterGENMatch[k][7]++;
+            if( is3SelMu8  ) counterGENMatch[k][8]++;
+            if( is4SelMu8  ){
+              counterGENMatch[k][9]++;
+
+              //std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
+              //std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
+              //std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
+
+              //###########################################################
+              // Check trigger efficiency after basic offline pT selections
+              // Need to put before "isSignalHLTFired" selector
+              //###########################################################
+              if( PerEventTriggerEff ) {
+                leading_pt_pass_basic->Fill(selMu0_pT); second_pt_pass_basic->Fill(selMu1_pT); third_pt_pass_basic->Fill(selMu2_pT); fourth_pt_pass_basic->Fill(selMu3_pT);
+                leading_eta_pass_basic->Fill(selMu0_eta); second_eta_pass_basic->Fill(selMu1_eta); third_eta_pass_basic->Fill(selMu2_eta); fourth_eta_pass_basic->Fill(selMu3_eta);
+                leading_phi_pass_basic->Fill(selMu0_phi); second_phi_pass_basic->Fill(selMu1_phi); third_phi_pass_basic->Fill(selMu2_phi); fourth_phi_pass_basic->Fill(selMu3_phi);
+
+                if ( isSignalHLTFired ) {
+                  HLT_leading_pt_pass_basic->Fill(selMu0_pT); HLT_second_pt_pass_basic->Fill(selMu1_pT); HLT_third_pt_pass_basic->Fill(selMu2_pT); HLT_fourth_pt_pass_basic->Fill(selMu3_pT);
+                  HLT_leading_eta_pass_basic->Fill(selMu0_eta); HLT_second_eta_pass_basic->Fill(selMu1_eta); HLT_third_eta_pass_basic->Fill(selMu2_eta); HLT_fourth_eta_pass_basic->Fill(selMu3_eta);
+                  HLT_leading_phi_pass_basic->Fill(selMu0_phi); HLT_second_phi_pass_basic->Fill(selMu1_phi); HLT_third_phi_pass_basic->Fill(selMu2_phi); HLT_fourth_phi_pass_basic->Fill(selMu3_phi);
+                }//HLT accept
+
+                if ( isSignalHLTL1Fired ) {
+                  L1_leading_pt_pass_basic->Fill(selMu0_pT); L1_second_pt_pass_basic->Fill(selMu1_pT); L1_third_pt_pass_basic->Fill(selMu2_pT); L1_fourth_pt_pass_basic->Fill(selMu3_pT);
+                  L1_leading_eta_pass_basic->Fill(selMu0_eta); L1_second_eta_pass_basic->Fill(selMu1_eta); L1_third_eta_pass_basic->Fill(selMu2_eta); L1_fourth_eta_pass_basic->Fill(selMu3_eta);
+                  L1_leading_phi_pass_basic->Fill(selMu0_phi); L1_second_phi_pass_basic->Fill(selMu1_phi); L1_third_phi_pass_basic->Fill(selMu2_phi); L1_fourth_phi_pass_basic->Fill(selMu3_phi);
+                }//L1 filter accept
+
+              }//end if PerEventTriggerEff
+
+              if( isVtxOK ){
+                counterGENMatch[k][10]++;
+
+                if( is2DiMuons ){
+                  counterGENMatch[k][11]++;
+
+                  if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
+                    //!!! Note: this needs to match GEN cut on geometry
+                    counterGENMatch[k][12]++;
+
+                    //Note: this needs to be before the cut on dz
+                    if( PlotdZ ) {
+                      dZdimuons->Fill(diMuons_dz_FittedVtx);
+                    }//end PlotdZ
+
+                    if( fabs(diMuons_dz_FittedVtx) < 0.1  ){
+
+                      counterGENMatch[k][13]++;
+
+                      if( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ){
+                      //if( (massC >= 11.0 && massF >= 11.0 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC < 11.0 && massF < 11.0) ){
+                        counterGENMatch[k][14]++;
+
+                        //Note: this needs to be before the cut on iso
+                        if( PlotIso ) {
+                          IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
+                          IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
+                          IsoDimuCMu0_dR0p3->Fill(diMuonCMu0_IsoTk0p3_FittedVtx);
+                          IsoDimuCMu0_dR0p4->Fill(diMuonCMu0_IsoTk0p4_FittedVtx);
+                          IsoDimuCMu0_dR0p5->Fill(diMuonCMu0_IsoTk0p5_FittedVtx);
+                          IsoDimuCMu1_dR0p3->Fill(diMuonCMu1_IsoTk0p3_FittedVtx);
+                          IsoDimuCMu1_dR0p4->Fill(diMuonCMu1_IsoTk0p4_FittedVtx);
+                          IsoDimuCMu1_dR0p5->Fill(diMuonCMu1_IsoTk0p5_FittedVtx);
+                          IsoDimuFMu0_dR0p3->Fill(diMuonFMu0_IsoTk0p3_FittedVtx);
+                          IsoDimuFMu0_dR0p4->Fill(diMuonFMu0_IsoTk0p4_FittedVtx);
+                          IsoDimuFMu0_dR0p5->Fill(diMuonFMu0_IsoTk0p5_FittedVtx);
+                          IsoDimuFMu1_dR0p3->Fill(diMuonFMu1_IsoTk0p3_FittedVtx);
+                          IsoDimuFMu1_dR0p4->Fill(diMuonFMu1_IsoTk0p4_FittedVtx);
+                          IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
+                        }//end PlotIso
+
+                        if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
+                        //if( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ){
+                          counterGENMatch[k][15]++;
+
+                          //###########################################################
+                          // Check trigger efficiency after most selections
+                          // Need to put before "isSignalHLTFired" selector
+                          //###########################################################
+                          if( PerEventTriggerEff ) {
+                            //L1, HLT eff.: denominator
+                            leading_pt_pass_all->Fill(selMu0_pT); second_pt_pass_all->Fill(selMu1_pT); third_pt_pass_all->Fill(selMu2_pT); fourth_pt_pass_all->Fill(selMu3_pT);
+                            leading_eta_pass_all->Fill(selMu0_eta); second_eta_pass_all->Fill(selMu1_eta); third_eta_pass_all->Fill(selMu2_eta); fourth_eta_pass_all->Fill(selMu3_eta);
+                            leading_phi_pass_all->Fill(selMu0_phi); second_phi_pass_all->Fill(selMu1_phi); third_phi_pass_all->Fill(selMu2_phi); fourth_phi_pass_all->Fill(selMu3_phi);
+
+                            if( isSignalHLTFired ) {
+                              HLT_leading_pt_pass_all->Fill(selMu0_pT); HLT_second_pt_pass_all->Fill(selMu1_pT); HLT_third_pt_pass_all->Fill(selMu2_pT); HLT_fourth_pt_pass_all->Fill(selMu3_pT);
+                              HLT_leading_eta_pass_all->Fill(selMu0_eta); HLT_second_eta_pass_all->Fill(selMu1_eta); HLT_third_eta_pass_all->Fill(selMu2_eta); HLT_fourth_eta_pass_all->Fill(selMu3_eta);
+                              HLT_leading_phi_pass_all->Fill(selMu0_phi); HLT_second_phi_pass_all->Fill(selMu1_phi); HLT_third_phi_pass_all->Fill(selMu2_phi); HLT_fourth_phi_pass_all->Fill(selMu3_phi);
+                            }//HLT accept: numerator
+
+                            if ( isSignalHLTL1Fired ) {
+                              L1_leading_pt_pass_all->Fill(selMu0_pT); L1_second_pt_pass_all->Fill(selMu1_pT); L1_third_pt_pass_all->Fill(selMu2_pT); L1_fourth_pt_pass_all->Fill(selMu3_pT);
+                              L1_leading_eta_pass_all->Fill(selMu0_eta); L1_second_eta_pass_all->Fill(selMu1_eta); L1_third_eta_pass_all->Fill(selMu2_eta); L1_fourth_eta_pass_all->Fill(selMu3_eta);
+                              L1_leading_phi_pass_all->Fill(selMu0_phi); L1_second_phi_pass_all->Fill(selMu1_phi); L1_third_phi_pass_all->Fill(selMu2_phi); L1_fourth_phi_pass_all->Fill(selMu3_phi);
+                            }//L1 filter accept: numerator
+
+                            if( genA0_Lxy > genA1_Lxy ){
+                              genA_leading_Lxy_pass_all->Fill(genA0_Lxy);
+                              if( isSignalHLTFired ) HLT_genA_leading_Lxy_pass_all->Fill(genA0_Lxy);
+                            }
+                            else{
+                              genA_leading_Lxy_pass_all->Fill(genA1_Lxy);
+                              if( isSignalHLTFired ) HLT_genA_leading_Lxy_pass_all->Fill(genA1_Lxy);
+                            }
+
+                            if( fabs(genA0_Lz) > fabs(genA1_Lz) ){
+                              genA_leading_Lz_pass_all->Fill(fabs(genA0_Lz));
+                              if( isSignalHLTFired ) HLT_genA_leading_Lz_pass_all->Fill(fabs(genA0_Lz));
+                            }
+                            else{
+                              genA_leading_Lz_pass_all->Fill(fabs(genA1_Lz));
+                              if( isSignalHLTFired ) HLT_genA_leading_Lz_pass_all->Fill(fabs(genA1_Lz));
+                            }
+
+                            if( diMuonC_FittedVtx_Lxy > diMuonF_FittedVtx_Lxy ){
+                              diMuon_leading_Lxy_pass_all->Fill(diMuonC_FittedVtx_Lxy);
+                              if( isSignalHLTFired ) HLT_diMuon_leading_Lxy_pass_all->Fill(diMuonC_FittedVtx_Lxy);
+                            }
+                            else{
+                              diMuon_leading_Lxy_pass_all->Fill(diMuonF_FittedVtx_Lxy);
+                              if( isSignalHLTFired ) HLT_diMuon_leading_Lxy_pass_all->Fill(diMuonF_FittedVtx_Lxy);
+                            }
+
+                            if( sqrt( pow(diMuonC_FittedVtx_L, 2) - pow(diMuonC_FittedVtx_Lxy, 2) ) > sqrt( pow(diMuonF_FittedVtx_L, 2) - pow(diMuonF_FittedVtx_Lxy, 2) ) ){
+                              diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonC_FittedVtx_L, 2) - pow(diMuonC_FittedVtx_Lxy, 2) ) );
+                              if( isSignalHLTFired ) HLT_diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonC_FittedVtx_L, 2) - pow(diMuonC_FittedVtx_Lxy, 2) ) );
+                            }
+                            else{
+                              diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonF_FittedVtx_L, 2) - pow(diMuonF_FittedVtx_Lxy, 2) ) );
+                              if( isSignalHLTFired ) HLT_diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonF_FittedVtx_L, 2) - pow(diMuonF_FittedVtx_Lxy, 2) ) );
+                            }
+
+                          }//end if PerEventTriggerEff
+
+                          if( isSignalHLTFired ) {
+                            counterGENMatch[k][16]++;
+
+                            if( ModelSRWidth ) { DimuMass->Fill( (massC+massF)/2 ); }
+
+                            if( is2DiMuonsMassOK ) {
+                              counterGENMatch[k][17]++;
+                            }//end 17
+                          }//end 16
+                        }//end 15
+                      }//end 14
+                    }//end 13
+                  }//end 12
+                }//end 11
+              }//end 10
+            }//end 9
+
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //+   End using GEN Match counter ONLY, for MC studies  +
+            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        }//End fiducial volume cut on Phase-1 pixel @GEN
+      }//End asking for four muons pT>8GeV (including 1st barrel muon) @GEN
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!        Cut Flow Ends@ GEN Level         !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!        Cut Flow Starts@ RECO Level      !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if( is1SelMu17 ) counter[k][6]++;
       if( is2SelMu8  ) counter[k][7]++;
       if( is3SelMu8  ) counter[k][8]++;
       if( is4SelMu8  ){
-      //if( is3SelMu8 && selMu3_pT > 0 && fabs(selMu3_eta) < 2.4 ){
         counter[k][9]++;
-        //==============================================
-        // Basic offline pT selections finished
-        //==============================================
-        //pass basic offline pT selections
-        if( PerEventTriggerEff ) {
-          leading_pt_pass_basic->Fill(selMu0_pT);
-          leading_eta_pass_basic->Fill(selMu0_eta);
-          leading_phi_pass_basic->Fill(selMu0_phi);
-
-          if ( isSignalHLTFired ) {
-            HLT_leading_pt_pass_basic->Fill(selMu0_pT);
-            HLT_leading_eta_pass_basic->Fill(selMu0_eta);
-            HLT_leading_phi_pass_basic->Fill(selMu0_phi);
-          }//HLT fired
-
-          if ( isSignalHLTL1Fired ) {
-            L1_leading_pt_pass_basic->Fill(selMu0_pT);
-            L1_leading_eta_pass_basic->Fill(selMu0_eta);
-            L1_leading_phi_pass_basic->Fill(selMu0_phi);
-          }//L1 seeds fired
-
-        }//end if PerEventTriggerEff
 
         if( isVtxOK ){
           counter[k][10]++;
@@ -528,83 +783,35 @@ void efficiency(const std::vector<std::string>& dirNames)
             }//end ModelBKGShape
 
             if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
-              //!!! Note: this needs to match counter[k][5] geometry
+              //!!! Note: this needs to match GEN cut on geometry
               counter[k][12]++;
 
               if( fabs(diMuons_dz_FittedVtx) < 0.1  ){
-
                 counter[k][13]++;
 
                 if( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ){
+                //if( (massC >= 11.0 && massF >= 11.0 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC < 11.0 && massF < 11.0) ){
                   counter[k][14]++;
 
-                  if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 &&
-                      diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
+                  if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
+                  //if( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ){
                     counter[k][15]++;
-
-                    //Note: for this study need to eliminate/relax Iso cut at counter 14, e.g. Iso<100 GeV or Iso>0
-                    if( PlotIso ) {
-                      MassC->Fill(massC);
-                      MassF->Fill(massF);
-                      IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
-                      IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
-                      IsoDimuCMu0_dR0p3->Fill(diMuonCMu0_IsoTk0p3_FittedVtx);
-                      IsoDimuCMu0_dR0p4->Fill(diMuonCMu0_IsoTk0p4_FittedVtx);
-                      IsoDimuCMu0_dR0p5->Fill(diMuonCMu0_IsoTk0p5_FittedVtx);
-                      IsoDimuCMu1_dR0p3->Fill(diMuonCMu1_IsoTk0p3_FittedVtx);
-                      IsoDimuCMu1_dR0p4->Fill(diMuonCMu1_IsoTk0p4_FittedVtx);
-                      IsoDimuCMu1_dR0p5->Fill(diMuonCMu1_IsoTk0p5_FittedVtx);
-                      IsoDimuFMu0_dR0p3->Fill(diMuonFMu0_IsoTk0p3_FittedVtx);
-                      IsoDimuFMu0_dR0p4->Fill(diMuonFMu0_IsoTk0p4_FittedVtx);
-                      IsoDimuFMu0_dR0p5->Fill(diMuonFMu0_IsoTk0p5_FittedVtx);
-                      IsoDimuFMu1_dR0p3->Fill(diMuonFMu1_IsoTk0p3_FittedVtx);
-                      IsoDimuFMu1_dR0p4->Fill(diMuonFMu1_IsoTk0p4_FittedVtx);
-                      IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
-                    }//end PlotIso
-
-                    //========================================================
-                    //PerEventTriggerEff after pass all offline selections except HLT fired
-                    // !!!Note: To be more precise, need to put isSignalHLTFired
-                    //          as the last counter and this section in the second to
-                    //          last counter for these plots to make sense
-                    //========================================================
-                    if( PerEventTriggerEff ) {
-                      leading_pt_pass_all->Fill(selMu0_pT);
-                      leading_eta_pass_all->Fill(selMu0_eta);
-                      leading_phi_pass_all->Fill(selMu0_phi);
-
-                      if( isSignalHLTFired ) {
-                        HLT_leading_pt_pass_all->Fill(selMu0_pT);
-                        HLT_leading_eta_pass_all->Fill(selMu0_eta);
-                        HLT_leading_phi_pass_all->Fill(selMu0_phi);
-                      }//HLT fired
-
-                      if ( isSignalHLTL1Fired ) {
-                        L1_leading_pt_pass_all->Fill(selMu0_pT);
-                        L1_leading_eta_pass_all->Fill(selMu0_eta);
-                        L1_leading_phi_pass_all->Fill(selMu0_phi);
-                      }//L1 seeds fired
-                    }//end if PerEventTriggerEff
 
                     if( isSignalHLTFired ) {
                       counter[k][16]++;
 
-                      if( ModelSRWidth ) {
-                        DimuMass->Fill( (massC+massF)/2 );
-                      }//end if ModelSRWidth
-
                       if( is2DiMuonsMassOK ) {
                         counter[k][17]++;
 
-                        //==============================================
-                        // All offline analysis selections finished
-                        //==============================================
+                        //=================================
+                        // All offline selections finished
+                        //=================================
+
                         if( ModelBKGShape ) {
                           BKGShapeSR->Fill(massC,massF);
                           BKGShapeSRmassC->Fill(massC);
                           BKGShapeSRmassF->Fill(massF);
                         }
-                        //std::cout << "SR run: "<< run << "; lumi: "<< lumi << "; event: "<< event << std::endl;
                         //check background events displacement
                         if( CheckDisplacement ) {
                           if (massC >= 11.0 && massC < 59.0 && massF >= 11.0 && massF < 59.0){
@@ -616,8 +823,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                             Lz_DimuF_SR_HighMass->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
                           }
                         }//end CheckDisplacement
-
-                      }//end 17: mass consistent
+                      }
                       else{
                         //================================================
                         //               2D mass control region
@@ -640,7 +846,6 @@ void efficiency(const std::vector<std::string>& dirNames)
                             Lz_DimuF_CR_HighMass->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
                           }
                         }//end CheckDisplacement
-
                       }//end else in loop 17
                     }//end 16
                   }//end 15
@@ -651,9 +856,9 @@ void efficiency(const std::vector<std::string>& dirNames)
         }//end 10
       }//end 9
 
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //!        Cut Flow Ends         !
-      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!        Cut Flow Ends@ RECO Level        !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     }//end for i entries
   }//end if( CutFlowTable )
@@ -661,32 +866,31 @@ void efficiency(const std::vector<std::string>& dirNames)
   //Loop over orphan-dimuon tree
   mentries = o->GetEntries();
   if( verbose ) std::cout << "orphan-dimu tree entries: "<< mentries << std::endl;
-  for( int j = 0; j < mentries; j++ ){
-    if ( verbose && (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
-    o->GetEntry(j);
 
-    //Pass offline basic selections, same as signal for isolation cut study
-    if( PlotIso && orph_passOffLineSelPtEta && orph_AllTrackerMu ){
-      OrphanDimuMass->Fill(orph_dimu_mass);
-      IsoOrphanDimu->Fill(orph_dimu_isoTk);
-      IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
-      IsoOrphanDimuMu0_dR0p4->Fill(orph_dimu_Mu0_isoTk0p4);
-      IsoOrphanDimuMu0_dR0p5->Fill(orph_dimu_Mu0_isoTk0p5);
-      IsoOrphanDimuMu1_dR0p3->Fill(orph_dimu_Mu1_isoTk0p3);
-      IsoOrphanDimuMu1_dR0p4->Fill(orph_dimu_Mu1_isoTk0p4);
-      IsoOrphanDimuMu1_dR0p5->Fill(orph_dimu_Mu1_isoTk0p5);
-      IsoOrphan->Fill(orph_isoTk);
-    }
+  if ( LoopOrphanTree ){
+    for( int j = 0; j < mentries; j++ ){
+      if ( verbose && (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
+      o->GetEntry(j);
 
-    //Pass same cut as signal, for study 1-D template distribution
-    //Note: May need to add orph_dimu_z cut in the future
-    if( ( ModelBKGShape || Model1DTemplate ) && orph_passOffLineSelPtEta && orph_AllTrackerMu && orph_isSignalHLTFired && orph_isVertexOK &&
-        ( orph_dimu_Mu0_hitpix_Phase1 == 1 || orph_dimu_Mu1_hitpix_Phase1 == 1 ) &&
-        orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
-            Mass1DTemplate->Fill(orph_dimu_mass);
-            BKGShapeOrphDimumass->Fill(orph_dimu_mass);
-    }
-  }//end for j entries
+      //Pass offline basic selections, same as signal for isolation cut study
+      if( PlotIso && orph_passOffLineSelPtEta && orph_AllTrackerMu ){
+        IsoOrphanDimu->Fill(orph_dimu_isoTk);
+        IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
+        IsoOrphanDimuMu0_dR0p4->Fill(orph_dimu_Mu0_isoTk0p4);
+        IsoOrphanDimuMu0_dR0p5->Fill(orph_dimu_Mu0_isoTk0p5);
+        IsoOrphanDimuMu1_dR0p3->Fill(orph_dimu_Mu1_isoTk0p3);
+        IsoOrphanDimuMu1_dR0p4->Fill(orph_dimu_Mu1_isoTk0p4);
+        IsoOrphanDimuMu1_dR0p5->Fill(orph_dimu_Mu1_isoTk0p5);
+        IsoOrphan->Fill(orph_isoTk);
+      }
+
+      //Pass same cut as signal, for study 1-D template distribution
+      //Note: May need to add orph_dimu_z cut in the future
+      if( ( ModelBKGShape || Model1DTemplate ) && orph_passOffLineSelPtEta && orph_AllTrackerMu && orph_isSignalHLTFired && orph_isVertexOK && ( orph_dimu_Mu0_hitpix_Phase1 == 1 || orph_dimu_Mu1_hitpix_Phase1 == 1 ) && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
+        Mass1DTemplate->Fill(orph_dimu_mass);
+      }
+    }//end for j entries
+  }//end LoopOrphanTree
 
   RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
   for(int m=0;m<18;m++){
@@ -713,29 +917,29 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<"centering"<<endl;
   cout<<"begin{tabular}{ c| c | c | c | c | c }"<<endl;
 
-  cout<<" #   Selection               & "<<left<< setw(11)<<" \\# Evts "    <<" & "<<left << setw(13) << " Tot. Eff. " << " & " << left << setw(13) << " Rel. Eff. "<<" & "<< left << setw(16) << " Tot. Eff. Err. "<<" & "<< left << setw(16) << " Rel. Eff. Err. " <<" hline "<<endl;
-  cout<<" #0  No cut                  & "<<left<< setw(11)<< counter[k][0]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][0]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][0] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][0]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][0]    <<" hline "<<endl;
-  cout<<" #1  is1GenMu17Barrel        & "<<left<< setw(11)<< counter[k][1]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][1]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][1] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][1]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][1]    <<" hline "<<endl;
-  cout<<" #2  is2GenMu8               & "<<left<< setw(11)<< counter[k][2]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][2]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][2] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][2]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][2]    <<" hline "<<endl;
-  cout<<" #3  is3GenMu8               & "<<left<< setw(11)<< counter[k][3]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][3]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][3] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][3]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][3]    <<" hline "<<endl;
-  cout<<" #4  is4GenMu8               & "<<left<< setw(11)<< counter[k][4]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][4]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][4] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][4]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][4]    <<" hline "<<endl;
-  cout<<" #5  Lxy<16.0cm && Lz<51.6cm & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][5]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][5] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][5]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][5]    <<" hline "<<endl;
+  cout<<" #   Selection             & "<<left<< setw(11)<<" \\# Evts "    <<" & "<<left << setw(13) << " Tot. Eff. " << " & " << left << setw(13) << " Rel. Eff. "<<" & "<< left << setw(16) << " Tot. Eff. Err. "<<" & "<< left << setw(16) << " Rel. Eff. Err. " <<" hline "<<endl;
+  cout<<" #0  No cut                & "<<left<< setw(11)<< counter[k][0]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][0]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][0] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][0]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][0]    <<" hline "<<endl;
+  cout<<" #1  1GenMu17Barrel        & "<<left<< setw(11)<< counter[k][1]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][1]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][1] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][1]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][1]    <<" hline "<<endl;
+  cout<<" #2  2GenMu8               & "<<left<< setw(11)<< counter[k][2]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][2]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][2] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][2]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][2]    <<" hline "<<endl;
+  cout<<" #3  3GenMu8               & "<<left<< setw(11)<< counter[k][3]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][3]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][3] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][3]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][3]    <<" hline "<<endl;
+  cout<<" #4  4GenMu8               & "<<left<< setw(11)<< counter[k][4]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][4]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][4] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][4]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][4]    <<" hline "<<endl;
+  cout<<" #5  BothDecayinPhase1Pix  & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][5]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][5] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][5]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][5]    <<" hline "<<endl;
   cout<<"                                                                                                                            " << " hline "<< endl;
 
-  cout<<" #6  is1SelMu17Barrel        & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][6]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][6] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][6]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][6]    <<" hline "<<endl;
-  cout<<" #7  is2SelMu8               & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][7]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][7] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][7]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][7]    <<" hline "<<endl;
-  cout<<" #8  is3SelMu8               & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][8]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][8] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][8]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][8]    <<" hline "<<endl;
-  cout<<" #9  is4SelMu8               & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][9]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][9] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][9]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][9]    <<" hline "<<endl;
-  cout<<" #10 isVertexOK              & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][10] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][10]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][10]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][10]   <<" hline "<<endl;
-  cout<<" #11 is2Dimuons              & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][11] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][11]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][11]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][11]   <<" hline "<<endl;
-  cout<<" #12 is2DiMuonsPixHitOk      & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][12] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][12]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][12]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][12]   <<" hline "<<endl;
-  cout<<" #13 is2DiMuonsFittedDzOk    & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
-  cout<<" #14 isNotDYLLQEDRadiate     & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
-  cout<<" #15 is2MuonsIsolationOK     & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
-  cout<<" #16 isSignalHLTAccepted     & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][16] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][16]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][16]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][16]   <<" hline "<<endl;
-  cout<<" #17 is2DiMuonsMassOK        & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][17] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][17]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][17]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][17]   <<" hline "<<endl;
+  cout<<" #6  1RecoMu17Barrel       & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][6]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][6] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][6]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][6]    <<" hline "<<endl;
+  cout<<" #7  2RecoMu8              & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][7]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][7] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][7]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][7]    <<" hline "<<endl;
+  cout<<" #8  3RecoMu8              & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][8]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][8] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][8]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][8]    <<" hline "<<endl;
+  cout<<" #9  4RecoMu8              & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][9]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][9] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][9]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][9]    <<" hline "<<endl;
+  cout<<" #10 PrimaryVtxOK          & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][10] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][10]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][10]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][10]   <<" hline "<<endl;
+  cout<<" #11 2CandDimuMindM        & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][11] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][11]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][11]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][11]   <<" hline "<<endl;
+  cout<<" #12 2DimuPixHitOK         & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][12] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][12]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][12]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][12]   <<" hline "<<endl;
+  cout<<" #13 BosonProdVtxDzOK      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
+  cout<<" #14 RejectDYQEDRadiate    & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
+  cout<<" #15 2DimuLeadingMuIsoOK   & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
+  cout<<" #16 SignalHLTAccepted     & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][16] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][16]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][16]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][16]   <<" hline "<<endl;
+  cout<<" #17 2DimuMassOK           & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][17] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][17]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][17]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][17]   <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;
-  cout<<" epsilon_rec/alpha_gen       & "<<setprecision(3)<< epsvsalph[k]  << " $\\pm$ "  << Err[k]<<" hline "<<endl;
+  cout<<" epsilon_rec/alpha_gen     & "<<setprecision(3)<< epsvsalph[k]  << " $\\pm$ "  << Err[k]<<" hline "<<endl;
 
   cout<<"end{tabular}"<<endl;
   cout<<"end{landscape}"<<endl;
@@ -746,122 +950,317 @@ void efficiency(const std::vector<std::string>& dirNames)
   TFile myPlot(output,"RECREATE");
 
   if ( CheckDisplacement ){
-    Lxy->cd();
-    Phase1Pix_GEN_A0_Lxy->SetLineColor(2); Phase1Pix_GEN_A0_Lxy->SetLineStyle(1); Phase1Pix_GEN_A0_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A0_Lxy->GetYaxis()->SetTitle("Events/0.5cm"); Phase1Pix_GEN_A0_Lxy->Draw();
-    Phase1Pix_GEN_A1_Lxy->SetLineColor(2); Phase1Pix_GEN_A1_Lxy->SetLineStyle(2); Phase1Pix_GEN_A1_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A1_Lxy->GetYaxis()->SetTitle("Events/0.5cm"); Phase1Pix_GEN_A1_Lxy->Draw("SAME");
-    Lxy->Write();
-
-    Lz->cd();
-    Phase1Pix_GEN_A0_Lz->SetLineColor(4); Phase1Pix_GEN_A0_Lz->SetLineStyle(1); Phase1Pix_GEN_A0_Lz->GetXaxis()->SetTitle("L_{z} [cm]"); Phase1Pix_GEN_A0_Lz->GetYaxis()->SetTitle("Events/0.5cm"); Phase1Pix_GEN_A0_Lz->Draw();
-    Phase1Pix_GEN_A1_Lz->SetLineColor(4); Phase1Pix_GEN_A1_Lz->SetLineStyle(2); Phase1Pix_GEN_A1_Lz->GetXaxis()->SetTitle("L_{z} [cm]"); Phase1Pix_GEN_A1_Lz->GetYaxis()->SetTitle("Events/0.5cm"); Phase1Pix_GEN_A1_Lz->Draw("SAME");
-    Lz->Write();
-
-    GENMuPt->cd();
-    Phase1Pix_GEN_Mu0_pT->SetLineColor(1); Phase1Pix_GEN_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu0_pT->Draw();
-    Phase1Pix_GEN_Mu1_pT->SetLineColor(2); Phase1Pix_GEN_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu1_pT->Draw("SAME");
-    Phase1Pix_GEN_Mu2_pT->SetLineColor(3); Phase1Pix_GEN_Mu2_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu2_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu2_pT->Draw("SAME");
-    Phase1Pix_GEN_Mu3_pT->SetLineColor(4); Phase1Pix_GEN_Mu3_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu3_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu3_pT->Draw("SAME");
-    GENMuPt->Write();
-
-    GENAMuPt->cd();
-    Phase1Pix_GEN_A0_Mu0_pT->SetLineColor(2); Phase1Pix_GEN_A0_Mu0_pT->SetLineStyle(1); Phase1Pix_GEN_A0_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A0_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A0_Mu0_pT->Draw();
-    Phase1Pix_GEN_A0_Mu1_pT->SetLineColor(2); Phase1Pix_GEN_A0_Mu1_pT->SetLineStyle(2); Phase1Pix_GEN_A0_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A0_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A0_Mu1_pT->Draw("SAME");
-    Phase1Pix_GEN_A1_Mu0_pT->SetLineColor(4); Phase1Pix_GEN_A1_Mu0_pT->SetLineStyle(1); Phase1Pix_GEN_A1_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A1_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A1_Mu0_pT->Draw("SAME");
-    Phase1Pix_GEN_A1_Mu1_pT->SetLineColor(4); Phase1Pix_GEN_A1_Mu1_pT->SetLineStyle(2); Phase1Pix_GEN_A1_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A1_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A1_Mu1_pT->Draw("SAME");
-    GENAMuPt->Write();
-
-    RECOMuPt->cd();
-    Phase1Pix_RECO_Mu0_pT->SetLineColor(1); Phase1Pix_RECO_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu0_pT->Draw();
-    Phase1Pix_RECO_Mu1_pT->SetLineColor(2); Phase1Pix_RECO_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu1_pT->Draw("SAME");
-    Phase1Pix_RECO_Mu2_pT->SetLineColor(3); Phase1Pix_RECO_Mu2_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu2_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu2_pT->Draw("SAME");
-    Phase1Pix_RECO_Mu3_pT->SetLineColor(4); Phase1Pix_RECO_Mu3_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu3_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu3_pT->Draw("SAME");
-    RECOMuPt->Write();
-
-    RECODimuMuPt->cd();
-    Phase1Pix_RECO_DimuC_Mu0_pT->SetLineColor(2); Phase1Pix_RECO_DimuC_Mu0_pT->SetLineStyle(1); Phase1Pix_RECO_DimuC_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuC_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuC_Mu0_pT->Draw();
-    Phase1Pix_RECO_DimuC_Mu1_pT->SetLineColor(2); Phase1Pix_RECO_DimuC_Mu1_pT->SetLineStyle(2); Phase1Pix_RECO_DimuC_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuC_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuC_Mu1_pT->Draw("SAME");
-    Phase1Pix_RECO_DimuF_Mu0_pT->SetLineColor(4); Phase1Pix_RECO_DimuF_Mu0_pT->SetLineStyle(1); Phase1Pix_RECO_DimuF_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuF_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuF_Mu0_pT->Draw("SAME");
-    Phase1Pix_RECO_DimuF_Mu1_pT->SetLineColor(4); Phase1Pix_RECO_DimuF_Mu1_pT->SetLineStyle(2); Phase1Pix_RECO_DimuF_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuF_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuF_Mu1_pT->Draw("SAME");
-    RECODimuMuPt->Write();
-
-    L_DimuC_SR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuC_SR_HighMass->Write();
-    L_DimuF_SR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuF_SR_HighMass->Write();
-    Lxy_DimuC_SR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lxy_DimuC_SR_HighMass->Write();
-    Lxy_DimuF_SR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lxy_DimuF_SR_HighMass->Write();
-    Lz_DimuC_SR_HighMass->GetXaxis()->SetTitle("Lz [cm]"); Lz_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lz_DimuC_SR_HighMass->Write();
-    Lz_DimuF_SR_HighMass->GetXaxis()->SetTitle("Lz [cm]"); Lz_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lz_DimuF_SR_HighMass->Write();
-    L_DimuC_CR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuC_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuC_CR_HighMass->Write();
-    L_DimuF_CR_HighMass->GetXaxis()->SetTitle("L [cm]"); L_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); L_DimuF_CR_HighMass->Write();
-    Lxy_DimuC_CR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuC_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lxy_DimuC_CR_HighMass->Write();
-    Lxy_DimuF_CR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lxy_DimuF_CR_HighMass->Write();
-    Lz_DimuC_CR_HighMass->GetXaxis()->SetTitle("Lz [cm]"); Lz_DimuC_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lz_DimuC_CR_HighMass->Write();
-    Lz_DimuF_CR_HighMass->GetXaxis()->SetTitle("Lz [cm]"); Lz_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1cm"); Lz_DimuF_CR_HighMass->Write();
+    L_DimuC_SR_HighMass->GetXaxis()->SetTitle("L [cm]");     L_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");   L_DimuC_SR_HighMass->Write();
+    L_DimuF_SR_HighMass->GetXaxis()->SetTitle("L [cm]");     L_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");   L_DimuF_SR_HighMass->Write();
+    Lxy_DimuC_SR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm"); Lxy_DimuC_SR_HighMass->Write();
+    Lxy_DimuF_SR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm"); Lxy_DimuF_SR_HighMass->Write();
+    Lz_DimuC_SR_HighMass->GetXaxis()->SetTitle("Lz [cm]");   Lz_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");  Lz_DimuC_SR_HighMass->Write();
+    Lz_DimuF_SR_HighMass->GetXaxis()->SetTitle("Lz [cm]");   Lz_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");  Lz_DimuF_SR_HighMass->Write();
+    L_DimuC_CR_HighMass->GetXaxis()->SetTitle("L [cm]");     L_DimuC_CR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");   L_DimuC_CR_HighMass->Write();
+    L_DimuF_CR_HighMass->GetXaxis()->SetTitle("L [cm]");     L_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");   L_DimuF_CR_HighMass->Write();
+    Lxy_DimuC_CR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuC_CR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm"); Lxy_DimuC_CR_HighMass->Write();
+    Lxy_DimuF_CR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm"); Lxy_DimuF_CR_HighMass->Write();
+    Lz_DimuC_CR_HighMass->GetXaxis()->SetTitle("Lz [cm]");   Lz_DimuC_CR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");  Lz_DimuC_CR_HighMass->Write();
+    Lz_DimuF_CR_HighMass->GetXaxis()->SetTitle("Lz [cm]");   Lz_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");  Lz_DimuF_CR_HighMass->Write();
   }//end CheckDisplacement
+
+  Lxy->cd();
+  Phase1Pix_GEN_A0_Lxy->SetLineColor(2); Phase1Pix_GEN_A0_Lxy->SetLineStyle(1); Phase1Pix_GEN_A0_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A0_Lxy->GetYaxis()->SetTitle("Events/0.5 cm"); Phase1Pix_GEN_A0_Lxy->Draw();
+  Phase1Pix_GEN_A1_Lxy->SetLineColor(2); Phase1Pix_GEN_A1_Lxy->SetLineStyle(2); Phase1Pix_GEN_A1_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A1_Lxy->GetYaxis()->SetTitle("Events/0.5 cm"); Phase1Pix_GEN_A1_Lxy->Draw("SAME");
+  Lxy->Write();
+
+  Lz->cd();
+  Phase1Pix_GEN_A0_Lz->SetLineColor(4); Phase1Pix_GEN_A0_Lz->SetLineStyle(1); Phase1Pix_GEN_A0_Lz->GetXaxis()->SetTitle("L_{z} [cm]"); Phase1Pix_GEN_A0_Lz->GetYaxis()->SetTitle("Events/0.5 cm"); Phase1Pix_GEN_A0_Lz->Draw();
+  Phase1Pix_GEN_A1_Lz->SetLineColor(4); Phase1Pix_GEN_A1_Lz->SetLineStyle(2); Phase1Pix_GEN_A1_Lz->GetXaxis()->SetTitle("L_{z} [cm]"); Phase1Pix_GEN_A1_Lz->GetYaxis()->SetTitle("Events/0.5 cm"); Phase1Pix_GEN_A1_Lz->Draw("SAME");
+  Lz->Write();
+
+  GENMuPt->cd();
+  Phase1Pix_GEN_Mu0_pT->SetLineColor(1); Phase1Pix_GEN_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu0_pT->Draw();
+  Phase1Pix_GEN_Mu1_pT->SetLineColor(2); Phase1Pix_GEN_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu1_pT->Draw("SAME");
+  Phase1Pix_GEN_Mu2_pT->SetLineColor(3); Phase1Pix_GEN_Mu2_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu2_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu2_pT->Draw("SAME");
+  Phase1Pix_GEN_Mu3_pT->SetLineColor(4); Phase1Pix_GEN_Mu3_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_Mu3_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_Mu3_pT->Draw("SAME");
+  GENMuPt->Write();
+
+  GENMuEta->cd();
+  Phase1Pix_GEN_Mu0_eta->SetLineColor(1); Phase1Pix_GEN_Mu0_eta->GetXaxis()->SetTitle("#eta"); Phase1Pix_GEN_Mu0_eta->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_GEN_Mu0_eta->Draw();
+  Phase1Pix_GEN_Mu1_eta->SetLineColor(2); Phase1Pix_GEN_Mu1_eta->GetXaxis()->SetTitle("#eta"); Phase1Pix_GEN_Mu1_eta->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_GEN_Mu1_eta->Draw("SAME");
+  Phase1Pix_GEN_Mu2_eta->SetLineColor(3); Phase1Pix_GEN_Mu2_eta->GetXaxis()->SetTitle("#eta"); Phase1Pix_GEN_Mu2_eta->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_GEN_Mu2_eta->Draw("SAME");
+  Phase1Pix_GEN_Mu3_eta->SetLineColor(4); Phase1Pix_GEN_Mu3_eta->GetXaxis()->SetTitle("#eta"); Phase1Pix_GEN_Mu3_eta->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_GEN_Mu3_eta->Draw("SAME");
+  GENMuEta->Write();
+
+  GENMuPhi->cd();
+  Phase1Pix_GEN_Mu0_phi->SetLineColor(1); Phase1Pix_GEN_Mu0_phi->GetXaxis()->SetTitle("#phi"); Phase1Pix_GEN_Mu0_phi->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_GEN_Mu0_phi->Draw();
+  Phase1Pix_GEN_Mu1_phi->SetLineColor(2); Phase1Pix_GEN_Mu1_phi->GetXaxis()->SetTitle("#phi"); Phase1Pix_GEN_Mu1_phi->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_GEN_Mu1_phi->Draw("SAME");
+  Phase1Pix_GEN_Mu2_phi->SetLineColor(3); Phase1Pix_GEN_Mu2_phi->GetXaxis()->SetTitle("#phi"); Phase1Pix_GEN_Mu2_phi->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_GEN_Mu2_phi->Draw("SAME");
+  Phase1Pix_GEN_Mu3_phi->SetLineColor(4); Phase1Pix_GEN_Mu3_phi->GetXaxis()->SetTitle("#phi"); Phase1Pix_GEN_Mu3_phi->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_GEN_Mu3_phi->Draw("SAME");
+  GENMuPhi->Write();
+
+  GENAMuPt->cd();
+  Phase1Pix_GEN_A0_Mu0_pT->SetLineColor(2); Phase1Pix_GEN_A0_Mu0_pT->SetLineStyle(1); Phase1Pix_GEN_A0_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A0_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A0_Mu0_pT->Draw();
+  Phase1Pix_GEN_A0_Mu1_pT->SetLineColor(2); Phase1Pix_GEN_A0_Mu1_pT->SetLineStyle(2); Phase1Pix_GEN_A0_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A0_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A0_Mu1_pT->Draw("SAME");
+  Phase1Pix_GEN_A1_Mu0_pT->SetLineColor(4); Phase1Pix_GEN_A1_Mu0_pT->SetLineStyle(1); Phase1Pix_GEN_A1_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A1_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A1_Mu0_pT->Draw("SAME");
+  Phase1Pix_GEN_A1_Mu1_pT->SetLineColor(4); Phase1Pix_GEN_A1_Mu1_pT->SetLineStyle(2); Phase1Pix_GEN_A1_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_GEN_A1_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_GEN_A1_Mu1_pT->Draw("SAME");
+  GENAMuPt->Write();
+
+  RECOMuPt->cd();
+  Phase1Pix_RECO_Mu0_pT->SetLineColor(1); Phase1Pix_RECO_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu0_pT->Draw();
+  Phase1Pix_RECO_Mu1_pT->SetLineColor(2); Phase1Pix_RECO_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu1_pT->Draw("SAME");
+  Phase1Pix_RECO_Mu2_pT->SetLineColor(3); Phase1Pix_RECO_Mu2_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu2_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu2_pT->Draw("SAME");
+  Phase1Pix_RECO_Mu3_pT->SetLineColor(4); Phase1Pix_RECO_Mu3_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_Mu3_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_Mu3_pT->Draw("SAME");
+  RECOMuPt->Write();
+
+  RECOMuEta->cd();
+  Phase1Pix_RECO_Mu0_eta->SetLineColor(1); Phase1Pix_RECO_Mu0_eta->GetXaxis()->SetTitle("#eta"); Phase1Pix_RECO_Mu0_eta->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_RECO_Mu0_eta->Draw();
+  Phase1Pix_RECO_Mu1_eta->SetLineColor(2); Phase1Pix_RECO_Mu1_eta->GetXaxis()->SetTitle("#eta"); Phase1Pix_RECO_Mu1_eta->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_RECO_Mu1_eta->Draw("SAME");
+  Phase1Pix_RECO_Mu2_eta->SetLineColor(3); Phase1Pix_RECO_Mu2_eta->GetXaxis()->SetTitle("#eta"); Phase1Pix_RECO_Mu2_eta->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_RECO_Mu2_eta->Draw("SAME");
+  Phase1Pix_RECO_Mu3_eta->SetLineColor(4); Phase1Pix_RECO_Mu3_eta->GetXaxis()->SetTitle("#eta"); Phase1Pix_RECO_Mu3_eta->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_RECO_Mu3_eta->Draw("SAME");
+  RECOMuEta->Write();
+
+  RECOMuPhi->cd();
+  Phase1Pix_RECO_Mu0_phi->SetLineColor(1); Phase1Pix_RECO_Mu0_phi->GetXaxis()->SetTitle("#phi"); Phase1Pix_RECO_Mu0_phi->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_RECO_Mu0_phi->Draw();
+  Phase1Pix_RECO_Mu1_phi->SetLineColor(2); Phase1Pix_RECO_Mu1_phi->GetXaxis()->SetTitle("#phi"); Phase1Pix_RECO_Mu1_phi->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_RECO_Mu1_phi->Draw("SAME");
+  Phase1Pix_RECO_Mu2_phi->SetLineColor(3); Phase1Pix_RECO_Mu2_phi->GetXaxis()->SetTitle("#phi"); Phase1Pix_RECO_Mu2_phi->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_RECO_Mu2_phi->Draw("SAME");
+  Phase1Pix_RECO_Mu3_phi->SetLineColor(4); Phase1Pix_RECO_Mu3_phi->GetXaxis()->SetTitle("#phi"); Phase1Pix_RECO_Mu3_phi->GetYaxis()->SetTitle("Events/0.1"); Phase1Pix_RECO_Mu3_phi->Draw("SAME");
+  RECOMuPhi->Write();
+
+  RECODimuMuPt->cd();
+  Phase1Pix_RECO_DimuC_Mu0_pT->SetLineColor(2); Phase1Pix_RECO_DimuC_Mu0_pT->SetLineStyle(1); Phase1Pix_RECO_DimuC_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuC_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuC_Mu0_pT->Draw();
+  Phase1Pix_RECO_DimuC_Mu1_pT->SetLineColor(2); Phase1Pix_RECO_DimuC_Mu1_pT->SetLineStyle(2); Phase1Pix_RECO_DimuC_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuC_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuC_Mu1_pT->Draw("SAME");
+  Phase1Pix_RECO_DimuF_Mu0_pT->SetLineColor(4); Phase1Pix_RECO_DimuF_Mu0_pT->SetLineStyle(1); Phase1Pix_RECO_DimuF_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuF_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuF_Mu0_pT->Draw("SAME");
+  Phase1Pix_RECO_DimuF_Mu1_pT->SetLineColor(4); Phase1Pix_RECO_DimuF_Mu1_pT->SetLineStyle(2); Phase1Pix_RECO_DimuF_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuF_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuF_Mu1_pT->Draw("SAME");
+  RECODimuMuPt->Write();
 
   if ( PerEventTriggerEff ) {
     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "BASIC" offline pT selections
     if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
       TEfficiency* eff_HLT_leading_pt_pass_basic  = new TEfficiency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic);
-      eff_HLT_leading_pt_pass_basic->SetTitle("HLT efficiency vs leading pT (after basic offline pT selections);Leading pT [GeV];#epsilon");
-      eff_HLT_leading_pt_pass_basic->Write();
-    }
+      eff_HLT_leading_pt_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;p_{T, leading #mu} [GeV];#epsilon");
+      eff_HLT_leading_pt_pass_basic->Write(); }
     if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
       TEfficiency* eff_HLT_leading_eta_pass_basic = new TEfficiency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic);
-      eff_HLT_leading_eta_pass_basic->SetTitle("HLT efficiency vs leading eta (after basic offline pT selections);Leading eta;#epsilon");
-      eff_HLT_leading_eta_pass_basic->Write();
-    }
+      eff_HLT_leading_eta_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#eta_{leading #mu};#epsilon");
+      eff_HLT_leading_eta_pass_basic->Write(); }
     if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
       TEfficiency* eff_HLT_leading_phi_pass_basic = new TEfficiency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic);
-      eff_HLT_leading_phi_pass_basic->SetTitle("HLT efficiency vs leading phi (after basic offline pT selections);Leading phi;#epsilon");
-      eff_HLT_leading_phi_pass_basic->Write();
-    }
+      eff_HLT_leading_phi_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#phi_{leading #mu};#epsilon");
+      eff_HLT_leading_phi_pass_basic->Write(); }
     if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
-      TEfficiency* eff_L1_leading_pt_past_basic  = new TEfficiency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic);
-      eff_L1_leading_pt_past_basic->SetTitle("L1 efficiency vs leading pT (after basic offline pT selections);Leading pT[GeV];#epsilon");
-      eff_L1_leading_pt_past_basic->Write();
-    }
+      TEfficiency* eff_L1_leading_pt_pass_basic  = new TEfficiency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic);
+      eff_L1_leading_pt_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;p_{T, leading #mu} [GeV];#epsilon");
+      eff_L1_leading_pt_pass_basic->Write(); }
     if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
-      TEfficiency* eff_L1_leading_eta_past_basic = new TEfficiency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic);
-      eff_L1_leading_eta_past_basic->SetTitle("L1 efficiency vs leading eta (after basic offline pT selections);Leading eta;#epsilon");
-      eff_L1_leading_eta_past_basic->Write();
-    }
+      TEfficiency* eff_L1_leading_eta_pass_basic = new TEfficiency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic);
+      eff_L1_leading_eta_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#eta_{leading #mu};#epsilon");
+      eff_L1_leading_eta_pass_basic->Write(); }
     if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
       TEfficiency* eff_L1_leading_phi_pass_basic = new TEfficiency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic);
-      eff_L1_leading_phi_pass_basic->SetTitle("L1 efficiency vs leading phi (after basic offline pT selections);Leading phi;#epsilon");
+      eff_L1_leading_phi_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#phi_{leading #mu};#epsilon");
       eff_L1_leading_phi_pass_basic->Write();
     }
 
-    //Per-event Efficiency for signal "HLT" and "L1 seeds" after "ALL" offline selections
+    if( TEfficiency::CheckConsistency(*HLT_second_pt_pass_basic, *second_pt_pass_basic) ) {
+      TEfficiency* eff_HLT_second_pt_pass_basic  = new TEfficiency(*HLT_second_pt_pass_basic, *second_pt_pass_basic);
+      eff_HLT_second_pt_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;p_{T, second #mu} [GeV];#epsilon");
+      eff_HLT_second_pt_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_second_eta_pass_basic, *second_eta_pass_basic) ) {
+      TEfficiency* eff_HLT_second_eta_pass_basic = new TEfficiency(*HLT_second_eta_pass_basic, *second_eta_pass_basic);
+      eff_HLT_second_eta_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#eta_{second #mu};#epsilon");
+      eff_HLT_second_eta_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_second_phi_pass_basic, *second_phi_pass_basic) ) {
+      TEfficiency* eff_HLT_second_phi_pass_basic = new TEfficiency(*HLT_second_phi_pass_basic, *second_phi_pass_basic);
+      eff_HLT_second_phi_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#phi_{second #mu};#epsilon");
+      eff_HLT_second_phi_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_second_pt_pass_basic, *second_pt_pass_basic) ) {
+      TEfficiency* eff_L1_second_pt_pass_basic  = new TEfficiency(*L1_second_pt_pass_basic, *second_pt_pass_basic);
+      eff_L1_second_pt_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;p_{T, second #mu} [GeV];#epsilon");
+      eff_L1_second_pt_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_second_eta_pass_basic, *second_eta_pass_basic) ) {
+      TEfficiency* eff_L1_second_eta_pass_basic = new TEfficiency(*L1_second_eta_pass_basic, *second_eta_pass_basic);
+      eff_L1_second_eta_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#eta_{second #mu};#epsilon");
+      eff_L1_second_eta_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_second_phi_pass_basic, *second_phi_pass_basic) ) {
+      TEfficiency* eff_L1_second_phi_pass_basic = new TEfficiency(*L1_second_phi_pass_basic, *second_phi_pass_basic);
+      eff_L1_second_phi_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#phi_{second #mu};#epsilon");
+      eff_L1_second_phi_pass_basic->Write();
+    }
+
+    if( TEfficiency::CheckConsistency(*HLT_third_pt_pass_basic, *third_pt_pass_basic) ) {
+      TEfficiency* eff_HLT_third_pt_pass_basic  = new TEfficiency(*HLT_third_pt_pass_basic, *third_pt_pass_basic);
+      eff_HLT_third_pt_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;p_{T, third #mu} [GeV];#epsilon");
+      eff_HLT_third_pt_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_third_eta_pass_basic, *third_eta_pass_basic) ) {
+      TEfficiency* eff_HLT_third_eta_pass_basic = new TEfficiency(*HLT_third_eta_pass_basic, *third_eta_pass_basic);
+      eff_HLT_third_eta_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#eta_{third #mu};#epsilon");
+      eff_HLT_third_eta_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_third_phi_pass_basic, *third_phi_pass_basic) ) {
+      TEfficiency* eff_HLT_third_phi_pass_basic = new TEfficiency(*HLT_third_phi_pass_basic, *third_phi_pass_basic);
+      eff_HLT_third_phi_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#phi_{third #mu};#epsilon");
+      eff_HLT_third_phi_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_third_pt_pass_basic, *third_pt_pass_basic) ) {
+      TEfficiency* eff_L1_third_pt_pass_basic  = new TEfficiency(*L1_third_pt_pass_basic, *third_pt_pass_basic);
+      eff_L1_third_pt_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;p_{T, third #mu} [GeV];#epsilon");
+      eff_L1_third_pt_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_third_eta_pass_basic, *third_eta_pass_basic) ) {
+      TEfficiency* eff_L1_third_eta_pass_basic = new TEfficiency(*L1_third_eta_pass_basic, *third_eta_pass_basic);
+      eff_L1_third_eta_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#eta_{third #mu};#epsilon");
+      eff_L1_third_eta_pass_basic->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_third_phi_pass_basic, *third_phi_pass_basic) ) {
+      TEfficiency* eff_L1_third_phi_pass_basic = new TEfficiency(*L1_third_phi_pass_basic, *third_phi_pass_basic);
+      eff_L1_third_phi_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#phi_{third #mu};#epsilon");
+      eff_L1_third_phi_pass_basic->Write();
+    }
+
+    if( TEfficiency::CheckConsistency(*HLT_fourth_pt_pass_basic, *fourth_pt_pass_basic) ) {
+      TEfficiency* eff_HLT_fourth_pt_pass_basic  = new TEfficiency(*HLT_fourth_pt_pass_basic, *fourth_pt_pass_basic);
+      eff_HLT_fourth_pt_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;p_{T, fourth #mu} [GeV];#epsilon"); eff_HLT_fourth_pt_pass_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*HLT_fourth_eta_pass_basic, *fourth_eta_pass_basic) ) {
+      TEfficiency* eff_HLT_fourth_eta_pass_basic = new TEfficiency(*HLT_fourth_eta_pass_basic, *fourth_eta_pass_basic);
+      eff_HLT_fourth_eta_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#eta_{fourth #mu};#epsilon"); eff_HLT_fourth_eta_pass_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*HLT_fourth_phi_pass_basic, *fourth_phi_pass_basic) ) {
+      TEfficiency* eff_HLT_fourth_phi_pass_basic = new TEfficiency(*HLT_fourth_phi_pass_basic, *fourth_phi_pass_basic);
+      eff_HLT_fourth_phi_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#phi_{fourth #mu};#epsilon"); eff_HLT_fourth_phi_pass_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*L1_fourth_pt_pass_basic, *fourth_pt_pass_basic) ) {
+      TEfficiency* eff_L1_fourth_pt_pass_basic  = new TEfficiency(*L1_fourth_pt_pass_basic, *fourth_pt_pass_basic);
+      eff_L1_fourth_pt_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;p_{T, fourth #mu} [GeV];#epsilon"); eff_L1_fourth_pt_pass_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*L1_fourth_eta_pass_basic, *fourth_eta_pass_basic) ) {
+      TEfficiency* eff_L1_fourth_eta_pass_basic = new TEfficiency(*L1_fourth_eta_pass_basic, *fourth_eta_pass_basic);
+      eff_L1_fourth_eta_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#eta_{fourth #mu};#epsilon"); eff_L1_fourth_eta_pass_basic->Write();
+    }
+    if( TEfficiency::CheckConsistency(*L1_fourth_phi_pass_basic, *fourth_phi_pass_basic) ) {
+      TEfficiency* eff_L1_fourth_phi_pass_basic = new TEfficiency(*L1_fourth_phi_pass_basic, *fourth_phi_pass_basic);
+      eff_L1_fourth_phi_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#phi_{fourth #mu};#epsilon"); eff_L1_fourth_phi_pass_basic->Write();
+    }
+
+    //Per-event Efficiency for signal "HLT" and "L1 seeds" after cut #15
     if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_all, *leading_pt_pass_all) ) {
       TEfficiency* eff_HLT_leading_pt_pass_all  = new TEfficiency(*HLT_leading_pt_pass_all, *leading_pt_pass_all);
-      eff_HLT_leading_pt_pass_all->SetTitle("HLT efficiency vs leading pT (after all offline selections);Leading pT [GeV];#epsilon");
-      eff_HLT_leading_pt_pass_all->Write();
-    }
+      eff_HLT_leading_pt_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;p_{T, leading #mu} [GeV];#epsilon");
+      eff_HLT_leading_pt_pass_all->Write(); }
     if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_all, *leading_eta_pass_all) ) {
       TEfficiency* eff_HLT_leading_eta_pass_all = new TEfficiency(*HLT_leading_eta_pass_all, *leading_eta_pass_all);
-      eff_HLT_leading_eta_pass_all->SetTitle("HLT efficiency vs leading eta (after all offline selections);Leading eta;#epsilon");
-      eff_HLT_leading_eta_pass_all->Write();
-    }
+      eff_HLT_leading_eta_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#eta_{leading #mu};#epsilon");
+      eff_HLT_leading_eta_pass_all->Write(); }
     if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_all, *leading_phi_pass_all) ) {
       TEfficiency* eff_HLT_leading_phi_pass_all = new TEfficiency(*HLT_leading_phi_pass_all, *leading_phi_pass_all);
-      eff_HLT_leading_phi_pass_all->SetTitle("HLT efficiency vs leading phi (after all offline selections);Leading phi;#epsilon");
-      eff_HLT_leading_phi_pass_all->Write();
-    }
+      eff_HLT_leading_phi_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#phi_{leading #mu};#epsilon");
+      eff_HLT_leading_phi_pass_all->Write(); }
     if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_all, *leading_pt_pass_all) ) {
-      TEfficiency* eff_L1_leading_pt_past_all  = new TEfficiency(*L1_leading_pt_pass_all, *leading_pt_pass_all);
-      eff_L1_leading_pt_past_all->SetTitle("L1 efficiency vs leading pT (after all offline selections);Leading pT [GeV];#epsilon");
-      eff_L1_leading_pt_past_all->Write();
-    }
+      TEfficiency* eff_L1_leading_pt_pass_all  = new TEfficiency(*L1_leading_pt_pass_all, *leading_pt_pass_all);
+      eff_L1_leading_pt_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;p_{T, leading #mu} [GeV];#epsilon");
+      eff_L1_leading_pt_pass_all->Write(); }
     if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_all, *leading_eta_pass_all) ) {
-      TEfficiency* eff_L1_leading_eta_past_all = new TEfficiency(*L1_leading_eta_pass_all, *leading_eta_pass_all);
-      eff_L1_leading_eta_past_all->SetTitle("L1 efficiency vs leading eta (after all offline selections);Leading eta;#epsilon");
-      eff_L1_leading_eta_past_all->Write();
-    }
+      TEfficiency* eff_L1_leading_eta_pass_all = new TEfficiency(*L1_leading_eta_pass_all, *leading_eta_pass_all);
+      eff_L1_leading_eta_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#eta_{leading #mu};#epsilon");
+      eff_L1_leading_eta_pass_all->Write(); }
     if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_all, *leading_phi_pass_all) ) {
       TEfficiency* eff_L1_leading_phi_pass_all = new TEfficiency(*L1_leading_phi_pass_all, *leading_phi_pass_all);
-      eff_L1_leading_phi_pass_all->SetTitle("L1 efficiency vs leading phi (after all offline selections);Leading phi;#epsilon");
+      eff_L1_leading_phi_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#phi_{leading #mu};#epsilon");
       eff_L1_leading_phi_pass_all->Write();
     }
+
+    if( TEfficiency::CheckConsistency(*HLT_second_pt_pass_all, *second_pt_pass_all) ) {
+      TEfficiency* eff_HLT_second_pt_pass_all  = new TEfficiency(*HLT_second_pt_pass_all, *second_pt_pass_all);
+      eff_HLT_second_pt_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;p_{T, second #mu} [GeV];#epsilon");
+      eff_HLT_second_pt_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_second_eta_pass_all, *second_eta_pass_all) ) {
+      TEfficiency* eff_HLT_second_eta_pass_all = new TEfficiency(*HLT_second_eta_pass_all, *second_eta_pass_all);
+      eff_HLT_second_eta_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#eta_{second #mu};#epsilon");
+      eff_HLT_second_eta_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_second_phi_pass_all, *second_phi_pass_all) ) {
+      TEfficiency* eff_HLT_second_phi_pass_all = new TEfficiency(*HLT_second_phi_pass_all, *second_phi_pass_all);
+      eff_HLT_second_phi_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#phi_{second #mu};#epsilon");
+      eff_HLT_second_phi_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_second_pt_pass_all, *second_pt_pass_all) ) {
+      TEfficiency* eff_L1_second_pt_pass_all  = new TEfficiency(*L1_second_pt_pass_all, *second_pt_pass_all);
+      eff_L1_second_pt_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;p_{T, second #mu} [GeV];#epsilon");
+      eff_L1_second_pt_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_second_eta_pass_all, *second_eta_pass_all) ) {
+      TEfficiency* eff_L1_second_eta_pass_all = new TEfficiency(*L1_second_eta_pass_all, *second_eta_pass_all);
+      eff_L1_second_eta_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#eta_{second #mu};#epsilon");
+      eff_L1_second_eta_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_second_phi_pass_all, *second_phi_pass_all) ) {
+      TEfficiency* eff_L1_second_phi_pass_all = new TEfficiency(*L1_second_phi_pass_all, *second_phi_pass_all);
+      eff_L1_second_phi_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#phi_{second #mu};#epsilon");
+      eff_L1_second_phi_pass_all->Write();
+    }
+
+    if( TEfficiency::CheckConsistency(*HLT_third_pt_pass_all, *third_pt_pass_all) ) {
+      TEfficiency* eff_HLT_third_pt_pass_all  = new TEfficiency(*HLT_third_pt_pass_all, *third_pt_pass_all);
+      eff_HLT_third_pt_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;p_{T, third #mu} [GeV];#epsilon");
+      eff_HLT_third_pt_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_third_eta_pass_all, *third_eta_pass_all) ) {
+      TEfficiency* eff_HLT_third_eta_pass_all = new TEfficiency(*HLT_third_eta_pass_all, *third_eta_pass_all);
+      eff_HLT_third_eta_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#eta_{third #mu};#epsilon");
+      eff_HLT_third_eta_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_third_phi_pass_all, *third_phi_pass_all) ) {
+      TEfficiency* eff_HLT_third_phi_pass_all = new TEfficiency(*HLT_third_phi_pass_all, *third_phi_pass_all);
+      eff_HLT_third_phi_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#phi_{third #mu};#epsilon");
+      eff_HLT_third_phi_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_third_pt_pass_all, *third_pt_pass_all) ) {
+      TEfficiency* eff_L1_third_pt_pass_all  = new TEfficiency(*L1_third_pt_pass_all, *third_pt_pass_all);
+      eff_L1_third_pt_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;p_{T, third #mu} [GeV];#epsilon");
+      eff_L1_third_pt_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_third_eta_pass_all, *third_eta_pass_all) ) {
+      TEfficiency* eff_L1_third_eta_pass_all = new TEfficiency(*L1_third_eta_pass_all, *third_eta_pass_all);
+      eff_L1_third_eta_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#eta_{third #mu};#epsilon");
+      eff_L1_third_eta_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_third_phi_pass_all, *third_phi_pass_all) ) {
+      TEfficiency* eff_L1_third_phi_pass_all = new TEfficiency(*L1_third_phi_pass_all, *third_phi_pass_all);
+      eff_L1_third_phi_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#phi_{third #mu};#epsilon");
+      eff_L1_third_phi_pass_all->Write();
+    }
+
+    if( TEfficiency::CheckConsistency(*HLT_fourth_pt_pass_all, *fourth_pt_pass_all) ) {
+      TEfficiency* eff_HLT_fourth_pt_pass_all  = new TEfficiency(*HLT_fourth_pt_pass_all, *fourth_pt_pass_all);
+      eff_HLT_fourth_pt_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;p_{T, fourth #mu} [GeV];#epsilon");
+      eff_HLT_fourth_pt_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_fourth_eta_pass_all, *fourth_eta_pass_all) ) {
+      TEfficiency* eff_HLT_fourth_eta_pass_all = new TEfficiency(*HLT_fourth_eta_pass_all, *fourth_eta_pass_all);
+      eff_HLT_fourth_eta_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#eta_{fourth #mu};#epsilon");
+      eff_HLT_fourth_eta_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*HLT_fourth_phi_pass_all, *fourth_phi_pass_all) ) {
+      TEfficiency* eff_HLT_fourth_phi_pass_all = new TEfficiency(*HLT_fourth_phi_pass_all, *fourth_phi_pass_all);
+      eff_HLT_fourth_phi_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#phi_{fourth #mu};#epsilon");
+      eff_HLT_fourth_phi_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_fourth_pt_pass_all, *fourth_pt_pass_all) ) {
+      TEfficiency* eff_L1_fourth_pt_pass_all  = new TEfficiency(*L1_fourth_pt_pass_all, *fourth_pt_pass_all);
+      eff_L1_fourth_pt_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;p_{T, fourth #mu} [GeV];#epsilon");
+      eff_L1_fourth_pt_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_fourth_eta_pass_all, *fourth_eta_pass_all) ) {
+      TEfficiency* eff_L1_fourth_eta_pass_all = new TEfficiency(*L1_fourth_eta_pass_all, *fourth_eta_pass_all);
+      eff_L1_fourth_eta_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#eta_{fourth #mu};#epsilon");
+      eff_L1_fourth_eta_pass_all->Write(); }
+    if( TEfficiency::CheckConsistency(*L1_fourth_phi_pass_all, *fourth_phi_pass_all) ) {
+      TEfficiency* eff_L1_fourth_phi_pass_all = new TEfficiency(*L1_fourth_phi_pass_all, *fourth_phi_pass_all);
+      eff_L1_fourth_phi_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#phi_{fourth #mu};#epsilon");
+      eff_L1_fourth_phi_pass_all->Write();
+    }
+
+    if( TEfficiency::CheckConsistency(*HLT_genA_leading_Lxy_pass_all, *genA_leading_Lxy_pass_all) ) {
+      TEfficiency* eff_HLT_genA_leading_Lxy_pass_all = new TEfficiency(*HLT_genA_leading_Lxy_pass_all, *genA_leading_Lxy_pass_all);
+      eff_HLT_genA_leading_Lxy_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;Leading L_{xy, GEN A} [cm];#epsilon");
+      eff_HLT_genA_leading_Lxy_pass_all->Write();
+    }
+    if( TEfficiency::CheckConsistency(*HLT_genA_leading_Lz_pass_all, *genA_leading_Lz_pass_all) ) {
+      TEfficiency* eff_HLT_genA_leading_Lz_pass_all = new TEfficiency(*HLT_genA_leading_Lz_pass_all, *genA_leading_Lz_pass_all);
+      eff_HLT_genA_leading_Lz_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;Leading L_{z, GEN A} [cm];#epsilon");
+      eff_HLT_genA_leading_Lz_pass_all->Write();
+    }
+    if( TEfficiency::CheckConsistency(*HLT_diMuon_leading_Lxy_pass_all, *diMuon_leading_Lxy_pass_all) ) {
+      TEfficiency* eff_HLT_diMuon_leading_Lxy_pass_all = new TEfficiency(*HLT_diMuon_leading_Lxy_pass_all, *diMuon_leading_Lxy_pass_all);
+      eff_HLT_diMuon_leading_Lxy_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;Leading L_{xy, RECO di-#mu} [cm];#epsilon");
+      eff_HLT_diMuon_leading_Lxy_pass_all->Write();
+    }
+    if( TEfficiency::CheckConsistency(*HLT_diMuon_leading_Lz_pass_all, *diMuon_leading_Lz_pass_all) ) {
+      TEfficiency* eff_HLT_diMuon_leading_Lz_pass_all = new TEfficiency(*HLT_diMuon_leading_Lz_pass_all, *diMuon_leading_Lz_pass_all);
+      eff_HLT_diMuon_leading_Lz_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;Leading L_{z, RECO di-#mu} [cm];#epsilon");
+      eff_HLT_diMuon_leading_Lz_pass_all->Write();
+    }
+
   }//end if (PerEventTriggerEff)
 
   if ( ModelBKGShape ) {
@@ -873,7 +1272,6 @@ void efficiency(const std::vector<std::string>& dirNames)
     BKGShapeCR->Write();
     BKGShapeCRmassC->Write();
     BKGShapeCRmassF->Write();
-    BKGShapeOrphDimumass->Write();
     BKGShapeSR->Write();
     BKGShapeSRmassC->Write();
     BKGShapeSRmassF->Write();
@@ -883,7 +1281,7 @@ void efficiency(const std::vector<std::string>& dirNames)
     DimuMass->SetLineColor(kBlue);
     DimuMass->SetLineWidth(2);
     DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
-    DimuMass->GetYaxis()->SetTitle("Events/0.01GeV");
+    DimuMass->GetYaxis()->SetTitle("Events/0.01 GeV");
     DimuMass->Fit("gaus","","",0,60);
     FitMean = DimuMass->GetFunction("gaus")->GetParameter(1);//get 2nd parameter Mean
     FitSigma = DimuMass->GetFunction("gaus")->GetParameter(2);//get 3rd parameter Sigma
@@ -895,13 +1293,17 @@ void efficiency(const std::vector<std::string>& dirNames)
     cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
   }//end if ( ModelSRWidth )
 
+  if ( PlotdZ ) {
+    dZdimuons->GetXaxis()->SetTitle("#Delta z [cm]");
+    dZdimuons->GetYaxis()->SetTitle("Events/0.002 cm");
+    dZdimuons->Write();
+    //Normalized plot
+    TH1F *dZdimuons_Normalized = (TH1F*)dZdimuons->Clone("dZdimuons_Normalized");
+    //Protect against 0 entry
+    if ( dZdimuons->Integral() > 0 ){ Double_t scaledZdimuons = 1./dZdimuons->Integral(); dZdimuons_Normalized->Scale(scaledZdimuons); dZdimuons_Normalized->Write(); }
+  }//end PlotdZ
+
   if ( PlotIso ) {
-    MassC->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]");
-    MassC->GetYaxis()->SetTitle("Events/0.1GeV");
-    MassF->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]");
-    MassF->GetYaxis()->SetTitle("Events/0.1GeV");
-    MassC->Write();
-    MassF->Write();
     IsoDimuC->Write();
     IsoDimuF->Write();
     IsoDimuCMu0_dR0p3->Write();
@@ -950,10 +1352,9 @@ void efficiency(const std::vector<std::string>& dirNames)
     if ( IsoDimuFMu1_dR0p3->Integral() > 0 ){ Double_t scaleFMu1_dR0p3 = 1./IsoDimuFMu1_dR0p3->Integral(); IsoDimuFMu1_dR0p3_Normalized->Scale(scaleFMu1_dR0p3); IsoDimuFMu1_dR0p3_Normalized->Write(); }
     if ( IsoDimuFMu1_dR0p4->Integral() > 0 ){ Double_t scaleFMu1_dR0p4 = 1./IsoDimuFMu1_dR0p4->Integral(); IsoDimuFMu1_dR0p4_Normalized->Scale(scaleFMu1_dR0p4); IsoDimuFMu1_dR0p4_Normalized->Write(); }
     if ( IsoDimuFMu1_dR0p5->Integral() > 0 ){ Double_t scaleFMu1_dR0p5 = 1./IsoDimuFMu1_dR0p5->Integral(); IsoDimuFMu1_dR0p5_Normalized->Scale(scaleFMu1_dR0p5); IsoDimuFMu1_dR0p5_Normalized->Write(); }
+  }//end if PlotIso
 
-    OrphanDimuMass->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
-    OrphanDimuMass->GetYaxis()->SetTitle("Events/0.1GeV");
-    OrphanDimuMass->Write();
+  if ( LoopOrphanTree && PlotIso ){
     IsoOrphanDimu->Write();
     IsoOrphanDimuMu0_dR0p3->Write();
     IsoOrphanDimuMu0_dR0p4->Write();
@@ -980,113 +1381,79 @@ void efficiency(const std::vector<std::string>& dirNames)
     if ( IsoOrphanDimuMu1_dR0p4->Integral() > 0 ){ Double_t scaleMu1_dR0p4 = 1./IsoOrphanDimuMu1_dR0p4->Integral(); IsoOrphanDimuMu1_dR0p4_Normalized->Scale(scaleMu1_dR0p4); IsoOrphanDimuMu1_dR0p4_Normalized->Write(); }
     if ( IsoOrphanDimuMu1_dR0p5->Integral() > 0 ){ Double_t scaleMu1_dR0p5 = 1./IsoOrphanDimuMu1_dR0p5->Integral(); IsoOrphanDimuMu1_dR0p5_Normalized->Scale(scaleMu1_dR0p5); IsoOrphanDimuMu1_dR0p5_Normalized->Write(); }
     if ( IsoOrphan->Integral() > 0 ){ Double_t scaleOrphan = 1./IsoOrphan->Integral(); IsoOrphanNormalized->Scale(scaleOrphan); IsoOrphanNormalized->Write(); }
-  }//end if ( PlotIso )
+  }//end if LoopOrphanTree and PlotIso
 
-  if( Model1DTemplate ){
+  if( LoopOrphanTree && Model1DTemplate ){
     Mass1DTemplate->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
-    Mass1DTemplate->GetYaxis()->SetTitle("Events/0.1GeV");
+    Mass1DTemplate->GetYaxis()->SetTitle("Events/0.1 GeV");
     Mass1DTemplate->Write();
     TH1F *Mass1DTemplateNormalized = (TH1F*)Mass1DTemplate->Clone("Mass1DTemplateNormalized");
     if ( Mass1DTemplate->Integral() > 0 ){ Double_t scale1DTemplate = 1./Mass1DTemplate->Integral(); Mass1DTemplateNormalized->Scale(scale1DTemplate); Mass1DTemplateNormalized->Write(); }
-  }//end if ( Model1DTemplate )
+  }//end if LoopOrphanTree and Model1DTemplate
 
   myPlot.Close();
 
   //Delete objects to avoid potential memory leak
-  delete Phase1Pix_GEN_A0_Lxy;
-  delete Phase1Pix_GEN_A0_Lz;
-  delete Phase1Pix_GEN_A1_Lxy;
-  delete Phase1Pix_GEN_A1_Lz;
-  delete Phase1Pix_GEN_Mu0_pT;
-  delete Phase1Pix_GEN_Mu1_pT;
-  delete Phase1Pix_GEN_Mu2_pT;
-  delete Phase1Pix_GEN_Mu3_pT;
-  delete Phase1Pix_GEN_A0_Mu0_pT;
-  delete Phase1Pix_GEN_A0_Mu1_pT;
-  delete Phase1Pix_GEN_A1_Mu0_pT;
-  delete Phase1Pix_GEN_A1_Mu1_pT;
-  delete Phase1Pix_RECO_Mu0_pT;
-  delete Phase1Pix_RECO_Mu1_pT;
-  delete Phase1Pix_RECO_Mu2_pT;
-  delete Phase1Pix_RECO_Mu3_pT;
-  delete Phase1Pix_RECO_DimuC_Mu0_pT;
-  delete Phase1Pix_RECO_DimuC_Mu1_pT;
-  delete Phase1Pix_RECO_DimuF_Mu0_pT;
-  delete Phase1Pix_RECO_DimuF_Mu1_pT;
-  delete Lxy;
-  delete Lz;
-  delete GENMuPt;
-  delete GENAMuPt;
-  delete RECOMuPt;
-  delete RECODimuMuPt;
-  delete leading_pt_pass_basic;
-  delete leading_eta_pass_basic;
-  delete leading_phi_pass_basic;
-  delete HLT_leading_pt_pass_basic;
-  delete HLT_leading_eta_pass_basic;
-  delete HLT_leading_phi_pass_basic;
-  delete L1_leading_pt_pass_basic;
-  delete L1_leading_eta_pass_basic;
-  delete L1_leading_phi_pass_basic;
-  delete leading_pt_pass_all;
-  delete leading_eta_pass_all;
-  delete leading_phi_pass_all;
-  delete HLT_leading_pt_pass_all;
-  delete HLT_leading_eta_pass_all;
-  delete HLT_leading_phi_pass_all;
-  delete L1_leading_pt_pass_all;
-  delete L1_leading_eta_pass_all;
-  delete L1_leading_phi_pass_all;
-  delete BKGShapeCR;
-  delete BKGShapeCRmassC;
-  delete BKGShapeCRmassF;
-  delete BKGShapeOrphDimumass;
-  delete BKGShapeSR;
-  delete BKGShapeSRmassC;
-  delete BKGShapeSRmassF;
-  delete L_DimuC_CR_HighMass;
-  delete L_DimuF_CR_HighMass;
-  delete Lxy_DimuC_CR_HighMass;
-  delete Lxy_DimuF_CR_HighMass;
-  delete Lz_DimuC_CR_HighMass;
-  delete Lz_DimuF_CR_HighMass;
-  delete L_DimuC_SR_HighMass;
-  delete L_DimuF_SR_HighMass;
-  delete Lxy_DimuC_SR_HighMass;
-  delete Lxy_DimuF_SR_HighMass;
-  delete Lz_DimuC_SR_HighMass;
-  delete Lz_DimuF_SR_HighMass;
+  delete Phase1Pix_GEN_Mu0_pT; delete Phase1Pix_GEN_Mu0_eta; delete Phase1Pix_GEN_Mu0_phi;
+  delete Phase1Pix_GEN_Mu1_pT; delete Phase1Pix_GEN_Mu1_eta; delete Phase1Pix_GEN_Mu1_phi;
+  delete Phase1Pix_GEN_Mu2_pT; delete Phase1Pix_GEN_Mu2_eta; delete Phase1Pix_GEN_Mu2_phi;
+  delete Phase1Pix_GEN_Mu3_pT; delete Phase1Pix_GEN_Mu3_eta; delete Phase1Pix_GEN_Mu3_phi;
+  delete Phase1Pix_GEN_A0_Lxy; delete Phase1Pix_GEN_A0_Lz;
+  delete Phase1Pix_GEN_A1_Lxy; delete Phase1Pix_GEN_A1_Lz;
+  delete Phase1Pix_GEN_A0_Mu0_pT; delete Phase1Pix_GEN_A0_Mu1_pT;
+  delete Phase1Pix_GEN_A1_Mu0_pT; delete Phase1Pix_GEN_A1_Mu1_pT;
+  delete Phase1Pix_RECO_Mu0_pT; delete Phase1Pix_RECO_Mu0_eta; delete Phase1Pix_RECO_Mu0_phi;
+  delete Phase1Pix_RECO_Mu1_pT; delete Phase1Pix_RECO_Mu1_eta; delete Phase1Pix_RECO_Mu1_phi;
+  delete Phase1Pix_RECO_Mu2_pT; delete Phase1Pix_RECO_Mu2_eta; delete Phase1Pix_RECO_Mu2_phi;
+  delete Phase1Pix_RECO_Mu3_pT; delete Phase1Pix_RECO_Mu3_eta; delete Phase1Pix_RECO_Mu3_phi;
+  delete Phase1Pix_RECO_DimuC_Mu0_pT; delete Phase1Pix_RECO_DimuC_Mu1_pT;
+  delete Phase1Pix_RECO_DimuF_Mu0_pT; delete Phase1Pix_RECO_DimuF_Mu1_pT;
+  delete Lxy; delete Lz;
+  delete GENMuPt; delete GENMuEta; delete GENMuPhi; delete GENAMuPt;
+  delete RECOMuPt; delete RECOMuEta; delete RECOMuPhi; delete RECODimuMuPt;
+  delete leading_pt_pass_basic; delete second_pt_pass_basic; delete third_pt_pass_basic; delete fourth_pt_pass_basic;
+  delete leading_eta_pass_basic; delete second_eta_pass_basic; delete third_eta_pass_basic; delete fourth_eta_pass_basic;
+  delete leading_phi_pass_basic; delete second_phi_pass_basic; delete third_phi_pass_basic; delete fourth_phi_pass_basic;
+  delete HLT_leading_pt_pass_basic; delete HLT_second_pt_pass_basic; delete HLT_third_pt_pass_basic; delete HLT_fourth_pt_pass_basic;
+  delete HLT_leading_eta_pass_basic; delete HLT_second_eta_pass_basic; delete HLT_third_eta_pass_basic; delete HLT_fourth_eta_pass_basic;
+  delete HLT_leading_phi_pass_basic; delete HLT_second_phi_pass_basic; delete HLT_third_phi_pass_basic; delete HLT_fourth_phi_pass_basic;
+  delete L1_leading_pt_pass_basic; delete L1_second_pt_pass_basic; delete L1_third_pt_pass_basic; delete L1_fourth_pt_pass_basic;
+  delete L1_leading_eta_pass_basic; delete L1_second_eta_pass_basic; delete L1_third_eta_pass_basic; delete L1_fourth_eta_pass_basic;
+  delete L1_leading_phi_pass_basic; delete L1_second_phi_pass_basic; delete L1_third_phi_pass_basic; delete L1_fourth_phi_pass_basic;
+  delete leading_pt_pass_all; delete second_pt_pass_all; delete third_pt_pass_all; delete fourth_pt_pass_all;
+  delete leading_eta_pass_all; delete second_eta_pass_all; delete third_eta_pass_all; delete fourth_eta_pass_all;
+  delete leading_phi_pass_all; delete second_phi_pass_all; delete third_phi_pass_all; delete fourth_phi_pass_all;
+  delete HLT_leading_pt_pass_all; delete HLT_second_pt_pass_all; delete HLT_third_pt_pass_all; delete HLT_fourth_pt_pass_all;
+  delete HLT_leading_eta_pass_all; delete HLT_second_eta_pass_all; delete HLT_third_eta_pass_all; delete HLT_fourth_eta_pass_all;
+  delete HLT_leading_phi_pass_all; delete HLT_second_phi_pass_all; delete HLT_third_phi_pass_all; delete HLT_fourth_phi_pass_all;
+  delete L1_leading_pt_pass_all; delete L1_second_pt_pass_all; delete L1_third_pt_pass_all; delete L1_fourth_pt_pass_all;
+  delete L1_leading_eta_pass_all; delete L1_second_eta_pass_all; delete L1_third_eta_pass_all; delete L1_fourth_eta_pass_all;
+  delete L1_leading_phi_pass_all; delete L1_second_phi_pass_all; delete L1_third_phi_pass_all; delete L1_fourth_phi_pass_all;
+  delete genA_leading_Lxy_pass_all; delete HLT_genA_leading_Lxy_pass_all;
+  delete genA_leading_Lz_pass_all; delete HLT_genA_leading_Lz_pass_all;
+  delete diMuon_leading_Lxy_pass_all; delete HLT_diMuon_leading_Lxy_pass_all;
+  delete diMuon_leading_Lz_pass_all; delete HLT_diMuon_leading_Lz_pass_all;
+  delete BKGShapeCR; delete BKGShapeCRmassC; delete BKGShapeCRmassF;
+  delete BKGShapeSR; delete BKGShapeSRmassC; delete BKGShapeSRmassF;
+  delete L_DimuC_CR_HighMass; delete Lxy_DimuC_CR_HighMass; delete Lz_DimuC_CR_HighMass;
+  delete L_DimuF_CR_HighMass; delete Lxy_DimuF_CR_HighMass; delete Lz_DimuF_CR_HighMass;
+  delete L_DimuC_SR_HighMass; delete Lxy_DimuC_SR_HighMass; delete Lz_DimuC_SR_HighMass;
+  delete L_DimuF_SR_HighMass; delete Lxy_DimuF_SR_HighMass; delete Lz_DimuF_SR_HighMass;
   delete DimuMass;
-  delete MassC;
-  delete MassF;
   delete RECO4muMass;
-  delete RECOrePaired2muLeadingMass;
-  delete RECOrePaired2muTrailingMass;
-  delete RECOrePaired2muLeadingdR;
-  delete RECOrePaired2muTrailingdR;
+  delete RECOrePaired2muLeadingMass; delete RECOrePaired2muLeadingdR;
+  delete RECOrePaired2muTrailingMass; delete RECOrePaired2muTrailingdR;
+  delete dZdimuons;
   delete IsoDimuC;
   delete IsoDimuF;
-  delete IsoDimuCMu0_dR0p3;
-  delete IsoDimuCMu0_dR0p4;
-  delete IsoDimuCMu0_dR0p5;
-  delete IsoDimuCMu1_dR0p3;
-  delete IsoDimuCMu1_dR0p4;
-  delete IsoDimuCMu1_dR0p5;
-  delete IsoDimuFMu0_dR0p3;
-  delete IsoDimuFMu0_dR0p4;
-  delete IsoDimuFMu0_dR0p5;
-  delete IsoDimuFMu1_dR0p3;
-  delete IsoDimuFMu1_dR0p4;
-  delete IsoDimuFMu1_dR0p5;
-  delete OrphanDimuMass;
+  delete IsoDimuCMu0_dR0p3; delete IsoDimuCMu0_dR0p4; delete IsoDimuCMu0_dR0p5;
+  delete IsoDimuCMu1_dR0p3; delete IsoDimuCMu1_dR0p4; delete IsoDimuCMu1_dR0p5;
+  delete IsoDimuFMu0_dR0p3; delete IsoDimuFMu0_dR0p4; delete IsoDimuFMu0_dR0p5;
+  delete IsoDimuFMu1_dR0p3; delete IsoDimuFMu1_dR0p4; delete IsoDimuFMu1_dR0p5;
   delete Mass1DTemplate;
   delete IsoOrphanDimu;
-  delete IsoOrphanDimuMu0_dR0p3;
-  delete IsoOrphanDimuMu0_dR0p4;
-  delete IsoOrphanDimuMu0_dR0p5;
-  delete IsoOrphanDimuMu1_dR0p3;
-  delete IsoOrphanDimuMu1_dR0p4;
-  delete IsoOrphanDimuMu1_dR0p5;
+  delete IsoOrphanDimuMu0_dR0p3; delete IsoOrphanDimuMu0_dR0p4; delete IsoOrphanDimuMu0_dR0p5;
+  delete IsoOrphanDimuMu1_dR0p3; delete IsoOrphanDimuMu1_dR0p4; delete IsoOrphanDimuMu1_dR0p5;
   delete IsoOrphan;
 
 }//end efficiency function
@@ -1171,33 +1538,104 @@ void analysis(const std::string SamplesList)
     //   Efficiency for MSSMD
     //=============================
     double massbin[12] = {0.25, 0.4, 0.7, 1, 2, 5, 8.5, 10, 15, 25, 35, 58};
-    double cTbin[13] = {0, 0.05, 0.1, 0.2, 0.5, 1, 2, 3, 5, 10, 20, 50, 100};
+    double cTbin[13]   = {0, 0.05, 0.1, 0.2, 0.5, 1, 2, 3, 5, 10, 20, 50, 100};
     int ix, iy;
-    TCanvas *C6 = new TCanvas("C6", "C6", 700, 500);
-    TCanvas *C7 = new TCanvas("C7", "C7", 700, 500);
-    TCanvas *C8 = new TCanvas("C8", "C8", 700, 500);
-    TCanvas *C9 = new TCanvas("C9", "C9", 700, 500);
-    TCanvas *C10 = new TCanvas("C10", "C10", 700, 500);
-    TCanvas *C11 = new TCanvas("C11", "C11", 700, 500);
-    TCanvas *C12 = new TCanvas("C12", "C12", 700, 500);
-    TCanvas *C13 = new TCanvas("C13", "C13", 700, 500);
-    TCanvas *C14 = new TCanvas("C14", "C14", 700, 500);
-    TCanvas *C15 = new TCanvas("C15", "C15", 700, 500);
-    TCanvas *C16 = new TCanvas("C16", "C16", 700, 500);
-    TCanvas *C17 = new TCanvas("C17", "C17", 700, 500);
 
-    TH2F *Cut6RatioMSSMD = new TH2F("Cut6RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #6 / GEN. Sel. #1}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut7RatioMSSMD = new TH2F("Cut7RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #7 / GEN. Sel. #2}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut8RatioMSSMD = new TH2F("Cut8RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #8 / GEN. Sel. #3}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut9RatioMSSMD = new TH2F("Cut9RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #9 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut10RatioMSSMD = new TH2F("Cut10RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #10 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut11RatioMSSMD = new TH2F("Cut11RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #11 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut12RatioMSSMD = new TH2F("Cut12RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #12 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut13RatioMSSMD = new TH2F("Cut13RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #13 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut14RatioMSSMD = new TH2F("Cut14RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #14 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut15RatioMSSMD = new TH2F("Cut15RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #15 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut16RatioMSSMD = new TH2F("Cut16RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #16 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *Cut17RatioMSSMD = new TH2F("Cut17RatioMSSMD", "#splitline{#scale[0.8]{Offline Sel. #17 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    //For GEN matched counters
+    TCanvas *c_MSSMD_GENMatch_Cut6_5  = new TCanvas("c_MSSMD_GENMatch_Cut6_5",  "c_MSSMD_GENMatch_Cut6_5",  700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut7_5  = new TCanvas("c_MSSMD_GENMatch_Cut7_5",  "c_MSSMD_GENMatch_Cut7_5",  700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut8_5  = new TCanvas("c_MSSMD_GENMatch_Cut8_5",  "c_MSSMD_GENMatch_Cut8_5",  700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut9_5  = new TCanvas("c_MSSMD_GENMatch_Cut9_5",  "c_MSSMD_GENMatch_Cut9_5",  700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut10_5 = new TCanvas("c_MSSMD_GENMatch_Cut10_5", "c_MSSMD_GENMatch_Cut10_5", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut11_5 = new TCanvas("c_MSSMD_GENMatch_Cut11_5", "c_MSSMD_GENMatch_Cut11_5", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut12_5 = new TCanvas("c_MSSMD_GENMatch_Cut12_5", "c_MSSMD_GENMatch_Cut12_5", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut13_5 = new TCanvas("c_MSSMD_GENMatch_Cut13_5", "c_MSSMD_GENMatch_Cut13_5", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut14_5 = new TCanvas("c_MSSMD_GENMatch_Cut14_5", "c_MSSMD_GENMatch_Cut14_5", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut15_5 = new TCanvas("c_MSSMD_GENMatch_Cut15_5", "c_MSSMD_GENMatch_Cut15_5", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut16_5 = new TCanvas("c_MSSMD_GENMatch_Cut16_5", "c_MSSMD_GENMatch_Cut16_5", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut17_5 = new TCanvas("c_MSSMD_GENMatch_Cut17_5", "c_MSSMD_GENMatch_Cut17_5", 700, 500);
+
+    TCanvas *c_MSSMD_GENMatch_Cut7_6    = new TCanvas("c_MSSMD_GENMatch_Cut7_6",    "c_MSSMD_GENMatch_Cut7_6",   700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut8_7    = new TCanvas("c_MSSMD_GENMatch_Cut8_7",    "c_MSSMD_GENMatch_Cut8_7",   700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut9_8    = new TCanvas("c_MSSMD_GENMatch_Cut9_8",    "c_MSSMD_GENMatch_Cut9_8",   700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut10_9   = new TCanvas("c_MSSMD_GENMatch_Cut10_9",   "c_MSSMD_GENMatch_Cut10_9",  700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut11_10  = new TCanvas("c_MSSMD_GENMatch_Cut11_10",  "c_MSSMD_GENMatch_Cut11_10", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut12_11  = new TCanvas("c_MSSMD_GENMatch_Cut12_11",  "c_MSSMD_GENMatch_Cut12_11", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut13_12  = new TCanvas("c_MSSMD_GENMatch_Cut13_12",  "c_MSSMD_GENMatch_Cut13_12", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut14_13  = new TCanvas("c_MSSMD_GENMatch_Cut14_13",  "c_MSSMD_GENMatch_Cut14_13", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut15_14  = new TCanvas("c_MSSMD_GENMatch_Cut15_14",  "c_MSSMD_GENMatch_Cut15_14", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut16_15  = new TCanvas("c_MSSMD_GENMatch_Cut16_15",  "c_MSSMD_GENMatch_Cut16_15", 700, 500);
+    TCanvas *c_MSSMD_GENMatch_Cut17_16  = new TCanvas("c_MSSMD_GENMatch_Cut17_16",  "c_MSSMD_GENMatch_Cut17_16", 700, 500);
+
+    TH2F *h_MSSMD_GENMatch_Cut6_5  = new TH2F("h_MSSMD_GENMatch_Cut6_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #6 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut7_5  = new TH2F("h_MSSMD_GENMatch_Cut7_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #7 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut8_5  = new TH2F("h_MSSMD_GENMatch_Cut8_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #8 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut9_5  = new TH2F("h_MSSMD_GENMatch_Cut9_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #9 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut10_5 = new TH2F("h_MSSMD_GENMatch_Cut10_5", "#splitline{#scale[0.8]{GEN Matched Sel. #10 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut11_5 = new TH2F("h_MSSMD_GENMatch_Cut11_5", "#splitline{#scale[0.8]{GEN Matched Sel. #11 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut12_5 = new TH2F("h_MSSMD_GENMatch_Cut12_5", "#splitline{#scale[0.8]{GEN Matched Sel. #12 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut13_5 = new TH2F("h_MSSMD_GENMatch_Cut13_5", "#splitline{#scale[0.8]{GEN Matched Sel. #13 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut14_5 = new TH2F("h_MSSMD_GENMatch_Cut14_5", "#splitline{#scale[0.8]{GEN Matched Sel. #14 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut15_5 = new TH2F("h_MSSMD_GENMatch_Cut15_5", "#splitline{#scale[0.8]{GEN Matched Sel. #15 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut16_5 = new TH2F("h_MSSMD_GENMatch_Cut16_5", "#splitline{#scale[0.8]{GEN Matched Sel. #16 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut17_5 = new TH2F("h_MSSMD_GENMatch_Cut17_5", "#splitline{#scale[0.8]{GEN Matched Sel. #17 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+
+    TH2F *h_MSSMD_GENMatch_Cut7_6    = new TH2F("h_MSSMD_GENMatch_Cut7_6",    "#splitline{#scale[0.8]{GEN Matched Sel. #7 / Sel. #6}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",    12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut8_7    = new TH2F("h_MSSMD_GENMatch_Cut8_7",    "#splitline{#scale[0.8]{GEN Matched Sel. #8 / Sel. #7}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",    12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut9_8    = new TH2F("h_MSSMD_GENMatch_Cut9_8",    "#splitline{#scale[0.8]{GEN Matched Sel. #9 / Sel. #8}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",    12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut10_9   = new TH2F("h_MSSMD_GENMatch_Cut10_9",   "#splitline{#scale[0.8]{GEN Matched Sel. #10 / Sel. #9}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",   12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut11_10  = new TH2F("h_MSSMD_GENMatch_Cut11_10",  "#splitline{#scale[0.8]{GEN Matched Sel. #11 / Sel. #10}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut12_11  = new TH2F("h_MSSMD_GENMatch_Cut12_11",  "#splitline{#scale[0.8]{GEN Matched Sel. #12 / Sel. #11}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut13_12  = new TH2F("h_MSSMD_GENMatch_Cut13_12",  "#splitline{#scale[0.8]{GEN Matched Sel. #13 / Sel. #12}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut14_13  = new TH2F("h_MSSMD_GENMatch_Cut14_13",  "#splitline{#scale[0.8]{GEN Matched Sel. #14 / Sel. #13}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut15_14  = new TH2F("h_MSSMD_GENMatch_Cut15_14",  "#splitline{#scale[0.8]{GEN Matched Sel. #15 / Sel. #14}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut16_15  = new TH2F("h_MSSMD_GENMatch_Cut16_15",  "#splitline{#scale[0.8]{GEN Matched Sel. #16 / Sel. #15}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut17_16  = new TH2F("h_MSSMD_GENMatch_Cut17_16",  "#splitline{#scale[0.8]{GEN Matched Sel. #17 / Sel. #16}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+
+    //For cut flow counter (no GEN match)
+    TCanvas *c_MSSMD_Cut6_1  = new TCanvas("c_MSSMD_Cut6_1",  "c_MSSMD_Cut6_1",  700, 500);
+    TCanvas *c_MSSMD_Cut7_2  = new TCanvas("c_MSSMD_Cut7_2",  "c_MSSMD_Cut7_2",  700, 500);
+    TCanvas *c_MSSMD_Cut8_3  = new TCanvas("c_MSSMD_Cut8_3",  "c_MSSMD_Cut8_3",  700, 500);
+    TCanvas *c_MSSMD_Cut9_4  = new TCanvas("c_MSSMD_Cut9_4",  "c_MSSMD_Cut9_4",  700, 500);
+    TCanvas *c_MSSMD_Cut10_4 = new TCanvas("c_MSSMD_Cut10_4", "c_MSSMD_Cut10_4", 700, 500);
+    TCanvas *c_MSSMD_Cut11_4 = new TCanvas("c_MSSMD_Cut11_4", "c_MSSMD_Cut11_4", 700, 500);
+    TCanvas *c_MSSMD_Cut12_5 = new TCanvas("c_MSSMD_Cut12_5", "c_MSSMD_Cut12_5", 700, 500);
+    TCanvas *c_MSSMD_Cut13_5 = new TCanvas("c_MSSMD_Cut13_5", "c_MSSMD_Cut13_5", 700, 500);
+    TCanvas *c_MSSMD_Cut14_5 = new TCanvas("c_MSSMD_Cut14_5", "c_MSSMD_Cut14_5", 700, 500);
+    TCanvas *c_MSSMD_Cut15_5 = new TCanvas("c_MSSMD_Cut15_5", "c_MSSMD_Cut15_5", 700, 500);
+    TCanvas *c_MSSMD_Cut16_5 = new TCanvas("c_MSSMD_Cut16_5", "c_MSSMD_Cut16_5", 700, 500);
+    TCanvas *c_MSSMD_Cut17_5 = new TCanvas("c_MSSMD_Cut17_5", "c_MSSMD_Cut17_5", 700, 500);
+
+    TCanvas *c_MSSMD_Cut10_9  = new TCanvas("c_MSSMD_Cut10_9",  "c_MSSMD_Cut10_9",  700, 500);
+    TCanvas *c_MSSMD_Cut11_10 = new TCanvas("c_MSSMD_Cut11_10", "c_MSSMD_Cut11_10", 700, 500);
+
+    TCanvas *c_MSSMD_Cut13_12 = new TCanvas("c_MSSMD_Cut13_12", "c_MSSMD_Cut13_12", 700, 500);
+    TCanvas *c_MSSMD_Cut14_13 = new TCanvas("c_MSSMD_Cut14_13", "c_MSSMD_Cut14_13", 700, 500);
+    TCanvas *c_MSSMD_Cut15_14 = new TCanvas("c_MSSMD_Cut15_14", "c_MSSMD_Cut15_14", 700, 500);
+    TCanvas *c_MSSMD_Cut16_15 = new TCanvas("c_MSSMD_Cut16_15", "c_MSSMD_Cut16_15", 700, 500);
+    TCanvas *c_MSSMD_Cut17_16 = new TCanvas("c_MSSMD_Cut17_16", "c_MSSMD_Cut17_16", 700, 500);
+
+    TH2F *h_MSSMD_Cut6_1  = new TH2F("h_MSSMD_Cut6_1",  "#splitline{#scale[0.8]{Offline Sel. #6 / GEN. Sel. #1}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut7_2  = new TH2F("h_MSSMD_Cut7_2",  "#splitline{#scale[0.8]{Offline Sel. #7 / GEN. Sel. #2}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut8_3  = new TH2F("h_MSSMD_Cut8_3",  "#splitline{#scale[0.8]{Offline Sel. #8 / GEN. Sel. #3}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut9_4  = new TH2F("h_MSSMD_Cut9_4",  "#splitline{#scale[0.8]{Offline Sel. #9 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut10_4 = new TH2F("h_MSSMD_Cut10_4", "#splitline{#scale[0.8]{Offline Sel. #10 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut11_4 = new TH2F("h_MSSMD_Cut11_4", "#splitline{#scale[0.8]{Offline Sel. #11 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut12_5 = new TH2F("h_MSSMD_Cut12_5", "#splitline{#scale[0.8]{Offline Sel. #12 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut13_5 = new TH2F("h_MSSMD_Cut13_5", "#splitline{#scale[0.8]{Offline Sel. #13 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut14_5 = new TH2F("h_MSSMD_Cut14_5", "#splitline{#scale[0.8]{Offline Sel. #14 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut15_5 = new TH2F("h_MSSMD_Cut15_5", "#splitline{#scale[0.8]{Offline Sel. #15 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut16_5 = new TH2F("h_MSSMD_Cut16_5", "#splitline{#scale[0.8]{Offline Sel. #16 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut17_5 = new TH2F("h_MSSMD_Cut17_5", "#splitline{#scale[0.8]{Offline Sel. #17 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+
+    TH2F *h_MSSMD_Cut10_9  = new TH2F("h_MSSMD_Cut10_9",  "#splitline{#scale[0.8]{Offline Sel. #10 / Sel. #9}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut11_10 = new TH2F("h_MSSMD_Cut11_10", "#splitline{#scale[0.8]{Offline Sel. #11 / Sel. #10}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+
+    TH2F *h_MSSMD_Cut13_12 = new TH2F("h_MSSMD_Cut13_12", "#splitline{#scale[0.8]{Offline Sel. #13 / Sel. #12}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut14_13 = new TH2F("h_MSSMD_Cut14_13", "#splitline{#scale[0.8]{Offline Sel. #14 / Sel. #13}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut15_14 = new TH2F("h_MSSMD_Cut15_14", "#splitline{#scale[0.8]{Offline Sel. #15 / Sel. #14}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut16_15 = new TH2F("h_MSSMD_Cut16_15", "#splitline{#scale[0.8]{Offline Sel. #16 / Sel. #15}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut17_16 = new TH2F("h_MSSMD_Cut17_16", "#splitline{#scale[0.8]{Offline Sel. #17 / Sel. #16}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
 
     if ( mGammaDarray.size() > 0 ){
 
@@ -1213,65 +1651,203 @@ void analysis(const std::string SamplesList)
           if( cTauarray[i] == cTbin[k] ){ iy = k+1; }
         }//end loop mass
         //cout << "ix: " << ix  << "; iy: " << iy << endl;
-        Cut6RatioMSSMD->SetBinContent(ix, iy, counter[i][6]*1.0/counter[i][1] );
-        Cut7RatioMSSMD->SetBinContent(ix, iy, counter[i][7]*1.0/counter[i][2] );
-        Cut8RatioMSSMD->SetBinContent(ix, iy, counter[i][8]*1.0/counter[i][3] );
-        Cut9RatioMSSMD->SetBinContent(ix, iy, counter[i][9]*1.0/counter[i][4] );
-        Cut10RatioMSSMD->SetBinContent(ix, iy, counter[i][10]*1.0/counter[i][4] );
-        Cut11RatioMSSMD->SetBinContent(ix, iy, counter[i][11]*1.0/counter[i][4] );//doesn't make sense to compare to #5
-        Cut12RatioMSSMD->SetBinContent(ix, iy, counter[i][12]*1.0/counter[i][5] );
-        Cut13RatioMSSMD->SetBinContent(ix, iy, counter[i][13]*1.0/counter[i][5] );
-        Cut14RatioMSSMD->SetBinContent(ix, iy, counter[i][14]*1.0/counter[i][5] );
-        Cut15RatioMSSMD->SetBinContent(ix, iy, counter[i][15]*1.0/counter[i][5] );
-        Cut16RatioMSSMD->SetBinContent(ix, iy, counter[i][16]*1.0/counter[i][5] );
-        Cut17RatioMSSMD->SetBinContent(ix, iy, epsvsalph[i] );
+
+        h_MSSMD_GENMatch_Cut6_5->SetBinContent(ix,  iy, round(counterGENMatch[i][6]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut7_5->SetBinContent(ix,  iy, round(counterGENMatch[i][7]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut8_5->SetBinContent(ix,  iy, round(counterGENMatch[i][8]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut9_5->SetBinContent(ix,  iy, round(counterGENMatch[i][9]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut10_5->SetBinContent(ix, iy, round(counterGENMatch[i][10]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut11_5->SetBinContent(ix, iy, round(counterGENMatch[i][11]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut12_5->SetBinContent(ix, iy, round(counterGENMatch[i][12]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut13_5->SetBinContent(ix, iy, round(counterGENMatch[i][13]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut14_5->SetBinContent(ix, iy, round(counterGENMatch[i][14]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut15_5->SetBinContent(ix, iy, round(counterGENMatch[i][15]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut16_5->SetBinContent(ix, iy, round(counterGENMatch[i][16]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut17_5->SetBinContent(ix, iy, round(counterGENMatch[i][17]*10000.0/counterGENMatch[i][5])/10000 );
+
+        h_MSSMD_GENMatch_Cut7_6->SetBinContent(ix,   iy, round(counterGENMatch[i][7]*10000.0/counterGENMatch[i][6])/10000 );
+        h_MSSMD_GENMatch_Cut8_7->SetBinContent(ix,   iy, round(counterGENMatch[i][8]*10000.0/counterGENMatch[i][7])/10000 );
+        h_MSSMD_GENMatch_Cut9_8->SetBinContent(ix,   iy, round(counterGENMatch[i][9]*10000.0/counterGENMatch[i][8])/10000 );
+        h_MSSMD_GENMatch_Cut10_9->SetBinContent(ix,  iy, round(counterGENMatch[i][10]*10000.0/counterGENMatch[i][9])/10000 );
+        h_MSSMD_GENMatch_Cut11_10->SetBinContent(ix, iy, round(counterGENMatch[i][11]*10000.0/counterGENMatch[i][10])/10000 );
+        h_MSSMD_GENMatch_Cut12_11->SetBinContent(ix, iy, round(counterGENMatch[i][12]*10000.0/counterGENMatch[i][11])/10000 );
+        h_MSSMD_GENMatch_Cut13_12->SetBinContent(ix, iy, round(counterGENMatch[i][13]*10000.0/counterGENMatch[i][12])/10000 );
+        h_MSSMD_GENMatch_Cut14_13->SetBinContent(ix, iy, round(counterGENMatch[i][14]*10000.0/counterGENMatch[i][13])/10000 );
+        h_MSSMD_GENMatch_Cut15_14->SetBinContent(ix, iy, round(counterGENMatch[i][15]*10000.0/counterGENMatch[i][14])/10000 );
+        h_MSSMD_GENMatch_Cut16_15->SetBinContent(ix, iy, round(counterGENMatch[i][16]*10000.0/counterGENMatch[i][15])/10000 );
+        h_MSSMD_GENMatch_Cut17_16->SetBinContent(ix, iy, round(counterGENMatch[i][17]*10000.0/counterGENMatch[i][16])/10000 );
+
+        h_MSSMD_Cut6_1->SetBinContent(ix, iy, round(counter[i][6]*1000.0/counter[i][1])/1000 );
+        h_MSSMD_Cut7_2->SetBinContent(ix, iy, round(counter[i][7]*1000.0/counter[i][2])/1000 );
+        h_MSSMD_Cut8_3->SetBinContent(ix, iy, round(counter[i][8]*1000.0/counter[i][3])/1000 );
+        h_MSSMD_Cut9_4->SetBinContent(ix, iy, round(counter[i][9]*1000.0/counter[i][4])/1000 );
+        h_MSSMD_Cut10_4->SetBinContent(ix, iy, round(counter[i][10]*1000.0/counter[i][4])/1000 );
+        h_MSSMD_Cut11_4->SetBinContent(ix, iy, round(counter[i][11]*1000.0/counter[i][4])/1000 );//doesn't make sense to compare to #5
+        h_MSSMD_Cut12_5->SetBinContent(ix, iy, round(counter[i][12]*1000.0/counter[i][5])/1000 );
+        h_MSSMD_Cut13_5->SetBinContent(ix, iy, round(counter[i][13]*1000.0/counter[i][5])/1000 );
+        h_MSSMD_Cut14_5->SetBinContent(ix, iy, round(counter[i][14]*1000.0/counter[i][5])/1000 );
+        h_MSSMD_Cut15_5->SetBinContent(ix, iy, round(counter[i][15]*1000.0/counter[i][5])/1000 );
+        h_MSSMD_Cut16_5->SetBinContent(ix, iy, round(counter[i][16]*1000.0/counter[i][5])/1000 );
+        h_MSSMD_Cut17_5->SetBinContent(ix, iy, round(epsvsalph[i]*1000.0)/1000 );
+
+        h_MSSMD_Cut10_9->SetBinContent(ix, iy, round(counter[i][10]*1000.0/counter[i][9])/1000 );
+        h_MSSMD_Cut11_10->SetBinContent(ix, iy, round(counter[i][11]*1000.0/counter[i][10])/1000 );
+
+        h_MSSMD_Cut13_12->SetBinContent(ix, iy, round(counter[i][13]*1000.0/counter[i][12])/1000 );
+        h_MSSMD_Cut14_13->SetBinContent(ix, iy, round(counter[i][14]*1000.0/counter[i][13])/1000 );
+        h_MSSMD_Cut15_14->SetBinContent(ix, iy, round(counter[i][15]*1000.0/counter[i][14])/1000 );
+        h_MSSMD_Cut16_15->SetBinContent(ix, iy, round(counter[i][16]*1000.0/counter[i][15])/1000 );
+        h_MSSMD_Cut17_16->SetBinContent(ix, iy, round(counter[i][17]*1000.0/counter[i][16])/1000 );
         //cout << "Mass: " << mGammaDarray[i]  << "; cT: " << cTauarray[i] << "; eff: "<< counter[i][12]*1.0/counter[i][5] << endl;
       }
 
       for(unsigned int iXL=1; iXL<=12; iXL++){
         //cout << "iXL: " << iXL  << endl;
-        Cut6RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut7RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut8RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut9RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut10RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut11RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut12RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut13RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut14RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut15RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut16RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
-        Cut17RatioMSSMD->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut6_5->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut7_5->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut8_5->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut9_5->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut10_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut11_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut12_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut13_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut14_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut15_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut16_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut17_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+
+        h_MSSMD_GENMatch_Cut7_6->GetXaxis()->SetBinLabel(iXL,   Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut8_7->GetXaxis()->SetBinLabel(iXL,   Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut9_8->GetXaxis()->SetBinLabel(iXL,   Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut10_9->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut11_10->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut12_11->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut13_12->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut14_13->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut15_14->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut16_15->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_GENMatch_Cut17_16->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+
+        h_MSSMD_Cut6_1->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut7_2->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut8_3->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut9_4->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut10_4->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut11_4->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut12_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut13_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut14_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut15_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut16_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut17_5->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+
+        h_MSSMD_Cut10_9->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut11_10->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+
+        h_MSSMD_Cut13_12->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut14_13->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut15_14->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut16_15->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
+        h_MSSMD_Cut17_16->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
       }
 
       for(unsigned int iYL=1; iYL<=13; iYL++){
         //cout << "iYL: " << iYL  << endl;
-        Cut6RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut7RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut8RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut9RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut10RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut11RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut12RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut13RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut14RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut15RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut16RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
-        Cut17RatioMSSMD->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut6_5->GetYaxis()->SetBinLabel(iYL,   Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut7_5->GetYaxis()->SetBinLabel(iYL,   Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut8_5->GetYaxis()->SetBinLabel(iYL,   Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut9_5->GetYaxis()->SetBinLabel(iYL,   Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut10_5->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut11_5->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut12_5->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut13_5->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut14_5->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut15_5->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut16_5->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut17_5->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+
+        h_MSSMD_GENMatch_Cut7_6->GetYaxis()->SetBinLabel(iYL,    Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut8_7->GetYaxis()->SetBinLabel(iYL,    Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut9_8->GetYaxis()->SetBinLabel(iYL,    Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut10_9->GetYaxis()->SetBinLabel(iYL,   Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut11_10->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut12_11->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut13_12->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut14_13->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut15_14->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut16_15->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_GENMatch_Cut17_16->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+
+        h_MSSMD_Cut6_1->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut7_2->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut8_3->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut9_4->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut10_4->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut11_4->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut12_5->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut13_5->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut14_5->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut15_5->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut16_5->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut17_5->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+
+        h_MSSMD_Cut10_9->GetYaxis()->SetBinLabel(iYL,  Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut11_10->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+
+        h_MSSMD_Cut13_12->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut14_13->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut15_14->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut16_15->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
+        h_MSSMD_Cut17_16->GetYaxis()->SetBinLabel(iYL, Form("%.2f", cTbin[iYL-1]) );
       }
 
-      C6->cd(); Cut6RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut6RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut6RatioMSSMD->SetStats(0); Cut6RatioMSSMD->Draw("COLZ TEXT"); Cut6RatioMSSMD->SetMinimum(0); Cut6RatioMSSMD->SetMaximum(1); C6->Write();
-      C7->cd(); Cut7RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut7RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut7RatioMSSMD->SetStats(0); Cut7RatioMSSMD->Draw("COLZ TEXT"); Cut7RatioMSSMD->SetMinimum(0); Cut7RatioMSSMD->SetMaximum(1); C7->Write();
-      C8->cd(); Cut8RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut8RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut8RatioMSSMD->SetStats(0); Cut8RatioMSSMD->Draw("COLZ TEXT"); Cut8RatioMSSMD->SetMinimum(0); Cut8RatioMSSMD->SetMaximum(1); C8->Write();
-      C9->cd(); Cut9RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut9RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut9RatioMSSMD->SetStats(0); Cut9RatioMSSMD->Draw("COLZ TEXT"); Cut9RatioMSSMD->SetMinimum(0); Cut9RatioMSSMD->SetMaximum(1); C9->Write();
-      C10->cd(); Cut10RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut10RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut10RatioMSSMD->SetStats(0); Cut10RatioMSSMD->Draw("COLZ TEXT"); Cut10RatioMSSMD->SetMinimum(0); Cut10RatioMSSMD->SetMaximum(1); C10->Write();
-      C11->cd(); Cut11RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut11RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut11RatioMSSMD->SetStats(0); Cut11RatioMSSMD->Draw("COLZ TEXT"); Cut11RatioMSSMD->SetMinimum(0); Cut11RatioMSSMD->SetMaximum(1); C11->Write();
-      C12->cd(); Cut12RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut12RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut12RatioMSSMD->SetStats(0); Cut12RatioMSSMD->Draw("COLZ TEXT"); Cut12RatioMSSMD->SetMinimum(0); Cut12RatioMSSMD->SetMaximum(1); C12->Write();
-      C13->cd(); Cut13RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut13RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut13RatioMSSMD->SetStats(0); Cut13RatioMSSMD->Draw("COLZ TEXT"); Cut13RatioMSSMD->SetMinimum(0); Cut13RatioMSSMD->SetMaximum(1); C13->Write();
-      C14->cd(); Cut14RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut14RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut14RatioMSSMD->SetStats(0); Cut14RatioMSSMD->Draw("COLZ TEXT"); Cut14RatioMSSMD->SetMinimum(0); Cut14RatioMSSMD->SetMaximum(1); C14->Write();
-      C15->cd(); Cut15RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut15RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut15RatioMSSMD->SetStats(0); Cut15RatioMSSMD->Draw("COLZ TEXT"); Cut15RatioMSSMD->SetMinimum(0); Cut15RatioMSSMD->SetMaximum(1); C15->Write();
-      C16->cd(); Cut16RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut16RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut16RatioMSSMD->SetStats(0); Cut16RatioMSSMD->Draw("COLZ TEXT"); Cut16RatioMSSMD->SetMinimum(0); Cut16RatioMSSMD->SetMaximum(1); C16->Write();
-      C17->cd(); Cut17RatioMSSMD->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); Cut17RatioMSSMD->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); Cut17RatioMSSMD->SetStats(0); Cut17RatioMSSMD->Draw("COLZ TEXT"); Cut17RatioMSSMD->SetMinimum(0); Cut17RatioMSSMD->SetMaximum(1); C17->Write();
+      c_MSSMD_GENMatch_Cut6_5->cd();  h_MSSMD_GENMatch_Cut6_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_GENMatch_Cut6_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_GENMatch_Cut6_5->SetStats(0);  h_MSSMD_GENMatch_Cut6_5->Draw("COLZ TEXT");  h_MSSMD_GENMatch_Cut6_5->SetMinimum(0);  h_MSSMD_GENMatch_Cut6_5->SetMaximum(1);  c_MSSMD_GENMatch_Cut6_5->Write();
+      c_MSSMD_GENMatch_Cut7_5->cd();  h_MSSMD_GENMatch_Cut7_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_GENMatch_Cut7_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_GENMatch_Cut7_5->SetStats(0);  h_MSSMD_GENMatch_Cut7_5->Draw("COLZ TEXT");  h_MSSMD_GENMatch_Cut7_5->SetMinimum(0);  h_MSSMD_GENMatch_Cut7_5->SetMaximum(1);  c_MSSMD_GENMatch_Cut7_5->Write();
+      c_MSSMD_GENMatch_Cut8_5->cd();  h_MSSMD_GENMatch_Cut8_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_GENMatch_Cut8_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_GENMatch_Cut8_5->SetStats(0);  h_MSSMD_GENMatch_Cut8_5->Draw("COLZ TEXT");  h_MSSMD_GENMatch_Cut8_5->SetMinimum(0);  h_MSSMD_GENMatch_Cut8_5->SetMaximum(1);  c_MSSMD_GENMatch_Cut8_5->Write();
+      c_MSSMD_GENMatch_Cut9_5->cd();  h_MSSMD_GENMatch_Cut9_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_GENMatch_Cut9_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_GENMatch_Cut9_5->SetStats(0);  h_MSSMD_GENMatch_Cut9_5->Draw("COLZ TEXT");  h_MSSMD_GENMatch_Cut9_5->SetMinimum(0);  h_MSSMD_GENMatch_Cut9_5->SetMaximum(1);  c_MSSMD_GENMatch_Cut9_5->Write();
+      c_MSSMD_GENMatch_Cut10_5->cd(); h_MSSMD_GENMatch_Cut10_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut10_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut10_5->SetStats(0); h_MSSMD_GENMatch_Cut10_5->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut10_5->SetMinimum(0); h_MSSMD_GENMatch_Cut10_5->SetMaximum(1); c_MSSMD_GENMatch_Cut10_5->Write();
+      c_MSSMD_GENMatch_Cut11_5->cd(); h_MSSMD_GENMatch_Cut11_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut11_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut11_5->SetStats(0); h_MSSMD_GENMatch_Cut11_5->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut11_5->SetMinimum(0); h_MSSMD_GENMatch_Cut11_5->SetMaximum(1); c_MSSMD_GENMatch_Cut11_5->Write();
+      c_MSSMD_GENMatch_Cut12_5->cd(); h_MSSMD_GENMatch_Cut12_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut12_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut12_5->SetStats(0); h_MSSMD_GENMatch_Cut12_5->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut12_5->SetMinimum(0); h_MSSMD_GENMatch_Cut12_5->SetMaximum(1); c_MSSMD_GENMatch_Cut12_5->Write();
+      c_MSSMD_GENMatch_Cut13_5->cd(); h_MSSMD_GENMatch_Cut13_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut13_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut13_5->SetStats(0); h_MSSMD_GENMatch_Cut13_5->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut13_5->SetMinimum(0); h_MSSMD_GENMatch_Cut13_5->SetMaximum(1); c_MSSMD_GENMatch_Cut13_5->Write();
+      c_MSSMD_GENMatch_Cut14_5->cd(); h_MSSMD_GENMatch_Cut14_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut14_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut14_5->SetStats(0); h_MSSMD_GENMatch_Cut14_5->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut14_5->SetMinimum(0); h_MSSMD_GENMatch_Cut14_5->SetMaximum(1); c_MSSMD_GENMatch_Cut14_5->Write();
+      c_MSSMD_GENMatch_Cut15_5->cd(); h_MSSMD_GENMatch_Cut15_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut15_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut15_5->SetStats(0); h_MSSMD_GENMatch_Cut15_5->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut15_5->SetMinimum(0); h_MSSMD_GENMatch_Cut15_5->SetMaximum(1); c_MSSMD_GENMatch_Cut15_5->Write();
+      c_MSSMD_GENMatch_Cut16_5->cd(); h_MSSMD_GENMatch_Cut16_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut16_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut16_5->SetStats(0); h_MSSMD_GENMatch_Cut16_5->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut16_5->SetMinimum(0); h_MSSMD_GENMatch_Cut16_5->SetMaximum(1); c_MSSMD_GENMatch_Cut16_5->Write();
+      c_MSSMD_GENMatch_Cut17_5->cd(); h_MSSMD_GENMatch_Cut17_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut17_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut17_5->SetStats(0); h_MSSMD_GENMatch_Cut17_5->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut17_5->SetMinimum(0); h_MSSMD_GENMatch_Cut17_5->SetMaximum(1); c_MSSMD_GENMatch_Cut17_5->Write();
+
+      c_MSSMD_GENMatch_Cut7_6->cd();   h_MSSMD_GENMatch_Cut7_6->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");   h_MSSMD_GENMatch_Cut7_6->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");   h_MSSMD_GENMatch_Cut7_6->SetStats(0);   h_MSSMD_GENMatch_Cut7_6->Draw("COLZ TEXT");   h_MSSMD_GENMatch_Cut7_6->SetMinimum(0);   h_MSSMD_GENMatch_Cut7_6->SetMaximum(1);   c_MSSMD_GENMatch_Cut7_6->Write();
+      c_MSSMD_GENMatch_Cut8_7->cd();   h_MSSMD_GENMatch_Cut8_7->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");   h_MSSMD_GENMatch_Cut8_7->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");   h_MSSMD_GENMatch_Cut8_7->SetStats(0);   h_MSSMD_GENMatch_Cut8_7->Draw("COLZ TEXT");   h_MSSMD_GENMatch_Cut8_7->SetMinimum(0);   h_MSSMD_GENMatch_Cut8_7->SetMaximum(1);   c_MSSMD_GENMatch_Cut8_7->Write();
+      c_MSSMD_GENMatch_Cut9_8->cd();   h_MSSMD_GENMatch_Cut9_8->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");   h_MSSMD_GENMatch_Cut9_8->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");   h_MSSMD_GENMatch_Cut9_8->SetStats(0);   h_MSSMD_GENMatch_Cut9_8->Draw("COLZ TEXT");   h_MSSMD_GENMatch_Cut9_8->SetMinimum(0);   h_MSSMD_GENMatch_Cut9_8->SetMaximum(1);   c_MSSMD_GENMatch_Cut9_8->Write();
+      c_MSSMD_GENMatch_Cut10_9->cd();  h_MSSMD_GENMatch_Cut10_9->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_GENMatch_Cut10_9->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_GENMatch_Cut10_9->SetStats(0);  h_MSSMD_GENMatch_Cut10_9->Draw("COLZ TEXT");  h_MSSMD_GENMatch_Cut10_9->SetMinimum(0);  h_MSSMD_GENMatch_Cut10_9->SetMaximum(1);  c_MSSMD_GENMatch_Cut10_9->Write();
+      c_MSSMD_GENMatch_Cut11_10->cd(); h_MSSMD_GENMatch_Cut11_10->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut11_10->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut11_10->SetStats(0); h_MSSMD_GENMatch_Cut11_10->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut11_10->SetMinimum(0); h_MSSMD_GENMatch_Cut11_10->SetMaximum(1); c_MSSMD_GENMatch_Cut11_10->Write();
+      c_MSSMD_GENMatch_Cut12_11->cd(); h_MSSMD_GENMatch_Cut12_11->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut12_11->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut12_11->SetStats(0); h_MSSMD_GENMatch_Cut12_11->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut12_11->SetMinimum(0); h_MSSMD_GENMatch_Cut12_11->SetMaximum(1); c_MSSMD_GENMatch_Cut12_11->Write();
+      c_MSSMD_GENMatch_Cut13_12->cd(); h_MSSMD_GENMatch_Cut13_12->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut13_12->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut13_12->SetStats(0); h_MSSMD_GENMatch_Cut13_12->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut13_12->SetMinimum(0); h_MSSMD_GENMatch_Cut13_12->SetMaximum(1); c_MSSMD_GENMatch_Cut13_12->Write();
+      c_MSSMD_GENMatch_Cut14_13->cd(); h_MSSMD_GENMatch_Cut14_13->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut14_13->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut14_13->SetStats(0); h_MSSMD_GENMatch_Cut14_13->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut14_13->SetMinimum(0); h_MSSMD_GENMatch_Cut14_13->SetMaximum(1); c_MSSMD_GENMatch_Cut14_13->Write();
+      c_MSSMD_GENMatch_Cut15_14->cd(); h_MSSMD_GENMatch_Cut15_14->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut15_14->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut15_14->SetStats(0); h_MSSMD_GENMatch_Cut15_14->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut15_14->SetMinimum(0); h_MSSMD_GENMatch_Cut15_14->SetMaximum(1); c_MSSMD_GENMatch_Cut15_14->Write();
+      c_MSSMD_GENMatch_Cut16_15->cd(); h_MSSMD_GENMatch_Cut16_15->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut16_15->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut16_15->SetStats(0); h_MSSMD_GENMatch_Cut16_15->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut16_15->SetMinimum(0); h_MSSMD_GENMatch_Cut16_15->SetMaximum(1); c_MSSMD_GENMatch_Cut16_15->Write();
+      c_MSSMD_GENMatch_Cut17_16->cd(); h_MSSMD_GENMatch_Cut17_16->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_GENMatch_Cut17_16->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_GENMatch_Cut17_16->SetStats(0); h_MSSMD_GENMatch_Cut17_16->Draw("COLZ TEXT"); h_MSSMD_GENMatch_Cut17_16->SetMinimum(0); h_MSSMD_GENMatch_Cut17_16->SetMaximum(1); c_MSSMD_GENMatch_Cut17_16->Write();
+
+      c_MSSMD_Cut6_1->cd();  h_MSSMD_Cut6_1->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_Cut6_1->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_Cut6_1->SetStats(0);  h_MSSMD_Cut6_1->Draw("COLZ TEXT");  h_MSSMD_Cut6_1->SetMinimum(0);  h_MSSMD_Cut6_1->SetMaximum(1);  c_MSSMD_Cut6_1->Write();
+      c_MSSMD_Cut7_2->cd();  h_MSSMD_Cut7_2->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_Cut7_2->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_Cut7_2->SetStats(0);  h_MSSMD_Cut7_2->Draw("COLZ TEXT");  h_MSSMD_Cut7_2->SetMinimum(0);  h_MSSMD_Cut7_2->SetMaximum(1);  c_MSSMD_Cut7_2->Write();
+      c_MSSMD_Cut8_3->cd();  h_MSSMD_Cut8_3->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_Cut8_3->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_Cut8_3->SetStats(0);  h_MSSMD_Cut8_3->Draw("COLZ TEXT");  h_MSSMD_Cut8_3->SetMinimum(0);  h_MSSMD_Cut8_3->SetMaximum(1);  c_MSSMD_Cut8_3->Write();
+      c_MSSMD_Cut9_4->cd();  h_MSSMD_Cut9_4->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_Cut9_4->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_Cut9_4->SetStats(0);  h_MSSMD_Cut9_4->Draw("COLZ TEXT");  h_MSSMD_Cut9_4->SetMinimum(0);  h_MSSMD_Cut9_4->SetMaximum(1);  c_MSSMD_Cut9_4->Write();
+      c_MSSMD_Cut10_4->cd(); h_MSSMD_Cut10_4->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut10_4->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut10_4->SetStats(0); h_MSSMD_Cut10_4->Draw("COLZ TEXT"); h_MSSMD_Cut10_4->SetMinimum(0); h_MSSMD_Cut10_4->SetMaximum(1); c_MSSMD_Cut10_4->Write();
+      c_MSSMD_Cut11_4->cd(); h_MSSMD_Cut11_4->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut11_4->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut11_4->SetStats(0); h_MSSMD_Cut11_4->Draw("COLZ TEXT"); h_MSSMD_Cut11_4->SetMinimum(0); h_MSSMD_Cut11_4->SetMaximum(1); c_MSSMD_Cut11_4->Write();
+      c_MSSMD_Cut12_5->cd(); h_MSSMD_Cut12_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut12_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut12_5->SetStats(0); h_MSSMD_Cut12_5->Draw("COLZ TEXT"); h_MSSMD_Cut12_5->SetMinimum(0); h_MSSMD_Cut12_5->SetMaximum(1); c_MSSMD_Cut12_5->Write();
+      c_MSSMD_Cut13_5->cd(); h_MSSMD_Cut13_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut13_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut13_5->SetStats(0); h_MSSMD_Cut13_5->Draw("COLZ TEXT"); h_MSSMD_Cut13_5->SetMinimum(0); h_MSSMD_Cut13_5->SetMaximum(1); c_MSSMD_Cut13_5->Write();
+      c_MSSMD_Cut14_5->cd(); h_MSSMD_Cut14_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut14_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut14_5->SetStats(0); h_MSSMD_Cut14_5->Draw("COLZ TEXT"); h_MSSMD_Cut14_5->SetMinimum(0); h_MSSMD_Cut14_5->SetMaximum(1); c_MSSMD_Cut14_5->Write();
+      c_MSSMD_Cut15_5->cd(); h_MSSMD_Cut15_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut15_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut15_5->SetStats(0); h_MSSMD_Cut15_5->Draw("COLZ TEXT"); h_MSSMD_Cut15_5->SetMinimum(0); h_MSSMD_Cut15_5->SetMaximum(1); c_MSSMD_Cut15_5->Write();
+      c_MSSMD_Cut16_5->cd(); h_MSSMD_Cut16_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut16_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut16_5->SetStats(0); h_MSSMD_Cut16_5->Draw("COLZ TEXT"); h_MSSMD_Cut16_5->SetMinimum(0); h_MSSMD_Cut16_5->SetMaximum(1); c_MSSMD_Cut16_5->Write();
+      c_MSSMD_Cut17_5->cd(); h_MSSMD_Cut17_5->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut17_5->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut17_5->SetStats(0); h_MSSMD_Cut17_5->Draw("COLZ TEXT"); h_MSSMD_Cut17_5->SetMinimum(0); h_MSSMD_Cut17_5->SetMaximum(1); c_MSSMD_Cut17_5->Write();
+
+      c_MSSMD_Cut10_9->cd();  h_MSSMD_Cut10_9->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]");  h_MSSMD_Cut10_9->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]");  h_MSSMD_Cut10_9->SetStats(0);  h_MSSMD_Cut10_9->Draw("COLZ TEXT");  h_MSSMD_Cut10_9->SetMinimum(0);  h_MSSMD_Cut10_9->SetMaximum(1);  c_MSSMD_Cut10_9->Write();
+      c_MSSMD_Cut11_10->cd(); h_MSSMD_Cut11_10->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut11_10->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut11_10->SetStats(0); h_MSSMD_Cut11_10->Draw("COLZ TEXT"); h_MSSMD_Cut11_10->SetMinimum(0); h_MSSMD_Cut11_10->SetMaximum(1); c_MSSMD_Cut11_10->Write();
+
+      c_MSSMD_Cut13_12->cd(); h_MSSMD_Cut13_12->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut13_12->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut13_12->SetStats(0); h_MSSMD_Cut13_12->Draw("COLZ TEXT"); h_MSSMD_Cut13_12->SetMinimum(0); h_MSSMD_Cut13_12->SetMaximum(1); c_MSSMD_Cut13_12->Write();
+      c_MSSMD_Cut14_13->cd(); h_MSSMD_Cut14_13->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut14_13->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut14_13->SetStats(0); h_MSSMD_Cut14_13->Draw("COLZ TEXT"); h_MSSMD_Cut14_13->SetMinimum(0); h_MSSMD_Cut14_13->SetMaximum(1); c_MSSMD_Cut14_13->Write();
+      c_MSSMD_Cut15_14->cd(); h_MSSMD_Cut15_14->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut15_14->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut15_14->SetStats(0); h_MSSMD_Cut15_14->Draw("COLZ TEXT"); h_MSSMD_Cut15_14->SetMinimum(0); h_MSSMD_Cut15_14->SetMaximum(1); c_MSSMD_Cut15_14->Write();
+      c_MSSMD_Cut16_15->cd(); h_MSSMD_Cut16_15->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut16_15->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut16_15->SetStats(0); h_MSSMD_Cut16_15->Draw("COLZ TEXT"); h_MSSMD_Cut16_15->SetMinimum(0); h_MSSMD_Cut16_15->SetMaximum(1); c_MSSMD_Cut16_15->Write();
+      c_MSSMD_Cut17_16->cd(); h_MSSMD_Cut17_16->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut17_16->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut17_16->SetStats(0); h_MSSMD_Cut17_16->Draw("COLZ TEXT"); h_MSSMD_Cut17_16->SetMinimum(0); h_MSSMD_Cut17_16->SetMaximum(1); c_MSSMD_Cut17_16->Write();
+
     }//if MSSMD sample exists
 
   }//end at least one sample

@@ -9,7 +9,9 @@ By issuing the command above, one is able to produce Ntuples for various analysi
 
 MiniAODSIM samples are moved to TAMU Terra cluster, to get a list of all files in a sample:
 `ls -d "$PWD"/* > text.txt`
-These are stored at `MuJetAnalysis/DataFormats/scripts/patifyMC_13TeV/*Samples` for 2017 and 2018.
+These are stored at `MuJetAnalysis/DataFormats/scripts/patifyMC_13TeV/*SamplesTerra` for 2017 and 2018.
+To get all end subdirectories:
+`find . -type d -links 2`
 
 ## Cut-and-count
 A simple macro is available for quick cut-and-count based on the Ntuples: `CutFlowAnalyzer/scripts/cutflow_macros/foo_modified.C`. More details on page.

@@ -32,7 +32,6 @@ process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
         #'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_58_cT_0p1_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/00000/00D463FA-CE35-EA11-89D1-E0DB55FDAC6E.root',
-        'root://cmsxrootd.fnal.gov//store/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_10_cT_5_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/130000/BA79B464-7F5B-EA11-8332-001E67A42026.root'
         )
 )
 
