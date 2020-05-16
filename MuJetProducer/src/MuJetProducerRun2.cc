@@ -254,10 +254,12 @@ MuJetProducerRun2::~MuJetProducerRun2()
 //
 
 bool MuJetProducerRun2::muonOkay(const pat::Muon &muon) {
-  if (muon.pt() < m_minPt ||  fabs(muon.eta()) > m_maxAbsEta) return false;
+  if (muon.pt() < m_minPt || fabs(muon.eta()) > m_maxAbsEta) return false;
 
-  if ( !muon.isPFMuon() ) return false;
-  if ( (!muon.isTrackerMuon()) && (!muon.isGlobalMuon()) ) return false;
+  //this should be consistent with PassMuonId in main analysis code: CutFlowAnalyzer_MiniAOD,
+  //allow ONLY one of four muons can be a standalone muon, here it's pairing two muons, so can't enforce ONLY one of four be SA muon
+  //Just relax it allow SA muon in the pairing
+  if ( !muon.isStandAloneMuon() && ( !muon.isPFMuon() || ( (!muon.isTrackerMuon()) && (!muon.isGlobalMuon()) ) ) ) return false;
 
   if (m_minTrackerHits > 0) {
     if (muon.innerTrack().isNull()) return false;

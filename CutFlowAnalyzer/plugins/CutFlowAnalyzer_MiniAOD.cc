@@ -439,6 +439,7 @@ private:
 
   // Reco branches in ROOT tree
   Int_t b_nRecoMu;
+  Int_t b_nSAMu;
   Int_t b_nMuPairs;
   Int_t b_nMuJets;
   Int_t b_nOrphans;
@@ -485,6 +486,7 @@ private:
   Float_t b_diMuonC_FittedVtx_vy;
   Float_t b_diMuonC_FittedVtx_vz;
 
+  Int_t b_nMuHasValidHitInPixel;//# of muons in 2 signal dimu with valid hit in pixel
   Int_t b_diMuonC_m1_FittedVtx_hitpix_Phase1;
   Int_t b_diMuonC_m2_FittedVtx_hitpix_Phase1;
   Int_t b_diMuonF_m1_FittedVtx_hitpix_Phase1;
@@ -578,7 +580,6 @@ private:
 
   Float_t m_orphan_dimu_mass;
   Float_t m_orphan_dimu_z;
-  Float_t m_orphan_z;
   Float_t m_orphan_dimu_isoTk;
   Float_t m_orphan_dimu_Mu0_isoTk0p3;
   Float_t m_orphan_dimu_Mu0_isoTk0p4;
@@ -735,7 +736,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   // Count number of analyzed events
   m_events++;
   if ( !(m_events%1000) ) std::cout << "Event " << m_events << std::endl;
-  if(m_debug > 10) std::cout << "m_barrelPixelLayer: " << m_barrelPixelLayer << std::endl;
 
   // Event info
   b_run   = iEvent.id().run();
@@ -800,7 +800,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   if (m_fillGenLevel){
 
-    if ( m_debug > 10 ) std::cout << m_events << " Start GEN Level" << std::endl;
+    if ( m_debug > 0 ) std::cout << m_events << " Start GEN Level" << std::endl;
 
     edm::Handle<reco::GenParticleCollection> genParticles;
     iEvent.getByToken(m_genParticles, genParticles);
@@ -1331,7 +1331,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_has1GenMu16Mu6Mu6 = true;
     }
 
-    if ( m_debug > 10 ) std::cout << m_events << " GEN Level Done " << std::endl;
+    if ( m_debug > 0 ) std::cout << m_events << " GEN Level Done " << std::endl;
   }
 
   //****************************************************************************
@@ -1342,20 +1342,54 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //                          RECO LEVEL ANALYSIS START
   //****************************************************************************
 
-  if ( m_debug > 10 ) std::cout << m_events << " Start RECO Level" << std::endl;
+  if ( m_debug > 0 ) std::cout << m_events << " Start RECO Level" << std::endl;
 
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
   std::vector<const pat::Muon*> selMuons;
 
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
-    if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
+    //START DEBUG@Wei May5, 2020
+    //FYI: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L275
+    //if ( (b_run == 1 && b_lumi == 177 && b_event == 17673) || (b_run == 1 && b_lumi == 441 && b_event == 44056) || (b_run == 1 && b_lumi == 444 && b_event == 44314) ){
+    //if ( (b_run == 1 && b_lumi == 246 && b_event == 24533) || (b_run == 1 && b_lumi == 305 && b_event == 30409) || (b_run == 1 && b_lumi == 306 && b_event == 30555) || (b_run == 1 && b_lumi == 373 && b_event == 37287) ){
+    /*if ( (b_run == 1 && b_lumi == 1 && b_event == 247) || (b_run == 1 && b_lumi == 1 && b_event == 364) ){
+      std::cout << ">>> run: " << b_run << ", lumi: " << b_lumi << ", event: " << b_event << std::endl;
+      std::cout << "Mu pT: " << iMuon->pt() << "; eta: " << iMuon->eta() << "; phi: " << iMuon->phi() <<std::endl;
+      std::cout << "   isLooseMuon: " << iMuon->isLooseMuon() << "; isMediumMuon: " << iMuon->isMediumMuon() << "; isTrackerMuon: " << iMuon->isTrackerMuon() << "; isGlobalMuon: " << iMuon->isGlobalMuon() << "; isPFMuon:" << iMuon->isPFMuon() << "; isStandAloneMuon: "<< iMuon->isStandAloneMuon() <<std::endl;
+      if ( iMuon->innerTrack().isAvailable() ){
+        std::cout << "   innerTrack available, dxy: " << iMuon->innerTrack()->dxy(beamSpot->position()) << ", dz: " << iMuon->innerTrack()->dz(beamSpot->position()) << std::endl;
+        const reco::HitPattern& ipa = iMuon->innerTrack()->hitPattern();
+        std::cout << "   Valid hits in PIX: " << ipa.numberOfValidPixelHits() << "; BPIX: " << ipa.numberOfValidPixelBarrelHits() << "; FPIX: " << ipa.numberOfValidPixelEndcapHits() << std::endl;
+        std::cout << "                           B1: " << ipa.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 1) << ";   F1: " << ipa.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 1) << std::endl;
+        std::cout << "                           B2: " << ipa.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) << ";   F1: " << ipa.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) << std::endl;
+        std::cout << "                           B3: " << ipa.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) << ";   F1: " << ipa.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) << std::endl;
+        std::cout << "                           B4: " << ipa.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) << std::endl;
+        std::cout << "               strip: " << ipa.numberOfValidStripHits() << "; tracker: " << ipa.numberOfValidTrackerHits() << std::endl;
+      }
+      if ( iMuon->outerTrack().isAvailable() ){
+        std::cout << "   outerTrack available, dxy: " << iMuon->outerTrack()->dxy(beamSpot->position()) << ", dz: " << iMuon->outerTrack()->dz(beamSpot->position()) << std::endl;
+        const reco::HitPattern& ipa = iMuon->outerTrack()->hitPattern();
+        std::cout << "   Valid hits in muon: " << ipa.numberOfValidMuonHits() << "; DT: " << ipa.numberOfValidMuonDTHits() << "; CSC: " << ipa.numberOfValidMuonCSCHits() << "; RPC: " << ipa.numberOfValidMuonRPCHits() << std::endl;
+      }
+      if ( iMuon->globalTrack().isAvailable() ){
+        std::cout << "   globalTrack available, dxy: " << iMuon->globalTrack()->dxy(beamSpot->position()) << ", dz: " << iMuon->globalTrack()->dz(beamSpot->position()) << std::endl;
+      }
+      if ( iMuon->muonBestTrack().isAvailable() ){
+        std::cout << "   bestTrack available, dxy: " << iMuon->muonBestTrack()->dxy(beamSpot->position()) << ", dz: " << iMuon->muonBestTrack()->dz(beamSpot->position()) << std::endl;
+      }
+    }*/
+    //End DEBUG@Wei May5, 2020
+    //@Wei May12, 2020: Update muon ID requirement for run2 analysis: push back PF loose muons or standalone muons,
+    //allow standalone muon to gain lost efficiency in the displaced muon reconstruction inside tracker (innerTrack)
+    //At dimu selection later, require LESS THAN TWO (<=1) standalone muon among four muons from 2 dimu
+    if ( tamu::helpers::PassMuonId( &(*iMuon) ) ) {
       selMuons.push_back( &(*iMuon) );
     }
   }
 
   // Sort selMuons by pT (leading pT first)
-  if ( selMuons.size() > 1 ) std::sort( selMuons.begin(), selMuons.end(), tamu::helpers::PtOrderPFMu );
+  if ( selMuons.size() > 1 ) std::sort( selMuons.begin(), selMuons.end(), tamu::helpers::PtOrderRecoMu );
   b_nRecoMu = selMuons.size();
 
   if ( selMuons.size() > 0 ) {
@@ -1413,11 +1447,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_pT  = selMuons[3]->pt();
     b_selMu3_eta = selMuons[3]->eta();
     b_selMu3_phi = selMuons[3]->phi();
-    //std::cout << "* Check selMuons pt order *"<< std::endl;
-    //std::cout << "selMuons[0] pT: " <<selMuons[0]->pt()<< std::endl;
-    //std::cout << "selMuons[1] pT: " <<selMuons[1]->pt()<< std::endl;
-    //std::cout << "selMuons[2] pT: " <<selMuons[2]->pt()<< std::endl;
-    //std::cout << "selMuons[3] pT: " <<selMuons[3]->pt()<< std::endl;
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1427,7 +1456,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_phi = -100.0;
   }
 
-  if ( m_debug > 10 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
+  if ( m_debug > 0 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
   std::vector<const pat::Muon*> selMuons17;
   std::vector<const pat::Muon*> selMuons8;
 
@@ -1461,8 +1490,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
   }
 
-  if ( m_debug > 10 ) std::cout <<"---------------------"<< std::endl;
-  if ( m_debug > 10 ) std::cout <<"Event #"<< m_events << ": build RECO muon pairs" << std::endl;
+  if ( m_debug > 0 ) std::cout <<"---------------------"<< std::endl;
+  if ( m_debug > 0 ) std::cout <<"Event #"<< m_events << ": build RECO muon pairs" << std::endl;
 
   //Check all formed mu pairs in each event
   edm::Handle<pat::MultiMuonCollection> muPairs;
@@ -1470,7 +1499,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_nMuPairs = muPairs->size();
   b_nDaughterPerMuPair = -999.;
 
-  if ( m_debug > 10 ) std::cout << ">>> Tot No. of Mu pairs: " << b_nMuPairs << std::endl;
+  if ( m_debug > 0 ) std::cout << ">>> Tot No. of Mu pairs: " << b_nMuPairs << std::endl;
   if ( b_nMuPairs!=0 ){
     b_nDaughterPerMuPair = 0.;
     for ( int i = 0; i < b_nMuPairs; i++ ) {
@@ -1480,7 +1509,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       if ( m_debug > 10 ) std::cout << "Mu pair #" << i+1 <<" mass: "<< (*muPairs)[i].mass() <<"; No. of Daughters: "<< (*muPairs)[i].numberOfDaughters() << std::endl;
     }
     b_nDaughterPerMuPair = b_nDaughterPerMuPair / b_nMuPairs;
-    if ( m_debug > 10 ) std::cout << "Avg. No. of Daughter per Mu pair: " << b_nDaughterPerMuPair << std::endl;
+    if ( m_debug > 0 ) std::cout << "Avg. No. of Daughter per Mu pair: " << b_nDaughterPerMuPair << std::endl;
   }
 
   edm::Handle<pat::MultiMuonCollection> muJets;
@@ -1493,7 +1522,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   int nMuJetsContainMu17 = 0;
   b_is2MuJets = false;
 
-  if ( m_debug > 10 ) std::cout << ">>> Tot No. of Mu Jets: " << b_nMuJets << std::endl;
+  if ( m_debug > 0 ) std::cout << ">>> Tot No. of Mu Jets: " << b_nMuJets << std::endl;
 
   //Store average no. of daughters in one mujet
   if ( b_nMuJets!=0 ) {
@@ -1503,11 +1532,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       if ( m_debug > 10 ) std::cout << "Mu Jet #" << d+1 <<" mass: "<< (*muJets)[d].mass() << "; No. of Daughters: "<< (*muJets)[d].numberOfDaughters() << std::endl;
     }
     b_nDaughterPerMuJet = b_nDaughterPerMuJet / b_nMuJets;
-    if ( m_debug > 10 ) std::cout << "Avg. No. of Daughter per Mu Jet: " << b_nDaughterPerMuJet << std::endl;
+    if ( m_debug > 0 ) std::cout << "Avg. No. of Daughter per Mu Jet: " << b_nDaughterPerMuJet << std::endl;
   }
 
   if ( b_nMuJets == 2) {
-    if ( m_debug > 10 ) std::cout << "Exactly two mu jets !! PairOne mass: "<< (*muJets)[0].mass() << "; PairTwo mass: "<< (*muJets)[1].mass() << std::endl;
+    if ( m_debug > 0 ) std::cout << "Exactly two mu jets !! PairOne mass: "<< (*muJets)[0].mass() << "; PairTwo mass: "<< (*muJets)[1].mass() << std::endl;
     for ( int j = 0; j < b_nMuJets; j++ ) {
       bool isMuJetContainMu17 = false;
       for ( unsigned int m = 0; m < (*muJets)[j].numberOfDaughters(); m++ ) {
@@ -1535,21 +1564,32 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     if ( nMuJetsContainMu17 > 0 ) b_is2MuJets = true;
   }
 
-  if ( m_debug > 10 ) std::cout << m_events << " Check if exactly 2 muon jets are built" << std::endl;
+  if ( m_debug > 0 ) std::cout << m_events << " Check if exactly 2 muon jets are built" << std::endl;
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets) m_events2MuJets++;
 
   b_is2DiMuons = false;
+  b_nSAMu = 0;
   const pat::MultiMuon *diMuonC = NULL;
   const pat::MultiMuon *diMuonF = NULL;
   if ( muJetC != NULL && muJetF != NULL ) {
     if ( muJetC->numberOfDaughters() == 2 && muJetF->numberOfDaughters() == 2 ) {
-      diMuonC = muJetC;
-      diMuonF = muJetF;
-      b_is2DiMuons = true;
+
+      if( muJetC->muon(0)->isStandAloneMuon() && !( muJetC->muon(0)->isPFMuon() && ( muJetC->muon(0)->isTrackerMuon() || muJetC->muon(0)->isGlobalMuon() ) ) ) b_nSAMu++;
+      if( muJetC->muon(1)->isStandAloneMuon() && !( muJetC->muon(1)->isPFMuon() && ( muJetC->muon(1)->isTrackerMuon() || muJetC->muon(1)->isGlobalMuon() ) ) ) b_nSAMu++;
+      if( muJetF->muon(0)->isStandAloneMuon() && !( muJetF->muon(0)->isPFMuon() && ( muJetF->muon(0)->isTrackerMuon() || muJetF->muon(0)->isGlobalMuon() ) ) ) b_nSAMu++;
+      if( muJetF->muon(1)->isStandAloneMuon() && !( muJetF->muon(1)->isPFMuon() && ( muJetF->muon(1)->isTrackerMuon() || muJetF->muon(1)->isGlobalMuon() ) ) ) b_nSAMu++;
+      //std::cout << "b_nSAMu: " << b_nSAMu << std::endl;
+      //Require LESS THAN TWO (<=1) standalone muon among four muons from 2 dimu
+      //Other three needs to be PF loose
+      if( b_nSAMu <= 1 ){
+        diMuonC = muJetC;
+        diMuonF = muJetF;
+        b_is2DiMuons = true;
+      }
     }
   }
 
-  if ( m_debug > 10 ) std::cout << m_events << " Check if 2 muon jets are dimuons" << std::endl;
+  if ( m_debug > 0 ) std::cout << m_events << " Check if 2 muon jets are dimuons" << std::endl;
 
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets && b_is2DiMuons){
     m_events2DiMuons++;
@@ -1781,7 +1821,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuons_dz_FittedVtx = -1000.0;
   }
 
-  if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
+  if ( m_debug > 0 ) std::cout << m_events << " Apply cut on dZ" << std::endl;
 
   // HLT cut
   b_isSignalHLTFired = false;
@@ -1827,7 +1867,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
     }
   }//end for trig
-  if ( m_debug > 10 )  std::cout << m_events << " Apply cut on HLT" << std::endl;
+  if ( m_debug > 0 )  std::cout << m_events << " Apply cut on HLT" << std::endl;
 
   //get L1 decisions for signal HLT L1 seeds
   b_isSignalHLTL1Fired = false;
@@ -1897,7 +1937,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
   }
 
-  if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon mass" << std::endl;
+  if ( m_debug > 0 ) std::cout << m_events << " Apply cut on dimuon mass" << std::endl;
 
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(m_tracks, tracks);
@@ -2056,9 +2096,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   }//end dimuon has good fitted vertex
 
-  if ( m_debug > 10 ) std::cout << m_events << " Apply cut on dimuon isolation" << std::endl;
-
   //Register pixel hits info for two muons of each dimuon
+  b_nMuHasValidHitInPixel = 0;
   b_diMuonC_m1_FittedVtx_hitpix_Phase1 = -1000;
   b_diMuonC_m2_FittedVtx_hitpix_Phase1 = -1000;
   b_diMuonF_m1_FittedVtx_hitpix_Phase1 = -1000;
@@ -2096,8 +2135,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
             p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
             p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
-              if(k==0) b_diMuonC_m1_FittedVtx_hitpix_Phase1 = 1;
-              if(k==1) b_diMuonC_m2_FittedVtx_hitpix_Phase1 = 1;
+              if(k==0) {
+                b_diMuonC_m1_FittedVtx_hitpix_Phase1 = 1;
+                b_nMuHasValidHitInPixel++;
+              }
+              if(k==1) {
+                b_diMuonC_m2_FittedVtx_hitpix_Phase1 = 1;
+                b_nMuHasValidHitInPixel++;
+              }
         }
         //Refer to: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L294
         if ( p.numberOfValidPixelHits() > 0 ){
@@ -2125,8 +2170,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 2) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 2) ||
             p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 3) || p.hasValidHitInPixelLayer(PixelSubdetector::PixelEndcap, 3) ||
             p.hasValidHitInPixelLayer(PixelSubdetector::PixelBarrel, 4) ){
-              if(k==0) b_diMuonF_m1_FittedVtx_hitpix_Phase1 = 1;
-              if(k==1) b_diMuonF_m2_FittedVtx_hitpix_Phase1 = 1;
+              if(k==0) {
+                b_diMuonF_m1_FittedVtx_hitpix_Phase1 = 1;
+                b_nMuHasValidHitInPixel++;
+              }
+              if(k==1) {
+                b_diMuonF_m2_FittedVtx_hitpix_Phase1 = 1;
+                b_nMuHasValidHitInPixel++;
+              }
         }
         if ( p.numberOfValidPixelHits() > 0 ){
           if(k==0) b_diMuonF_m1_FittedVtx_ValidPixelHits = p.numberOfValidPixelHits();
@@ -2171,7 +2222,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   m_orphan_PtMu1   = -99.;
   m_orphan_EtaMu1  = -99.;
   m_orphan_isoTk = -999.;
-  m_orphan_z = -999.;
   m_orphan_dimu_z = -999.;
   m_dimuorphan_containstrig = 0;
   m_dimuorphan_containstrig2 = 0;
@@ -2229,7 +2279,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   }
 
   // Sort orphan muons by pT (leading pT first)
-  if ( orphans.size() > 1 ) std::sort( orphans.begin(), orphans.end(), tamu::helpers::PtOrderPFMu );
+  if ( orphans.size() > 1 ) std::sort( orphans.begin(), orphans.end(), tamu::helpers::PtOrderRecoMu );
   b_nOrphans = orphans.size();
 
   //===============================================================================
@@ -2248,8 +2298,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     m_orphan_EtaMu0  = muJet->muon(0)->eta();
     m_orphan_EtaMu1  = muJet->muon(1)->eta();
     m_orphan_dimu_mass = muJet->mass();
-    m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
-    m_orphan_z = orphans[0]->innerTrack()->dz(beamSpot->position());
+    if ( muJet->vertexValid() ) m_orphan_dimu_z = muJet->vertexDz(beamSpot->position());
 
     double triPt[3]  = {m_orphan_PtMu0, m_orphan_PtMu1, m_orphan_PtOrph};
     double triEta[3] = {fabs( m_orphan_EtaMu0 ), fabs( m_orphan_EtaMu1 ), fabs( m_orphan_EtaOrph)};
@@ -2264,12 +2313,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
     if( mu1788==1 ) m_orphan_passOffLineSelPtEta = true;
 
-    if ( muJet->muon(0)->isTrackerMuon() &&
-         muJet->muon(0)->innerTrack().isNonnull() &&
-         muJet->muon(1)->isTrackerMuon() &&
-         muJet->muon(1)->innerTrack().isNonnull() &&
-         orphans[0]->isTrackerMuon() &&
-         orphans[0]->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true;
+    if ( muJet->muon(0)->isTrackerMuon() && muJet->muon(0)->innerTrack().isNonnull() &&
+         muJet->muon(1)->isTrackerMuon() && muJet->muon(1)->innerTrack().isNonnull() &&
+         orphans[0]->isTrackerMuon() && orphans[0]->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true;
+
     if( m_orphan_passOffLineSelPtEta ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
 
     //Check whether orphan muon or dimu muons fired high pT leg
@@ -2356,7 +2403,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
                double dphiOrph = tamu::helpers::My_dPhi( candOrphan->pseudoTrack().phi(), track->phi() );
                double detaOrph = candOrphan->pseudoTrack().eta() - track->eta();
                double dROrph = sqrt(pow(dphiOrph, 2) + pow(detaOrph, 2));
-               double dzOrph = m_orphan_z - track->dz(beamSpot->position());
+               double dzOrph = candOrphan->pseudoTrack().dz(beamSpot->position()) - track->dz(beamSpot->position());
                if ( dROrph       < iso_track_dR_threshold &&
                     track->pt()  > iso_track_pt_threshold &&
                     fabs(dzOrph) < iso_track_dz_threshold) m_orphan_isoTk += track->pt();
@@ -2470,7 +2517,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
   }
 
-  if ( m_debug > 10 ) std::cout << m_events << " Stop RECO Level" << std::endl;
+  if ( m_debug > 0 ) std::cout << m_events << " Stop RECO Level" << std::endl;
   //****************************************************************************
   //                          RECO LEVEL ANALYSIS FINISH
   //****************************************************************************
@@ -2678,9 +2725,10 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   //                          RECO LEVEL BRANCHES
   //****************************************************************************
   m_ttree->Branch("nRecoMu",  &b_nRecoMu,  "nRecoMu/I");
-  m_ttree->Branch("nMuPairs",  &b_nMuPairs,  "nMuPairs/I");
-  m_ttree->Branch("nDaughterPerMuPair",  &b_nDaughterPerMuPair,  "nDaughterPerMuPair/F");
-  m_ttree->Branch("nMuJets",  &b_nMuJets,  "nMuJets/I");
+  m_ttree->Branch("nSAMu",    &b_nSAMu,    "nSAMu/I");
+  m_ttree->Branch("nMuPairs", &b_nMuPairs, "nMuPairs/I");
+  m_ttree->Branch("nDaughterPerMuPair", &b_nDaughterPerMuPair, "nDaughterPerMuPair/F");
+  m_ttree->Branch("nMuJets",   &b_nMuJets,   "nMuJets/I");
   m_ttree->Branch("nOrphans",  &b_nOrphans,  "nOrphans/I");
   m_ttree->Branch("nDaughterPerMuJet",  &b_nDaughterPerMuJet,  "nDaughterPerMuJet/F");
 
@@ -2756,8 +2804,9 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("diMuonFMu1_IsoTk0p4_FittedVtx", &b_diMuonFMu1_IsoTk0p4_FittedVtx, "diMuonFMu1_IsoTk0p4_FittedVtx/F");
   m_ttree->Branch("diMuonFMu1_IsoTk0p5_FittedVtx", &b_diMuonFMu1_IsoTk0p5_FittedVtx, "diMuonFMu1_IsoTk0p5_FittedVtx/F");
 
-  m_ttree->Branch("diMuons_dz_FittedVtx", &b_diMuons_dz_FittedVtx, "diMuons_dz_FittedVtx/F");
+  m_ttree->Branch("diMuons_dz_FittedVtx",  &b_diMuons_dz_FittedVtx,  "diMuons_dz_FittedVtx/F");
 
+  m_ttree->Branch("nMuHasValidHitInPixel", &b_nMuHasValidHitInPixel, "nMuHasValidHitInPixel/I");
   m_ttree->Branch("diMuonC_m1_FittedVtx_hitpix_Phase1", &b_diMuonC_m1_FittedVtx_hitpix_Phase1, "diMuonC_m1_FittedVtx_hitpix_Phase1/I");
   m_ttree->Branch("diMuonC_m2_FittedVtx_hitpix_Phase1", &b_diMuonC_m2_FittedVtx_hitpix_Phase1, "diMuonC_m2_FittedVtx_hitpix_Phase1/I");
   m_ttree->Branch("diMuonF_m1_FittedVtx_hitpix_Phase1", &b_diMuonF_m1_FittedVtx_hitpix_Phase1, "diMuonF_m1_FittedVtx_hitpix_Phase1/I");
@@ -2872,7 +2921,6 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree_orphan->Branch("orph_dimu_Mu0_pixelLayersWithMeasurement", &m_orphan_dimu_Mu0_pixelLayersWithMeasurement, "orph_dimu_Mu0_pixelLayersWithMeasurement/I");
   m_ttree_orphan->Branch("orph_dimu_Mu1_pixelLayersWithMeasurement", &m_orphan_dimu_Mu1_pixelLayersWithMeasurement, "orph_dimu_Mu1_pixelLayersWithMeasurement/I");
   m_ttree_orphan->Branch("orph_dimu_mass", &m_orphan_dimu_mass, "orph_dimu_mass/F");
-  m_ttree_orphan->Branch("orph_z",         &m_orphan_z,         "orph_z/F");
   m_ttree_orphan->Branch("orph_dimu_z",    &m_orphan_dimu_z,    "orph_dimu_z/F");
   m_ttree_orphan->Branch("orph_isoTk",               &m_orphan_isoTk,               "orph_isoTk/F");
   m_ttree_orphan->Branch("orph_dimu_isoTk",          &m_orphan_dimu_isoTk,          "orph_dimu_isoTk/F");
@@ -2904,34 +2952,7 @@ void
 CutFlowAnalyzer_MiniAOD::endJob()
 {
   using namespace std;
-
   cout << "END JOB" << endl;
-
-   cout << "Total number of events:          " << m_events << endl;
-  if (m_events==0) return;
-   cout << "Total number of events with 4mu: " << m_events4GenMu << " fraction: " <<  m_events4GenMu/m_events << endl;
-
-  if (m_fillGenLevel){
-     cout << "********** GEN **********" << endl;
-     cout << "Selection              " << "nEv"         << " \t RelEff"                                       << " \t Eff" << endl;
-     cout << "pT1>17 |eta1|<0.9:       " << m_events1GenMu17 << " \t" << (float)m_events1GenMu17/(float)m_events << " \t" << (float)m_events1GenMu17/(float)m_events << endl;
-     cout << "pT2>8  |eta2|<2.4:       " << m_events2GenMu8  << " \t" << (float)m_events2GenMu8/(float)m_events1GenMu17  << " \t" << (float)m_events2GenMu8/(float)m_events << endl;
-     cout << "pT3>8  |eta2|<2.4:       " << m_events3GenMu8  << " \t" << (float)m_events3GenMu8/(float)m_events2GenMu8   << " \t" << (float)m_events3GenMu8/(float)m_events << endl;
-     cout << "pT4>8  |eta2|<2.4:       " << m_events4GenMu8  << " \t" << (float)m_events4GenMu8/(float)m_events3GenMu8   << " \t" << (float)m_events4GenMu8/(float)m_events << endl;
-     cout << "Basic MC Acceptance:     " << (float)m_events4GenMu8/(float)m_events << endl;
-  }
-   cout << "********** RECO **********" << endl;
-   cout << "Selection                " << "nEv"                   << " \t RelEff"                                                         << " \t Eff" << endl;
-   cout << "m_events1SelMu17:        " << m_events1SelMu17        << " \t" << (float)m_events1SelMu17/(float)m_events                << " \t" << (float)m_events1SelMu17/(float)m_events        << endl;
-   cout << "m_events2SelMu8:         " << m_events2SelMu8         << " \t" << (float)m_events2SelMu8/(float)m_events1SelMu17              << " \t" << (float)m_events2SelMu8/(float)m_events         << endl;
-   cout << "m_events3SelMu8:         " << m_events3SelMu8         << " \t" << (float)m_events3SelMu8/(float)m_events2SelMu8               << " \t" << (float)m_events3SelMu8/(float)m_events         << endl;
-   cout << "m_events4SelMu8:         " << m_events4SelMu8         << " \t" << (float)m_events4SelMu8/(float)m_events3SelMu8               << " \t" << (float)m_events4SelMu8/(float)m_events         << endl;
-
-   cout << "Basic Acceptance:        " << (float)m_events4SelMu8/(float)m_events << endl;
-  if (m_fillGenLevel)  cout << "Basic MC Accept. a_gen:  " << (float)m_events4GenMu8/(float)m_events << endl;
-
-   cout << "m_events2MuJets:         " << m_events2MuJets         << " \t" << (float)m_events2MuJets/(float)m_events4SelMu8               << " \t" << (float)m_events2MuJets/(float)m_events         << endl;
-   cout << "m_events2DiMuons:        " << m_events2DiMuons        << " \t" << (float)m_events2DiMuons/(float)m_events2MuJets              << " \t" << (float)m_events2DiMuons/(float)m_events        << endl;
 }
 
 void CutFlowAnalyzer_MiniAOD::FillTrigInfo( TH1F * h1, const edm::TriggerNames& triggerNames, std::map<int,std::string> nameAndNumb )

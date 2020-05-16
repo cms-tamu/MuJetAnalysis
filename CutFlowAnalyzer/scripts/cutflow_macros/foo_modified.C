@@ -117,6 +117,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t genA0Mu1_pt;
   Float_t genA1Mu0_pt;
   Float_t genA1Mu1_pt;
+  Float_t genA0Mu_dR;
+  Float_t genA1Mu_dR;
 
   Bool_t  is1SelMu17;
   Bool_t  is2SelMu8;
@@ -176,6 +178,21 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  diMuonC_m2_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m1_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m2_FittedVtx_hitpix_Phase1;
+/*
+  Int_t diMuonC_m1_FittedVtx_ValidPixelHits;
+  Int_t diMuonC_m2_FittedVtx_ValidPixelHits;
+  Int_t diMuonF_m1_FittedVtx_ValidPixelHits;
+  Int_t diMuonF_m2_FittedVtx_ValidPixelHits;
+
+  Int_t diMuonC_m1_FittedVtx_ValidPixelBarrelHits;
+  Int_t diMuonC_m2_FittedVtx_ValidPixelBarrelHits;
+  Int_t diMuonF_m1_FittedVtx_ValidPixelBarrelHits;
+  Int_t diMuonF_m2_FittedVtx_ValidPixelBarrelHits;
+
+  Int_t diMuonC_m1_FittedVtx_ValidPixelEndcapHits;
+  Int_t diMuonC_m2_FittedVtx_ValidPixelEndcapHits;
+  Int_t diMuonF_m1_FittedVtx_ValidPixelEndcapHits;
+  Int_t diMuonF_m2_FittedVtx_ValidPixelEndcapHits;*/
 
   Float_t diMuonC_FittedVtx_Lxy;
   Float_t diMuonC_FittedVtx_L;
@@ -374,6 +391,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* Lz_DimuF_SR_HighMass  = new TH1F("Lz_DimuF_SR_HighMass",  "", 600, 0., 60.);
 
   TH1F *DimuMass = new TH1F("DimuMass", "", 6000, 0., 60.);//binning 0.01 GeV
+  TH1F *DimuCMassAfterCut12 = new TH1F("DimuCMassAfterCut12", "Di-#mu #1 Mass after Cut 12", 3000, 0., 60.);//binning 0.02 GeV
+  TH1F *DimuFMassAfterCut12 = new TH1F("DimuFMassAfterCut12", "Di-#mu #2 Mass after Cut 12", 3000, 0., 60.);
+  TH1F *DimuCMassAfterCut16 = new TH1F("DimuCMassAfterCut16", "Di-#mu #1 Mass after Cut 16", 3000, 0., 60.);
+  TH1F *DimuFMassAfterCut16 = new TH1F("DimuFMassAfterCut16", "Di-#mu #2 Mass after Cut 16", 3000, 0., 60.);
 
   TH1F *RECO4muMass                 = new TH1F("RECO4muMass",                 "", 180, 0., 180.);//binning 1 GeV
   TH1F *RECOrePaired2muLeadingMass  = new TH1F("RECOrePaired2muLeadingMass",  "", 180, 0., 180.);
@@ -442,6 +463,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("genA1Mu0_pt",   &genA1Mu0_pt);
   t->SetBranchAddress("genA1Mu1_pt",   &genA1Mu1_pt);
 
+  t->SetBranchAddress("genA0Mu_dR",    &genA0Mu_dR);
+  t->SetBranchAddress("genA1Mu_dR",    &genA1Mu_dR);
+
 	t->SetBranchAddress("is1SelMu17",    &is1SelMu17);
 	t->SetBranchAddress("is2SelMu8",     &is2SelMu8);
 	t->SetBranchAddress("is3SelMu8",     &is3SelMu8);
@@ -479,6 +503,21 @@ void efficiency(const std::vector<std::string>& dirNames)
 	t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1", &diMuonC_m2_FittedVtx_hitpix_Phase1);
 	t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1", &diMuonF_m1_FittedVtx_hitpix_Phase1);
 	t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1", &diMuonF_m2_FittedVtx_hitpix_Phase1);
+/*
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelHits", &diMuonC_m1_FittedVtx_ValidPixelHits);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelHits", &diMuonC_m2_FittedVtx_ValidPixelHits);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelHits", &diMuonF_m1_FittedVtx_ValidPixelHits);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelHits", &diMuonF_m2_FittedVtx_ValidPixelHits);
+
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelBarrelHits", &diMuonC_m1_FittedVtx_ValidPixelBarrelHits);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelBarrelHits", &diMuonC_m2_FittedVtx_ValidPixelBarrelHits);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelBarrelHits", &diMuonF_m1_FittedVtx_ValidPixelBarrelHits);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelBarrelHits", &diMuonF_m2_FittedVtx_ValidPixelBarrelHits);
+
+  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelEndcapHits", &diMuonC_m1_FittedVtx_ValidPixelEndcapHits);
+	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelEndcapHits", &diMuonC_m2_FittedVtx_ValidPixelEndcapHits);
+	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelEndcapHits", &diMuonF_m1_FittedVtx_ValidPixelEndcapHits);
+	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelEndcapHits", &diMuonF_m2_FittedVtx_ValidPixelEndcapHits);*/
   //For checking pixel Hit
   t->SetBranchAddress("diMuonC_FittedVtx_Lxy", &diMuonC_FittedVtx_Lxy);
 	t->SetBranchAddress("diMuonC_FittedVtx_L",   &diMuonC_FittedVtx_L);
@@ -524,6 +563,37 @@ void efficiency(const std::vector<std::string>& dirNames)
   o->SetBranchAddress("orph_isoTk",             &orph_isoTk);
 
 	nentries = t->GetEntries();
+  //For some basic test
+  int newcount = 0;
+  int newcountmu1st = 0;
+  int newcountmu2nd = 0;
+  int newcountmu3rd = 0;
+  int newcountmu4th = 0;
+  int newcountmu12   = 0;
+  int newcountmu123  = 0;
+  int newcountmu1234 = 0;
+
+
+  TH1F* GENMudR_A0 = new TH1F("GENMudR_A0", "", 80, 0, 8);//per 0.1
+  TH1F* GENMudR_A1 = new TH1F("GENMudR_A1", "", 80, 0, 8);
+
+  TH1F* GEN1stPt_pass_GEN = new TH1F("GEN1stPt_pass_GEN", "", 150, 0, 150);
+  TH1F* GEN2ndPt_pass_GEN = new TH1F("GEN2ndPt_pass_GEN", "", 150, 0, 150);
+  TH1F* GEN3rdPt_pass_GEN = new TH1F("GEN3rdPt_pass_GEN", "", 150, 0, 150);
+  TH1F* GEN4thPt_pass_GEN = new TH1F("GEN4thPt_pass_GEN", "", 150, 0, 150);
+  TH1F* GENLeadingLxy_pass_GEN   = new TH1F("GENLeadingLxy_pass_GEN",   "",  40, 0., 20.); //per 0.5cm
+  TH1F* GENLeadingLz_pass_GEN    = new TH1F("GENLeadingLz_pass_GEN",    "", 120, 0., 60.); //per 0.5cm
+
+  TH1F* GEN1stPt_pass_1stRECOmu = new TH1F("GEN1stPt_pass_1stRECOmu", "", 150, 0, 150);
+  TH1F* GEN2ndPt_pass_2ndRECOmu = new TH1F("GEN2ndPt_pass_2ndRECOmu", "", 150, 0, 150);
+  TH1F* GEN3rdPt_pass_3rdRECOmu = new TH1F("GEN3rdPt_pass_3rdRECOmu", "", 150, 0, 150);
+  TH1F* GEN4thPt_pass_4thRECOmu = new TH1F("GEN4thPt_pass_4thRECOmu", "", 150, 0, 150);
+  TH1F* GEN1stPt_pass_RECOmu12   = new TH1F("GEN1stPt_pass_RECOmu12",   "", 150, 0, 150);
+  TH1F* GEN1stPt_pass_RECOmu123  = new TH1F("GEN1stPt_pass_RECOmu123",  "", 150, 0, 150);
+  TH1F* GEN1stPt_pass_RECOmu1234 = new TH1F("GEN1stPt_pass_RECOmu1234", "", 150, 0, 150);
+  TH1F* GENLeadingLxy_pass_RECOmu1234 = new TH1F("GENLeadingLxy_pass_RECOmu1234",   "",  40, 0., 20.);
+  TH1F* GENLeadingLz_pass_RECOmu1234  = new TH1F("GENLeadingLz_pass_RECOmu1234",    "", 120, 0., 60.);
+
   if( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
 
   if( CutFlowTable ){
@@ -532,6 +602,90 @@ void efficiency(const std::vector<std::string>& dirNames)
       if ( verbose && (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
       counter[k][0]++;
       counterGENMatch[k][0]++;
+
+      //std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
+      //std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
+      //std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
+      //Some basic efficiency tests on muon selections
+      if (genMu0_pT > 8 && fabs(genMu0_eta) < 2.4 &&
+          genMu1_pT > 8 && fabs(genMu1_eta) < 2.4 &&
+          genMu2_pT > 8 && fabs(genMu2_eta) < 2.4 &&
+          genMu3_pT > 8 && fabs(genMu3_eta) < 2.4 && ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ){
+            newcount++;
+
+            GEN1stPt_pass_GEN->Fill(genMu0_pT);
+            GEN2ndPt_pass_GEN->Fill(genMu1_pT);
+            GEN3rdPt_pass_GEN->Fill(genMu2_pT);
+            GEN4thPt_pass_GEN->Fill(genMu3_pT);
+
+            GENMudR_A0->Fill(genA0Mu_dR);
+            GENMudR_A1->Fill(genA1Mu_dR);
+
+            if(genA0_Lxy>genA1_Lxy){
+              GENLeadingLxy_pass_GEN->Fill(genA0_Lxy);
+            }
+            else{
+              GENLeadingLxy_pass_GEN->Fill(genA1_Lxy);
+            }
+
+            if(fabs(genA0_Lz)>fabs(genA1_Lz)){
+              GENLeadingLz_pass_GEN->Fill(fabs(genA0_Lz));
+            }
+            else{
+              GENLeadingLz_pass_GEN->Fill(fabs(genA1_Lz));
+            }
+
+            //selections
+            if(selMu0_pT > 8 && fabs(selMu0_eta) < 2.4){
+               newcountmu1st++;
+               GEN1stPt_pass_1stRECOmu->Fill(genMu0_pT);
+            }
+
+            if(selMu1_pT > 8 && fabs(selMu1_eta) < 2.4){
+               newcountmu2nd++;
+               GEN2ndPt_pass_2ndRECOmu->Fill(genMu1_pT);
+            }
+
+            if(selMu2_pT > 8 && fabs(selMu2_eta) < 2.4){
+               newcountmu3rd++;
+               GEN3rdPt_pass_3rdRECOmu->Fill(genMu2_pT);
+            }
+
+            if(selMu3_pT > 8 && fabs(selMu3_eta) < 2.4){
+               newcountmu4th++;
+               GEN4thPt_pass_4thRECOmu->Fill(genMu3_pT);
+            }
+
+            if(selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4){
+               newcountmu12++;
+               GEN1stPt_pass_RECOmu12->Fill(genMu0_pT);
+            }
+
+            if(selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 && selMu2_pT > 8 && fabs(selMu2_eta) < 2.4){
+               newcountmu123++;
+               GEN1stPt_pass_RECOmu123->Fill(genMu0_pT);
+            }
+
+            if(selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 && selMu2_pT > 8 && fabs(selMu2_eta) < 2.4 && selMu3_pT > 8 && fabs(selMu3_eta) < 2.4){
+               newcountmu1234++;
+               GEN1stPt_pass_RECOmu1234->Fill(genMu0_pT);
+
+               if(genA0_Lxy>genA1_Lxy){
+                 GENLeadingLxy_pass_RECOmu1234->Fill(genA0_Lxy);
+               }
+               else{
+                 GENLeadingLxy_pass_RECOmu1234->Fill(genA1_Lxy);
+               }
+
+               if(fabs(genA0_Lz)>fabs(genA1_Lz)){
+                 GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA0_Lz));
+               }
+               else{
+                 GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA1_Lz));
+               }
+            }
+
+      }//basic gen selections
 
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ GEN Level       !
@@ -594,15 +748,20 @@ void efficiency(const std::vector<std::string>& dirNames)
             Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
             Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
 
-            if( is1SelMu17 ) counterGENMatch[k][6]++;
-            if( is2SelMu8  ) counterGENMatch[k][7]++;
-            if( is3SelMu8  ) counterGENMatch[k][8]++;
+            if( is1SelMu17 ) { counterGENMatch[k][6]++; }
+            if( is2SelMu8  ) { counterGENMatch[k][7]++; }
+            if( is3SelMu8  ) {
+              counterGENMatch[k][8]++;
+
+              /*if(selMu3_pT >= 2 && selMu3_pT <= 3 && fabs(selMu3_eta) > 1.5 && genMu3_pT > 8 && fabs(genMu3_eta) < 0.9){
+                std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
+                std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
+                std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
+              }*/
+
+            }
             if( is4SelMu8  ){
               counterGENMatch[k][9]++;
-
-              //std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
-              //std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
-              //std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
 
               //###########################################################
               // Check trigger efficiency after basic offline pT selections
@@ -630,12 +789,17 @@ void efficiency(const std::vector<std::string>& dirNames)
               if( isVtxOK ){
                 counterGENMatch[k][10]++;
 
-                if( is2DiMuons ){
+                if( is2DiMuons ){//This selector also contains <=1 SA muon requirement for run2
                   counterGENMatch[k][11]++;
 
                   if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
                     //!!! Note: this needs to match GEN cut on geometry
                     counterGENMatch[k][12]++;
+
+                    if( ModelSRWidth ) {
+                      DimuCMassAfterCut12->Fill(massC);
+                      DimuFMassAfterCut12->Fill(massF);
+                    }
 
                     //Note: this needs to be before the cut on dz
                     if( PlotdZ ) {
@@ -732,10 +896,21 @@ void efficiency(const std::vector<std::string>& dirNames)
 
                           }//end if PerEventTriggerEff
 
+                          //std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
+                          //std::cout << ">>> Tot. # of valid pix hits 1st dimu mu0: " << diMuonC_m1_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonC_m1_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonC_m1_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonC_m1_FittedVtx_hitpix_Phase1 << "; pT: " << muJetC_Mu0_pt << std::endl;
+                          //std::cout << "                             1st dimu mu1: " << diMuonC_m2_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonC_m2_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonC_m2_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonC_m2_FittedVtx_hitpix_Phase1 << "; pT: " << muJetC_Mu1_pt << std::endl;
+                          //std::cout << "                             2nd dimu mu0: " << diMuonF_m1_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonF_m1_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonF_m1_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonF_m1_FittedVtx_hitpix_Phase1 << "; pT: " << muJetF_Mu0_pt << std::endl;
+                          //std::cout << "                             2nd dimu mu1: " << diMuonF_m2_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonF_m2_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonF_m2_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonF_m2_FittedVtx_hitpix_Phase1 << "; pT: " << muJetF_Mu1_pt << std::endl;
+
                           if( isSignalHLTFired ) {
                             counterGENMatch[k][16]++;
+                            //std::cout << "    HLT Fired!" << std::endl;
 
-                            if( ModelSRWidth ) { DimuMass->Fill( (massC+massF)/2 ); }
+                            if( ModelSRWidth ) {
+                              DimuMass->Fill( (massC+massF)/2 );
+                              DimuCMassAfterCut16->Fill(massC);
+                              DimuFMassAfterCut16->Fill(massF);
+                            }
 
                             if( is2DiMuonsMassOK ) {
                               counterGENMatch[k][17]++;
@@ -771,7 +946,7 @@ void efficiency(const std::vector<std::string>& dirNames)
         if( isVtxOK ){
           counter[k][10]++;
 
-          if( is2DiMuons ){
+          if( is2DiMuons ){//This selector also contains <=1 SA muon requirement for run2
             counter[k][11]++;
 
             if( ModelBKGShape ) {
@@ -862,6 +1037,15 @@ void efficiency(const std::vector<std::string>& dirNames)
 
     }//end for i entries
   }//end if( CutFlowTable )
+
+  std::cout << "GEN-8-8-8-8@PIX: " << newcount << std::endl;
+  std::cout << "RECO1stMu8: "      << newcountmu1st << std::endl;
+  std::cout << "RECO2ndMu8: "      << newcountmu2nd << std::endl;
+  std::cout << "RECO3rdMu8: "      << newcountmu3rd << std::endl;
+  std::cout << "RECO4thMu8: "      << newcountmu4th << std::endl;
+  std::cout << "RECO1+2Mu8: "      << newcountmu12  << std::endl;
+  std::cout << "RECO1+2+3Mu8: "    << newcountmu123 << std::endl;
+  std::cout << "RECO1+2+3+4Mu8: "  << newcountmu1234 << std::endl;
 
   //Loop over orphan-dimuon tree
   mentries = o->GetEntries();
@@ -964,6 +1148,9 @@ void efficiency(const std::vector<std::string>& dirNames)
     Lz_DimuF_CR_HighMass->GetXaxis()->SetTitle("Lz [cm]");   Lz_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");  Lz_DimuF_CR_HighMass->Write();
   }//end CheckDisplacement
 
+  GENMudR_A0->GetXaxis()->SetTitle("#DeltaR of muons from leading pT GEN boson"); GENMudR_A0->GetYaxis()->SetTitle("Events/0.1"); GENMudR_A0->Write();
+  GENMudR_A1->GetXaxis()->SetTitle("#DeltaR of muons from sub-leading pT GEN boson"); GENMudR_A1->GetYaxis()->SetTitle("Events/0.1"); GENMudR_A1->Write();
+
   Lxy->cd();
   Phase1Pix_GEN_A0_Lxy->SetLineColor(2); Phase1Pix_GEN_A0_Lxy->SetLineStyle(1); Phase1Pix_GEN_A0_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A0_Lxy->GetYaxis()->SetTitle("Events/0.5 cm"); Phase1Pix_GEN_A0_Lxy->Draw();
   Phase1Pix_GEN_A1_Lxy->SetLineColor(2); Phase1Pix_GEN_A1_Lxy->SetLineStyle(2); Phase1Pix_GEN_A1_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A1_Lxy->GetYaxis()->SetTitle("Events/0.5 cm"); Phase1Pix_GEN_A1_Lxy->Draw("SAME");
@@ -1029,6 +1216,57 @@ void efficiency(const std::vector<std::string>& dirNames)
   Phase1Pix_RECO_DimuF_Mu0_pT->SetLineColor(4); Phase1Pix_RECO_DimuF_Mu0_pT->SetLineStyle(1); Phase1Pix_RECO_DimuF_Mu0_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuF_Mu0_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuF_Mu0_pT->Draw("SAME");
   Phase1Pix_RECO_DimuF_Mu1_pT->SetLineColor(4); Phase1Pix_RECO_DimuF_Mu1_pT->SetLineStyle(2); Phase1Pix_RECO_DimuF_Mu1_pT->GetXaxis()->SetTitle("p_{T} [GeV]"); Phase1Pix_RECO_DimuF_Mu1_pT->GetYaxis()->SetTitle("Events/GeV"); Phase1Pix_RECO_DimuF_Mu1_pT->Draw("SAME");
   RECODimuMuPt->Write();
+
+  //some basic selections eff check
+  if( TEfficiency::CheckConsistency(*GEN1stPt_pass_1stRECOmu, *GEN1stPt_pass_GEN) ) {
+    TEfficiency* eff_GEN1stPt_pass_1stRECOmu = new TEfficiency(*GEN1stPt_pass_1stRECOmu, *GEN1stPt_pass_GEN);
+    eff_GEN1stPt_pass_1stRECOmu->SetTitle("Efficiency: 1st RECO mu pT > 8 GeV;p_{T, 1st GEN #mu} [GeV];#epsilon");
+    eff_GEN1stPt_pass_1stRECOmu->Write();
+  }
+  if( TEfficiency::CheckConsistency(*GEN2ndPt_pass_2ndRECOmu, *GEN2ndPt_pass_GEN) ) {
+    TEfficiency* eff_GEN2ndPt_pass_2ndRECOmu = new TEfficiency(*GEN2ndPt_pass_2ndRECOmu, *GEN2ndPt_pass_GEN);
+    eff_GEN2ndPt_pass_2ndRECOmu->SetTitle("Efficiency: 2nd RECO mu pT > 8 GeV;p_{T, 2nd GEN #mu} [GeV];#epsilon");
+    eff_GEN2ndPt_pass_2ndRECOmu->Write();
+  }
+  if( TEfficiency::CheckConsistency(*GEN3rdPt_pass_3rdRECOmu, *GEN3rdPt_pass_GEN) ) {
+    TEfficiency* eff_GEN3rdPt_pass_3rdRECOmu = new TEfficiency(*GEN3rdPt_pass_3rdRECOmu, *GEN3rdPt_pass_GEN);
+    eff_GEN3rdPt_pass_3rdRECOmu->SetTitle("Efficiency: 3rd RECO mu pT > 8 GeV;p_{T, 3rd GEN #mu} [GeV];#epsilon");
+    eff_GEN3rdPt_pass_3rdRECOmu->Write();
+  }
+  if( TEfficiency::CheckConsistency(*GEN4thPt_pass_4thRECOmu, *GEN4thPt_pass_GEN) ) {
+    TEfficiency* eff_GEN4thPt_pass_4thRECOmu = new TEfficiency(*GEN4thPt_pass_4thRECOmu, *GEN4thPt_pass_GEN);
+    eff_GEN4thPt_pass_4thRECOmu->SetTitle("Efficiency: 4th RECO mu pT > 8 GeV;p_{T, 4th GEN #mu} [GeV];#epsilon");
+    eff_GEN4thPt_pass_4thRECOmu->Write();
+  }
+
+  if( TEfficiency::CheckConsistency(*GEN1stPt_pass_RECOmu12, *GEN1stPt_pass_GEN) ) {
+    TEfficiency* eff_GEN1stPt_pass_RECOmu12 = new TEfficiency(*GEN1stPt_pass_RECOmu12, *GEN1stPt_pass_GEN);
+    eff_GEN1stPt_pass_RECOmu12->SetTitle("Efficiency: 1 & 2 RECO mu pT > 8 GeV;p_{T, 1st GEN #mu} [GeV];#epsilon");
+    eff_GEN1stPt_pass_RECOmu12->Write();
+  }
+  if( TEfficiency::CheckConsistency(*GEN1stPt_pass_RECOmu123, *GEN1stPt_pass_GEN) ) {
+    TEfficiency* eff_GEN1stPt_pass_RECOmu123 = new TEfficiency(*GEN1stPt_pass_RECOmu123, *GEN1stPt_pass_GEN);
+    eff_GEN1stPt_pass_RECOmu123->SetTitle("Efficiency: 1 & 2 & 3 RECO mu pT > 8 GeV;p_{T, 1st GEN #mu} [GeV];#epsilon");
+    eff_GEN1stPt_pass_RECOmu123->Write();
+  }
+  if( TEfficiency::CheckConsistency(*GEN1stPt_pass_RECOmu1234, *GEN1stPt_pass_GEN) ) {
+    TEfficiency* eff_GEN1stPt_pass_RECOmu1234 = new TEfficiency(*GEN1stPt_pass_RECOmu1234, *GEN1stPt_pass_GEN);
+    eff_GEN1stPt_pass_RECOmu1234->SetTitle("Efficiency: 1 & 2 & 3 & 4 RECO mu pT > 8 GeV;p_{T, 1st GEN #mu} [GeV];#epsilon");
+    eff_GEN1stPt_pass_RECOmu1234->Write();
+  }
+
+
+  if( TEfficiency::CheckConsistency(*GENLeadingLxy_pass_RECOmu1234, *GENLeadingLxy_pass_GEN) ) {
+    TEfficiency* eff_GENLeadingLxy_pass_RECOmu1234 = new TEfficiency(*GENLeadingLxy_pass_RECOmu1234, *GENLeadingLxy_pass_GEN);
+    eff_GENLeadingLxy_pass_RECOmu1234->SetTitle("Efficiency: 1 & 2 & 3 & 4 RECO mu pT > 8 GeV;GEN A leading L_{xy} [cm];#epsilon");
+    eff_GENLeadingLxy_pass_RECOmu1234->Write();
+  }
+
+  if( TEfficiency::CheckConsistency(*GENLeadingLz_pass_RECOmu1234, *GENLeadingLz_pass_GEN) ) {
+    TEfficiency* eff_GENLeadingLz_pass_RECOmu1234 = new TEfficiency(*GENLeadingLz_pass_RECOmu1234, *GENLeadingLz_pass_GEN);
+    eff_GENLeadingLz_pass_RECOmu1234->SetTitle("Efficiency: 1 & 2 & 3 & 4 RECO mu pT > 8 GeV;GEN A leading L_{z} [cm];#epsilon");
+    eff_GENLeadingLz_pass_RECOmu1234->Write();
+  }
 
   if ( PerEventTriggerEff ) {
     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "BASIC" offline pT selections
@@ -1277,20 +1515,29 @@ void efficiency(const std::vector<std::string>& dirNames)
     BKGShapeSRmassF->Write();
   } //end if ( ModelBKGShape )
 
-  if ( ModelSRWidth && DimuMass->Integral() > 0 ) {
-    DimuMass->SetLineColor(kBlue);
-    DimuMass->SetLineWidth(2);
-    DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
-    DimuMass->GetYaxis()->SetTitle("Events/0.01 GeV");
-    DimuMass->Fit("gaus","","",0,60);
-    FitMean = DimuMass->GetFunction("gaus")->GetParameter(1);//get 2nd parameter Mean
-    FitSigma = DimuMass->GetFunction("gaus")->GetParameter(2);//get 3rd parameter Sigma
-    DimuMass->GetFunction("gaus")->SetLineColor(kBlue);
-    DimuMass->GetFunction("gaus")->SetLineStyle(2);
-    gStyle->SetOptStat(0);
-    DimuMass->Write();
+  if ( ModelSRWidth ) {
 
-    cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
+    DimuCMassAfterCut12->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMassAfterCut12->GetYaxis()->SetTitle("Events/0.02 GeV"); DimuCMassAfterCut12->Write();
+    DimuFMassAfterCut12->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassAfterCut12->GetYaxis()->SetTitle("Events/0.02 GeV"); DimuFMassAfterCut12->Write();
+    DimuCMassAfterCut16->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMassAfterCut16->GetYaxis()->SetTitle("Events/0.02 GeV"); DimuCMassAfterCut16->Write();
+    DimuFMassAfterCut16->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassAfterCut16->GetYaxis()->SetTitle("Events/0.02 GeV"); DimuFMassAfterCut16->Write();
+
+    //This fits the width
+    if(DimuMass->Integral() > 0){
+      DimuMass->SetLineColor(kBlue);
+      DimuMass->SetLineWidth(2);
+      DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
+      DimuMass->GetYaxis()->SetTitle("Events/0.01 GeV");
+      DimuMass->Fit("gaus","","",0,60);
+      FitMean = DimuMass->GetFunction("gaus")->GetParameter(1);//get 2nd parameter Mean
+      FitSigma = DimuMass->GetFunction("gaus")->GetParameter(2);//get 3rd parameter Sigma
+      DimuMass->GetFunction("gaus")->SetLineColor(kBlue);
+      DimuMass->GetFunction("gaus")->SetLineStyle(2);
+      gStyle->SetOptStat(0);
+      DimuMass->Write();
+
+      cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
+    }
   }//end if ( ModelSRWidth )
 
   if ( PlotdZ ) {
@@ -1402,6 +1649,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete Phase1Pix_GEN_A1_Lxy; delete Phase1Pix_GEN_A1_Lz;
   delete Phase1Pix_GEN_A0_Mu0_pT; delete Phase1Pix_GEN_A0_Mu1_pT;
   delete Phase1Pix_GEN_A1_Mu0_pT; delete Phase1Pix_GEN_A1_Mu1_pT;
+  delete GENMudR_A0; delete GENMudR_A1;
   delete Phase1Pix_RECO_Mu0_pT; delete Phase1Pix_RECO_Mu0_eta; delete Phase1Pix_RECO_Mu0_phi;
   delete Phase1Pix_RECO_Mu1_pT; delete Phase1Pix_RECO_Mu1_eta; delete Phase1Pix_RECO_Mu1_phi;
   delete Phase1Pix_RECO_Mu2_pT; delete Phase1Pix_RECO_Mu2_eta; delete Phase1Pix_RECO_Mu2_phi;
@@ -1411,6 +1659,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete Lxy; delete Lz;
   delete GENMuPt; delete GENMuEta; delete GENMuPhi; delete GENAMuPt;
   delete RECOMuPt; delete RECOMuEta; delete RECOMuPhi; delete RECODimuMuPt;
+  delete GEN1stPt_pass_GEN; delete GEN2ndPt_pass_GEN; delete GEN3rdPt_pass_GEN; delete GEN4thPt_pass_GEN;
+  delete GENLeadingLxy_pass_GEN; delete GENLeadingLz_pass_GEN;
+  delete GEN1stPt_pass_1stRECOmu; delete GEN2ndPt_pass_2ndRECOmu; delete GEN3rdPt_pass_3rdRECOmu; delete GEN4thPt_pass_4thRECOmu;
+  delete GEN1stPt_pass_RECOmu12; delete GEN1stPt_pass_RECOmu123; delete GEN1stPt_pass_RECOmu1234;
+  delete GENLeadingLxy_pass_RECOmu1234; delete GENLeadingLz_pass_RECOmu1234;
   delete leading_pt_pass_basic; delete second_pt_pass_basic; delete third_pt_pass_basic; delete fourth_pt_pass_basic;
   delete leading_eta_pass_basic; delete second_eta_pass_basic; delete third_eta_pass_basic; delete fourth_eta_pass_basic;
   delete leading_phi_pass_basic; delete second_phi_pass_basic; delete third_phi_pass_basic; delete fourth_phi_pass_basic;
@@ -1440,6 +1693,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete L_DimuC_SR_HighMass; delete Lxy_DimuC_SR_HighMass; delete Lz_DimuC_SR_HighMass;
   delete L_DimuF_SR_HighMass; delete Lxy_DimuF_SR_HighMass; delete Lz_DimuF_SR_HighMass;
   delete DimuMass;
+  delete DimuCMassAfterCut12; delete DimuCMassAfterCut16;
+  delete DimuFMassAfterCut12; delete DimuFMassAfterCut16;
   delete RECO4muMass;
   delete RECOrePaired2muLeadingMass; delete RECOrePaired2muLeadingdR;
   delete RECOrePaired2muTrailingMass; delete RECOrePaired2muTrailingdR;

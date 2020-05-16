@@ -237,7 +237,10 @@ namespace pat {
         double      pt_mag = sqrt( p.x()*p.x() + p.y()*p.y() );
         return ( v.z()-myBeamSpot.z() ) - ( (v.x()-myBeamSpot.x())*p.x() + (v.y()-myBeamSpot.y())*p.y() )/pt_mag * p.z()/pt_mag;
       }
-      else return muon(0)->innerTrack()->dz(myBeamSpot);
+      else if ( muon(0)->innerTrack().isAvailable() ){//Allow one SA muon, which might have no innerTrack
+        return muon(0)->innerTrack()->dz(myBeamSpot);
+      }
+      else return muon(1)->innerTrack()->dz(myBeamSpot);
     }
 
     /// return the distance of flight from the primary vertex in the direction of momentum
