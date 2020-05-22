@@ -141,6 +141,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t muJetF_Mu0_pt;
   Float_t muJetF_Mu1_pt;
 
+  Int_t   nSAMu;
+  Int_t   dimuC_nSAMu;
+  Int_t   dimuF_nSAMu;
+  Float_t diMuonC_FittedVtx_prob;
+  Float_t diMuonF_FittedVtx_prob;
+  Int_t   nMuJets;
   Bool_t  is2MuJets;
   Bool_t  is2DiMuons;
   Float_t massC;
@@ -272,6 +278,40 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* Phase1Pix_RECO_DimuC_Mu1_pT = new TH1F("Phase1Pix_RECO_DimuC_Mu1_pT", "p_{T} of Trailing Muon in 1st Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
   TH1F* Phase1Pix_RECO_DimuF_Mu0_pT = new TH1F("Phase1Pix_RECO_DimuF_Mu0_pT", "p_{T} of Leading Muon in 2nd Di-#mu (RECO) in Phase-1 Pixel Volume",  130, 0., 130.);
   TH1F* Phase1Pix_RECO_DimuF_Mu1_pT = new TH1F("Phase1Pix_RECO_DimuF_Mu1_pT", "p_{T} of Trailing Muon in 2nd Di-#mu (RECO) in Phase-1 Pixel Volume", 130, 0., 130.);
+
+  TH1F* GENMudR_A0 = new TH1F("GENMudR_A0", "", 80, 0, 8);//per 0.1
+  TH1F* GENMudR_A1 = new TH1F("GENMudR_A1", "", 80, 0, 8);
+
+  TH1F* GEN1stPt_pass_GEN = new TH1F("GEN1stPt_pass_GEN", "", 150, 0, 150);
+  TH1F* GEN2ndPt_pass_GEN = new TH1F("GEN2ndPt_pass_GEN", "", 150, 0, 150);
+  TH1F* GEN3rdPt_pass_GEN = new TH1F("GEN3rdPt_pass_GEN", "", 150, 0, 150);
+  TH1F* GEN4thPt_pass_GEN = new TH1F("GEN4thPt_pass_GEN", "", 150, 0, 150);
+  TH1F* GENLeadingLxy_pass_GEN   = new TH1F("GENLeadingLxy_pass_GEN",   "",  40, 0., 20.); //per 0.5cm
+  TH1F* GENLeadingLz_pass_GEN    = new TH1F("GENLeadingLz_pass_GEN",    "", 120, 0., 60.); //per 0.5cm
+
+  TH1F* GEN1stPt_pass_1stRECOmu = new TH1F("GEN1stPt_pass_1stRECOmu", "", 150, 0, 150);
+  TH1F* GEN2ndPt_pass_2ndRECOmu = new TH1F("GEN2ndPt_pass_2ndRECOmu", "", 150, 0, 150);
+  TH1F* GEN3rdPt_pass_3rdRECOmu = new TH1F("GEN3rdPt_pass_3rdRECOmu", "", 150, 0, 150);
+  TH1F* GEN4thPt_pass_4thRECOmu = new TH1F("GEN4thPt_pass_4thRECOmu", "", 150, 0, 150);
+  TH1F* GEN1stPt_pass_RECOmu12   = new TH1F("GEN1stPt_pass_RECOmu12",   "", 150, 0, 150);
+  TH1F* GEN1stPt_pass_RECOmu123  = new TH1F("GEN1stPt_pass_RECOmu123",  "", 150, 0, 150);
+  TH1F* GEN1stPt_pass_RECOmu1234 = new TH1F("GEN1stPt_pass_RECOmu1234", "", 150, 0, 150);
+  TH1F* GENLeadingLxy_pass_RECOmu1234 = new TH1F("GENLeadingLxy_pass_RECOmu1234",   "",  40, 0., 20.);
+  TH1F* GENLeadingLz_pass_RECOmu1234  = new TH1F("GENLeadingLz_pass_RECOmu1234",    "", 120, 0., 60.);
+
+  TH1F* CvtxProbSAmuInCbeforeCut11 = new TH1F("CvtxProbSAmuInCbeforeCut11", "Di-#mu0 Vtx Fit Prob. Before Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.); //per 0.1%
+  TH1F* FvtxProbSAmuInCbeforeCut11 = new TH1F("FvtxProbSAmuInCbeforeCut11", "Di-#mu1 Vtx Fit Prob. Before Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.);
+  TH1F* CvtxProbSAmuInFbeforeCut11 = new TH1F("CvtxProbSAmuInFbeforeCut11", "Di-#mu0 Vtx Fit Prob. Before Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
+  TH1F* FvtxProbSAmuInFbeforeCut11 = new TH1F("FvtxProbSAmuInFbeforeCut11", "Di-#mu1 Vtx Fit Prob. Before Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
+  TH1F* CvtxProbNoSAmubeforeCut11  = new TH1F("CvtxProbNoSAmubeforeCut11",  "Di-#mu0 Vtx Fit Prob. Before Cut 11 (all PF loose mu)", 1000, 0., 1.);
+  TH1F* FvtxProbNoSAmubeforeCut11  = new TH1F("FvtxProbNoSAmubeforeCut11",  "Di-#mu1 Vtx Fit Prob. Before Cut 11 (all PF loose mu)", 1000, 0., 1.);
+
+  TH1F* CvtxProbSAmuInCafterCut11 = new TH1F("CvtxProbSAmuInCafterCut11", "Di-#mu0 Vtx Fit Prob. After Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.);
+  TH1F* FvtxProbSAmuInCafterCut11 = new TH1F("FvtxProbSAmuInCafterCut11", "Di-#mu1 Vtx Fit Prob. After Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.);
+  TH1F* CvtxProbSAmuInFafterCut11 = new TH1F("CvtxProbSAmuInFafterCut11", "Di-#mu0 Vtx Fit Prob. After Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
+  TH1F* FvtxProbSAmuInFafterCut11 = new TH1F("FvtxProbSAmuInFafterCut11", "Di-#mu1 Vtx Fit Prob. After Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
+  TH1F* CvtxProbNoSAmuafterCut11  = new TH1F("CvtxProbNoSAmuafterCut11",  "Di-#mu0 Vtx Fit Prob. After Cut 11 (all PF loose mu)", 1000, 0., 1.);
+  TH1F* FvtxProbNoSAmuafterCut11  = new TH1F("FvtxProbNoSAmuafterCut11",  "Di-#mu1 Vtx Fit Prob. After Cut 11 (all PF loose mu)", 1000, 0., 1.);
 
   //Trigger accept eff as function of leading muon pT, eta and phi after cut #9
   TH1F* leading_pt_pass_basic      = new TH1F("leading_pt_pass_basic",      "", 150,    0, 150); //per 1
@@ -488,6 +528,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("muJetF_Mu1_pt", &muJetF_Mu1_pt);
 
   t->SetBranchAddress("isVertexOK", &isVtxOK);
+  t->SetBranchAddress("nSAMu",      &nSAMu);
+  t->SetBranchAddress("dimuC_nSAMu",&dimuC_nSAMu);
+  t->SetBranchAddress("dimuF_nSAMu",&dimuF_nSAMu);
+  t->SetBranchAddress("diMuonC_FittedVtx_prob",&diMuonC_FittedVtx_prob);
+  t->SetBranchAddress("diMuonF_FittedVtx_prob",&diMuonF_FittedVtx_prob);
+  t->SetBranchAddress("nMuJets",    &nMuJets);
 	t->SetBranchAddress("is2MuJets",  &is2MuJets);
   t->SetBranchAddress("is2DiMuons", &is2DiMuons);
   t->SetBranchAddress("massC",      &massC);
@@ -572,27 +618,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcountmu12   = 0;
   int newcountmu123  = 0;
   int newcountmu1234 = 0;
-
-
-  TH1F* GENMudR_A0 = new TH1F("GENMudR_A0", "", 80, 0, 8);//per 0.1
-  TH1F* GENMudR_A1 = new TH1F("GENMudR_A1", "", 80, 0, 8);
-
-  TH1F* GEN1stPt_pass_GEN = new TH1F("GEN1stPt_pass_GEN", "", 150, 0, 150);
-  TH1F* GEN2ndPt_pass_GEN = new TH1F("GEN2ndPt_pass_GEN", "", 150, 0, 150);
-  TH1F* GEN3rdPt_pass_GEN = new TH1F("GEN3rdPt_pass_GEN", "", 150, 0, 150);
-  TH1F* GEN4thPt_pass_GEN = new TH1F("GEN4thPt_pass_GEN", "", 150, 0, 150);
-  TH1F* GENLeadingLxy_pass_GEN   = new TH1F("GENLeadingLxy_pass_GEN",   "",  40, 0., 20.); //per 0.5cm
-  TH1F* GENLeadingLz_pass_GEN    = new TH1F("GENLeadingLz_pass_GEN",    "", 120, 0., 60.); //per 0.5cm
-
-  TH1F* GEN1stPt_pass_1stRECOmu = new TH1F("GEN1stPt_pass_1stRECOmu", "", 150, 0, 150);
-  TH1F* GEN2ndPt_pass_2ndRECOmu = new TH1F("GEN2ndPt_pass_2ndRECOmu", "", 150, 0, 150);
-  TH1F* GEN3rdPt_pass_3rdRECOmu = new TH1F("GEN3rdPt_pass_3rdRECOmu", "", 150, 0, 150);
-  TH1F* GEN4thPt_pass_4thRECOmu = new TH1F("GEN4thPt_pass_4thRECOmu", "", 150, 0, 150);
-  TH1F* GEN1stPt_pass_RECOmu12   = new TH1F("GEN1stPt_pass_RECOmu12",   "", 150, 0, 150);
-  TH1F* GEN1stPt_pass_RECOmu123  = new TH1F("GEN1stPt_pass_RECOmu123",  "", 150, 0, 150);
-  TH1F* GEN1stPt_pass_RECOmu1234 = new TH1F("GEN1stPt_pass_RECOmu1234", "", 150, 0, 150);
-  TH1F* GENLeadingLxy_pass_RECOmu1234 = new TH1F("GENLeadingLxy_pass_RECOmu1234",   "",  40, 0., 20.);
-  TH1F* GENLeadingLz_pass_RECOmu1234  = new TH1F("GENLeadingLz_pass_RECOmu1234",    "", 120, 0., 60.);
+  int newcount0SAzeromujet = 0;
+  int newcount0SAonemujet = 0;
+  int newcount0SAtwomujet = 0;
+  int newcount0SAmuCZeroProb = 0;
+  int newcount0SAmuFZeroProb = 0;
+  int newcount1SAmuInCCZeroProb = 0;
+  int newcount1SAmuInCFZeroProb = 0;
+  int newcount1SAmuInFCZeroProb = 0;
+  int newcount1SAmuInFFZeroProb = 0;
 
   if( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
 
@@ -621,19 +655,11 @@ void efficiency(const std::vector<std::string>& dirNames)
             GENMudR_A0->Fill(genA0Mu_dR);
             GENMudR_A1->Fill(genA1Mu_dR);
 
-            if(genA0_Lxy>genA1_Lxy){
-              GENLeadingLxy_pass_GEN->Fill(genA0_Lxy);
-            }
-            else{
-              GENLeadingLxy_pass_GEN->Fill(genA1_Lxy);
-            }
+            if ( genA0_Lxy > genA1_Lxy ) GENLeadingLxy_pass_GEN->Fill(genA0_Lxy);
+            else GENLeadingLxy_pass_GEN->Fill(genA1_Lxy);
 
-            if(fabs(genA0_Lz)>fabs(genA1_Lz)){
-              GENLeadingLz_pass_GEN->Fill(fabs(genA0_Lz));
-            }
-            else{
-              GENLeadingLz_pass_GEN->Fill(fabs(genA1_Lz));
-            }
+            if ( fabs(genA0_Lz) > fabs(genA1_Lz) ) GENLeadingLz_pass_GEN->Fill(fabs(genA0_Lz));
+            else GENLeadingLz_pass_GEN->Fill(fabs(genA1_Lz));
 
             //selections
             if(selMu0_pT > 8 && fabs(selMu0_eta) < 2.4){
@@ -670,19 +696,11 @@ void efficiency(const std::vector<std::string>& dirNames)
                newcountmu1234++;
                GEN1stPt_pass_RECOmu1234->Fill(genMu0_pT);
 
-               if(genA0_Lxy>genA1_Lxy){
-                 GENLeadingLxy_pass_RECOmu1234->Fill(genA0_Lxy);
-               }
-               else{
-                 GENLeadingLxy_pass_RECOmu1234->Fill(genA1_Lxy);
-               }
+               if ( genA0_Lxy > genA1_Lxy ) GENLeadingLxy_pass_RECOmu1234->Fill(genA0_Lxy);
+               else GENLeadingLxy_pass_RECOmu1234->Fill(genA1_Lxy);
 
-               if(fabs(genA0_Lz)>fabs(genA1_Lz)){
-                 GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA0_Lz));
-               }
-               else{
-                 GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA1_Lz));
-               }
+               if ( fabs(genA0_Lz) > fabs(genA1_Lz) ) GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA0_Lz));
+               else GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA1_Lz));
             }
 
       }//basic gen selections
@@ -748,8 +766,8 @@ void efficiency(const std::vector<std::string>& dirNames)
             Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
             Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
 
-            if( is1SelMu17 ) { counterGENMatch[k][6]++; }
-            if( is2SelMu8  ) { counterGENMatch[k][7]++; }
+            if( is1SelMu17 ) counterGENMatch[k][6]++;
+            if( is2SelMu8  ) counterGENMatch[k][7]++;
             if( is3SelMu8  ) {
               counterGENMatch[k][8]++;
 
@@ -789,8 +807,57 @@ void efficiency(const std::vector<std::string>& dirNames)
               if( isVtxOK ){
                 counterGENMatch[k][10]++;
 
+                /*if ( (run == 1 && lumi == 1 && event == 247) || (run == 1 && lumi == 1 && event == 364) ){
+                  std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
+                  std::cout << "nMuJets: " << nMuJets << std::endl;
+                  if( is2DiMuons ){
+                    std::cout << "is2DiMuons-->Passed " << std::endl;
+                    std::cout << "nSAMu: " << nSAMu << std::endl;
+                    if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
+                      std::cout << "ValidPixHit-->Passed " << std::endl;
+                      std::cout << "dZ: " << diMuons_dz_FittedVtx << std::endl;
+                    }
+                  }
+                }*/
+
+                if ( nSAMu == 0 ){
+                  CvtxProbNoSAmubeforeCut11->Fill(diMuonC_FittedVtx_prob);
+                  FvtxProbNoSAmubeforeCut11->Fill(diMuonF_FittedVtx_prob);
+                }
+                if ( nSAMu == 1 && dimuC_nSAMu == 1 ){
+                  CvtxProbSAmuInCbeforeCut11->Fill(diMuonC_FittedVtx_prob);
+                  FvtxProbSAmuInCbeforeCut11->Fill(diMuonF_FittedVtx_prob);
+                }
+                if ( nSAMu == 1 && dimuF_nSAMu == 1 ){
+                  CvtxProbSAmuInFbeforeCut11->Fill(diMuonC_FittedVtx_prob);
+                  FvtxProbSAmuInFbeforeCut11->Fill(diMuonF_FittedVtx_prob);
+                }
+
+                if ( nSAMu == 0 && nMuJets == 0 ) newcount0SAzeromujet++;
+                if ( nSAMu == 0 && nMuJets == 1 ) newcount0SAonemujet++;
+                if ( nSAMu == 0 && nMuJets == 2 ) newcount0SAtwomujet++;
+
                 if( is2DiMuons ){//This selector also contains <=1 SA muon requirement for run2
                   counterGENMatch[k][11]++;
+
+                  if ( nSAMu == 0 ){
+                    CvtxProbNoSAmuafterCut11->Fill(diMuonC_FittedVtx_prob);
+                    FvtxProbNoSAmuafterCut11->Fill(diMuonF_FittedVtx_prob);
+                    if ( diMuonC_FittedVtx_prob == 0 ) newcount0SAmuCZeroProb++;
+                    if ( diMuonF_FittedVtx_prob == 0 ) newcount0SAmuFZeroProb++;
+                  }
+                  if ( nSAMu == 1 && dimuC_nSAMu == 1 ){
+                    CvtxProbSAmuInCafterCut11->Fill(diMuonC_FittedVtx_prob);
+                    FvtxProbSAmuInCafterCut11->Fill(diMuonF_FittedVtx_prob);
+                    if ( diMuonC_FittedVtx_prob == 0 ) newcount1SAmuInCCZeroProb++;
+                    if ( diMuonF_FittedVtx_prob == 0 ) newcount1SAmuInCFZeroProb++;
+                  }
+                  if ( nSAMu == 1 && dimuF_nSAMu == 1 ){
+                    CvtxProbSAmuInFafterCut11->Fill(diMuonC_FittedVtx_prob);
+                    FvtxProbSAmuInFafterCut11->Fill(diMuonF_FittedVtx_prob);
+                    if ( diMuonC_FittedVtx_prob == 0 ) newcount1SAmuInFCZeroProb++;
+                    if ( diMuonF_FittedVtx_prob == 0 ) newcount1SAmuInFFZeroProb++;
+                  }
 
                   if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
                     //!!! Note: this needs to match GEN cut on geometry
@@ -912,9 +979,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                               DimuFMassAfterCut16->Fill(massF);
                             }
 
-                            if( is2DiMuonsMassOK ) {
-                              counterGENMatch[k][17]++;
-                            }//end 17
+                            if( is2DiMuonsMassOK ) counterGENMatch[k][17]++; //end 17
                           }//end 16
                         }//end 15
                       }//end 14
@@ -1046,6 +1111,20 @@ void efficiency(const std::vector<std::string>& dirNames)
   std::cout << "RECO1+2Mu8: "      << newcountmu12  << std::endl;
   std::cout << "RECO1+2+3Mu8: "    << newcountmu123 << std::endl;
   std::cout << "RECO1+2+3+4Mu8: "  << newcountmu1234 << std::endl;
+  std::cout << "-------------------------" << std::endl;
+  std::cout << "GEN matched cut 10: " << counterGENMatch[k][10] << std::endl;
+  std::cout << "GEN matched cut 11: " << counterGENMatch[k][11] << std::endl;
+  std::cout << "-------------------------" << std::endl;
+  std::cout << "0 SA mu, 0 mujet: "  << newcount0SAzeromujet << std::endl;
+  std::cout << "0 SA mu, 1 mujet: "  << newcount0SAonemujet << std::endl;
+  std::cout << "0 SA mu, 2 mujet: "  << newcount0SAtwomujet << std::endl;
+  std::cout << "-------------------------" << std::endl;
+  std::cout << "0 SA mu, dimuC zero vtx prob: "  << newcount0SAmuCZeroProb << std::endl;
+  std::cout << "0 SA mu, dimuF zero vtx prob: "  << newcount0SAmuFZeroProb << std::endl;
+  std::cout << "1 SA mu in dimuC, dimuC zero vtx prob: "  << newcount1SAmuInCCZeroProb << std::endl;
+  std::cout << "1 SA mu in dimuC, dimuF zero vtx prob: "  << newcount1SAmuInCFZeroProb << std::endl;
+  std::cout << "1 SA mu in dimuF, dimuC zero vtx prob: "  << newcount1SAmuInFCZeroProb << std::endl;
+  std::cout << "1 SA mu in dimuF, dimuF zero vtx prob: "  << newcount1SAmuInFFZeroProb << std::endl;
 
   //Loop over orphan-dimuon tree
   mentries = o->GetEntries();
@@ -1150,6 +1229,20 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   GENMudR_A0->GetXaxis()->SetTitle("#DeltaR of muons from leading pT GEN boson"); GENMudR_A0->GetYaxis()->SetTitle("Events/0.1"); GENMudR_A0->Write();
   GENMudR_A1->GetXaxis()->SetTitle("#DeltaR of muons from sub-leading pT GEN boson"); GENMudR_A1->GetYaxis()->SetTitle("Events/0.1"); GENMudR_A1->Write();
+
+  CvtxProbSAmuInCbeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInCbeforeCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInCbeforeCut11->Write();
+  FvtxProbSAmuInCbeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInCbeforeCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInCbeforeCut11->Write();
+  CvtxProbSAmuInFbeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInFbeforeCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInFbeforeCut11->Write();
+  FvtxProbSAmuInFbeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInFbeforeCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInFbeforeCut11->Write();
+  CvtxProbNoSAmubeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbNoSAmubeforeCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbNoSAmubeforeCut11->Write();
+  FvtxProbNoSAmubeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbNoSAmubeforeCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbNoSAmubeforeCut11->Write();
+
+  CvtxProbSAmuInCafterCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInCafterCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInCafterCut11->Write();
+  FvtxProbSAmuInCafterCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInCafterCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInCafterCut11->Write();
+  CvtxProbSAmuInFafterCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInFafterCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInFafterCut11->Write();
+  FvtxProbSAmuInFafterCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInFafterCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInFafterCut11->Write();
+  CvtxProbNoSAmuafterCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbNoSAmuafterCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbNoSAmuafterCut11->Write();
+  FvtxProbNoSAmuafterCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbNoSAmuafterCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbNoSAmuafterCut11->Write();
 
   Lxy->cd();
   Phase1Pix_GEN_A0_Lxy->SetLineColor(2); Phase1Pix_GEN_A0_Lxy->SetLineStyle(1); Phase1Pix_GEN_A0_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A0_Lxy->GetYaxis()->SetTitle("Events/0.5 cm"); Phase1Pix_GEN_A0_Lxy->Draw();
@@ -1649,6 +1742,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete Phase1Pix_GEN_A1_Lxy; delete Phase1Pix_GEN_A1_Lz;
   delete Phase1Pix_GEN_A0_Mu0_pT; delete Phase1Pix_GEN_A0_Mu1_pT;
   delete Phase1Pix_GEN_A1_Mu0_pT; delete Phase1Pix_GEN_A1_Mu1_pT;
+  delete CvtxProbSAmuInCbeforeCut11; delete FvtxProbSAmuInCbeforeCut11; delete CvtxProbSAmuInFbeforeCut11; delete FvtxProbSAmuInFbeforeCut11; delete CvtxProbNoSAmubeforeCut11; delete FvtxProbNoSAmubeforeCut11;
+  delete CvtxProbSAmuInCafterCut11; delete FvtxProbSAmuInCafterCut11; delete CvtxProbSAmuInFafterCut11; delete FvtxProbSAmuInFafterCut11; delete CvtxProbNoSAmuafterCut11; delete FvtxProbNoSAmuafterCut11;
   delete GENMudR_A0; delete GENMudR_A1;
   delete Phase1Pix_RECO_Mu0_pT; delete Phase1Pix_RECO_Mu0_eta; delete Phase1Pix_RECO_Mu0_phi;
   delete Phase1Pix_RECO_Mu1_pT; delete Phase1Pix_RECO_Mu1_eta; delete Phase1Pix_RECO_Mu1_phi;

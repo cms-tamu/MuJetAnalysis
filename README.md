@@ -11,7 +11,9 @@ MiniAODSIM samples are moved to TAMU Terra cluster, to get a list of all files i
 `ls -d "$PWD"/* > text.txt`
 These are stored at `MuJetAnalysis/DataFormats/scripts/patifyMC_13TeV/*SamplesTerra` for 2017 and 2018.
 To get all end subdirectories:
-`find . -type d -links 2`
+`find <pwd> -type d -links 2`
+To get all end su if you know the max depth:
+`find <pwd> -maxdepth 10 -name "*2017_SA*" -type d`
 
 ## Cut-and-count
 A simple macro is available for quick cut-and-count based on the Ntuples: `CutFlowAnalyzer/scripts/cutflow_macros/foo_modified.C`. More details on page.

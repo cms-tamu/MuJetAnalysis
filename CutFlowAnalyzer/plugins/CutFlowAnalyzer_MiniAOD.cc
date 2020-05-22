@@ -440,6 +440,8 @@ private:
   // Reco branches in ROOT tree
   Int_t b_nRecoMu;
   Int_t b_nSAMu;
+  Int_t b_dimuC_nSAMu;
+  Int_t b_dimuF_nSAMu;
   Int_t b_nMuPairs;
   Int_t b_nMuJets;
   Int_t b_nOrphans;
@@ -485,6 +487,24 @@ private:
   Float_t b_diMuonC_FittedVtx_vx;
   Float_t b_diMuonC_FittedVtx_vy;
   Float_t b_diMuonC_FittedVtx_vz;
+  Float_t b_diMuonC_FittedVtx_Lxy;
+  Float_t b_diMuonC_FittedVtx_L;
+  Float_t b_diMuonC_FittedVtx_dz;
+  Float_t b_diMuonC_FittedVtx_prob;
+
+  Float_t b_diMuonF_FittedVtx_m;
+  Float_t b_diMuonF_FittedVtx_px;
+  Float_t b_diMuonF_FittedVtx_py;
+  Float_t b_diMuonF_FittedVtx_pz;
+  Float_t b_diMuonF_FittedVtx_eta;
+  Float_t b_diMuonF_FittedVtx_phi;
+  Float_t b_diMuonF_FittedVtx_vx;
+  Float_t b_diMuonF_FittedVtx_vy;
+  Float_t b_diMuonF_FittedVtx_vz;
+  Float_t b_diMuonF_FittedVtx_Lxy;
+  Float_t b_diMuonF_FittedVtx_L;
+  Float_t b_diMuonF_FittedVtx_dz;
+  Float_t b_diMuonF_FittedVtx_prob;
 
   Int_t b_nMuHasValidHitInPixel;//# of muons in 2 signal dimu with valid hit in pixel
   Int_t b_diMuonC_m1_FittedVtx_hitpix_Phase1;
@@ -511,24 +531,6 @@ private:
   Int_t b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement;
   Int_t b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement;
   Int_t b_diMuonF_m2_FittedVtx_pixelLayersWithMeasurement;
-
-  Float_t b_diMuonC_FittedVtx_Lxy;
-  Float_t b_diMuonC_FittedVtx_L;
-  Float_t b_diMuonC_FittedVtx_dz;
-
-  Float_t b_diMuonF_FittedVtx_m;
-  Float_t b_diMuonF_FittedVtx_px;
-  Float_t b_diMuonF_FittedVtx_py;
-  Float_t b_diMuonF_FittedVtx_pz;
-  Float_t b_diMuonF_FittedVtx_eta;
-  Float_t b_diMuonF_FittedVtx_phi;
-  Float_t b_diMuonF_FittedVtx_vx;
-  Float_t b_diMuonF_FittedVtx_vy;
-  Float_t b_diMuonF_FittedVtx_vz;
-
-  Float_t b_diMuonF_FittedVtx_Lxy;
-  Float_t b_diMuonF_FittedVtx_L;
-  Float_t b_diMuonF_FittedVtx_dz;
 
   Float_t b_diMuons_dz_FittedVtx;
 
@@ -1567,17 +1569,41 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   if ( m_debug > 0 ) std::cout << m_events << " Check if exactly 2 muon jets are built" << std::endl;
   if ( b_is1SelMu17 && b_is4SelMu8 && b_is2MuJets) m_events2MuJets++;
 
+  //Note@Wei, May 20, 2020: Below count SA muons is not ideal, as muJetC and muJetF are registered together when mujet size is two,
+  //so you only get correct count nSA when there are two mujets.
+  //In a way this is what we preferred now because we are more concerned how many SA muons are in the final dimu, not the sel mu
+  //In the future, need to disentangle the nSA count with mu jet size equal two
+  //Even better, merge the MuJetProducerRun2.cc with this CutFlowAnalyzer_MiniAOD.cc
+  //Use 4 sel muon as input to MuJetProducerRun2.cc instead of slimmedMuons
   b_is2DiMuons = false;
   b_nSAMu = 0;
+  b_dimuC_nSAMu = 0;
+  b_dimuF_nSAMu = 0;
+  if ( muJetC != NULL && muJetC->numberOfDaughters() == 2 ) {
+    if( muJetC->muon(0)->isStandAloneMuon() && !( muJetC->muon(0)->isPFMuon() && ( muJetC->muon(0)->isTrackerMuon() || muJetC->muon(0)->isGlobalMuon() ) ) ){
+      b_nSAMu++;
+      b_dimuC_nSAMu++;
+    }
+    if( muJetC->muon(1)->isStandAloneMuon() && !( muJetC->muon(1)->isPFMuon() && ( muJetC->muon(1)->isTrackerMuon() || muJetC->muon(1)->isGlobalMuon() ) ) ){
+      b_nSAMu++;
+      b_dimuC_nSAMu++;
+    }
+  }
+  if ( muJetF != NULL && muJetF->numberOfDaughters() == 2 ) {
+    if( muJetF->muon(0)->isStandAloneMuon() && !( muJetF->muon(0)->isPFMuon() && ( muJetF->muon(0)->isTrackerMuon() || muJetF->muon(0)->isGlobalMuon() ) ) ){
+      b_nSAMu++;
+      b_dimuF_nSAMu++;
+    }
+    if( muJetF->muon(1)->isStandAloneMuon() && !( muJetF->muon(1)->isPFMuon() && ( muJetF->muon(1)->isTrackerMuon() || muJetF->muon(1)->isGlobalMuon() ) ) ){
+      b_nSAMu++;
+      b_dimuF_nSAMu++;
+    }
+  }
+
   const pat::MultiMuon *diMuonC = NULL;
   const pat::MultiMuon *diMuonF = NULL;
   if ( muJetC != NULL && muJetF != NULL ) {
     if ( muJetC->numberOfDaughters() == 2 && muJetF->numberOfDaughters() == 2 ) {
-
-      if( muJetC->muon(0)->isStandAloneMuon() && !( muJetC->muon(0)->isPFMuon() && ( muJetC->muon(0)->isTrackerMuon() || muJetC->muon(0)->isGlobalMuon() ) ) ) b_nSAMu++;
-      if( muJetC->muon(1)->isStandAloneMuon() && !( muJetC->muon(1)->isPFMuon() && ( muJetC->muon(1)->isTrackerMuon() || muJetC->muon(1)->isGlobalMuon() ) ) ) b_nSAMu++;
-      if( muJetF->muon(0)->isStandAloneMuon() && !( muJetF->muon(0)->isPFMuon() && ( muJetF->muon(0)->isTrackerMuon() || muJetF->muon(0)->isGlobalMuon() ) ) ) b_nSAMu++;
-      if( muJetF->muon(1)->isStandAloneMuon() && !( muJetF->muon(1)->isPFMuon() && ( muJetF->muon(1)->isTrackerMuon() || muJetF->muon(1)->isGlobalMuon() ) ) ) b_nSAMu++;
       //std::cout << "b_nSAMu: " << b_nSAMu << std::endl;
       //Require LESS THAN TWO (<=1) standalone muon among four muons from 2 dimu
       //Other three needs to be PF loose
@@ -1736,21 +1762,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_recoRePaired2mutrailing_dR = -999.;
   }
 
-  // fitted vertexes
-  b_is2DiMuonsFittedVtxOK = false;
-  if ( diMuonC != NULL && diMuonF != NULL ) {
-    if ( diMuonC->vertexValid() && diMuonF->vertexValid() ) {
-      b_is2DiMuonsFittedVtxOK = true;
-    }
-  }
-
   // Fill branches with variables calculated with "old" fitted vertexes
-  if ( b_is2DiMuonsFittedVtxOK ) {
+  if ( diMuonC != NULL && diMuonC->vertexValid() ) {
     //All vertex* functions below defined in MuJetAnalysis/DataFormats/interface/MultiMuon.h
     b_diMuonC_FittedVtx_m   = diMuonC->vertexMass();//seems ok
-    //This should propagate back to the beam line, looks right
-    b_diMuonC_FittedVtx_dz  = diMuonC->vertexDz(beamSpot->position());
-
     //variables below are relevant when calculate dimu iso
     b_diMuonC_FittedVtx_px  = diMuonC->vertexMomentum().x();
     b_diMuonC_FittedVtx_py  = diMuonC->vertexMomentum().y();
@@ -1762,22 +1777,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuonC_FittedVtx_vz  = diMuonC->vertexPoint().z();
     b_diMuonC_FittedVtx_Lxy = diMuonC->vertexLxy(beamSpotPosition);
     b_diMuonC_FittedVtx_L   = diMuonC->vertexL(beamSpotPosition);
-
-    b_diMuonF_FittedVtx_m   = diMuonF->vertexMass();//seems ok
     //This should propagate back to the beam line, looks right
-    b_diMuonF_FittedVtx_dz  = diMuonF->vertexDz(beamSpot->position());
-
-    //variables below are relevant when calculate dimu iso
-    b_diMuonF_FittedVtx_px  = diMuonF->vertexMomentum().x();
-    b_diMuonF_FittedVtx_py  = diMuonF->vertexMomentum().y();
-    b_diMuonF_FittedVtx_pz  = diMuonF->vertexMomentum().z();
-    b_diMuonF_FittedVtx_eta = diMuonF->vertexMomentum().eta();
-    b_diMuonF_FittedVtx_phi = diMuonF->vertexMomentum().phi();
-    b_diMuonF_FittedVtx_vx  = diMuonF->vertexPoint().x();
-    b_diMuonF_FittedVtx_vy  = diMuonF->vertexPoint().y();
-    b_diMuonF_FittedVtx_vz  = diMuonF->vertexPoint().z();
-    b_diMuonF_FittedVtx_Lxy = diMuonF->vertexLxy(beamSpotPosition);
-    b_diMuonF_FittedVtx_L   = diMuonF->vertexL(beamSpotPosition);
+    b_diMuonC_FittedVtx_dz  = diMuonC->vertexDz(beamSpot->position());
+    b_diMuonC_FittedVtx_prob= diMuonC->vertexProb();
+    //std::cout << ">>> dimuC vtx prob: " << b_diMuonC_FittedVtx_prob << ", mass: " << b_diMuonC_FittedVtx_m << ", SAmu ONLY: " << b_dimuC_nSAMu << std::endl;
 
 	  //std::cout << "diMuC vtx         (x,y,z)[cm]: " << b_diMuonC_FittedVtx_vx << ", " << b_diMuonC_FittedVtx_vy << ", " << b_diMuonC_FittedVtx_vz << std::endl;
     //std::cout << "            (Lxy,|Lz|,dz)[cm]: " << b_diMuonC_FittedVtx_Lxy<< ", " << sqrt( pow(b_diMuonC_FittedVtx_L,2) - pow(b_diMuonC_FittedVtx_Lxy,2) )<<", "<<b_diMuonC_FittedVtx_dz<< std::endl;
@@ -1794,11 +1797,30 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuonC_FittedVtx_vx  = -1000.0;
     b_diMuonC_FittedVtx_vy  = -1000.0;
     b_diMuonC_FittedVtx_vz  = -1000.0;
-
     b_diMuonC_FittedVtx_Lxy = -1000.0;
     b_diMuonC_FittedVtx_L   = -1000.0;
     b_diMuonC_FittedVtx_dz  = -1000.0;
+    b_diMuonC_FittedVtx_prob= -1000.0;
+  }
 
+  if ( diMuonF != NULL && diMuonF->vertexValid() ) {
+    b_diMuonF_FittedVtx_m   = diMuonF->vertexMass();//seems ok
+    //variables below are relevant when calculate dimu iso
+    b_diMuonF_FittedVtx_px  = diMuonF->vertexMomentum().x();
+    b_diMuonF_FittedVtx_py  = diMuonF->vertexMomentum().y();
+    b_diMuonF_FittedVtx_pz  = diMuonF->vertexMomentum().z();
+    b_diMuonF_FittedVtx_eta = diMuonF->vertexMomentum().eta();
+    b_diMuonF_FittedVtx_phi = diMuonF->vertexMomentum().phi();
+    b_diMuonF_FittedVtx_vx  = diMuonF->vertexPoint().x();
+    b_diMuonF_FittedVtx_vy  = diMuonF->vertexPoint().y();
+    b_diMuonF_FittedVtx_vz  = diMuonF->vertexPoint().z();
+    b_diMuonF_FittedVtx_Lxy = diMuonF->vertexLxy(beamSpotPosition);
+    b_diMuonF_FittedVtx_L   = diMuonF->vertexL(beamSpotPosition);
+    //This should propagate back to the beam line, looks right
+    b_diMuonF_FittedVtx_dz  = diMuonF->vertexDz(beamSpot->position());
+    b_diMuonF_FittedVtx_prob= diMuonF->vertexProb();
+    //std::cout << "    dimuF vtx prob: " << b_diMuonF_FittedVtx_prob << ", mass: " << b_diMuonF_FittedVtx_m <<  ", SAmu ONLY: " << b_dimuF_nSAMu << std::endl;
+  } else {
     b_diMuonF_FittedVtx_m   = -1000.0;
     b_diMuonF_FittedVtx_px  = -1000.0;
     b_diMuonF_FittedVtx_py  = -1000.0;
@@ -1808,10 +1830,18 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_diMuonF_FittedVtx_vx  = -1000.0;
     b_diMuonF_FittedVtx_vy  = -1000.0;
     b_diMuonF_FittedVtx_vz  = -1000.0;
-
     b_diMuonF_FittedVtx_Lxy = -1000.0;
     b_diMuonF_FittedVtx_L   = -1000.0;
     b_diMuonF_FittedVtx_dz  = -1000.0;
+    b_diMuonF_FittedVtx_prob= -1000.0;
+  }
+
+  // fitted vertexes
+  b_is2DiMuonsFittedVtxOK = false;
+  if ( diMuonC != NULL && diMuonF != NULL ) {
+    if ( diMuonC->vertexValid() && diMuonF->vertexValid() ) {
+      b_is2DiMuonsFittedVtxOK = true;
+    }
   }
 
   // Calculate dz between dimuons - use fitted vertexes
@@ -1942,7 +1972,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   edm::Handle<reco::TrackCollection> tracks;
   iEvent.getByToken(m_tracks, tracks);
 
-  // Calculate isolation for dimuon and single muons inside: require valid fitted vertexes
+  // Calculate isolation for dimuon and single muons inside: require valid fitted vertex of each dimu
   b_diMuonC_IsoTk_FittedVtx = -999.;
   b_diMuonF_IsoTk_FittedVtx = -999.;
   b_isoC_1mm = -999.;
@@ -1960,7 +1990,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_diMuonFMu1_IsoTk0p4_FittedVtx = -999.;
   b_diMuonFMu1_IsoTk0p5_FittedVtx = -999.;
 
-  if ( b_is2DiMuonsFittedVtxOK ) {
+  if ( diMuonC != NULL && diMuonC->vertexValid() ) {
 
     double diMuonC_IsoTk_FittedVtx = -999.;
     double diMuonCMu0_IsoTk0p3_FittedVtx = -999.;
@@ -1970,24 +2000,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     double diMuonCMu1_IsoTk0p4_FittedVtx = -999.;
     double diMuonCMu1_IsoTk0p5_FittedVtx = -999.;
 
-    double diMuonF_IsoTk_FittedVtx = -999.;
-    double diMuonFMu0_IsoTk0p3_FittedVtx = -999.;
-    double diMuonFMu0_IsoTk0p4_FittedVtx = -999.;
-    double diMuonFMu0_IsoTk0p5_FittedVtx = -999.;
-    double diMuonFMu1_IsoTk0p3_FittedVtx = -999.;
-    double diMuonFMu1_IsoTk0p4_FittedVtx = -999.;
-    double diMuonFMu1_IsoTk0p5_FittedVtx = -999.;
-
     const pat::PackedCandidate* candFittedVtx_diMuonCMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(0)->sourceCandidatePtr(0).get());
     const pat::PackedCandidate* candFittedVtx_diMuonCMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(1)->sourceCandidatePtr(0).get());
-    const pat::PackedCandidate* candFittedVtx_diMuonFMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(0)->sourceCandidatePtr(0).get());
-    const pat::PackedCandidate* candFittedVtx_diMuonFMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(1)->sourceCandidatePtr(0).get());
 
     //Avoid null dynamic cast: casuing segmentation violation error
     //In cases no dynamic cast exists, the event shouldn't be considered
     //since the track couldn't be matched to the muons in the dimuon, this will lead to wrong iso.
-    if ( candFittedVtx_diMuonCMu0 != 0               && candFittedVtx_diMuonCMu1 != 0               && candFittedVtx_diMuonFMu0!=0                 && candFittedVtx_diMuonFMu1!=0 &&
-         candFittedVtx_diMuonCMu0->hasTrackDetails() && candFittedVtx_diMuonCMu1->hasTrackDetails() && candFittedVtx_diMuonFMu0->hasTrackDetails() && candFittedVtx_diMuonFMu1->hasTrackDetails() ){
+    if ( candFittedVtx_diMuonCMu0 != 0 && candFittedVtx_diMuonCMu1 != 0 && candFittedVtx_diMuonCMu0->hasTrackDetails() && candFittedVtx_diMuonCMu1->hasTrackDetails() ){
 
         diMuonC_IsoTk_FittedVtx = 0.0;
         diMuonCMu0_IsoTk0p3_FittedVtx = 0.0;
@@ -1997,24 +2016,20 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         diMuonCMu1_IsoTk0p4_FittedVtx = 0.0;
         diMuonCMu1_IsoTk0p5_FittedVtx = 0.0;
 
-        diMuonF_IsoTk_FittedVtx = 0.0;
-        diMuonFMu0_IsoTk0p3_FittedVtx = 0.0;
-        diMuonFMu0_IsoTk0p4_FittedVtx = 0.0;
-        diMuonFMu0_IsoTk0p5_FittedVtx = 0.0;
-        diMuonFMu1_IsoTk0p3_FittedVtx = 0.0;
-        diMuonFMu1_IsoTk0p4_FittedVtx = 0.0;
-        diMuonFMu1_IsoTk0p5_FittedVtx = 0.0;
-
         for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
           bool trackIsMuon = false;
           if ( m_debug > 10 ) std::cout << "track_px: " <<track->px() << "; track_py: "<<track->py() <<"; track_pz: "<<track->pz()<< "; track_vx: " <<track->vx() << "; track_vy: "<<track->vy() <<"; track_vz: "<<track->vz()<<std::endl;
 
-          //Track used for iso calculation can't be from four signal muons
-          if (  tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonCMu0->pseudoTrack()) )
-  	         || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonCMu1->pseudoTrack()) )
-             || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonFMu0->pseudoTrack()) )
-             || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonFMu1->pseudoTrack()) )
-           ){ trackIsMuon = true; }
+          //Track used for iso calculation can't be from signal muons
+          if ( tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonCMu0->pseudoTrack()) ) || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonCMu1->pseudoTrack()) ) ) trackIsMuon = true;
+          //If the other dimu exists, also exclude its signal muons
+          if ( diMuonF != NULL && diMuonF->vertexValid() ) {
+            const pat::PackedCandidate* candTmp_diMuonFMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(0)->sourceCandidatePtr(0).get());
+            const pat::PackedCandidate* candTmp_diMuonFMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(1)->sourceCandidatePtr(0).get());
+            if ( candTmp_diMuonFMu0!=0 && candTmp_diMuonFMu1!=0 && candTmp_diMuonFMu0->hasTrackDetails() && candTmp_diMuonFMu1->hasTrackDetails() ){
+              if ( tamu::helpers::sameTrack( &*track, &(candTmp_diMuonFMu0->pseudoTrack()) ) || tamu::helpers::sameTrack( &*track, &(candTmp_diMuonFMu1->pseudoTrack()) ) ) trackIsMuon = true;
+            }
+          }
 
           if ( trackIsMuon == false ) {
             //dimuC iso
@@ -2025,15 +2040,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             if (    dRC       < m_threshold_DiMuons_Iso_dR
               && track->pt()  > m_threshold_DiMuons_Iso_pT
 		          && fabs( dzC )  < m_threshold_DiMuons_Iso_dz ) { diMuonC_IsoTk_FittedVtx += track->pt(); }//end dimuC iso calculation
-
-            //dimuF iso
-            double dPhiF = tamu::helpers::My_dPhi( diMuonF->vertexMomentum().phi(), track->phi() );
-            double dEtaF = diMuonF->vertexMomentum().eta() - track->eta();
-            double dRF   = sqrt( dPhiF*dPhiF + dEtaF*dEtaF );
-            double dzF   = b_diMuonF_FittedVtx_dz - track->dz(beamSpot->position());
-            if (    dRF       < m_threshold_DiMuons_Iso_dR
-              && track->pt()  > m_threshold_DiMuons_Iso_pT
-  		        && fabs( dzF )  < m_threshold_DiMuons_Iso_dz ) { diMuonF_IsoTk_FittedVtx += track->pt(); }//end dimuF iso calculation
 
             //dimuC mu0 iso
             double dPhiC0 = tamu::helpers::My_dPhi( candFittedVtx_diMuonCMu0->pseudoTrack().phi(), track->phi() );
@@ -2053,11 +2059,79 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
             if ( dRC1 < 0.4 && track->pt() > 0.5 && fabs( dzC1 ) < 0.1 ) { diMuonCMu1_IsoTk0p4_FittedVtx += track->pt(); }//cone size: 0.4
             if ( dRC1 < 0.5 && track->pt() > 0.5 && fabs( dzC1 ) < 0.1 ) { diMuonCMu1_IsoTk0p5_FittedVtx += track->pt(); }//cone size: 0.5
 
+          }//end trackIsMuon
+
+        }//end loop over tracks
+
+      }//end if cast exists
+
+      b_diMuonC_IsoTk_FittedVtx = diMuonC_IsoTk_FittedVtx;
+      b_isoC_1mm = b_diMuonC_IsoTk_FittedVtx;
+      b_diMuonCMu0_IsoTk0p3_FittedVtx = diMuonCMu0_IsoTk0p3_FittedVtx;
+      b_diMuonCMu0_IsoTk0p4_FittedVtx = diMuonCMu0_IsoTk0p4_FittedVtx;
+      b_diMuonCMu0_IsoTk0p5_FittedVtx = diMuonCMu0_IsoTk0p5_FittedVtx;
+      b_diMuonCMu1_IsoTk0p3_FittedVtx = diMuonCMu1_IsoTk0p3_FittedVtx;
+      b_diMuonCMu1_IsoTk0p4_FittedVtx = diMuonCMu1_IsoTk0p4_FittedVtx;
+      b_diMuonCMu1_IsoTk0p5_FittedVtx = diMuonCMu1_IsoTk0p5_FittedVtx;
+
+  }//end diMuonC not null and vertex valid
+
+  if ( diMuonF != NULL && diMuonF->vertexValid() ) {
+
+    double diMuonF_IsoTk_FittedVtx = -999.;
+    double diMuonFMu0_IsoTk0p3_FittedVtx = -999.;
+    double diMuonFMu0_IsoTk0p4_FittedVtx = -999.;
+    double diMuonFMu0_IsoTk0p5_FittedVtx = -999.;
+    double diMuonFMu1_IsoTk0p3_FittedVtx = -999.;
+    double diMuonFMu1_IsoTk0p4_FittedVtx = -999.;
+    double diMuonFMu1_IsoTk0p5_FittedVtx = -999.;
+
+    const pat::PackedCandidate* candFittedVtx_diMuonFMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(0)->sourceCandidatePtr(0).get());
+    const pat::PackedCandidate* candFittedVtx_diMuonFMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonF->muon(1)->sourceCandidatePtr(0).get());
+
+    //Avoid null dynamic cast: casuing segmentation violation error
+    //In cases no dynamic cast exists, the event shouldn't be considered
+    //since the track couldn't be matched to the muons in the dimuon, this will lead to wrong iso.
+    if ( candFittedVtx_diMuonFMu0!=0 && candFittedVtx_diMuonFMu1!=0 && candFittedVtx_diMuonFMu0->hasTrackDetails() && candFittedVtx_diMuonFMu1->hasTrackDetails() ){
+
+        diMuonF_IsoTk_FittedVtx = 0.0;
+        diMuonFMu0_IsoTk0p3_FittedVtx = 0.0;
+        diMuonFMu0_IsoTk0p4_FittedVtx = 0.0;
+        diMuonFMu0_IsoTk0p5_FittedVtx = 0.0;
+        diMuonFMu1_IsoTk0p3_FittedVtx = 0.0;
+        diMuonFMu1_IsoTk0p4_FittedVtx = 0.0;
+        diMuonFMu1_IsoTk0p5_FittedVtx = 0.0;
+
+        for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+          bool trackIsMuon = false;
+          if ( m_debug > 10 ) std::cout << "track_px: " <<track->px() << "; track_py: "<<track->py() <<"; track_pz: "<<track->pz()<< "; track_vx: " <<track->vx() << "; track_vy: "<<track->vy() <<"; track_vz: "<<track->vz()<<std::endl;
+
+          //Track used for iso calculation can't be from signal muons
+          if ( tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonFMu0->pseudoTrack()) ) || tamu::helpers::sameTrack( &*track, &(candFittedVtx_diMuonFMu1->pseudoTrack()) ) ) trackIsMuon = true;
+          //If the other dimu exists, also exclude its signal muons
+          if ( diMuonC != NULL && diMuonC->vertexValid() ) {
+            const pat::PackedCandidate* candTmp_diMuonCMu0 = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(0)->sourceCandidatePtr(0).get());
+            const pat::PackedCandidate* candTmp_diMuonCMu1 = dynamic_cast<const pat::PackedCandidate*>(diMuonC->muon(1)->sourceCandidatePtr(0).get());
+            if ( candTmp_diMuonCMu0!=0 && candTmp_diMuonCMu1!=0 && candTmp_diMuonCMu0->hasTrackDetails() && candTmp_diMuonCMu1->hasTrackDetails() ){
+              if ( tamu::helpers::sameTrack( &*track, &(candTmp_diMuonCMu0->pseudoTrack()) ) || tamu::helpers::sameTrack( &*track, &(candTmp_diMuonCMu1->pseudoTrack()) ) ) trackIsMuon = true;
+            }
+          }
+
+          if ( trackIsMuon == false ) {
+            //dimuF iso
+            double dPhiF = tamu::helpers::My_dPhi( diMuonF->vertexMomentum().phi(), track->phi() );
+            double dEtaF = diMuonF->vertexMomentum().eta() - track->eta();
+            double dRF   = sqrt( dPhiF*dPhiF + dEtaF*dEtaF );
+            double dzF   = b_diMuonF_FittedVtx_dz - track->dz(beamSpot->position());
+            if (    dRF       < m_threshold_DiMuons_Iso_dR
+              && track->pt()  > m_threshold_DiMuons_Iso_pT
+  		        && fabs( dzF )  < m_threshold_DiMuons_Iso_dz ) { diMuonF_IsoTk_FittedVtx += track->pt(); }//end dimuF iso calculation
+
             //dimuF mu0 iso
             double dPhiF0 = tamu::helpers::My_dPhi( candFittedVtx_diMuonFMu0->pseudoTrack().phi(), track->phi() );
             double dEtaF0 = candFittedVtx_diMuonFMu0->pseudoTrack().eta() - track->eta();
             double dRF0   = sqrt( dPhiF0*dPhiF0 + dEtaF0*dEtaF0 );
-            double dzF0   = candFittedVtx_diMuonCMu0->pseudoTrack().dz(beamSpot->position()) - track->dz(beamSpot->position());
+            double dzF0   = candFittedVtx_diMuonFMu0->pseudoTrack().dz(beamSpot->position()) - track->dz(beamSpot->position());
             if ( dRF0 < 0.3 && track->pt() > 0.5 && fabs( dzF0 ) < 0.1 ) { diMuonFMu0_IsoTk0p3_FittedVtx += track->pt(); }//cone size: 0.3
             if ( dRF0 < 0.4 && track->pt() > 0.5 && fabs( dzF0 ) < 0.1 ) { diMuonFMu0_IsoTk0p4_FittedVtx += track->pt(); }//cone size: 0.4
             if ( dRF0 < 0.5 && track->pt() > 0.5 && fabs( dzF0 ) < 0.1 ) { diMuonFMu0_IsoTk0p5_FittedVtx += track->pt(); }//cone size: 0.5
@@ -2077,24 +2151,15 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
       }//end if cast exists
 
-      b_diMuonC_IsoTk_FittedVtx = diMuonC_IsoTk_FittedVtx;
       b_diMuonF_IsoTk_FittedVtx = diMuonF_IsoTk_FittedVtx;
-      b_isoC_1mm = b_diMuonC_IsoTk_FittedVtx;
       b_isoF_1mm = b_diMuonF_IsoTk_FittedVtx;
-      b_diMuonCMu0_IsoTk0p3_FittedVtx = diMuonCMu0_IsoTk0p3_FittedVtx;
-      b_diMuonCMu0_IsoTk0p4_FittedVtx = diMuonCMu0_IsoTk0p4_FittedVtx;
-      b_diMuonCMu0_IsoTk0p5_FittedVtx = diMuonCMu0_IsoTk0p5_FittedVtx;
-      b_diMuonCMu1_IsoTk0p3_FittedVtx = diMuonCMu1_IsoTk0p3_FittedVtx;
-      b_diMuonCMu1_IsoTk0p4_FittedVtx = diMuonCMu1_IsoTk0p4_FittedVtx;
-      b_diMuonCMu1_IsoTk0p5_FittedVtx = diMuonCMu1_IsoTk0p5_FittedVtx;
       b_diMuonFMu0_IsoTk0p3_FittedVtx = diMuonFMu0_IsoTk0p3_FittedVtx;
       b_diMuonFMu0_IsoTk0p4_FittedVtx = diMuonFMu0_IsoTk0p4_FittedVtx;
       b_diMuonFMu0_IsoTk0p5_FittedVtx = diMuonFMu0_IsoTk0p5_FittedVtx;
       b_diMuonFMu1_IsoTk0p3_FittedVtx = diMuonFMu1_IsoTk0p3_FittedVtx;
       b_diMuonFMu1_IsoTk0p4_FittedVtx = diMuonFMu1_IsoTk0p4_FittedVtx;
       b_diMuonFMu1_IsoTk0p5_FittedVtx = diMuonFMu1_IsoTk0p5_FittedVtx;
-
-  }//end dimuon has good fitted vertex
+  }//end diMuonF not null and vertex valid
 
   //Register pixel hits info for two muons of each dimuon
   b_nMuHasValidHitInPixel = 0;
@@ -2123,9 +2188,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_diMuonF_m1_FittedVtx_pixelLayersWithMeasurement = -1000;
   b_diMuonF_m2_FittedVtx_pixelLayersWithMeasurement = -1000;
 
-  //Note: here probably only need to specify diMuC/F !=NULL,
-  //vertexValid requirement is too strong?
-  if ( b_is2DiMuonsFittedVtxOK ) {
+  //Here only need diMu not NULL
+  if ( diMuonC != NULL ) {
     for(uint32_t k=0;k<2;k++){
 
       if ( diMuonC->muon(k)->innerTrack().isAvailable() ){
@@ -2162,6 +2226,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
           if(k==1) b_diMuonC_m2_FittedVtx_pixelLayersWithMeasurement = p.pixelLayersWithMeasurement();
         }
       }//C innerTrack available
+    }//end loop k
+  }//end diMuonC not null
+
+  if ( diMuonF != NULL ) {
+    for(uint32_t k=0;k<2;k++){
 
       if ( diMuonF->muon(k)->innerTrack().isAvailable() ){
         const reco::HitPattern& p = diMuonF->muon(k)->innerTrack()->hitPattern();
@@ -2197,7 +2266,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         }
       }//F innerTrack available
     }//end loop k
-  }//end b_is2DiMuonsFittedVtxOK
+  }//end dimuF not null
 
   //****************************************************************************
   //                    Control Region Events for BKG Modeling
@@ -2691,7 +2760,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("genFakeDiMu_dPhi",  &b_genFakeDiMu_dPhi,  "genFakeDiMu_dPhi/F");
   m_ttree->Branch("genFakeDiMu_dR",    &b_genFakeDiMu_dR,    "genFakeDiMu_dR/F");
   m_ttree->Branch("genFakeDiMu_dM",    &b_genFakeDiMu_dM,    "genFakeDiMu_dM/F");
-  m_ttree->Branch("gen_ddPhi",    &b_gen_ddPhi,    "gen_ddPhi/F");
+  m_ttree->Branch("gen_ddPhi",         &b_gen_ddPhi,         "gen_ddPhi/F");
 
   // GEN Level Muons
   m_ttree->Branch("genMu0_pT",  &b_genMu0_pT,  "genMu0_pT/F");
@@ -2717,20 +2786,22 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is4GenMu8",   &b_is4GenMu8,      "is4GenMu8/O");
 
   //For signal HLT study
-  m_ttree->Branch("has1GenMu16",  &b_has1GenMu16,     "has1GenMu16/O");
-  m_ttree->Branch("has1GenMu6",   &b_has1GenMu6,      "has1GenMu6/O");
-  m_ttree->Branch("has1GenMu16Mu6Mu6",   &b_has1GenMu16Mu6Mu6,      "has1GenMu16Mu6Mu6/O");
+  m_ttree->Branch("has1GenMu16",       &b_has1GenMu16,      "has1GenMu16/O");
+  m_ttree->Branch("has1GenMu6",        &b_has1GenMu6,       "has1GenMu6/O");
+  m_ttree->Branch("has1GenMu16Mu6Mu6", &b_has1GenMu16Mu6Mu6,"has1GenMu16Mu6Mu6/O");
 
   //****************************************************************************
   //                          RECO LEVEL BRANCHES
   //****************************************************************************
-  m_ttree->Branch("nRecoMu",  &b_nRecoMu,  "nRecoMu/I");
-  m_ttree->Branch("nSAMu",    &b_nSAMu,    "nSAMu/I");
-  m_ttree->Branch("nMuPairs", &b_nMuPairs, "nMuPairs/I");
+  m_ttree->Branch("nRecoMu",     &b_nRecoMu,     "nRecoMu/I");
+  m_ttree->Branch("nSAMu",       &b_nSAMu,       "nSAMu/I");
+  m_ttree->Branch("dimuC_nSAMu", &b_dimuC_nSAMu, "dimuC_nSAMu/I");
+  m_ttree->Branch("dimuF_nSAMu", &b_dimuF_nSAMu, "dimuF_nSAMu/I");
+  m_ttree->Branch("nMuPairs",  &b_nMuPairs,  "nMuPairs/I");
   m_ttree->Branch("nDaughterPerMuPair", &b_nDaughterPerMuPair, "nDaughterPerMuPair/F");
   m_ttree->Branch("nMuJets",   &b_nMuJets,   "nMuJets/I");
-  m_ttree->Branch("nOrphans",  &b_nOrphans,  "nOrphans/I");
   m_ttree->Branch("nDaughterPerMuJet",  &b_nDaughterPerMuJet,  "nDaughterPerMuJet/F");
+  m_ttree->Branch("nOrphans",  &b_nOrphans,  "nOrphans/I");
 
   m_ttree->Branch("selMu0_px",  &b_selMu0_px,  "selMu0_px/F");
   m_ttree->Branch("selMu1_px",  &b_selMu1_px,  "selMu1_px/F");
@@ -2774,6 +2845,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("diMuonC_FittedVtx_Lxy", &b_diMuonC_FittedVtx_Lxy, "diMuonC_FittedVtx_Lxy/F");
   m_ttree->Branch("diMuonC_FittedVtx_L",   &b_diMuonC_FittedVtx_L,   "diMuonC_FittedVtx_L/F");
   m_ttree->Branch("diMuonC_FittedVtx_dz",  &b_diMuonC_FittedVtx_dz,  "diMuonC_FittedVtx_dz/F");
+  m_ttree->Branch("diMuonC_FittedVtx_prob",&b_diMuonC_FittedVtx_prob,"diMuonC_FittedVtx_prob/F");
 
   m_ttree->Branch("diMuonF_FittedVtx_m",   &b_diMuonF_FittedVtx_m,   "diMuonF_FittedVtx_m/F");
   m_ttree->Branch("diMuonF_FittedVtx_px",  &b_diMuonF_FittedVtx_px,  "diMuonF_FittedVtx_px/F");
@@ -2787,6 +2859,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("diMuonF_FittedVtx_Lxy", &b_diMuonF_FittedVtx_Lxy, "diMuonF_FittedVtx_Lxy/F");
   m_ttree->Branch("diMuonF_FittedVtx_L",   &b_diMuonF_FittedVtx_L,   "diMuonF_FittedVtx_L/F");
   m_ttree->Branch("diMuonF_FittedVtx_dz",  &b_diMuonF_FittedVtx_dz,  "diMuonF_FittedVtx_dz/F");
+  m_ttree->Branch("diMuonF_FittedVtx_prob",&b_diMuonF_FittedVtx_prob,"diMuonF_FittedVtx_prob/F");
 
   m_ttree->Branch("diMuonC_IsoTk_FittedVtx", &b_diMuonC_IsoTk_FittedVtx, "diMuonC_IsoTk_FittedVtx/F");
   m_ttree->Branch("diMuonCMu0_IsoTk0p3_FittedVtx", &b_diMuonCMu0_IsoTk0p3_FittedVtx, "diMuonCMu0_IsoTk0p3_FittedVtx/F");

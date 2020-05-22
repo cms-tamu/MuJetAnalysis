@@ -14,5 +14,5 @@ parrot_run $cmsMount $SHELL << EOF
 shopt -s expand_aliases
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsenv
-echo 'gROOT->ProcessLine(".L foo_modified.C++"); analysis("SignalsList2017MSSMD.txt")' | root -l -b
+echo 'gROOT->ProcessLine(".L foo_modified.C++"); analysis("SignalsList2017MSSMD_1SAmu.txt")' | root -l -b
 EOF

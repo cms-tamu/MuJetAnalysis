@@ -478,7 +478,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   */
   //end DEBUG @Wei SHI 2019.04.18
 
-  //double PairCount=-1;
+  //double PairCount = 0;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {
 	    for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
@@ -528,16 +528,43 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           else if (m_groupByCharge == kGroupByOppositeCharge) satisfied = satisfied  &&  (one->charge() != two->charge());
           else if (m_groupByCharge == kGroupBySameCharge    ) satisfied = satisfied  &&  (one->charge() == two->charge());
 
+          //Start DEBUG@WeiShi
+          /*std::cout <<"----------"<<std::endl;
+          std::cout << "Muon one (x,y,z)[cm]: " << one->vx() <<", "<< one->vy() <<", "<< one->vz() <<std::endl;
+          std::cout << "             pT[GeV]: " << one->pt() << "; eta: " << one->eta() << "; phi: " << one->phi() << "; q: " << one->charge() << "; Tracker Mu: " << one->isTrackerMuon() << "; Global Mu: " << one->isGlobalMuon() << "; PF Mu:" << one->isPFMuon() << "; SA Mu: " << one->isStandAloneMuon() <<std::endl;
+          if( one->innerTrack().isAvailable() ){
+            std::cout << "  innerTrack pT[GeV]: " << one->innerTrack()->pt() << "; eta: " << one->innerTrack()->eta() << "; phi: " << one->innerTrack()->phi() <<std::endl;
+          }
+          if( one->outerTrack().isAvailable() ){
+            std::cout << "  outerTrack pT[GeV]: " << one->outerTrack()->pt() << "; eta: " << one->outerTrack()->eta() << "; phi: " << one->outerTrack()->phi() <<std::endl;
+          }
+          if( one->globalTrack().isAvailable() ){
+            std::cout << " globalTrack pT[GeV]: " << one->globalTrack()->pt() << "; eta: " << one->globalTrack()->eta() << "; phi: " << one->globalTrack()->phi() <<std::endl;
+          }
+          std::cout << "Muon two (x,y,z)[cm]: " << two->vx() <<", "<< two->vy() <<", "<< two->vz() <<std::endl;
+          std::cout << "             pT[GeV]: " << two->pt() << "; eta: " << two->eta() << "; phi: " << two->phi() << "; q: " << two->charge() << "; Tracker Mu: " << two->isTrackerMuon() << "; Global Mu: " << two->isGlobalMuon() << "; PF Mu:" << two->isPFMuon() << "; SA Mu: " << two->isStandAloneMuon() <<std::endl;
+          if( two->innerTrack().isAvailable() ){
+            std::cout << "  innerTrack pT[GeV]: " << two->innerTrack()->pt() << "; eta: " << two->innerTrack()->eta() << "; phi: " << two->innerTrack()->phi() <<std::endl;
+          }
+          if( two->outerTrack().isAvailable() ){
+            std::cout << "  outerTrack pT[GeV]: " << two->outerTrack()->pt() << "; eta: " << two->outerTrack()->eta() << "; phi: " << two->outerTrack()->phi() <<std::endl;
+          }
+          if( two->globalTrack().isAvailable() ){
+            std::cout << " globalTrack pT[GeV]: " << two->globalTrack()->pt() << "; eta: " << two->globalTrack()->eta() << "; phi: " << two->globalTrack()->phi() <<std::endl;
+          }
+          std::cout << "muonPair mass: " << muonPair.mass() << ", vtx valid: " << muonPair.vertexValid() <<", dR: "<< muonPair.dR(0, 1, muonPair.vertexValid()) <<std::endl;
+          if( muonPair.vertexValid() ){
+            std::cout << "         vtx Prob.: "<< muonPair.vertexProb() <<std::endl;
+          }*/
+          //End DEBUG@WeiShi
+
           if (satisfied) {
             Pairs->push_back(muonPair);//All possible pairs
             jets.push_back(muonPair);//tmp jets/pairs, to be cleaned further
+            //Start DEBUG@WeiShi
             //PairCount++;
-            //std::cout <<"----------"<<std::endl;
-            //std::cout << "Pair #"<<PairCount<<std::endl;
-            //std::cout << "Muon one (x,y,z)[cm]: " << one->vx() <<", "<< one->vy() <<", "<< one->vz() <<std::endl;
-            //std::cout << "             pT[GeV]: " << one->pt() << "; eta: " << one->eta() << "; phi: " << one->phi() << "; q: " << one->charge() << "; Tracker Mu: " << one->isTrackerMuon() << "; Global Mu: " << one->isGlobalMuon() << "; PF Mu:" << one->isPFMuon() <<std::endl;
-            //std::cout << "Muon two (x,y,z)[cm]: " << two->vx() <<", "<< two->vy() <<", "<< two->vz() <<std::endl;
-            //std::cout << "             pT[GeV]: " << two->pt() << "; eta: " << two->eta() << "; phi: " << two->phi() << "; q: " << two->charge() << "; Tracker Mu: " << two->isTrackerMuon() << "; Global Mu: " << two->isGlobalMuon() << "; PF Mu:" << two->isPFMuon() <<std::endl;
+            //std::cout << "Satisfied pair #" << PairCount <<std::endl;
+            //End DEBUG@WeiShi
           }//end if satisfied
 
 	      }//end if muon two okay

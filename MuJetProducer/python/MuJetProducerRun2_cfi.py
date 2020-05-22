@@ -37,7 +37,7 @@ MuJetProducer = cms.EDProducer(
     groupingMode = cms.string("GroupByMassAndVertexProbOrDeltaR"),
     maxDeltaR = cms.double(0.01),
     maxMass = cms.double(60.),
-    minVertexProb = cms.double(0.01),
+    minVertexProb = cms.double(-1),
     groupByCharge = cms.string("opposite"),
 
     # defines isolation variables for offline cuts
