@@ -230,15 +230,30 @@ bool pat::MultiMuon::calculateVertex(const TransientTrackBuilder *transientTrack
     if (muon(i) == NULL) {
       throw cms::Exception("MultiMuon") << "MultiMuons should only contain pat::Muons";
     }
-    if (muon(i)->innerTrack().isAvailable()) {//i.e. tracker track
+		//If not a tracker mu, it means the tracker track/innerTrack can't find compatible hit in calo & muon sys.;
+		//it's high chance the global mu is wrong (pT) and the inner track not right
+		//A global muon that's not a tracker muon could still have innerTrack, this innerTrack can't be trusted
+    /*if ( muon(i)->innerTrack().isAvailable() && muon(i)->isTrackerMuon() && muon(i)->isPFMuon() ) {
+			//use innerTrack only if the muon is tracker muon & PF muon
 			//std::cout <<"muon "<< i <<": inner track"<<std::endl;
       tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->innerTrack()));
-      muonTracks.push_back(&*muon(i)->innerTrack()); //&*track
+      muonTracks.push_back(&*muon(i)->innerTrack());
     }
-    else if (muon(i)->outerTrack().isAvailable()) {//i.e. muon detector only
+    else if (muon(i)->outerTrack().isAvailable()) {
+			//if it's not tracker+PF muon (i.e. PF+global/SA), use outerTrack
 			//std::cout <<"muon "<< i <<": outer track"<<std::endl;
       tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->outerTrack()));
-      muonTracks.push_back(&*muon(i)->outerTrack()); //&*track
+      muonTracks.push_back(&*muon(i)->outerTrack());
+    }*/
+		if (muon(i)->innerTrack().isAvailable()) {
+			//std::cout <<"muon "<< i <<": inner track"<<std::endl;
+      tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->innerTrack()));
+      muonTracks.push_back(&*muon(i)->innerTrack());
+    }
+    else if (muon(i)->outerTrack().isAvailable()) {
+			//std::cout <<"muon "<< i <<": outer track"<<std::endl;
+      tracksToVertex.push_back(transientTrackBuilder->build(muon(i)->outerTrack()));
+      muonTracks.push_back(&*muon(i)->outerTrack());
     }
   }
 

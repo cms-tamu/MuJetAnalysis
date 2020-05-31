@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=CutFlow
-#SBATCH --time=11:59:00
+#SBATCH --time=4:59:00
 #SBATCH --ntasks=1
-#SBATCH --mem=10000M
+#SBATCH --mem=7000M
 #SBATCH --output=CutFlow.out.%j
 
 module load cctools
@@ -14,5 +14,5 @@ parrot_run $cmsMount $SHELL << EOF
 shopt -s expand_aliases
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsenv
-echo 'gROOT->ProcessLine(".L foo_modified.C++"); analysis("SignalsList2017MSSMD_1SAmu.txt")' | root -l -b
+echo 'gROOT->ProcessLine(".L foo_modified.C++"); analysis("SignalsList2017MSSMD_1SAmu_NoVtxProbCut.txt")' | root -l -b
 EOF

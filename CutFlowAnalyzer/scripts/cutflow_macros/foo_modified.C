@@ -48,8 +48,8 @@ Float_t FitSigma = 0.0;
 
 void setup()
 {
-  for(int i=0;i<500;i++){
-    for(int j=0;j<18;j++){
+  for (int i=0;i<500;i++) {
+    for (int j=0;j<18;j++) {
       counter[i][j]=0;
       counterGENMatch[i][j]=0;
       TotEff[i][j]=0.0;
@@ -144,6 +144,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t   nSAMu;
   Int_t   dimuC_nSAMu;
   Int_t   dimuF_nSAMu;
+  Int_t   nNonTrackerMu;
+  Int_t   dimuC_nNonTrackerMu;
+  Int_t   dimuF_nNonTrackerMu;
   Float_t diMuonC_FittedVtx_prob;
   Float_t diMuonF_FittedVtx_prob;
   Int_t   nMuJets;
@@ -299,19 +302,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* GENLeadingLxy_pass_RECOmu1234 = new TH1F("GENLeadingLxy_pass_RECOmu1234",   "",  40, 0., 20.);
   TH1F* GENLeadingLz_pass_RECOmu1234  = new TH1F("GENLeadingLz_pass_RECOmu1234",    "", 120, 0., 60.);
 
-  TH1F* CvtxProbSAmuInCbeforeCut11 = new TH1F("CvtxProbSAmuInCbeforeCut11", "Di-#mu0 Vtx Fit Prob. Before Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.); //per 0.1%
-  TH1F* FvtxProbSAmuInCbeforeCut11 = new TH1F("FvtxProbSAmuInCbeforeCut11", "Di-#mu1 Vtx Fit Prob. Before Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.);
-  TH1F* CvtxProbSAmuInFbeforeCut11 = new TH1F("CvtxProbSAmuInFbeforeCut11", "Di-#mu0 Vtx Fit Prob. Before Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
-  TH1F* FvtxProbSAmuInFbeforeCut11 = new TH1F("FvtxProbSAmuInFbeforeCut11", "Di-#mu1 Vtx Fit Prob. Before Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
-  TH1F* CvtxProbNoSAmubeforeCut11  = new TH1F("CvtxProbNoSAmubeforeCut11",  "Di-#mu0 Vtx Fit Prob. Before Cut 11 (all PF loose mu)", 1000, 0., 1.);
-  TH1F* FvtxProbNoSAmubeforeCut11  = new TH1F("FvtxProbNoSAmubeforeCut11",  "Di-#mu1 Vtx Fit Prob. Before Cut 11 (all PF loose mu)", 1000, 0., 1.);
-
-  TH1F* CvtxProbSAmuInCafterCut11 = new TH1F("CvtxProbSAmuInCafterCut11", "Di-#mu0 Vtx Fit Prob. After Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.);
-  TH1F* FvtxProbSAmuInCafterCut11 = new TH1F("FvtxProbSAmuInCafterCut11", "Di-#mu1 Vtx Fit Prob. After Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.);
-  TH1F* CvtxProbSAmuInFafterCut11 = new TH1F("CvtxProbSAmuInFafterCut11", "Di-#mu0 Vtx Fit Prob. After Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
-  TH1F* FvtxProbSAmuInFafterCut11 = new TH1F("FvtxProbSAmuInFafterCut11", "Di-#mu1 Vtx Fit Prob. After Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
-  TH1F* CvtxProbNoSAmuafterCut11  = new TH1F("CvtxProbNoSAmuafterCut11",  "Di-#mu0 Vtx Fit Prob. After Cut 11 (all PF loose mu)", 1000, 0., 1.);
+  TH1F* CvtxProbNoSAmuafterCut11  = new TH1F("CvtxProbNoSAmuafterCut11",  "Di-#mu0 Vtx Fit Prob. After Cut 11 (all PF loose mu)", 1000, 0., 1.);//per 0.001
   TH1F* FvtxProbNoSAmuafterCut11  = new TH1F("FvtxProbNoSAmuafterCut11",  "Di-#mu1 Vtx Fit Prob. After Cut 11 (all PF loose mu)", 1000, 0., 1.);
+  TH1F* CvtxProbSAmuInCafterCut11 = new TH1F("CvtxProbSAmuInCafterCut11", "Di-#mu0 Vtx Fit Prob. After Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.);
+  TH1F* FvtxProbSAmuInFafterCut11 = new TH1F("FvtxProbSAmuInFafterCut11", "Di-#mu1 Vtx Fit Prob. After Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
 
   //Trigger accept eff as function of leading muon pT, eta and phi after cut #9
   TH1F* leading_pt_pass_basic      = new TH1F("leading_pt_pass_basic",      "", 150,    0, 150); //per 1
@@ -442,7 +436,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *RECOrePaired2muLeadingdR    = new TH1F("RECOrePaired2muLeadingdR",    "", 450, 0., 4.5);//binning 0.01
   TH1F *RECOrePaired2muTrailingdR   = new TH1F("RECOrePaired2muTrailingdR",   "", 450, 0., 4.5);
 
-  TH1F *dZdimuons         = new TH1F("dZdimuons", "Difference in z of Reconstructed Signal Production Vertex at the Beam Line", 24000, -24, 24);//binning 0.002 cm, i.e. 20 microns
+  TH1F *dZdimuons         = new TH1F("dZdimuons", "Difference in z of Reconstructed Signal Production Vertex at the Beam Line", 4800, -24, 24);//binning 0.01 cm
 
   TH1F *IsoDimuC          = new TH1F("IsoDimuC",          "", 1000, 0., 100.);//binning 0.1 GeV
   TH1F *IsoDimuF          = new TH1F("IsoDimuF",          "", 1000, 0., 100.);
@@ -531,13 +525,18 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("nSAMu",      &nSAMu);
   t->SetBranchAddress("dimuC_nSAMu",&dimuC_nSAMu);
   t->SetBranchAddress("dimuF_nSAMu",&dimuF_nSAMu);
+  t->SetBranchAddress("nNonTrackerMu", &nNonTrackerMu);
+  t->SetBranchAddress("dimuC_nNonTrackerMu", &dimuC_nNonTrackerMu);
+  t->SetBranchAddress("dimuF_nNonTrackerMu", &dimuF_nNonTrackerMu);
   t->SetBranchAddress("diMuonC_FittedVtx_prob",&diMuonC_FittedVtx_prob);
   t->SetBranchAddress("diMuonF_FittedVtx_prob",&diMuonF_FittedVtx_prob);
   t->SetBranchAddress("nMuJets",    &nMuJets);
 	t->SetBranchAddress("is2MuJets",  &is2MuJets);
   t->SetBranchAddress("is2DiMuons", &is2DiMuons);
-  t->SetBranchAddress("massC",      &massC);
-	t->SetBranchAddress("massF",      &massF);
+  //Need to use fitted vertex mass, not the muon pair mass
+  //In most cases, they are the close, but not necessarily in some cases
+  t->SetBranchAddress("diMuonC_FittedVtx_m", &massC);
+	t->SetBranchAddress("diMuonF_FittedVtx_m", &massF);
 
   t->SetBranchAddress("reco4mu_m",                  &reco4mu_m);
   t->SetBranchAddress("recoRePaired2muleading_m",   &recoRePaired2muleading_m);
@@ -621,17 +620,21 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcount0SAzeromujet = 0;
   int newcount0SAonemujet = 0;
   int newcount0SAtwomujet = 0;
-  int newcount0SAmuCZeroProb = 0;
-  int newcount0SAmuFZeroProb = 0;
-  int newcount1SAmuInCCZeroProb = 0;
-  int newcount1SAmuInCFZeroProb = 0;
-  int newcount1SAmuInFCZeroProb = 0;
-  int newcount1SAmuInFFZeroProb = 0;
+  int newcount0NonTrkMu = 0;
+  int newcount1NonTrkMu = 0;
+  int newcount2NonTrkMu = 0;
+  int newcount3NonTrkMu = 0;
+  int newcount4NonTrkMu = 0;
+  int newcount0SAmu = 0;
+  int newcount1SAmu = 0;
+  int newcount2SAmu = 0;
+  Float_t ProbSA = 0;
+  Float_t ProbPF = 0.01;
 
-  if( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
+  if ( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
 
-  if( CutFlowTable ){
-    for( int i = 0; i < nentries; i++ ){
+  if ( CutFlowTable ) {
+    for ( int i = 0; i < nentries; i++ ) {
       t->GetEntry(i);
       if ( verbose && (i % 1000000) == 0  ) std::cout << "Looking at Events " << i << std::endl;
       counter[k][0]++;
@@ -644,7 +647,7 @@ void efficiency(const std::vector<std::string>& dirNames)
       if (genMu0_pT > 8 && fabs(genMu0_eta) < 2.4 &&
           genMu1_pT > 8 && fabs(genMu1_eta) < 2.4 &&
           genMu2_pT > 8 && fabs(genMu2_eta) < 2.4 &&
-          genMu3_pT > 8 && fabs(genMu3_eta) < 2.4 && ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ){
+          genMu3_pT > 8 && fabs(genMu3_eta) < 2.4 && ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
             newcount++;
 
             GEN1stPt_pass_GEN->Fill(genMu0_pT);
@@ -662,37 +665,37 @@ void efficiency(const std::vector<std::string>& dirNames)
             else GENLeadingLz_pass_GEN->Fill(fabs(genA1_Lz));
 
             //selections
-            if(selMu0_pT > 8 && fabs(selMu0_eta) < 2.4){
+            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4) {
                newcountmu1st++;
                GEN1stPt_pass_1stRECOmu->Fill(genMu0_pT);
             }
 
-            if(selMu1_pT > 8 && fabs(selMu1_eta) < 2.4){
+            if (selMu1_pT > 8 && fabs(selMu1_eta) < 2.4) {
                newcountmu2nd++;
                GEN2ndPt_pass_2ndRECOmu->Fill(genMu1_pT);
             }
 
-            if(selMu2_pT > 8 && fabs(selMu2_eta) < 2.4){
+            if (selMu2_pT > 8 && fabs(selMu2_eta) < 2.4) {
                newcountmu3rd++;
                GEN3rdPt_pass_3rdRECOmu->Fill(genMu2_pT);
             }
 
-            if(selMu3_pT > 8 && fabs(selMu3_eta) < 2.4){
+            if (selMu3_pT > 8 && fabs(selMu3_eta) < 2.4) {
                newcountmu4th++;
                GEN4thPt_pass_4thRECOmu->Fill(genMu3_pT);
             }
 
-            if(selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4){
+            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4) {
                newcountmu12++;
                GEN1stPt_pass_RECOmu12->Fill(genMu0_pT);
             }
 
-            if(selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 && selMu2_pT > 8 && fabs(selMu2_eta) < 2.4){
+            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 && selMu2_pT > 8 && fabs(selMu2_eta) < 2.4) {
                newcountmu123++;
                GEN1stPt_pass_RECOmu123->Fill(genMu0_pT);
             }
 
-            if(selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 && selMu2_pT > 8 && fabs(selMu2_eta) < 2.4 && selMu3_pT > 8 && fabs(selMu3_eta) < 2.4){
+            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 && selMu2_pT > 8 && fabs(selMu2_eta) < 2.4 && selMu3_pT > 8 && fabs(selMu3_eta) < 2.4) {
                newcountmu1234++;
                GEN1stPt_pass_RECOmu1234->Fill(genMu0_pT);
 
@@ -708,10 +711,10 @@ void efficiency(const std::vector<std::string>& dirNames)
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ GEN Level       !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      if( is1GenMu17 ) {counter[k][1]++; counterGENMatch[k][1]++;} //Ask for one barrel muon pT>17GeV @GEN
-      if( is2GenMu8  ) {counter[k][2]++; counterGENMatch[k][2]++;} //Ask for two muons pT>8GeV (including 1st barrel muon) @GEN
-      if( is3GenMu8  ) {counter[k][3]++; counterGENMatch[k][3]++;} //Ask for three muons pT>8GeV (including 1st barrel muon) @GEN
-      if( is4GenMu8  ){
+      if ( is1GenMu17 ) {counter[k][1]++; counterGENMatch[k][1]++;} //Ask for one barrel muon pT>17GeV @GEN
+      if ( is2GenMu8  ) {counter[k][2]++; counterGENMatch[k][2]++;} //Ask for two muons pT>8GeV (including 1st barrel muon) @GEN
+      if ( is3GenMu8  ) {counter[k][3]++; counterGENMatch[k][3]++;} //Ask for three muons pT>8GeV (including 1st barrel muon) @GEN
+      if ( is4GenMu8  ) {
         counter[k][4]++;
         counterGENMatch[k][4]++;
 
@@ -720,7 +723,7 @@ void efficiency(const std::vector<std::string>& dirNames)
         //Phase-1 pixel system (2017+2018): 4th barrel pixel layer and 3rd fwd layer -> Lxy = 16.0 cm; Lz = 51.6 cm //To be used for Run2
         //[1]Reference: https://iopscience.iop.org/article/10.1088/1748-0221/12/07/C07009/pdf
         //[2]TDR: https://cds.cern.ch/record/1481838/files/CMS-TDR-011.pdf
-        if( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
+        if ( ( genA0_Lxy < 16.0 && fabs(genA0_Lz) < 51.6 ) && ( genA1_Lxy < 16.0 && fabs(genA1_Lz) < 51.6 ) ) {
             counter[k][5]++;
             counterGENMatch[k][5]++;
 
@@ -766,26 +769,17 @@ void efficiency(const std::vector<std::string>& dirNames)
             Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
             Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
 
-            if( is1SelMu17 ) counterGENMatch[k][6]++;
-            if( is2SelMu8  ) counterGENMatch[k][7]++;
-            if( is3SelMu8  ) {
-              counterGENMatch[k][8]++;
-
-              /*if(selMu3_pT >= 2 && selMu3_pT <= 3 && fabs(selMu3_eta) > 1.5 && genMu3_pT > 8 && fabs(genMu3_eta) < 0.9){
-                std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
-                std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
-                std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
-              }*/
-
-            }
-            if( is4SelMu8  ){
+            if ( is1SelMu17 ) counterGENMatch[k][6]++;
+            if ( is2SelMu8  ) counterGENMatch[k][7]++;
+            if ( is3SelMu8  ) counterGENMatch[k][8]++;
+            if ( is4SelMu8  ) {
               counterGENMatch[k][9]++;
 
               //###########################################################
               // Check trigger efficiency after basic offline pT selections
               // Need to put before "isSignalHLTFired" selector
               //###########################################################
-              if( PerEventTriggerEff ) {
+              if ( PerEventTriggerEff ) {
                 leading_pt_pass_basic->Fill(selMu0_pT); second_pt_pass_basic->Fill(selMu1_pT); third_pt_pass_basic->Fill(selMu2_pT); fourth_pt_pass_basic->Fill(selMu3_pT);
                 leading_eta_pass_basic->Fill(selMu0_eta); second_eta_pass_basic->Fill(selMu1_eta); third_eta_pass_basic->Fill(selMu2_eta); fourth_eta_pass_basic->Fill(selMu3_eta);
                 leading_phi_pass_basic->Fill(selMu0_phi); second_phi_pass_basic->Fill(selMu1_phi); third_phi_pass_basic->Fill(selMu2_phi); fourth_phi_pass_basic->Fill(selMu3_phi);
@@ -804,85 +798,58 @@ void efficiency(const std::vector<std::string>& dirNames)
 
               }//end if PerEventTriggerEff
 
-              if( isVtxOK ){
+              if ( isVtxOK ) {
                 counterGENMatch[k][10]++;
-
-                /*if ( (run == 1 && lumi == 1 && event == 247) || (run == 1 && lumi == 1 && event == 364) ){
-                  std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
-                  std::cout << "nMuJets: " << nMuJets << std::endl;
-                  if( is2DiMuons ){
-                    std::cout << "is2DiMuons-->Passed " << std::endl;
-                    std::cout << "nSAMu: " << nSAMu << std::endl;
-                    if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
-                      std::cout << "ValidPixHit-->Passed " << std::endl;
-                      std::cout << "dZ: " << diMuons_dz_FittedVtx << std::endl;
-                    }
-                  }
-                }*/
-
-                if ( nSAMu == 0 ){
-                  CvtxProbNoSAmubeforeCut11->Fill(diMuonC_FittedVtx_prob);
-                  FvtxProbNoSAmubeforeCut11->Fill(diMuonF_FittedVtx_prob);
-                }
-                if ( nSAMu == 1 && dimuC_nSAMu == 1 ){
-                  CvtxProbSAmuInCbeforeCut11->Fill(diMuonC_FittedVtx_prob);
-                  FvtxProbSAmuInCbeforeCut11->Fill(diMuonF_FittedVtx_prob);
-                }
-                if ( nSAMu == 1 && dimuF_nSAMu == 1 ){
-                  CvtxProbSAmuInFbeforeCut11->Fill(diMuonC_FittedVtx_prob);
-                  FvtxProbSAmuInFbeforeCut11->Fill(diMuonF_FittedVtx_prob);
-                }
 
                 if ( nSAMu == 0 && nMuJets == 0 ) newcount0SAzeromujet++;
                 if ( nSAMu == 0 && nMuJets == 1 ) newcount0SAonemujet++;
                 if ( nSAMu == 0 && nMuJets == 2 ) newcount0SAtwomujet++;
 
-                if( is2DiMuons ){//This selector also contains <=1 SA muon requirement for run2
+                //nSAMu = dimuC_nSAMu + dimuF_nSAMu
+                //if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
+                if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
+                                     (dimuC_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbSA && diMuonF_FittedVtx_prob > ProbPF) ||
+                                     (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {
                   counterGENMatch[k][11]++;
 
-                  if ( nSAMu == 0 ){
+                  if ( nSAMu == 0 ) {
                     CvtxProbNoSAmuafterCut11->Fill(diMuonC_FittedVtx_prob);
                     FvtxProbNoSAmuafterCut11->Fill(diMuonF_FittedVtx_prob);
-                    if ( diMuonC_FittedVtx_prob == 0 ) newcount0SAmuCZeroProb++;
-                    if ( diMuonF_FittedVtx_prob == 0 ) newcount0SAmuFZeroProb++;
                   }
-                  if ( nSAMu == 1 && dimuC_nSAMu == 1 ){
-                    CvtxProbSAmuInCafterCut11->Fill(diMuonC_FittedVtx_prob);
-                    FvtxProbSAmuInCafterCut11->Fill(diMuonF_FittedVtx_prob);
-                    if ( diMuonC_FittedVtx_prob == 0 ) newcount1SAmuInCCZeroProb++;
-                    if ( diMuonF_FittedVtx_prob == 0 ) newcount1SAmuInCFZeroProb++;
-                  }
-                  if ( nSAMu == 1 && dimuF_nSAMu == 1 ){
-                    CvtxProbSAmuInFafterCut11->Fill(diMuonC_FittedVtx_prob);
-                    FvtxProbSAmuInFafterCut11->Fill(diMuonF_FittedVtx_prob);
-                    if ( diMuonC_FittedVtx_prob == 0 ) newcount1SAmuInFCZeroProb++;
-                    if ( diMuonF_FittedVtx_prob == 0 ) newcount1SAmuInFFZeroProb++;
-                  }
+                  if ( dimuC_nSAMu == 1 ) CvtxProbSAmuInCafterCut11->Fill(diMuonC_FittedVtx_prob);
+                  if ( dimuF_nSAMu == 1 ) FvtxProbSAmuInFafterCut11->Fill(diMuonF_FittedVtx_prob);
 
-                  if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
+                  if ( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ) {
                     //!!! Note: this needs to match GEN cut on geometry
                     counterGENMatch[k][12]++;
 
-                    if( ModelSRWidth ) {
+                    if ( nNonTrackerMu == 0 ) newcount0NonTrkMu++;
+                    if ( nNonTrackerMu == 1 ) newcount1NonTrkMu++;
+                    if ( nNonTrackerMu == 2 ) newcount2NonTrkMu++;
+                    if ( nNonTrackerMu == 3 ) newcount3NonTrkMu++;
+                    if ( nNonTrackerMu == 4 ) newcount4NonTrkMu++;
+                    if ( nSAMu == 0 ) newcount0SAmu++;
+                    if ( nSAMu == 1 ) newcount1SAmu++;
+                    if ( nSAMu == 2 ) newcount2SAmu++;
+
+                    if ( ModelSRWidth ) {
                       DimuCMassAfterCut12->Fill(massC);
                       DimuFMassAfterCut12->Fill(massF);
                     }
 
                     //Note: this needs to be before the cut on dz
-                    if( PlotdZ ) {
-                      dZdimuons->Fill(diMuons_dz_FittedVtx);
-                    }//end PlotdZ
+                    if ( PlotdZ ) dZdimuons->Fill(diMuons_dz_FittedVtx);
 
-                    if( fabs(diMuons_dz_FittedVtx) < 0.1  ){
+                    if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
 
                       counterGENMatch[k][13]++;
 
-                      if( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ){
-                      //if( (massC >= 11.0 && massF >= 11.0 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC < 11.0 && massF < 11.0) ){
+                      if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
+                      //if ( (massC >= 11.0 && massF >= 11.0 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC < 11.0 && massF < 11.0) ) {
                         counterGENMatch[k][14]++;
 
                         //Note: this needs to be before the cut on iso
-                        if( PlotIso ) {
+                        if ( PlotIso ) {
                           IsoDimuC->Fill(diMuonC_IsoTk_FittedVtx);
                           IsoDimuF->Fill(diMuonF_IsoTk_FittedVtx);
                           IsoDimuCMu0_dR0p3->Fill(diMuonCMu0_IsoTk0p3_FittedVtx);
@@ -899,21 +866,21 @@ void efficiency(const std::vector<std::string>& dirNames)
                           IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
                         }//end PlotIso
 
-                        if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
-                        //if( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ){
+                        if ( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ) {
+                        //if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
                           counterGENMatch[k][15]++;
 
                           //###########################################################
                           // Check trigger efficiency after most selections
                           // Need to put before "isSignalHLTFired" selector
                           //###########################################################
-                          if( PerEventTriggerEff ) {
+                          if ( PerEventTriggerEff ) {
                             //L1, HLT eff.: denominator
                             leading_pt_pass_all->Fill(selMu0_pT); second_pt_pass_all->Fill(selMu1_pT); third_pt_pass_all->Fill(selMu2_pT); fourth_pt_pass_all->Fill(selMu3_pT);
                             leading_eta_pass_all->Fill(selMu0_eta); second_eta_pass_all->Fill(selMu1_eta); third_eta_pass_all->Fill(selMu2_eta); fourth_eta_pass_all->Fill(selMu3_eta);
                             leading_phi_pass_all->Fill(selMu0_phi); second_phi_pass_all->Fill(selMu1_phi); third_phi_pass_all->Fill(selMu2_phi); fourth_phi_pass_all->Fill(selMu3_phi);
 
-                            if( isSignalHLTFired ) {
+                            if ( isSignalHLTFired ) {
                               HLT_leading_pt_pass_all->Fill(selMu0_pT); HLT_second_pt_pass_all->Fill(selMu1_pT); HLT_third_pt_pass_all->Fill(selMu2_pT); HLT_fourth_pt_pass_all->Fill(selMu3_pT);
                               HLT_leading_eta_pass_all->Fill(selMu0_eta); HLT_second_eta_pass_all->Fill(selMu1_eta); HLT_third_eta_pass_all->Fill(selMu2_eta); HLT_fourth_eta_pass_all->Fill(selMu3_eta);
                               HLT_leading_phi_pass_all->Fill(selMu0_phi); HLT_second_phi_pass_all->Fill(selMu1_phi); HLT_third_phi_pass_all->Fill(selMu2_phi); HLT_fourth_phi_pass_all->Fill(selMu3_phi);
@@ -925,40 +892,40 @@ void efficiency(const std::vector<std::string>& dirNames)
                               L1_leading_phi_pass_all->Fill(selMu0_phi); L1_second_phi_pass_all->Fill(selMu1_phi); L1_third_phi_pass_all->Fill(selMu2_phi); L1_fourth_phi_pass_all->Fill(selMu3_phi);
                             }//L1 filter accept: numerator
 
-                            if( genA0_Lxy > genA1_Lxy ){
+                            if ( genA0_Lxy > genA1_Lxy ) {
                               genA_leading_Lxy_pass_all->Fill(genA0_Lxy);
-                              if( isSignalHLTFired ) HLT_genA_leading_Lxy_pass_all->Fill(genA0_Lxy);
+                              if ( isSignalHLTFired ) HLT_genA_leading_Lxy_pass_all->Fill(genA0_Lxy);
                             }
                             else{
                               genA_leading_Lxy_pass_all->Fill(genA1_Lxy);
-                              if( isSignalHLTFired ) HLT_genA_leading_Lxy_pass_all->Fill(genA1_Lxy);
+                              if ( isSignalHLTFired ) HLT_genA_leading_Lxy_pass_all->Fill(genA1_Lxy);
                             }
 
-                            if( fabs(genA0_Lz) > fabs(genA1_Lz) ){
+                            if ( fabs(genA0_Lz) > fabs(genA1_Lz) ) {
                               genA_leading_Lz_pass_all->Fill(fabs(genA0_Lz));
-                              if( isSignalHLTFired ) HLT_genA_leading_Lz_pass_all->Fill(fabs(genA0_Lz));
+                              if ( isSignalHLTFired ) HLT_genA_leading_Lz_pass_all->Fill(fabs(genA0_Lz));
                             }
                             else{
                               genA_leading_Lz_pass_all->Fill(fabs(genA1_Lz));
-                              if( isSignalHLTFired ) HLT_genA_leading_Lz_pass_all->Fill(fabs(genA1_Lz));
+                              if ( isSignalHLTFired ) HLT_genA_leading_Lz_pass_all->Fill(fabs(genA1_Lz));
                             }
 
-                            if( diMuonC_FittedVtx_Lxy > diMuonF_FittedVtx_Lxy ){
+                            if ( diMuonC_FittedVtx_Lxy > diMuonF_FittedVtx_Lxy ) {
                               diMuon_leading_Lxy_pass_all->Fill(diMuonC_FittedVtx_Lxy);
-                              if( isSignalHLTFired ) HLT_diMuon_leading_Lxy_pass_all->Fill(diMuonC_FittedVtx_Lxy);
+                              if ( isSignalHLTFired ) HLT_diMuon_leading_Lxy_pass_all->Fill(diMuonC_FittedVtx_Lxy);
                             }
                             else{
                               diMuon_leading_Lxy_pass_all->Fill(diMuonF_FittedVtx_Lxy);
-                              if( isSignalHLTFired ) HLT_diMuon_leading_Lxy_pass_all->Fill(diMuonF_FittedVtx_Lxy);
+                              if ( isSignalHLTFired ) HLT_diMuon_leading_Lxy_pass_all->Fill(diMuonF_FittedVtx_Lxy);
                             }
 
-                            if( sqrt( pow(diMuonC_FittedVtx_L, 2) - pow(diMuonC_FittedVtx_Lxy, 2) ) > sqrt( pow(diMuonF_FittedVtx_L, 2) - pow(diMuonF_FittedVtx_Lxy, 2) ) ){
+                            if ( sqrt( pow(diMuonC_FittedVtx_L, 2) - pow(diMuonC_FittedVtx_Lxy, 2) ) > sqrt( pow(diMuonF_FittedVtx_L, 2) - pow(diMuonF_FittedVtx_Lxy, 2) ) ) {
                               diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonC_FittedVtx_L, 2) - pow(diMuonC_FittedVtx_Lxy, 2) ) );
-                              if( isSignalHLTFired ) HLT_diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonC_FittedVtx_L, 2) - pow(diMuonC_FittedVtx_Lxy, 2) ) );
+                              if ( isSignalHLTFired ) HLT_diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonC_FittedVtx_L, 2) - pow(diMuonC_FittedVtx_Lxy, 2) ) );
                             }
                             else{
                               diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonF_FittedVtx_L, 2) - pow(diMuonF_FittedVtx_Lxy, 2) ) );
-                              if( isSignalHLTFired ) HLT_diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonF_FittedVtx_L, 2) - pow(diMuonF_FittedVtx_Lxy, 2) ) );
+                              if ( isSignalHLTFired ) HLT_diMuon_leading_Lz_pass_all->Fill( sqrt( pow(diMuonF_FittedVtx_L, 2) - pow(diMuonF_FittedVtx_Lxy, 2) ) );
                             }
 
                           }//end if PerEventTriggerEff
@@ -969,17 +936,17 @@ void efficiency(const std::vector<std::string>& dirNames)
                           //std::cout << "                             2nd dimu mu0: " << diMuonF_m1_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonF_m1_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonF_m1_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonF_m1_FittedVtx_hitpix_Phase1 << "; pT: " << muJetF_Mu0_pt << std::endl;
                           //std::cout << "                             2nd dimu mu1: " << diMuonF_m2_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonF_m2_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonF_m2_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonF_m2_FittedVtx_hitpix_Phase1 << "; pT: " << muJetF_Mu1_pt << std::endl;
 
-                          if( isSignalHLTFired ) {
+                          if ( isSignalHLTFired ) {
                             counterGENMatch[k][16]++;
                             //std::cout << "    HLT Fired!" << std::endl;
 
-                            if( ModelSRWidth ) {
+                            if ( ModelSRWidth ) {
                               DimuMass->Fill( (massC+massF)/2 );
                               DimuCMassAfterCut16->Fill(massC);
                               DimuFMassAfterCut16->Fill(massF);
                             }
 
-                            if( is2DiMuonsMassOK ) counterGENMatch[k][17]++; //end 17
+                            if ( is2DiMuonsMassOK ) counterGENMatch[k][17]++; //end 17
                           }//end 16
                         }//end 15
                       }//end 14
@@ -989,9 +956,9 @@ void efficiency(const std::vector<std::string>& dirNames)
               }//end 10
             }//end 9
 
-            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            //+   End using GEN Match counter ONLY, for MC studies  +
-            //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            //+   End using GEN Match counter ONLY, for signal MC studies  +
+            //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         }//End fiducial volume cut on Phase-1 pixel @GEN
       }//End asking for four muons pT>8GeV (including 1st barrel muon) @GEN
@@ -1002,19 +969,23 @@ void efficiency(const std::vector<std::string>& dirNames)
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ RECO Level      !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      if( is1SelMu17 ) counter[k][6]++;
-      if( is2SelMu8  ) counter[k][7]++;
-      if( is3SelMu8  ) counter[k][8]++;
-      if( is4SelMu8  ){
+      if ( is1SelMu17 ) counter[k][6]++;
+      if ( is2SelMu8  ) counter[k][7]++;
+      if ( is3SelMu8  ) counter[k][8]++;
+      if ( is4SelMu8  ) {
         counter[k][9]++;
 
-        if( isVtxOK ){
+        if ( isVtxOK ) {
           counter[k][10]++;
 
-          if( is2DiMuons ){//This selector also contains <=1 SA muon requirement for run2
+          //nSAMu = dimuC_nSAMu + dimuF_nSAMu
+          //if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
+          if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
+                               (dimuC_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbSA && diMuonF_FittedVtx_prob > ProbPF) ||
+                               (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {
             counter[k][11]++;
 
-            if( ModelBKGShape ) {
+            if ( ModelBKGShape ) {
               RECO4muMass->Fill(reco4mu_m);
               RECOrePaired2muLeadingMass->Fill(recoRePaired2muleading_m);
               RECOrePaired2muTrailingMass->Fill(recoRePaired2mutrailing_m);
@@ -1022,39 +993,39 @@ void efficiency(const std::vector<std::string>& dirNames)
               RECOrePaired2muTrailingdR->Fill(recoRePaired2mutrailing_dR);
             }//end ModelBKGShape
 
-            if( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ){
+            if ( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ) {
               //!!! Note: this needs to match GEN cut on geometry
               counter[k][12]++;
 
-              if( fabs(diMuons_dz_FittedVtx) < 0.1  ){
+              if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
                 counter[k][13]++;
 
-                if( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ){
-                //if( (massC >= 11.0 && massF >= 11.0 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC < 11.0 && massF < 11.0) ){
+                if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
+                //if ( (massC >= 11.0 && massF >= 11.0 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC < 11.0 && massF < 11.0) ) {
                   counter[k][14]++;
 
-                  if( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ){
-                  //if( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ){
+                  if ( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ) {
+                  //if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
                     counter[k][15]++;
 
-                    if( isSignalHLTFired ) {
+                    if ( isSignalHLTFired ) {
                       counter[k][16]++;
 
-                      if( is2DiMuonsMassOK ) {
+                      if ( is2DiMuonsMassOK ) {
                         counter[k][17]++;
 
                         //=================================
                         // All offline selections finished
                         //=================================
 
-                        if( ModelBKGShape ) {
+                        if ( ModelBKGShape ) {
                           BKGShapeSR->Fill(massC,massF);
                           BKGShapeSRmassC->Fill(massC);
                           BKGShapeSRmassF->Fill(massF);
                         }
                         //check background events displacement
-                        if( CheckDisplacement ) {
-                          if (massC >= 11.0 && massC < 59.0 && massF >= 11.0 && massF < 59.0){
+                        if ( CheckDisplacement ) {
+                          if (massC >= 11.0 && massC < 59.0 && massF >= 11.0 && massF < 59.0) {
                             L_DimuC_SR_HighMass->Fill(fabs(diMuonC_FittedVtx_L));
                             Lxy_DimuC_SR_HighMass->Fill(fabs(diMuonC_FittedVtx_Lxy));
                             Lz_DimuC_SR_HighMass->Fill( sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
@@ -1069,15 +1040,15 @@ void efficiency(const std::vector<std::string>& dirNames)
                         //               2D mass control region
                         //Validation region on data and MC for high mass BKG
                         //=================================================
-                        if( ModelBKGShape ) {
+                        if ( ModelBKGShape ) {
                           BKGShapeCR->Fill(massC,massF);
                           BKGShapeCRmassC->Fill(massC);
                           BKGShapeCRmassF->Fill(massF);
                         }//end if ModelBKGShape
 
                         //check background events displacement
-                        if( CheckDisplacement ) {
-                          if (massC >= 11.0 && massC < 59.0 && massF >= 11.0 && massF < 59.0){
+                        if ( CheckDisplacement ) {
+                          if (massC >= 11.0 && massC < 59.0 && massF >= 11.0 && massF < 59.0) {
                             L_DimuC_CR_HighMass->Fill(fabs(diMuonC_FittedVtx_L));
                             Lxy_DimuC_CR_HighMass->Fill(fabs(diMuonC_FittedVtx_Lxy));
                             Lz_DimuC_CR_HighMass->Fill( sqrt( pow(diMuonC_FittedVtx_L,2) - pow(diMuonC_FittedVtx_Lxy,2) ) );
@@ -1101,8 +1072,9 @@ void efficiency(const std::vector<std::string>& dirNames)
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     }//end for i entries
-  }//end if( CutFlowTable )
+  }//end CutFlowTable
 
+  std::cout << "-------------------------" << std::endl;
   std::cout << "GEN-8-8-8-8@PIX: " << newcount << std::endl;
   std::cout << "RECO1stMu8: "      << newcountmu1st << std::endl;
   std::cout << "RECO2ndMu8: "      << newcountmu2nd << std::endl;
@@ -1113,30 +1085,33 @@ void efficiency(const std::vector<std::string>& dirNames)
   std::cout << "RECO1+2+3+4Mu8: "  << newcountmu1234 << std::endl;
   std::cout << "-------------------------" << std::endl;
   std::cout << "GEN matched cut 10: " << counterGENMatch[k][10] << std::endl;
-  std::cout << "GEN matched cut 11: " << counterGENMatch[k][11] << std::endl;
-  std::cout << "-------------------------" << std::endl;
   std::cout << "0 SA mu, 0 mujet: "  << newcount0SAzeromujet << std::endl;
   std::cout << "0 SA mu, 1 mujet: "  << newcount0SAonemujet << std::endl;
   std::cout << "0 SA mu, 2 mujet: "  << newcount0SAtwomujet << std::endl;
   std::cout << "-------------------------" << std::endl;
-  std::cout << "0 SA mu, dimuC zero vtx prob: "  << newcount0SAmuCZeroProb << std::endl;
-  std::cout << "0 SA mu, dimuF zero vtx prob: "  << newcount0SAmuFZeroProb << std::endl;
-  std::cout << "1 SA mu in dimuC, dimuC zero vtx prob: "  << newcount1SAmuInCCZeroProb << std::endl;
-  std::cout << "1 SA mu in dimuC, dimuF zero vtx prob: "  << newcount1SAmuInCFZeroProb << std::endl;
-  std::cout << "1 SA mu in dimuF, dimuC zero vtx prob: "  << newcount1SAmuInFCZeroProb << std::endl;
-  std::cout << "1 SA mu in dimuF, dimuF zero vtx prob: "  << newcount1SAmuInFFZeroProb << std::endl;
+  std::cout << "GEN matched cut 11: " << counterGENMatch[k][11] << std::endl;
+  std::cout << "GEN matched cut 12: " << counterGENMatch[k][12] << std::endl;
+  std::cout << "2 dimu, 0 Non-Tracker mu: "  << newcount0NonTrkMu << std::endl;
+  std::cout << "2 dimu, 1 Non-Tracker mu: "  << newcount1NonTrkMu << std::endl;
+  std::cout << "2 dimu, 2 Non-Tracker mu: "  << newcount2NonTrkMu << std::endl;
+  std::cout << "2 dimu, 3 Non-Tracker mu: "  << newcount3NonTrkMu << std::endl;
+  std::cout << "2 dimu, 4 Non-Tracker mu: "  << newcount4NonTrkMu << std::endl;
+  std::cout << "2 dimu, 0 SA mu: "  << newcount0SAmu << std::endl;
+  std::cout << "2 dimu, 1 SA mu: "  << newcount1SAmu << std::endl;
+  std::cout << "2 dimu, 2 SA mu: "  << newcount2SAmu << std::endl;
+  std::cout << "-------------------------" << std::endl;
 
   //Loop over orphan-dimuon tree
   mentries = o->GetEntries();
-  if( verbose ) std::cout << "orphan-dimu tree entries: "<< mentries << std::endl;
+  if ( verbose ) std::cout << "orphan-dimu tree entries: "<< mentries << std::endl;
 
-  if ( LoopOrphanTree ){
-    for( int j = 0; j < mentries; j++ ){
-      if ( verbose && (j % 1000000) == 0  ) std::cout << "Looking at Events_orphan " << j << std::endl;
+  if ( LoopOrphanTree ) {
+    for ( int j = 0; j < mentries; j++ ) {
+      if ( verbose && (j % 1000000) == 0 ) std::cout << "Looking at Events_orphan " << j << std::endl;
       o->GetEntry(j);
 
       //Pass offline basic selections, same as signal for isolation cut study
-      if( PlotIso && orph_passOffLineSelPtEta && orph_AllTrackerMu ){
+      if ( PlotIso && orph_passOffLineSelPtEta && orph_AllTrackerMu ) {
         IsoOrphanDimu->Fill(orph_dimu_isoTk);
         IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
         IsoOrphanDimuMu0_dR0p4->Fill(orph_dimu_Mu0_isoTk0p4);
@@ -1149,22 +1124,22 @@ void efficiency(const std::vector<std::string>& dirNames)
 
       //Pass same cut as signal, for study 1-D template distribution
       //Note: May need to add orph_dimu_z cut in the future
-      if( ( ModelBKGShape || Model1DTemplate ) && orph_passOffLineSelPtEta && orph_AllTrackerMu && orph_isSignalHLTFired && orph_isVertexOK && ( orph_dimu_Mu0_hitpix_Phase1 == 1 || orph_dimu_Mu1_hitpix_Phase1 == 1 ) && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ){
+      if ( ( ModelBKGShape || Model1DTemplate ) && orph_passOffLineSelPtEta && orph_AllTrackerMu && orph_isSignalHLTFired && orph_isVertexOK && ( orph_dimu_Mu0_hitpix_Phase1 == 1 || orph_dimu_Mu1_hitpix_Phase1 == 1 ) && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ) {
         Mass1DTemplate->Fill(orph_dimu_mass);
       }
     }//end for j entries
   }//end LoopOrphanTree
 
   RelEff[k][0] = counter[k][0]/(counter[k][0]*1.0);
-  for(int m=0;m<18;m++){
+  for (int m=0;m<18;m++) {
     TotEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
     TotEffErr[k][m]= sqrt( (TotEff[k][m]*(1-TotEff[k][m]))/(counter[k][0]*1.0));
-    if( m>0 ){
-      if( m==6 ){
+    if ( m>0 ) {
+      if ( m == 6 ) {
         RelEff[k][m]= counter[k][m]/(counter[k][0]*1.0);
         RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][0]*1.0));
       }
-      else{
+      else {
         RelEff[k][m]=  counter[k][m]/(counter[k][m-1]*1.0);
         RelEffErr[k][m]= sqrt( (RelEff[k][m]*(1-RelEff[k][m]))/(counter[k][m-1]*1.0));
       }
@@ -1212,7 +1187,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   output = output + "./foo_modified_sample_" + Form("%d", k+1)+ ".root";
   TFile myPlot(output,"RECREATE");
 
-  if ( CheckDisplacement ){
+  if ( CheckDisplacement ) {
     L_DimuC_SR_HighMass->GetXaxis()->SetTitle("L [cm]");     L_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");   L_DimuC_SR_HighMass->Write();
     L_DimuF_SR_HighMass->GetXaxis()->SetTitle("L [cm]");     L_DimuF_SR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");   L_DimuF_SR_HighMass->Write();
     Lxy_DimuC_SR_HighMass->GetXaxis()->SetTitle("Lxy [cm]"); Lxy_DimuC_SR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm"); Lxy_DimuC_SR_HighMass->Write();
@@ -1230,19 +1205,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   GENMudR_A0->GetXaxis()->SetTitle("#DeltaR of muons from leading pT GEN boson"); GENMudR_A0->GetYaxis()->SetTitle("Events/0.1"); GENMudR_A0->Write();
   GENMudR_A1->GetXaxis()->SetTitle("#DeltaR of muons from sub-leading pT GEN boson"); GENMudR_A1->GetYaxis()->SetTitle("Events/0.1"); GENMudR_A1->Write();
 
-  CvtxProbSAmuInCbeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInCbeforeCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInCbeforeCut11->Write();
-  FvtxProbSAmuInCbeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInCbeforeCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInCbeforeCut11->Write();
-  CvtxProbSAmuInFbeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInFbeforeCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInFbeforeCut11->Write();
-  FvtxProbSAmuInFbeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInFbeforeCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInFbeforeCut11->Write();
-  CvtxProbNoSAmubeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbNoSAmubeforeCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbNoSAmubeforeCut11->Write();
-  FvtxProbNoSAmubeforeCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbNoSAmubeforeCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbNoSAmubeforeCut11->Write();
-
-  CvtxProbSAmuInCafterCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInCafterCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInCafterCut11->Write();
-  FvtxProbSAmuInCafterCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInCafterCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInCafterCut11->Write();
-  CvtxProbSAmuInFafterCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInFafterCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInFafterCut11->Write();
-  FvtxProbSAmuInFafterCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInFafterCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInFafterCut11->Write();
   CvtxProbNoSAmuafterCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbNoSAmuafterCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbNoSAmuafterCut11->Write();
   FvtxProbNoSAmuafterCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbNoSAmuafterCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbNoSAmuafterCut11->Write();
+  CvtxProbSAmuInCafterCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInCafterCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInCafterCut11->Write();
+  FvtxProbSAmuInFafterCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInFafterCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInFafterCut11->Write();
 
   Lxy->cd();
   Phase1Pix_GEN_A0_Lxy->SetLineColor(2); Phase1Pix_GEN_A0_Lxy->SetLineStyle(1); Phase1Pix_GEN_A0_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A0_Lxy->GetYaxis()->SetTitle("Events/0.5 cm"); Phase1Pix_GEN_A0_Lxy->Draw();
@@ -1311,51 +1277,51 @@ void efficiency(const std::vector<std::string>& dirNames)
   RECODimuMuPt->Write();
 
   //some basic selections eff check
-  if( TEfficiency::CheckConsistency(*GEN1stPt_pass_1stRECOmu, *GEN1stPt_pass_GEN) ) {
+  if ( TEfficiency::CheckConsistency(*GEN1stPt_pass_1stRECOmu, *GEN1stPt_pass_GEN) ) {
     TEfficiency* eff_GEN1stPt_pass_1stRECOmu = new TEfficiency(*GEN1stPt_pass_1stRECOmu, *GEN1stPt_pass_GEN);
     eff_GEN1stPt_pass_1stRECOmu->SetTitle("Efficiency: 1st RECO mu pT > 8 GeV;p_{T, 1st GEN #mu} [GeV];#epsilon");
     eff_GEN1stPt_pass_1stRECOmu->Write();
   }
-  if( TEfficiency::CheckConsistency(*GEN2ndPt_pass_2ndRECOmu, *GEN2ndPt_pass_GEN) ) {
+  if ( TEfficiency::CheckConsistency(*GEN2ndPt_pass_2ndRECOmu, *GEN2ndPt_pass_GEN) ) {
     TEfficiency* eff_GEN2ndPt_pass_2ndRECOmu = new TEfficiency(*GEN2ndPt_pass_2ndRECOmu, *GEN2ndPt_pass_GEN);
     eff_GEN2ndPt_pass_2ndRECOmu->SetTitle("Efficiency: 2nd RECO mu pT > 8 GeV;p_{T, 2nd GEN #mu} [GeV];#epsilon");
     eff_GEN2ndPt_pass_2ndRECOmu->Write();
   }
-  if( TEfficiency::CheckConsistency(*GEN3rdPt_pass_3rdRECOmu, *GEN3rdPt_pass_GEN) ) {
+  if ( TEfficiency::CheckConsistency(*GEN3rdPt_pass_3rdRECOmu, *GEN3rdPt_pass_GEN) ) {
     TEfficiency* eff_GEN3rdPt_pass_3rdRECOmu = new TEfficiency(*GEN3rdPt_pass_3rdRECOmu, *GEN3rdPt_pass_GEN);
     eff_GEN3rdPt_pass_3rdRECOmu->SetTitle("Efficiency: 3rd RECO mu pT > 8 GeV;p_{T, 3rd GEN #mu} [GeV];#epsilon");
     eff_GEN3rdPt_pass_3rdRECOmu->Write();
   }
-  if( TEfficiency::CheckConsistency(*GEN4thPt_pass_4thRECOmu, *GEN4thPt_pass_GEN) ) {
+  if ( TEfficiency::CheckConsistency(*GEN4thPt_pass_4thRECOmu, *GEN4thPt_pass_GEN) ) {
     TEfficiency* eff_GEN4thPt_pass_4thRECOmu = new TEfficiency(*GEN4thPt_pass_4thRECOmu, *GEN4thPt_pass_GEN);
     eff_GEN4thPt_pass_4thRECOmu->SetTitle("Efficiency: 4th RECO mu pT > 8 GeV;p_{T, 4th GEN #mu} [GeV];#epsilon");
     eff_GEN4thPt_pass_4thRECOmu->Write();
   }
 
-  if( TEfficiency::CheckConsistency(*GEN1stPt_pass_RECOmu12, *GEN1stPt_pass_GEN) ) {
+  if ( TEfficiency::CheckConsistency(*GEN1stPt_pass_RECOmu12, *GEN1stPt_pass_GEN) ) {
     TEfficiency* eff_GEN1stPt_pass_RECOmu12 = new TEfficiency(*GEN1stPt_pass_RECOmu12, *GEN1stPt_pass_GEN);
     eff_GEN1stPt_pass_RECOmu12->SetTitle("Efficiency: 1 & 2 RECO mu pT > 8 GeV;p_{T, 1st GEN #mu} [GeV];#epsilon");
     eff_GEN1stPt_pass_RECOmu12->Write();
   }
-  if( TEfficiency::CheckConsistency(*GEN1stPt_pass_RECOmu123, *GEN1stPt_pass_GEN) ) {
+  if ( TEfficiency::CheckConsistency(*GEN1stPt_pass_RECOmu123, *GEN1stPt_pass_GEN) ) {
     TEfficiency* eff_GEN1stPt_pass_RECOmu123 = new TEfficiency(*GEN1stPt_pass_RECOmu123, *GEN1stPt_pass_GEN);
     eff_GEN1stPt_pass_RECOmu123->SetTitle("Efficiency: 1 & 2 & 3 RECO mu pT > 8 GeV;p_{T, 1st GEN #mu} [GeV];#epsilon");
     eff_GEN1stPt_pass_RECOmu123->Write();
   }
-  if( TEfficiency::CheckConsistency(*GEN1stPt_pass_RECOmu1234, *GEN1stPt_pass_GEN) ) {
+  if ( TEfficiency::CheckConsistency(*GEN1stPt_pass_RECOmu1234, *GEN1stPt_pass_GEN) ) {
     TEfficiency* eff_GEN1stPt_pass_RECOmu1234 = new TEfficiency(*GEN1stPt_pass_RECOmu1234, *GEN1stPt_pass_GEN);
     eff_GEN1stPt_pass_RECOmu1234->SetTitle("Efficiency: 1 & 2 & 3 & 4 RECO mu pT > 8 GeV;p_{T, 1st GEN #mu} [GeV];#epsilon");
     eff_GEN1stPt_pass_RECOmu1234->Write();
   }
 
 
-  if( TEfficiency::CheckConsistency(*GENLeadingLxy_pass_RECOmu1234, *GENLeadingLxy_pass_GEN) ) {
+  if ( TEfficiency::CheckConsistency(*GENLeadingLxy_pass_RECOmu1234, *GENLeadingLxy_pass_GEN) ) {
     TEfficiency* eff_GENLeadingLxy_pass_RECOmu1234 = new TEfficiency(*GENLeadingLxy_pass_RECOmu1234, *GENLeadingLxy_pass_GEN);
     eff_GENLeadingLxy_pass_RECOmu1234->SetTitle("Efficiency: 1 & 2 & 3 & 4 RECO mu pT > 8 GeV;GEN A leading L_{xy} [cm];#epsilon");
     eff_GENLeadingLxy_pass_RECOmu1234->Write();
   }
 
-  if( TEfficiency::CheckConsistency(*GENLeadingLz_pass_RECOmu1234, *GENLeadingLz_pass_GEN) ) {
+  if ( TEfficiency::CheckConsistency(*GENLeadingLz_pass_RECOmu1234, *GENLeadingLz_pass_GEN) ) {
     TEfficiency* eff_GENLeadingLz_pass_RECOmu1234 = new TEfficiency(*GENLeadingLz_pass_RECOmu1234, *GENLeadingLz_pass_GEN);
     eff_GENLeadingLz_pass_RECOmu1234->SetTitle("Efficiency: 1 & 2 & 3 & 4 RECO mu pT > 8 GeV;GEN A leading L_{z} [cm];#epsilon");
     eff_GENLeadingLz_pass_RECOmu1234->Write();
@@ -1363,230 +1329,230 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   if ( PerEventTriggerEff ) {
     //Per-event Efficiency for signal "HLT" and "L1 seeds" after "BASIC" offline pT selections
-    if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
       TEfficiency* eff_HLT_leading_pt_pass_basic  = new TEfficiency(*HLT_leading_pt_pass_basic, *leading_pt_pass_basic);
       eff_HLT_leading_pt_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;p_{T, leading #mu} [GeV];#epsilon");
       eff_HLT_leading_pt_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
       TEfficiency* eff_HLT_leading_eta_pass_basic = new TEfficiency(*HLT_leading_eta_pass_basic, *leading_eta_pass_basic);
       eff_HLT_leading_eta_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#eta_{leading #mu};#epsilon");
       eff_HLT_leading_eta_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
       TEfficiency* eff_HLT_leading_phi_pass_basic = new TEfficiency(*HLT_leading_phi_pass_basic, *leading_phi_pass_basic);
       eff_HLT_leading_phi_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#phi_{leading #mu};#epsilon");
       eff_HLT_leading_phi_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic) ) {
       TEfficiency* eff_L1_leading_pt_pass_basic  = new TEfficiency(*L1_leading_pt_pass_basic, *leading_pt_pass_basic);
       eff_L1_leading_pt_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;p_{T, leading #mu} [GeV];#epsilon");
       eff_L1_leading_pt_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic) ) {
       TEfficiency* eff_L1_leading_eta_pass_basic = new TEfficiency(*L1_leading_eta_pass_basic, *leading_eta_pass_basic);
       eff_L1_leading_eta_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#eta_{leading #mu};#epsilon");
       eff_L1_leading_eta_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic) ) {
       TEfficiency* eff_L1_leading_phi_pass_basic = new TEfficiency(*L1_leading_phi_pass_basic, *leading_phi_pass_basic);
       eff_L1_leading_phi_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#phi_{leading #mu};#epsilon");
       eff_L1_leading_phi_pass_basic->Write();
     }
 
-    if( TEfficiency::CheckConsistency(*HLT_second_pt_pass_basic, *second_pt_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_second_pt_pass_basic, *second_pt_pass_basic) ) {
       TEfficiency* eff_HLT_second_pt_pass_basic  = new TEfficiency(*HLT_second_pt_pass_basic, *second_pt_pass_basic);
       eff_HLT_second_pt_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;p_{T, second #mu} [GeV];#epsilon");
       eff_HLT_second_pt_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_second_eta_pass_basic, *second_eta_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_second_eta_pass_basic, *second_eta_pass_basic) ) {
       TEfficiency* eff_HLT_second_eta_pass_basic = new TEfficiency(*HLT_second_eta_pass_basic, *second_eta_pass_basic);
       eff_HLT_second_eta_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#eta_{second #mu};#epsilon");
       eff_HLT_second_eta_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_second_phi_pass_basic, *second_phi_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_second_phi_pass_basic, *second_phi_pass_basic) ) {
       TEfficiency* eff_HLT_second_phi_pass_basic = new TEfficiency(*HLT_second_phi_pass_basic, *second_phi_pass_basic);
       eff_HLT_second_phi_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#phi_{second #mu};#epsilon");
       eff_HLT_second_phi_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_second_pt_pass_basic, *second_pt_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_second_pt_pass_basic, *second_pt_pass_basic) ) {
       TEfficiency* eff_L1_second_pt_pass_basic  = new TEfficiency(*L1_second_pt_pass_basic, *second_pt_pass_basic);
       eff_L1_second_pt_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;p_{T, second #mu} [GeV];#epsilon");
       eff_L1_second_pt_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_second_eta_pass_basic, *second_eta_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_second_eta_pass_basic, *second_eta_pass_basic) ) {
       TEfficiency* eff_L1_second_eta_pass_basic = new TEfficiency(*L1_second_eta_pass_basic, *second_eta_pass_basic);
       eff_L1_second_eta_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#eta_{second #mu};#epsilon");
       eff_L1_second_eta_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_second_phi_pass_basic, *second_phi_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_second_phi_pass_basic, *second_phi_pass_basic) ) {
       TEfficiency* eff_L1_second_phi_pass_basic = new TEfficiency(*L1_second_phi_pass_basic, *second_phi_pass_basic);
       eff_L1_second_phi_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#phi_{second #mu};#epsilon");
       eff_L1_second_phi_pass_basic->Write();
     }
 
-    if( TEfficiency::CheckConsistency(*HLT_third_pt_pass_basic, *third_pt_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_third_pt_pass_basic, *third_pt_pass_basic) ) {
       TEfficiency* eff_HLT_third_pt_pass_basic  = new TEfficiency(*HLT_third_pt_pass_basic, *third_pt_pass_basic);
       eff_HLT_third_pt_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;p_{T, third #mu} [GeV];#epsilon");
       eff_HLT_third_pt_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_third_eta_pass_basic, *third_eta_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_third_eta_pass_basic, *third_eta_pass_basic) ) {
       TEfficiency* eff_HLT_third_eta_pass_basic = new TEfficiency(*HLT_third_eta_pass_basic, *third_eta_pass_basic);
       eff_HLT_third_eta_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#eta_{third #mu};#epsilon");
       eff_HLT_third_eta_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_third_phi_pass_basic, *third_phi_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_third_phi_pass_basic, *third_phi_pass_basic) ) {
       TEfficiency* eff_HLT_third_phi_pass_basic = new TEfficiency(*HLT_third_phi_pass_basic, *third_phi_pass_basic);
       eff_HLT_third_phi_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#phi_{third #mu};#epsilon");
       eff_HLT_third_phi_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_third_pt_pass_basic, *third_pt_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_third_pt_pass_basic, *third_pt_pass_basic) ) {
       TEfficiency* eff_L1_third_pt_pass_basic  = new TEfficiency(*L1_third_pt_pass_basic, *third_pt_pass_basic);
       eff_L1_third_pt_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;p_{T, third #mu} [GeV];#epsilon");
       eff_L1_third_pt_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_third_eta_pass_basic, *third_eta_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_third_eta_pass_basic, *third_eta_pass_basic) ) {
       TEfficiency* eff_L1_third_eta_pass_basic = new TEfficiency(*L1_third_eta_pass_basic, *third_eta_pass_basic);
       eff_L1_third_eta_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#eta_{third #mu};#epsilon");
       eff_L1_third_eta_pass_basic->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_third_phi_pass_basic, *third_phi_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_third_phi_pass_basic, *third_phi_pass_basic) ) {
       TEfficiency* eff_L1_third_phi_pass_basic = new TEfficiency(*L1_third_phi_pass_basic, *third_phi_pass_basic);
       eff_L1_third_phi_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#phi_{third #mu};#epsilon");
       eff_L1_third_phi_pass_basic->Write();
     }
 
-    if( TEfficiency::CheckConsistency(*HLT_fourth_pt_pass_basic, *fourth_pt_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_fourth_pt_pass_basic, *fourth_pt_pass_basic) ) {
       TEfficiency* eff_HLT_fourth_pt_pass_basic  = new TEfficiency(*HLT_fourth_pt_pass_basic, *fourth_pt_pass_basic);
       eff_HLT_fourth_pt_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;p_{T, fourth #mu} [GeV];#epsilon"); eff_HLT_fourth_pt_pass_basic->Write();
     }
-    if( TEfficiency::CheckConsistency(*HLT_fourth_eta_pass_basic, *fourth_eta_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_fourth_eta_pass_basic, *fourth_eta_pass_basic) ) {
       TEfficiency* eff_HLT_fourth_eta_pass_basic = new TEfficiency(*HLT_fourth_eta_pass_basic, *fourth_eta_pass_basic);
       eff_HLT_fourth_eta_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#eta_{fourth #mu};#epsilon"); eff_HLT_fourth_eta_pass_basic->Write();
     }
-    if( TEfficiency::CheckConsistency(*HLT_fourth_phi_pass_basic, *fourth_phi_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_fourth_phi_pass_basic, *fourth_phi_pass_basic) ) {
       TEfficiency* eff_HLT_fourth_phi_pass_basic = new TEfficiency(*HLT_fourth_phi_pass_basic, *fourth_phi_pass_basic);
       eff_HLT_fourth_phi_pass_basic->SetTitle("Signal HLT Efficiency After Cut #9;#phi_{fourth #mu};#epsilon"); eff_HLT_fourth_phi_pass_basic->Write();
     }
-    if( TEfficiency::CheckConsistency(*L1_fourth_pt_pass_basic, *fourth_pt_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_fourth_pt_pass_basic, *fourth_pt_pass_basic) ) {
       TEfficiency* eff_L1_fourth_pt_pass_basic  = new TEfficiency(*L1_fourth_pt_pass_basic, *fourth_pt_pass_basic);
       eff_L1_fourth_pt_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;p_{T, fourth #mu} [GeV];#epsilon"); eff_L1_fourth_pt_pass_basic->Write();
     }
-    if( TEfficiency::CheckConsistency(*L1_fourth_eta_pass_basic, *fourth_eta_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_fourth_eta_pass_basic, *fourth_eta_pass_basic) ) {
       TEfficiency* eff_L1_fourth_eta_pass_basic = new TEfficiency(*L1_fourth_eta_pass_basic, *fourth_eta_pass_basic);
       eff_L1_fourth_eta_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#eta_{fourth #mu};#epsilon"); eff_L1_fourth_eta_pass_basic->Write();
     }
-    if( TEfficiency::CheckConsistency(*L1_fourth_phi_pass_basic, *fourth_phi_pass_basic) ) {
+    if ( TEfficiency::CheckConsistency(*L1_fourth_phi_pass_basic, *fourth_phi_pass_basic) ) {
       TEfficiency* eff_L1_fourth_phi_pass_basic = new TEfficiency(*L1_fourth_phi_pass_basic, *fourth_phi_pass_basic);
       eff_L1_fourth_phi_pass_basic->SetTitle("Signal L1 Efficiency After Cut #9;#phi_{fourth #mu};#epsilon"); eff_L1_fourth_phi_pass_basic->Write();
     }
 
     //Per-event Efficiency for signal "HLT" and "L1 seeds" after cut #15
-    if( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_all, *leading_pt_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_leading_pt_pass_all, *leading_pt_pass_all) ) {
       TEfficiency* eff_HLT_leading_pt_pass_all  = new TEfficiency(*HLT_leading_pt_pass_all, *leading_pt_pass_all);
       eff_HLT_leading_pt_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;p_{T, leading #mu} [GeV];#epsilon");
       eff_HLT_leading_pt_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_all, *leading_eta_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_leading_eta_pass_all, *leading_eta_pass_all) ) {
       TEfficiency* eff_HLT_leading_eta_pass_all = new TEfficiency(*HLT_leading_eta_pass_all, *leading_eta_pass_all);
       eff_HLT_leading_eta_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#eta_{leading #mu};#epsilon");
       eff_HLT_leading_eta_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_all, *leading_phi_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_leading_phi_pass_all, *leading_phi_pass_all) ) {
       TEfficiency* eff_HLT_leading_phi_pass_all = new TEfficiency(*HLT_leading_phi_pass_all, *leading_phi_pass_all);
       eff_HLT_leading_phi_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#phi_{leading #mu};#epsilon");
       eff_HLT_leading_phi_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_leading_pt_pass_all, *leading_pt_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_leading_pt_pass_all, *leading_pt_pass_all) ) {
       TEfficiency* eff_L1_leading_pt_pass_all  = new TEfficiency(*L1_leading_pt_pass_all, *leading_pt_pass_all);
       eff_L1_leading_pt_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;p_{T, leading #mu} [GeV];#epsilon");
       eff_L1_leading_pt_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_leading_eta_pass_all, *leading_eta_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_leading_eta_pass_all, *leading_eta_pass_all) ) {
       TEfficiency* eff_L1_leading_eta_pass_all = new TEfficiency(*L1_leading_eta_pass_all, *leading_eta_pass_all);
       eff_L1_leading_eta_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#eta_{leading #mu};#epsilon");
       eff_L1_leading_eta_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_leading_phi_pass_all, *leading_phi_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_leading_phi_pass_all, *leading_phi_pass_all) ) {
       TEfficiency* eff_L1_leading_phi_pass_all = new TEfficiency(*L1_leading_phi_pass_all, *leading_phi_pass_all);
       eff_L1_leading_phi_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#phi_{leading #mu};#epsilon");
       eff_L1_leading_phi_pass_all->Write();
     }
 
-    if( TEfficiency::CheckConsistency(*HLT_second_pt_pass_all, *second_pt_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_second_pt_pass_all, *second_pt_pass_all) ) {
       TEfficiency* eff_HLT_second_pt_pass_all  = new TEfficiency(*HLT_second_pt_pass_all, *second_pt_pass_all);
       eff_HLT_second_pt_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;p_{T, second #mu} [GeV];#epsilon");
       eff_HLT_second_pt_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_second_eta_pass_all, *second_eta_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_second_eta_pass_all, *second_eta_pass_all) ) {
       TEfficiency* eff_HLT_second_eta_pass_all = new TEfficiency(*HLT_second_eta_pass_all, *second_eta_pass_all);
       eff_HLT_second_eta_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#eta_{second #mu};#epsilon");
       eff_HLT_second_eta_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_second_phi_pass_all, *second_phi_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_second_phi_pass_all, *second_phi_pass_all) ) {
       TEfficiency* eff_HLT_second_phi_pass_all = new TEfficiency(*HLT_second_phi_pass_all, *second_phi_pass_all);
       eff_HLT_second_phi_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#phi_{second #mu};#epsilon");
       eff_HLT_second_phi_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_second_pt_pass_all, *second_pt_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_second_pt_pass_all, *second_pt_pass_all) ) {
       TEfficiency* eff_L1_second_pt_pass_all  = new TEfficiency(*L1_second_pt_pass_all, *second_pt_pass_all);
       eff_L1_second_pt_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;p_{T, second #mu} [GeV];#epsilon");
       eff_L1_second_pt_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_second_eta_pass_all, *second_eta_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_second_eta_pass_all, *second_eta_pass_all) ) {
       TEfficiency* eff_L1_second_eta_pass_all = new TEfficiency(*L1_second_eta_pass_all, *second_eta_pass_all);
       eff_L1_second_eta_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#eta_{second #mu};#epsilon");
       eff_L1_second_eta_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_second_phi_pass_all, *second_phi_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_second_phi_pass_all, *second_phi_pass_all) ) {
       TEfficiency* eff_L1_second_phi_pass_all = new TEfficiency(*L1_second_phi_pass_all, *second_phi_pass_all);
       eff_L1_second_phi_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#phi_{second #mu};#epsilon");
       eff_L1_second_phi_pass_all->Write();
     }
 
-    if( TEfficiency::CheckConsistency(*HLT_third_pt_pass_all, *third_pt_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_third_pt_pass_all, *third_pt_pass_all) ) {
       TEfficiency* eff_HLT_third_pt_pass_all  = new TEfficiency(*HLT_third_pt_pass_all, *third_pt_pass_all);
       eff_HLT_third_pt_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;p_{T, third #mu} [GeV];#epsilon");
       eff_HLT_third_pt_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_third_eta_pass_all, *third_eta_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_third_eta_pass_all, *third_eta_pass_all) ) {
       TEfficiency* eff_HLT_third_eta_pass_all = new TEfficiency(*HLT_third_eta_pass_all, *third_eta_pass_all);
       eff_HLT_third_eta_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#eta_{third #mu};#epsilon");
       eff_HLT_third_eta_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_third_phi_pass_all, *third_phi_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_third_phi_pass_all, *third_phi_pass_all) ) {
       TEfficiency* eff_HLT_third_phi_pass_all = new TEfficiency(*HLT_third_phi_pass_all, *third_phi_pass_all);
       eff_HLT_third_phi_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#phi_{third #mu};#epsilon");
       eff_HLT_third_phi_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_third_pt_pass_all, *third_pt_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_third_pt_pass_all, *third_pt_pass_all) ) {
       TEfficiency* eff_L1_third_pt_pass_all  = new TEfficiency(*L1_third_pt_pass_all, *third_pt_pass_all);
       eff_L1_third_pt_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;p_{T, third #mu} [GeV];#epsilon");
       eff_L1_third_pt_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_third_eta_pass_all, *third_eta_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_third_eta_pass_all, *third_eta_pass_all) ) {
       TEfficiency* eff_L1_third_eta_pass_all = new TEfficiency(*L1_third_eta_pass_all, *third_eta_pass_all);
       eff_L1_third_eta_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#eta_{third #mu};#epsilon");
       eff_L1_third_eta_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_third_phi_pass_all, *third_phi_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_third_phi_pass_all, *third_phi_pass_all) ) {
       TEfficiency* eff_L1_third_phi_pass_all = new TEfficiency(*L1_third_phi_pass_all, *third_phi_pass_all);
       eff_L1_third_phi_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#phi_{third #mu};#epsilon");
       eff_L1_third_phi_pass_all->Write();
     }
 
-    if( TEfficiency::CheckConsistency(*HLT_fourth_pt_pass_all, *fourth_pt_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_fourth_pt_pass_all, *fourth_pt_pass_all) ) {
       TEfficiency* eff_HLT_fourth_pt_pass_all  = new TEfficiency(*HLT_fourth_pt_pass_all, *fourth_pt_pass_all);
       eff_HLT_fourth_pt_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;p_{T, fourth #mu} [GeV];#epsilon");
       eff_HLT_fourth_pt_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_fourth_eta_pass_all, *fourth_eta_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_fourth_eta_pass_all, *fourth_eta_pass_all) ) {
       TEfficiency* eff_HLT_fourth_eta_pass_all = new TEfficiency(*HLT_fourth_eta_pass_all, *fourth_eta_pass_all);
       eff_HLT_fourth_eta_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#eta_{fourth #mu};#epsilon");
       eff_HLT_fourth_eta_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*HLT_fourth_phi_pass_all, *fourth_phi_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_fourth_phi_pass_all, *fourth_phi_pass_all) ) {
       TEfficiency* eff_HLT_fourth_phi_pass_all = new TEfficiency(*HLT_fourth_phi_pass_all, *fourth_phi_pass_all);
       eff_HLT_fourth_phi_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;#phi_{fourth #mu};#epsilon");
       eff_HLT_fourth_phi_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_fourth_pt_pass_all, *fourth_pt_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_fourth_pt_pass_all, *fourth_pt_pass_all) ) {
       TEfficiency* eff_L1_fourth_pt_pass_all  = new TEfficiency(*L1_fourth_pt_pass_all, *fourth_pt_pass_all);
       eff_L1_fourth_pt_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;p_{T, fourth #mu} [GeV];#epsilon");
       eff_L1_fourth_pt_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_fourth_eta_pass_all, *fourth_eta_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_fourth_eta_pass_all, *fourth_eta_pass_all) ) {
       TEfficiency* eff_L1_fourth_eta_pass_all = new TEfficiency(*L1_fourth_eta_pass_all, *fourth_eta_pass_all);
       eff_L1_fourth_eta_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#eta_{fourth #mu};#epsilon");
       eff_L1_fourth_eta_pass_all->Write(); }
-    if( TEfficiency::CheckConsistency(*L1_fourth_phi_pass_all, *fourth_phi_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*L1_fourth_phi_pass_all, *fourth_phi_pass_all) ) {
       TEfficiency* eff_L1_fourth_phi_pass_all = new TEfficiency(*L1_fourth_phi_pass_all, *fourth_phi_pass_all);
       eff_L1_fourth_phi_pass_all->SetTitle("Signal L1 Efficiency After Cut #15;#phi_{fourth #mu};#epsilon");
       eff_L1_fourth_phi_pass_all->Write();
     }
 
-    if( TEfficiency::CheckConsistency(*HLT_genA_leading_Lxy_pass_all, *genA_leading_Lxy_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_genA_leading_Lxy_pass_all, *genA_leading_Lxy_pass_all) ) {
       TEfficiency* eff_HLT_genA_leading_Lxy_pass_all = new TEfficiency(*HLT_genA_leading_Lxy_pass_all, *genA_leading_Lxy_pass_all);
       eff_HLT_genA_leading_Lxy_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;Leading L_{xy, GEN A} [cm];#epsilon");
       eff_HLT_genA_leading_Lxy_pass_all->Write();
     }
-    if( TEfficiency::CheckConsistency(*HLT_genA_leading_Lz_pass_all, *genA_leading_Lz_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_genA_leading_Lz_pass_all, *genA_leading_Lz_pass_all) ) {
       TEfficiency* eff_HLT_genA_leading_Lz_pass_all = new TEfficiency(*HLT_genA_leading_Lz_pass_all, *genA_leading_Lz_pass_all);
       eff_HLT_genA_leading_Lz_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;Leading L_{z, GEN A} [cm];#epsilon");
       eff_HLT_genA_leading_Lz_pass_all->Write();
     }
-    if( TEfficiency::CheckConsistency(*HLT_diMuon_leading_Lxy_pass_all, *diMuon_leading_Lxy_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_diMuon_leading_Lxy_pass_all, *diMuon_leading_Lxy_pass_all) ) {
       TEfficiency* eff_HLT_diMuon_leading_Lxy_pass_all = new TEfficiency(*HLT_diMuon_leading_Lxy_pass_all, *diMuon_leading_Lxy_pass_all);
       eff_HLT_diMuon_leading_Lxy_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;Leading L_{xy, RECO di-#mu} [cm];#epsilon");
       eff_HLT_diMuon_leading_Lxy_pass_all->Write();
     }
-    if( TEfficiency::CheckConsistency(*HLT_diMuon_leading_Lz_pass_all, *diMuon_leading_Lz_pass_all) ) {
+    if ( TEfficiency::CheckConsistency(*HLT_diMuon_leading_Lz_pass_all, *diMuon_leading_Lz_pass_all) ) {
       TEfficiency* eff_HLT_diMuon_leading_Lz_pass_all = new TEfficiency(*HLT_diMuon_leading_Lz_pass_all, *diMuon_leading_Lz_pass_all);
       eff_HLT_diMuon_leading_Lz_pass_all->SetTitle("Signal HLT Efficiency After Cut #15;Leading L_{z, RECO di-#mu} [cm];#epsilon");
       eff_HLT_diMuon_leading_Lz_pass_all->Write();
@@ -1616,7 +1582,7 @@ void efficiency(const std::vector<std::string>& dirNames)
     DimuFMassAfterCut16->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassAfterCut16->GetYaxis()->SetTitle("Events/0.02 GeV"); DimuFMassAfterCut16->Write();
 
     //This fits the width
-    if(DimuMass->Integral() > 0){
+    if (DimuMass->Integral() > 0) {
       DimuMass->SetLineColor(kBlue);
       DimuMass->SetLineWidth(2);
       DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
@@ -1635,12 +1601,18 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   if ( PlotdZ ) {
     dZdimuons->GetXaxis()->SetTitle("#Delta z [cm]");
-    dZdimuons->GetYaxis()->SetTitle("Events/0.002 cm");
+    dZdimuons->GetYaxis()->SetTitle("Events/0.01 cm");
     dZdimuons->Write();
     //Normalized plot
     TH1F *dZdimuons_Normalized = (TH1F*)dZdimuons->Clone("dZdimuons_Normalized");
     //Protect against 0 entry
-    if ( dZdimuons->Integral() > 0 ){ Double_t scaledZdimuons = 1./dZdimuons->Integral(); dZdimuons_Normalized->Scale(scaledZdimuons); dZdimuons_Normalized->Write(); }
+    if ( dZdimuons->Integral() > 0 ) {
+      Double_t scaledZdimuons = 1./dZdimuons->Integral();
+      dZdimuons_Normalized->Scale(scaledZdimuons);
+      dZdimuons_Normalized->GetXaxis()->SetTitle("#Delta z [cm]");
+      dZdimuons_Normalized->GetYaxis()->SetTitle("Fraction/0.01 cm");
+      dZdimuons_Normalized->Write();
+    }
   }//end PlotdZ
 
   if ( PlotIso ) {
@@ -1675,26 +1647,26 @@ void efficiency(const std::vector<std::string>& dirNames)
     TH1F *IsoDimuFMu1_dR0p4_Normalized = (TH1F*)IsoDimuFMu1_dR0p4->Clone("IsoDimuFMu1_dR0p4_Normalized");
     TH1F *IsoDimuFMu1_dR0p5_Normalized = (TH1F*)IsoDimuFMu1_dR0p5->Clone("IsoDimuFMu1_dR0p5_Normalized");
     //Protect against 0 entry
-    if ( IsoDimuC->Integral() > 0 ){ Double_t scaleC = 1./IsoDimuC->Integral(); IsoDimuCNormalized->Scale(scaleC); IsoDimuCNormalized->Write(); }
-    if ( IsoDimuF->Integral() > 0 ){ Double_t scaleF = 1./IsoDimuF->Integral(); IsoDimuFNormalized->Scale(scaleF); IsoDimuFNormalized->Write(); }
-    if ( IsoDimuCMu0_dR0p3->Integral() > 0 ){ Double_t scaleCMu0_dR0p3 = 1./IsoDimuCMu0_dR0p3->Integral(); IsoDimuCMu0_dR0p3_Normalized->Scale(scaleCMu0_dR0p3); IsoDimuCMu0_dR0p3_Normalized->Write(); }
-    if ( IsoDimuCMu0_dR0p4->Integral() > 0 ){ Double_t scaleCMu0_dR0p4 = 1./IsoDimuCMu0_dR0p4->Integral(); IsoDimuCMu0_dR0p4_Normalized->Scale(scaleCMu0_dR0p4); IsoDimuCMu0_dR0p4_Normalized->Write(); }
-    if ( IsoDimuCMu0_dR0p5->Integral() > 0 ){ Double_t scaleCMu0_dR0p5 = 1./IsoDimuCMu0_dR0p5->Integral(); IsoDimuCMu0_dR0p5_Normalized->Scale(scaleCMu0_dR0p5); IsoDimuCMu0_dR0p5_Normalized->Write(); }
+    if ( IsoDimuC->Integral() > 0 ) { Double_t scaleC = 1./IsoDimuC->Integral(); IsoDimuCNormalized->Scale(scaleC); IsoDimuCNormalized->Write(); }
+    if ( IsoDimuF->Integral() > 0 ) { Double_t scaleF = 1./IsoDimuF->Integral(); IsoDimuFNormalized->Scale(scaleF); IsoDimuFNormalized->Write(); }
+    if ( IsoDimuCMu0_dR0p3->Integral() > 0 ) { Double_t scaleCMu0_dR0p3 = 1./IsoDimuCMu0_dR0p3->Integral(); IsoDimuCMu0_dR0p3_Normalized->Scale(scaleCMu0_dR0p3); IsoDimuCMu0_dR0p3_Normalized->Write(); }
+    if ( IsoDimuCMu0_dR0p4->Integral() > 0 ) { Double_t scaleCMu0_dR0p4 = 1./IsoDimuCMu0_dR0p4->Integral(); IsoDimuCMu0_dR0p4_Normalized->Scale(scaleCMu0_dR0p4); IsoDimuCMu0_dR0p4_Normalized->Write(); }
+    if ( IsoDimuCMu0_dR0p5->Integral() > 0 ) { Double_t scaleCMu0_dR0p5 = 1./IsoDimuCMu0_dR0p5->Integral(); IsoDimuCMu0_dR0p5_Normalized->Scale(scaleCMu0_dR0p5); IsoDimuCMu0_dR0p5_Normalized->Write(); }
 
-    if ( IsoDimuCMu1_dR0p3->Integral() > 0 ){ Double_t scaleCMu1_dR0p3 = 1./IsoDimuCMu1_dR0p3->Integral(); IsoDimuCMu1_dR0p3_Normalized->Scale(scaleCMu1_dR0p3); IsoDimuCMu1_dR0p3_Normalized->Write(); }
-    if ( IsoDimuCMu1_dR0p4->Integral() > 0 ){ Double_t scaleCMu1_dR0p4 = 1./IsoDimuCMu1_dR0p4->Integral(); IsoDimuCMu1_dR0p4_Normalized->Scale(scaleCMu1_dR0p4); IsoDimuCMu1_dR0p4_Normalized->Write(); }
-    if ( IsoDimuCMu1_dR0p5->Integral() > 0 ){ Double_t scaleCMu1_dR0p5 = 1./IsoDimuCMu1_dR0p5->Integral(); IsoDimuCMu1_dR0p5_Normalized->Scale(scaleCMu1_dR0p5); IsoDimuCMu1_dR0p5_Normalized->Write(); }
+    if ( IsoDimuCMu1_dR0p3->Integral() > 0 ) { Double_t scaleCMu1_dR0p3 = 1./IsoDimuCMu1_dR0p3->Integral(); IsoDimuCMu1_dR0p3_Normalized->Scale(scaleCMu1_dR0p3); IsoDimuCMu1_dR0p3_Normalized->Write(); }
+    if ( IsoDimuCMu1_dR0p4->Integral() > 0 ) { Double_t scaleCMu1_dR0p4 = 1./IsoDimuCMu1_dR0p4->Integral(); IsoDimuCMu1_dR0p4_Normalized->Scale(scaleCMu1_dR0p4); IsoDimuCMu1_dR0p4_Normalized->Write(); }
+    if ( IsoDimuCMu1_dR0p5->Integral() > 0 ) { Double_t scaleCMu1_dR0p5 = 1./IsoDimuCMu1_dR0p5->Integral(); IsoDimuCMu1_dR0p5_Normalized->Scale(scaleCMu1_dR0p5); IsoDimuCMu1_dR0p5_Normalized->Write(); }
 
-    if ( IsoDimuFMu0_dR0p3->Integral() > 0 ){ Double_t scaleFMu0_dR0p3 = 1./IsoDimuFMu0_dR0p3->Integral(); IsoDimuFMu0_dR0p3_Normalized->Scale(scaleFMu0_dR0p3); IsoDimuFMu0_dR0p3_Normalized->Write(); }
-    if ( IsoDimuFMu0_dR0p4->Integral() > 0 ){ Double_t scaleFMu0_dR0p4 = 1./IsoDimuFMu0_dR0p4->Integral(); IsoDimuFMu0_dR0p4_Normalized->Scale(scaleFMu0_dR0p4); IsoDimuFMu0_dR0p4_Normalized->Write(); }
-    if ( IsoDimuFMu0_dR0p5->Integral() > 0 ){ Double_t scaleFMu0_dR0p5 = 1./IsoDimuFMu0_dR0p5->Integral(); IsoDimuFMu0_dR0p5_Normalized->Scale(scaleFMu0_dR0p5); IsoDimuFMu0_dR0p5_Normalized->Write(); }
+    if ( IsoDimuFMu0_dR0p3->Integral() > 0 ) { Double_t scaleFMu0_dR0p3 = 1./IsoDimuFMu0_dR0p3->Integral(); IsoDimuFMu0_dR0p3_Normalized->Scale(scaleFMu0_dR0p3); IsoDimuFMu0_dR0p3_Normalized->Write(); }
+    if ( IsoDimuFMu0_dR0p4->Integral() > 0 ) { Double_t scaleFMu0_dR0p4 = 1./IsoDimuFMu0_dR0p4->Integral(); IsoDimuFMu0_dR0p4_Normalized->Scale(scaleFMu0_dR0p4); IsoDimuFMu0_dR0p4_Normalized->Write(); }
+    if ( IsoDimuFMu0_dR0p5->Integral() > 0 ) { Double_t scaleFMu0_dR0p5 = 1./IsoDimuFMu0_dR0p5->Integral(); IsoDimuFMu0_dR0p5_Normalized->Scale(scaleFMu0_dR0p5); IsoDimuFMu0_dR0p5_Normalized->Write(); }
 
-    if ( IsoDimuFMu1_dR0p3->Integral() > 0 ){ Double_t scaleFMu1_dR0p3 = 1./IsoDimuFMu1_dR0p3->Integral(); IsoDimuFMu1_dR0p3_Normalized->Scale(scaleFMu1_dR0p3); IsoDimuFMu1_dR0p3_Normalized->Write(); }
-    if ( IsoDimuFMu1_dR0p4->Integral() > 0 ){ Double_t scaleFMu1_dR0p4 = 1./IsoDimuFMu1_dR0p4->Integral(); IsoDimuFMu1_dR0p4_Normalized->Scale(scaleFMu1_dR0p4); IsoDimuFMu1_dR0p4_Normalized->Write(); }
-    if ( IsoDimuFMu1_dR0p5->Integral() > 0 ){ Double_t scaleFMu1_dR0p5 = 1./IsoDimuFMu1_dR0p5->Integral(); IsoDimuFMu1_dR0p5_Normalized->Scale(scaleFMu1_dR0p5); IsoDimuFMu1_dR0p5_Normalized->Write(); }
+    if ( IsoDimuFMu1_dR0p3->Integral() > 0 ) { Double_t scaleFMu1_dR0p3 = 1./IsoDimuFMu1_dR0p3->Integral(); IsoDimuFMu1_dR0p3_Normalized->Scale(scaleFMu1_dR0p3); IsoDimuFMu1_dR0p3_Normalized->Write(); }
+    if ( IsoDimuFMu1_dR0p4->Integral() > 0 ) { Double_t scaleFMu1_dR0p4 = 1./IsoDimuFMu1_dR0p4->Integral(); IsoDimuFMu1_dR0p4_Normalized->Scale(scaleFMu1_dR0p4); IsoDimuFMu1_dR0p4_Normalized->Write(); }
+    if ( IsoDimuFMu1_dR0p5->Integral() > 0 ) { Double_t scaleFMu1_dR0p5 = 1./IsoDimuFMu1_dR0p5->Integral(); IsoDimuFMu1_dR0p5_Normalized->Scale(scaleFMu1_dR0p5); IsoDimuFMu1_dR0p5_Normalized->Write(); }
   }//end if PlotIso
 
-  if ( LoopOrphanTree && PlotIso ){
+  if ( LoopOrphanTree && PlotIso ) {
     IsoOrphanDimu->Write();
     IsoOrphanDimuMu0_dR0p3->Write();
     IsoOrphanDimuMu0_dR0p4->Write();
@@ -1713,22 +1685,22 @@ void efficiency(const std::vector<std::string>& dirNames)
     TH1F *IsoOrphanDimuMu1_dR0p5_Normalized = (TH1F*)IsoOrphanDimuMu1_dR0p5->Clone("IsoOrphanDimuMu1_dR0p5_Normalized");
     TH1F *IsoOrphanNormalized = (TH1F*)IsoOrphan->Clone("IsoOrphanNormalized");
     //Protect against 0 entry
-    if ( IsoOrphanDimu->Integral() > 0 ){ Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral(); IsoOrphanDimuNormalized->Scale(scaleOrphanDimu); IsoOrphanDimuNormalized->Write(); }
-    if ( IsoOrphanDimuMu0_dR0p3->Integral() > 0 ){ Double_t scaleMu0_dR0p3 = 1./IsoOrphanDimuMu0_dR0p3->Integral(); IsoOrphanDimuMu0_dR0p3_Normalized->Scale(scaleMu0_dR0p3); IsoOrphanDimuMu0_dR0p3_Normalized->Write(); }
-    if ( IsoOrphanDimuMu0_dR0p4->Integral() > 0 ){ Double_t scaleMu0_dR0p4 = 1./IsoOrphanDimuMu0_dR0p4->Integral(); IsoOrphanDimuMu0_dR0p4_Normalized->Scale(scaleMu0_dR0p4); IsoOrphanDimuMu0_dR0p4_Normalized->Write(); }
-    if ( IsoOrphanDimuMu0_dR0p5->Integral() > 0 ){ Double_t scaleMu0_dR0p5 = 1./IsoOrphanDimuMu0_dR0p5->Integral(); IsoOrphanDimuMu0_dR0p5_Normalized->Scale(scaleMu0_dR0p5); IsoOrphanDimuMu0_dR0p5_Normalized->Write(); }
-    if ( IsoOrphanDimuMu1_dR0p3->Integral() > 0 ){ Double_t scaleMu1_dR0p3 = 1./IsoOrphanDimuMu1_dR0p3->Integral(); IsoOrphanDimuMu1_dR0p3_Normalized->Scale(scaleMu1_dR0p3); IsoOrphanDimuMu1_dR0p3_Normalized->Write(); }
-    if ( IsoOrphanDimuMu1_dR0p4->Integral() > 0 ){ Double_t scaleMu1_dR0p4 = 1./IsoOrphanDimuMu1_dR0p4->Integral(); IsoOrphanDimuMu1_dR0p4_Normalized->Scale(scaleMu1_dR0p4); IsoOrphanDimuMu1_dR0p4_Normalized->Write(); }
-    if ( IsoOrphanDimuMu1_dR0p5->Integral() > 0 ){ Double_t scaleMu1_dR0p5 = 1./IsoOrphanDimuMu1_dR0p5->Integral(); IsoOrphanDimuMu1_dR0p5_Normalized->Scale(scaleMu1_dR0p5); IsoOrphanDimuMu1_dR0p5_Normalized->Write(); }
-    if ( IsoOrphan->Integral() > 0 ){ Double_t scaleOrphan = 1./IsoOrphan->Integral(); IsoOrphanNormalized->Scale(scaleOrphan); IsoOrphanNormalized->Write(); }
+    if ( IsoOrphanDimu->Integral() > 0 ) { Double_t scaleOrphanDimu = 1./IsoOrphanDimu->Integral(); IsoOrphanDimuNormalized->Scale(scaleOrphanDimu); IsoOrphanDimuNormalized->Write(); }
+    if ( IsoOrphanDimuMu0_dR0p3->Integral() > 0 ) { Double_t scaleMu0_dR0p3 = 1./IsoOrphanDimuMu0_dR0p3->Integral(); IsoOrphanDimuMu0_dR0p3_Normalized->Scale(scaleMu0_dR0p3); IsoOrphanDimuMu0_dR0p3_Normalized->Write(); }
+    if ( IsoOrphanDimuMu0_dR0p4->Integral() > 0 ) { Double_t scaleMu0_dR0p4 = 1./IsoOrphanDimuMu0_dR0p4->Integral(); IsoOrphanDimuMu0_dR0p4_Normalized->Scale(scaleMu0_dR0p4); IsoOrphanDimuMu0_dR0p4_Normalized->Write(); }
+    if ( IsoOrphanDimuMu0_dR0p5->Integral() > 0 ) { Double_t scaleMu0_dR0p5 = 1./IsoOrphanDimuMu0_dR0p5->Integral(); IsoOrphanDimuMu0_dR0p5_Normalized->Scale(scaleMu0_dR0p5); IsoOrphanDimuMu0_dR0p5_Normalized->Write(); }
+    if ( IsoOrphanDimuMu1_dR0p3->Integral() > 0 ) { Double_t scaleMu1_dR0p3 = 1./IsoOrphanDimuMu1_dR0p3->Integral(); IsoOrphanDimuMu1_dR0p3_Normalized->Scale(scaleMu1_dR0p3); IsoOrphanDimuMu1_dR0p3_Normalized->Write(); }
+    if ( IsoOrphanDimuMu1_dR0p4->Integral() > 0 ) { Double_t scaleMu1_dR0p4 = 1./IsoOrphanDimuMu1_dR0p4->Integral(); IsoOrphanDimuMu1_dR0p4_Normalized->Scale(scaleMu1_dR0p4); IsoOrphanDimuMu1_dR0p4_Normalized->Write(); }
+    if ( IsoOrphanDimuMu1_dR0p5->Integral() > 0 ) { Double_t scaleMu1_dR0p5 = 1./IsoOrphanDimuMu1_dR0p5->Integral(); IsoOrphanDimuMu1_dR0p5_Normalized->Scale(scaleMu1_dR0p5); IsoOrphanDimuMu1_dR0p5_Normalized->Write(); }
+    if ( IsoOrphan->Integral() > 0 ) { Double_t scaleOrphan = 1./IsoOrphan->Integral(); IsoOrphanNormalized->Scale(scaleOrphan); IsoOrphanNormalized->Write(); }
   }//end if LoopOrphanTree and PlotIso
 
-  if( LoopOrphanTree && Model1DTemplate ){
+  if ( LoopOrphanTree && Model1DTemplate ) {
     Mass1DTemplate->GetXaxis()->SetTitle("m_{orphan_#mu#mu} [GeV]");
     Mass1DTemplate->GetYaxis()->SetTitle("Events/0.1 GeV");
     Mass1DTemplate->Write();
     TH1F *Mass1DTemplateNormalized = (TH1F*)Mass1DTemplate->Clone("Mass1DTemplateNormalized");
-    if ( Mass1DTemplate->Integral() > 0 ){ Double_t scale1DTemplate = 1./Mass1DTemplate->Integral(); Mass1DTemplateNormalized->Scale(scale1DTemplate); Mass1DTemplateNormalized->Write(); }
+    if ( Mass1DTemplate->Integral() > 0 ) { Double_t scale1DTemplate = 1./Mass1DTemplate->Integral(); Mass1DTemplateNormalized->Scale(scale1DTemplate); Mass1DTemplateNormalized->Write(); }
   }//end if LoopOrphanTree and Model1DTemplate
 
   myPlot.Close();
@@ -1742,8 +1714,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete Phase1Pix_GEN_A1_Lxy; delete Phase1Pix_GEN_A1_Lz;
   delete Phase1Pix_GEN_A0_Mu0_pT; delete Phase1Pix_GEN_A0_Mu1_pT;
   delete Phase1Pix_GEN_A1_Mu0_pT; delete Phase1Pix_GEN_A1_Mu1_pT;
-  delete CvtxProbSAmuInCbeforeCut11; delete FvtxProbSAmuInCbeforeCut11; delete CvtxProbSAmuInFbeforeCut11; delete FvtxProbSAmuInFbeforeCut11; delete CvtxProbNoSAmubeforeCut11; delete FvtxProbNoSAmubeforeCut11;
-  delete CvtxProbSAmuInCafterCut11; delete FvtxProbSAmuInCafterCut11; delete CvtxProbSAmuInFafterCut11; delete FvtxProbSAmuInFafterCut11; delete CvtxProbNoSAmuafterCut11; delete FvtxProbNoSAmuafterCut11;
+  delete CvtxProbNoSAmuafterCut11; delete FvtxProbNoSAmuafterCut11;
+  delete CvtxProbSAmuInCafterCut11; delete FvtxProbSAmuInFafterCut11;
   delete GENMudR_A0; delete GENMudR_A1;
   delete Phase1Pix_RECO_Mu0_pT; delete Phase1Pix_RECO_Mu0_eta; delete Phase1Pix_RECO_Mu0_phi;
   delete Phase1Pix_RECO_Mu1_pT; delete Phase1Pix_RECO_Mu1_eta; delete Phase1Pix_RECO_Mu1_phi;
@@ -1829,22 +1801,22 @@ void analysis(const std::string SamplesList)
     cout << "Sample #"<< linecount << ": "<< sampletxtfile << endl;
 
     //MSSMD: assume file format MSSMD_mH_125_mN1_60_mGammaD_XXX_cT_YYYY.txt
-    if ( sampletxtfile.find("mGammaD_") != string::npos && sampletxtfile.find("_cT_") != string::npos && sampletxtfile.find(".txt") != string::npos ){
+    if ( sampletxtfile.find("mGammaD_") != string::npos && sampletxtfile.find("_cT_") != string::npos && sampletxtfile.find(".txt") != string::npos ) {
       unsigned delimiterleft  = sampletxtfile.find("mGammaD_");
       unsigned delimitermiddle = sampletxtfile.find("_cT_");
       unsigned delimiterright = sampletxtfile.find(".txt");
       string mass = sampletxtfile.substr(delimiterleft+8, delimitermiddle-delimiterleft-8);
       string lifetime = sampletxtfile.substr(delimitermiddle+4, delimiterright-delimitermiddle-4);
-      if ( mass.find("p") != string::npos ){ std::replace( mass.begin(), mass.end(), 'p', '.'); }
-      if ( lifetime.find("p") != string::npos ){ std::replace( lifetime.begin(), lifetime.end(), 'p', '.'); }
+      if ( mass.find("p") != string::npos ) { std::replace( mass.begin(), mass.end(), 'p', '.'); }
+      if ( lifetime.find("p") != string::npos ) { std::replace( lifetime.begin(), lifetime.end(), 'p', '.'); }
       double mGammaD  = std::stod(mass);
       double cTau  = std::stod(lifetime);
       mGammaDarray.push_back(mGammaD);
       cTauarray.push_back(cTau);
-      if(sampletxtfile.find("2017") != string::npos){
+      if (sampletxtfile.find("2017") != string::npos) {
         cout << "This is a 2017 MSSMD MC sample: " << "mass = " << mGammaD << " GeV, cT = " << cTau << " mm" << endl;
       }
-      if(sampletxtfile.find("2018") != string::npos){
+      if (sampletxtfile.find("2018") != string::npos) {
         cout << "This is a 2018 MSSMD MC sample: " << "mass = " << mGammaD << " GeV, cT = " << cTau << " mm" << endl;
       }
 
@@ -1853,7 +1825,7 @@ void analysis(const std::string SamplesList)
     const std::string txtfile = sampletxtfile;
     std::vector< std::vector<string> > NtuplePaths;
     readTextFileWithSamples(txtfile, NtuplePaths);
-    for(auto v: NtuplePaths)  efficiency(v);
+    for (auto v: NtuplePaths)  efficiency(v);
     cout << "                       " << endl;
     cout << "#######################" << endl;
   }//end while
@@ -1863,7 +1835,7 @@ void analysis(const std::string SamplesList)
   cout << "Tot. # of samples: "<< linecount << endl;
 
   //at least one sample
-  if ( linecount >= 1 ){
+  if ( linecount >= 1 ) {
     //Calcaulate standard deviation (SD) for selection 12: DY cut
     //Smaller SD indicate better performance on model independence for the selection
     TH1F *finalratio  = new TH1F("finalratio", "", 100, 0., 1.);//binning 0.01
@@ -1987,18 +1959,18 @@ void analysis(const std::string SamplesList)
     TH2F *h_MSSMD_Cut16_15 = new TH2F("h_MSSMD_Cut16_15", "#splitline{#scale[0.8]{Offline Sel. #16 / Sel. #15}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
     TH2F *h_MSSMD_Cut17_16 = new TH2F("h_MSSMD_Cut17_16", "#splitline{#scale[0.8]{Offline Sel. #17 / Sel. #16}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
 
-    if ( mGammaDarray.size() > 0 ){
+    if ( mGammaDarray.size() > 0 ) {
 
       for (UInt_t i = 0; i < mGammaDarray.size(); i++) {
         ix = 0;
         iy = 0;
         //loop through all mass to get bin index
-        for(int j=0; j<12; j++){
-          if( mGammaDarray[i] == massbin[j] ){ ix = j+1; }
+        for (int j=0; j<12; j++) {
+          if ( mGammaDarray[i] == massbin[j] ) { ix = j+1; }
         }//end loop mass
         //loop through all cT to get bin index
-        for(int k=0; k<13; k++){
-          if( cTauarray[i] == cTbin[k] ){ iy = k+1; }
+        for (int k=0; k<13; k++) {
+          if ( cTauarray[i] == cTbin[k] ) { iy = k+1; }
         }//end loop mass
         //cout << "ix: " << ix  << "; iy: " << iy << endl;
 
@@ -2051,7 +2023,7 @@ void analysis(const std::string SamplesList)
         //cout << "Mass: " << mGammaDarray[i]  << "; cT: " << cTauarray[i] << "; eff: "<< counter[i][12]*1.0/counter[i][5] << endl;
       }
 
-      for(unsigned int iXL=1; iXL<=12; iXL++){
+      for (unsigned int iXL=1; iXL<=12; iXL++) {
         //cout << "iXL: " << iXL  << endl;
         h_MSSMD_GENMatch_Cut6_5->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
         h_MSSMD_GENMatch_Cut7_5->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
@@ -2101,7 +2073,7 @@ void analysis(const std::string SamplesList)
         h_MSSMD_Cut17_16->GetXaxis()->SetBinLabel(iXL, Form("%.2f", massbin[iXL-1]) );
       }
 
-      for(unsigned int iYL=1; iYL<=13; iYL++){
+      for (unsigned int iYL=1; iYL<=13; iYL++) {
         //cout << "iYL: " << iYL  << endl;
         h_MSSMD_GENMatch_Cut6_5->GetYaxis()->SetBinLabel(iYL,   Form("%.2f", cTbin[iYL-1]) );
         h_MSSMD_GENMatch_Cut7_5->GetYaxis()->SetBinLabel(iYL,   Form("%.2f", cTbin[iYL-1]) );
