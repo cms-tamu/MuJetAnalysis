@@ -2591,11 +2591,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //std::cout<<"Define PupInfo"<<std::endl;
   edm::Handle<std::vector<PileupSummaryInfo> > PupInfo;
   //std::cout<<"Get by token"<<std::endl;
-  iEvent.getByToken(m_pileupCollection, PupInfo);
-  //std::cout<<"Define iterator"<<std::endl;
-  std::vector<PileupSummaryInfo>::const_iterator PVI;
-  //std::cout<<"Enter loop"<<std::endl;
-  for (PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI){
+  if(m_fillGenLevel){ 
+    iEvent.getByToken(m_pileupCollection, PupInfo);
+    std::vector<PileupSummaryInfo>::const_iterator PVI;
+    for (PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI){
         int BX = PVI->getBunchCrossing();
         //std::cout<<"BX is "<<BX<<std::endl;
         if ( BX == 0 ){
@@ -2604,6 +2603,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
                 //std::cout<<"b_npv is "<<b_npv<<std::endl;
                 continue;
         }
+    }
   }
 
   edm::Handle<reco::VertexCollection> primaryVertices;
