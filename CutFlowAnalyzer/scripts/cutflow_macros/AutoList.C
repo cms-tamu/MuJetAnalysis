@@ -33,7 +33,7 @@ void AutoList(){
       fclose(ntuplefile);
     }//end if
     else{
-      std::cout<<"Don't match" << newline << '\n';
+      std::cout<< "Above line doesn't match" << '\n';
     }
 
   }//end while

@@ -1,8 +1,8 @@
 #!/usr/bin/expect -f
 
 set timeout 86400
-set cutsa [list -1]
-set cutpf [list 0.3 0.4 0.5 0.6 0.7 0.8 0.9]
+set cutsa [list 0]
+set cutpf [list 0.07 0.09 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9]
 ################
 spawn sh
 expect "$ "
@@ -35,7 +35,7 @@ send "sed -i '632s/ProbPF = 0.01/ProbPF = $CUTPF/' foo_modified.C\r"
 expect "$ "
 send "mv foo_modified.C foo_modified_ProbSA_$CUTSA\_ProbPF_$CUTPF.C\r"
 expect "$ "
-send "sed -i '17s/foo_modified/foo_modified_ProbSA_$CUTSA\_ProbPF_$CUTPF/' CutFlow.slurm\r"
+send "sed -i '18s/foo_modified/foo_modified_ProbSA_$CUTSA\_ProbPF_$CUTPF/' CutFlow.slurm\r"
 expect "$ "
 send "mv CutFlow.slurm CutFlow_ProbSA_$CUTSA\_ProbPF_$CUTPF.slurm\r"
 expect "$ "

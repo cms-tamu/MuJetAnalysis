@@ -32,9 +32,13 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     MeasurementTrackerEvent = cms.InputTag('MeasurementTrackerEvent'),
     Propagator = cms.string("RungeKuttaTrackerPropagator"),
     skimOutput = cms.bool(False),
-    ## no need to version it!
     signalHltPaths = cms.vstring(
-    'HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx',
+    # No need to version it!
+    #'HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx',
+    #'HLT_TripleMu_10_5_5_DZ',
+    #'HLT_TripleMu_12_10_5',
+    'HLT_Mu8',
+    #'HLT_Mu17',
     ),
     controlHltPaths = cms.vstring(
     'HLT_TrkMu16NoFiltersNoVtx',
@@ -42,8 +46,21 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     ),
     #L1 algos for signal HLT (FIN-OR)
     l1algos = cms.vstring(
-    "L1_DoubleMu_12_5",
-    "L1_DoubleMu_15_5_SQ",
-    "L1_DoubleMu_15_7" ,
-    "L1_TripleMu_5_3_3"),
+    #Seeds for TripleTrkMu HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx
+    #"L1_DoubleMu_12_5",
+    #"L1_DoubleMu_15_5_SQ",
+    #"L1_DoubleMu_15_7" ,
+    #"L1_TripleMu_5_3_3",
+    #Seeds for TripleMu HLT 10_5_5/12_10_5
+    #"L1_TripleMu0",
+    #"L1_TripleMu_5_5_3",
+    #"L1_TripleMu_5_3_3",
+    #"L1_TripleMu3_SQ",
+    #Seeds for SingleMu HLT_Mu8
+    "L1_SingleMu3",
+    "L1_SingleMu5",
+    "L1_SingleMu7",
+    #Seeds for SingleMu HLT_Mu17
+    #"L1_SingleMu15_DQ",
+    ),
 )

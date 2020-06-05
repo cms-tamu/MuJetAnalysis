@@ -1,9 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=test              #Set the job name to "test"
-#SBATCH --time=02:00:00              #Set the wall clock limit 
-#SBATCH --ntasks=1                   #Request 1 task
-#SBATCH --mem=2000M                  #Request 2000MB per node
-#SBATCH --output=batch/Test.out.%j         #Send stdout/err to "Test.out.[jobID]"
+#SBATCH --job-name=test
+#SBATCH --time=02:00:00
+#SBATCH --ntasks=1
+#SBATCH --mem=2000M
+#SBATCH --output=batch/Test.out.%j
+#SBATCH --account=122747014089
 
 module load cctools
 export PARROT_CVMFS_ALIEN_CACHE=/scratch/group/mitchcomp/CVMFS_cache

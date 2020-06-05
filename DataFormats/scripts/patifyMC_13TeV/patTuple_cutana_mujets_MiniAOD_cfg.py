@@ -31,9 +31,9 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_MiniAOD_cff")
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
+    #'file:/scratch/user/ws13/2017TestData/FAC28F5A-C639-E811-B4BB-10604BA8FC24.root', #one file from /DoubleMuon/Run2017C-31Mar2018-v1/MINIAOD
     #'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_58_cT_0_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/120000/0228EDB3-A855-E911-8BCD-842B2B180C66.root',
     #'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_58_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/110000/02E71858-9C36-EA11-9831-0CC47A57CEB4.root',
-    #'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_25_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/260000/0C6708F8-CE5D-EA11-AE6D-B8CA3A709648.root',
     #'file:/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/DataFormats/scripts/patifyMC_13TeV/HIG-RunIIFall17MiniAODv2-03652.root' #private production of 400 events for 2017 mGammaD_25_cT_100
     'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_25_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/260000/0C6708F8-CE5D-EA11-AE6D-B8CA3A709648.root',
     'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_25_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/260000/143727A9-125E-EA11-B92A-801844DF001C.root',

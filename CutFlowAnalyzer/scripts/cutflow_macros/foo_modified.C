@@ -141,6 +141,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t muJetF_Mu0_pt;
   Float_t muJetF_Mu1_pt;
 
+  Int_t   nMuJets;
+  Bool_t  is2MuJets;
+  Bool_t  is2DiMuons;
   Int_t   nSAMu;
   Int_t   dimuC_nSAMu;
   Int_t   dimuF_nSAMu;
@@ -149,9 +152,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t   dimuF_nNonTrackerMu;
   Float_t diMuonC_FittedVtx_prob;
   Float_t diMuonF_FittedVtx_prob;
-  Int_t   nMuJets;
-  Bool_t  is2MuJets;
-  Bool_t  is2DiMuons;
+  Float_t diMuonC_FittedVtx_dR;
+  Float_t diMuonF_FittedVtx_dR;
+  Float_t diMuonC_FittedVtx_Lxy;
+  Float_t diMuonC_FittedVtx_L;
+  Float_t diMuonF_FittedVtx_Lxy;
+  Float_t diMuonF_FittedVtx_L;
   Float_t massC;
   Float_t massF;
 
@@ -163,6 +169,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   Bool_t  isVtxOK;
   Float_t diMuons_dz_FittedVtx;
+  Float_t diMuonC_FittedVtx_dz;
+  Float_t diMuonF_FittedVtx_dz;
   Bool_t  is2DiMuonsMassOK;
 
   Bool_t  isSignalHLTFired;
@@ -202,11 +210,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t diMuonC_m2_FittedVtx_ValidPixelEndcapHits;
   Int_t diMuonF_m1_FittedVtx_ValidPixelEndcapHits;
   Int_t diMuonF_m2_FittedVtx_ValidPixelEndcapHits;*/
-
-  Float_t diMuonC_FittedVtx_Lxy;
-  Float_t diMuonC_FittedVtx_L;
-  Float_t diMuonF_FittedVtx_Lxy;
-  Float_t diMuonF_FittedVtx_L;
 
   Bool_t orph_passOffLineSelPtEta;
   Bool_t orph_AllTrackerMu;
@@ -285,6 +288,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* GENMudR_A0 = new TH1F("GENMudR_A0", "", 80, 0, 8);//per 0.1
   TH1F* GENMudR_A1 = new TH1F("GENMudR_A1", "", 80, 0, 8);
 
+  TH1F* DimuCdR = new TH1F("DimuCdR", "#DeltaR of muons from 1st di-#mu", 80, 0, 8);//per 0.1
+  TH1F* DimuFdR = new TH1F("DimuFdR", "#DeltaR of muons from 2nd di-#mu", 80, 0, 8);
+
   TH1F* GEN1stPt_pass_GEN = new TH1F("GEN1stPt_pass_GEN", "", 150, 0, 150);
   TH1F* GEN2ndPt_pass_GEN = new TH1F("GEN2ndPt_pass_GEN", "", 150, 0, 150);
   TH1F* GEN3rdPt_pass_GEN = new TH1F("GEN3rdPt_pass_GEN", "", 150, 0, 150);
@@ -302,10 +308,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* GENLeadingLxy_pass_RECOmu1234 = new TH1F("GENLeadingLxy_pass_RECOmu1234",   "",  40, 0., 20.);
   TH1F* GENLeadingLz_pass_RECOmu1234  = new TH1F("GENLeadingLz_pass_RECOmu1234",    "", 120, 0., 60.);
 
-  TH1F* CvtxProbNoSAmuafterCut11  = new TH1F("CvtxProbNoSAmuafterCut11",  "Di-#mu0 Vtx Fit Prob. After Cut 11 (all PF loose mu)", 1000, 0., 1.);//per 0.001
-  TH1F* FvtxProbNoSAmuafterCut11  = new TH1F("FvtxProbNoSAmuafterCut11",  "Di-#mu1 Vtx Fit Prob. After Cut 11 (all PF loose mu)", 1000, 0., 1.);
-  TH1F* CvtxProbSAmuInCafterCut11 = new TH1F("CvtxProbSAmuInCafterCut11", "Di-#mu0 Vtx Fit Prob. After Cut 11 (di-#mu0 has one SA mu)", 1000, 0., 1.);
-  TH1F* FvtxProbSAmuInFafterCut11 = new TH1F("FvtxProbSAmuInFafterCut11", "Di-#mu1 Vtx Fit Prob. After Cut 11 (di-#mu1 has one SA mu)", 1000, 0., 1.);
+  TH1F* CvtxProbNoSAmu  = new TH1F("CvtxProbNoSAmu",  "Di-#mu0 Vtx Fit Prob. (all PF loose mu)", 1000, 0., 1.);//per 0.001
+  TH1F* FvtxProbNoSAmu  = new TH1F("FvtxProbNoSAmu",  "Di-#mu1 Vtx Fit Prob. (all PF loose mu)", 1000, 0., 1.);
+  TH1F* CvtxProbSAmuInC = new TH1F("CvtxProbSAmuInC", "Di-#mu0 Vtx Fit Prob. (di-#mu0 has one SA mu)", 1000, 0., 1.);
+  TH1F* FvtxProbSAmuInF = new TH1F("FvtxProbSAmuInF", "Di-#mu1 Vtx Fit Prob. (di-#mu1 has one SA mu)", 1000, 0., 1.);
 
   //Trigger accept eff as function of leading muon pT, eta and phi after cut #9
   TH1F* leading_pt_pass_basic      = new TH1F("leading_pt_pass_basic",      "", 150,    0, 150); //per 1
@@ -436,7 +442,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *RECOrePaired2muLeadingdR    = new TH1F("RECOrePaired2muLeadingdR",    "", 450, 0., 4.5);//binning 0.01
   TH1F *RECOrePaired2muTrailingdR   = new TH1F("RECOrePaired2muTrailingdR",   "", 450, 0., 4.5);
 
-  TH1F *dZdimuons         = new TH1F("dZdimuons", "Difference in z of Reconstructed Signal Production Vertex at the Beam Line", 4800, -24, 24);//binning 0.01 cm
+  TH1F *dZDimuC   = new TH1F("dZDimuC", "dz of 1st RECO Di-#mu Production Vtx (w.r.t. Beamspot)", 4800, -24, 24);//binning 0.01 cm
+  TH1F *dZDimuF   = new TH1F("dZDimuF", "dz of 2nd RECO Di-#mu Production Vtx (w.r.t. Beamspot)", 4800, -24, 24);
+  TH1F *dZdimuons = new TH1F("dZdimuons", "dz of RECO Di-#mu Production Vtx", 4800, -24, 24);
 
   TH1F *IsoDimuC          = new TH1F("IsoDimuC",          "", 1000, 0., 100.);//binning 0.1 GeV
   TH1F *IsoDimuF          = new TH1F("IsoDimuF",          "", 1000, 0., 100.);
@@ -522,6 +530,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("muJetF_Mu1_pt", &muJetF_Mu1_pt);
 
   t->SetBranchAddress("isVertexOK", &isVtxOK);
+  t->SetBranchAddress("nMuJets",    &nMuJets);
+	t->SetBranchAddress("is2MuJets",  &is2MuJets);
+  t->SetBranchAddress("is2DiMuons", &is2DiMuons);
   t->SetBranchAddress("nSAMu",      &nSAMu);
   t->SetBranchAddress("dimuC_nSAMu",&dimuC_nSAMu);
   t->SetBranchAddress("dimuF_nSAMu",&dimuF_nSAMu);
@@ -530,9 +541,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("dimuF_nNonTrackerMu", &dimuF_nNonTrackerMu);
   t->SetBranchAddress("diMuonC_FittedVtx_prob",&diMuonC_FittedVtx_prob);
   t->SetBranchAddress("diMuonF_FittedVtx_prob",&diMuonF_FittedVtx_prob);
-  t->SetBranchAddress("nMuJets",    &nMuJets);
-	t->SetBranchAddress("is2MuJets",  &is2MuJets);
-  t->SetBranchAddress("is2DiMuons", &is2DiMuons);
+  t->SetBranchAddress("diMuonC_FittedVtx_dR",  &diMuonC_FittedVtx_dR);
+  t->SetBranchAddress("diMuonF_FittedVtx_dR",  &diMuonF_FittedVtx_dR);
+  t->SetBranchAddress("diMuonC_FittedVtx_Lxy", &diMuonC_FittedVtx_Lxy);
+	t->SetBranchAddress("diMuonC_FittedVtx_L",   &diMuonC_FittedVtx_L);
+	t->SetBranchAddress("diMuonF_FittedVtx_Lxy", &diMuonF_FittedVtx_Lxy);
+	t->SetBranchAddress("diMuonF_FittedVtx_L",   &diMuonF_FittedVtx_L);
   //Need to use fitted vertex mass, not the muon pair mass
   //In most cases, they are the close, but not necessarily in some cases
   t->SetBranchAddress("diMuonC_FittedVtx_m", &massC);
@@ -563,12 +577,9 @@ void efficiency(const std::vector<std::string>& dirNames)
 	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelEndcapHits", &diMuonC_m2_FittedVtx_ValidPixelEndcapHits);
 	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelEndcapHits", &diMuonF_m1_FittedVtx_ValidPixelEndcapHits);
 	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelEndcapHits", &diMuonF_m2_FittedVtx_ValidPixelEndcapHits);*/
-  //For checking pixel Hit
-  t->SetBranchAddress("diMuonC_FittedVtx_Lxy", &diMuonC_FittedVtx_Lxy);
-	t->SetBranchAddress("diMuonC_FittedVtx_L",   &diMuonC_FittedVtx_L);
-	t->SetBranchAddress("diMuonF_FittedVtx_Lxy", &diMuonF_FittedVtx_Lxy);
-	t->SetBranchAddress("diMuonF_FittedVtx_L",   &diMuonF_FittedVtx_L);
 
+  t->SetBranchAddress("diMuonC_FittedVtx_dz",          &diMuonC_FittedVtx_dz);
+  t->SetBranchAddress("diMuonF_FittedVtx_dz",          &diMuonF_FittedVtx_dz);
   t->SetBranchAddress("diMuons_dz_FittedVtx",          &diMuons_dz_FittedVtx);
   t->SetBranchAddress("diMuonC_IsoTk_FittedVtx",       &diMuonC_IsoTk_FittedVtx);
 	t->SetBranchAddress("diMuonF_IsoTk_FittedVtx",       &diMuonF_IsoTk_FittedVtx);
@@ -586,6 +597,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("diMuonFMu1_IsoTk0p5_FittedVtx", &diMuonFMu1_IsoTk0p5_FittedVtx);
   t->SetBranchAddress("isSignalHLTFired",              &isSignalHLTFired);
   t->SetBranchAddress("isSignalHLTL1Fired",            &isSignalHLTL1Fired);
+  //t->SetBranchAddress("isControlHLT16Fired",           &isControlHLT16Fired);//Control HLT only work for 2018 MC as they are deployed 2018 May
+  //t->SetBranchAddress("isControlHLT6Fired",            &isControlHLT6Fired);
   t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",    &is2DiMuonsMassOK);
 
   //Get branch from orphan-dimuon tree
@@ -806,22 +819,22 @@ void efficiency(const std::vector<std::string>& dirNames)
                 if ( nSAMu == 0 && nMuJets == 2 ) newcount0SAtwomujet++;
 
                 //nSAMu = dimuC_nSAMu + dimuF_nSAMu
-                //if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
-                if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
+                if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
+                /*if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
                                      (dimuC_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbSA && diMuonF_FittedVtx_prob > ProbPF) ||
-                                     (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {
+                                     (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {*/
                   counterGENMatch[k][11]++;
-
-                  if ( nSAMu == 0 ) {
-                    CvtxProbNoSAmuafterCut11->Fill(diMuonC_FittedVtx_prob);
-                    FvtxProbNoSAmuafterCut11->Fill(diMuonF_FittedVtx_prob);
-                  }
-                  if ( dimuC_nSAMu == 1 ) CvtxProbSAmuInCafterCut11->Fill(diMuonC_FittedVtx_prob);
-                  if ( dimuF_nSAMu == 1 ) FvtxProbSAmuInFafterCut11->Fill(diMuonF_FittedVtx_prob);
 
                   if ( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ) {
                     //!!! Note: this needs to match GEN cut on geometry
                     counterGENMatch[k][12]++;
+
+                    if ( nSAMu == 0 ) {
+                      CvtxProbNoSAmu->Fill(diMuonC_FittedVtx_prob);
+                      FvtxProbNoSAmu->Fill(diMuonF_FittedVtx_prob);
+                    }
+                    if ( dimuC_nSAMu == 1 ) CvtxProbSAmuInC->Fill(diMuonC_FittedVtx_prob);
+                    if ( dimuF_nSAMu == 1 ) FvtxProbSAmuInF->Fill(diMuonF_FittedVtx_prob);
 
                     if ( nNonTrackerMu == 0 ) newcount0NonTrkMu++;
                     if ( nNonTrackerMu == 1 ) newcount1NonTrkMu++;
@@ -832,13 +845,20 @@ void efficiency(const std::vector<std::string>& dirNames)
                     if ( nSAMu == 1 ) newcount1SAmu++;
                     if ( nSAMu == 2 ) newcount2SAmu++;
 
+                    DimuCdR->Fill(diMuonC_FittedVtx_dR);
+                    DimuFdR->Fill(diMuonF_FittedVtx_dR);
+
                     if ( ModelSRWidth ) {
                       DimuCMassAfterCut12->Fill(massC);
                       DimuFMassAfterCut12->Fill(massF);
                     }
 
                     //Note: this needs to be before the cut on dz
-                    if ( PlotdZ ) dZdimuons->Fill(diMuons_dz_FittedVtx);
+                    if ( PlotdZ ) {
+                      dZDimuC->Fill(diMuonC_FittedVtx_dz);
+                      dZDimuF->Fill(diMuonF_FittedVtx_dz);
+                      dZdimuons->Fill(diMuons_dz_FittedVtx);
+                    }
 
                     if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
 
@@ -979,10 +999,10 @@ void efficiency(const std::vector<std::string>& dirNames)
           counter[k][10]++;
 
           //nSAMu = dimuC_nSAMu + dimuF_nSAMu
-          //if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
-          if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
+          if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
+          /*if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
                                (dimuC_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbSA && diMuonF_FittedVtx_prob > ProbPF) ||
-                               (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {
+                               (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {*/
             counter[k][11]++;
 
             if ( ModelBKGShape ) {
@@ -1202,13 +1222,25 @@ void efficiency(const std::vector<std::string>& dirNames)
     Lz_DimuF_CR_HighMass->GetXaxis()->SetTitle("Lz [cm]");   Lz_DimuF_CR_HighMass->GetYaxis()->SetTitle("Events/0.1 cm");  Lz_DimuF_CR_HighMass->Write();
   }//end CheckDisplacement
 
-  GENMudR_A0->GetXaxis()->SetTitle("#DeltaR of muons from leading pT GEN boson"); GENMudR_A0->GetYaxis()->SetTitle("Events/0.1"); GENMudR_A0->Write();
+  genA_leading_Lxy_pass_all->GetXaxis()->SetTitle("Lxy [cm]"); genA_leading_Lxy_pass_all->GetYaxis()->SetTitle("Events/0.5 cm"); genA_leading_Lxy_pass_all->Write();
+  genA_leading_Lz_pass_all->GetXaxis()->SetTitle("Lz [cm]");   genA_leading_Lz_pass_all->GetYaxis()->SetTitle("Events/0.5 cm");  genA_leading_Lz_pass_all->Write();
+  HLT_genA_leading_Lxy_pass_all->GetXaxis()->SetTitle("Lxy [cm]"); HLT_genA_leading_Lxy_pass_all->GetYaxis()->SetTitle("Events/0.5 cm"); HLT_genA_leading_Lxy_pass_all->Write();
+  HLT_genA_leading_Lz_pass_all->GetXaxis()->SetTitle("Lxy [cm]");  HLT_genA_leading_Lz_pass_all->GetYaxis()->SetTitle("Events/0.5 cm");  HLT_genA_leading_Lz_pass_all->Write();
+  diMuon_leading_Lxy_pass_all->GetXaxis()->SetTitle("Lxy [cm]"); diMuon_leading_Lxy_pass_all->GetYaxis()->SetTitle("Events/0.5 cm"); diMuon_leading_Lxy_pass_all->Write();
+  diMuon_leading_Lz_pass_all->GetXaxis()->SetTitle("Lz [cm]");   diMuon_leading_Lz_pass_all->GetYaxis()->SetTitle("Events/0.5 cm");  diMuon_leading_Lz_pass_all->Write();
+  HLT_diMuon_leading_Lxy_pass_all->GetXaxis()->SetTitle("Lxy [cm]"); HLT_diMuon_leading_Lxy_pass_all->GetYaxis()->SetTitle("Events/0.5 cm"); HLT_diMuon_leading_Lxy_pass_all->Write();
+  HLT_diMuon_leading_Lz_pass_all->GetXaxis()->SetTitle("Lz [cm]");   HLT_diMuon_leading_Lz_pass_all->GetYaxis()->SetTitle("Events/0.5 cm");  HLT_diMuon_leading_Lz_pass_all->Write();
+
+  GENMudR_A0->GetXaxis()->SetTitle("#DeltaR of muons from leading pT GEN boson");     GENMudR_A0->GetYaxis()->SetTitle("Events/0.1"); GENMudR_A0->Write();
   GENMudR_A1->GetXaxis()->SetTitle("#DeltaR of muons from sub-leading pT GEN boson"); GENMudR_A1->GetYaxis()->SetTitle("Events/0.1"); GENMudR_A1->Write();
 
-  CvtxProbNoSAmuafterCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbNoSAmuafterCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbNoSAmuafterCut11->Write();
-  FvtxProbNoSAmuafterCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbNoSAmuafterCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbNoSAmuafterCut11->Write();
-  CvtxProbSAmuInCafterCut11->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInCafterCut11->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInCafterCut11->Write();
-  FvtxProbSAmuInFafterCut11->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInFafterCut11->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInFafterCut11->Write();
+  CvtxProbNoSAmu->GetXaxis()->SetTitle("Vtx Prob.");  CvtxProbNoSAmu->GetYaxis()->SetTitle("Events/0.001");  CvtxProbNoSAmu->Write();
+  FvtxProbNoSAmu->GetXaxis()->SetTitle("Vtx Prob.");  FvtxProbNoSAmu->GetYaxis()->SetTitle("Events/0.001");  FvtxProbNoSAmu->Write();
+  CvtxProbSAmuInC->GetXaxis()->SetTitle("Vtx Prob."); CvtxProbSAmuInC->GetYaxis()->SetTitle("Events/0.001"); CvtxProbSAmuInC->Write();
+  FvtxProbSAmuInF->GetXaxis()->SetTitle("Vtx Prob."); FvtxProbSAmuInF->GetYaxis()->SetTitle("Events/0.001"); FvtxProbSAmuInF->Write();
+
+  DimuCdR->GetXaxis()->SetTitle("#DeltaR"); DimuCdR->GetYaxis()->SetTitle("Events/0.1"); DimuCdR->Write();
+  DimuFdR->GetXaxis()->SetTitle("#DeltaR"); DimuFdR->GetYaxis()->SetTitle("Events/0.1"); DimuFdR->Write();
 
   Lxy->cd();
   Phase1Pix_GEN_A0_Lxy->SetLineColor(2); Phase1Pix_GEN_A0_Lxy->SetLineStyle(1); Phase1Pix_GEN_A0_Lxy->GetXaxis()->SetTitle("L_{xy} [cm]"); Phase1Pix_GEN_A0_Lxy->GetYaxis()->SetTitle("Events/0.5 cm"); Phase1Pix_GEN_A0_Lxy->Draw();
@@ -1600,18 +1632,16 @@ void efficiency(const std::vector<std::string>& dirNames)
   }//end if ( ModelSRWidth )
 
   if ( PlotdZ ) {
-    dZdimuons->GetXaxis()->SetTitle("#Delta z [cm]");
-    dZdimuons->GetYaxis()->SetTitle("Events/0.01 cm");
-    dZdimuons->Write();
+    dZDimuC->GetXaxis()->SetTitle("#Delta z [cm]");   dZDimuC->GetYaxis()->SetTitle("Events/0.01 cm");   dZDimuC->Write();
+    dZDimuF->GetXaxis()->SetTitle("#Delta z [cm]");   dZDimuF->GetYaxis()->SetTitle("Events/0.01 cm");   dZDimuF->Write();
+    dZdimuons->GetXaxis()->SetTitle("#Delta z [cm]"); dZdimuons->GetYaxis()->SetTitle("Events/0.01 cm"); dZdimuons->Write();
     //Normalized plot
     TH1F *dZdimuons_Normalized = (TH1F*)dZdimuons->Clone("dZdimuons_Normalized");
     //Protect against 0 entry
     if ( dZdimuons->Integral() > 0 ) {
       Double_t scaledZdimuons = 1./dZdimuons->Integral();
       dZdimuons_Normalized->Scale(scaledZdimuons);
-      dZdimuons_Normalized->GetXaxis()->SetTitle("#Delta z [cm]");
-      dZdimuons_Normalized->GetYaxis()->SetTitle("Fraction/0.01 cm");
-      dZdimuons_Normalized->Write();
+      dZdimuons_Normalized->GetXaxis()->SetTitle("#Delta z [cm]"); dZdimuons_Normalized->GetYaxis()->SetTitle("Fraction/0.01 cm"); dZdimuons_Normalized->Write();
     }
   }//end PlotdZ
 
@@ -1714,8 +1744,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete Phase1Pix_GEN_A1_Lxy; delete Phase1Pix_GEN_A1_Lz;
   delete Phase1Pix_GEN_A0_Mu0_pT; delete Phase1Pix_GEN_A0_Mu1_pT;
   delete Phase1Pix_GEN_A1_Mu0_pT; delete Phase1Pix_GEN_A1_Mu1_pT;
-  delete CvtxProbNoSAmuafterCut11; delete FvtxProbNoSAmuafterCut11;
-  delete CvtxProbSAmuInCafterCut11; delete FvtxProbSAmuInFafterCut11;
+  delete CvtxProbNoSAmu; delete FvtxProbNoSAmu;
+  delete CvtxProbSAmuInC; delete FvtxProbSAmuInF;
+  delete DimuCdR; delete DimuFdR;
   delete GENMudR_A0; delete GENMudR_A1;
   delete Phase1Pix_RECO_Mu0_pT; delete Phase1Pix_RECO_Mu0_eta; delete Phase1Pix_RECO_Mu0_phi;
   delete Phase1Pix_RECO_Mu1_pT; delete Phase1Pix_RECO_Mu1_eta; delete Phase1Pix_RECO_Mu1_phi;
@@ -1765,9 +1796,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete RECO4muMass;
   delete RECOrePaired2muLeadingMass; delete RECOrePaired2muLeadingdR;
   delete RECOrePaired2muTrailingMass; delete RECOrePaired2muTrailingdR;
-  delete dZdimuons;
-  delete IsoDimuC;
-  delete IsoDimuF;
+  delete dZDimuC; delete dZDimuF; delete dZdimuons;
+  delete IsoDimuC; delete IsoDimuF;
   delete IsoDimuCMu0_dR0p3; delete IsoDimuCMu0_dR0p4; delete IsoDimuCMu0_dR0p5;
   delete IsoDimuCMu1_dR0p3; delete IsoDimuCMu1_dR0p4; delete IsoDimuCMu1_dR0p5;
   delete IsoDimuFMu0_dR0p3; delete IsoDimuFMu0_dR0p4; delete IsoDimuFMu0_dR0p5;
