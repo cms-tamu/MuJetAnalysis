@@ -596,6 +596,8 @@ private:
   Float_t m_orphan_dimu_dR;
   Float_t m_orphan_dimu_mass;
   Float_t m_orphan_dimu_z;
+  Float_t m_orphan_dimu_Lxy;
+  Float_t m_orphan_dimu_L;
   Float_t m_orphan_dimu_chi2;
   Float_t m_orphan_dimu_ndof;
   Float_t m_orphan_dimu_prob;
@@ -2317,6 +2319,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   m_orphan_dimu_dR = -999.;
   m_orphan_dimu_mass = -999.;
   m_orphan_dimu_z = -999.;
+  m_orphan_dimu_Lxy  = -999.;
+  m_orphan_dimu_L    = -999.;
   m_orphan_dimu_chi2 = -999.;
   m_orphan_dimu_ndof = -999.;
   m_orphan_dimu_prob = -999.;
@@ -2414,6 +2418,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     if ( muJet->vertexValid() ){
       m_orphan_dimu_mass = muJet->vertexMass();
       m_orphan_dimu_z    = muJet->vertexDz(beamSpot->position());
+      m_orphan_dimu_Lxy  = muJet->vertexLxy(beamSpotPosition);
+      m_orphan_dimu_L    = muJet->vertexL(beamSpotPosition);
       //fitted vtx GoF
       m_orphan_dimu_chi2 = muJet->vertexChi2();
       m_orphan_dimu_ndof = muJet->vertexNdof();
@@ -2591,7 +2597,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //std::cout<<"Define PupInfo"<<std::endl;
   edm::Handle<std::vector<PileupSummaryInfo> > PupInfo;
   //std::cout<<"Get by token"<<std::endl;
-  if(m_fillGenLevel){ 
+  if(m_fillGenLevel){
     iEvent.getByToken(m_pileupCollection, PupInfo);
     std::vector<PileupSummaryInfo>::const_iterator PVI;
     for (PVI = PupInfo->begin(); PVI != PupInfo->end(); ++PVI){
@@ -3057,6 +3063,8 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree_orphan->Branch("orph_dimu_dR",   &m_orphan_dimu_dR,   "orph_dimu_dR/F");
   m_ttree_orphan->Branch("orph_dimu_mass", &m_orphan_dimu_mass, "orph_dimu_mass/F");
   m_ttree_orphan->Branch("orph_dimu_z",    &m_orphan_dimu_z,    "orph_dimu_z/F");
+  m_ttree_orphan->Branch("orph_dimu_Lxy",  &m_orphan_dimu_Lxy,  "orph_dimu_Lxy/F");
+  m_ttree_orphan->Branch("orph_dimu_L",    &m_orphan_dimu_L,    "orph_dimu_L/F");
   m_ttree_orphan->Branch("orph_dimu_chi2", &m_orphan_dimu_chi2, "orph_dimu_chi2/F");
   m_ttree_orphan->Branch("orph_dimu_ndof", &m_orphan_dimu_ndof, "orph_dimu_ndof/F");
   m_ttree_orphan->Branch("orph_dimu_prob", &m_orphan_dimu_prob, "orph_dimu_prob/F");

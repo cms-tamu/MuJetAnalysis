@@ -643,6 +643,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcount2SAmu = 0;
   Float_t ProbSA = 0;
   Float_t ProbPF = 0.01;
+  Float_t R0 = 6.8;
+  Float_t P0 = 0.08;
+  Float_t C0 = 0.1;
+  Float_t N0 = 1.0;
 
   if ( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
 
@@ -819,7 +823,16 @@ void efficiency(const std::vector<std::string>& dirNames)
                 if ( nSAMu == 0 && nMuJets == 2 ) newcount0SAtwomujet++;
 
                 //nSAMu = dimuC_nSAMu + dimuF_nSAMu
-                if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
+                //if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
+                /*if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
+                     diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -(diMuonC_FittedVtx_dR*diMuonC_FittedVtx_Lxy/R0) ) &&
+                     diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -(diMuonF_FittedVtx_dR*diMuonF_FittedVtx_Lxy/R0) ) ) {*/
+                if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
+                     diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -(C0*diMuonC_FittedVtx_dR + diMuonC_FittedVtx_Lxy/R0) ) &&
+                     diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -(C0*diMuonF_FittedVtx_dR + diMuonF_FittedVtx_Lxy/R0) ) ) {
+                /*if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
+                     diMuonC_FittedVtx_prob > P0*exp( -(C0*diMuonC_FittedVtx_dR + diMuonC_FittedVtx_Lxy/R0 + N0*dimuC_nSAMu) ) &&
+                     diMuonF_FittedVtx_prob > P0*exp( -(C0*diMuonF_FittedVtx_dR + diMuonF_FittedVtx_Lxy/R0 + N0*dimuF_nSAMu) ) ) {*/
                 /*if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
                                      (dimuC_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbSA && diMuonF_FittedVtx_prob > ProbPF) ||
                                      (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {*/
@@ -864,8 +877,8 @@ void efficiency(const std::vector<std::string>& dirNames)
 
                       counterGENMatch[k][13]++;
 
-                      if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
-                      //if ( (massC >= 11.0 && massF >= 11.0 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC < 11.0 && massF < 11.0) ) {
+                      //if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
+                      if ( (massC >= 9.5 && massF >= 9.5 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
                         counterGENMatch[k][14]++;
 
                         //Note: this needs to be before the cut on iso
@@ -886,8 +899,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                           IsoDimuFMu1_dR0p5->Fill(diMuonFMu1_IsoTk0p5_FittedVtx);
                         }//end PlotIso
 
-                        if ( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ) {
-                        //if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
+                        //if ( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ) {
+                        if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
                           counterGENMatch[k][15]++;
 
                           //###########################################################
@@ -999,7 +1012,16 @@ void efficiency(const std::vector<std::string>& dirNames)
           counter[k][10]++;
 
           //nSAMu = dimuC_nSAMu + dimuF_nSAMu
-          if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
+          //if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
+          /*if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
+               diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -(diMuonC_FittedVtx_dR*diMuonC_FittedVtx_Lxy/R0) ) &&
+               diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -(diMuonF_FittedVtx_dR*diMuonF_FittedVtx_Lxy/R0) ) ) {*/
+          if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
+               diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -(C0*diMuonC_FittedVtx_dR + diMuonC_FittedVtx_Lxy/R0) ) &&
+               diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -(C0*diMuonF_FittedVtx_dR + diMuonF_FittedVtx_Lxy/R0) ) ) {
+          /*if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
+               diMuonC_FittedVtx_prob > P0*exp( -(C0*diMuonC_FittedVtx_dR + diMuonC_FittedVtx_Lxy/R0 + N0*dimuC_nSAMu) ) &&
+               diMuonF_FittedVtx_prob > P0*exp( -(C0*diMuonF_FittedVtx_dR + diMuonF_FittedVtx_Lxy/R0 + N0*dimuF_nSAMu) ) ) {*/
           /*if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
                                (dimuC_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbSA && diMuonF_FittedVtx_prob > ProbPF) ||
                                (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {*/
@@ -1020,12 +1042,12 @@ void efficiency(const std::vector<std::string>& dirNames)
               if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
                 counter[k][13]++;
 
-                if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
-                //if ( (massC >= 11.0 && massF >= 11.0 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC < 11.0 && massF < 11.0) ) {
+                //if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
+                if ( (massC >= 9.5 && massF >= 9.5 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
                   counter[k][14]++;
 
-                  if ( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ) {
-                  //if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
+                  //if ( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ) {
+                  if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
                     counter[k][15]++;
 
                     if ( isSignalHLTFired ) {
