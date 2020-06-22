@@ -1799,7 +1799,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_recoRePaired2mutrailing_dR = -999.;
   }
 
-  // Fill branches with variables calculated with fitted vertexes
+  // Variables calculated with fitted vertexes
   if ( diMuonC != NULL ) b_diMuonC_FittedVtx_dR = diMuonC->dR(0, 1, diMuonC->vertexValid());
   else b_diMuonC_FittedVtx_dR = -1000.0;
 

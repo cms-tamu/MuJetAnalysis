@@ -643,8 +643,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcount2SAmu = 0;
   Float_t ProbSA = 0;
   Float_t ProbPF = 0.01;
-  Float_t R0 = 6.8;
-  Float_t P0 = 0.08;
+  Float_t E1 = 0.5;
+  Float_t E2 = 1.0;
+  Float_t R0 = 2.9;
+  Float_t P0 = 0.18;
   Float_t C0 = 0.1;
   Float_t N0 = 1.0;
 
@@ -823,19 +825,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                 if ( nSAMu == 0 && nMuJets == 2 ) newcount0SAtwomujet++;
 
                 //nSAMu = dimuC_nSAMu + dimuF_nSAMu
-                //if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
-                /*if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
-                     diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -(diMuonC_FittedVtx_dR*diMuonC_FittedVtx_Lxy/R0) ) &&
-                     diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -(diMuonF_FittedVtx_dR*diMuonF_FittedVtx_Lxy/R0) ) ) {*/
-                if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
-                     diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -(C0*diMuonC_FittedVtx_dR + diMuonC_FittedVtx_Lxy/R0) ) &&
-                     diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -(C0*diMuonF_FittedVtx_dR + diMuonF_FittedVtx_Lxy/R0) ) ) {
-                /*if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
-                     diMuonC_FittedVtx_prob > P0*exp( -(C0*diMuonC_FittedVtx_dR + diMuonC_FittedVtx_Lxy/R0 + N0*dimuC_nSAMu) ) &&
-                     diMuonF_FittedVtx_prob > P0*exp( -(C0*diMuonF_FittedVtx_dR + diMuonF_FittedVtx_Lxy/R0 + N0*dimuF_nSAMu) ) ) {*/
-                /*if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
-                                     (dimuC_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbSA && diMuonF_FittedVtx_prob > ProbPF) ||
-                                     (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {*/
+                if ( is2DiMuons && nSAMu <= 1 && diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -( 0.099 + 0.115*diMuonC_FittedVtx_dR + 0.311*pow(diMuonC_FittedVtx_dR, 2) + 0.074*pow(diMuonC_FittedVtx_dR, 3) )*fabs(diMuonC_FittedVtx_Lxy/R0) ) &&
+                     diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -( 0.099 + 0.115*diMuonF_FittedVtx_dR + 0.311*pow(diMuonF_FittedVtx_dR, 2) + 0.074*pow(diMuonF_FittedVtx_dR, 3) )*fabs(diMuonF_FittedVtx_Lxy/R0) ) ) {
                   counterGENMatch[k][11]++;
 
                   if ( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ) {
@@ -873,7 +864,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                       dZdimuons->Fill(diMuons_dz_FittedVtx);
                     }
 
-                    if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
+                    //if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
+                    if ( 2 > 1  ) {
 
                       counterGENMatch[k][13]++;
 
@@ -1012,19 +1004,8 @@ void efficiency(const std::vector<std::string>& dirNames)
           counter[k][10]++;
 
           //nSAMu = dimuC_nSAMu + dimuF_nSAMu
-          //if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 ) {
-          /*if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
-               diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -(diMuonC_FittedVtx_dR*diMuonC_FittedVtx_Lxy/R0) ) &&
-               diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -(diMuonF_FittedVtx_dR*diMuonF_FittedVtx_Lxy/R0) ) ) {*/
-          if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
-               diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -(C0*diMuonC_FittedVtx_dR + diMuonC_FittedVtx_Lxy/R0) ) &&
-               diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -(C0*diMuonF_FittedVtx_dR + diMuonF_FittedVtx_Lxy/R0) ) ) {
-          /*if ( is2DiMuons && dimuC_nSAMu <= 1 && dimuF_nSAMu <= 1 &&
-               diMuonC_FittedVtx_prob > P0*exp( -(C0*diMuonC_FittedVtx_dR + diMuonC_FittedVtx_Lxy/R0 + N0*dimuC_nSAMu) ) &&
-               diMuonF_FittedVtx_prob > P0*exp( -(C0*diMuonF_FittedVtx_dR + diMuonF_FittedVtx_Lxy/R0 + N0*dimuF_nSAMu) ) ) {*/
-          /*if ( is2DiMuons && ( (nSAMu == 0 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbPF) ||
-                               (dimuC_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbSA && diMuonF_FittedVtx_prob > ProbPF) ||
-                               (dimuF_nSAMu == 1 && diMuonC_FittedVtx_prob > ProbPF && diMuonF_FittedVtx_prob > ProbSA) ) ) {*/
+          if ( is2DiMuons && nSAMu <= 1 && diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -( 0.099 + 0.115*diMuonC_FittedVtx_dR + 0.311*pow(diMuonC_FittedVtx_dR, 2) + 0.074*pow(diMuonC_FittedVtx_dR, 3) )*fabs(diMuonC_FittedVtx_Lxy/R0) ) &&
+               diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -( 0.099 + 0.115*diMuonF_FittedVtx_dR + 0.311*pow(diMuonF_FittedVtx_dR, 2) + 0.074*pow(diMuonF_FittedVtx_dR, 3) )*fabs(diMuonF_FittedVtx_Lxy/R0) ) ) {
             counter[k][11]++;
 
             if ( ModelBKGShape ) {
@@ -1039,7 +1020,8 @@ void efficiency(const std::vector<std::string>& dirNames)
               //!!! Note: this needs to match GEN cut on geometry
               counter[k][12]++;
 
-              if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
+              //if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
+              if ( 2 > 1  ) {
                 counter[k][13]++;
 
                 //if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
@@ -1911,7 +1893,7 @@ void analysis(const std::string SamplesList)
     //=============================
     //   Efficiency for MSSMD
     //=============================
-    double massbin[12] = {0.25, 0.4, 0.7, 1, 2, 5, 8.5, 10, 15, 25, 35, 58};
+    double massbin[11] = {0.25, 0.4, 0.7, 1, 2, 5, 8.5, 15, 25, 35, 58};//Exclude 10GeV becaue it's in Upsilon range
     double cTbin[13]   = {0, 0.05, 0.1, 0.2, 0.5, 1, 2, 3, 5, 10, 20, 50, 100};
     int ix, iy;
 
@@ -1941,30 +1923,30 @@ void analysis(const std::string SamplesList)
     TCanvas *c_MSSMD_GENMatch_Cut16_15  = new TCanvas("c_MSSMD_GENMatch_Cut16_15",  "c_MSSMD_GENMatch_Cut16_15", 700, 500);
     TCanvas *c_MSSMD_GENMatch_Cut17_16  = new TCanvas("c_MSSMD_GENMatch_Cut17_16",  "c_MSSMD_GENMatch_Cut17_16", 700, 500);
 
-    TH2F *h_MSSMD_GENMatch_Cut6_5  = new TH2F("h_MSSMD_GENMatch_Cut6_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #6 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut7_5  = new TH2F("h_MSSMD_GENMatch_Cut7_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #7 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut8_5  = new TH2F("h_MSSMD_GENMatch_Cut8_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #8 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut9_5  = new TH2F("h_MSSMD_GENMatch_Cut9_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #9 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut10_5 = new TH2F("h_MSSMD_GENMatch_Cut10_5", "#splitline{#scale[0.8]{GEN Matched Sel. #10 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut11_5 = new TH2F("h_MSSMD_GENMatch_Cut11_5", "#splitline{#scale[0.8]{GEN Matched Sel. #11 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut12_5 = new TH2F("h_MSSMD_GENMatch_Cut12_5", "#splitline{#scale[0.8]{GEN Matched Sel. #12 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut13_5 = new TH2F("h_MSSMD_GENMatch_Cut13_5", "#splitline{#scale[0.8]{GEN Matched Sel. #13 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut14_5 = new TH2F("h_MSSMD_GENMatch_Cut14_5", "#splitline{#scale[0.8]{GEN Matched Sel. #14 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut15_5 = new TH2F("h_MSSMD_GENMatch_Cut15_5", "#splitline{#scale[0.8]{GEN Matched Sel. #15 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut16_5 = new TH2F("h_MSSMD_GENMatch_Cut16_5", "#splitline{#scale[0.8]{GEN Matched Sel. #16 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut17_5 = new TH2F("h_MSSMD_GENMatch_Cut17_5", "#splitline{#scale[0.8]{GEN Matched Sel. #17 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut6_5  = new TH2F("h_MSSMD_GENMatch_Cut6_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #6 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut7_5  = new TH2F("h_MSSMD_GENMatch_Cut7_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #7 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut8_5  = new TH2F("h_MSSMD_GENMatch_Cut8_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #8 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut9_5  = new TH2F("h_MSSMD_GENMatch_Cut9_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #9 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut10_5 = new TH2F("h_MSSMD_GENMatch_Cut10_5", "#splitline{#scale[0.8]{GEN Matched Sel. #10 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut11_5 = new TH2F("h_MSSMD_GENMatch_Cut11_5", "#splitline{#scale[0.8]{GEN Matched Sel. #11 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut12_5 = new TH2F("h_MSSMD_GENMatch_Cut12_5", "#splitline{#scale[0.8]{GEN Matched Sel. #12 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut13_5 = new TH2F("h_MSSMD_GENMatch_Cut13_5", "#splitline{#scale[0.8]{GEN Matched Sel. #13 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut14_5 = new TH2F("h_MSSMD_GENMatch_Cut14_5", "#splitline{#scale[0.8]{GEN Matched Sel. #14 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut15_5 = new TH2F("h_MSSMD_GENMatch_Cut15_5", "#splitline{#scale[0.8]{GEN Matched Sel. #15 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut16_5 = new TH2F("h_MSSMD_GENMatch_Cut16_5", "#splitline{#scale[0.8]{GEN Matched Sel. #16 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut17_5 = new TH2F("h_MSSMD_GENMatch_Cut17_5", "#splitline{#scale[0.8]{GEN Matched Sel. #17 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
 
-    TH2F *h_MSSMD_GENMatch_Cut7_6    = new TH2F("h_MSSMD_GENMatch_Cut7_6",    "#splitline{#scale[0.8]{GEN Matched Sel. #7 / Sel. #6}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",    12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut8_7    = new TH2F("h_MSSMD_GENMatch_Cut8_7",    "#splitline{#scale[0.8]{GEN Matched Sel. #8 / Sel. #7}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",    12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut9_8    = new TH2F("h_MSSMD_GENMatch_Cut9_8",    "#splitline{#scale[0.8]{GEN Matched Sel. #9 / Sel. #8}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",    12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut10_9   = new TH2F("h_MSSMD_GENMatch_Cut10_9",   "#splitline{#scale[0.8]{GEN Matched Sel. #10 / Sel. #9}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",   12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut11_10  = new TH2F("h_MSSMD_GENMatch_Cut11_10",  "#splitline{#scale[0.8]{GEN Matched Sel. #11 / Sel. #10}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut12_11  = new TH2F("h_MSSMD_GENMatch_Cut12_11",  "#splitline{#scale[0.8]{GEN Matched Sel. #12 / Sel. #11}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut13_12  = new TH2F("h_MSSMD_GENMatch_Cut13_12",  "#splitline{#scale[0.8]{GEN Matched Sel. #13 / Sel. #12}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut14_13  = new TH2F("h_MSSMD_GENMatch_Cut14_13",  "#splitline{#scale[0.8]{GEN Matched Sel. #14 / Sel. #13}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut15_14  = new TH2F("h_MSSMD_GENMatch_Cut15_14",  "#splitline{#scale[0.8]{GEN Matched Sel. #15 / Sel. #14}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut16_15  = new TH2F("h_MSSMD_GENMatch_Cut16_15",  "#splitline{#scale[0.8]{GEN Matched Sel. #16 / Sel. #15}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut17_16  = new TH2F("h_MSSMD_GENMatch_Cut17_16",  "#splitline{#scale[0.8]{GEN Matched Sel. #17 / Sel. #16}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut7_6    = new TH2F("h_MSSMD_GENMatch_Cut7_6",    "#splitline{#scale[0.8]{GEN Matched Sel. #7 / Sel. #6}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",    11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut8_7    = new TH2F("h_MSSMD_GENMatch_Cut8_7",    "#splitline{#scale[0.8]{GEN Matched Sel. #8 / Sel. #7}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",    11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut9_8    = new TH2F("h_MSSMD_GENMatch_Cut9_8",    "#splitline{#scale[0.8]{GEN Matched Sel. #9 / Sel. #8}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",    11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut10_9   = new TH2F("h_MSSMD_GENMatch_Cut10_9",   "#splitline{#scale[0.8]{GEN Matched Sel. #10 / Sel. #9}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",   11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut11_10  = new TH2F("h_MSSMD_GENMatch_Cut11_10",  "#splitline{#scale[0.8]{GEN Matched Sel. #11 / Sel. #10}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut12_11  = new TH2F("h_MSSMD_GENMatch_Cut12_11",  "#splitline{#scale[0.8]{GEN Matched Sel. #12 / Sel. #11}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut13_12  = new TH2F("h_MSSMD_GENMatch_Cut13_12",  "#splitline{#scale[0.8]{GEN Matched Sel. #13 / Sel. #12}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut14_13  = new TH2F("h_MSSMD_GENMatch_Cut14_13",  "#splitline{#scale[0.8]{GEN Matched Sel. #14 / Sel. #13}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut15_14  = new TH2F("h_MSSMD_GENMatch_Cut15_14",  "#splitline{#scale[0.8]{GEN Matched Sel. #15 / Sel. #14}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut16_15  = new TH2F("h_MSSMD_GENMatch_Cut16_15",  "#splitline{#scale[0.8]{GEN Matched Sel. #16 / Sel. #15}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut17_16  = new TH2F("h_MSSMD_GENMatch_Cut17_16",  "#splitline{#scale[0.8]{GEN Matched Sel. #17 / Sel. #16}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
 
     //For cut flow counter (no GEN match)
     TCanvas *c_MSSMD_Cut6_1  = new TCanvas("c_MSSMD_Cut6_1",  "c_MSSMD_Cut6_1",  700, 500);
@@ -1989,27 +1971,27 @@ void analysis(const std::string SamplesList)
     TCanvas *c_MSSMD_Cut16_15 = new TCanvas("c_MSSMD_Cut16_15", "c_MSSMD_Cut16_15", 700, 500);
     TCanvas *c_MSSMD_Cut17_16 = new TCanvas("c_MSSMD_Cut17_16", "c_MSSMD_Cut17_16", 700, 500);
 
-    TH2F *h_MSSMD_Cut6_1  = new TH2F("h_MSSMD_Cut6_1",  "#splitline{#scale[0.8]{Offline Sel. #6 / GEN. Sel. #1}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut7_2  = new TH2F("h_MSSMD_Cut7_2",  "#splitline{#scale[0.8]{Offline Sel. #7 / GEN. Sel. #2}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut8_3  = new TH2F("h_MSSMD_Cut8_3",  "#splitline{#scale[0.8]{Offline Sel. #8 / GEN. Sel. #3}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut9_4  = new TH2F("h_MSSMD_Cut9_4",  "#splitline{#scale[0.8]{Offline Sel. #9 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut10_4 = new TH2F("h_MSSMD_Cut10_4", "#splitline{#scale[0.8]{Offline Sel. #10 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut11_4 = new TH2F("h_MSSMD_Cut11_4", "#splitline{#scale[0.8]{Offline Sel. #11 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut12_5 = new TH2F("h_MSSMD_Cut12_5", "#splitline{#scale[0.8]{Offline Sel. #12 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut13_5 = new TH2F("h_MSSMD_Cut13_5", "#splitline{#scale[0.8]{Offline Sel. #13 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut14_5 = new TH2F("h_MSSMD_Cut14_5", "#splitline{#scale[0.8]{Offline Sel. #14 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut15_5 = new TH2F("h_MSSMD_Cut15_5", "#splitline{#scale[0.8]{Offline Sel. #15 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut16_5 = new TH2F("h_MSSMD_Cut16_5", "#splitline{#scale[0.8]{Offline Sel. #16 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut17_5 = new TH2F("h_MSSMD_Cut17_5", "#splitline{#scale[0.8]{Offline Sel. #17 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut6_1  = new TH2F("h_MSSMD_Cut6_1",  "#splitline{#scale[0.8]{Offline Sel. #6 / GEN. Sel. #1}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut7_2  = new TH2F("h_MSSMD_Cut7_2",  "#splitline{#scale[0.8]{Offline Sel. #7 / GEN. Sel. #2}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut8_3  = new TH2F("h_MSSMD_Cut8_3",  "#splitline{#scale[0.8]{Offline Sel. #8 / GEN. Sel. #3}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut9_4  = new TH2F("h_MSSMD_Cut9_4",  "#splitline{#scale[0.8]{Offline Sel. #9 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut10_4 = new TH2F("h_MSSMD_Cut10_4", "#splitline{#scale[0.8]{Offline Sel. #10 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut11_4 = new TH2F("h_MSSMD_Cut11_4", "#splitline{#scale[0.8]{Offline Sel. #11 / GEN. Sel. #4}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut12_5 = new TH2F("h_MSSMD_Cut12_5", "#splitline{#scale[0.8]{Offline Sel. #12 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut13_5 = new TH2F("h_MSSMD_Cut13_5", "#splitline{#scale[0.8]{Offline Sel. #13 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut14_5 = new TH2F("h_MSSMD_Cut14_5", "#splitline{#scale[0.8]{Offline Sel. #14 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut15_5 = new TH2F("h_MSSMD_Cut15_5", "#splitline{#scale[0.8]{Offline Sel. #15 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut16_5 = new TH2F("h_MSSMD_Cut16_5", "#splitline{#scale[0.8]{Offline Sel. #16 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut17_5 = new TH2F("h_MSSMD_Cut17_5", "#splitline{#scale[0.8]{Offline Sel. #17 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
 
-    TH2F *h_MSSMD_Cut10_9  = new TH2F("h_MSSMD_Cut10_9",  "#splitline{#scale[0.8]{Offline Sel. #10 / Sel. #9}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut11_10 = new TH2F("h_MSSMD_Cut11_10", "#splitline{#scale[0.8]{Offline Sel. #11 / Sel. #10}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut10_9  = new TH2F("h_MSSMD_Cut10_9",  "#splitline{#scale[0.8]{Offline Sel. #10 / Sel. #9}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut11_10 = new TH2F("h_MSSMD_Cut11_10", "#splitline{#scale[0.8]{Offline Sel. #11 / Sel. #10}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
 
-    TH2F *h_MSSMD_Cut13_12 = new TH2F("h_MSSMD_Cut13_12", "#splitline{#scale[0.8]{Offline Sel. #13 / Sel. #12}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut14_13 = new TH2F("h_MSSMD_Cut14_13", "#splitline{#scale[0.8]{Offline Sel. #14 / Sel. #13}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut15_14 = new TH2F("h_MSSMD_Cut15_14", "#splitline{#scale[0.8]{Offline Sel. #15 / Sel. #14}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut16_15 = new TH2F("h_MSSMD_Cut16_15", "#splitline{#scale[0.8]{Offline Sel. #16 / Sel. #15}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
-    TH2F *h_MSSMD_Cut17_16 = new TH2F("h_MSSMD_Cut17_16", "#splitline{#scale[0.8]{Offline Sel. #17 / Sel. #16}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 12, 0, 12, 13, 0, 13);
+    TH2F *h_MSSMD_Cut13_12 = new TH2F("h_MSSMD_Cut13_12", "#splitline{#scale[0.8]{Offline Sel. #13 / Sel. #12}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut14_13 = new TH2F("h_MSSMD_Cut14_13", "#splitline{#scale[0.8]{Offline Sel. #14 / Sel. #13}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut15_14 = new TH2F("h_MSSMD_Cut15_14", "#splitline{#scale[0.8]{Offline Sel. #15 / Sel. #14}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut16_15 = new TH2F("h_MSSMD_Cut16_15", "#splitline{#scale[0.8]{Offline Sel. #16 / Sel. #15}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut17_16 = new TH2F("h_MSSMD_Cut17_16", "#splitline{#scale[0.8]{Offline Sel. #17 / Sel. #16}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
 
     if ( mGammaDarray.size() > 0 ) {
 
@@ -2017,7 +1999,7 @@ void analysis(const std::string SamplesList)
         ix = 0;
         iy = 0;
         //loop through all mass to get bin index
-        for (int j=0; j<12; j++) {
+        for (int j=0; j<11; j++) {
           if ( mGammaDarray[i] == massbin[j] ) { ix = j+1; }
         }//end loop mass
         //loop through all cT to get bin index
@@ -2075,7 +2057,7 @@ void analysis(const std::string SamplesList)
         //cout << "Mass: " << mGammaDarray[i]  << "; cT: " << cTauarray[i] << "; eff: "<< counter[i][12]*1.0/counter[i][5] << endl;
       }
 
-      for (unsigned int iXL=1; iXL<=12; iXL++) {
+      for (unsigned int iXL=1; iXL<=11; iXL++) {
         //cout << "iXL: " << iXL  << endl;
         h_MSSMD_GENMatch_Cut6_5->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );
         h_MSSMD_GENMatch_Cut7_5->GetXaxis()->SetBinLabel(iXL,  Form("%.2f", massbin[iXL-1]) );

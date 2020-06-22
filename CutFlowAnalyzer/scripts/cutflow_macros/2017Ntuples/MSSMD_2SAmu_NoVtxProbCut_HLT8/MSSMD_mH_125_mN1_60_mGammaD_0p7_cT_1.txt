@@ -1,1 +1,0 @@
-/scratch/user/hyunyong/newHLT/MSSMD_mH_125_mN1_60_mGammaD_0p7_cT_1_TuneCP5_13TeV-madgraph-pythia8/Run2_2017_newHLT/200609_001430/0000
