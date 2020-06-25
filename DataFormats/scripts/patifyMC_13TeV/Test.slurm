@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=test
-#SBATCH --time=02:00:00
+#SBATCH --time=02:00:00 #120 mins for 300k events
 #SBATCH --ntasks=1
 #SBATCH --mem=2000M
 #SBATCH --output=batch/Test.out.%j

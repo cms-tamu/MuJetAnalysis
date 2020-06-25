@@ -11,8 +11,8 @@ MiniAODSIM samples are moved to TAMU Terra cluster, to get a list of all files i
 `ls -d "$PWD"/* > text.txt`
 These are stored at `MuJetAnalysis/DataFormats/scripts/patifyMC_13TeV/*SamplesTerra` for 2017 and 2018.
 To get all end subdirectories:
-`find <pwd> -type d -links 2 > /home/ws13/A.txt`
-`grep -E '2SA' A.txt > /home/ws13/2017.txt`
+`find <pwd> -type d -links 2 > /home/ws13/EndDir.txt`
+`grep -E '2SA' EndDir.txt > /home/ws13/input.txt`
 `root -l -b -q AutoList.C++`
 
 ## Cut-and-count

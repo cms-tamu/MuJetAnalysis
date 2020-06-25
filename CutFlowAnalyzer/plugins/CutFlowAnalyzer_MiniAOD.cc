@@ -429,6 +429,29 @@ private:
   Bool_t b_is2DiMuonsFittedVtxOK;
 
   Bool_t b_isSignalHLTFired;
+  //Start DEBUG HLT paths
+  /*
+  Bool_t b_isSignalHLT_0_Fired;
+  Bool_t b_isSignalHLT_1_Fired;
+  Bool_t b_isSignalHLT_2_Fired;
+  Bool_t b_isSignalHLT_3_Fired;
+  Bool_t b_isSignalHLT_4_Fired;
+  Bool_t b_isSignalHLT_5_Fired;
+  Bool_t b_isSignalHLT_6_Fired;
+  Bool_t b_isSignalHLT_7_Fired;
+  Bool_t b_isSignalHLT_8_Fired;
+  Bool_t b_isSignalHLT_9_Fired;
+  Bool_t b_isSignalHLT_10_Fired;
+  Bool_t b_isSignalHLT_11_Fired;
+  Bool_t b_isSignalHLT_12_Fired;
+  Bool_t b_isSignalHLT_13_Fired;
+  Bool_t b_isSignalHLT_14_Fired;
+  Bool_t b_isSignalHLT_15_Fired;
+  Bool_t b_isSignalHLT_16_Fired;
+  Bool_t b_isSignalHLT_17_Fired;
+  Bool_t b_isSignalHLT_18_Fired;
+  Bool_t b_isSignalHLT_19_Fired;*/
+  //End DEBUG HLT paths
   Bool_t b_isControlHLT16Fired;
   Bool_t b_isControlHLT6Fired;
   Bool_t b_isSignalHLTL1Fired;
@@ -1905,6 +1928,30 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   // HLT cut
   b_isSignalHLTFired = false;
+  //START DEBUG Many HLT paths
+  /*
+  b_isSignalHLT_0_Fired = false;
+  b_isSignalHLT_1_Fired = false;
+  b_isSignalHLT_2_Fired = false;
+  b_isSignalHLT_3_Fired = false;
+  b_isSignalHLT_4_Fired = false;
+  b_isSignalHLT_5_Fired = false;
+  b_isSignalHLT_6_Fired = false;
+  b_isSignalHLT_7_Fired = false;
+  b_isSignalHLT_8_Fired = false;
+  b_isSignalHLT_9_Fired = false;
+  b_isSignalHLT_10_Fired = false;
+  b_isSignalHLT_11_Fired = false;
+  b_isSignalHLT_12_Fired = false;
+  b_isSignalHLT_13_Fired = false;
+  b_isSignalHLT_14_Fired = false;
+  b_isSignalHLT_15_Fired = false;
+  b_isSignalHLT_16_Fired = false;
+  b_isSignalHLT_17_Fired = false;
+  b_isSignalHLT_18_Fired = false;
+  b_isSignalHLT_19_Fired = false;
+  */
+  //End DEBUG Many HLT paths
   b_isControlHLT16Fired = false;
   b_isControlHLT6Fired = false;
   b_hltPaths.clear();
@@ -1927,10 +1974,74 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       for (const auto& p: signalHltPaths_){
         if ( m_debug > 10 ) std::cout << "Signal trigger is "<< p << std::endl;
         if (trigNameStr.find(p) != std::string::npos) {
-        if ( m_debug > 10 ) std::cout << "Signal trigger " << p << " fired!" << std::endl;
+          if ( m_debug > 10 ) std::cout << "Signal trigger " << p << " fired!" << std::endl;
           b_isSignalHLTFired = true;
         }
       }//end for signal hlt
+
+      //Start: DEBUG Many HLT Paths
+      //0: 'HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx',
+      //1: 'HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx',
+      //2: 'HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx',
+      //3: 'HLT_Mu18_Mu9_SameSign',
+      //4: 'HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed',
+      //5: 'HLT_DoubleL2Mu23NoVtx_2Cha',
+      //6: 'HLT_TripleMu_10_5_5_DZ',
+      //7: 'HLT_TripleMu_12_10_5',
+      //8: 'HLT_DoubleL2Mu50',
+      //9: 'HLT_DoubleMu43NoFiltersNoVtx',
+      //10: 'HLT_DoubleMu33NoFiltersNoVtxDisplaced',
+      //11: 'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8',
+      //12: 'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8',
+      //13: 'HLT_Mu37_TkMu27',
+      //14: 'HLT_IsoMu24',
+      //15: 'HLT_IsoMu27',
+      //16: 'HLT_Mu50',
+      //17: 'HLT_Mu55',
+      //18: 'HLT_OldMu100',
+      //19: 'HLT_TkMu100',
+      /*
+      const std::string& s0 = signalHltPaths_[0];
+      const std::string& s1 = signalHltPaths_[1];
+      const std::string& s2 = signalHltPaths_[2];
+      const std::string& s3 = signalHltPaths_[3];
+      const std::string& s4 = signalHltPaths_[4];
+      const std::string& s5 = signalHltPaths_[5];
+      const std::string& s6 = signalHltPaths_[6];
+      const std::string& s7 = signalHltPaths_[7];
+      const std::string& s8 = signalHltPaths_[8];
+      const std::string& s9 = signalHltPaths_[9];
+      const std::string& s10 = signalHltPaths_[10];
+      const std::string& s11 = signalHltPaths_[11];
+      const std::string& s12 = signalHltPaths_[12];
+      const std::string& s13 = signalHltPaths_[13];
+      const std::string& s14 = signalHltPaths_[14];
+      const std::string& s15 = signalHltPaths_[15];
+      const std::string& s16 = signalHltPaths_[16];
+      const std::string& s17 = signalHltPaths_[17];
+      const std::string& s18 = signalHltPaths_[18];
+      const std::string& s19 = signalHltPaths_[19];
+      if (trigNameStr.find(s0) != std::string::npos) b_isSignalHLT_0_Fired = true;
+      if (trigNameStr.find(s1) != std::string::npos) b_isSignalHLT_1_Fired = true;
+      if (trigNameStr.find(s2) != std::string::npos) b_isSignalHLT_2_Fired = true;
+      if (trigNameStr.find(s3) != std::string::npos) b_isSignalHLT_3_Fired = true;
+      if (trigNameStr.find(s4) != std::string::npos) b_isSignalHLT_4_Fired = true;
+      if (trigNameStr.find(s5) != std::string::npos) b_isSignalHLT_5_Fired = true;
+      if (trigNameStr.find(s6) != std::string::npos) b_isSignalHLT_6_Fired = true;
+      if (trigNameStr.find(s7) != std::string::npos) b_isSignalHLT_7_Fired = true;
+      if (trigNameStr.find(s8) != std::string::npos) b_isSignalHLT_8_Fired = true;
+      if (trigNameStr.find(s9) != std::string::npos) b_isSignalHLT_9_Fired = true;
+      if (trigNameStr.find(s10) != std::string::npos) b_isSignalHLT_10_Fired = true;
+      if (trigNameStr.find(s11) != std::string::npos) b_isSignalHLT_11_Fired = true;
+      if (trigNameStr.find(s12) != std::string::npos) b_isSignalHLT_12_Fired = true;
+      if (trigNameStr.find(s13) != std::string::npos) b_isSignalHLT_13_Fired = true;
+      if (trigNameStr.find(s14) != std::string::npos) b_isSignalHLT_14_Fired = true;
+      if (trigNameStr.find(s15) != std::string::npos) b_isSignalHLT_15_Fired = true;
+      if (trigNameStr.find(s16) != std::string::npos) b_isSignalHLT_16_Fired = true;
+      if (trigNameStr.find(s17) != std::string::npos) b_isSignalHLT_17_Fired = true;
+      if (trigNameStr.find(s18) != std::string::npos) b_isSignalHLT_18_Fired = true;
+      if (trigNameStr.find(s19) != std::string::npos) b_isSignalHLT_19_Fired = true;*/
+      //End: DEBUG Many HLT Paths
 
       const std::string& p0 = controlHltPaths_[0];
       const std::string& p1 = controlHltPaths_[1];
@@ -3028,6 +3139,33 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
 
   m_ttree->Branch("isSignalHLTFired",               &b_isSignalHLTFired,               "isSignalHLTFired/O");
+  //Start Debug
+  /*
+  m_ttree->Branch("isSignalHLT_0_Fired",            &b_isSignalHLT_0_Fired,            "isSignalHLT_0_Fired/O");
+  m_ttree->Branch("isSignalHLT_1_Fired",            &b_isSignalHLT_1_Fired,            "isSignalHLT_1_Fired/O");
+  m_ttree->Branch("isSignalHLT_2_Fired",            &b_isSignalHLT_2_Fired,            "isSignalHLT_2_Fired/O");
+  m_ttree->Branch("isSignalHLT_3_Fired",            &b_isSignalHLT_3_Fired,            "isSignalHLT_3_Fired/O");
+  m_ttree->Branch("isSignalHLT_4_Fired",            &b_isSignalHLT_4_Fired,            "isSignalHLT_4_Fired/O");
+  m_ttree->Branch("isSignalHLT_5_Fired",            &b_isSignalHLT_5_Fired,            "isSignalHLT_5_Fired/O");
+  m_ttree->Branch("isSignalHLT_6_Fired",            &b_isSignalHLT_6_Fired,            "isSignalHLT_6_Fired/O");
+  m_ttree->Branch("isSignalHLT_7_Fired",            &b_isSignalHLT_7_Fired,            "isSignalHLT_7_Fired/O");
+  m_ttree->Branch("isSignalHLT_8_Fired",            &b_isSignalHLT_8_Fired,            "isSignalHLT_8_Fired/O");
+  m_ttree->Branch("isSignalHLT_9_Fired",            &b_isSignalHLT_9_Fired,            "isSignalHLT_9_Fired/O");
+  m_ttree->Branch("isSignalHLT_10_Fired",           &b_isSignalHLT_10_Fired,           "isSignalHLT_10_Fired/O");
+  m_ttree->Branch("isSignalHLT_11_Fired",           &b_isSignalHLT_11_Fired,           "isSignalHLT_11_Fired/O");
+  m_ttree->Branch("isSignalHLT_12_Fired",           &b_isSignalHLT_12_Fired,           "isSignalHLT_12_Fired/O");
+  m_ttree->Branch("isSignalHLT_13_Fired",           &b_isSignalHLT_13_Fired,           "isSignalHLT_13_Fired/O");
+  m_ttree->Branch("isSignalHLT_14_Fired",           &b_isSignalHLT_14_Fired,           "isSignalHLT_14_Fired/O");
+  m_ttree->Branch("isSignalHLT_15_Fired",           &b_isSignalHLT_15_Fired,           "isSignalHLT_15_Fired/O");
+  m_ttree->Branch("isSignalHLT_16_Fired",           &b_isSignalHLT_16_Fired,           "isSignalHLT_16_Fired/O");
+  m_ttree->Branch("isSignalHLT_17_Fired",           &b_isSignalHLT_17_Fired,           "isSignalHLT_17_Fired/O");
+  m_ttree->Branch("isSignalHLT_18_Fired",           &b_isSignalHLT_18_Fired,           "isSignalHLT_18_Fired/O");
+  m_ttree->Branch("isSignalHLT_19_Fired",           &b_isSignalHLT_19_Fired,           "isSignalHLT_19_Fired/O");*/
+  //End Debug
+  m_ttree->Branch("NPATJet",        &b_NPATJet,        "NPATJet/I");
+  m_ttree->Branch("NPATJetTightB",  &b_NPATJetTightB,  "NPATJetTightB/I");
+  m_ttree->Branch("NPATJetMediumB", &b_NPATJetMediumB, "NPATJetMediumB/I");
+  m_ttree->Branch("NPATJetLooseB",  &b_NPATJetLooseB,  "NPATJetLooseB/I");
   m_ttree->Branch("isControlHLT16Fired",            &b_isControlHLT16Fired,            "isControlHLT16Fired/O");
   m_ttree->Branch("isControlHLT6Fired",             &b_isControlHLT6Fired,             "isControlHLT6Fired/O");
   m_ttree->Branch("isSignalHLTL1Fired",             &b_isSignalHLTL1Fired,             "isSignalHLTL1Fired/O");

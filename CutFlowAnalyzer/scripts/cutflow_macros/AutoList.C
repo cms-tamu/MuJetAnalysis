@@ -10,7 +10,7 @@ using namespace std;
 
 void AutoList(){
   ifstream infile;
-	infile.open("/home/ws13/2017.txt");
+	infile.open("/home/ws13/input.txt");
   int linecount = 0;
 
   while ( !infile.eof() ) {

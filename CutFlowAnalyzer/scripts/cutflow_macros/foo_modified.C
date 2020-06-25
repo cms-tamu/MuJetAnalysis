@@ -173,6 +173,28 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t diMuonF_FittedVtx_dz;
   Bool_t  is2DiMuonsMassOK;
 
+  //Start DEBUG: many HLT paths
+  Bool_t  isSignalHLT_0_Fired;
+  Bool_t  isSignalHLT_1_Fired;
+  Bool_t  isSignalHLT_2_Fired;
+  Bool_t  isSignalHLT_3_Fired;
+  Bool_t  isSignalHLT_4_Fired;
+  Bool_t  isSignalHLT_5_Fired;
+  Bool_t  isSignalHLT_6_Fired;
+  Bool_t  isSignalHLT_7_Fired;
+  Bool_t  isSignalHLT_8_Fired;
+  Bool_t  isSignalHLT_9_Fired;
+  Bool_t  isSignalHLT_10_Fired;
+  Bool_t  isSignalHLT_11_Fired;
+  Bool_t  isSignalHLT_12_Fired;
+  Bool_t  isSignalHLT_13_Fired;
+  Bool_t  isSignalHLT_14_Fired;
+  Bool_t  isSignalHLT_15_Fired;
+  Bool_t  isSignalHLT_16_Fired;
+  Bool_t  isSignalHLT_17_Fired;
+  Bool_t  isSignalHLT_18_Fired;
+  Bool_t  isSignalHLT_19_Fired;
+  //End DEBUG: many HLT paths
   Bool_t  isSignalHLTFired;
   Bool_t  isSignalHLTL1Fired;
 
@@ -595,6 +617,28 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("diMuonFMu1_IsoTk0p3_FittedVtx", &diMuonFMu1_IsoTk0p3_FittedVtx);
   t->SetBranchAddress("diMuonFMu1_IsoTk0p4_FittedVtx", &diMuonFMu1_IsoTk0p4_FittedVtx);
   t->SetBranchAddress("diMuonFMu1_IsoTk0p5_FittedVtx", &diMuonFMu1_IsoTk0p5_FittedVtx);
+  //Start Debug: many HLT paths
+  t->SetBranchAddress("isSignalHLT_0_Fired",           &isSignalHLT_0_Fired);
+  t->SetBranchAddress("isSignalHLT_1_Fired",           &isSignalHLT_1_Fired);
+  t->SetBranchAddress("isSignalHLT_2_Fired",           &isSignalHLT_2_Fired);
+  t->SetBranchAddress("isSignalHLT_3_Fired",           &isSignalHLT_3_Fired);
+  t->SetBranchAddress("isSignalHLT_4_Fired",           &isSignalHLT_4_Fired);
+  t->SetBranchAddress("isSignalHLT_5_Fired",           &isSignalHLT_5_Fired);
+  t->SetBranchAddress("isSignalHLT_6_Fired",           &isSignalHLT_6_Fired);
+  t->SetBranchAddress("isSignalHLT_7_Fired",           &isSignalHLT_7_Fired);
+  t->SetBranchAddress("isSignalHLT_8_Fired",           &isSignalHLT_8_Fired);
+  t->SetBranchAddress("isSignalHLT_9_Fired",           &isSignalHLT_9_Fired);
+  t->SetBranchAddress("isSignalHLT_10_Fired",          &isSignalHLT_10_Fired);
+  t->SetBranchAddress("isSignalHLT_11_Fired",          &isSignalHLT_11_Fired);
+  t->SetBranchAddress("isSignalHLT_12_Fired",          &isSignalHLT_12_Fired);
+  t->SetBranchAddress("isSignalHLT_13_Fired",          &isSignalHLT_13_Fired);
+  t->SetBranchAddress("isSignalHLT_14_Fired",          &isSignalHLT_14_Fired);
+  t->SetBranchAddress("isSignalHLT_15_Fired",          &isSignalHLT_15_Fired);
+  t->SetBranchAddress("isSignalHLT_16_Fired",          &isSignalHLT_16_Fired);
+  t->SetBranchAddress("isSignalHLT_17_Fired",          &isSignalHLT_17_Fired);
+  t->SetBranchAddress("isSignalHLT_18_Fired",          &isSignalHLT_18_Fired);
+  t->SetBranchAddress("isSignalHLT_19_Fired",          &isSignalHLT_19_Fired);
+  //End Debug: many HLT paths
   t->SetBranchAddress("isSignalHLTFired",              &isSignalHLTFired);
   t->SetBranchAddress("isSignalHLTL1Fired",            &isSignalHLTL1Fired);
   //t->SetBranchAddress("isControlHLT16Fired",           &isControlHLT16Fired);//Control HLT only work for 2018 MC as they are deployed 2018 May
@@ -649,6 +693,27 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t P0 = 0.18;
   Float_t C0 = 0.1;
   Float_t N0 = 1.0;
+  int newcountHLT = 0;
+  int newcountHLT0 = 0;
+  int newcountHLT1 = 0;
+  int newcountHLT2 = 0;
+  int newcountHLT3 = 0;
+  int newcountHLT4 = 0;
+  int newcountHLT5 = 0;
+  int newcountHLT6 = 0;
+  int newcountHLT7 = 0;
+  int newcountHLT8 = 0;
+  int newcountHLT9 = 0;
+  int newcountHLT10 = 0;
+  int newcountHLT11 = 0;
+  int newcountHLT12 = 0;
+  int newcountHLT13 = 0;
+  int newcountHLT14 = 0;
+  int newcountHLT15 = 0;
+  int newcountHLT16 = 0;
+  int newcountHLT17 = 0;
+  int newcountHLT18 = 0;
+  int newcountHLT19 = 0;
 
   if ( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
 
@@ -892,7 +957,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                         }//end PlotIso
 
                         //if ( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ) {
-                        if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
+                        //if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
+                        if ( diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
                           counterGENMatch[k][15]++;
 
                           //###########################################################
@@ -960,6 +1026,30 @@ void efficiency(const std::vector<std::string>& dirNames)
                           //std::cout << "                             1st dimu mu1: " << diMuonC_m2_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonC_m2_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonC_m2_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonC_m2_FittedVtx_hitpix_Phase1 << "; pT: " << muJetC_Mu1_pt << std::endl;
                           //std::cout << "                             2nd dimu mu0: " << diMuonF_m1_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonF_m1_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonF_m1_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonF_m1_FittedVtx_hitpix_Phase1 << "; pT: " << muJetF_Mu0_pt << std::endl;
                           //std::cout << "                             2nd dimu mu1: " << diMuonF_m2_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonF_m2_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonF_m2_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonF_m2_FittedVtx_hitpix_Phase1 << "; pT: " << muJetF_Mu1_pt << std::endl;
+
+                          //START: DEBUG Many HLT paths
+                          newcountHLT++;
+                          if ( isSignalHLT_0_Fired ) newcountHLT0++;
+                          if ( isSignalHLT_1_Fired ) newcountHLT1++;
+                          if ( isSignalHLT_2_Fired ) newcountHLT2++;
+                          if ( isSignalHLT_3_Fired ) newcountHLT3++;
+                          if ( isSignalHLT_4_Fired ) newcountHLT4++;
+                          if ( isSignalHLT_5_Fired ) newcountHLT5++;
+                          if ( isSignalHLT_6_Fired ) newcountHLT6++;
+                          if ( isSignalHLT_7_Fired ) newcountHLT7++;
+                          if ( isSignalHLT_8_Fired ) newcountHLT8++;
+                          if ( isSignalHLT_9_Fired ) newcountHLT9++;
+                          if ( isSignalHLT_10_Fired ) newcountHLT10++;
+                          if ( isSignalHLT_11_Fired ) newcountHLT11++;
+                          if ( isSignalHLT_12_Fired ) newcountHLT12++;
+                          if ( isSignalHLT_13_Fired ) newcountHLT13++;
+                          if ( isSignalHLT_14_Fired ) newcountHLT14++;
+                          if ( isSignalHLT_15_Fired ) newcountHLT15++;
+                          if ( isSignalHLT_16_Fired ) newcountHLT16++;
+                          if ( isSignalHLT_17_Fired ) newcountHLT17++;
+                          if ( isSignalHLT_18_Fired ) newcountHLT18++;
+                          if ( isSignalHLT_19_Fired ) newcountHLT19++;
+                          //End: DEBUG Many HLT paths
 
                           if ( isSignalHLTFired ) {
                             counterGENMatch[k][16]++;
@@ -1029,7 +1119,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                   counter[k][14]++;
 
                   //if ( diMuonCMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonCMu0_IsoTk0p3_FittedVtx < 1.5 && diMuonFMu0_IsoTk0p3_FittedVtx >= 0.0 && diMuonFMu0_IsoTk0p3_FittedVtx < 1.5 ) {
-                  if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
+                  //if ( diMuonC_IsoTk_FittedVtx >= 0.0 && diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx >= 0.0 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
+                  if ( diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
                     counter[k][15]++;
 
                     if ( isSignalHLTFired ) {
@@ -1041,6 +1132,9 @@ void efficiency(const std::vector<std::string>& dirNames)
                         //=================================
                         // All offline selections finished
                         //=================================
+                        //std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
+                        //std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
+                        //std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
 
                         if ( ModelBKGShape ) {
                           BKGShapeSR->Fill(massC,massF);
@@ -1124,6 +1218,28 @@ void efficiency(const std::vector<std::string>& dirNames)
   std::cout << "2 dimu, 1 SA mu: "  << newcount1SAmu << std::endl;
   std::cout << "2 dimu, 2 SA mu: "  << newcount2SAmu << std::endl;
   std::cout << "-------------------------" << std::endl;
+  //Start: DEBUG many HLT
+  std::cout << "HLT0: "  << newcountHLT0*1.0/newcountHLT << std::endl;
+  std::cout << "HLT1: "  << newcountHLT1*1.0/newcountHLT << std::endl;
+  std::cout << "HLT2: "  << newcountHLT2*1.0/newcountHLT << std::endl;
+  std::cout << "HLT3: "  << newcountHLT3*1.0/newcountHLT << std::endl;
+  std::cout << "HLT4: "  << newcountHLT4*1.0/newcountHLT << std::endl;
+  std::cout << "HLT5: "  << newcountHLT5*1.0/newcountHLT << std::endl;
+  std::cout << "HLT6: "  << newcountHLT6*1.0/newcountHLT << std::endl;
+  std::cout << "HLT7: "  << newcountHLT7*1.0/newcountHLT << std::endl;
+  std::cout << "HLT8: "  << newcountHLT8*1.0/newcountHLT << std::endl;
+  std::cout << "HLT9: "  << newcountHLT9*1.0/newcountHLT << std::endl;
+  std::cout << "HLT10: "  << newcountHLT10*1.0/newcountHLT << std::endl;
+  std::cout << "HLT11: "  << newcountHLT11*1.0/newcountHLT << std::endl;
+  std::cout << "HLT12: "  << newcountHLT12*1.0/newcountHLT << std::endl;
+  std::cout << "HLT13: "  << newcountHLT13*1.0/newcountHLT << std::endl;
+  std::cout << "HLT14: "  << newcountHLT14*1.0/newcountHLT << std::endl;
+  std::cout << "HLT15: "  << newcountHLT15*1.0/newcountHLT << std::endl;
+  std::cout << "HLT16: "  << newcountHLT16*1.0/newcountHLT << std::endl;
+  std::cout << "HLT17: "  << newcountHLT17*1.0/newcountHLT << std::endl;
+  std::cout << "HLT18: "  << newcountHLT18*1.0/newcountHLT << std::endl;
+  std::cout << "HLT19: "  << newcountHLT19*1.0/newcountHLT << std::endl;
+  //End: DEBUG many HLT
 
   //Loop over orphan-dimuon tree
   mentries = o->GetEntries();
