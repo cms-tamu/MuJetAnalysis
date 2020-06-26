@@ -19,7 +19,7 @@ void AutoList(){
     linecount++;
     std::cout<<"line #"<< linecount << ": " << newline << '\n';
 
-    //Assume newline format: /scratch/user/hyunyong/MSSMD_mH_125_mN1_60_mGammaD_5_cT_3_TuneCP5_13TeV-madgraph-pythia8/Run2_2017_SA_noVtxCut/200522_214055/0000
+    //Assume newline format: */MSSMD_mH_125_mN1_60_mGammaD_5_cT_3_TuneCP5_13TeV-madgraph-pythia8/*
     //Need to create MSSMD_mH_125_mN1_60_mGammaD_5_cT_3.txt and put the path in
     if ( newline.find("MSSMD") != string::npos && newline.find("_Tune") != string::npos ) {
       unsigned delimiterleft  = newline.find("MSSMD");

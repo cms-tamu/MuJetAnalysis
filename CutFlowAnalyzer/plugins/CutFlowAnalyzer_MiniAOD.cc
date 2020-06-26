@@ -944,7 +944,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_genH_vy  = genH[0]->vy() - b_beamSpot_y;
       b_genH_vz  = genH[0]->vz() - b_beamSpot_z;
     } else {
-      std::cout << "WARNING! genH.size() != 1" << std::endl;
+      if ( m_debug > 0 ) std::cout << "WARNING! genH.size() != 1" << std::endl;
     }
 
     // Sort genA by pT (leading pT first)
@@ -982,7 +982,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       //std::cout << "genA[1] pT: " <<genA[1]->pt()<< std::endl;
 
     } else {
-      std::cout << "WARNING! genA.size() < 2" << std::endl;
+      if ( m_debug > 0 ) std::cout << "WARNING! genA.size() < 2" << std::endl;
     }
 
     // Group muons with the same mother
@@ -1242,7 +1242,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_gen_ddPhi = fabs(b_genDiMu_dPhi) - fabs(b_genFakeDiMu_dPhi);
 
     } else {
-      std::cout << "WARNING! No signal topology found at GEN level!" << std::endl;
+      if ( m_debug > 0 ) std::cout << "WARNING! No signal topology found at GEN level!" << std::endl;
     }//end if ( genMuonGroups.size() == 2 ...) else {}
 
     // Sort genMuons by pT (leading pT first)

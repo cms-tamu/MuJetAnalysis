@@ -140,6 +140,14 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t muJetC_Mu1_pt;
   Float_t muJetF_Mu0_pt;
   Float_t muJetF_Mu1_pt;
+  Float_t muJetC_Mu0_eta;
+  Float_t muJetC_Mu1_eta;
+  Float_t muJetF_Mu0_eta;
+  Float_t muJetF_Mu1_eta;
+  Float_t muJetC_Mu0_phi;
+  Float_t muJetC_Mu1_phi;
+  Float_t muJetF_Mu0_phi;
+  Float_t muJetF_Mu1_phi;
 
   Int_t   nMuJets;
   Bool_t  is2MuJets;
@@ -550,6 +558,14 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("muJetC_Mu1_pt", &muJetC_Mu1_pt);
   t->SetBranchAddress("muJetF_Mu0_pt", &muJetF_Mu0_pt);
   t->SetBranchAddress("muJetF_Mu1_pt", &muJetF_Mu1_pt);
+  t->SetBranchAddress("muJetC_Mu0_eta", &muJetC_Mu0_eta);
+  t->SetBranchAddress("muJetC_Mu1_eta", &muJetC_Mu1_eta);
+  t->SetBranchAddress("muJetF_Mu0_eta", &muJetF_Mu0_eta);
+  t->SetBranchAddress("muJetF_Mu1_eta", &muJetF_Mu1_eta);
+  t->SetBranchAddress("muJetC_Mu0_phi", &muJetC_Mu0_phi);
+  t->SetBranchAddress("muJetC_Mu1_phi", &muJetC_Mu1_phi);
+  t->SetBranchAddress("muJetF_Mu0_phi", &muJetF_Mu0_phi);
+  t->SetBranchAddress("muJetF_Mu1_phi", &muJetF_Mu1_phi);
 
   t->SetBranchAddress("isVertexOK", &isVtxOK);
   t->SetBranchAddress("nMuJets",    &nMuJets);
@@ -714,6 +730,25 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcountHLT17 = 0;
   int newcountHLT18 = 0;
   int newcountHLT19 = 0;
+  int newcountHLTTwo1 = 0;
+  int newcountHLTTwo2 = 0;
+  int newcountHLTTwo3 = 0;
+  int newcountHLTThree1 = 0;
+  int newcountHLTThree2 = 0;
+  int newcountHLTThree3 = 0;
+  int newcountHLTThree4 = 0;
+  int newcountHLTThree5 = 0;
+  int newcountHLTThree6 = 0;
+  int newcountHLTThree7 = 0;
+  int newcountHLTThree8 = 0;
+  int newcountHLTThree9 = 0;
+  int newcountHLTFour1 = 0;
+  int newcountHLTFour2 = 0;
+  int newcountHLTFour3 = 0;
+  int newcountHLTFour4 = 0;
+  int newcountHLTFour5 = 0;
+  int newcountHLTFive1 = 0;
+  int newcountHLTAll = 0;
 
   if ( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
 
@@ -1049,6 +1084,30 @@ void efficiency(const std::vector<std::string>& dirNames)
                           if ( isSignalHLT_17_Fired ) newcountHLT17++;
                           if ( isSignalHLT_18_Fired ) newcountHLT18++;
                           if ( isSignalHLT_19_Fired ) newcountHLT19++;
+                          //Two
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired ) newcountHLTTwo1++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired ) newcountHLTTwo2++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_7_Fired ) newcountHLTTwo3++;
+                          //Three
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_4_Fired) newcountHLTThree1++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_5_Fired) newcountHLTThree2++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_7_Fired) newcountHLTThree3++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired || isSignalHLT_4_Fired) newcountHLTThree4++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired || isSignalHLT_5_Fired) newcountHLTThree5++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired) newcountHLTThree6++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_7_Fired) newcountHLTThree7++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTThree8++;
+                          if ( isSignalHLT_4_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTThree9++;
+                          //Four
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired) newcountHLTFour1++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_7_Fired) newcountHLTFour2++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFour3++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFour4++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFour5++;
+                          //Five
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFive1++;
+                          //All
+                          if ( isSignalHLTFired ) newcountHLTAll++;
                           //End: DEBUG Many HLT paths
 
                           if ( isSignalHLTFired ) {
@@ -1135,6 +1194,11 @@ void efficiency(const std::vector<std::string>& dirNames)
                         //std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
                         //std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
                         //std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
+                        /*std::cout << ">>> massC: " << massC << "GeV; massF: " << massF << "GeV;"<< std::endl;
+                        std::cout << "    1st Dimu Mu0 pT: " << muJetC_Mu0_pt << "GeV; eta: " << muJetC_Mu0_eta << "; phi: " << muJetC_Mu0_phi << std::endl;
+                        std::cout << "    1st Dimu Mu1 pT: " << muJetC_Mu1_pt << "GeV; eta: " << muJetC_Mu1_eta << "; phi: " << muJetC_Mu1_phi << std::endl;
+                        std::cout << "    2nd Dimu Mu0 pT: " << muJetF_Mu0_pt << "GeV; eta: " << muJetF_Mu0_eta << "; phi: " << muJetF_Mu0_phi << std::endl;
+                        std::cout << "    2nd Dimu Mu1 pT: " << muJetF_Mu1_pt << "GeV; eta: " << muJetF_Mu1_eta << "; phi: " << muJetF_Mu1_phi << std::endl;*/
 
                         if ( ModelBKGShape ) {
                           BKGShapeSR->Fill(massC,massF);
@@ -1239,6 +1303,26 @@ void efficiency(const std::vector<std::string>& dirNames)
   std::cout << "HLT17: "  << newcountHLT17*1.0/newcountHLT << std::endl;
   std::cout << "HLT18: "  << newcountHLT18*1.0/newcountHLT << std::endl;
   std::cout << "HLT19: "  << newcountHLT19*1.0/newcountHLT << std::endl;
+  std::cout << "HLTTwo1: "  << newcountHLTTwo1*1.0/newcountHLT << std::endl;
+  std::cout << "HLTTwo2: "  << newcountHLTTwo2*1.0/newcountHLT << std::endl;
+  std::cout << "HLTTwo3: "  << newcountHLTTwo3*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree1: "  << newcountHLTThree1*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree2: "  << newcountHLTThree2*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree3: "  << newcountHLTThree3*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree4: "  << newcountHLTThree4*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree5: "  << newcountHLTThree5*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree6: "  << newcountHLTThree6*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree7: "  << newcountHLTThree7*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree8: "  << newcountHLTThree8*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree9: "  << newcountHLTThree9*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFour1: "  << newcountHLTFour1*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFour2: "  << newcountHLTFour2*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFour3: "  << newcountHLTFour3*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFour4: "  << newcountHLTFour4*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFour5: "  << newcountHLTFour5*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFive1: "  << newcountHLTFive1*1.0/newcountHLT << std::endl;
+  std::cout << "HLTAll: "  << newcountHLTAll*1.0/newcountHLT << std::endl;
+  std::cout << "-------------------------" << std::endl;
   //End: DEBUG many HLT
 
   //Loop over orphan-dimuon tree
