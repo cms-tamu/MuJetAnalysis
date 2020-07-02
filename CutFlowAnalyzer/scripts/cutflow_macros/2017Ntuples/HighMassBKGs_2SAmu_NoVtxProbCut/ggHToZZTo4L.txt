@@ -1,1 +1,1 @@
-/scratch/user/hyunyong/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/Run2_2017_BG_2SA/200601_194039/0000
+/scratch/user/hyunyong/newHLT/GluGluHToZZTo4L_M125_13TeV_powheg2_JHUGenV7011_pythia8/Run2_2017_CSVv2/200625_234852/0000

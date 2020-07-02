@@ -35,6 +35,7 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     signalHltPaths = cms.vstring(
     'HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx',
     'HLT_Mu18_Mu9_SameSign',
+    'HLT_DoubleL2Mu23NoVtx_2Cha',
     'HLT_TripleMu_12_10_5',
     ),
     controlHltPaths = cms.vstring(
@@ -53,11 +54,5 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     #"L1_TripleMu_5_5_3",
     #"L1_TripleMu_5_3_3",
     #"L1_TripleMu3_SQ",
-    #Seeds for SingleMu HLT_Mu8
-    #"L1_SingleMu3",
-    #"L1_SingleMu5",
-    #"L1_SingleMu7",
-    #Seeds for SingleMu HLT_Mu17
-    #"L1_SingleMu15_DQ",
     ),
 )

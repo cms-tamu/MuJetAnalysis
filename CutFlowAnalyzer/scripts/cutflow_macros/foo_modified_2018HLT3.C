@@ -717,14 +717,21 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcountHLTTwo1 = 0;
   int newcountHLTTwo2 = 0;
   int newcountHLTTwo3 = 0;
-  int newcountHLTTwo4 = 0;
-  int newcountHLTTwo5 = 0;
-  int newcountHLTTwo6 = 0;
   int newcountHLTThree1 = 0;
   int newcountHLTThree2 = 0;
   int newcountHLTThree3 = 0;
   int newcountHLTThree4 = 0;
+  int newcountHLTThree5 = 0;
+  int newcountHLTThree6 = 0;
+  int newcountHLTThree7 = 0;
+  int newcountHLTThree8 = 0;
+  int newcountHLTThree9 = 0;
   int newcountHLTFour1 = 0;
+  int newcountHLTFour2 = 0;
+  int newcountHLTFour3 = 0;
+  int newcountHLTFour4 = 0;
+  int newcountHLTFour5 = 0;
+  int newcountHLTFive1 = 0;
   int newcountHLTAll = 0;
 
   if ( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
@@ -804,25 +811,34 @@ void efficiency(const std::vector<std::string>& dirNames)
 
       }//basic gen selections
 
-      //Count muons: pT>24 && |eta|<2.0@GEN,RECO
-      //muons: pT>8 && |eta|<2.4@GEN,RECO
-      int nGenMu24 = 0;
+      //Count muons in each event
+      int nGenMu20 = 0;
+      int nGenMu12 = 0;
       int nGenMu8  = 0;
-      int nSelMu24 = 0;
+      int nSelMu20 = 0;
+      int nSelMu12 = 0;
       int nSelMu8  = 0;
-      if ( genMu0_pT > 24 && fabs(genMu0_eta) < 2.0 ) nGenMu24++;
-      if ( genMu1_pT > 24 && fabs(genMu1_eta) < 2.0 ) nGenMu24++;
-      if ( genMu2_pT > 24 && fabs(genMu2_eta) < 2.0 ) nGenMu24++;
-      if ( genMu3_pT > 24 && fabs(genMu3_eta) < 2.0 ) nGenMu24++;
+      if ( genMu0_pT > 20 && fabs(genMu0_eta) < 2.4 ) nGenMu20++;
+      if ( genMu1_pT > 20 && fabs(genMu1_eta) < 2.4 ) nGenMu20++;
+      if ( genMu2_pT > 20 && fabs(genMu2_eta) < 2.4 ) nGenMu20++;
+      if ( genMu3_pT > 20 && fabs(genMu3_eta) < 2.4 ) nGenMu20++;
+      if ( genMu0_pT > 12 && fabs(genMu0_eta) < 2.4 ) nGenMu12++;
+      if ( genMu1_pT > 12 && fabs(genMu1_eta) < 2.4 ) nGenMu12++;
+      if ( genMu2_pT > 12 && fabs(genMu2_eta) < 2.4 ) nGenMu12++;
+      if ( genMu3_pT > 12 && fabs(genMu3_eta) < 2.4 ) nGenMu12++;
       if ( genMu0_pT > 8 && fabs(genMu0_eta) < 2.4 ) nGenMu8++;
       if ( genMu1_pT > 8 && fabs(genMu1_eta) < 2.4 ) nGenMu8++;
       if ( genMu2_pT > 8 && fabs(genMu2_eta) < 2.4 ) nGenMu8++;
       if ( genMu3_pT > 8 && fabs(genMu3_eta) < 2.4 ) nGenMu8++;
 
-      if ( selMu0_pT > 24 && fabs(selMu0_eta) < 2.0 ) nSelMu24++;
-      if ( selMu1_pT > 24 && fabs(selMu1_eta) < 2.0 ) nSelMu24++;
-      if ( selMu2_pT > 24 && fabs(selMu2_eta) < 2.0 ) nSelMu24++;
-      if ( selMu3_pT > 24 && fabs(selMu3_eta) < 2.0 ) nSelMu24++;
+      if ( selMu0_pT > 20 && fabs(selMu0_eta) < 2.4 ) nSelMu20++;
+      if ( selMu1_pT > 20 && fabs(selMu1_eta) < 2.4 ) nSelMu20++;
+      if ( selMu2_pT > 20 && fabs(selMu2_eta) < 2.4 ) nSelMu20++;
+      if ( selMu3_pT > 20 && fabs(selMu3_eta) < 2.4 ) nSelMu20++;
+      if ( selMu0_pT > 12 && fabs(selMu0_eta) < 2.4 ) nSelMu12++;
+      if ( selMu1_pT > 12 && fabs(selMu1_eta) < 2.4 ) nSelMu12++;
+      if ( selMu2_pT > 12 && fabs(selMu2_eta) < 2.4 ) nSelMu12++;
+      if ( selMu3_pT > 12 && fabs(selMu3_eta) < 2.4 ) nSelMu12++;
       if ( selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 ) nSelMu8++;
       if ( selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 ) nSelMu8++;
       if ( selMu2_pT > 8 && fabs(selMu2_eta) < 2.4 ) nSelMu8++;
@@ -831,11 +847,10 @@ void efficiency(const std::vector<std::string>& dirNames)
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ GEN Level       !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //consistent with 2018 HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed requirement (two 23 GeV muons |eta|<2)
-      if ( nGenMu24 > 0 ) {counter[k][1]++; counterGENMatch[k][1]++;}
-      if ( nGenMu24 > 1 ) {counter[k][2]++; counterGENMatch[k][2]++;}
-      if ( nGenMu24 > 1 && nGenMu8 > 2  ) {counter[k][3]++; counterGENMatch[k][3]++;}
-      if ( nGenMu24 > 1 && nGenMu8 > 3  ) {
+      if ( nGenMu20 > 0 ) {counter[k][1]++; counterGENMatch[k][1]++;}
+      if ( nGenMu20 > 0 && nGenMu12 > 1 ) {counter[k][2]++; counterGENMatch[k][2]++;}
+      if ( nGenMu20 > 0 && nGenMu12 > 1 && nGenMu8 > 2  ) {counter[k][3]++; counterGENMatch[k][3]++;}
+      if ( nGenMu20 > 0 && nGenMu12 > 1 && nGenMu8 > 3  ) {
         counter[k][4]++;
         counterGENMatch[k][4]++;
 
@@ -890,10 +905,10 @@ void efficiency(const std::vector<std::string>& dirNames)
             Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
             Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
 
-            if ( nSelMu24 > 0 ) counterGENMatch[k][6]++;
-            if ( nSelMu24 > 1  ) counterGENMatch[k][7]++;
-            if ( nSelMu24 > 1 && nSelMu8 > 2  ) counterGENMatch[k][8]++;
-            if ( nSelMu24 > 1 && nSelMu8 > 3  ) {
+            if ( nSelMu20 > 0 ) counterGENMatch[k][6]++;
+            if ( nSelMu20 > 0 && nSelMu12 > 1 ) counterGENMatch[k][7]++;
+            if ( nSelMu20 > 0 && nSelMu12 > 1 && nSelMu8 > 2  ) counterGENMatch[k][8]++;
+            if ( nSelMu20 > 0 && nSelMu12 > 1 && nSelMu8 > 3  ) {
               counterGENMatch[k][9]++;
 
               //###########################################################
@@ -1086,19 +1101,28 @@ void efficiency(const std::vector<std::string>& dirNames)
                           if ( isSignalHLT_17_Fired ) newcountHLT17++;
                           if ( isSignalHLT_18_Fired ) newcountHLT18++;
                           if ( isSignalHLT_19_Fired ) newcountHLT19++;
-                          //Multiple paths
+                          //Two
                           if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired ) newcountHLTTwo1++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_5_Fired ) newcountHLTTwo2++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired ) newcountHLTTwo3++;
-                          if ( isSignalHLT_3_Fired || isSignalHLT_5_Fired ) newcountHLTTwo4++;
-                          if ( isSignalHLT_3_Fired || isSignalHLT_7_Fired ) newcountHLTTwo5++;
-                          if ( isSignalHLT_5_Fired || isSignalHLT_7_Fired ) newcountHLTTwo6++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_5_Fired) newcountHLTThree1++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_7_Fired) newcountHLTThree2++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired || isSignalHLT_5_Fired) newcountHLTThree3++;
-                          if ( isSignalHLT_3_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTThree4++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFour1++;
-
+                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired ) newcountHLTTwo2++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_7_Fired ) newcountHLTTwo3++;
+                          //Three
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_4_Fired) newcountHLTThree1++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_5_Fired) newcountHLTThree2++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_7_Fired) newcountHLTThree3++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired || isSignalHLT_4_Fired) newcountHLTThree4++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired || isSignalHLT_5_Fired) newcountHLTThree5++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired) newcountHLTThree6++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_7_Fired) newcountHLTThree7++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTThree8++;
+                          if ( isSignalHLT_4_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTThree9++;
+                          //Four
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired) newcountHLTFour1++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_7_Fired) newcountHLTFour2++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFour3++;
+                          if ( isSignalHLT_1_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFour4++;
+                          if ( isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFour5++;
+                          //Five
+                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_4_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFive1++;
                           //All
                           if ( isSignalHLTFired ) newcountHLTAll++;
                           //End: DEBUG Many HLT paths
@@ -1136,10 +1160,10 @@ void efficiency(const std::vector<std::string>& dirNames)
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ RECO Level      !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      if ( nSelMu24 > 0 ) counter[k][6]++;
-      if ( nSelMu24 > 1  ) counter[k][7]++;
-      if ( nSelMu24 > 1 && nSelMu8 > 2  ) counter[k][8]++;
-      if ( nSelMu24 > 1 && nSelMu8 > 3  ) {
+      if ( nSelMu20 > 0 ) counter[k][6]++;
+      if ( nSelMu20 > 0 && nSelMu12 > 1 ) counter[k][7]++;
+      if ( nSelMu20 > 0 && nSelMu12 > 1 && nSelMu8 > 2 ) counter[k][8]++;
+      if ( nSelMu20 > 0 && nSelMu12 > 1 && nSelMu8 > 3 ) {
         counter[k][9]++;
 
         if ( isVtxOK ) {
@@ -1294,14 +1318,21 @@ void efficiency(const std::vector<std::string>& dirNames)
   std::cout << "HLTTwo1: "  << newcountHLTTwo1*1.0/newcountHLT << std::endl;
   std::cout << "HLTTwo2: "  << newcountHLTTwo2*1.0/newcountHLT << std::endl;
   std::cout << "HLTTwo3: "  << newcountHLTTwo3*1.0/newcountHLT << std::endl;
-  std::cout << "HLTTwo4: "  << newcountHLTTwo4*1.0/newcountHLT << std::endl;
-  std::cout << "HLTTwo5: "  << newcountHLTTwo5*1.0/newcountHLT << std::endl;
-  std::cout << "HLTTwo6: "  << newcountHLTTwo6*1.0/newcountHLT << std::endl;
   std::cout << "HLTThree1: "  << newcountHLTThree1*1.0/newcountHLT << std::endl;
   std::cout << "HLTThree2: "  << newcountHLTThree2*1.0/newcountHLT << std::endl;
   std::cout << "HLTThree3: "  << newcountHLTThree3*1.0/newcountHLT << std::endl;
   std::cout << "HLTThree4: "  << newcountHLTThree4*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree5: "  << newcountHLTThree5*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree6: "  << newcountHLTThree6*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree7: "  << newcountHLTThree7*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree8: "  << newcountHLTThree8*1.0/newcountHLT << std::endl;
+  std::cout << "HLTThree9: "  << newcountHLTThree9*1.0/newcountHLT << std::endl;
   std::cout << "HLTFour1: "  << newcountHLTFour1*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFour2: "  << newcountHLTFour2*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFour3: "  << newcountHLTFour3*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFour4: "  << newcountHLTFour4*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFour5: "  << newcountHLTFour5*1.0/newcountHLT << std::endl;
+  std::cout << "HLTFive1: "  << newcountHLTFive1*1.0/newcountHLT << std::endl;
   std::cout << "HLTAll: "  << newcountHLTAll*1.0/newcountHLT << std::endl;
   std::cout << "-------------------------" << std::endl;
   //End: DEBUG many HLT

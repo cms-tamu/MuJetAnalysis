@@ -430,27 +430,10 @@ private:
 
   Bool_t b_isSignalHLTFired;
   //Start DEBUG HLT paths
-  /*
   Bool_t b_isSignalHLT_0_Fired;
   Bool_t b_isSignalHLT_1_Fired;
   Bool_t b_isSignalHLT_2_Fired;
   Bool_t b_isSignalHLT_3_Fired;
-  Bool_t b_isSignalHLT_4_Fired;
-  Bool_t b_isSignalHLT_5_Fired;
-  Bool_t b_isSignalHLT_6_Fired;
-  Bool_t b_isSignalHLT_7_Fired;
-  Bool_t b_isSignalHLT_8_Fired;
-  Bool_t b_isSignalHLT_9_Fired;
-  Bool_t b_isSignalHLT_10_Fired;
-  Bool_t b_isSignalHLT_11_Fired;
-  Bool_t b_isSignalHLT_12_Fired;
-  Bool_t b_isSignalHLT_13_Fired;
-  Bool_t b_isSignalHLT_14_Fired;
-  Bool_t b_isSignalHLT_15_Fired;
-  Bool_t b_isSignalHLT_16_Fired;
-  Bool_t b_isSignalHLT_17_Fired;
-  Bool_t b_isSignalHLT_18_Fired;
-  Bool_t b_isSignalHLT_19_Fired;*/
   //End DEBUG HLT paths
   Bool_t b_isControlHLT16Fired;
   Bool_t b_isControlHLT6Fired;
@@ -599,8 +582,6 @@ private:
   Bool_t  m_orphan_passOffLineSelPtEta;
   Bool_t  m_orphan_AllTrackerMu;
 
-  Int_t m_dimuorphan_containstrig;
-  Int_t m_dimuorphan_containstrig2;
   Int_t m_orphan_dimu_nSAMu;
   Int_t m_orphan_dimu_nNonTrackerMu;
   Int_t m_orphan_nSAMu;
@@ -1929,28 +1910,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   // HLT cut
   b_isSignalHLTFired = false;
   //START DEBUG Many HLT paths
-  /*
   b_isSignalHLT_0_Fired = false;
   b_isSignalHLT_1_Fired = false;
   b_isSignalHLT_2_Fired = false;
   b_isSignalHLT_3_Fired = false;
-  b_isSignalHLT_4_Fired = false;
-  b_isSignalHLT_5_Fired = false;
-  b_isSignalHLT_6_Fired = false;
-  b_isSignalHLT_7_Fired = false;
-  b_isSignalHLT_8_Fired = false;
-  b_isSignalHLT_9_Fired = false;
-  b_isSignalHLT_10_Fired = false;
-  b_isSignalHLT_11_Fired = false;
-  b_isSignalHLT_12_Fired = false;
-  b_isSignalHLT_13_Fired = false;
-  b_isSignalHLT_14_Fired = false;
-  b_isSignalHLT_15_Fired = false;
-  b_isSignalHLT_16_Fired = false;
-  b_isSignalHLT_17_Fired = false;
-  b_isSignalHLT_18_Fired = false;
-  b_isSignalHLT_19_Fired = false;
-  */
   //End DEBUG Many HLT paths
   b_isControlHLT16Fired = false;
   b_isControlHLT6Fired = false;
@@ -1980,83 +1943,46 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       }//end for signal hlt
 
       //Start: DEBUG Many HLT Paths
-      //0: 'HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx',
-      //1: 'HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx',
-      //2: 'HLT_TrkMu17_DoubleTrkMu8NoFiltersNoVtx',
-      //3: 'HLT_Mu18_Mu9_SameSign',
-      //4: 'HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed',
-      //5: 'HLT_DoubleL2Mu23NoVtx_2Cha',
-      //6: 'HLT_TripleMu_10_5_5_DZ',
-      //7: 'HLT_TripleMu_12_10_5',
-      //8: 'HLT_DoubleL2Mu50',
-      //9: 'HLT_DoubleMu43NoFiltersNoVtx',
-      //10: 'HLT_DoubleMu33NoFiltersNoVtxDisplaced',
-      //11: 'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8',
-      //12: 'HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass8',
-      //13: 'HLT_Mu37_TkMu27',
-      //14: 'HLT_IsoMu24',
-      //15: 'HLT_IsoMu27',
-      //16: 'HLT_Mu50',
-      //17: 'HLT_Mu55',
-      //18: 'HLT_OldMu100',
-      //19: 'HLT_TkMu100',
-      /*
-      const std::string& s0 = signalHltPaths_[0];
-      const std::string& s1 = signalHltPaths_[1];
-      const std::string& s2 = signalHltPaths_[2];
-      const std::string& s3 = signalHltPaths_[3];
-      const std::string& s4 = signalHltPaths_[4];
-      const std::string& s5 = signalHltPaths_[5];
-      const std::string& s6 = signalHltPaths_[6];
-      const std::string& s7 = signalHltPaths_[7];
-      const std::string& s8 = signalHltPaths_[8];
-      const std::string& s9 = signalHltPaths_[9];
-      const std::string& s10 = signalHltPaths_[10];
-      const std::string& s11 = signalHltPaths_[11];
-      const std::string& s12 = signalHltPaths_[12];
-      const std::string& s13 = signalHltPaths_[13];
-      const std::string& s14 = signalHltPaths_[14];
-      const std::string& s15 = signalHltPaths_[15];
-      const std::string& s16 = signalHltPaths_[16];
-      const std::string& s17 = signalHltPaths_[17];
-      const std::string& s18 = signalHltPaths_[18];
-      const std::string& s19 = signalHltPaths_[19];
-      if (trigNameStr.find(s0) != std::string::npos) b_isSignalHLT_0_Fired = true;
-      if (trigNameStr.find(s1) != std::string::npos) b_isSignalHLT_1_Fired = true;
-      if (trigNameStr.find(s2) != std::string::npos) b_isSignalHLT_2_Fired = true;
-      if (trigNameStr.find(s3) != std::string::npos) b_isSignalHLT_3_Fired = true;
-      if (trigNameStr.find(s4) != std::string::npos) b_isSignalHLT_4_Fired = true;
-      if (trigNameStr.find(s5) != std::string::npos) b_isSignalHLT_5_Fired = true;
-      if (trigNameStr.find(s6) != std::string::npos) b_isSignalHLT_6_Fired = true;
-      if (trigNameStr.find(s7) != std::string::npos) b_isSignalHLT_7_Fired = true;
-      if (trigNameStr.find(s8) != std::string::npos) b_isSignalHLT_8_Fired = true;
-      if (trigNameStr.find(s9) != std::string::npos) b_isSignalHLT_9_Fired = true;
-      if (trigNameStr.find(s10) != std::string::npos) b_isSignalHLT_10_Fired = true;
-      if (trigNameStr.find(s11) != std::string::npos) b_isSignalHLT_11_Fired = true;
-      if (trigNameStr.find(s12) != std::string::npos) b_isSignalHLT_12_Fired = true;
-      if (trigNameStr.find(s13) != std::string::npos) b_isSignalHLT_13_Fired = true;
-      if (trigNameStr.find(s14) != std::string::npos) b_isSignalHLT_14_Fired = true;
-      if (trigNameStr.find(s15) != std::string::npos) b_isSignalHLT_15_Fired = true;
-      if (trigNameStr.find(s16) != std::string::npos) b_isSignalHLT_16_Fired = true;
-      if (trigNameStr.find(s17) != std::string::npos) b_isSignalHLT_17_Fired = true;
-      if (trigNameStr.find(s18) != std::string::npos) b_isSignalHLT_18_Fired = true;
-      if (trigNameStr.find(s19) != std::string::npos) b_isSignalHLT_19_Fired = true;*/
+      //0: 'HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx',
+      //1: 'HLT_Mu18_Mu9_SameSign',
+      //2: 'HLT_DoubleL2Mu23NoVtx_2Cha',
+      //3: 'HLT_TripleMu_12_10_5',
+      if ( signalHltPaths_.size() > 0){
+        const std::string& s0 = signalHltPaths_[0];
+        if (trigNameStr.find(s0) != std::string::npos) b_isSignalHLT_0_Fired = true;
+      }
+      if ( signalHltPaths_.size() > 1){
+        const std::string& s1 = signalHltPaths_[1];
+        if (trigNameStr.find(s1) != std::string::npos) b_isSignalHLT_1_Fired = true;
+      }
+      if ( signalHltPaths_.size() > 2){
+        const std::string& s2 = signalHltPaths_[2];
+        if (trigNameStr.find(s2) != std::string::npos) b_isSignalHLT_2_Fired = true;
+      }
+      if ( signalHltPaths_.size() > 3){
+        const std::string& s3 = signalHltPaths_[3];
+        if (trigNameStr.find(s3) != std::string::npos) b_isSignalHLT_3_Fired = true;
+      }
       //End: DEBUG Many HLT Paths
 
-      const std::string& p0 = controlHltPaths_[0];
-      const std::string& p1 = controlHltPaths_[1];
-      if ( m_debug > 10 ) std::cout << "Control trigger is "<< p0 << std::endl;
-      if (trigNameStr.find(p0) != std::string::npos) {
-        if ( m_debug > 10 ) std::cout << "Control trigger " << p0 << " fired!" << std::endl;
+      if ( controlHltPaths_.size() > 0){
+        const std::string& p0 = controlHltPaths_[0];
+        if ( m_debug > 10 ) std::cout << "Control trigger is "<< p0 << std::endl;
+        if (trigNameStr.find(p0) != std::string::npos) {
+          if ( m_debug > 10 ) std::cout << "Control trigger " << p0 << " fired!" << std::endl;
           b_isControlHLT16Fired = true;
-      }
-      if ( m_debug > 10 ) std::cout << "Control trigger is "<< p1 << std::endl;
-      if (trigNameStr.find(p1) != std::string::npos) {
-        if ( m_debug > 10 ) std::cout << "Control trigger " << p1 << " fired!" << std::endl;
+        }
+      }//end control 0
+      if ( controlHltPaths_.size() > 1){
+        const std::string& p1 = controlHltPaths_[1];
+        if ( m_debug > 10 ) std::cout << "Control trigger is "<< p1 << std::endl;
+        if (trigNameStr.find(p1) != std::string::npos) {
+          if ( m_debug > 10 ) std::cout << "Control trigger " << p1 << " fired!" << std::endl;
           b_isControlHLT6Fired = true;
-      }
+        }
+      }//end control 1
 
-    }
+    }//end trRes accept
   }//end for trig
   if ( m_debug > 0 )  std::cout << m_events << " Apply cut on HLT" << std::endl;
 
@@ -2449,8 +2375,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   m_orphan_PtMu1   = -99.;
   m_orphan_EtaMu1  = -99.;
   m_orphan_isoTk = -999.;
-  m_dimuorphan_containstrig = 0;
-  m_dimuorphan_containstrig2 = 0;
   m_orphan_dimu_nSAMu = 0;
   m_orphan_dimu_nNonTrackerMu = 0;
   m_orphan_nSAMu = 0;
@@ -2489,17 +2413,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_NPATJetTightB = NPATJetTightB;
   b_NPATJetMediumB = NPATJetMediumB;
   b_NPATJetLooseB = NPATJetLooseB;
-
-  //high pT muon trigger object
-  std::vector<pat::MuonCollection::const_iterator> hightrigmuons;
-  for (pat::MuonCollection::const_iterator muon = muons->begin();  muon != muons->end();  ++muon) {
-    if (muon->pt() > m_threshold_Mu17_pT  &&  fabs(muon->eta()) < m_threshold_Mu17_eta) {
-      const pat::TriggerObjectStandAlone *mu01  = muon->triggerObjectMatchByPath("HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx_v*");
-      if((mu01 != NULL && mu01->collection() == std::string("hltGlbTrkMuonCandsNoVtx::HLT") && mu01->pt() > m_threshold_Mu17_pT)  ){
-        hightrigmuons.push_back(muon);
-      }
-    }
-  }//end high pT mu matching to trigger objects
 
   edm::Handle<pat::MuonCollection> orphans_unsorted;
   iEvent.getByToken(m_muJetOrphans, orphans_unsorted);
@@ -2567,27 +2480,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
          orphans[0]->isTrackerMuon() && orphans[0]->innerTrack().isNonnull() ) m_orphan_AllTrackerMu = true;
 
     if( m_orphan_passOffLineSelPtEta ) FillTrigInfo(triggerComposition_bb, triggerNames, NameAndNumb );
-
-    //Check whether orphan muon or dimu muons fired high pT leg
-    for (auto iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-      if( orphans[0]->innerTrack().isAvailable() &&
-          (*iter)->innerTrack().isAvailable() &&
-          tamu::helpers::sameTrack(&*(orphans[0]->innerTrack()), &*((*iter)->innerTrack())) ){
-            m_dimuorphan_containstrig++;
-      }
-    }
-    for (auto iter = hightrigmuons.begin();  iter != hightrigmuons.end();  ++iter) {
-      if( muJet->muon(0)->innerTrack().isAvailable() &&
-          (*iter)->innerTrack().isAvailable() &&
-          tamu::helpers::sameTrack(&*(muJet->muon(0)->innerTrack()), &*((*iter)->innerTrack())) ){
-            m_dimuorphan_containstrig2++;
-      }
-      if( muJet->muon(1)->innerTrack().isAvailable() &&
-          (*iter)->innerTrack().isAvailable() &&
-          tamu::helpers::sameTrack(&*(muJet->muon(1)->innerTrack()), &*((*iter)->innerTrack()))) {
-            m_dimuorphan_containstrig2++;
-      }
-    }
 
     //@Wei Shi 10.25.2018: Can't use the old method in AOD below since MiniAOD has different precision for the two collections:
     /*if (tamu::helpers::sameTrack(&*track,&*(muJet->muon(0)->innerTrack())) ||
@@ -3140,27 +3032,10 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   m_ttree->Branch("isSignalHLTFired",               &b_isSignalHLTFired,               "isSignalHLTFired/O");
   //Start Debug
-  /*
   m_ttree->Branch("isSignalHLT_0_Fired",            &b_isSignalHLT_0_Fired,            "isSignalHLT_0_Fired/O");
   m_ttree->Branch("isSignalHLT_1_Fired",            &b_isSignalHLT_1_Fired,            "isSignalHLT_1_Fired/O");
   m_ttree->Branch("isSignalHLT_2_Fired",            &b_isSignalHLT_2_Fired,            "isSignalHLT_2_Fired/O");
   m_ttree->Branch("isSignalHLT_3_Fired",            &b_isSignalHLT_3_Fired,            "isSignalHLT_3_Fired/O");
-  m_ttree->Branch("isSignalHLT_4_Fired",            &b_isSignalHLT_4_Fired,            "isSignalHLT_4_Fired/O");
-  m_ttree->Branch("isSignalHLT_5_Fired",            &b_isSignalHLT_5_Fired,            "isSignalHLT_5_Fired/O");
-  m_ttree->Branch("isSignalHLT_6_Fired",            &b_isSignalHLT_6_Fired,            "isSignalHLT_6_Fired/O");
-  m_ttree->Branch("isSignalHLT_7_Fired",            &b_isSignalHLT_7_Fired,            "isSignalHLT_7_Fired/O");
-  m_ttree->Branch("isSignalHLT_8_Fired",            &b_isSignalHLT_8_Fired,            "isSignalHLT_8_Fired/O");
-  m_ttree->Branch("isSignalHLT_9_Fired",            &b_isSignalHLT_9_Fired,            "isSignalHLT_9_Fired/O");
-  m_ttree->Branch("isSignalHLT_10_Fired",           &b_isSignalHLT_10_Fired,           "isSignalHLT_10_Fired/O");
-  m_ttree->Branch("isSignalHLT_11_Fired",           &b_isSignalHLT_11_Fired,           "isSignalHLT_11_Fired/O");
-  m_ttree->Branch("isSignalHLT_12_Fired",           &b_isSignalHLT_12_Fired,           "isSignalHLT_12_Fired/O");
-  m_ttree->Branch("isSignalHLT_13_Fired",           &b_isSignalHLT_13_Fired,           "isSignalHLT_13_Fired/O");
-  m_ttree->Branch("isSignalHLT_14_Fired",           &b_isSignalHLT_14_Fired,           "isSignalHLT_14_Fired/O");
-  m_ttree->Branch("isSignalHLT_15_Fired",           &b_isSignalHLT_15_Fired,           "isSignalHLT_15_Fired/O");
-  m_ttree->Branch("isSignalHLT_16_Fired",           &b_isSignalHLT_16_Fired,           "isSignalHLT_16_Fired/O");
-  m_ttree->Branch("isSignalHLT_17_Fired",           &b_isSignalHLT_17_Fired,           "isSignalHLT_17_Fired/O");
-  m_ttree->Branch("isSignalHLT_18_Fired",           &b_isSignalHLT_18_Fired,           "isSignalHLT_18_Fired/O");
-  m_ttree->Branch("isSignalHLT_19_Fired",           &b_isSignalHLT_19_Fired,           "isSignalHLT_19_Fired/O");*/
   //End Debug
   m_ttree->Branch("NPATJet",        &b_NPATJet,        "NPATJet/I");
   m_ttree->Branch("NPATJetTightB",  &b_NPATJetTightB,  "NPATJetTightB/I");
@@ -3180,10 +3055,12 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree_orphan->Branch("run",   &b_run,   "run/I");
   m_ttree_orphan->Branch("lumi",  &b_lumi,  "lumi/I");
   m_ttree_orphan->Branch("event", &b_event, "event/I");
-  m_ttree_orphan->Branch("orph_isSignalHLTFired", &b_isSignalHLTFired,         "orph_isSignalHLTFired/O");
-  m_ttree_orphan->Branch("orph_isVertexOK",       &b_orphan_isVertexOK,        "orph_isVertexOK/O");
-  m_ttree_orphan->Branch("containstrig",          &m_dimuorphan_containstrig,  "containstrig/I");
-  m_ttree_orphan->Branch("containstrig2",         &m_dimuorphan_containstrig2, "containstrig2/I");
+  m_ttree_orphan->Branch("orph_isSignalHLTFired",    &b_isSignalHLTFired,    "orph_isSignalHLTFired/O");
+  m_ttree_orphan->Branch("orph_isSignalHLT_0_Fired", &b_isSignalHLT_0_Fired, "orph_isSignalHLT_0_Fired/O");
+  m_ttree_orphan->Branch("orph_isSignalHLT_1_Fired", &b_isSignalHLT_1_Fired, "orph_isSignalHLT_1_Fired/O");
+  m_ttree_orphan->Branch("orph_isSignalHLT_2_Fired", &b_isSignalHLT_2_Fired, "orph_isSignalHLT_2_Fired/O");
+  m_ttree_orphan->Branch("orph_isSignalHLT_3_Fired", &b_isSignalHLT_3_Fired, "orph_isSignalHLT_3_Fired/O");
+  m_ttree_orphan->Branch("orph_isVertexOK",          &b_orphan_isVertexOK,   "orph_isVertexOK/O");
   m_ttree_orphan->Branch("orph_dimu_nSAMu",                          &m_orphan_dimu_nSAMu,                          "orph_dimu_nSAMu/I");
   m_ttree_orphan->Branch("orph_dimu_nNonTrackerMu",                  &m_orphan_dimu_nNonTrackerMu,                  "orph_dimu_nNonTrackerMu/I");
   m_ttree_orphan->Branch("orph_nSAMu",                               &m_orphan_nSAMu,                               "orph_nSAMu/I");
@@ -3223,7 +3100,6 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree_orphan->Branch("orph_EtaMu0",  &m_orphan_EtaMu0,  "orph_EtaMu0/F");
   m_ttree_orphan->Branch("orph_PtMu1",   &m_orphan_PtMu1,   "orph_PtMu1/F");
   m_ttree_orphan->Branch("orph_EtaMu1",  &m_orphan_EtaMu1,  "orph_EtaMu1/F");
-
   m_ttree_orphan->Branch("NPATJet",        &b_NPATJet,        "NPATJet/I");
   m_ttree_orphan->Branch("NPATJetTightB",  &b_NPATJetTightB,  "NPATJetTightB/I");
   m_ttree_orphan->Branch("NPATJetMediumB", &b_NPATJetMediumB, "NPATJetMediumB/I");

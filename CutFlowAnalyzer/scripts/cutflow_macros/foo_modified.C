@@ -168,6 +168,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t diMuonF_FittedVtx_L;
   Float_t massC;
   Float_t massF;
+  Int_t   NPATJet;
+  Int_t   NPATJetTightB;
+  Int_t   NPATJetMediumB;
+  Int_t   NPATJetLooseB;
 
   Float_t reco4mu_m;
   Float_t recoRePaired2muleading_m;
@@ -441,10 +445,18 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH2F *BKGShapeCR      = new TH2F("BKGShapeCR",      "", 12, 11., 59., 12, 11., 59.);//binning 4 GeV
   TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF", "", 12, 11., 59.);
+  TH1F *NJetCR = new TH1F("NJetCR", "", 100, 0, 100);
+  TH1F *NTightBCR  = new TH1F("NTightBCR",  "", 10, 0, 10);
+  TH1F *NMediumBCR = new TH1F("NMediumBCR", "", 10, 0, 10);
+  TH1F *NLooseBCR  = new TH1F("NLooseBCR",  "", 10, 0, 10);
   //Signal Region
   TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 12, 11., 59., 12, 11., 59.);
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 12, 11., 59.);
+  TH1F *NJetSR = new TH1F("NJetSR", "", 100, 0, 100);
+  TH1F *NTightBSR  = new TH1F("NTightBSR",  "", 10, 0, 10);
+  TH1F *NMediumBSR = new TH1F("NMediumBSR", "", 10, 0, 10);
+  TH1F *NLooseBSR  = new TH1F("NLooseBSR",  "", 10, 0, 10);
 
   TH1F* L_DimuC_CR_HighMass   = new TH1F("L_DimuC_CR_HighMass",   "", 800, 0., 80.);//cm
   TH1F* L_DimuF_CR_HighMass   = new TH1F("L_DimuF_CR_HighMass",   "", 800, 0., 80.);
@@ -589,6 +601,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   //In most cases, they are the close, but not necessarily in some cases
   t->SetBranchAddress("diMuonC_FittedVtx_m", &massC);
 	t->SetBranchAddress("diMuonF_FittedVtx_m", &massF);
+  t->SetBranchAddress("NPATJet",       &NPATJet);
+  t->SetBranchAddress("NPATJetTightB", &NPATJetTightB);
+  t->SetBranchAddress("NPATJetMediumB",&NPATJetMediumB);
+  t->SetBranchAddress("NPATJetLooseB", &NPATJetLooseB);
 
   t->SetBranchAddress("reco4mu_m",                  &reco4mu_m);
   t->SetBranchAddress("recoRePaired2muleading_m",   &recoRePaired2muleading_m);
@@ -965,8 +981,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                     }
 
                     //if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
-                    if ( 2 > 1  ) {
-
+                    if ( (massC >= 9.5 && massF >= 9.5 && NPATJetLooseB < 2 ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
                       counterGENMatch[k][13]++;
 
                       //if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
@@ -1170,7 +1185,7 @@ void efficiency(const std::vector<std::string>& dirNames)
               counter[k][12]++;
 
               //if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
-              if ( 2 > 1  ) {
+              if ( (massC >= 9.5 && massF >= 9.5 && NPATJetLooseB < 2 ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
                 counter[k][13]++;
 
                 //if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
@@ -1204,6 +1219,13 @@ void efficiency(const std::vector<std::string>& dirNames)
                           BKGShapeSR->Fill(massC,massF);
                           BKGShapeSRmassC->Fill(massC);
                           BKGShapeSRmassF->Fill(massF);
+
+                          //Number of jets
+                          NJetSR->Fill(NPATJet);
+                          //Number of B jets
+                          NTightBSR->Fill(NPATJetTightB);
+                          NMediumBSR->Fill(NPATJetMediumB);
+                          NLooseBSR->Fill(NPATJetLooseB);
                         }
                         //check background events displacement
                         if ( CheckDisplacement ) {
@@ -1226,6 +1248,13 @@ void efficiency(const std::vector<std::string>& dirNames)
                           BKGShapeCR->Fill(massC,massF);
                           BKGShapeCRmassC->Fill(massC);
                           BKGShapeCRmassF->Fill(massF);
+
+                          //Number of jets
+                          NJetCR->Fill(NPATJet);
+                          //Number of B jets
+                          NTightBCR->Fill(NPATJetTightB);
+                          NMediumBCR->Fill(NPATJetMediumB);
+                          NLooseBCR->Fill(NPATJetLooseB);
                         }//end if ModelBKGShape
 
                         //check background events displacement
@@ -1802,12 +1831,10 @@ void efficiency(const std::vector<std::string>& dirNames)
     RECOrePaired2muTrailingMass->GetXaxis()->SetTitle("Trailing mass of re-paired OS di-#mu [GeV]"); RECOrePaired2muTrailingMass->GetYaxis()->SetTitle("Events/GeV"); RECOrePaired2muTrailingMass->Write();
     RECOrePaired2muLeadingdR->GetXaxis()->SetTitle("Leading dR of re-paired OS di-#mu"); RECOrePaired2muLeadingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muLeadingdR->Write();
     RECOrePaired2muTrailingdR->GetXaxis()->SetTitle("Trailing dR of re-paired OS di-#mu"); RECOrePaired2muTrailingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muTrailingdR->Write();
-    BKGShapeCR->Write();
-    BKGShapeCRmassC->Write();
-    BKGShapeCRmassF->Write();
-    BKGShapeSR->Write();
-    BKGShapeSRmassC->Write();
-    BKGShapeSRmassF->Write();
+    BKGShapeCR->Write(); BKGShapeCRmassC->Write(); BKGShapeCRmassF->Write();
+    NJetCR->Write(); NTightBCR->Write(); NMediumBCR->Write(); NLooseBCR->Write();
+    BKGShapeSR->Write(); BKGShapeSRmassC->Write(); BKGShapeSRmassF->Write();
+    NJetSR->Write(); NTightBSR->Write(); NMediumBSR->Write(); NLooseBSR->Write();
   } //end if ( ModelBKGShape )
 
   if ( ModelSRWidth ) {
@@ -1990,6 +2017,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete diMuon_leading_Lz_pass_all; delete HLT_diMuon_leading_Lz_pass_all;
   delete BKGShapeCR; delete BKGShapeCRmassC; delete BKGShapeCRmassF;
   delete BKGShapeSR; delete BKGShapeSRmassC; delete BKGShapeSRmassF;
+  delete NJetCR; delete NTightBCR; delete NMediumBCR; delete NLooseBCR;
+  delete NJetSR; delete NTightBSR; delete NMediumBSR; delete NLooseBSR;
   delete L_DimuC_CR_HighMass; delete Lxy_DimuC_CR_HighMass; delete Lz_DimuC_CR_HighMass;
   delete L_DimuF_CR_HighMass; delete Lxy_DimuF_CR_HighMass; delete Lz_DimuF_CR_HighMass;
   delete L_DimuC_SR_HighMass; delete Lxy_DimuC_SR_HighMass; delete Lz_DimuC_SR_HighMass;

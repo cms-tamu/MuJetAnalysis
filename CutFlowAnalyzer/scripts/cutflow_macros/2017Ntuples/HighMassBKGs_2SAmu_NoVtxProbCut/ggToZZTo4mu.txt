@@ -1,1 +1,1 @@
-/scratch/user/hyunyong/GluGluToContinToZZTo4mu_13TeV_MCFM701_pythia8/Run2_2017_BG_2SA/200601_194158/0000
+/scratch/user/hyunyong/newHLT/GluGluToContinToZZTo4mu_13TeV_MCFM701_pythia8/Run2_2017_CSVv2/200625_234843/0000

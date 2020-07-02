@@ -1,2 +1,2 @@
-/scratch/user/hyunyong/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2_2017_BG_2SA/200601_193401/0000
-/scratch/user/hyunyong/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2_2017_BG_2SA/200601_193401/0001
+/scratch/user/hyunyong/newHLT/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2_2017_CSVv2/200625_234928/0000
+/scratch/user/hyunyong/newHLT/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2_2017_CSVv2/200625_234928/0001
