@@ -140,14 +140,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t muJetC_Mu1_pt;
   Float_t muJetF_Mu0_pt;
   Float_t muJetF_Mu1_pt;
-  Float_t muJetC_Mu0_eta;
-  Float_t muJetC_Mu1_eta;
-  Float_t muJetF_Mu0_eta;
-  Float_t muJetF_Mu1_eta;
-  Float_t muJetC_Mu0_phi;
-  Float_t muJetC_Mu1_phi;
-  Float_t muJetF_Mu0_phi;
-  Float_t muJetF_Mu1_phi;
 
   Int_t   nMuJets;
   Bool_t  is2MuJets;
@@ -168,10 +160,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t diMuonF_FittedVtx_L;
   Float_t massC;
   Float_t massF;
-  Int_t   NPATJet;
-  Int_t   NPATJetTightB;
-  Int_t   NPATJetMediumB;
-  Int_t   NPATJetLooseB;
 
   Float_t reco4mu_m;
   Float_t recoRePaired2muleading_m;
@@ -445,18 +433,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH2F *BKGShapeCR      = new TH2F("BKGShapeCR",      "", 12, 11., 59., 12, 11., 59.);//binning 4 GeV
   TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF", "", 12, 11., 59.);
-  TH1F *NJetCR = new TH1F("NJetCR", "", 100, 0, 100);
-  TH1F *NTightBCR  = new TH1F("NTightBCR",  "", 10, 0, 10);
-  TH1F *NMediumBCR = new TH1F("NMediumBCR", "", 10, 0, 10);
-  TH1F *NLooseBCR  = new TH1F("NLooseBCR",  "", 10, 0, 10);
   //Signal Region
   TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 12, 11., 59., 12, 11., 59.);
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
   TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 12, 11., 59.);
-  TH1F *NJetSR = new TH1F("NJetSR", "", 100, 0, 100);
-  TH1F *NTightBSR  = new TH1F("NTightBSR",  "", 10, 0, 10);
-  TH1F *NMediumBSR = new TH1F("NMediumBSR", "", 10, 0, 10);
-  TH1F *NLooseBSR  = new TH1F("NLooseBSR",  "", 10, 0, 10);
 
   TH1F* L_DimuC_CR_HighMass   = new TH1F("L_DimuC_CR_HighMass",   "", 800, 0., 80.);//cm
   TH1F* L_DimuF_CR_HighMass   = new TH1F("L_DimuF_CR_HighMass",   "", 800, 0., 80.);
@@ -570,14 +550,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("muJetC_Mu1_pt", &muJetC_Mu1_pt);
   t->SetBranchAddress("muJetF_Mu0_pt", &muJetF_Mu0_pt);
   t->SetBranchAddress("muJetF_Mu1_pt", &muJetF_Mu1_pt);
-  t->SetBranchAddress("muJetC_Mu0_eta", &muJetC_Mu0_eta);
-  t->SetBranchAddress("muJetC_Mu1_eta", &muJetC_Mu1_eta);
-  t->SetBranchAddress("muJetF_Mu0_eta", &muJetF_Mu0_eta);
-  t->SetBranchAddress("muJetF_Mu1_eta", &muJetF_Mu1_eta);
-  t->SetBranchAddress("muJetC_Mu0_phi", &muJetC_Mu0_phi);
-  t->SetBranchAddress("muJetC_Mu1_phi", &muJetC_Mu1_phi);
-  t->SetBranchAddress("muJetF_Mu0_phi", &muJetF_Mu0_phi);
-  t->SetBranchAddress("muJetF_Mu1_phi", &muJetF_Mu1_phi);
 
   t->SetBranchAddress("isVertexOK", &isVtxOK);
   t->SetBranchAddress("nMuJets",    &nMuJets);
@@ -601,10 +573,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   //In most cases, they are the close, but not necessarily in some cases
   t->SetBranchAddress("diMuonC_FittedVtx_m", &massC);
 	t->SetBranchAddress("diMuonF_FittedVtx_m", &massF);
-  t->SetBranchAddress("NPATJet",       &NPATJet);
-  t->SetBranchAddress("NPATJetTightB", &NPATJetTightB);
-  t->SetBranchAddress("NPATJetMediumB",&NPATJetMediumB);
-  t->SetBranchAddress("NPATJetLooseB", &NPATJetLooseB);
 
   t->SetBranchAddress("reco4mu_m",                  &reco4mu_m);
   t->SetBranchAddress("recoRePaired2muleading_m",   &recoRePaired2muleading_m);
@@ -843,13 +811,46 @@ void efficiency(const std::vector<std::string>& dirNames)
 
       }//basic gen selections
 
+      //Count muons in each event
+      int nGenMu15 = 0;
+      int nGenMu12 = 0;
+      int nGenMu8  = 0;
+      int nSelMu15 = 0;
+      int nSelMu12 = 0;
+      int nSelMu8  = 0;
+      if ( genMu0_pT > 15 && fabs(genMu0_eta) < 2.4 ) nGenMu15++;
+      if ( genMu1_pT > 15 && fabs(genMu1_eta) < 2.4 ) nGenMu15++;
+      if ( genMu2_pT > 15 && fabs(genMu2_eta) < 2.4 ) nGenMu15++;
+      if ( genMu3_pT > 15 && fabs(genMu3_eta) < 2.4 ) nGenMu15++;
+      if ( genMu0_pT > 12 && fabs(genMu0_eta) < 2.4 ) nGenMu12++;
+      if ( genMu1_pT > 12 && fabs(genMu1_eta) < 2.4 ) nGenMu12++;
+      if ( genMu2_pT > 12 && fabs(genMu2_eta) < 2.4 ) nGenMu12++;
+      if ( genMu3_pT > 12 && fabs(genMu3_eta) < 2.4 ) nGenMu12++;
+      if ( genMu0_pT > 8 && fabs(genMu0_eta) < 2.4 ) nGenMu8++;
+      if ( genMu1_pT > 8 && fabs(genMu1_eta) < 2.4 ) nGenMu8++;
+      if ( genMu2_pT > 8 && fabs(genMu2_eta) < 2.4 ) nGenMu8++;
+      if ( genMu3_pT > 8 && fabs(genMu3_eta) < 2.4 ) nGenMu8++;
+
+      if ( selMu0_pT > 15 && fabs(selMu0_eta) < 2.4 ) nSelMu15++;
+      if ( selMu1_pT > 15 && fabs(selMu1_eta) < 2.4 ) nSelMu15++;
+      if ( selMu2_pT > 15 && fabs(selMu2_eta) < 2.4 ) nSelMu15++;
+      if ( selMu3_pT > 15 && fabs(selMu3_eta) < 2.4 ) nSelMu15++;
+      if ( selMu0_pT > 12 && fabs(selMu0_eta) < 2.4 ) nSelMu12++;
+      if ( selMu1_pT > 12 && fabs(selMu1_eta) < 2.4 ) nSelMu12++;
+      if ( selMu2_pT > 12 && fabs(selMu2_eta) < 2.4 ) nSelMu12++;
+      if ( selMu3_pT > 12 && fabs(selMu3_eta) < 2.4 ) nSelMu12++;
+      if ( selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 ) nSelMu8++;
+      if ( selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 ) nSelMu8++;
+      if ( selMu2_pT > 8 && fabs(selMu2_eta) < 2.4 ) nSelMu8++;
+      if ( selMu3_pT > 8 && fabs(selMu3_eta) < 2.4 ) nSelMu8++;
+
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ GEN Level       !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      if ( is1GenMu17 ) {counter[k][1]++; counterGENMatch[k][1]++;} //Ask for one barrel muon pT>17GeV @GEN
-      if ( is2GenMu8  ) {counter[k][2]++; counterGENMatch[k][2]++;} //Ask for two muons pT>8GeV (including 1st barrel muon) @GEN
-      if ( is3GenMu8  ) {counter[k][3]++; counterGENMatch[k][3]++;} //Ask for three muons pT>8GeV (including 1st barrel muon) @GEN
-      if ( is4GenMu8  ) {
+      if ( nGenMu15 > 0 ) {counter[k][1]++; counterGENMatch[k][1]++;}
+      if ( nGenMu15 > 0 && nGenMu12 > 1 ) {counter[k][2]++; counterGENMatch[k][2]++;}
+      if ( nGenMu15 > 0 && nGenMu12 > 1 && nGenMu8 > 2  ) {counter[k][3]++; counterGENMatch[k][3]++;}
+      if ( nGenMu15 > 0 && nGenMu12 > 1 && nGenMu8 > 3  ) {
         counter[k][4]++;
         counterGENMatch[k][4]++;
 
@@ -904,10 +905,10 @@ void efficiency(const std::vector<std::string>& dirNames)
             Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
             Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
 
-            if ( is1SelMu17 ) counterGENMatch[k][6]++;
-            if ( is2SelMu8  ) counterGENMatch[k][7]++;
-            if ( is3SelMu8  ) counterGENMatch[k][8]++;
-            if ( is4SelMu8  ) {
+            if ( nSelMu15 > 0 ) counterGENMatch[k][6]++;
+            if ( nSelMu15 > 0 && nSelMu12 > 1 ) counterGENMatch[k][7]++;
+            if ( nSelMu15 > 0 && nSelMu12 > 1 && nSelMu8 > 2  ) counterGENMatch[k][8]++;
+            if ( nSelMu15 > 0 && nSelMu12 > 1 && nSelMu8 > 3  ) {
               counterGENMatch[k][9]++;
 
               //###########################################################
@@ -981,8 +982,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                     }
 
                     //if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
-                    //if ( (massC >= 9.5 && massF >= 9.5 && NPATJetTightB < 1 ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
-                    if ( 2 > 1 ) {
+                    if ( 2 > 1  ) {
+
                       counterGENMatch[k][13]++;
 
                       //if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
@@ -1126,7 +1127,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                           if ( isSignalHLTFired ) newcountHLTAll++;
                           //End: DEBUG Many HLT paths
 
-                          if ( isSignalHLTFired ) {
+                          if ( isSignalHLT_0_Fired || isSignalHLT_3_Fired ) {
                             counterGENMatch[k][16]++;
                             //std::cout << "    HLT Fired!" << std::endl;
 
@@ -1159,10 +1160,10 @@ void efficiency(const std::vector<std::string>& dirNames)
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ RECO Level      !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      if ( is1SelMu17 ) counter[k][6]++;
-      if ( is2SelMu8  ) counter[k][7]++;
-      if ( is3SelMu8  ) counter[k][8]++;
-      if ( is4SelMu8  ) {
+      if ( nSelMu15 > 0 ) counter[k][6]++;
+      if ( nSelMu15 > 0 && nSelMu12 > 1 ) counter[k][7]++;
+      if ( nSelMu15 > 0 && nSelMu12 > 1 && nSelMu8 > 2 ) counter[k][8]++;
+      if ( nSelMu15 > 0 && nSelMu12 > 1 && nSelMu8 > 3 ) {
         counter[k][9]++;
 
         if ( isVtxOK ) {
@@ -1186,8 +1187,7 @@ void efficiency(const std::vector<std::string>& dirNames)
               counter[k][12]++;
 
               //if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
-              //if ( (massC >= 9.5 && massF >= 9.5 && NPATJetTightB < 1 ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
-              if ( 2 > 1 ) {
+              if ( 2 > 1  ) {
                 counter[k][13]++;
 
                 //if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
@@ -1199,7 +1199,7 @@ void efficiency(const std::vector<std::string>& dirNames)
                   if ( diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
                     counter[k][15]++;
 
-                    if ( isSignalHLTFired ) {
+                    if ( isSignalHLT_0_Fired || isSignalHLT_3_Fired ) {
                       counter[k][16]++;
 
                       if ( is2DiMuonsMassOK ) {
@@ -1211,23 +1211,11 @@ void efficiency(const std::vector<std::string>& dirNames)
                         //std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
                         //std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
                         //std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
-                        /*std::cout << ">>> massC: " << massC << "GeV; massF: " << massF << "GeV;"<< std::endl;
-                        std::cout << "    1st Dimu Mu0 pT: " << muJetC_Mu0_pt << "GeV; eta: " << muJetC_Mu0_eta << "; phi: " << muJetC_Mu0_phi << std::endl;
-                        std::cout << "    1st Dimu Mu1 pT: " << muJetC_Mu1_pt << "GeV; eta: " << muJetC_Mu1_eta << "; phi: " << muJetC_Mu1_phi << std::endl;
-                        std::cout << "    2nd Dimu Mu0 pT: " << muJetF_Mu0_pt << "GeV; eta: " << muJetF_Mu0_eta << "; phi: " << muJetF_Mu0_phi << std::endl;
-                        std::cout << "    2nd Dimu Mu1 pT: " << muJetF_Mu1_pt << "GeV; eta: " << muJetF_Mu1_eta << "; phi: " << muJetF_Mu1_phi << std::endl;*/
 
                         if ( ModelBKGShape ) {
                           BKGShapeSR->Fill(massC,massF);
                           BKGShapeSRmassC->Fill(massC);
                           BKGShapeSRmassF->Fill(massF);
-
-                          //Number of jets
-                          NJetSR->Fill(NPATJet);
-                          //Number of B jets
-                          NTightBSR->Fill(NPATJetTightB);
-                          NMediumBSR->Fill(NPATJetMediumB);
-                          NLooseBSR->Fill(NPATJetLooseB);
                         }
                         //check background events displacement
                         if ( CheckDisplacement ) {
@@ -1250,13 +1238,6 @@ void efficiency(const std::vector<std::string>& dirNames)
                           BKGShapeCR->Fill(massC,massF);
                           BKGShapeCRmassC->Fill(massC);
                           BKGShapeCRmassF->Fill(massF);
-
-                          //Number of jets
-                          NJetCR->Fill(NPATJet);
-                          //Number of B jets
-                          NTightBCR->Fill(NPATJetTightB);
-                          NMediumBCR->Fill(NPATJetMediumB);
-                          NLooseBCR->Fill(NPATJetLooseB);
                         }//end if ModelBKGShape
 
                         //check background events displacement
@@ -1833,10 +1814,12 @@ void efficiency(const std::vector<std::string>& dirNames)
     RECOrePaired2muTrailingMass->GetXaxis()->SetTitle("Trailing mass of re-paired OS di-#mu [GeV]"); RECOrePaired2muTrailingMass->GetYaxis()->SetTitle("Events/GeV"); RECOrePaired2muTrailingMass->Write();
     RECOrePaired2muLeadingdR->GetXaxis()->SetTitle("Leading dR of re-paired OS di-#mu"); RECOrePaired2muLeadingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muLeadingdR->Write();
     RECOrePaired2muTrailingdR->GetXaxis()->SetTitle("Trailing dR of re-paired OS di-#mu"); RECOrePaired2muTrailingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muTrailingdR->Write();
-    BKGShapeCR->Write(); BKGShapeCRmassC->Write(); BKGShapeCRmassF->Write();
-    NJetCR->Write(); NTightBCR->Write(); NMediumBCR->Write(); NLooseBCR->Write();
-    BKGShapeSR->Write(); BKGShapeSRmassC->Write(); BKGShapeSRmassF->Write();
-    NJetSR->Write(); NTightBSR->Write(); NMediumBSR->Write(); NLooseBSR->Write();
+    BKGShapeCR->Write();
+    BKGShapeCRmassC->Write();
+    BKGShapeCRmassF->Write();
+    BKGShapeSR->Write();
+    BKGShapeSRmassC->Write();
+    BKGShapeSRmassF->Write();
   } //end if ( ModelBKGShape )
 
   if ( ModelSRWidth ) {
@@ -2019,8 +2002,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete diMuon_leading_Lz_pass_all; delete HLT_diMuon_leading_Lz_pass_all;
   delete BKGShapeCR; delete BKGShapeCRmassC; delete BKGShapeCRmassF;
   delete BKGShapeSR; delete BKGShapeSRmassC; delete BKGShapeSRmassF;
-  delete NJetCR; delete NTightBCR; delete NMediumBCR; delete NLooseBCR;
-  delete NJetSR; delete NTightBSR; delete NMediumBSR; delete NLooseBSR;
   delete L_DimuC_CR_HighMass; delete Lxy_DimuC_CR_HighMass; delete Lz_DimuC_CR_HighMass;
   delete L_DimuF_CR_HighMass; delete Lxy_DimuF_CR_HighMass; delete Lz_DimuF_CR_HighMass;
   delete L_DimuC_SR_HighMass; delete Lxy_DimuC_SR_HighMass; delete Lz_DimuC_SR_HighMass;

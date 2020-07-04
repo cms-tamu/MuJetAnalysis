@@ -448,6 +448,16 @@ private:
   Int_t b_nSAMu;
   Int_t b_dimuC_nSAMu;
   Int_t b_dimuF_nSAMu;
+  Bool_t b_dimuC_Mu0_SA;
+  Bool_t b_dimuC_Mu1_SA;
+  Bool_t b_dimuF_Mu0_SA;
+  Bool_t b_dimuF_Mu1_SA;
+  Int_t b_SAmu_nTrkWP1;//trk pt > 0.5
+  Int_t b_SAmu_nTrkWP2;//trk pT > 1
+  Int_t b_SAmu_nTrkWP3;//trk pT > SA-only mu pT
+  Float_t b_SAmu_TrkIsoWP1;
+  Float_t b_SAmu_TrkIsoWP2;
+  Float_t b_SAmu_TrkIsoWP3;
   Int_t b_nNonTrackerMu;
   Int_t b_dimuC_nNonTrackerMu;
   Int_t b_dimuF_nNonTrackerMu;
@@ -1602,6 +1612,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_nSAMu = 0;//total number of SA-only mu in 2 dimuons: not a PF loose mu
   b_dimuC_nSAMu = 0;//... in dimuC
   b_dimuF_nSAMu = 0;//... in dimuF
+  b_dimuC_Mu0_SA = false;//tag: is this muon a SA-only muon
+  b_dimuC_Mu1_SA = false;
+  b_dimuF_Mu0_SA = false;
+  b_dimuF_Mu1_SA = false;
   b_nNonTrackerMu = 0;//total number of muons that's PF loose global mu (PF & global), but not a tracker mu.
   b_dimuC_nNonTrackerMu = 0;//... in dimuC
   b_dimuF_nNonTrackerMu = 0;//... in dimuF
@@ -1609,10 +1623,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     if( muJetC->muon(0)->isStandAloneMuon() && !( muJetC->muon(0)->isPFMuon() && ( muJetC->muon(0)->isTrackerMuon() || muJetC->muon(0)->isGlobalMuon() ) ) ){
       b_nSAMu++;
       b_dimuC_nSAMu++;
+      b_dimuC_Mu0_SA = true;
     }
     if( muJetC->muon(1)->isStandAloneMuon() && !( muJetC->muon(1)->isPFMuon() && ( muJetC->muon(1)->isTrackerMuon() || muJetC->muon(1)->isGlobalMuon() ) ) ){
       b_nSAMu++;
       b_dimuC_nSAMu++;
+      b_dimuC_Mu1_SA = true;
     }
     if( muJetC->muon(0)->isPFMuon() && muJetC->muon(0)->isGlobalMuon() && !muJetC->muon(0)->isTrackerMuon() ){
       b_nNonTrackerMu++;
@@ -1627,10 +1643,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     if( muJetF->muon(0)->isStandAloneMuon() && !( muJetF->muon(0)->isPFMuon() && ( muJetF->muon(0)->isTrackerMuon() || muJetF->muon(0)->isGlobalMuon() ) ) ){
       b_nSAMu++;
       b_dimuF_nSAMu++;
+      b_dimuF_Mu0_SA = true;
     }
     if( muJetF->muon(1)->isStandAloneMuon() && !( muJetF->muon(1)->isPFMuon() && ( muJetF->muon(1)->isTrackerMuon() || muJetF->muon(1)->isGlobalMuon() ) ) ){
       b_nSAMu++;
       b_dimuF_nSAMu++;
+      b_dimuF_Mu1_SA = true;
     }
     if( muJetF->muon(0)->isPFMuon() && muJetF->muon(0)->isGlobalMuon() && !muJetF->muon(0)->isTrackerMuon() ){
       b_nNonTrackerMu++;
@@ -2238,6 +2256,48 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       b_diMuonFMu1_IsoTk0p5_FittedVtx = diMuonFMu1_IsoTk0p5_FittedVtx;
   }//end diMuonF not null and vertex valid
 
+  //Calculate track iso and multiplicity around standalone-only mu
+  b_SAmu_nTrkWP1 = 0;//trk pt > 0.5
+  b_SAmu_nTrkWP2 = 0;//trk pT > 1
+  b_SAmu_nTrkWP3 = 0;//trk pT > SA-only mu pT
+  b_SAmu_TrkIsoWP1 = 0;
+  b_SAmu_TrkIsoWP2 = 0;
+  b_SAmu_TrkIsoWP3 = 0;
+  double dPhiSA = 0;
+  double dEtaSA = 0;
+  double dRSA   = 0;
+  double dzSA   = 0;
+  for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
+    //if dimuC mu0 is SA-only mu
+    if ( b_nSAMu == 1 && b_dimuC_Mu0_SA  ) {
+      dPhiSA = tamu::helpers::My_dPhi( muJetC->muon(0)->outerTrack()->phi(), track->phi() );
+      dEtaSA = muJetC->muon(0)->outerTrack()->eta() - track->eta();
+      dzSA   = muJetC->muon(0)->outerTrack()->dz(beamSpot->position()) - track->dz(beamSpot->position());
+    }//end if dimuC mu0 is SA-only mu
+    if ( b_nSAMu == 1 && b_dimuC_Mu1_SA  ) {
+      dPhiSA = tamu::helpers::My_dPhi( muJetC->muon(1)->outerTrack()->phi(), track->phi() );
+      dEtaSA = muJetC->muon(1)->outerTrack()->eta() - track->eta();
+      dzSA   = muJetC->muon(1)->outerTrack()->dz(beamSpot->position()) - track->dz(beamSpot->position());
+    }
+    if ( b_nSAMu == 1 && b_dimuF_Mu0_SA  ) {
+      dPhiSA = tamu::helpers::My_dPhi( muJetF->muon(0)->outerTrack()->phi(), track->phi() );
+      dEtaSA = muJetF->muon(0)->outerTrack()->eta() - track->eta();
+      dzSA   = muJetF->muon(0)->outerTrack()->dz(beamSpot->position()) - track->dz(beamSpot->position());
+    }
+    if ( b_nSAMu == 1 && b_dimuF_Mu1_SA  ) {
+      dPhiSA = tamu::helpers::My_dPhi( muJetF->muon(1)->outerTrack()->phi(), track->phi() );
+      dEtaSA = muJetF->muon(1)->outerTrack()->eta() - track->eta();
+      dzSA   = muJetF->muon(1)->outerTrack()->dz(beamSpot->position()) - track->dz(beamSpot->position());
+    }
+    dRSA = sqrt( dPhiSA*dPhiSA + dEtaSA*dEtaSA );
+    if ( dRSA < 0.4 && track->pt() > 0.5 && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP1++; b_SAmu_TrkIsoWP1 += track->pt(); }
+    if ( dRSA < 0.4 && track->pt() > 1.0 && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP2++; b_SAmu_TrkIsoWP2 += track->pt(); }
+    if ( b_nSAMu == 1 && b_dimuC_Mu0_SA && dRSA < 0.4 && track->pt() > muJetC->muon(0)->outerTrack()->pt() && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP3++; b_SAmu_TrkIsoWP3 += track->pt(); }
+    if ( b_nSAMu == 1 && b_dimuC_Mu1_SA && dRSA < 0.4 && track->pt() > muJetC->muon(1)->outerTrack()->pt() && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP3++; b_SAmu_TrkIsoWP3 += track->pt(); }
+    if ( b_nSAMu == 1 && b_dimuF_Mu0_SA && dRSA < 0.4 && track->pt() > muJetF->muon(0)->outerTrack()->pt() && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP3++; b_SAmu_TrkIsoWP3 += track->pt(); }
+    if ( b_nSAMu == 1 && b_dimuF_Mu1_SA && dRSA < 0.4 && track->pt() > muJetF->muon(1)->outerTrack()->pt() && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP3++; b_SAmu_TrkIsoWP3 += track->pt(); }
+  }//end loop over tracks
+
   //Register pixel hits info for two muons of each dimuon
   b_nMuHasValidHitInPixel = 0;
   b_diMuonC_m1_FittedVtx_hitpix_Phase1 = -1000;
@@ -2389,7 +2449,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   edm::Handle<std::vector<pat::Jet> > PATJet;
   iEvent.getByToken(m_PATJet, PATJet);
   for( auto Myjet = PATJet->begin(); Myjet != PATJet->end(); ++Myjet ){
-    if( fabs(Myjet->eta())<2.4 && Myjet->pt()>5. ){
+    if( fabs(Myjet->eta()) < 2.4 && Myjet->pt() > 10. ){
       // B-tags: https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookMiniAOD2017#Jets
       // 2017 WP: https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation94X
       b_PAT_jet_pt[NPATJet]   = Myjet->pt();
@@ -2854,6 +2914,16 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("nSAMu",       &b_nSAMu,       "nSAMu/I");
   m_ttree->Branch("dimuC_nSAMu", &b_dimuC_nSAMu, "dimuC_nSAMu/I");
   m_ttree->Branch("dimuF_nSAMu", &b_dimuF_nSAMu, "dimuF_nSAMu/I");
+  m_ttree->Branch("dimuC_Mu0_SA", &b_dimuC_Mu0_SA, "dimuC_Mu0_SA/O");
+  m_ttree->Branch("dimuC_Mu1_SA", &b_dimuC_Mu1_SA, "dimuC_Mu1_SA/O");
+  m_ttree->Branch("dimuF_Mu0_SA", &b_dimuF_Mu0_SA, "dimuF_Mu0_SA/O");
+  m_ttree->Branch("dimuF_Mu1_SA", &b_dimuF_Mu1_SA, "dimuF_Mu1_SA/O");
+  m_ttree->Branch("SAmu_nTrkWP1", &b_SAmu_nTrkWP1, "SAmu_nTrkWP1/I");
+  m_ttree->Branch("SAmu_nTrkWP2", &b_SAmu_nTrkWP2, "SAmu_nTrkWP2/I");
+  m_ttree->Branch("SAmu_nTrkWP3", &b_SAmu_nTrkWP3, "SAmu_nTrkWP3/I");
+  m_ttree->Branch("SAmu_TrkIsoWP1", &b_SAmu_TrkIsoWP1, "SAmu_TrkIsoWP1/F");
+  m_ttree->Branch("SAmu_TrkIsoWP2", &b_SAmu_TrkIsoWP2, "SAmu_TrkIsoWP2/F");
+  m_ttree->Branch("SAmu_TrkIsoWP3", &b_SAmu_TrkIsoWP3, "SAmu_TrkIsoWP3/F");
   m_ttree->Branch("nNonTrackerMu",       &b_nNonTrackerMu,       "nNonTrackerMu/I");
   m_ttree->Branch("dimuC_nNonTrackerMu", &b_dimuC_nNonTrackerMu, "dimuC_nNonTrackerMu/I");
   m_ttree->Branch("dimuF_nNonTrackerMu", &b_dimuF_nNonTrackerMu, "dimuF_nNonTrackerMu/I");
