@@ -158,6 +158,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t   nNonTrackerMu;
   Int_t   dimuC_nNonTrackerMu;
   Int_t   dimuF_nNonTrackerMu;
+  Int_t   SAmu_nTrkWP1;
+  Int_t   SAmu_nTrkWP2;
+  Int_t   SAmu_nTrkWP3;
+  Float_t SAmu_TrkIsoWP1;
+  Float_t SAmu_TrkIsoWP2;
+  Float_t SAmu_TrkIsoWP3;
   Float_t diMuonC_FittedVtx_prob;
   Float_t diMuonF_FittedVtx_prob;
   Float_t diMuonC_FittedVtx_dR;
@@ -449,6 +455,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *NTightBCR  = new TH1F("NTightBCR",  "", 10, 0, 10);
   TH1F *NMediumBCR = new TH1F("NMediumBCR", "", 10, 0, 10);
   TH1F *NLooseBCR  = new TH1F("NLooseBCR",  "", 10, 0, 10);
+  TH1F *SAmuNTrkWP1CR = new TH1F("SAmuNTrkWP1CR", "", 1000, 0, 1000);
+  TH1F *SAmuNTrkWP2CR = new TH1F("SAmuNTrkWP2CR", "", 1000, 0, 1000);
+  TH1F *SAmuNTrkWP3CR = new TH1F("SAmuNTrkWP3CR", "", 100, 0, 100);
+  TH1F *SAmuTrkIsoWP1CR = new TH1F("SAmuTrkIsoWP1CR", "", 1000, 0, 100);//bin 0.1GeV
+  TH1F *SAmuTrkIsoWP2CR = new TH1F("SAmuTrkIsoWP2CR", "", 1000, 0, 100);
+  TH1F *SAmuTrkIsoWP3CR = new TH1F("SAmuTrkIsoWP3CR", "", 1000, 0, 100);
   //Signal Region
   TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 12, 11., 59., 12, 11., 59.);
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
@@ -457,6 +469,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *NTightBSR  = new TH1F("NTightBSR",  "", 10, 0, 10);
   TH1F *NMediumBSR = new TH1F("NMediumBSR", "", 10, 0, 10);
   TH1F *NLooseBSR  = new TH1F("NLooseBSR",  "", 10, 0, 10);
+  TH1F *SAmuNTrkWP1SR = new TH1F("SAmuNTrkWP1SR", "", 1000, 0, 1000);
+  TH1F *SAmuNTrkWP2SR = new TH1F("SAmuNTrkWP2SR", "", 1000, 0, 1000);
+  TH1F *SAmuNTrkWP3SR = new TH1F("SAmuNTrkWP3SR", "", 100, 0, 100);
+  TH1F *SAmuTrkIsoWP1SR = new TH1F("SAmuTrkIsoWP1SR", "", 1000, 0, 100);//bin 0.1GeV
+  TH1F *SAmuTrkIsoWP2SR = new TH1F("SAmuTrkIsoWP2SR", "", 1000, 0, 100);
+  TH1F *SAmuTrkIsoWP3SR = new TH1F("SAmuTrkIsoWP3SR", "", 1000, 0, 100);
 
   TH1F* L_DimuC_CR_HighMass   = new TH1F("L_DimuC_CR_HighMass",   "", 800, 0., 80.);//cm
   TH1F* L_DimuF_CR_HighMass   = new TH1F("L_DimuF_CR_HighMass",   "", 800, 0., 80.);
@@ -589,6 +607,12 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("nNonTrackerMu", &nNonTrackerMu);
   t->SetBranchAddress("dimuC_nNonTrackerMu", &dimuC_nNonTrackerMu);
   t->SetBranchAddress("dimuF_nNonTrackerMu", &dimuF_nNonTrackerMu);
+  t->SetBranchAddress("SAmu_nTrkWP1", &SAmu_nTrkWP1);
+  t->SetBranchAddress("SAmu_nTrkWP2", &SAmu_nTrkWP2);
+  t->SetBranchAddress("SAmu_nTrkWP3", &SAmu_nTrkWP3);
+  t->SetBranchAddress("SAmu_TrkIsoWP1", &SAmu_TrkIsoWP1);
+  t->SetBranchAddress("SAmu_TrkIsoWP2", &SAmu_TrkIsoWP2);
+  t->SetBranchAddress("SAmu_TrkIsoWP3", &SAmu_TrkIsoWP3);
   t->SetBranchAddress("diMuonC_FittedVtx_prob",&diMuonC_FittedVtx_prob);
   t->SetBranchAddress("diMuonF_FittedVtx_prob",&diMuonF_FittedVtx_prob);
   t->SetBranchAddress("diMuonC_FittedVtx_dR",  &diMuonC_FittedVtx_dR);
@@ -1228,6 +1252,14 @@ void efficiency(const std::vector<std::string>& dirNames)
                           NTightBSR->Fill(NPATJetTightB);
                           NMediumBSR->Fill(NPATJetMediumB);
                           NLooseBSR->Fill(NPATJetLooseB);
+
+                          //SA mu iso and trk multiplicity
+                          SAmuNTrkWP1SR->Fill(SAmu_nTrkWP1);
+                          SAmuNTrkWP2SR->Fill(SAmu_nTrkWP2);
+                          SAmuNTrkWP3SR->Fill(SAmu_nTrkWP3);
+                          SAmuTrkIsoWP1SR->Fill(SAmu_TrkIsoWP1);
+                          SAmuTrkIsoWP2SR->Fill(SAmu_TrkIsoWP2);
+                          SAmuTrkIsoWP3SR->Fill(SAmu_TrkIsoWP3);
                         }
                         //check background events displacement
                         if ( CheckDisplacement ) {
@@ -1257,6 +1289,14 @@ void efficiency(const std::vector<std::string>& dirNames)
                           NTightBCR->Fill(NPATJetTightB);
                           NMediumBCR->Fill(NPATJetMediumB);
                           NLooseBCR->Fill(NPATJetLooseB);
+
+                          //SA mu iso and trk multiplicity
+                          SAmuNTrkWP1CR->Fill(SAmu_nTrkWP1);
+                          SAmuNTrkWP2CR->Fill(SAmu_nTrkWP2);
+                          SAmuNTrkWP3CR->Fill(SAmu_nTrkWP3);
+                          SAmuTrkIsoWP1CR->Fill(SAmu_TrkIsoWP1);
+                          SAmuTrkIsoWP2CR->Fill(SAmu_TrkIsoWP2);
+                          SAmuTrkIsoWP3CR->Fill(SAmu_TrkIsoWP3);
                         }//end if ModelBKGShape
 
                         //check background events displacement
@@ -1835,8 +1875,10 @@ void efficiency(const std::vector<std::string>& dirNames)
     RECOrePaired2muTrailingdR->GetXaxis()->SetTitle("Trailing dR of re-paired OS di-#mu"); RECOrePaired2muTrailingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muTrailingdR->Write();
     BKGShapeCR->Write(); BKGShapeCRmassC->Write(); BKGShapeCRmassF->Write();
     NJetCR->Write(); NTightBCR->Write(); NMediumBCR->Write(); NLooseBCR->Write();
+    SAmuTrkIsoWP1CR->Write(); SAmuTrkIsoWP2CR->Write(); SAmuTrkIsoWP3CR->Write(); SAmuNTrkWP1CR->Write(); SAmuNTrkWP2CR->Write(); SAmuNTrkWP3CR->Write();
     BKGShapeSR->Write(); BKGShapeSRmassC->Write(); BKGShapeSRmassF->Write();
     NJetSR->Write(); NTightBSR->Write(); NMediumBSR->Write(); NLooseBSR->Write();
+    SAmuTrkIsoWP1SR->Write(); SAmuTrkIsoWP2SR->Write(); SAmuTrkIsoWP3SR->Write(); SAmuNTrkWP1SR->Write(); SAmuNTrkWP2SR->Write(); SAmuNTrkWP3SR->Write();
   } //end if ( ModelBKGShape )
 
   if ( ModelSRWidth ) {
@@ -2021,6 +2063,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete BKGShapeSR; delete BKGShapeSRmassC; delete BKGShapeSRmassF;
   delete NJetCR; delete NTightBCR; delete NMediumBCR; delete NLooseBCR;
   delete NJetSR; delete NTightBSR; delete NMediumBSR; delete NLooseBSR;
+  delete SAmuTrkIsoWP1CR; delete SAmuTrkIsoWP2CR; delete SAmuTrkIsoWP3CR; delete SAmuNTrkWP1CR; delete SAmuNTrkWP2CR; delete SAmuNTrkWP3CR;
+  delete SAmuTrkIsoWP1SR; delete SAmuTrkIsoWP2SR; delete SAmuTrkIsoWP3SR; delete SAmuNTrkWP1SR; delete SAmuNTrkWP2SR; delete SAmuNTrkWP3SR;
   delete L_DimuC_CR_HighMass; delete Lxy_DimuC_CR_HighMass; delete Lz_DimuC_CR_HighMass;
   delete L_DimuF_CR_HighMass; delete Lxy_DimuF_CR_HighMass; delete Lz_DimuF_CR_HighMass;
   delete L_DimuC_SR_HighMass; delete Lxy_DimuC_SR_HighMass; delete Lz_DimuC_SR_HighMass;
