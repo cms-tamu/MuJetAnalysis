@@ -454,10 +454,16 @@ private:
   Bool_t b_dimuF_Mu1_SA;
   Int_t b_SAmu_nTrkWP1;//trk pt > 0.5
   Int_t b_SAmu_nTrkWP2;//trk pT > 1
-  Int_t b_SAmu_nTrkWP3;//trk pT > SA-only mu pT
+  Int_t b_SAmu_nTrkWP3;//trk pT > 5
+  Int_t b_SAmu_nTrkNodzWP1;
+  Int_t b_SAmu_nTrkNodzWP2;
+  Int_t b_SAmu_nTrkNodzWP3;
   Float_t b_SAmu_TrkIsoWP1;
   Float_t b_SAmu_TrkIsoWP2;
   Float_t b_SAmu_TrkIsoWP3;
+  Float_t b_SAmu_TrkIsoNodzWP1;
+  Float_t b_SAmu_TrkIsoNodzWP2;
+  Float_t b_SAmu_TrkIsoNodzWP3;
   Int_t b_nNonTrackerMu;
   Int_t b_dimuC_nNonTrackerMu;
   Int_t b_dimuF_nNonTrackerMu;
@@ -2259,43 +2265,52 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   //Calculate track iso and multiplicity around standalone-only mu
   b_SAmu_nTrkWP1 = 0;//trk pt > 0.5
   b_SAmu_nTrkWP2 = 0;//trk pT > 1
-  b_SAmu_nTrkWP3 = 0;//trk pT > SA-only mu pT
+  b_SAmu_nTrkWP3 = 0;//trk pT > 5
+  b_SAmu_nTrkNodzWP1 = 0;
+  b_SAmu_nTrkNodzWP2 = 0;
+  b_SAmu_nTrkNodzWP3 = 0;
   b_SAmu_TrkIsoWP1 = 0;
   b_SAmu_TrkIsoWP2 = 0;
   b_SAmu_TrkIsoWP3 = 0;
-  double dPhiSA = 0;
-  double dEtaSA = 0;
-  double dRSA   = 0;
-  double dzSA   = 0;
+  b_SAmu_TrkIsoNodzWP1 = 0;
+  b_SAmu_TrkIsoNodzWP2 = 0;
+  b_SAmu_TrkIsoNodzWP3 = 0;
+  double dPhiSA = -999.;
+  double dEtaSA = -999.;
+  double dRSA   = -999.;
+  double dzSA   = -999.;
   for (reco::TrackCollection::const_iterator track = tracks->begin(); track != tracks->end(); ++track) {
     //if dimuC mu0 is SA-only mu
     if ( b_nSAMu == 1 && b_dimuC_Mu0_SA  ) {
       dPhiSA = tamu::helpers::My_dPhi( muJetC->muon(0)->outerTrack()->phi(), track->phi() );
       dEtaSA = muJetC->muon(0)->outerTrack()->eta() - track->eta();
+      dRSA = sqrt( dPhiSA*dPhiSA + dEtaSA*dEtaSA );
       dzSA   = muJetC->muon(0)->outerTrack()->dz(beamSpot->position()) - track->dz(beamSpot->position());
-    }//end if dimuC mu0 is SA-only mu
+    }
     if ( b_nSAMu == 1 && b_dimuC_Mu1_SA  ) {
       dPhiSA = tamu::helpers::My_dPhi( muJetC->muon(1)->outerTrack()->phi(), track->phi() );
       dEtaSA = muJetC->muon(1)->outerTrack()->eta() - track->eta();
+      dRSA = sqrt( dPhiSA*dPhiSA + dEtaSA*dEtaSA );
       dzSA   = muJetC->muon(1)->outerTrack()->dz(beamSpot->position()) - track->dz(beamSpot->position());
     }
     if ( b_nSAMu == 1 && b_dimuF_Mu0_SA  ) {
       dPhiSA = tamu::helpers::My_dPhi( muJetF->muon(0)->outerTrack()->phi(), track->phi() );
       dEtaSA = muJetF->muon(0)->outerTrack()->eta() - track->eta();
+      dRSA = sqrt( dPhiSA*dPhiSA + dEtaSA*dEtaSA );
       dzSA   = muJetF->muon(0)->outerTrack()->dz(beamSpot->position()) - track->dz(beamSpot->position());
     }
     if ( b_nSAMu == 1 && b_dimuF_Mu1_SA  ) {
       dPhiSA = tamu::helpers::My_dPhi( muJetF->muon(1)->outerTrack()->phi(), track->phi() );
       dEtaSA = muJetF->muon(1)->outerTrack()->eta() - track->eta();
+      dRSA = sqrt( dPhiSA*dPhiSA + dEtaSA*dEtaSA );
       dzSA   = muJetF->muon(1)->outerTrack()->dz(beamSpot->position()) - track->dz(beamSpot->position());
     }
-    dRSA = sqrt( dPhiSA*dPhiSA + dEtaSA*dEtaSA );
-    if ( dRSA < 0.4 && track->pt() > 0.5 && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP1++; b_SAmu_TrkIsoWP1 += track->pt(); }
-    if ( dRSA < 0.4 && track->pt() > 1.0 && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP2++; b_SAmu_TrkIsoWP2 += track->pt(); }
-    if ( b_nSAMu == 1 && b_dimuC_Mu0_SA && dRSA < 0.4 && track->pt() > muJetC->muon(0)->outerTrack()->pt() && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP3++; b_SAmu_TrkIsoWP3 += track->pt(); }
-    if ( b_nSAMu == 1 && b_dimuC_Mu1_SA && dRSA < 0.4 && track->pt() > muJetC->muon(1)->outerTrack()->pt() && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP3++; b_SAmu_TrkIsoWP3 += track->pt(); }
-    if ( b_nSAMu == 1 && b_dimuF_Mu0_SA && dRSA < 0.4 && track->pt() > muJetF->muon(0)->outerTrack()->pt() && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP3++; b_SAmu_TrkIsoWP3 += track->pt(); }
-    if ( b_nSAMu == 1 && b_dimuF_Mu1_SA && dRSA < 0.4 && track->pt() > muJetF->muon(1)->outerTrack()->pt() && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP3++; b_SAmu_TrkIsoWP3 += track->pt(); }
+    if ( b_nSAMu == 1 && dRSA < 0.4 && track->pt() > 0.5 && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP1++; b_SAmu_TrkIsoWP1 += track->pt(); }
+    if ( b_nSAMu == 1 && dRSA < 0.4 && track->pt() > 1.0 && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP2++; b_SAmu_TrkIsoWP2 += track->pt(); }
+    if ( b_nSAMu == 1 && dRSA < 0.4 && track->pt() > 5.0 && fabs( dzSA ) < 0.1 ) { b_SAmu_nTrkWP3++; b_SAmu_TrkIsoWP3 += track->pt(); }
+    if ( b_nSAMu == 1 && dRSA < 0.4 && track->pt() > 0.5 ) { b_SAmu_nTrkNodzWP1++; b_SAmu_TrkIsoNodzWP1 += track->pt(); }
+    if ( b_nSAMu == 1 && dRSA < 0.4 && track->pt() > 1.0 ) { b_SAmu_nTrkNodzWP2++; b_SAmu_TrkIsoNodzWP2 += track->pt(); }
+    if ( b_nSAMu == 1 && dRSA < 0.4 && track->pt() > 5.0 ) { b_SAmu_nTrkNodzWP3++; b_SAmu_TrkIsoNodzWP3 += track->pt(); }
   }//end loop over tracks
 
   //Register pixel hits info for two muons of each dimuon
@@ -2921,9 +2936,15 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("SAmu_nTrkWP1", &b_SAmu_nTrkWP1, "SAmu_nTrkWP1/I");
   m_ttree->Branch("SAmu_nTrkWP2", &b_SAmu_nTrkWP2, "SAmu_nTrkWP2/I");
   m_ttree->Branch("SAmu_nTrkWP3", &b_SAmu_nTrkWP3, "SAmu_nTrkWP3/I");
+  m_ttree->Branch("SAmu_nTrkNodzWP1", &b_SAmu_nTrkNodzWP1, "SAmu_nTrkNodzWP1/I");
+  m_ttree->Branch("SAmu_nTrkNodzWP2", &b_SAmu_nTrkNodzWP2, "SAmu_nTrkNodzWP2/I");
+  m_ttree->Branch("SAmu_nTrkNodzWP3", &b_SAmu_nTrkNodzWP3, "SAmu_nTrkNodzWP3/I");
   m_ttree->Branch("SAmu_TrkIsoWP1", &b_SAmu_TrkIsoWP1, "SAmu_TrkIsoWP1/F");
   m_ttree->Branch("SAmu_TrkIsoWP2", &b_SAmu_TrkIsoWP2, "SAmu_TrkIsoWP2/F");
   m_ttree->Branch("SAmu_TrkIsoWP3", &b_SAmu_TrkIsoWP3, "SAmu_TrkIsoWP3/F");
+  m_ttree->Branch("SAmu_TrkIsoNodzWP1", &b_SAmu_TrkIsoNodzWP1, "SAmu_TrkIsoNodzWP1/F");
+  m_ttree->Branch("SAmu_TrkIsoNodzWP2", &b_SAmu_TrkIsoNodzWP2, "SAmu_TrkIsoNodzWP2/F");
+  m_ttree->Branch("SAmu_TrkIsoNodzWP3", &b_SAmu_TrkIsoNodzWP3, "SAmu_TrkIsoNodzWP3/F");
   m_ttree->Branch("nNonTrackerMu",       &b_nNonTrackerMu,       "nNonTrackerMu/I");
   m_ttree->Branch("dimuC_nNonTrackerMu", &b_dimuC_nNonTrackerMu, "dimuC_nNonTrackerMu/I");
   m_ttree->Branch("dimuF_nNonTrackerMu", &b_dimuF_nNonTrackerMu, "dimuF_nNonTrackerMu/I");

@@ -1,2 +1,2 @@
-/scratch/user/hyunyong/newHLT/DoubleMuon/Run2_2017_CSVv2/200625_014026/0000
-/scratch/user/hyunyong/newHLT/DoubleMuon/Run2_2017_CSVv2/200625_014026/0001
+/scratch/user/hyunyong/newHLT/DoubleMuon/Run2_2017_muIso/200705_015937/0000
+/scratch/user/hyunyong/newHLT/DoubleMuon/Run2_2017_muIso/200705_015937/0001
