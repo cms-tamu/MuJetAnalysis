@@ -93,10 +93,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t lumi;
   Int_t event;
 
-  Bool_t  is1GenMu17;
-  Bool_t  is2GenMu8;
-  Bool_t  is3GenMu8;
-  Bool_t  is4GenMu8;
+  Bool_t is1GenMuHighPt;
+  Bool_t is2GenMuHighPt;
+  Bool_t is3GenMuLowPt;
+  Bool_t is4GenMuLowPt;
   Float_t genMu0_pT; //leading mu
   Float_t genMu1_pT;
   Float_t genMu2_pT;
@@ -120,10 +120,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t genA0Mu_dR;
   Float_t genA1Mu_dR;
 
-  Bool_t  is1SelMu17;
-  Bool_t  is2SelMu8;
-  Bool_t  is3SelMu8;
-  Bool_t  is4SelMu8;
+  Bool_t is1SelMuHighPt;
+  Bool_t is2SelMuHighPt;
+  Bool_t is3SelMuLowPt;
+  Bool_t is4SelMuLowPt;
   Float_t selMu0_pT; //leading mu
   Float_t selMu1_pT;
   Float_t selMu2_pT;
@@ -178,22 +178,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   Bool_t  isSignalHLT_1_Fired;
   Bool_t  isSignalHLT_2_Fired;
   Bool_t  isSignalHLT_3_Fired;
-  Bool_t  isSignalHLT_4_Fired;
-  Bool_t  isSignalHLT_5_Fired;
-  Bool_t  isSignalHLT_6_Fired;
-  Bool_t  isSignalHLT_7_Fired;
-  Bool_t  isSignalHLT_8_Fired;
-  Bool_t  isSignalHLT_9_Fired;
-  Bool_t  isSignalHLT_10_Fired;
-  Bool_t  isSignalHLT_11_Fired;
-  Bool_t  isSignalHLT_12_Fired;
-  Bool_t  isSignalHLT_13_Fired;
-  Bool_t  isSignalHLT_14_Fired;
-  Bool_t  isSignalHLT_15_Fired;
-  Bool_t  isSignalHLT_16_Fired;
-  Bool_t  isSignalHLT_17_Fired;
-  Bool_t  isSignalHLT_18_Fired;
-  Bool_t  isSignalHLT_19_Fired;
   //End DEBUG: many HLT paths
   Bool_t  isSignalHLTFired;
   Bool_t  isSignalHLTL1Fired;
@@ -217,24 +201,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t  diMuonC_m2_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m1_FittedVtx_hitpix_Phase1;
   Int_t  diMuonF_m2_FittedVtx_hitpix_Phase1;
-/*
-  Int_t diMuonC_m1_FittedVtx_ValidPixelHits;
-  Int_t diMuonC_m2_FittedVtx_ValidPixelHits;
-  Int_t diMuonF_m1_FittedVtx_ValidPixelHits;
-  Int_t diMuonF_m2_FittedVtx_ValidPixelHits;
-
-  Int_t diMuonC_m1_FittedVtx_ValidPixelBarrelHits;
-  Int_t diMuonC_m2_FittedVtx_ValidPixelBarrelHits;
-  Int_t diMuonF_m1_FittedVtx_ValidPixelBarrelHits;
-  Int_t diMuonF_m2_FittedVtx_ValidPixelBarrelHits;
-
-  Int_t diMuonC_m1_FittedVtx_ValidPixelEndcapHits;
-  Int_t diMuonC_m2_FittedVtx_ValidPixelEndcapHits;
-  Int_t diMuonF_m1_FittedVtx_ValidPixelEndcapHits;
-  Int_t diMuonF_m2_FittedVtx_ValidPixelEndcapHits;*/
 
   Bool_t orph_passOffLineSelPtEta;
-  Bool_t orph_AllTrackerMu;
   Bool_t orph_isSignalHLTFired;
   Bool_t orph_isVertexOK;
   Int_t orph_dimu_Mu0_hitpix_Phase1;
@@ -501,10 +469,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("lumi",  &lumi);
 	t->SetBranchAddress("event", &event);
 
-  t->SetBranchAddress("is1GenMu17",    &is1GenMu17);
-	t->SetBranchAddress("is2GenMu8",     &is2GenMu8);
-	t->SetBranchAddress("is3GenMu8",     &is3GenMu8);
-	t->SetBranchAddress("is4GenMu8",     &is4GenMu8);
+  t->SetBranchAddress("is1GenMuHighPt",&is1GenMuHighPt);
+  t->SetBranchAddress("is2GenMuHighPt",&is2GenMuHighPt);
+  t->SetBranchAddress("is3GenMuLowPt", &is3GenMuLowPt);
+  t->SetBranchAddress("is4GenMuLowPt", &is4GenMuLowPt);
   t->SetBranchAddress("genMu0_pT",     &genMu0_pT); //leading mu
   t->SetBranchAddress("genMu1_pT",     &genMu1_pT);
   t->SetBranchAddress("genMu2_pT",     &genMu2_pT);
@@ -517,7 +485,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("genMu1_phi",    &genMu1_phi);
   t->SetBranchAddress("genMu2_phi",    &genMu2_phi);
   t->SetBranchAddress("genMu3_phi",    &genMu3_phi);
-
   t->SetBranchAddress("genA0_Lxy",     &genA0_Lxy);
 	t->SetBranchAddress("genA1_Lxy",     &genA1_Lxy);
 	t->SetBranchAddress("genA0_Lz",      &genA0_Lz);
@@ -526,14 +493,13 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("genA0Mu1_pt",   &genA0Mu1_pt);
   t->SetBranchAddress("genA1Mu0_pt",   &genA1Mu0_pt);
   t->SetBranchAddress("genA1Mu1_pt",   &genA1Mu1_pt);
-
   t->SetBranchAddress("genA0Mu_dR",    &genA0Mu_dR);
   t->SetBranchAddress("genA1Mu_dR",    &genA1Mu_dR);
 
-	t->SetBranchAddress("is1SelMu17",    &is1SelMu17);
-	t->SetBranchAddress("is2SelMu8",     &is2SelMu8);
-	t->SetBranchAddress("is3SelMu8",     &is3SelMu8);
-	t->SetBranchAddress("is4SelMu8",     &is4SelMu8);
+  t->SetBranchAddress("is1SelMuHighPt",&is1SelMuHighPt);
+  t->SetBranchAddress("is2SelMuHighPt",&is2SelMuHighPt);
+  t->SetBranchAddress("is3SelMuLowPt", &is3SelMuLowPt);
+  t->SetBranchAddress("is4SelMuLowPt", &is4SelMuLowPt);
   t->SetBranchAddress("selMu0_pT",     &selMu0_pT); //leading mu
   t->SetBranchAddress("selMu1_pT",     &selMu1_pT);
   t->SetBranchAddress("selMu2_pT",     &selMu2_pT);
@@ -584,21 +550,6 @@ void efficiency(const std::vector<std::string>& dirNames)
 	t->SetBranchAddress("diMuonC_m2_FittedVtx_hitpix_Phase1", &diMuonC_m2_FittedVtx_hitpix_Phase1);
 	t->SetBranchAddress("diMuonF_m1_FittedVtx_hitpix_Phase1", &diMuonF_m1_FittedVtx_hitpix_Phase1);
 	t->SetBranchAddress("diMuonF_m2_FittedVtx_hitpix_Phase1", &diMuonF_m2_FittedVtx_hitpix_Phase1);
-/*
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelHits", &diMuonC_m1_FittedVtx_ValidPixelHits);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelHits", &diMuonC_m2_FittedVtx_ValidPixelHits);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelHits", &diMuonF_m1_FittedVtx_ValidPixelHits);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelHits", &diMuonF_m2_FittedVtx_ValidPixelHits);
-
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelBarrelHits", &diMuonC_m1_FittedVtx_ValidPixelBarrelHits);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelBarrelHits", &diMuonC_m2_FittedVtx_ValidPixelBarrelHits);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelBarrelHits", &diMuonF_m1_FittedVtx_ValidPixelBarrelHits);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelBarrelHits", &diMuonF_m2_FittedVtx_ValidPixelBarrelHits);
-
-  t->SetBranchAddress("diMuonC_m1_FittedVtx_ValidPixelEndcapHits", &diMuonC_m1_FittedVtx_ValidPixelEndcapHits);
-	t->SetBranchAddress("diMuonC_m2_FittedVtx_ValidPixelEndcapHits", &diMuonC_m2_FittedVtx_ValidPixelEndcapHits);
-	t->SetBranchAddress("diMuonF_m1_FittedVtx_ValidPixelEndcapHits", &diMuonF_m1_FittedVtx_ValidPixelEndcapHits);
-	t->SetBranchAddress("diMuonF_m2_FittedVtx_ValidPixelEndcapHits", &diMuonF_m2_FittedVtx_ValidPixelEndcapHits);*/
 
   t->SetBranchAddress("diMuonC_FittedVtx_dz",          &diMuonC_FittedVtx_dz);
   t->SetBranchAddress("diMuonF_FittedVtx_dz",          &diMuonF_FittedVtx_dz);
@@ -622,32 +573,13 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("isSignalHLT_1_Fired",           &isSignalHLT_1_Fired);
   t->SetBranchAddress("isSignalHLT_2_Fired",           &isSignalHLT_2_Fired);
   t->SetBranchAddress("isSignalHLT_3_Fired",           &isSignalHLT_3_Fired);
-  t->SetBranchAddress("isSignalHLT_4_Fired",           &isSignalHLT_4_Fired);
-  t->SetBranchAddress("isSignalHLT_5_Fired",           &isSignalHLT_5_Fired);
-  t->SetBranchAddress("isSignalHLT_6_Fired",           &isSignalHLT_6_Fired);
-  t->SetBranchAddress("isSignalHLT_7_Fired",           &isSignalHLT_7_Fired);
-  t->SetBranchAddress("isSignalHLT_8_Fired",           &isSignalHLT_8_Fired);
-  t->SetBranchAddress("isSignalHLT_9_Fired",           &isSignalHLT_9_Fired);
-  t->SetBranchAddress("isSignalHLT_10_Fired",          &isSignalHLT_10_Fired);
-  t->SetBranchAddress("isSignalHLT_11_Fired",          &isSignalHLT_11_Fired);
-  t->SetBranchAddress("isSignalHLT_12_Fired",          &isSignalHLT_12_Fired);
-  t->SetBranchAddress("isSignalHLT_13_Fired",          &isSignalHLT_13_Fired);
-  t->SetBranchAddress("isSignalHLT_14_Fired",          &isSignalHLT_14_Fired);
-  t->SetBranchAddress("isSignalHLT_15_Fired",          &isSignalHLT_15_Fired);
-  t->SetBranchAddress("isSignalHLT_16_Fired",          &isSignalHLT_16_Fired);
-  t->SetBranchAddress("isSignalHLT_17_Fired",          &isSignalHLT_17_Fired);
-  t->SetBranchAddress("isSignalHLT_18_Fired",          &isSignalHLT_18_Fired);
-  t->SetBranchAddress("isSignalHLT_19_Fired",          &isSignalHLT_19_Fired);
   //End Debug: many HLT paths
   t->SetBranchAddress("isSignalHLTFired",              &isSignalHLTFired);
   t->SetBranchAddress("isSignalHLTL1Fired",            &isSignalHLTL1Fired);
-  //t->SetBranchAddress("isControlHLT16Fired",           &isControlHLT16Fired);//Control HLT only work for 2018 MC as they are deployed 2018 May
-  //t->SetBranchAddress("isControlHLT6Fired",            &isControlHLT6Fired);
   t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",    &is2DiMuonsMassOK);
 
   //Get branch from orphan-dimuon tree
   o->SetBranchAddress("orph_passOffLineSelPtEta",    &orph_passOffLineSelPtEta); //offline pT, eta selection same as signal
-  o->SetBranchAddress("orph_AllTrackerMu",           &orph_AllTrackerMu); //tracker mu
   o->SetBranchAddress("orph_isSignalHLTFired",       &orph_isSignalHLTFired);
   o->SetBranchAddress("orph_isVertexOK",             &orph_isVertexOK);
   o->SetBranchAddress("orph_dimu_Mu0_hitpix_Phase1", &orph_dimu_Mu0_hitpix_Phase1);
@@ -698,34 +630,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcountHLT1 = 0;
   int newcountHLT2 = 0;
   int newcountHLT3 = 0;
-  int newcountHLT4 = 0;
-  int newcountHLT5 = 0;
-  int newcountHLT6 = 0;
-  int newcountHLT7 = 0;
-  int newcountHLT8 = 0;
-  int newcountHLT9 = 0;
-  int newcountHLT10 = 0;
-  int newcountHLT11 = 0;
-  int newcountHLT12 = 0;
-  int newcountHLT13 = 0;
-  int newcountHLT14 = 0;
-  int newcountHLT15 = 0;
-  int newcountHLT16 = 0;
-  int newcountHLT17 = 0;
-  int newcountHLT18 = 0;
-  int newcountHLT19 = 0;
-  int newcountHLTTwo1 = 0;
-  int newcountHLTTwo2 = 0;
-  int newcountHLTTwo3 = 0;
-  int newcountHLTTwo4 = 0;
-  int newcountHLTTwo5 = 0;
-  int newcountHLTTwo6 = 0;
-  int newcountHLTThree1 = 0;
-  int newcountHLTThree2 = 0;
-  int newcountHLTThree3 = 0;
-  int newcountHLTThree4 = 0;
-  int newcountHLTFour1 = 0;
-  int newcountHLTAll = 0;
 
   if ( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
 
@@ -831,11 +735,15 @@ void efficiency(const std::vector<std::string>& dirNames)
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ GEN Level       !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //consistent with 2018 HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed requirement (two 23 GeV muons |eta|<2)
-      if ( nGenMu24 > 0 ) {counter[k][1]++; counterGENMatch[k][1]++;}
-      if ( nGenMu24 > 1 ) {counter[k][2]++; counterGENMatch[k][2]++;}
-      if ( nGenMu24 > 1 && nGenMu8 > 2  ) {counter[k][3]++; counterGENMatch[k][3]++;}
-      if ( nGenMu24 > 1 && nGenMu8 > 3  ) {
+      //Consistent with 2018 HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed requirement (two 23 GeV muons |eta|<2)
+      //if ( nGenMu24 > 0 ) {counter[k][1]++; counterGENMatch[k][1]++;}
+      //if ( nGenMu24 > 1 ) {counter[k][2]++; counterGENMatch[k][2]++;}
+      //if ( nGenMu24 > 1 && nGenMu8 > 2  ) {counter[k][3]++; counterGENMatch[k][3]++;}
+      //if ( nGenMu24 > 1 && nGenMu8 > 3  ) {
+      if ( is1GenMuHighPt ) {counter[k][1]++; counterGENMatch[k][1]++;}
+      if ( is2GenMuHighPt ) {counter[k][2]++; counterGENMatch[k][2]++;}
+      if ( is3GenMuLowPt  ) {counter[k][3]++; counterGENMatch[k][3]++;}
+      if ( is4GenMuLowPt  ) {
         counter[k][4]++;
         counterGENMatch[k][4]++;
 
@@ -890,10 +798,14 @@ void efficiency(const std::vector<std::string>& dirNames)
             Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
             Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
 
-            if ( nSelMu24 > 0 ) counterGENMatch[k][6]++;
-            if ( nSelMu24 > 1  ) counterGENMatch[k][7]++;
-            if ( nSelMu24 > 1 && nSelMu8 > 2  ) counterGENMatch[k][8]++;
-            if ( nSelMu24 > 1 && nSelMu8 > 3  ) {
+            //if ( nSelMu24 > 0 ) counterGENMatch[k][6]++;
+            //if ( nSelMu24 > 1  ) counterGENMatch[k][7]++;
+            //if ( nSelMu24 > 1 && nSelMu8 > 2  ) counterGENMatch[k][8]++;
+            //if ( nSelMu24 > 1 && nSelMu8 > 3  ) {
+            if ( is1SelMuHighPt ) counterGENMatch[k][6]++;
+            if ( is2SelMuHighPt ) counterGENMatch[k][7]++;
+            if ( is3SelMuLowPt  ) counterGENMatch[k][8]++;
+            if ( is4SelMuLowPt  ) {
               counterGENMatch[k][9]++;
 
               //###########################################################
@@ -1064,48 +976,14 @@ void efficiency(const std::vector<std::string>& dirNames)
                           //std::cout << "                             2nd dimu mu0: " << diMuonF_m1_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonF_m1_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonF_m1_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonF_m1_FittedVtx_hitpix_Phase1 << "; pT: " << muJetF_Mu0_pt << std::endl;
                           //std::cout << "                             2nd dimu mu1: " << diMuonF_m2_FittedVtx_ValidPixelHits << "; BPIX: " << diMuonF_m2_FittedVtx_ValidPixelBarrelHits << "; FPIX: " << diMuonF_m2_FittedVtx_ValidPixelEndcapHits << "; Flag_hasValidHitInPix: " << diMuonF_m2_FittedVtx_hitpix_Phase1 << "; pT: " << muJetF_Mu1_pt << std::endl;
 
-                          //START: DEBUG Many HLT paths
                           newcountHLT++;
                           if ( isSignalHLT_0_Fired ) newcountHLT0++;
                           if ( isSignalHLT_1_Fired ) newcountHLT1++;
                           if ( isSignalHLT_2_Fired ) newcountHLT2++;
                           if ( isSignalHLT_3_Fired ) newcountHLT3++;
-                          if ( isSignalHLT_4_Fired ) newcountHLT4++;
-                          if ( isSignalHLT_5_Fired ) newcountHLT5++;
-                          if ( isSignalHLT_6_Fired ) newcountHLT6++;
-                          if ( isSignalHLT_7_Fired ) newcountHLT7++;
-                          if ( isSignalHLT_8_Fired ) newcountHLT8++;
-                          if ( isSignalHLT_9_Fired ) newcountHLT9++;
-                          if ( isSignalHLT_10_Fired ) newcountHLT10++;
-                          if ( isSignalHLT_11_Fired ) newcountHLT11++;
-                          if ( isSignalHLT_12_Fired ) newcountHLT12++;
-                          if ( isSignalHLT_13_Fired ) newcountHLT13++;
-                          if ( isSignalHLT_14_Fired ) newcountHLT14++;
-                          if ( isSignalHLT_15_Fired ) newcountHLT15++;
-                          if ( isSignalHLT_16_Fired ) newcountHLT16++;
-                          if ( isSignalHLT_17_Fired ) newcountHLT17++;
-                          if ( isSignalHLT_18_Fired ) newcountHLT18++;
-                          if ( isSignalHLT_19_Fired ) newcountHLT19++;
-                          //Multiple paths
-                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired ) newcountHLTTwo1++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_5_Fired ) newcountHLTTwo2++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired ) newcountHLTTwo3++;
-                          if ( isSignalHLT_3_Fired || isSignalHLT_5_Fired ) newcountHLTTwo4++;
-                          if ( isSignalHLT_3_Fired || isSignalHLT_7_Fired ) newcountHLTTwo5++;
-                          if ( isSignalHLT_5_Fired || isSignalHLT_7_Fired ) newcountHLTTwo6++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_5_Fired) newcountHLTThree1++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_7_Fired) newcountHLTThree2++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_7_Fired || isSignalHLT_5_Fired) newcountHLTThree3++;
-                          if ( isSignalHLT_3_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTThree4++;
-                          if ( isSignalHLT_1_Fired || isSignalHLT_3_Fired || isSignalHLT_5_Fired || isSignalHLT_7_Fired) newcountHLTFour1++;
-
-                          //All
-                          if ( isSignalHLTFired ) newcountHLTAll++;
-                          //End: DEBUG Many HLT paths
 
                           if ( isSignalHLTFired ) {
                             counterGENMatch[k][16]++;
-                            //std::cout << "    HLT Fired!" << std::endl;
 
                             if ( ModelSRWidth ) {
                               DimuMass->Fill( (massC+massF)/2 );
@@ -1136,10 +1014,14 @@ void efficiency(const std::vector<std::string>& dirNames)
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ RECO Level      !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      if ( nSelMu24 > 0 ) counter[k][6]++;
-      if ( nSelMu24 > 1  ) counter[k][7]++;
-      if ( nSelMu24 > 1 && nSelMu8 > 2  ) counter[k][8]++;
-      if ( nSelMu24 > 1 && nSelMu8 > 3  ) {
+      //if ( nSelMu24 > 0 ) counter[k][6]++;
+      //if ( nSelMu24 > 1  ) counter[k][7]++;
+      //if ( nSelMu24 > 1 && nSelMu8 > 2  ) counter[k][8]++;
+      //if ( nSelMu24 > 1 && nSelMu8 > 3  ) {
+      if ( is1SelMuHighPt ) counter[k][6]++;
+      if ( is2SelMuHighPt ) counter[k][7]++;
+      if ( is3SelMuLowPt  ) counter[k][8]++;
+      if ( is4SelMuLowPt  ) {
         counter[k][9]++;
 
         if ( isVtxOK ) {
@@ -1275,34 +1157,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   std::cout << "HLT1: "  << newcountHLT1*1.0/newcountHLT << std::endl;
   std::cout << "HLT2: "  << newcountHLT2*1.0/newcountHLT << std::endl;
   std::cout << "HLT3: "  << newcountHLT3*1.0/newcountHLT << std::endl;
-  std::cout << "HLT4: "  << newcountHLT4*1.0/newcountHLT << std::endl;
-  std::cout << "HLT5: "  << newcountHLT5*1.0/newcountHLT << std::endl;
-  std::cout << "HLT6: "  << newcountHLT6*1.0/newcountHLT << std::endl;
-  std::cout << "HLT7: "  << newcountHLT7*1.0/newcountHLT << std::endl;
-  std::cout << "HLT8: "  << newcountHLT8*1.0/newcountHLT << std::endl;
-  std::cout << "HLT9: "  << newcountHLT9*1.0/newcountHLT << std::endl;
-  std::cout << "HLT10: "  << newcountHLT10*1.0/newcountHLT << std::endl;
-  std::cout << "HLT11: "  << newcountHLT11*1.0/newcountHLT << std::endl;
-  std::cout << "HLT12: "  << newcountHLT12*1.0/newcountHLT << std::endl;
-  std::cout << "HLT13: "  << newcountHLT13*1.0/newcountHLT << std::endl;
-  std::cout << "HLT14: "  << newcountHLT14*1.0/newcountHLT << std::endl;
-  std::cout << "HLT15: "  << newcountHLT15*1.0/newcountHLT << std::endl;
-  std::cout << "HLT16: "  << newcountHLT16*1.0/newcountHLT << std::endl;
-  std::cout << "HLT17: "  << newcountHLT17*1.0/newcountHLT << std::endl;
-  std::cout << "HLT18: "  << newcountHLT18*1.0/newcountHLT << std::endl;
-  std::cout << "HLT19: "  << newcountHLT19*1.0/newcountHLT << std::endl;
-  std::cout << "HLTTwo1: "  << newcountHLTTwo1*1.0/newcountHLT << std::endl;
-  std::cout << "HLTTwo2: "  << newcountHLTTwo2*1.0/newcountHLT << std::endl;
-  std::cout << "HLTTwo3: "  << newcountHLTTwo3*1.0/newcountHLT << std::endl;
-  std::cout << "HLTTwo4: "  << newcountHLTTwo4*1.0/newcountHLT << std::endl;
-  std::cout << "HLTTwo5: "  << newcountHLTTwo5*1.0/newcountHLT << std::endl;
-  std::cout << "HLTTwo6: "  << newcountHLTTwo6*1.0/newcountHLT << std::endl;
-  std::cout << "HLTThree1: "  << newcountHLTThree1*1.0/newcountHLT << std::endl;
-  std::cout << "HLTThree2: "  << newcountHLTThree2*1.0/newcountHLT << std::endl;
-  std::cout << "HLTThree3: "  << newcountHLTThree3*1.0/newcountHLT << std::endl;
-  std::cout << "HLTThree4: "  << newcountHLTThree4*1.0/newcountHLT << std::endl;
-  std::cout << "HLTFour1: "  << newcountHLTFour1*1.0/newcountHLT << std::endl;
-  std::cout << "HLTAll: "  << newcountHLTAll*1.0/newcountHLT << std::endl;
   std::cout << "-------------------------" << std::endl;
   //End: DEBUG many HLT
 
@@ -1316,7 +1170,7 @@ void efficiency(const std::vector<std::string>& dirNames)
       o->GetEntry(j);
 
       //Pass offline basic selections, same as signal for isolation cut study
-      if ( PlotIso && orph_passOffLineSelPtEta && orph_AllTrackerMu ) {
+      if ( PlotIso && orph_passOffLineSelPtEta ) {
         IsoOrphanDimu->Fill(orph_dimu_isoTk);
         IsoOrphanDimuMu0_dR0p3->Fill(orph_dimu_Mu0_isoTk0p3);
         IsoOrphanDimuMu0_dR0p4->Fill(orph_dimu_Mu0_isoTk0p4);
@@ -1329,7 +1183,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
       //Pass same cut as signal, for study 1-D template distribution
       //Note: May need to add orph_dimu_z cut in the future
-      if ( ( ModelBKGShape || Model1DTemplate ) && orph_passOffLineSelPtEta && orph_AllTrackerMu && orph_isSignalHLTFired && orph_isVertexOK && ( orph_dimu_Mu0_hitpix_Phase1 == 1 || orph_dimu_Mu1_hitpix_Phase1 == 1 ) && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ) {
+      if ( ( ModelBKGShape || Model1DTemplate ) && orph_passOffLineSelPtEta && orph_isSignalHLTFired && orph_isVertexOK && ( orph_dimu_Mu0_hitpix_Phase1 == 1 || orph_dimu_Mu1_hitpix_Phase1 == 1 ) && orph_dimu_Mu0_isoTk0p3 >= 0.0 && orph_dimu_Mu0_isoTk0p3 < 1.5 ) {
         Mass1DTemplate->Fill(orph_dimu_mass);
       }
     }//end for j entries
@@ -1362,23 +1216,23 @@ void efficiency(const std::vector<std::string>& dirNames)
 
   cout<<" #   Selection             & "<<left<< setw(11)<<" \\# Evts "    <<" & "<<left << setw(13) << " Tot. Eff. " << " & " << left << setw(13) << " Rel. Eff. "<<" & "<< left << setw(16) << " Tot. Eff. Err. "<<" & "<< left << setw(16) << " Rel. Eff. Err. " <<" hline "<<endl;
   cout<<" #0  No cut                & "<<left<< setw(11)<< counter[k][0]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][0]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][0] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][0]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][0]    <<" hline "<<endl;
-  cout<<" #1  1GenMu17Barrel        & "<<left<< setw(11)<< counter[k][1]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][1]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][1] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][1]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][1]    <<" hline "<<endl;
-  cout<<" #2  2GenMu8               & "<<left<< setw(11)<< counter[k][2]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][2]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][2] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][2]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][2]    <<" hline "<<endl;
+  cout<<" #1  1GenMu24Eta2          & "<<left<< setw(11)<< counter[k][1]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][1]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][1] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][1]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][1]    <<" hline "<<endl;
+  cout<<" #2  2GenMu24Eta2          & "<<left<< setw(11)<< counter[k][2]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][2]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][2] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][2]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][2]    <<" hline "<<endl;
   cout<<" #3  3GenMu8               & "<<left<< setw(11)<< counter[k][3]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][3]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][3] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][3]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][3]    <<" hline "<<endl;
   cout<<" #4  4GenMu8               & "<<left<< setw(11)<< counter[k][4]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][4]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][4] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][4]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][4]    <<" hline "<<endl;
   cout<<" #5  BothDecayinPhase1Pix  & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][5]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][5] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][5]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][5]    <<" hline "<<endl;
   cout<<"                                                                                                                            " << " hline "<< endl;
 
-  cout<<" #6  1RecoMu17Barrel       & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][6]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][6] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][6]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][6]    <<" hline "<<endl;
-  cout<<" #7  2RecoMu8              & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][7]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][7] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][7]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][7]    <<" hline "<<endl;
+  cout<<" #6  1RecoMu24Eta2         & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][6]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][6] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][6]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][6]    <<" hline "<<endl;
+  cout<<" #7  2RecoMu24Eta2         & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][7]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][7] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][7]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][7]    <<" hline "<<endl;
   cout<<" #8  3RecoMu8              & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][8]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][8] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][8]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][8]    <<" hline "<<endl;
   cout<<" #9  4RecoMu8              & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][9]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][9] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][9]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][9]    <<" hline "<<endl;
   cout<<" #10 PrimaryVtxOK          & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][10] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][10]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][10]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][10]   <<" hline "<<endl;
   cout<<" #11 2CandDimuMindM        & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][11] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][11]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][11]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][11]   <<" hline "<<endl;
   cout<<" #12 2DimuPixHitOK         & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][12] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][12]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][12]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][12]   <<" hline "<<endl;
-  cout<<" #13 BosonProdVtxDzOK      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
-  cout<<" #14 RejectDYQEDRadiate    & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
-  cout<<" #15 2DimuLeadingMuIsoOK   & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
+  cout<<" #13 SA-only Muon Cut      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
+  cout<<" #14 VetoDYQEDRadiate      & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
+  cout<<" #15 2DimuIsoOK            & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
   cout<<" #16 SignalHLTAccepted     & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][16] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][16]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][16]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][16]   <<" hline "<<endl;
   cout<<" #17 2DimuMassOK           & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][17] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][17]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][17]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][17]   <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;

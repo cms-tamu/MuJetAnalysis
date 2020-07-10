@@ -152,6 +152,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t   nMuJets;
   Bool_t  is2MuJets;
   Bool_t  is2DiMuons;
+  Bool_t  dimuC_Mu0_SA;
+  Bool_t  dimuC_Mu1_SA;
+  Bool_t  dimuF_Mu0_SA;
+  Bool_t  dimuF_Mu1_SA;
   Int_t   nSAMu;
   Int_t   dimuC_nSAMu;
   Int_t   dimuF_nSAMu;
@@ -161,9 +165,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   Int_t   SAmu_nTrkWP1;
   Int_t   SAmu_nTrkWP2;
   Int_t   SAmu_nTrkWP3;
+  Int_t   SAmu_nTrkNodzWP1;
+  Int_t   SAmu_nTrkNodzWP2;
+  Int_t   SAmu_nTrkNodzWP3;
   Float_t SAmu_TrkIsoWP1;
   Float_t SAmu_TrkIsoWP2;
   Float_t SAmu_TrkIsoWP3;
+  Float_t SAmu_TrkIsoNodzWP1;
+  Float_t SAmu_TrkIsoNodzWP2;
+  Float_t SAmu_TrkIsoNodzWP3;
   Float_t diMuonC_FittedVtx_prob;
   Float_t diMuonF_FittedVtx_prob;
   Float_t diMuonC_FittedVtx_dR;
@@ -455,12 +465,23 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *NTightBCR  = new TH1F("NTightBCR",  "", 10, 0, 10);
   TH1F *NMediumBCR = new TH1F("NMediumBCR", "", 10, 0, 10);
   TH1F *NLooseBCR  = new TH1F("NLooseBCR",  "", 10, 0, 10);
-  TH1F *SAmuNTrkWP1CR = new TH1F("SAmuNTrkWP1CR", "", 1000, 0, 1000);
-  TH1F *SAmuNTrkWP2CR = new TH1F("SAmuNTrkWP2CR", "", 1000, 0, 1000);
+  TH1F *SAmuNTrkWP1CR = new TH1F("SAmuNTrkWP1CR", "", 100, 0, 100);
+  TH1F *SAmuNTrkWP2CR = new TH1F("SAmuNTrkWP2CR", "", 100, 0, 100);
   TH1F *SAmuNTrkWP3CR = new TH1F("SAmuNTrkWP3CR", "", 100, 0, 100);
   TH1F *SAmuTrkIsoWP1CR = new TH1F("SAmuTrkIsoWP1CR", "", 1000, 0, 100);//bin 0.1GeV
   TH1F *SAmuTrkIsoWP2CR = new TH1F("SAmuTrkIsoWP2CR", "", 1000, 0, 100);
   TH1F *SAmuTrkIsoWP3CR = new TH1F("SAmuTrkIsoWP3CR", "", 1000, 0, 100);
+  //no dz version
+  TH1F *SAmuNTrkNoDzWP1CR = new TH1F("SAmuNTrkNoDzWP1CR", "", 100, 0, 100);
+  TH1F *SAmuNTrkNoDzWP2CR = new TH1F("SAmuNTrkNoDzWP2CR", "", 100, 0, 100);
+  TH1F *SAmuNTrkNoDzWP3CR = new TH1F("SAmuNTrkNoDzWP3CR", "", 100, 0, 100);
+  TH1F *SAmuTrkIsoNoDzWP1CR = new TH1F("SAmuTrkIsoNoDzWP1CR", "", 1000, 0, 100);//bin 0.1GeV
+  TH1F *SAmuTrkIsoNoDzWP2CR = new TH1F("SAmuTrkIsoNoDzWP2CR", "", 1000, 0, 100);
+  TH1F *SAmuTrkIsoNoDzWP3CR = new TH1F("SAmuTrkIsoNoDzWP3CR", "", 1000, 0, 100);
+
+  TH1F* SAmuPtCR  = new TH1F("SAmuPtCR",  "", 150,    0, 150);//per 1GeV
+  TH1F* SAmuEtaCR = new TH1F("SAmuEtaCR", "",  50, -2.5, 2.5);//per 0.1
+  TH1F* SAmuPhiCR = new TH1F("SAmuPhiCR", "",  70, -3.5, 3.5);//per 0.1
   //Signal Region
   TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 12, 11., 59., 12, 11., 59.);
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
@@ -469,12 +490,23 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *NTightBSR  = new TH1F("NTightBSR",  "", 10, 0, 10);
   TH1F *NMediumBSR = new TH1F("NMediumBSR", "", 10, 0, 10);
   TH1F *NLooseBSR  = new TH1F("NLooseBSR",  "", 10, 0, 10);
-  TH1F *SAmuNTrkWP1SR = new TH1F("SAmuNTrkWP1SR", "", 1000, 0, 1000);
-  TH1F *SAmuNTrkWP2SR = new TH1F("SAmuNTrkWP2SR", "", 1000, 0, 1000);
+  TH1F *SAmuNTrkWP1SR = new TH1F("SAmuNTrkWP1SR", "", 100, 0, 100);
+  TH1F *SAmuNTrkWP2SR = new TH1F("SAmuNTrkWP2SR", "", 100, 0, 100);
   TH1F *SAmuNTrkWP3SR = new TH1F("SAmuNTrkWP3SR", "", 100, 0, 100);
   TH1F *SAmuTrkIsoWP1SR = new TH1F("SAmuTrkIsoWP1SR", "", 1000, 0, 100);//bin 0.1GeV
   TH1F *SAmuTrkIsoWP2SR = new TH1F("SAmuTrkIsoWP2SR", "", 1000, 0, 100);
   TH1F *SAmuTrkIsoWP3SR = new TH1F("SAmuTrkIsoWP3SR", "", 1000, 0, 100);
+  //no dz version
+  TH1F *SAmuNTrkNoDzWP1SR = new TH1F("SAmuNTrkNoDzWP1SR", "", 100, 0, 100);
+  TH1F *SAmuNTrkNoDzWP2SR = new TH1F("SAmuNTrkNoDzWP2SR", "", 100, 0, 100);
+  TH1F *SAmuNTrkNoDzWP3SR = new TH1F("SAmuNTrkNoDzWP3SR", "", 100, 0, 100);
+  TH1F *SAmuTrkIsoNoDzWP1SR = new TH1F("SAmuTrkIsoNoDzWP1SR", "", 1000, 0, 100);//bin 0.1GeV
+  TH1F *SAmuTrkIsoNoDzWP2SR = new TH1F("SAmuTrkIsoNoDzWP2SR", "", 1000, 0, 100);
+  TH1F *SAmuTrkIsoNoDzWP3SR = new TH1F("SAmuTrkIsoNoDzWP3SR", "", 1000, 0, 100);
+
+  TH1F* SAmuPtSR  = new TH1F("SAmuPtSR",  "", 150,    0, 150);//per 1GeV
+  TH1F* SAmuEtaSR = new TH1F("SAmuEtaSR", "",  50, -2.5, 2.5);//per 0.1
+  TH1F* SAmuPhiSR = new TH1F("SAmuPhiSR", "",  70, -3.5, 3.5);//per 0.1
 
   TH1F* L_DimuC_CR_HighMass   = new TH1F("L_DimuC_CR_HighMass",   "", 800, 0., 80.);//cm
   TH1F* L_DimuF_CR_HighMass   = new TH1F("L_DimuF_CR_HighMass",   "", 800, 0., 80.);
@@ -607,12 +639,22 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("nNonTrackerMu", &nNonTrackerMu);
   t->SetBranchAddress("dimuC_nNonTrackerMu", &dimuC_nNonTrackerMu);
   t->SetBranchAddress("dimuF_nNonTrackerMu", &dimuF_nNonTrackerMu);
+  t->SetBranchAddress("dimuC_Mu0_SA", &dimuC_Mu0_SA);
+  t->SetBranchAddress("dimuC_Mu1_SA", &dimuC_Mu1_SA);
+  t->SetBranchAddress("dimuF_Mu0_SA", &dimuF_Mu0_SA);
+  t->SetBranchAddress("dimuF_Mu1_SA", &dimuF_Mu1_SA);
   t->SetBranchAddress("SAmu_nTrkWP1", &SAmu_nTrkWP1);
   t->SetBranchAddress("SAmu_nTrkWP2", &SAmu_nTrkWP2);
   t->SetBranchAddress("SAmu_nTrkWP3", &SAmu_nTrkWP3);
+  t->SetBranchAddress("SAmu_nTrkNodzWP1", &SAmu_nTrkNodzWP1);
+  t->SetBranchAddress("SAmu_nTrkNodzWP2", &SAmu_nTrkNodzWP2);
+  t->SetBranchAddress("SAmu_nTrkNodzWP3", &SAmu_nTrkNodzWP3);
   t->SetBranchAddress("SAmu_TrkIsoWP1", &SAmu_TrkIsoWP1);
   t->SetBranchAddress("SAmu_TrkIsoWP2", &SAmu_TrkIsoWP2);
   t->SetBranchAddress("SAmu_TrkIsoWP3", &SAmu_TrkIsoWP3);
+  t->SetBranchAddress("SAmu_TrkIsoNodzWP1", &SAmu_TrkIsoNodzWP1);
+  t->SetBranchAddress("SAmu_TrkIsoNodzWP2", &SAmu_TrkIsoNodzWP2);
+  t->SetBranchAddress("SAmu_TrkIsoNodzWP3", &SAmu_TrkIsoNodzWP3);
   t->SetBranchAddress("diMuonC_FittedVtx_prob",&diMuonC_FittedVtx_prob);
   t->SetBranchAddress("diMuonF_FittedVtx_prob",&diMuonF_FittedVtx_prob);
   t->SetBranchAddress("diMuonC_FittedVtx_dR",  &diMuonC_FittedVtx_dR);
@@ -1006,7 +1048,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
                     //if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
                     //if ( (massC >= 9.5 && massF >= 9.5 && NPATJetTightB < 1 ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
-                    if ( 2 > 1 ) {
+                    if ( ( massC >= 9.5 && massF >= 9.5 && SAmu_nTrkNodzWP1 < 1 ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
                       counterGENMatch[k][13]++;
 
                       //if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
@@ -1211,7 +1253,7 @@ void efficiency(const std::vector<std::string>& dirNames)
 
               //if ( fabs(diMuons_dz_FittedVtx) < 0.1  ) {
               //if ( (massC >= 9.5 && massF >= 9.5 && NPATJetTightB < 1 ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
-              if ( 2 > 1 ) {
+              if ( (massC >= 9.5 && massF >= 9.5 && SAmu_nTrkNodzWP1 < 1 ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
                 counter[k][13]++;
 
                 //if ( recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3 ) {
@@ -1260,6 +1302,17 @@ void efficiency(const std::vector<std::string>& dirNames)
                           SAmuTrkIsoWP1SR->Fill(SAmu_TrkIsoWP1);
                           SAmuTrkIsoWP2SR->Fill(SAmu_TrkIsoWP2);
                           SAmuTrkIsoWP3SR->Fill(SAmu_TrkIsoWP3);
+                          //no dz version
+                          SAmuNTrkNoDzWP1SR->Fill(SAmu_nTrkNodzWP1);
+                          SAmuNTrkNoDzWP2SR->Fill(SAmu_nTrkNodzWP2);
+                          SAmuNTrkNoDzWP3SR->Fill(SAmu_nTrkNodzWP3);
+                          SAmuTrkIsoNoDzWP1SR->Fill(SAmu_TrkIsoNodzWP1);
+                          SAmuTrkIsoNoDzWP2SR->Fill(SAmu_TrkIsoNodzWP2);
+                          SAmuTrkIsoNoDzWP3SR->Fill(SAmu_TrkIsoNodzWP3);
+                          if( dimuC_Mu0_SA ){ SAmuPtSR->Fill(muJetC_Mu0_pt); SAmuEtaSR->Fill(muJetC_Mu0_eta); SAmuPhiSR->Fill(muJetC_Mu0_phi); }
+                          if( dimuC_Mu1_SA ){ SAmuPtSR->Fill(muJetC_Mu1_pt); SAmuEtaSR->Fill(muJetC_Mu1_eta); SAmuPhiSR->Fill(muJetC_Mu1_phi); }
+                          if( dimuF_Mu0_SA ){ SAmuPtSR->Fill(muJetF_Mu0_pt); SAmuEtaSR->Fill(muJetF_Mu0_eta); SAmuPhiSR->Fill(muJetF_Mu0_phi); }
+                          if( dimuF_Mu1_SA ){ SAmuPtSR->Fill(muJetF_Mu1_pt); SAmuEtaSR->Fill(muJetF_Mu1_eta); SAmuPhiSR->Fill(muJetF_Mu1_phi); }
                         }
                         //check background events displacement
                         if ( CheckDisplacement ) {
@@ -1297,6 +1350,17 @@ void efficiency(const std::vector<std::string>& dirNames)
                           SAmuTrkIsoWP1CR->Fill(SAmu_TrkIsoWP1);
                           SAmuTrkIsoWP2CR->Fill(SAmu_TrkIsoWP2);
                           SAmuTrkIsoWP3CR->Fill(SAmu_TrkIsoWP3);
+                          //no dz version
+                          SAmuNTrkNoDzWP1CR->Fill(SAmu_nTrkNodzWP1);
+                          SAmuNTrkNoDzWP2CR->Fill(SAmu_nTrkNodzWP2);
+                          SAmuNTrkNoDzWP3CR->Fill(SAmu_nTrkNodzWP3);
+                          SAmuTrkIsoNoDzWP1CR->Fill(SAmu_TrkIsoNodzWP1);
+                          SAmuTrkIsoNoDzWP2CR->Fill(SAmu_TrkIsoNodzWP2);
+                          SAmuTrkIsoNoDzWP3CR->Fill(SAmu_TrkIsoNodzWP3);
+                          if( dimuC_Mu0_SA ){ SAmuPtCR->Fill(muJetC_Mu0_pt); SAmuEtaCR->Fill(muJetC_Mu0_eta); SAmuPhiCR->Fill(muJetC_Mu0_phi); }
+                          if( dimuC_Mu1_SA ){ SAmuPtCR->Fill(muJetC_Mu1_pt); SAmuEtaCR->Fill(muJetC_Mu1_eta); SAmuPhiCR->Fill(muJetC_Mu1_phi); }
+                          if( dimuF_Mu0_SA ){ SAmuPtCR->Fill(muJetF_Mu0_pt); SAmuEtaCR->Fill(muJetF_Mu0_eta); SAmuPhiCR->Fill(muJetF_Mu0_phi); }
+                          if( dimuF_Mu1_SA ){ SAmuPtCR->Fill(muJetF_Mu1_pt); SAmuEtaCR->Fill(muJetF_Mu1_eta); SAmuPhiCR->Fill(muJetF_Mu1_phi); }
                         }//end if ModelBKGShape
 
                         //check background events displacement
@@ -1466,9 +1530,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<" #10 PrimaryVtxOK          & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][10] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][10]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][10]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][10]   <<" hline "<<endl;
   cout<<" #11 2CandDimuMindM        & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][11] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][11]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][11]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][11]   <<" hline "<<endl;
   cout<<" #12 2DimuPixHitOK         & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][12] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][12]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][12]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][12]   <<" hline "<<endl;
-  cout<<" #13 BosonProdVtxDzOK      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
-  cout<<" #14 RejectDYQEDRadiate    & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
-  cout<<" #15 2DimuLeadingMuIsoOK   & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
+  cout<<" #13 SA-only Muon Cut      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
+  cout<<" #14 VetoDYQEDRadiate      & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
+  cout<<" #15 2DimuIsoOK            & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
   cout<<" #16 SignalHLTAccepted     & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][16] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][16]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][16]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][16]   <<" hline "<<endl;
   cout<<" #17 2DimuMassOK           & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][17] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][17]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][17]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][17]   <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;
@@ -1873,12 +1937,18 @@ void efficiency(const std::vector<std::string>& dirNames)
     RECOrePaired2muTrailingMass->GetXaxis()->SetTitle("Trailing mass of re-paired OS di-#mu [GeV]"); RECOrePaired2muTrailingMass->GetYaxis()->SetTitle("Events/GeV"); RECOrePaired2muTrailingMass->Write();
     RECOrePaired2muLeadingdR->GetXaxis()->SetTitle("Leading dR of re-paired OS di-#mu"); RECOrePaired2muLeadingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muLeadingdR->Write();
     RECOrePaired2muTrailingdR->GetXaxis()->SetTitle("Trailing dR of re-paired OS di-#mu"); RECOrePaired2muTrailingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muTrailingdR->Write();
+
     BKGShapeCR->Write(); BKGShapeCRmassC->Write(); BKGShapeCRmassF->Write();
     NJetCR->Write(); NTightBCR->Write(); NMediumBCR->Write(); NLooseBCR->Write();
     SAmuTrkIsoWP1CR->Write(); SAmuTrkIsoWP2CR->Write(); SAmuTrkIsoWP3CR->Write(); SAmuNTrkWP1CR->Write(); SAmuNTrkWP2CR->Write(); SAmuNTrkWP3CR->Write();
+    SAmuNTrkNoDzWP1CR->Write(); SAmuNTrkNoDzWP2CR->Write(); SAmuNTrkNoDzWP3CR->Write(); SAmuTrkIsoNoDzWP1CR->Write(); SAmuTrkIsoNoDzWP2CR->Write(); SAmuTrkIsoNoDzWP3CR->Write();
+    SAmuPtCR->Write(); SAmuEtaCR->Write(); SAmuPhiCR->Write();
+
     BKGShapeSR->Write(); BKGShapeSRmassC->Write(); BKGShapeSRmassF->Write();
     NJetSR->Write(); NTightBSR->Write(); NMediumBSR->Write(); NLooseBSR->Write();
     SAmuTrkIsoWP1SR->Write(); SAmuTrkIsoWP2SR->Write(); SAmuTrkIsoWP3SR->Write(); SAmuNTrkWP1SR->Write(); SAmuNTrkWP2SR->Write(); SAmuNTrkWP3SR->Write();
+    SAmuNTrkNoDzWP1SR->Write(); SAmuNTrkNoDzWP2SR->Write(); SAmuNTrkNoDzWP3SR->Write(); SAmuTrkIsoNoDzWP1SR->Write(); SAmuTrkIsoNoDzWP2SR->Write(); SAmuTrkIsoNoDzWP3SR->Write();
+    SAmuPtSR->Write(); SAmuEtaSR->Write(); SAmuPhiSR->Write();
   } //end if ( ModelBKGShape )
 
   if ( ModelSRWidth ) {
@@ -2065,6 +2135,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete NJetSR; delete NTightBSR; delete NMediumBSR; delete NLooseBSR;
   delete SAmuTrkIsoWP1CR; delete SAmuTrkIsoWP2CR; delete SAmuTrkIsoWP3CR; delete SAmuNTrkWP1CR; delete SAmuNTrkWP2CR; delete SAmuNTrkWP3CR;
   delete SAmuTrkIsoWP1SR; delete SAmuTrkIsoWP2SR; delete SAmuTrkIsoWP3SR; delete SAmuNTrkWP1SR; delete SAmuNTrkWP2SR; delete SAmuNTrkWP3SR;
+  delete SAmuTrkIsoNoDzWP1CR; delete SAmuTrkIsoNoDzWP2CR; delete SAmuTrkIsoNoDzWP3CR; delete SAmuNTrkNoDzWP1CR; delete SAmuNTrkNoDzWP2CR; delete SAmuNTrkNoDzWP3CR;
+  delete SAmuTrkIsoNoDzWP1SR; delete SAmuTrkIsoNoDzWP2SR; delete SAmuTrkIsoNoDzWP3SR; delete SAmuNTrkNoDzWP1SR; delete SAmuNTrkNoDzWP2SR; delete SAmuNTrkNoDzWP3SR;
+  delete SAmuPtCR; delete SAmuEtaCR; delete SAmuPhiCR; delete SAmuPtSR; delete SAmuEtaSR; delete SAmuPhiSR;
   delete L_DimuC_CR_HighMass; delete Lxy_DimuC_CR_HighMass; delete Lz_DimuC_CR_HighMass;
   delete L_DimuF_CR_HighMass; delete Lxy_DimuF_CR_HighMass; delete Lz_DimuF_CR_HighMass;
   delete L_DimuC_SR_HighMass; delete Lxy_DimuC_SR_HighMass; delete Lz_DimuC_SR_HighMass;

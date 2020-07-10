@@ -2,7 +2,6 @@ import FWCore.ParameterSet.Config as cms
 
 cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     analyzerDebug = cms.int32(-1),
-    #muons = cms.InputTag("cleanPatPFMuonsTriggerMatch"),
     muons = cms.InputTag("slimmedMuons"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     muPairs = cms.InputTag("PFMuJetProducer05", "Pairs"),
@@ -33,11 +32,10 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     Propagator = cms.string("RungeKuttaTrackerPropagator"),
     skimOutput = cms.bool(False),
     signalHltPaths = cms.vstring(
-    'HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx',
-    #'HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx',
-    #'HLT_Mu18_Mu9_SameSign',
-    #'HLT_DoubleL2Mu23NoVtx_2Cha',
-    #'HLT_TripleMu_12_10_5',
+    'HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx',
+    'HLT_Mu18_Mu9_SameSign',
+    'HLT_DoubleL2Mu23NoVtx_2Cha',
+    'HLT_TripleMu_12_10_5',
     ),
     controlHltPaths = cms.vstring(
     'HLT_TrkMu16NoFiltersNoVtx',
@@ -45,15 +43,15 @@ cutFlowAnalyzer = cms.EDAnalyzer('CutFlowAnalyzer_MiniAOD',
     ),
     #L1 algos for signal HLT (FIN-OR)
     l1algos = cms.vstring(
-    #Seeds for TripleTrkMu HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx
-    "L1_DoubleMu_12_5",
-    "L1_DoubleMu_15_5_SQ",
-    "L1_DoubleMu_15_7" ,
-    "L1_TripleMu_5_3_3",
-    #Seeds for TripleMu HLT 10_5_5/12_10_5
-    #"L1_TripleMu0",
-    #"L1_TripleMu_5_5_3",
+    #Seeds for TripleTrkMu: HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx
+    #"L1_DoubleMu_12_5",
+    #"L1_DoubleMu_15_5_SQ",
+    #"L1_DoubleMu_15_7" ,
     #"L1_TripleMu_5_3_3",
-    #"L1_TripleMu3_SQ",
+    #Seeds for TripleMu HLT 10_5_5/12_10_5
+    "L1_TripleMu0",
+    "L1_TripleMu_5_5_3",
+    "L1_TripleMu_5_3_3",
+    "L1_TripleMu3_SQ",
     ),
 )
