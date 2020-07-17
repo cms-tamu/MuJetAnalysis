@@ -1,1 +1,1 @@
-/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/TEST/A.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2018Ntuples/MSSMD_2SAmu_NoVtxProbCut_4HLT/MSSMD_mH_125_mN1_60_mGammaD_58_cT_100.txt

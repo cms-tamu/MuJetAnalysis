@@ -2,7 +2,7 @@
 
 Run the following command to get the cut flow table for all signals:
 ```
-echo 'gROOT->ProcessLine(".L foo_modified.C++"); analysis("SignalsList2017MSSMD.txt")' | root -l -b
+echo 'gROOT->ProcessLine(".L CutFlow_2018L2Mu23.C++"); analysis("SignalsList2018MSSMD_2SAmu_NoVtxProbCut_4HLT.txt")' | root -l -b
 ```
 
 The "SignalsList201*.txt" file list text files for all signal samples in this year (2017/2018). Each text file point to the Ntuple path of a signal sample.

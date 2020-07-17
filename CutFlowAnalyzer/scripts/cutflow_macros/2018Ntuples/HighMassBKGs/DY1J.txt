@@ -1,2 +1,0 @@
-/scratch/user/ws13/DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2/200122_015122/0000
-/scratch/user/ws13/DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2/200122_015122/0001

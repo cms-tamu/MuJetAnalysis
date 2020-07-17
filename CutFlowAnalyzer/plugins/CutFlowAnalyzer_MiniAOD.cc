@@ -299,6 +299,7 @@ private:
   //****************************************************************************
 
   std::vector<std::string> signalHltPaths_;
+  std::vector<std::string> orthogonalHltPaths_;//To be used for trigger study
   std::vector<std::string> controlHltPaths_;
   std::vector<std::string> l1algos_;
   std::vector<std::string> b_hltPaths;
@@ -402,6 +403,7 @@ private:
   Bool_t b_isSignalHLT_2_Fired;
   Bool_t b_isSignalHLT_3_Fired;
   //End DEBUG HLT paths
+  Bool_t b_isOrthogonalHLTFired;
   Bool_t b_isControlHLT16Fired;
   Bool_t b_isControlHLT6Fired;
   Bool_t b_isSignalHLTL1Fired;
@@ -469,6 +471,16 @@ private:
   Float_t b_selMu1_pT;
   Float_t b_selMu2_pT;
   Float_t b_selMu3_pT;
+
+  Float_t b_selMu0_charge;
+  Float_t b_selMu1_charge;
+  Float_t b_selMu2_charge;
+  Float_t b_selMu3_charge;
+
+  Bool_t b_selMu0_SA;
+  Bool_t b_selMu1_SA;
+  Bool_t b_selMu2_SA;
+  Bool_t b_selMu3_SA;
 
   Float_t b_diMuonC_FittedVtx_dR;
   Float_t b_diMuonC_FittedVtx_m;
@@ -641,6 +653,7 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   //****************************************************************************
 
   signalHltPaths_  = iConfig.getParameter<std::vector<std::string> >("signalHltPaths");
+  orthogonalHltPaths_  = iConfig.getParameter<std::vector<std::string> >("orthogonalHltPaths");
   controlHltPaths_ = iConfig.getParameter<std::vector<std::string> >("controlHltPaths");
   l1algos_         = iConfig.getParameter<std::vector<std::string> >("l1algos");//l1 seeds for signal
 
@@ -1323,6 +1336,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_pT  = selMuons[0]->pt();
     b_selMu0_eta = selMuons[0]->eta();
     b_selMu0_phi = selMuons[0]->phi();
+    b_selMu0_charge = selMuons[0]->charge();
+    if( selMuons[0]->isStandAloneMuon() && !( selMuons[0]->isPFMuon() && ( selMuons[0]->isTrackerMuon() || selMuons[0]->isGlobalMuon() ) ) ) b_selMu0_SA = true;
   } else {
     b_selMu0_px  = -100.0;
     b_selMu0_py  = -100.0;
@@ -1330,6 +1345,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_pT  = -100.0;
     b_selMu0_eta = -100.0;
     b_selMu0_phi = -100.0;
+    b_selMu0_charge = 0.;
+    b_selMu0_SA  = false;
   }
 
   if ( selMuons.size() > 1 ) {
@@ -1339,6 +1356,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_pT  = selMuons[1]->pt();
     b_selMu1_eta = selMuons[1]->eta();
     b_selMu1_phi = selMuons[1]->phi();
+    b_selMu1_charge = selMuons[1]->charge();
+    if( selMuons[1]->isStandAloneMuon() && !( selMuons[1]->isPFMuon() && ( selMuons[1]->isTrackerMuon() || selMuons[1]->isGlobalMuon() ) ) ) b_selMu1_SA = true;
   } else {
     b_selMu1_px  = -100.0;
     b_selMu1_py  = -100.0;
@@ -1346,6 +1365,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_pT  = -100.0;
     b_selMu1_eta = -100.0;
     b_selMu1_phi = -100.0;
+    b_selMu1_charge = 0.;
+    b_selMu1_SA  = false;
   }
 
   if ( selMuons.size() > 2 ) {
@@ -1355,6 +1376,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_pT  = selMuons[2]->pt();
     b_selMu2_eta = selMuons[2]->eta();
     b_selMu2_phi = selMuons[2]->phi();
+    b_selMu2_charge = selMuons[2]->charge();
+    if( selMuons[2]->isStandAloneMuon() && !( selMuons[2]->isPFMuon() && ( selMuons[2]->isTrackerMuon() || selMuons[2]->isGlobalMuon() ) ) ) b_selMu2_SA = true;
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
@@ -1362,6 +1385,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_pT  = -100.0;
     b_selMu2_eta = -100.0;
     b_selMu2_phi = -100.0;
+    b_selMu2_charge = 0.;
+    b_selMu2_SA  = false;
   }
 
   if ( selMuons.size() > 3 ) {
@@ -1371,6 +1396,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_pT  = selMuons[3]->pt();
     b_selMu3_eta = selMuons[3]->eta();
     b_selMu3_phi = selMuons[3]->phi();
+    b_selMu3_charge = selMuons[3]->charge();
+    if( selMuons[3]->isStandAloneMuon() && !( selMuons[3]->isPFMuon() && ( selMuons[3]->isTrackerMuon() || selMuons[3]->isGlobalMuon() ) ) ) b_selMu3_SA = true;
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1378,6 +1405,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_pT  = -100.0;
     b_selMu3_eta = -100.0;
     b_selMu3_phi = -100.0;
+    b_selMu3_charge = 0.;
+    b_selMu3_SA  = false;
   }
 
   if ( m_debug > 0 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
@@ -1818,8 +1847,9 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   b_isSignalHLT_2_Fired = false;
   b_isSignalHLT_3_Fired = false;
   //End DEBUG Many HLT paths
-  b_isControlHLT16Fired = false;
-  b_isControlHLT6Fired = false;
+  b_isOrthogonalHLTFired = false;
+  b_isControlHLT16Fired  = false;
+  b_isControlHLT6Fired   = false;
   b_hltPaths.clear();
 
   edm::Handle<edm::TriggerResults> TrResults;
@@ -1867,6 +1897,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         if (trigNameStr.find(s3) != std::string::npos) b_isSignalHLT_3_Fired = true;
       }
       //End: DEBUG Many HLT Paths
+
+      // For signal trigger study using orthogonal dataset/triggers
+      for (const auto& q: orthogonalHltPaths_){
+        if (trigNameStr.find(q) != std::string::npos) {
+          if ( m_debug > 10 ) std::cout << "Orthogonal trigger " << q << " fired!" << std::endl;
+          b_isOrthogonalHLTFired = true;
+        }
+      }//end for orthogonal trigger
 
       if ( controlHltPaths_.size() > 0){
         const std::string& p0 = controlHltPaths_[0];
@@ -2859,6 +2897,16 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("selMu2_phi", &b_selMu2_phi, "selMu2_phi/F");
   m_ttree->Branch("selMu3_phi", &b_selMu3_phi, "selMu3_phi/F");
 
+  m_ttree->Branch("selMu0_charge", &b_selMu0_charge, "selMu0_charge/F");
+  m_ttree->Branch("selMu1_charge", &b_selMu1_charge, "selMu1_charge/F");
+  m_ttree->Branch("selMu2_charge", &b_selMu2_charge, "selMu2_charge/F");
+  m_ttree->Branch("selMu3_charge", &b_selMu3_charge, "selMu3_charge/F");
+
+  m_ttree->Branch("selMu0_SA",  &b_selMu0_SA, "selMu0_SA/O");
+  m_ttree->Branch("selMu1_SA",  &b_selMu1_SA, "selMu1_SA/O");
+  m_ttree->Branch("selMu2_SA",  &b_selMu2_SA, "selMu2_SA/O");
+  m_ttree->Branch("selMu3_SA",  &b_selMu3_SA, "selMu3_SA/O");
+
   m_ttree->Branch("diMuonC_FittedVtx_dR",  &b_diMuonC_FittedVtx_dR,  "diMuonC_FittedVtx_dR/F");
   m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
   m_ttree->Branch("diMuonC_FittedVtx_px",  &b_diMuonC_FittedVtx_px,  "diMuonC_FittedVtx_px/F");
@@ -2991,26 +3039,25 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is2SelMuHighPt", &b_is2SelMuHighPt, "is2SelMuHighPt/O");
   m_ttree->Branch("is3SelMuLowPt",  &b_is3SelMuLowPt,  "is3SelMuLowPt/O");
   m_ttree->Branch("is4SelMuLowPt",  &b_is4SelMuLowPt,  "is4SelMuLowPt/O");
+  m_ttree->Branch("NPATJet",        &b_NPATJet,        "NPATJet/I");
+  m_ttree->Branch("NPATJetTightB",  &b_NPATJetTightB,  "NPATJetTightB/I");
+  m_ttree->Branch("NPATJetMediumB", &b_NPATJetMediumB, "NPATJetMediumB/I");
+  m_ttree->Branch("NPATJetLooseB",  &b_NPATJetLooseB,  "NPATJetLooseB/I");
 
   m_ttree->Branch("is2MuJets",                      &b_is2MuJets,                      "is2MuJets/O");
   m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
   m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
-
+  m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
   m_ttree->Branch("isSignalHLTFired",               &b_isSignalHLTFired,               "isSignalHLTFired/O");
   m_ttree->Branch("isSignalHLT_0_Fired",            &b_isSignalHLT_0_Fired,            "isSignalHLT_0_Fired/O");
   m_ttree->Branch("isSignalHLT_1_Fired",            &b_isSignalHLT_1_Fired,            "isSignalHLT_1_Fired/O");
   m_ttree->Branch("isSignalHLT_2_Fired",            &b_isSignalHLT_2_Fired,            "isSignalHLT_2_Fired/O");
   m_ttree->Branch("isSignalHLT_3_Fired",            &b_isSignalHLT_3_Fired,            "isSignalHLT_3_Fired/O");
-
-  m_ttree->Branch("NPATJet",        &b_NPATJet,        "NPATJet/I");
-  m_ttree->Branch("NPATJetTightB",  &b_NPATJetTightB,  "NPATJetTightB/I");
-  m_ttree->Branch("NPATJetMediumB", &b_NPATJetMediumB, "NPATJetMediumB/I");
-  m_ttree->Branch("NPATJetLooseB",  &b_NPATJetLooseB,  "NPATJetLooseB/I");
+  m_ttree->Branch("isOrthogonalHLTFired",           &b_isOrthogonalHLTFired,           "isOrthogonalHLTFired/O");
   m_ttree->Branch("isControlHLT16Fired",            &b_isControlHLT16Fired,            "isControlHLT16Fired/O");
   m_ttree->Branch("isControlHLT6Fired",             &b_isControlHLT6Fired,             "isControlHLT6Fired/O");
   m_ttree->Branch("isSignalHLTL1Fired",             &b_isSignalHLTL1Fired,             "isSignalHLTL1Fired/O");
   m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
-  m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
   m_ttree->Branch("hltPaths",  &b_hltPaths);
 
   //****************************************************************************

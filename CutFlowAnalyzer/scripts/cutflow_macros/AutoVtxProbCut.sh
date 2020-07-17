@@ -1,8 +1,8 @@
 #!/usr/bin/expect -f
 
 set timeout 86400
-set r0 [list 2.9]
-set p0 [list 0.05 0.06 0.07 0.08 0.09 0.1 0.12 0.14]
+set r0 [list 1.0 2.0 4.0 5.0 6.0 7.0 8.0 9.0 10.0]
+set p0 [list 0.12]
 ################
 spawn sh
 expect "$ "
@@ -21,21 +21,21 @@ send "mkdir R0_$R0\_P0_$P0\r"
 expect "$ "
 send "cp CutFlow.slurm R0_$R0\_P0_$P0\r"
 expect "$ "
-send "cp foo_modified.C R0_$R0\_P0_$P0\r"
+send "cp CutFlow_2018L2Mu23.C R0_$R0\_P0_$P0\r"
 expect "$ "
 send "cp Helpers.h R0_$R0\_P0_$P0\r"
 expect "$ "
-send "cp SignalsList2017MSSMD_2SAmu_NoVtxProbCut.txt R0_$R0\_P0_$P0\r"
+send "cp SignalsList2018MSSMD_2SAmu_NoVtxProbCut_4HLT.txt R0_$R0\_P0_$P0\r"
 expect "$ "
 send "cd R0_$R0\_P0_$P0\r"
 expect "$ "
-send "sed -i '648s/R0 = 2.9/R0 = $R0/' foo_modified.C\r"
+send "sed -i '718s/R0 = 2.9/R0 = $R0/' CutFlow_2018L2Mu23.C\r"
 expect "$ "
-send "sed -i '649s/P0 = 0.18/P0 = $P0/' foo_modified.C\r"
+send "sed -i '719s/P0 = 0.12/P0 = $P0/' CutFlow_2018L2Mu23.C\r"
 expect "$ "
-send "mv foo_modified.C foo_modified_R0_$R0\_P0_$P0.C\r"
+send "mv CutFlow_2018L2Mu23.C CutFlow_2018L2Mu23_R0_$R0\_P0_$P0.C\r"
 expect "$ "
-send "sed -i '18s/foo_modified/foo_modified_R0_$R0\_P0_$P0/' CutFlow.slurm\r"
+send "sed -i '18s/CutFlow_2018L2Mu23/CutFlow_2018L2Mu23_R0_$R0\_P0_$P0/' CutFlow.slurm\r"
 expect "$ "
 send "mv CutFlow.slurm CutFlow_R0_$R0\_P0_$P0.slurm\r"
 expect "$ "
