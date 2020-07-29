@@ -486,7 +486,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* Lz_DimuC_SR_HighMass  = new TH1F("Lz_DimuC_SR_HighMass",  "", 600, 0., 60.);
   TH1F* Lz_DimuF_SR_HighMass  = new TH1F("Lz_DimuF_SR_HighMass",  "", 600, 0., 60.);
 
-  TH1F *DimuMass = new TH1F("DimuMass", "", 6000, 0., 60.);//binning 0.01 GeV
+  TH1F *DimuMass = new TH1F("DimuMass", "", 7000, 0., 70.);//binning 0.01 GeV
   TH1F *DimuCMassAfterCut12 = new TH1F("DimuCMassAfterCut12", "Di-#mu #1 Mass after Cut 12", 3000, 0., 60.);//binning 0.02 GeV
   TH1F *DimuFMassAfterCut12 = new TH1F("DimuFMassAfterCut12", "Di-#mu #2 Mass after Cut 12", 3000, 0., 60.);
   TH1F *DimuCMassAfterCut16 = new TH1F("DimuCMassAfterCut16", "Di-#mu #1 Mass after Cut 16", 3000, 0., 60.);
@@ -711,17 +711,28 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcount0SAmu = 0;
   int newcount1SAmu = 0;
   int newcount2SAmu = 0;
-  Float_t ProbSA = 0;
-  Float_t ProbPF = 0.01;
-  Float_t E1 = 0.5;
-  Float_t E2 = 1.0;
-  Float_t R0 = 11.0;
+  Float_t R0 = 10.0;
   Float_t P0 = 0.2;
-  //f(dR)-Poly3
-  Float_t p0 = 8.129;
-  Float_t p1 = -18.613;
-  Float_t p2 = 15.799;
-  Float_t p3 = -3.316;
+  Float_t N0 = 5.0;
+  Float_t L0 = 0.1;
+  Float_t C0 = 2.0;
+  //f(dR)-Poly4
+  Float_t p0 = 8.53647;
+  Float_t p1 = -50.4571;
+  Float_t p2 = 109.83;
+  Float_t p3 = -92.7445;
+  Float_t p4 = 36.8351;
+  //mass window below J/Psi: Poly3
+  Float_t V0 = 0.00849813;
+  Float_t V1 = 0.00475107;
+  Float_t V2 = -0.00665393;
+  Float_t V3 = 0.00337777;
+  //mass window above J/Psi: Poly4
+  Float_t W0 = 0.0472738;
+  Float_t W1 = -0.00591865;
+  Float_t W2 = 0.00113991;
+  Float_t W3 = -2.62048e-05;
+  Float_t W4 = 1.92254e-07;
   int newcountHLT = 0;
   int newcountHLT0 = 0;
   int newcountHLT1 = 0;
@@ -936,8 +947,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                 if ( nSAMu == 0 && nMuJets == 2 ) newcount0SAtwomujet++;
 
                 //nSAMu = dimuC_nSAMu + dimuF_nSAMu
-                if ( is2DiMuons && nSAMu <= 1 && diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -( p0 + p1*diMuonC_FittedVtx_dR + p2*pow(diMuonC_FittedVtx_dR, 2) + p3*pow(diMuonC_FittedVtx_dR, 3) )*fabs(diMuonC_FittedVtx_Lxy/R0) ) &&
-                     diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -( p0 + p1*diMuonF_FittedVtx_dR + p2*pow(diMuonF_FittedVtx_dR, 2) + p3*pow(diMuonF_FittedVtx_dR, 3) )*fabs(diMuonF_FittedVtx_Lxy/R0) ) ) {
+                if ( is2DiMuons && nSAMu <= 1 && diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -( p0 + p1*(sqrt(diMuonC_FittedVtx_dR)) + p2*pow(sqrt(diMuonC_FittedVtx_dR), 2) + p3*pow(sqrt(diMuonC_FittedVtx_dR), 3) + p4*pow(sqrt(diMuonC_FittedVtx_dR), 4) )*pow(fabs(diMuonC_FittedVtx_Lxy/R0), C0) ) &&
+                     diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -( p0 + p1*(sqrt(diMuonF_FittedVtx_dR)) + p2*pow(sqrt(diMuonF_FittedVtx_dR), 2) + p3*pow(sqrt(diMuonF_FittedVtx_dR), 3) + p4*pow(sqrt(diMuonF_FittedVtx_dR), 4) )*pow(fabs(diMuonF_FittedVtx_Lxy/R0), C0) ) ) {
                   counterGENMatch[k][11]++;
 
                   if ( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ) {
@@ -968,14 +979,13 @@ void efficiency(const std::vector<std::string>& dirNames)
                       DimuFMassAfterCut12->Fill(massF);
                     }
 
-                    //Note: this needs to be before the cut on dz
                     if ( PlotdZ ) {
                       dZDimuC->Fill(diMuonC_FittedVtx_dz);
                       dZDimuF->Fill(diMuonF_FittedVtx_dz);
                       dZdimuons->Fill(diMuons_dz_FittedVtx);
                     }
 
-                    if ( (massC >= 9.5 && massF >= 9.5 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
+                    if ( (massC >= 9.5 && massF >= 9.5 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
                       counterGENMatch[k][13]++;
 
                       //Note: this needs to be before the cut on iso
@@ -1073,8 +1083,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                         if ( isSignalHLTFired ) {
                           counterGENMatch[k][15]++;
 
-                          //Cut SA-only introduced BKG in data
-                          if ( 2 > 1 ) {
+                          if ( ( massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5 ) ||
+                               ( massC >= 9.5 && massF >= 9.5 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
                             counterGENMatch[k][16]++;
 
                             if ( ModelSRWidth ) {
@@ -1083,7 +1093,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                               DimuFMassAfterCut16->Fill(massF);
                             }
 
-                            if ( is2DiMuonsMassOK ) counterGENMatch[k][17]++; //end 17
+                            if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
+                                 ( massC >= 3.0 && massF >= 3.0 && fabs(massC - massF) < N0*( W0 + W1*(massC + massF)/2.0 + W2*pow((massC + massF)/2.0, 2) + W3*pow((massC + massF)/2.0, 3) + W4*pow((massC + massF)/2.0, 4) ) ) ) counterGENMatch[k][17]++; //end 17 Poly-5
                           }//end 16
                         }//end 15
                       }//end 14
@@ -1120,23 +1131,23 @@ void efficiency(const std::vector<std::string>& dirNames)
           counter[k][10]++;
 
           //nSAMu = dimuC_nSAMu + dimuF_nSAMu
-          if ( is2DiMuons && nSAMu <= 1 && diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -( p0 + p1*diMuonC_FittedVtx_dR + p2*pow(diMuonC_FittedVtx_dR, 2) + p3*pow(diMuonC_FittedVtx_dR, 3) )*fabs(diMuonC_FittedVtx_Lxy/R0) ) &&
-               diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -( p0 + p1*diMuonF_FittedVtx_dR + p2*pow(diMuonF_FittedVtx_dR, 2) + p3*pow(diMuonF_FittedVtx_dR, 3) )*fabs(diMuonF_FittedVtx_Lxy/R0) ) ) {
+          if ( is2DiMuons && nSAMu <= 1 && diMuonC_FittedVtx_prob > P0*(1 - dimuC_nSAMu)*exp( -( p0 + p1*(sqrt(diMuonC_FittedVtx_dR)) + p2*pow(sqrt(diMuonC_FittedVtx_dR), 2) + p3*pow(sqrt(diMuonC_FittedVtx_dR), 3) + p4*pow(sqrt(diMuonC_FittedVtx_dR), 4) )*pow(fabs(diMuonC_FittedVtx_Lxy/R0), C0) ) &&
+               diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -( p0 + p1*(sqrt(diMuonF_FittedVtx_dR)) + p2*pow(sqrt(diMuonF_FittedVtx_dR), 2) + p3*pow(sqrt(diMuonF_FittedVtx_dR), 3) + p4*pow(sqrt(diMuonF_FittedVtx_dR), 4) )*pow(fabs(diMuonF_FittedVtx_Lxy/R0), C0) ) ) {
             counter[k][11]++;
-
-            if ( ModelBKGShape ) {
-              RECO4muMass->Fill(reco4mu_m);
-              RECOrePaired2muLeadingMass->Fill(recoRePaired2muleading_m);
-              RECOrePaired2muTrailingMass->Fill(recoRePaired2mutrailing_m);
-              RECOrePaired2muLeadingdR->Fill(recoRePaired2muleading_dR);
-              RECOrePaired2muTrailingdR->Fill(recoRePaired2mutrailing_dR);
-            }//end ModelBKGShape
 
             if ( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ) {
               //!!! Note: this needs to match GEN cut on geometry
               counter[k][12]++;
 
-              if ( (massC >= 9.5 && massF >= 9.5 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
+              if ( ModelBKGShape ) {
+                RECO4muMass->Fill(reco4mu_m);
+                RECOrePaired2muLeadingMass->Fill(recoRePaired2muleading_m);
+                RECOrePaired2muTrailingMass->Fill(recoRePaired2mutrailing_m);
+                RECOrePaired2muLeadingdR->Fill(recoRePaired2muleading_dR);
+                RECOrePaired2muTrailingdR->Fill(recoRePaired2mutrailing_dR);
+              }//end ModelBKGShape
+
+              if ( (massC >= 9.5 && massF >= 9.5 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
                 counter[k][13]++;
 
                 if ( diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
@@ -1146,10 +1157,12 @@ void efficiency(const std::vector<std::string>& dirNames)
                     counter[k][15]++;
 
                     //Cut SA-only introduced BKG in data
-                    if ( 2 > 1 ) {
+                    if ( ( massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5 ) ||
+                         ( massC >= 9.5 && massF >= 9.5 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
                       counter[k][16]++;
 
-                      if ( is2DiMuonsMassOK ) {
+                      if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
+                           ( massC >= 3.0 && massF >= 3.0 && fabs(massC - massF) < N0*( W0 + W1*(massC + massF)/2.0 + W2*pow((massC + massF)/2.0, 2) + W3*pow((massC + massF)/2.0, 3) + W4*pow((massC + massF)/2.0, 4) ) ) ) {
                         counter[k][17]++;
 
                         //=================================
@@ -1364,33 +1377,33 @@ void efficiency(const std::vector<std::string>& dirNames)
   epsvsalph[k] = counter[k][17]/(counter[k][5]*1.0); //final epsilob_rec/alpha_gen
   cout<<"Here is the cut-flow-table:"<<endl;
   cout<<"epsvsalph[k]: "<<epsvsalph[k]<<endl;
-  Err[k]=   sqrt( (epsvsalph[k]*(1-epsvsalph[k]))/(counter[k][5]*1.0));
+  Err[k] = epsvsalph[k]*sqrt(1.0/counter[k][5] + 1.0/counter[k][17]);//error use sqrt of entries at #5 and #17
   cout<<"        "<<endl;
   cout<<"begin{landscape}"<<endl;
   cout<<"centering"<<endl;
   cout<<"begin{tabular}{ c| c | c | c | c | c }"<<endl;
 
-  cout<<" #   Selection             & "<<left<< setw(11)<<" \\# Evts "    <<" & "<<left << setw(13) << " Tot. Eff. " << " & " << left << setw(13) << " Rel. Eff. "<<" & "<< left << setw(16) << " Tot. Eff. Err. "<<" & "<< left << setw(16) << " Rel. Eff. Err. " <<" hline "<<endl;
-  cout<<" #0  No cut                & "<<left<< setw(11)<< counter[k][0]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][0]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][0] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][0]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][0]    <<" hline "<<endl;
-  cout<<" #1  1GenMu24Eta2          & "<<left<< setw(11)<< counter[k][1]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][1]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][1] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][1]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][1]    <<" hline "<<endl;
-  cout<<" #2  2GenMu24Eta2          & "<<left<< setw(11)<< counter[k][2]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][2]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][2] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][2]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][2]    <<" hline "<<endl;
-  cout<<" #3  3GenMu8               & "<<left<< setw(11)<< counter[k][3]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][3]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][3] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][3]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][3]    <<" hline "<<endl;
-  cout<<" #4  4GenMu8               & "<<left<< setw(11)<< counter[k][4]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][4]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][4] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][4]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][4]    <<" hline "<<endl;
-  cout<<" #5  BothDecayinPhase1Pix  & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][5]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][5] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][5]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][5]    <<" hline "<<endl;
+  cout<<" #   Selection                & "<<left<< setw(11)<<" \\# Evts "    <<" & "<<left << setw(13) << " Tot. Eff. " << " & " << left << setw(13) << " Rel. Eff. "<<" & "<< left << setw(16) << " Tot. Eff. Err. "<<" & "<< left << setw(16) << " Rel. Eff. Err. " <<" hline "<<endl;
+  cout<<" #0  No cut                   & "<<left<< setw(11)<< counter[k][0]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][0]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][0] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][0]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][0]    <<" hline "<<endl;
+  cout<<" #1  1GenMu24Eta2             & "<<left<< setw(11)<< counter[k][1]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][1]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][1] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][1]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][1]    <<" hline "<<endl;
+  cout<<" #2  2GenMu24Eta2             & "<<left<< setw(11)<< counter[k][2]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][2]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][2] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][2]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][2]    <<" hline "<<endl;
+  cout<<" #3  3GenMu8                  & "<<left<< setw(11)<< counter[k][3]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][3]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][3] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][3]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][3]    <<" hline "<<endl;
+  cout<<" #4  4GenMu8                  & "<<left<< setw(11)<< counter[k][4]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][4]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][4] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][4]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][4]    <<" hline "<<endl;
+  cout<<" #5  Decay in Phase 1 pixdet  & "<<left<< setw(11)<< counter[k][5]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][5]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][5] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][5]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][5]    <<" hline "<<endl;
   cout<<"                                                                                                                            " << " hline "<< endl;
 
-  cout<<" #6  1RecoMu24Eta2         & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][6]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][6] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][6]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][6]    <<" hline "<<endl;
-  cout<<" #7  2RecoMu24Eta2         & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][7]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][7] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][7]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][7]    <<" hline "<<endl;
-  cout<<" #8  3RecoMu8              & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][8]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][8] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][8]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][8]    <<" hline "<<endl;
-  cout<<" #9  4RecoMu8              & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][9]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][9] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][9]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][9]    <<" hline "<<endl;
-  cout<<" #10 PrimaryVtxOK          & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][10] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][10]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][10]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][10]   <<" hline "<<endl;
-  cout<<" #11 2CandDimuMindM        & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][11] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][11]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][11]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][11]   <<" hline "<<endl;
-  cout<<" #12 2DimuPixHitOK         & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][12] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][12]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][12]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][12]   <<" hline "<<endl;
-  cout<<" #13 VetoDYQEDRadiate      & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
-  cout<<" #14 2DimuIsoOK            & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
-  cout<<" #15 SignalHLTAccepted     & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
-  cout<<" #16 SA-only Mu BKG Cut    & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][16] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][16]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][16]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][16]   <<" hline "<<endl;
-  cout<<" #17 2DimuMassOK           & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][17] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][17]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][17]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][17]   <<" hline "<<endl;
+  cout<<" #6  1RecoMu24Eta2            & "<<left<< setw(11)<< counter[k][6]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][6]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][6] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][6]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][6]    <<" hline "<<endl;
+  cout<<" #7  2RecoMu24Eta2            & "<<left<< setw(11)<< counter[k][7]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][7]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][7] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][7]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][7]    <<" hline "<<endl;
+  cout<<" #8  3RecoMu8                 & "<<left<< setw(11)<< counter[k][8]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][8]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][8] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][8]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][8]    <<" hline "<<endl;
+  cout<<" #9  4RecoMu8                 & "<<left<< setw(11)<< counter[k][9]  <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][9]  << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][9] <<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][9]   <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][9]    <<" hline "<<endl;
+  cout<<" #10 Good primary vertex      & "<<left<< setw(11)<< counter[k][10] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][10] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][10]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][10]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][10]   <<" hline "<<endl;
+  cout<<" #11 Two candidate dimuons    & "<<left<< setw(11)<< counter[k][11] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][11] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][11]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][11]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][11]   <<" hline "<<endl;
+  cout<<" #12 Valid pix hit            & "<<left<< setw(11)<< counter[k][12] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][12] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][12]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][12]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][12]   <<" hline "<<endl;
+  cout<<" #13 Veto DY QED radiation    & "<<left<< setw(11)<< counter[k][13] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][13] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][13]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][13]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][13]   <<" hline "<<endl;
+  cout<<" #14 Dimuon isolation         & "<<left<< setw(11)<< counter[k][14] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][14] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][14]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][14]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][14]   <<" hline "<<endl;
+  cout<<" #15 Signal HLT accepted      & "<<left<< setw(11)<< counter[k][15] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][15] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][15]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][15]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][15]   <<" hline "<<endl;
+  cout<<" #16 Lxy cut SA-only Mu BKG   & "<<left<< setw(11)<< counter[k][16] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][16] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][16]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][16]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][16]   <<" hline "<<endl;
+  cout<<" #17 Consistent dimuon mass   & "<<left<< setw(11)<< counter[k][17] <<" & "<<left << setw(13) <<setprecision(3)<< TotEff[k][17] << " & " << left << setw(13) <<setprecision(3)<< RelEff[k][17]<<" & "<< left << setw(16) <<setprecision(3)<< TotEffErr[k][17]  <<" & "<< left << setw(16) <<setprecision(3)<< RelEffErr[k][17]   <<" hline "<<endl;
   cout<<"                                                                                                                         " << " hline "<< endl;
   cout<<" epsilon_rec/alpha_gen     & "<<setprecision(3)<< epsvsalph[k]  << " $\\pm$ "  << Err[k]<<" hline "<<endl;
 
@@ -2131,7 +2144,7 @@ void analysis(const std::string SamplesList)
     TH2F *h_MSSMD_GENMatch_Cut9_5  = new TH2F("h_MSSMD_GENMatch_Cut9_5",  "#splitline{#scale[0.8]{GEN Matched Sel. #9 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_GENMatch_Cut10_5 = new TH2F("h_MSSMD_GENMatch_Cut10_5", "#splitline{#scale[0.8]{GEN Matched Sel. #10 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_GENMatch_Cut11_5 = new TH2F("h_MSSMD_GENMatch_Cut11_5", "#splitline{#scale[0.8]{GEN Matched Sel. #11 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
-    TH2F *h_MSSMD_GENMatch_Cut12_5 = new TH2F("h_MSSMD_GENMatch_Cut12_5", "#splitline{#scale[0.8]{GEN Matched Sel. #12 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_GENMatch_Cut12_5 = new TH2F("h_MSSMD_GENMatch_Cut12_5", "#splitline{#scale[0.8]{Signal Dimuon Pairing and Selection}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_GENMatch_Cut13_5 = new TH2F("h_MSSMD_GENMatch_Cut13_5", "#splitline{#scale[0.8]{GEN Matched Sel. #13 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_GENMatch_Cut14_5 = new TH2F("h_MSSMD_GENMatch_Cut14_5", "#splitline{#scale[0.8]{GEN Matched Sel. #14 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_GENMatch_Cut15_5 = new TH2F("h_MSSMD_GENMatch_Cut15_5", "#splitline{#scale[0.8]{GEN Matched Sel. #15 / Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
@@ -2184,7 +2197,7 @@ void analysis(const std::string SamplesList)
     TH2F *h_MSSMD_Cut14_5 = new TH2F("h_MSSMD_Cut14_5", "#splitline{#scale[0.8]{Offline Sel. #14 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_Cut15_5 = new TH2F("h_MSSMD_Cut15_5", "#splitline{#scale[0.8]{Offline Sel. #15 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_Cut16_5 = new TH2F("h_MSSMD_Cut16_5", "#splitline{#scale[0.8]{Offline Sel. #16 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
-    TH2F *h_MSSMD_Cut17_5 = new TH2F("h_MSSMD_Cut17_5", "#splitline{#scale[0.8]{Offline Sel. #17 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut17_5 = new TH2F("h_MSSMD_Cut17_5", "#splitline{#scale[0.8]{#epsilon_{full}/#alpha_{gen}}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
 
     TH2F *h_MSSMD_Cut10_9  = new TH2F("h_MSSMD_Cut10_9",  "#splitline{#scale[0.8]{Offline Sel. #10 / Sel. #9}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_Cut11_10 = new TH2F("h_MSSMD_Cut11_10", "#splitline{#scale[0.8]{Offline Sel. #11 / Sel. #10}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
