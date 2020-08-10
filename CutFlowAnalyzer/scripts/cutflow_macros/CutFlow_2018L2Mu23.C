@@ -486,11 +486,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* Lz_DimuC_SR_HighMass  = new TH1F("Lz_DimuC_SR_HighMass",  "", 600, 0., 60.);
   TH1F* Lz_DimuF_SR_HighMass  = new TH1F("Lz_DimuF_SR_HighMass",  "", 600, 0., 60.);
 
-  TH1F *DimuMass = new TH1F("DimuMass", "", 7000, 0., 70.);//binning 0.01 GeV
-  TH1F *DimuCMassAfterCut12 = new TH1F("DimuCMassAfterCut12", "Di-#mu #1 Mass after Cut 12", 3000, 0., 60.);//binning 0.02 GeV
-  TH1F *DimuFMassAfterCut12 = new TH1F("DimuFMassAfterCut12", "Di-#mu #2 Mass after Cut 12", 3000, 0., 60.);
-  TH1F *DimuCMassAfterCut16 = new TH1F("DimuCMassAfterCut16", "Di-#mu #1 Mass after Cut 16", 3000, 0., 60.);
-  TH1F *DimuFMassAfterCut16 = new TH1F("DimuFMassAfterCut16", "Di-#mu #2 Mass after Cut 16", 3000, 0., 60.);
+  TH1F *DimuMassGenMatched = new TH1F("DimuMassGenMatched", "", 70000, 0., 70.);//binning 0.001 GeV
+  TH1F *DimuCMassGenMatched = new TH1F("DimuCMassGenMatched", "Di-#mu #1 Mass Before Mass Window Cut (GEN Matched)", 60000, 0., 60.);
+  TH1F *DimuFMassGenMatched = new TH1F("DimuFMassGenMatched", "Di-#mu #2 Mass Before Mass Window Cut (GEN Matched)", 60000, 0., 60.);
+  TH1F *DimuCMassAfterCut12GenMatched = new TH1F("DimuCMassAfterCut12GenMatched", "Di-#mu #1 Mass after Cut 12 (GEN Matched)", 60000, 0., 60.);//binning 0.001 GeV
+  TH1F *DimuFMassAfterCut12GenMatched = new TH1F("DimuFMassAfterCut12GenMatched", "Di-#mu #2 Mass after Cut 12 (GEN Matched)", 60000, 0., 60.);
+
+  TH1F *DimuMass  = new TH1F("DimuMass", "", 70000, 0., 70.);
+  TH1F *DimuCMass = new TH1F("DimuCMass", "Di-#mu #1 Mass Before Mass Window Cut", 60000, 0., 60.);
+  TH1F *DimuFMass = new TH1F("DimuFMass", "Di-#mu #2 Mass Before Mass Window Cut", 60000, 0., 60.);
 
   TH1F *RECO4muMass                 = new TH1F("RECO4muMass",                 "", 180, 0., 180.);//binning 1 GeV
   TH1F *RECOrePaired2muLeadingMass  = new TH1F("RECOrePaired2muLeadingMass",  "", 180, 0., 180.);
@@ -975,8 +979,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                     DimuFdR->Fill(diMuonF_FittedVtx_dR);
 
                     if ( ModelSRWidth ) {
-                      DimuCMassAfterCut12->Fill(massC);
-                      DimuFMassAfterCut12->Fill(massF);
+                      DimuCMassAfterCut12GenMatched->Fill(massC);
+                      DimuFMassAfterCut12GenMatched->Fill(massF);
                     }
 
                     if ( PlotdZ ) {
@@ -1088,9 +1092,9 @@ void efficiency(const std::vector<std::string>& dirNames)
                             counterGENMatch[k][16]++;
 
                             if ( ModelSRWidth ) {
-                              DimuMass->Fill( (massC+massF)/2 );
-                              DimuCMassAfterCut16->Fill(massC);
-                              DimuFMassAfterCut16->Fill(massF);
+                              DimuMassGenMatched->Fill( (massC+massF)/2 );
+                              DimuCMassGenMatched->Fill(massC);
+                              DimuFMassGenMatched->Fill(massF);
                             }
 
                             if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
@@ -1160,6 +1164,12 @@ void efficiency(const std::vector<std::string>& dirNames)
                     if ( ( massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5 ) ||
                          ( massC >= 9.5 && massF >= 9.5 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
                       counter[k][16]++;
+
+                      if ( ModelSRWidth ) {
+                        DimuMass->Fill( (massC+massF)/2 );
+                        DimuCMass->Fill(massC);
+                        DimuFMass->Fill(massF);
+                      }
 
                       if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
                            ( massC >= 3.0 && massF >= 3.0 && fabs(massC - massF) < N0*( W0 + W1*(massC + massF)/2.0 + W2*pow((massC + massF)/2.0, 2) + W3*pow((massC + massF)/2.0, 3) + W4*pow((massC + massF)/2.0, 4) ) ) ) {
@@ -1819,28 +1829,24 @@ void efficiency(const std::vector<std::string>& dirNames)
   } //end if ( ModelBKGShape )
 
   if ( ModelSRWidth ) {
+    DimuCMassAfterCut12GenMatched->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMassAfterCut12GenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuCMassAfterCut12GenMatched->Write();
+    DimuFMassAfterCut12GenMatched->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassAfterCut12GenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuFMassAfterCut12GenMatched->Write();
 
-    DimuCMassAfterCut12->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMassAfterCut12->GetYaxis()->SetTitle("Events/0.02 GeV"); DimuCMassAfterCut12->Write();
-    DimuFMassAfterCut12->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassAfterCut12->GetYaxis()->SetTitle("Events/0.02 GeV"); DimuFMassAfterCut12->Write();
-    DimuCMassAfterCut16->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMassAfterCut16->GetYaxis()->SetTitle("Events/0.02 GeV"); DimuCMassAfterCut16->Write();
-    DimuFMassAfterCut16->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassAfterCut16->GetYaxis()->SetTitle("Events/0.02 GeV"); DimuFMassAfterCut16->Write();
+    DimuMassGenMatched->SetLineColor(kBlue);
+    DimuMassGenMatched->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
+    DimuMassGenMatched->GetYaxis()->SetTitle("Events/0.001 GeV");
+    DimuMassGenMatched->Write();
 
-    //This fits the width
-    if (DimuMass->Integral() > 0) {
-      DimuMass->SetLineColor(kBlue);
-      DimuMass->SetLineWidth(2);
-      DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
-      DimuMass->GetYaxis()->SetTitle("Events/0.01 GeV");
-      DimuMass->Fit("gaus","","",0,60);
-      FitMean = DimuMass->GetFunction("gaus")->GetParameter(1);//get 2nd parameter Mean
-      FitSigma = DimuMass->GetFunction("gaus")->GetParameter(2);//get 3rd parameter Sigma
-      DimuMass->GetFunction("gaus")->SetLineColor(kBlue);
-      DimuMass->GetFunction("gaus")->SetLineStyle(2);
-      gStyle->SetOptStat(0);
-      DimuMass->Write();
+    DimuCMassGenMatched->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMassGenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuCMassGenMatched->Write();
+    DimuFMassGenMatched->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassGenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuFMassGenMatched->Write();
 
-      cout<<"Dimu Mass Fit Mean: "<< FitMean<<"; Fit Sigma: "<< FitSigma<<endl;
-    }
+    DimuMass->SetLineColor(kBlue);
+    DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
+    DimuMass->GetYaxis()->SetTitle("Events/0.001 GeV");
+    DimuMass->Write();
+
+    DimuCMass->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMass->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuCMass->Write();
+    DimuFMass->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMass->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuFMass->Write();
   }//end if ( ModelSRWidth )
 
   if ( PlotdZ ) {
@@ -2009,9 +2015,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete L_DimuF_CR_HighMass; delete Lxy_DimuF_CR_HighMass; delete Lz_DimuF_CR_HighMass;
   delete L_DimuC_SR_HighMass; delete Lxy_DimuC_SR_HighMass; delete Lz_DimuC_SR_HighMass;
   delete L_DimuF_SR_HighMass; delete Lxy_DimuF_SR_HighMass; delete Lz_DimuF_SR_HighMass;
-  delete DimuMass;
-  delete DimuCMassAfterCut12; delete DimuCMassAfterCut16;
-  delete DimuFMassAfterCut12; delete DimuFMassAfterCut16;
+  delete DimuMassGenMatched; delete DimuMass;
+  delete DimuCMassAfterCut12GenMatched; delete DimuCMassGenMatched; delete DimuCMass;
+  delete DimuFMassAfterCut12GenMatched; delete DimuFMassGenMatched; delete DimuFMass;
   delete RECO4muMass;
   delete RECOrePaired2muLeadingMass; delete RECOrePaired2muLeadingdR;
   delete RECOrePaired2muTrailingMass; delete RECOrePaired2muTrailingdR;
