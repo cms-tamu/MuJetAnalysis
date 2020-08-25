@@ -1,3 +1,0 @@
-/scratch/user/hyunyong/newHLT/DoubleMuon/Run2_2018_ptSel/200711_033037/0000
-/scratch/user/hyunyong/newHLT/DoubleMuon/Run2_2018_ptSel/200711_033037/0001
-/scratch/user/hyunyong/newHLT/DoubleMuon/Run2_2018_ptSel/200711_033037/0002

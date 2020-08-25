@@ -4,7 +4,6 @@
 //      depending on running cluster limit settings on CPU time, etc
 //To check settings:
 //      Bash: ulimit -H -a, ulimit -S -a; tcsh: limit -h, limit
-//To resolve this on TAMU Brazos, use sintr --help or srun to get interactive node
 //===========================================================================
 #include <iostream>
 #include <iomanip>
@@ -32,6 +31,7 @@ using namespace std;
 #include <TEfficiency.h>
 #include <TMath.h>
 #include "Helpers.h"
+#include "TLorentzVector.h"
 
 int k = -1;//counts sample number
 int counter[500][18];//limit # of samples: 500; 18 total selections per sample for run 2; will be used in final cut flow
@@ -67,6 +67,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   bool verbose(true);//Debug and printout basic info from ntuple
   bool CutFlowTable(true);//Loop 2-dimu events and print cutflow table
+  bool TriggerSFPlot(false);//Study the trigger scale factor using MET and WZ MC
   bool LoopOrphanTree(false);//Loop over orphan-dimu events
   bool Model1DTemplate(false);//plot dimu mass in orphan-dimu events
   bool PlotdZ(true);//Plot dZ of two dimuon vtx
@@ -117,7 +118,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t genA1Mu1_pt;
   Float_t genA0Mu_dR;
   Float_t genA1Mu_dR;
+  Float_t genDiMu0_M;
+  Float_t genDiMu1_M;
 
+  Int_t  nRecoMu;
   Bool_t is1SelMuHighPt;
   Bool_t is2SelMuHighPt;
   Bool_t is3SelMuLowPt;
@@ -134,6 +138,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t selMu1_phi;
   Float_t selMu2_phi;
   Float_t selMu3_phi;
+  Float_t selMu0_charge;
+  Float_t selMu1_charge;
+  Float_t selMu2_charge;
+  Float_t selMu3_charge;
   Float_t muJetC_Mu0_pt;
   Float_t muJetC_Mu1_pt;
   Float_t muJetF_Mu0_pt;
@@ -207,6 +215,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   //End DEBUG: many HLT paths
   Bool_t  isSignalHLTFired;
   Bool_t  isSignalHLTL1Fired;
+  Bool_t  isOrthogonalHLTFired;
 
   Float_t diMuonC_IsoTk_FittedVtx;
   Float_t diMuonF_IsoTk_FittedVtx;
@@ -254,6 +263,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   TCanvas *RECOMuEta    = new TCanvas("RECOMuEta",    "Muon #eta (RECO) in Phase-1 Pixel Volume",  700, 500);
   TCanvas *RECOMuPhi    = new TCanvas("RECOMuPhi",    "Muon #phi (RECO) in Phase-1 Pixel Volume",  700, 500);
   TCanvas *RECODimuMuPt = new TCanvas("RECODimuMuPt", "Candidate Di-#mu Muon p_{T} (RECO) in Phase-1 Pixel Volume", 700, 500);
+  TCanvas *HighTaildpT  = new TCanvas("HighTaildpT",  "Muon p_{T} Difference of RECO and GEN", 700, 500);
+  TCanvas *HighTaildEta  = new TCanvas("HighTaildEta",  "Muon #eta Difference of RECO and GEN", 700, 500);
+  TCanvas *HighTaildPhi  = new TCanvas("HighTaildPhi",  "Muon #phi Difference of RECO and GEN", 700, 500);
 
   TH1F* Phase1Pix_GEN_A0_Lxy = new TH1F("Phase1Pix_GEN_A0_Lxy", "L_{xy} of A0 (GEN) in Phase-1 Pixel Volume", 40,   0., 20.); //per 0.5cm
   TH1F* Phase1Pix_GEN_A0_Lz  = new TH1F("Phase1Pix_GEN_A0_Lz",  "L_{z} of A0 (GEN) in Phase-1 Pixel Volume", 240, -60., 60.); //per 0.5cm
@@ -279,7 +291,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* Phase1Pix_GEN_A0_Mu1_pT = new TH1F("Phase1Pix_GEN_A0_Mu1_pT", "p_{T} of Trailing Muon in A0 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
   TH1F* Phase1Pix_GEN_A1_Mu0_pT = new TH1F("Phase1Pix_GEN_A1_Mu0_pT", "p_{T} of Leading Muon in A1 (GEN) in Phase-1 Pixel Volume",  130, 0., 130.);
   TH1F* Phase1Pix_GEN_A1_Mu1_pT = new TH1F("Phase1Pix_GEN_A1_Mu1_pT", "p_{T} of Trailing Muon in A1 (GEN) in Phase-1 Pixel Volume", 130, 0., 130.);
-
 
   TH1F* Phase1Pix_RECO_Mu0_pT = new TH1F("Phase1Pix_RECO_Mu0_pT", "1st RECO #mu in Phase-1 Pixel Volume", 130, 0., 130.);
   TH1F* Phase1Pix_RECO_Mu1_pT = new TH1F("Phase1Pix_RECO_Mu1_pT", "2nd RECO #mu in Phase-1 Pixel Volume", 130, 0., 130.);
@@ -422,11 +433,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* HLT_diMuon_leading_Lxy_pass_all = new TH1F("HLT_diMuon_leading_Lxy_pass_all", "",  40, 0., 20.);
   TH1F* HLT_diMuon_leading_Lz_pass_all  = new TH1F("HLT_diMuon_leading_Lz_pass_all",  "", 120, 0., 60.);
 
-  //For BKG modeling at high mass 11-59 GeV
+  //For BKG modeling at high mass
   //Control Region/Validation Region
-  TH2F *BKGShapeCR      = new TH2F("BKGShapeCR",      "", 12, 11., 59., 12, 11., 59.);//binning 4 GeV
-  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC", "", 12, 11., 59.);
-  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF", "", 12, 11., 59.);
+  TH2F *BKGShapeCR      = new TH2F("BKGShapeCR",      "", 14, 11., 60., 14, 11., 60.);//binning 3.5 GeV
+  TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC", "", 14, 11., 60.);
+  TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF", "", 14, 11., 60.);
   TH1F *NJetCR = new TH1F("NJetCR", "", 100, 0, 100);
   TH1F *NTightBCR  = new TH1F("NTightBCR",  "", 10, 0, 10);
   TH1F *NMediumBCR = new TH1F("NMediumBCR", "", 10, 0, 10);
@@ -448,9 +459,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* SAmuEtaCR = new TH1F("SAmuEtaCR", "",  50, -2.5, 2.5);//per 0.1
   TH1F* SAmuPhiCR = new TH1F("SAmuPhiCR", "",  70, -3.5, 3.5);//per 0.1
   //Signal Region
-  TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 12, 11., 59., 12, 11., 59.);
-  TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 12, 11., 59.);
-  TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 12, 11., 59.);
+  TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 14, 11., 60., 14, 11., 60.);
+  TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 14, 11., 60.);
+  TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 14, 11., 60.);
   TH1F *NJetSR = new TH1F("NJetSR", "", 100, 0, 100);
   TH1F *NTightBSR  = new TH1F("NTightBSR",  "", 10, 0, 10);
   TH1F *NMediumBSR = new TH1F("NMediumBSR", "", 10, 0, 10);
@@ -489,8 +500,44 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F *DimuMassGenMatched = new TH1F("DimuMassGenMatched", "", 70000, 0., 70.);//binning 0.001 GeV
   TH1F *DimuCMassGenMatched = new TH1F("DimuCMassGenMatched", "Di-#mu #1 Mass Before Mass Window Cut (GEN Matched)", 60000, 0., 60.);
   TH1F *DimuFMassGenMatched = new TH1F("DimuFMassGenMatched", "Di-#mu #2 Mass Before Mass Window Cut (GEN Matched)", 60000, 0., 60.);
+
+  TH1F *DimuCMassAfterCut11GenMatched = new TH1F("DimuCMassAfterCut11GenMatched", "Di-#mu #1 Mass after Cut 11 (GEN Matched)", 60000, 0., 60.);//binning 0.001 GeV
+  TH1F *DimuFMassAfterCut11GenMatched = new TH1F("DimuFMassAfterCut11GenMatched", "Di-#mu #2 Mass after Cut 11 (GEN Matched)", 60000, 0., 60.);
   TH1F *DimuCMassAfterCut12GenMatched = new TH1F("DimuCMassAfterCut12GenMatched", "Di-#mu #1 Mass after Cut 12 (GEN Matched)", 60000, 0., 60.);//binning 0.001 GeV
   TH1F *DimuFMassAfterCut12GenMatched = new TH1F("DimuFMassAfterCut12GenMatched", "Di-#mu #2 Mass after Cut 12 (GEN Matched)", 60000, 0., 60.);
+
+  TH1F *GENDimuMass = new TH1F("GENDimuMass", "", 70000, 0., 70.);//binning 0.001 GeV
+  TH1F *GENDimu0Mass = new TH1F("GENDimu0Mass", "", 70000, 0., 70.);
+  TH1F *GENDimu1Mass = new TH1F("GENDimu1Mass", "", 70000, 0., 70.);
+
+  //For dimuon mass tail studies
+  TH1F *HighTailDimuMass = new TH1F("HighTailDimuMass", "", 7000, 0., 70.);//binning 0.01 GeV
+  TH1F *HighTailmassC = new TH1F("HighTailmassC", "", 7000, 0., 70.);
+  TH1F *HighTailmassF = new TH1F("HighTailmassF", "", 7000, 0., 70.);
+
+  TH1F* HighTailMu0dpT = new TH1F("HighTailMu0dpT", "1st #mu: RECO p_{T} - GEN p_{T}", 100, -50., 50.); //per 1
+  TH1F* HighTailMu1dpT = new TH1F("HighTailMu1dpT", "2nd #mu: RECO p_{T} - GEN p_{T}", 100, -50., 50.);
+  TH1F* HighTailMu2dpT = new TH1F("HighTailMu2dpT", "3rd #mu: RECO p_{T} - GEN p_{T}", 100, -50., 50.);
+  TH1F* HighTailMu3dpT = new TH1F("HighTailMu3dpT", "4th #mu: RECO p_{T} - GEN p_{T}", 100, -50., 50.);
+
+  TH1F* HighTailMu0dEta = new TH1F("HighTailMu0dEta", "1st #mu: RECO #eta - GEN #eta", 100, -5., 5.); //per 0.1
+  TH1F* HighTailMu1dEta = new TH1F("HighTailMu1dEta", "2nd #mu: RECO #eta - GEN #eta", 100, -5., 5.);
+  TH1F* HighTailMu2dEta = new TH1F("HighTailMu2dEta", "3rd #mu: RECO #eta - GEN #eta", 100, -5., 5.);
+  TH1F* HighTailMu3dEta = new TH1F("HighTailMu3dEta", "4th #mu: RECO #eta - GEN #eta", 100, -5., 5.);
+
+  TH1F* HighTailMu0dPhi = new TH1F("HighTailMu0dPhi", "1st #mu: RECO #phi - GEN #phi", 140, -7., 7.); //per 0.1
+  TH1F* HighTailMu1dPhi = new TH1F("HighTailMu1dPhi", "2nd #mu: RECO #phi - GEN #phi", 140, -7., 7.);
+  TH1F* HighTailMu2dPhi = new TH1F("HighTailMu2dPhi", "3rd #mu: RECO #phi - GEN #phi", 140, -7., 7.);
+  TH1F* HighTailMu3dPhi = new TH1F("HighTailMu3dPhi", "4th #mu: RECO #phi - GEN #phi", 140, -7., 7.);
+
+  //For trigger SF study in orthogonal method with MET and WZ MC
+  TH1F *BestZMass  = new TH1F("BestZMass", "", 31, 76., 107.); //per GeV
+  TH1F* leading_pt_orthogonal      = new TH1F("leading_pt_orthogonal",      "", 150,    0, 150); //per 1
+  TH1F* leading_eta_orthogonal     = new TH1F("leading_eta_orthogonal",     "",  50, -2.5, 2.5); //per 0.1
+  TH1F* leading_phi_orthogonal     = new TH1F("leading_phi_orthogonal",     "",  70, -3.5, 3.5); //per 0.1
+  TH1F* HLT_leading_pt_orthogonal  = new TH1F("HLT_leading_pt_orthogonal",  "", 150,    0, 150);
+  TH1F* HLT_leading_eta_orthogonal = new TH1F("HLT_leading_eta_orthogonal", "",  50, -2.5, 2.5);
+  TH1F* HLT_leading_phi_orthogonal = new TH1F("HLT_leading_phi_orthogonal", "",  70, -3.5, 3.5);
 
   TH1F *DimuMass  = new TH1F("DimuMass", "", 70000, 0., 70.);
   TH1F *DimuCMass = new TH1F("DimuCMass", "Di-#mu #1 Mass Before Mass Window Cut", 60000, 0., 60.);
@@ -565,7 +612,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("genA1Mu1_pt",   &genA1Mu1_pt);
   t->SetBranchAddress("genA0Mu_dR",    &genA0Mu_dR);
   t->SetBranchAddress("genA1Mu_dR",    &genA1Mu_dR);
+  t->SetBranchAddress("genDiMu0_M",    &genDiMu0_M);
+  t->SetBranchAddress("genDiMu1_M",    &genDiMu1_M);
 
+  t->SetBranchAddress("nRecoMu",       &nRecoMu);
   t->SetBranchAddress("is1SelMuHighPt",&is1SelMuHighPt);
   t->SetBranchAddress("is2SelMuHighPt",&is2SelMuHighPt);
   t->SetBranchAddress("is3SelMuLowPt", &is3SelMuLowPt);
@@ -582,6 +632,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("selMu1_phi",    &selMu1_phi);
   t->SetBranchAddress("selMu2_phi",    &selMu2_phi);
   t->SetBranchAddress("selMu3_phi",    &selMu3_phi);
+  t->SetBranchAddress("selMu0_charge", &selMu0_charge);
+  t->SetBranchAddress("selMu1_charge", &selMu1_charge);
+  t->SetBranchAddress("selMu2_charge", &selMu2_charge);
+  t->SetBranchAddress("selMu3_charge", &selMu3_charge);
   t->SetBranchAddress("muJetC_Mu0_pt", &muJetC_Mu0_pt);
   t->SetBranchAddress("muJetC_Mu1_pt", &muJetC_Mu1_pt);
   t->SetBranchAddress("muJetF_Mu0_pt", &muJetF_Mu0_pt);
@@ -674,6 +728,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   //End Debug: many HLT paths
   t->SetBranchAddress("isSignalHLTFired",              &isSignalHLTFired);
   t->SetBranchAddress("isSignalHLTL1Fired",            &isSignalHLTL1Fired);
+  t->SetBranchAddress("isOrthogonalHLTFired",          &isOrthogonalHLTFired);
   t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",    &is2DiMuonsMassOK);
 
   //Get branch from orphan-dimuon tree
@@ -717,7 +772,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcount2SAmu = 0;
   Float_t R0 = 10.0;
   Float_t P0 = 0.2;
-  Float_t N0 = 5.0;
+  //Float_t N0 = 5.0;
   Float_t L0 = 0.1;
   Float_t C0 = 2.0;
   //f(dR)-Poly4
@@ -726,6 +781,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t p2 = 109.83;
   Float_t p3 = -92.7445;
   Float_t p4 = 36.8351;
+  /*
   //mass window below J/Psi: Poly3
   Float_t V0 = 0.00849813;
   Float_t V1 = 0.00475107;
@@ -737,6 +793,11 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t W2 = 0.00113991;
   Float_t W3 = -2.62048e-05;
   Float_t W4 = 1.92254e-07;
+  */
+  //Test CB fit sigma Poly-1 fit
+  //Float_t Consta = 5.0;
+  //Float_t B0 = 0.003681;
+  //Float_t B1 = 0.007583;
   int newcountHLT = 0;
   int newcountHLT0 = 0;
   int newcountHLT1 = 0;
@@ -752,10 +813,86 @@ void efficiency(const std::vector<std::string>& dirNames)
       counter[k][0]++;
       counterGENMatch[k][0]++;
 
+      //Example printout
       //std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
       //std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
       //std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
-      //Some basic efficiency tests on muon selections
+
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!    Start: Trigger Scale factpr study with MET/WZ MC  !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      int nSelMu24 = 0;
+      int nSelMu8  = 0;
+      TLorentzVector selMu0_V, selMu1_V, selMu2_V;
+      Float_t ZdimuM1 = 0;
+      Float_t ZdimuM2 = 0;
+      Float_t ZdimuM = 0;
+      //Fire one of the selected MET triggers
+      //At least three reco muons with ++- or --+ signs to reconstuct WZ events
+      //No b jet from ttbar events
+      if ( TriggerSFPlot && isOrthogonalHLTFired && NPATJetTightB < 1 && nRecoMu >= 3 && !( selMu0_charge == selMu1_charge && selMu1_charge == selMu2_charge ) ){
+
+        //Count muons: pT>24 && |eta|<2.0@RECO
+        if ( selMu0_pT > 24 && fabs(selMu0_eta) < 2.0 ) nSelMu24++;
+        if ( selMu1_pT > 24 && fabs(selMu1_eta) < 2.0 ) nSelMu24++;
+        if ( selMu2_pT > 24 && fabs(selMu2_eta) < 2.0 ) nSelMu24++;
+        //Count muons: pT>8 && |eta|<2.4@RECO
+        if ( selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 ) nSelMu8++;
+        if ( selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 ) nSelMu8++;
+        if ( selMu2_pT > 8 && fabs(selMu2_eta) < 2.4 ) nSelMu8++;
+
+        //Consistent with 2018 DoubleL2Mu23NoVtx trigger requirement (two high pt muons |eta|<2)
+        //At most 1 SA mu, consistent with analysis selection
+        if ( nSelMu24 > 1 && nSelMu8 > 2 && nSAMu <= 1 ) {
+          selMu0_V.SetPtEtaPhiM(selMu0_pT, selMu0_eta, selMu0_phi, 0.105);
+          selMu1_V.SetPtEtaPhiM(selMu1_pT, selMu1_eta, selMu1_phi, 0.105);
+          selMu2_V.SetPtEtaPhiM(selMu2_pT, selMu2_eta, selMu2_phi, 0.105);
+          //find two same charge sign muons among 3 muons
+          //three possible cases, each case gives two possible Z mass
+          if( selMu0_charge*selMu1_charge > 0 ){
+            ZdimuM1 = (selMu0_V + selMu2_V).M();
+            ZdimuM2 = (selMu1_V + selMu2_V).M();
+          }
+          else if ( selMu0_charge*selMu2_charge > 0 ){
+            ZdimuM1 = (selMu0_V + selMu1_V).M();
+            ZdimuM2 = (selMu2_V + selMu1_V).M();
+          }
+          else if ( selMu1_charge*selMu2_charge > 0 ){
+            ZdimuM1 = (selMu1_V + selMu0_V).M();
+            ZdimuM2 = (selMu2_V + selMu0_V).M();
+          }
+          else{
+            std::cout << "//============================" << std::endl;
+            std::cout << "    Can't find Z candidates..." << std::endl;
+            std::cout << "//============================" << std::endl;
+          }
+
+          if ( (ZdimuM1 > 76 && ZdimuM1 < 107) && !(ZdimuM2 > 76 && ZdimuM2 < 107) ) ZdimuM = ZdimuM1;
+          else if( !(ZdimuM1 > 76 && ZdimuM1 < 107) && (ZdimuM2 > 76 && ZdimuM2 < 107) ) ZdimuM = ZdimuM2;
+          else if( (ZdimuM1 > 76 && ZdimuM1 < 107) && (ZdimuM2 > 76 && ZdimuM2 < 107) ) {
+            if ( fabs(ZdimuM1 - 91) < fabs(ZdimuM2 - 91) ) ZdimuM = ZdimuM1;
+            else ZdimuM = ZdimuM2;
+          }
+
+          //Final selected WZ events
+          if ( ZdimuM > 0 ) {
+            BestZMass->Fill(ZdimuM);
+
+            //plot signal trigger efficiency
+            leading_pt_orthogonal->Fill(selMu0_pT); leading_eta_orthogonal->Fill(selMu0_eta); leading_phi_orthogonal->Fill(selMu0_phi);
+            if ( isSignalHLTFired ) { HLT_leading_pt_orthogonal->Fill(selMu0_pT); HLT_leading_eta_orthogonal->Fill(selMu0_eta); HLT_leading_phi_orthogonal->Fill(selMu0_phi); }
+          }//final selected WZ events
+
+        }//end pT selection
+      }//end trigger SF study
+
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!    End: Trigger Scale factpr study with MET/WZ MC  !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!   Start: Basic efficiency tests on muon selection !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if (genMu0_pT > 8 && fabs(genMu0_eta) < 2.4 &&
           genMu1_pT > 8 && fabs(genMu1_eta) < 2.4 &&
           genMu2_pT > 8 && fabs(genMu2_eta) < 2.4 &&
@@ -777,81 +914,31 @@ void efficiency(const std::vector<std::string>& dirNames)
             else GENLeadingLz_pass_GEN->Fill(fabs(genA1_Lz));
 
             //selections
-            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4) {
-               newcountmu1st++;
-               GEN1stPt_pass_1stRECOmu->Fill(genMu0_pT);
-            }
+            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4) { newcountmu1st++; GEN1stPt_pass_1stRECOmu->Fill(genMu0_pT); }
+            if (selMu1_pT > 8 && fabs(selMu1_eta) < 2.4) { newcountmu2nd++; GEN2ndPt_pass_2ndRECOmu->Fill(genMu1_pT); }
+            if (selMu2_pT > 8 && fabs(selMu2_eta) < 2.4) { newcountmu3rd++; GEN3rdPt_pass_3rdRECOmu->Fill(genMu2_pT); }
+            if (selMu3_pT > 8 && fabs(selMu3_eta) < 2.4) { newcountmu4th++; GEN4thPt_pass_4thRECOmu->Fill(genMu3_pT); }
 
-            if (selMu1_pT > 8 && fabs(selMu1_eta) < 2.4) {
-               newcountmu2nd++;
-               GEN2ndPt_pass_2ndRECOmu->Fill(genMu1_pT);
-            }
-
-            if (selMu2_pT > 8 && fabs(selMu2_eta) < 2.4) {
-               newcountmu3rd++;
-               GEN3rdPt_pass_3rdRECOmu->Fill(genMu2_pT);
-            }
-
-            if (selMu3_pT > 8 && fabs(selMu3_eta) < 2.4) {
-               newcountmu4th++;
-               GEN4thPt_pass_4thRECOmu->Fill(genMu3_pT);
-            }
-
-            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4) {
-               newcountmu12++;
-               GEN1stPt_pass_RECOmu12->Fill(genMu0_pT);
-            }
-
-            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 && selMu2_pT > 8 && fabs(selMu2_eta) < 2.4) {
-               newcountmu123++;
-               GEN1stPt_pass_RECOmu123->Fill(genMu0_pT);
-            }
-
+            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4) { newcountmu12++; GEN1stPt_pass_RECOmu12->Fill(genMu0_pT); }
+            if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 && selMu2_pT > 8 && fabs(selMu2_eta) < 2.4) { newcountmu123++; GEN1stPt_pass_RECOmu123->Fill(genMu0_pT); }
             if (selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 && selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 && selMu2_pT > 8 && fabs(selMu2_eta) < 2.4 && selMu3_pT > 8 && fabs(selMu3_eta) < 2.4) {
-               newcountmu1234++;
-               GEN1stPt_pass_RECOmu1234->Fill(genMu0_pT);
+              newcountmu1234++;
+              GEN1stPt_pass_RECOmu1234->Fill(genMu0_pT);
 
-               if ( genA0_Lxy > genA1_Lxy ) GENLeadingLxy_pass_RECOmu1234->Fill(genA0_Lxy);
-               else GENLeadingLxy_pass_RECOmu1234->Fill(genA1_Lxy);
+              if ( genA0_Lxy > genA1_Lxy ) GENLeadingLxy_pass_RECOmu1234->Fill(genA0_Lxy);
+              else GENLeadingLxy_pass_RECOmu1234->Fill(genA1_Lxy);
 
-               if ( fabs(genA0_Lz) > fabs(genA1_Lz) ) GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA0_Lz));
-               else GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA1_Lz));
+              if ( fabs(genA0_Lz) > fabs(genA1_Lz) ) GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA0_Lz));
+              else GENLeadingLz_pass_RECOmu1234->Fill(fabs(genA1_Lz));
             }
-
       }//basic gen selections
-
-      //Count muons: pT>24 && |eta|<2.0@GEN,RECO
-      //muons: pT>8 && |eta|<2.4@GEN,RECO
-      int nGenMu24 = 0;
-      int nGenMu8  = 0;
-      int nSelMu24 = 0;
-      int nSelMu8  = 0;
-      if ( genMu0_pT > 24 && fabs(genMu0_eta) < 2.0 ) nGenMu24++;
-      if ( genMu1_pT > 24 && fabs(genMu1_eta) < 2.0 ) nGenMu24++;
-      if ( genMu2_pT > 24 && fabs(genMu2_eta) < 2.0 ) nGenMu24++;
-      if ( genMu3_pT > 24 && fabs(genMu3_eta) < 2.0 ) nGenMu24++;
-      if ( genMu0_pT > 8 && fabs(genMu0_eta) < 2.4 ) nGenMu8++;
-      if ( genMu1_pT > 8 && fabs(genMu1_eta) < 2.4 ) nGenMu8++;
-      if ( genMu2_pT > 8 && fabs(genMu2_eta) < 2.4 ) nGenMu8++;
-      if ( genMu3_pT > 8 && fabs(genMu3_eta) < 2.4 ) nGenMu8++;
-
-      if ( selMu0_pT > 24 && fabs(selMu0_eta) < 2.0 ) nSelMu24++;
-      if ( selMu1_pT > 24 && fabs(selMu1_eta) < 2.0 ) nSelMu24++;
-      if ( selMu2_pT > 24 && fabs(selMu2_eta) < 2.0 ) nSelMu24++;
-      if ( selMu3_pT > 24 && fabs(selMu3_eta) < 2.0 ) nSelMu24++;
-      if ( selMu0_pT > 8 && fabs(selMu0_eta) < 2.4 ) nSelMu8++;
-      if ( selMu1_pT > 8 && fabs(selMu1_eta) < 2.4 ) nSelMu8++;
-      if ( selMu2_pT > 8 && fabs(selMu2_eta) < 2.4 ) nSelMu8++;
-      if ( selMu3_pT > 8 && fabs(selMu3_eta) < 2.4 ) nSelMu8++;
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      //!   End: Basic efficiency tests on muon selection !
+      //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ GEN Level       !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //Consistent with 2018 HLT_DoubleL2Mu23NoVtx_2Cha_CosmicSeed requirement (two 23 GeV muons |eta|<2)
-      //if ( nGenMu24 > 0 ) {counter[k][1]++; counterGENMatch[k][1]++;}
-      //if ( nGenMu24 > 1 ) {counter[k][2]++; counterGENMatch[k][2]++;}
-      //if ( nGenMu24 > 1 && nGenMu8 > 2  ) {counter[k][3]++; counterGENMatch[k][3]++;}
-      //if ( nGenMu24 > 1 && nGenMu8 > 3  ) {
       if ( is1GenMuHighPt ) {counter[k][1]++; counterGENMatch[k][1]++;}
       if ( is2GenMuHighPt ) {counter[k][2]++; counterGENMatch[k][2]++;}
       if ( is3GenMuLowPt  ) {counter[k][3]++; counterGENMatch[k][3]++;}
@@ -910,10 +997,6 @@ void efficiency(const std::vector<std::string>& dirNames)
             Phase1Pix_RECO_DimuF_Mu0_pT->Fill(muJetF_Mu0_pt);
             Phase1Pix_RECO_DimuF_Mu1_pT->Fill(muJetF_Mu1_pt);
 
-            //if ( nSelMu24 > 0 ) counterGENMatch[k][6]++;
-            //if ( nSelMu24 > 1  ) counterGENMatch[k][7]++;
-            //if ( nSelMu24 > 1 && nSelMu8 > 2  ) counterGENMatch[k][8]++;
-            //if ( nSelMu24 > 1 && nSelMu8 > 3  ) {
             if ( is1SelMuHighPt ) counterGENMatch[k][6]++;
             if ( is2SelMuHighPt ) counterGENMatch[k][7]++;
             if ( is3SelMuLowPt  ) counterGENMatch[k][8]++;
@@ -955,6 +1038,11 @@ void efficiency(const std::vector<std::string>& dirNames)
                      diMuonF_FittedVtx_prob > P0*(1 - dimuF_nSAMu)*exp( -( p0 + p1*(sqrt(diMuonF_FittedVtx_dR)) + p2*pow(sqrt(diMuonF_FittedVtx_dR), 2) + p3*pow(sqrt(diMuonF_FittedVtx_dR), 3) + p4*pow(sqrt(diMuonF_FittedVtx_dR), 4) )*pow(fabs(diMuonF_FittedVtx_Lxy/R0), C0) ) ) {
                   counterGENMatch[k][11]++;
 
+                  if ( ModelSRWidth ) {
+                    DimuCMassAfterCut11GenMatched->Fill(massC);
+                    DimuFMassAfterCut11GenMatched->Fill(massF);
+                  }
+
                   if ( ( diMuonC_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonC_m2_FittedVtx_hitpix_Phase1 == 1 ) && ( diMuonF_m1_FittedVtx_hitpix_Phase1 == 1 || diMuonF_m2_FittedVtx_hitpix_Phase1 == 1 ) ) {
                     //!!! Note: this needs to match GEN cut on geometry
                     counterGENMatch[k][12]++;
@@ -989,7 +1077,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                       dZdimuons->Fill(diMuons_dz_FittedVtx);
                     }
 
-                    if ( (massC >= 9.5 && massF >= 9.5 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
+                    if ( (massC > 11 && massC < 60 && massF > 11 && massF < 60 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) ||
+                         (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ) {
                       counterGENMatch[k][13]++;
 
                       //Note: this needs to be before the cut on iso
@@ -1087,18 +1176,46 @@ void efficiency(const std::vector<std::string>& dirNames)
                         if ( isSignalHLTFired ) {
                           counterGENMatch[k][15]++;
 
-                          if ( ( massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5 ) ||
-                               ( massC >= 9.5 && massF >= 9.5 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
+                          if ( (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ||
+                               (massC > 11 && massC < 60 && massF > 11 && massF < 60 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
                             counterGENMatch[k][16]++;
 
                             if ( ModelSRWidth ) {
-                              DimuMassGenMatched->Fill( (massC+massF)/2 );
+                              DimuMassGenMatched->Fill( (massC+massF)/2 );//this is the fitted dimu mass, not the mu pair mass, the actual value is close for most cases
                               DimuCMassGenMatched->Fill(massC);
                               DimuFMassGenMatched->Fill(massF);
-                            }
 
-                            if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
-                                 ( massC >= 3.0 && massF >= 3.0 && fabs(massC - massF) < N0*( W0 + W1*(massC + massF)/2.0 + W2*pow((massC + massF)/2.0, 2) + W3*pow((massC + massF)/2.0, 3) + W4*pow((massC + massF)/2.0, 4) ) ) ) counterGENMatch[k][17]++; //end 17 Poly-5
+                              GENDimuMass->Fill( (genDiMu0_M + genDiMu1_M)/2 );
+                              GENDimu0Mass->Fill( genDiMu0_M );
+                              GENDimu1Mass->Fill( genDiMu1_M );
+
+                              //print mass for 0.25GeV-0mm signal to see why there is high end tail
+                              if ( (massC + massF)/2 > 0.3 && genDiMu0_M > 0 && genDiMu0_M < 0.3 && genDiMu1_M > 0 && genDiMu1_M < 0.3 ) {
+                                HighTailDimuMass->Fill((massC + massF)/2);
+                                HighTailmassC->Fill(massC);
+                                HighTailmassF->Fill(massF);
+                                //RECO - GEN
+                                HighTailMu0dpT->Fill(selMu0_pT-genMu0_pT);
+                                HighTailMu1dpT->Fill(selMu1_pT-genMu1_pT);
+                                HighTailMu2dpT->Fill(selMu2_pT-genMu2_pT);
+                                HighTailMu3dpT->Fill(selMu3_pT-genMu3_pT);
+
+                                HighTailMu0dEta->Fill(selMu0_eta-genMu0_eta);
+                                HighTailMu1dEta->Fill(selMu1_eta-genMu1_eta);
+                                HighTailMu2dEta->Fill(selMu2_eta-genMu2_eta);
+                                HighTailMu3dEta->Fill(selMu3_eta-genMu3_eta);
+
+                                HighTailMu0dPhi->Fill(selMu0_phi-genMu0_phi);
+                                HighTailMu1dPhi->Fill(selMu1_phi-genMu1_phi);
+                                HighTailMu2dPhi->Fill(selMu2_phi-genMu2_phi);
+                                HighTailMu3dPhi->Fill(selMu3_phi-genMu3_phi);
+                              }
+                            }//end ModelSRWidth
+
+                            //if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
+                            //     ( massC >= 3.0 && massF >= 3.0 && fabs(massC - massF) < N0*( W0 + W1*(massC + massF)/2.0 + W2*pow((massC + massF)/2.0, 2) + W3*pow((massC + massF)/2.0, 3) + W4*pow((massC + massF)/2.0, 4) ) ) ) counterGENMatch[k][17]++; //end 17
+                            //if ( fabs(massC - massF) < Consta*( B0 + B1*(massC + massF)/2.0 ) ) counterGENMatch[k][17]++; //end 17
+                            if ( fabs(massC - massF) < My_MassWindow(massC, massF) ) counterGENMatch[k][17]++; //end 17
                           }//end 16
                         }//end 15
                       }//end 14
@@ -1113,7 +1230,7 @@ void efficiency(const std::vector<std::string>& dirNames)
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         }//End fiducial volume cut on Phase-1 pixel @GEN
-      }//End asking for four muons pT>8GeV (including 1st barrel muon) @GEN
+      }//End asking for four muons @GEN
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Ends@ GEN Level         !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1121,10 +1238,6 @@ void efficiency(const std::vector<std::string>& dirNames)
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Starts@ RECO Level      !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      //if ( nSelMu24 > 0 ) counter[k][6]++;
-      //if ( nSelMu24 > 1  ) counter[k][7]++;
-      //if ( nSelMu24 > 1 && nSelMu8 > 2  ) counter[k][8]++;
-      //if ( nSelMu24 > 1 && nSelMu8 > 3  ) {
       if ( is1SelMuHighPt ) counter[k][6]++;
       if ( is2SelMuHighPt ) counter[k][7]++;
       if ( is3SelMuLowPt  ) counter[k][8]++;
@@ -1151,7 +1264,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                 RECOrePaired2muTrailingdR->Fill(recoRePaired2mutrailing_dR);
               }//end ModelBKGShape
 
-              if ( (massC >= 9.5 && massF >= 9.5 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) || (massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5) ) {
+              if ( (massC > 11 && massC < 60 && massF > 11 && massF < 60 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) ||
+                   (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ) {
                 counter[k][13]++;
 
                 if ( diMuonC_IsoTk_FittedVtx < 2.3 && diMuonF_IsoTk_FittedVtx < 2.3 ) {
@@ -1161,8 +1275,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                     counter[k][15]++;
 
                     //Cut SA-only introduced BKG in data
-                    if ( ( massC > 0 && massC < 9.5 && massF > 0 && massF < 9.5 ) ||
-                         ( massC >= 9.5 && massF >= 9.5 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
+                    if ( (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ||
+                         (massC > 11 && massC < 60 && massF > 11 && massF < 60 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
                       counter[k][16]++;
 
                       if ( ModelSRWidth ) {
@@ -1171,8 +1285,10 @@ void efficiency(const std::vector<std::string>& dirNames)
                         DimuFMass->Fill(massF);
                       }
 
-                      if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
-                           ( massC >= 3.0 && massF >= 3.0 && fabs(massC - massF) < N0*( W0 + W1*(massC + massF)/2.0 + W2*pow((massC + massF)/2.0, 2) + W3*pow((massC + massF)/2.0, 3) + W4*pow((massC + massF)/2.0, 4) ) ) ) {
+                      //if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
+                      //     ( massC >= 3.0 && massF >= 3.0 && fabs(massC - massF) < N0*( W0 + W1*(massC + massF)/2.0 + W2*pow((massC + massF)/2.0, 2) + W3*pow((massC + massF)/2.0, 3) + W4*pow((massC + massF)/2.0, 4) ) ) ) {
+                      //if ( fabs(massC - massF) < Consta*( B0 + B1*(massC + massF)/2.0 ) ) {
+                      if ( fabs(massC - massF) < My_MassWindow(massC, massF) ) {
                         counter[k][17]++;
 
                         //=================================
@@ -1424,6 +1540,26 @@ void efficiency(const std::vector<std::string>& dirNames)
   TString output="";
   output = output + "./foo_modified_sample_" + Form("%d", k+1)+ ".root";
   TFile myPlot(output,"RECREATE");
+
+  //plots for trigger scale factor study using orthogonal method
+  if ( TriggerSFPlot ){
+    BestZMass->Write();
+    if ( TEfficiency::CheckConsistency(*HLT_leading_pt_orthogonal, *leading_pt_orthogonal) ) {
+      TEfficiency* eff_HLT_leading_pt_orthogonal  = new TEfficiency(*HLT_leading_pt_orthogonal, *leading_pt_orthogonal);
+      eff_HLT_leading_pt_orthogonal->SetTitle("Signal HLT Efficiency;Leading muon p_{T} [GeV];Trigger efficiency");
+      eff_HLT_leading_pt_orthogonal->Write();
+    }
+    if ( TEfficiency::CheckConsistency(*HLT_leading_eta_orthogonal, *leading_eta_orthogonal) ) {
+      TEfficiency* eff_HLT_leading_eta_orthogonal = new TEfficiency(*HLT_leading_eta_orthogonal, *leading_eta_orthogonal);
+      eff_HLT_leading_eta_orthogonal->SetTitle("Signal HLT Efficiency;Leading muon #eta;Trigger efficiency");
+      eff_HLT_leading_eta_orthogonal->Write();
+    }
+    if ( TEfficiency::CheckConsistency(*HLT_leading_phi_orthogonal, *leading_phi_orthogonal) ) {
+      TEfficiency* eff_HLT_leading_phi_orthogonal = new TEfficiency(*HLT_leading_phi_orthogonal, *leading_phi_orthogonal);
+      eff_HLT_leading_phi_orthogonal->SetTitle("Signal HLT Efficiency;Leading muon #phi;Trigger efficiency");
+      eff_HLT_leading_phi_orthogonal->Write();
+    }
+  }//end TriggerSFPlot
 
   genA_leading_Lxy_pass_all->GetXaxis()->SetTitle("Lxy [cm]"); genA_leading_Lxy_pass_all->GetYaxis()->SetTitle("Events/0.5 cm"); genA_leading_Lxy_pass_all->Write();
   genA_leading_Lz_pass_all->GetXaxis()->SetTitle("Lz [cm]");   genA_leading_Lz_pass_all->GetYaxis()->SetTitle("Events/0.5 cm");  genA_leading_Lz_pass_all->Write();
@@ -1829,6 +1965,8 @@ void efficiency(const std::vector<std::string>& dirNames)
   } //end if ( ModelBKGShape )
 
   if ( ModelSRWidth ) {
+    DimuCMassAfterCut11GenMatched->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMassAfterCut11GenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuCMassAfterCut11GenMatched->Write();
+    DimuFMassAfterCut11GenMatched->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassAfterCut11GenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuFMassAfterCut11GenMatched->Write();
     DimuCMassAfterCut12GenMatched->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMassAfterCut12GenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuCMassAfterCut12GenMatched->Write();
     DimuFMassAfterCut12GenMatched->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassAfterCut12GenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuFMassAfterCut12GenMatched->Write();
 
@@ -1839,6 +1977,35 @@ void efficiency(const std::vector<std::string>& dirNames)
 
     DimuCMassGenMatched->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); DimuCMassGenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuCMassGenMatched->Write();
     DimuFMassGenMatched->GetXaxis()->SetTitle("m_{#mu#mu2} [GeV]"); DimuFMassGenMatched->GetYaxis()->SetTitle("Events/0.001 GeV"); DimuFMassGenMatched->Write();
+
+    GENDimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]"); GENDimuMass->GetYaxis()->SetTitle("Events/0.001 GeV"); GENDimuMass->Write();
+    GENDimu0Mass->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); GENDimu0Mass->GetYaxis()->SetTitle("Events/0.001 GeV"); GENDimu0Mass->Write();
+    GENDimu1Mass->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); GENDimu1Mass->GetYaxis()->SetTitle("Events/0.001 GeV"); GENDimu1Mass->Write();
+
+    HighTailDimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]"); HighTailDimuMass->GetYaxis()->SetTitle("Events/0.01 GeV"); HighTailDimuMass->Write();
+    HighTailmassC->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); HighTailmassC->GetYaxis()->SetTitle("Events/0.01 GeV"); HighTailmassC->Write();
+    HighTailmassF->GetXaxis()->SetTitle("m_{#mu#mu1} [GeV]"); HighTailmassF->GetYaxis()->SetTitle("Events/0.01 GeV"); HighTailmassF->Write();
+
+    HighTaildpT->cd();
+    HighTailMu0dpT->SetLineColor(1); HighTailMu0dpT->GetXaxis()->SetTitle("RECO p_{T} - GEN p_{T} [GeV]"); HighTailMu0dpT->GetYaxis()->SetTitle("Events/GeV"); HighTailMu0dpT->Draw();
+    HighTailMu1dpT->SetLineColor(2); HighTailMu1dpT->GetXaxis()->SetTitle("RECO p_{T} - GEN p_{T} [GeV]"); HighTailMu1dpT->GetYaxis()->SetTitle("Events/GeV"); HighTailMu1dpT->Draw("SAMES");
+    HighTailMu2dpT->SetLineColor(3); HighTailMu2dpT->GetXaxis()->SetTitle("RECO p_{T} - GEN p_{T} [GeV]"); HighTailMu2dpT->GetYaxis()->SetTitle("Events/GeV"); HighTailMu2dpT->Draw("SAMES");
+    HighTailMu3dpT->SetLineColor(4); HighTailMu3dpT->GetXaxis()->SetTitle("RECO p_{T} - GEN p_{T} [GeV]"); HighTailMu3dpT->GetYaxis()->SetTitle("Events/GeV"); HighTailMu3dpT->Draw("SAMES");
+    HighTaildpT->Write();
+
+    HighTaildEta->cd();
+    HighTailMu0dEta->SetLineColor(1); HighTailMu0dEta->GetXaxis()->SetTitle("RECO #eta - GEN #eta"); HighTailMu0dEta->GetYaxis()->SetTitle("Events/0.1"); HighTailMu0dEta->Draw();
+    HighTailMu1dEta->SetLineColor(2); HighTailMu1dEta->GetXaxis()->SetTitle("RECO #eta - GEN #eta"); HighTailMu1dEta->GetYaxis()->SetTitle("Events/0.1"); HighTailMu1dEta->Draw("SAMES");
+    HighTailMu2dEta->SetLineColor(3); HighTailMu2dEta->GetXaxis()->SetTitle("RECO #eta - GEN #eta"); HighTailMu2dEta->GetYaxis()->SetTitle("Events/0.1"); HighTailMu2dEta->Draw("SAMES");
+    HighTailMu3dEta->SetLineColor(4); HighTailMu3dEta->GetXaxis()->SetTitle("RECO #eta - GEN #eta"); HighTailMu3dEta->GetYaxis()->SetTitle("Events/0.1"); HighTailMu3dEta->Draw("SAMES");
+    HighTaildEta->Write();
+
+    HighTaildPhi->cd();
+    HighTailMu0dPhi->SetLineColor(1); HighTailMu0dPhi->GetXaxis()->SetTitle("RECO #phi - GEN #phi"); HighTailMu0dPhi->GetYaxis()->SetTitle("Events/0.1"); HighTailMu0dPhi->Draw();
+    HighTailMu1dPhi->SetLineColor(2); HighTailMu1dPhi->GetXaxis()->SetTitle("RECO #phi - GEN #phi"); HighTailMu1dPhi->GetYaxis()->SetTitle("Events/0.1"); HighTailMu1dPhi->Draw("SAMES");
+    HighTailMu2dPhi->SetLineColor(3); HighTailMu2dPhi->GetXaxis()->SetTitle("RECO #phi - GEN #phi"); HighTailMu2dPhi->GetYaxis()->SetTitle("Events/0.1"); HighTailMu2dPhi->Draw("SAMES");
+    HighTailMu3dPhi->SetLineColor(4); HighTailMu3dPhi->GetXaxis()->SetTitle("RECO #phi - GEN #phi"); HighTailMu3dPhi->GetYaxis()->SetTitle("Events/0.1"); HighTailMu3dPhi->Draw("SAMES");
+    HighTaildPhi->Write();
 
     DimuMass->SetLineColor(kBlue);
     DimuMass->GetXaxis()->SetTitle("#frac{m_{#mu#mu1}+m_{#mu#mu2}}{2} [GeV]");
@@ -1954,6 +2121,9 @@ void efficiency(const std::vector<std::string>& dirNames)
   myPlot.Close();
 
   //Delete objects to avoid potential memory leak
+  delete BestZMass;
+  delete leading_pt_orthogonal; delete leading_eta_orthogonal; delete leading_phi_orthogonal;
+  delete HLT_leading_pt_orthogonal; delete HLT_leading_eta_orthogonal; delete HLT_leading_phi_orthogonal;
   delete Phase1Pix_GEN_Mu0_pT; delete Phase1Pix_GEN_Mu0_eta; delete Phase1Pix_GEN_Mu0_phi;
   delete Phase1Pix_GEN_Mu1_pT; delete Phase1Pix_GEN_Mu1_eta; delete Phase1Pix_GEN_Mu1_phi;
   delete Phase1Pix_GEN_Mu2_pT; delete Phase1Pix_GEN_Mu2_eta; delete Phase1Pix_GEN_Mu2_phi;
@@ -1975,6 +2145,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete Lxy; delete Lz;
   delete GENMuPt; delete GENMuEta; delete GENMuPhi; delete GENAMuPt;
   delete RECOMuPt; delete RECOMuEta; delete RECOMuPhi; delete RECODimuMuPt;
+  delete HighTaildpT; delete HighTaildEta; delete HighTaildPhi;
   delete GEN1stPt_pass_GEN; delete GEN2ndPt_pass_GEN; delete GEN3rdPt_pass_GEN; delete GEN4thPt_pass_GEN;
   delete GENLeadingLxy_pass_GEN; delete GENLeadingLz_pass_GEN;
   delete GEN1stPt_pass_1stRECOmu; delete GEN2ndPt_pass_2ndRECOmu; delete GEN3rdPt_pass_3rdRECOmu; delete GEN4thPt_pass_4thRECOmu;
@@ -2016,8 +2187,13 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete L_DimuC_SR_HighMass; delete Lxy_DimuC_SR_HighMass; delete Lz_DimuC_SR_HighMass;
   delete L_DimuF_SR_HighMass; delete Lxy_DimuF_SR_HighMass; delete Lz_DimuF_SR_HighMass;
   delete DimuMassGenMatched; delete DimuMass;
-  delete DimuCMassAfterCut12GenMatched; delete DimuCMassGenMatched; delete DimuCMass;
-  delete DimuFMassAfterCut12GenMatched; delete DimuFMassGenMatched; delete DimuFMass;
+  delete DimuCMassAfterCut11GenMatched; delete DimuCMassAfterCut12GenMatched; delete DimuCMassGenMatched; delete DimuCMass;
+  delete DimuFMassAfterCut11GenMatched; delete DimuFMassAfterCut12GenMatched; delete DimuFMassGenMatched; delete DimuFMass;
+  delete GENDimuMass; delete GENDimu0Mass; delete GENDimu1Mass;
+  delete HighTailDimuMass; delete HighTailmassC; delete HighTailmassF;
+  delete HighTailMu0dpT; delete HighTailMu1dpT; delete HighTailMu2dpT; delete HighTailMu3dpT;
+  delete HighTailMu0dEta; delete HighTailMu1dEta; delete HighTailMu2dEta; delete HighTailMu3dEta;
+  delete HighTailMu0dPhi; delete HighTailMu1dPhi; delete HighTailMu2dPhi; delete HighTailMu3dPhi;
   delete RECO4muMass;
   delete RECOrePaired2muLeadingMass; delete RECOrePaired2muLeadingdR;
   delete RECOrePaired2muTrailingMass; delete RECOrePaired2muTrailingdR;
@@ -2089,33 +2265,35 @@ void analysis(const std::string SamplesList)
   TFile finalPlot("analysis.root", "RECREATE");
   cout << "Tot. # of samples: "<< linecount << endl;
 
-  //at least one sample
+  //===========================================================
+  //   Study the efficiency of each selection on many samples
+  //   At least one sample is required
+  //===========================================================
   if ( linecount >= 1 ) {
-    //Calcaulate standard deviation (SD) for selection 12: DY cut
-    //Smaller SD indicate better performance on model independence for the selection
-    TH1F *finalratio  = new TH1F("finalratio", "", 100, 0., 1.);//binning 0.01
-    TH1F *cut12releff = new TH1F("cut12releff","", 100, 0., 1.);
-    TH1F *cut12ratio  = new TH1F("cut12ratio", "", 100, 0., 1.);
-    for (int iline = 0; iline < linecount; iline++) {
-      //cout << iline+1 << ": final ratio = "<< epsvsalph[iline] << "; cut12 releff = " << RelEff[iline][12] << "; cut12 ratio = "<< counter[iline][12]*1.0/counter[iline][5] << endl;
-      finalratio->Fill(epsvsalph[iline]);
-      cut12releff->Fill(RelEff[iline][12]);
-      cut12ratio->Fill(counter[iline][12]*1.0/counter[iline][5]);
-    }
-    //cout << "final ratio  Sigma: " << finalratio->GetStdDev()  << "; Mean: " << finalratio->GetMean() << endl;
-    //cout << "cut12 releff Sigma: " << cut12releff->GetStdDev() << "; Mean: " << cut12releff->GetMean() << endl;
-    //cout << "cut12 ratio  Sigma: " << cut12ratio->GetStdDev()  << "; Mean: " << cut12ratio->GetMean() << endl;
 
-    finalratio->Write();
-    cut12releff->Write();
-    cut12ratio->Write();
+    //some efficiency plots showing flatness
+    TH1F *ModelIndependentRatio  = new TH1F("ModelIndependentRatio", "", 100, 0., 1.);//binning 0.01
+    TH1F *DimuonEfficiency  = new TH1F("DimuonEfficiency", "Signal Dimuon Pairing and Selection Efficiency", 100, 0., 1.);//binning 0.01
+    for (int iline = 0; iline < linecount; iline++) {
+      ModelIndependentRatio->Fill(epsvsalph[iline]);
+      DimuonEfficiency->Fill(counterGENMatch[iline][12]*1.0/counterGENMatch[iline][5]);
+    }
+    ModelIndependentRatio->SetLineColor(kBlue);
+    ModelIndependentRatio->GetXaxis()->SetTitle("Model Independent Ratio (r)");
+    ModelIndependentRatio->GetYaxis()->SetTitle("Number of Samples/0.01");
+    ModelIndependentRatio->Write();
+
+    DimuonEfficiency->SetLineColor(kRed);
+    DimuonEfficiency->GetXaxis()->SetTitle("Efficiency");
+    DimuonEfficiency->GetYaxis()->SetTitle("Number of Samples/0.01");
+    DimuonEfficiency->Write();
 
     //Each offline selection efficiency/GEN Accept.: counter[12-17]/counter[5]
-    //=============================
-    //   Efficiency for MSSMD
-    //=============================
+    //=======================================
+    //= Start: Efficiency for MSSMD: 2D plot
+    //=======================================
     double massbin[11] = {0.25, 0.4, 0.7, 1, 2, 5, 8.5, 15, 25, 35, 58};//Exclude 10GeV becaue it's in Upsilon range
-    double cTbin[13]   = {0, 0.05, 0.1, 0.2, 0.5, 1, 2, 3, 5, 10, 20, 50, 100};
+    double cTbin[13] = {0, 0.05, 0.1, 0.2, 0.5, 1, 2, 3, 5, 10, 20, 50, 100};
     int ix, iy;
 
     //For GEN matched counters
@@ -2203,7 +2381,7 @@ void analysis(const std::string SamplesList)
     TH2F *h_MSSMD_Cut14_5 = new TH2F("h_MSSMD_Cut14_5", "#splitline{#scale[0.8]{Offline Sel. #14 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_Cut15_5 = new TH2F("h_MSSMD_Cut15_5", "#splitline{#scale[0.8]{Offline Sel. #15 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_Cut16_5 = new TH2F("h_MSSMD_Cut16_5", "#splitline{#scale[0.8]{Offline Sel. #16 / GEN. Sel. #5}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
-    TH2F *h_MSSMD_Cut17_5 = new TH2F("h_MSSMD_Cut17_5", "#splitline{#scale[0.8]{#epsilon_{full}/#alpha_{gen}}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
+    TH2F *h_MSSMD_Cut17_5 = new TH2F("h_MSSMD_Cut17_5", "#epsilon_{full}/#alpha_{gen} (MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV)", 11, 0, 11, 13, 0, 13);
 
     TH2F *h_MSSMD_Cut10_9  = new TH2F("h_MSSMD_Cut10_9",  "#splitline{#scale[0.8]{Offline Sel. #10 / Sel. #9}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}",  11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_Cut11_10 = new TH2F("h_MSSMD_Cut11_10", "#splitline{#scale[0.8]{Offline Sel. #11 / Sel. #10}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
@@ -2426,6 +2604,10 @@ void analysis(const std::string SamplesList)
       c_MSSMD_Cut17_16->cd(); h_MSSMD_Cut17_16->GetXaxis()->SetTitle("m_{#gamma_{D}} [GeV]"); h_MSSMD_Cut17_16->GetYaxis()->SetTitle("c#tau_{#gamma_{D}} [mm]"); h_MSSMD_Cut17_16->SetStats(0); h_MSSMD_Cut17_16->Draw("COLZ TEXT"); h_MSSMD_Cut17_16->SetMinimum(0); h_MSSMD_Cut17_16->SetMaximum(1); c_MSSMD_Cut17_16->Write();
 
     }//if MSSMD sample exists
+
+    //====================================
+    //= End: Efficiency for MSSMD: 2D plot
+    //====================================
 
   }//end at least one sample
 

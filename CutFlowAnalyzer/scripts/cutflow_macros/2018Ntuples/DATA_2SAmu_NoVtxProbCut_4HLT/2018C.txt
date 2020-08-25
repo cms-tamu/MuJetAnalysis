@@ -1,2 +1,0 @@
-/scratch/user/hyunyong/newHLT/DoubleMuon/Run2_2018_ptSel/200711_033100/0000
-/scratch/user/hyunyong/newHLT/DoubleMuon/Run2_2018_ptSel/200711_033100/0001

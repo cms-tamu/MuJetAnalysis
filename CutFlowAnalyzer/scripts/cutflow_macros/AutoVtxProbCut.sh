@@ -2,7 +2,7 @@
 
 set timeout 86400
 set r0 [list 10.0]
-set c0 [list 1.5 1.8 2.1 2.4 2.7 3.0]
+set c0 [list 5.0 3.0 4.0 6.0 7.0 8.0 9.0 10.0 11.0]
 ################
 spawn sh
 expect "$ "
@@ -17,21 +17,21 @@ for { set j 0 } { $j < [llength $c0] } { incr j } {
 
 set C0 [lindex $c0 $j]
 
-send "mkdir Pol4R0_$R0\_C0_$C0\r"
+send "mkdir SIGNAL18R0_$R0\_C0_$C0\r"
 expect "$ "
-send "cp CutFlow.slurm Pol4R0_$R0\_C0_$C0\r"
+send "cp CutFlow.slurm SIGNAL18R0_$R0\_C0_$C0\r"
 expect "$ "
-send "cp CutFlow_2018L2Mu23.C Pol4R0_$R0\_C0_$C0\r"
+send "cp CutFlow_2018L2Mu23.C SIGNAL18R0_$R0\_C0_$C0\r"
 expect "$ "
-send "cp Helpers.h Pol4R0_$R0\_C0_$C0\r"
+send "cp Helpers.h SIGNAL18R0_$R0\_C0_$C0\r"
 expect "$ "
-send "cp SignalsList2018MSSMD_2SAmu_NoVtxProbCut_4HLT.txt Pol4R0_$R0\_C0_$C0\r"
+send "cp SignalsList2018MSSMD_2SAmu_NoVtxProbCut_4HLT.txt SIGNAL18R0_$R0\_C0_$C0\r"
 expect "$ "
-send "cd Pol4R0_$R0\_C0_$C0\r"
+send "cd SIGNAL18R0_$R0\_C0_$C0\r"
 expect "$ "
-send "sed -i '714s/R0 = 10.0/R0 = $R0/' CutFlow_2018L2Mu23.C\r"
+send "sed -i '728s/R0 = 10.0/R0 = $R0/' CutFlow_2018L2Mu23.C\r"
 expect "$ "
-send "sed -i '718s/C0 = 2.0/C0 = $C0/' CutFlow_2018L2Mu23.C\r"
+send "sed -i '753s/Consta = 5.0/Consta = $C0/' CutFlow_2018L2Mu23.C\r"
 expect "$ "
 send "mv CutFlow_2018L2Mu23.C CutFlow_2018L2Mu23_R0_$R0\_C0_$C0.C\r"
 expect "$ "
