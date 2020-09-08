@@ -839,7 +839,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
       if (
         ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 25 ) ||
         ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 35 ) ||
-        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 5000002 )
+        ( iGenParticle->status() == 22 && iGenParticle->pdgId() == 1023 )
        ) {
         genH.push_back(&(*iGenParticle));
       }
