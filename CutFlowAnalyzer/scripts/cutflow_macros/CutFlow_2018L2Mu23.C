@@ -772,7 +772,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcount2SAmu = 0;
   Float_t R0 = 10.0;
   Float_t P0 = 0.2;
-  //Float_t N0 = 5.0;
   Float_t L0 = 0.1;
   Float_t C0 = 2.0;
   //f(dR)-Poly4
@@ -1077,7 +1076,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                       dZdimuons->Fill(diMuons_dz_FittedVtx);
                     }
 
-                    if ( (massC > 11 && massC < 60 && massF > 11 && massF < 60 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) ||
+                    //if ( (massC > 11 && massC < 60 && massF > 11 && massF < 60 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) ||
+                    if ( (massC > 11 && massC < 60 && massF > 11 && massF < 60 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) ||
                          (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ) {
                       counterGENMatch[k][13]++;
 
@@ -1176,8 +1176,11 @@ void efficiency(const std::vector<std::string>& dirNames)
                         if ( isSignalHLTFired ) {
                           counterGENMatch[k][15]++;
 
-                          if ( (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ||
-                               (massC > 11 && massC < 60 && massF > 11 && massF < 60 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
+                          //if ( (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ||
+                            //   (massC > 11 && massC < 60 && massF > 11 && massF < 60 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
+                          //if ( (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ||
+                            //   (massC > 11 && massC < 60 && massF > 11 && massF < 60 && ( nSAMu == 0 || (dimuC_nSAMu == 1 && diMuonC_FittedVtx_Lxy > L0) || (dimuF_nSAMu == 1 && diMuonF_FittedVtx_Lxy > L0) ) ) ) {
+                          if ( 2 > 1 ){
                             counterGENMatch[k][16]++;
 
                             if ( ModelSRWidth ) {
@@ -1212,9 +1215,6 @@ void efficiency(const std::vector<std::string>& dirNames)
                               }
                             }//end ModelSRWidth
 
-                            //if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
-                            //     ( massC >= 3.0 && massF >= 3.0 && fabs(massC - massF) < N0*( W0 + W1*(massC + massF)/2.0 + W2*pow((massC + massF)/2.0, 2) + W3*pow((massC + massF)/2.0, 3) + W4*pow((massC + massF)/2.0, 4) ) ) ) counterGENMatch[k][17]++; //end 17
-                            //if ( fabs(massC - massF) < Consta*( B0 + B1*(massC + massF)/2.0 ) ) counterGENMatch[k][17]++; //end 17
                             if ( fabs(massC - massF) < My_MassWindow(massC, massF) ) counterGENMatch[k][17]++; //end 17
                           }//end 16
                         }//end 15
@@ -1264,7 +1264,8 @@ void efficiency(const std::vector<std::string>& dirNames)
                 RECOrePaired2muTrailingdR->Fill(recoRePaired2mutrailing_dR);
               }//end ModelBKGShape
 
-              if ( (massC > 11 && massC < 60 && massF > 11 && massF < 60 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) ||
+              //if ( (massC > 11 && massC < 60 && massF > 11 && massF < 60 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) && recoRePaired2muleading_m < 76) ||
+              if ( (massC > 11 && massC < 60 && massF > 11 && massF < 60 && (recoRePaired2mutrailing_dR >= 0.2 || recoRePaired2mutrailing_m >= 3) ) ||
                    (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ) {
                 counter[k][13]++;
 
@@ -1275,8 +1276,11 @@ void efficiency(const std::vector<std::string>& dirNames)
                     counter[k][15]++;
 
                     //Cut SA-only introduced BKG in data
-                    if ( (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ||
-                         (massC > 11 && massC < 60 && massF > 11 && massF < 60 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
+                    //if ( (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ||
+                         //(massC > 11 && massC < 60 && massF > 11 && massF < 60 && ( nSAMu == 0 || ( nSAMu == 1 && ( diMuonC_FittedVtx_Lxy > L0 || diMuonF_FittedVtx_Lxy > L0 ) ) ) ) ) {
+                    //if ( (massC > 0.2113 && massC < 9 && massF > 0.2113 && massF < 9) ||
+                      //   (massC > 11 && massC < 60 && massF > 11 && massF < 60 && ( nSAMu == 0 || (dimuC_nSAMu == 1 && diMuonC_FittedVtx_Lxy > L0) || (dimuF_nSAMu == 1 && diMuonF_FittedVtx_Lxy > L0) ) ) ) {
+                    if ( 2 > 1 ){
                       counter[k][16]++;
 
                       if ( ModelSRWidth ) {
@@ -1285,18 +1289,25 @@ void efficiency(const std::vector<std::string>& dirNames)
                         DimuFMass->Fill(massF);
                       }
 
-                      //if ( ( massC > 0 && massC < 3.0 && massF > 0 && massF < 3.0 && fabs(massC - massF) < N0*( V0 + V1*(massC + massF)/2.0 + V2*pow((massC + massF)/2.0, 2) + V3*pow((massC + massF)/2.0, 3) ) ) ||
-                      //     ( massC >= 3.0 && massF >= 3.0 && fabs(massC - massF) < N0*( W0 + W1*(massC + massF)/2.0 + W2*pow((massC + massF)/2.0, 2) + W3*pow((massC + massF)/2.0, 3) + W4*pow((massC + massF)/2.0, 4) ) ) ) {
-                      //if ( fabs(massC - massF) < Consta*( B0 + B1*(massC + massF)/2.0 ) ) {
                       if ( fabs(massC - massF) < My_MassWindow(massC, massF) ) {
                         counter[k][17]++;
 
                         //=================================
                         // All offline selections finished
                         //=================================
-                        //std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
-                        //std::cout << ">>> selMu3 pT: " << selMu3_pT << ", eta: " << selMu3_eta << ", phi: " << selMu3_phi << std::endl;
-                        //std::cout << "    genMu3 pT: " << genMu3_pT << ", eta: " << genMu3_eta << ", phi: " << genMu3_phi << std::endl;
+                        /*
+                        std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
+                        std::cout << ">>> dimuC mass: " << massC << ", Lxy: " << diMuonC_FittedVtx_Lxy << ", No. SAMu: " << dimuC_nSAMu << ", dz: " << diMuonC_FittedVtx_dz << std::endl;
+                        std::cout << "        Mu0 pT: " << muJetC_Mu0_pt << ", eta: " << muJetC_Mu0_eta << ", phi: " << muJetC_Mu0_phi <<", SA-only(?): "<< dimuC_Mu0_SA << std::endl;
+                        std::cout << "        Mu1 pT: " << muJetC_Mu1_pt << ", eta: " << muJetC_Mu1_eta << ", phi: " << muJetC_Mu1_phi <<", SA-only(?): "<< dimuC_Mu1_SA << std::endl;
+                        std::cout << "    dimuF mass: " << massF << ", Lxy: " << diMuonF_FittedVtx_Lxy << ", No. SAMu: " << dimuF_nSAMu << ", dz: " << diMuonF_FittedVtx_dz << std::endl;
+                        std::cout << "        Mu0 pT: " << muJetF_Mu0_pt << ", eta: " << muJetF_Mu0_eta << ", phi: " << muJetF_Mu0_phi <<", SA-only(?): "<< dimuF_Mu0_SA << std::endl;
+                        std::cout << "        Mu1 pT: " << muJetF_Mu1_pt << ", eta: " << muJetF_Mu1_eta << ", phi: " << muJetF_Mu1_phi <<", SA-only(?): "<< dimuF_Mu1_SA << std::endl;
+                        std::cout << "    Alternative trailing dR: " << recoRePaired2mutrailing_dR << ", alternative trailing mass: " << recoRePaired2mutrailing_m << std::endl;
+                        std::cout << "    Alternative leading  dR: " << recoRePaired2muleading_dR  << ", alternative leading  mass: " << recoRePaired2muleading_m << std::endl;
+                        std::cout << "    Reco 4mu mass: " <<  reco4mu_m << std::endl;
+                        */
+
 
                         if ( ModelBKGShape ) {
                           BKGShapeSR->Fill(massC,massF);
@@ -2392,6 +2403,7 @@ void analysis(const std::string SamplesList)
     TH2F *h_MSSMD_Cut16_15 = new TH2F("h_MSSMD_Cut16_15", "#splitline{#scale[0.8]{Offline Sel. #16 / Sel. #15}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
     TH2F *h_MSSMD_Cut17_16 = new TH2F("h_MSSMD_Cut17_16", "#splitline{#scale[0.8]{Offline Sel. #17 / Sel. #16}}{#scale[0.5]{MSSMD: m_{h}=125GeV, m_{n_{1}}=60GeV, m_{n_{D}}=1GeV}}", 11, 0, 11, 13, 0, 13);
 
+    //if MSSMD sample exists
     if ( mGammaDarray.size() > 0 ) {
 
       for (UInt_t i = 0; i < mGammaDarray.size(); i++) {

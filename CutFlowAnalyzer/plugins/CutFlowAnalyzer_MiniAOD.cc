@@ -357,6 +357,11 @@ private:
   Float_t b_muJetF_Mu0_charge;
   Float_t b_muJetF_Mu1_charge;
 
+  Int_t b_muJetC_Mu0_matched_segs;
+  Int_t b_muJetC_Mu1_matched_segs;
+  Int_t b_muJetF_Mu0_matched_segs;
+  Int_t b_muJetF_Mu1_matched_segs;
+
   Float_t b_reco4mu_pt;
   Float_t b_reco4mu_eta;
   Float_t b_reco4mu_phi;
@@ -610,10 +615,13 @@ private:
 
   Float_t m_orphan_PtOrph;
   Float_t m_orphan_EtaOrph;
+  Int_t m_orphan_matched_segs_Orph;
   Float_t m_orphan_PtMu0;
   Float_t m_orphan_EtaMu0;
+  Int_t m_orphan_matched_segs_Mu0;
   Float_t m_orphan_PtMu1;
   Float_t m_orphan_EtaMu1;
+  Int_t m_orphan_matched_segs_Mu1;
 };
 
 CutFlowAnalyzer_MiniAOD::CutFlowAnalyzer_MiniAOD(const edm::ParameterSet& iConfig):
@@ -1287,12 +1295,12 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
     //START DEBUG@Wei May5, 2020
     //FYI: https://github.com/cms-sw/cmssw/blob/master/DataFormats/TrackReco/interface/HitPattern.h#L275
-    //if ( (b_run == 1 && b_lumi == 177 && b_event == 17673) || (b_run == 1 && b_lumi == 441 && b_event == 44056) || (b_run == 1 && b_lumi == 444 && b_event == 44314) ){
-    //if ( (b_run == 1 && b_lumi == 246 && b_event == 24533) || (b_run == 1 && b_lumi == 305 && b_event == 30409) || (b_run == 1 && b_lumi == 306 && b_event == 30555) || (b_run == 1 && b_lumi == 373 && b_event == 37287) ){
-    //if ( (b_run == 1 && b_lumi == 1 && b_event == 247) || (b_run == 1 && b_lumi == 1 && b_event == 364) ){
-    /*if ( (b_run == 1 && b_lumi == 2301 && b_event == 230014) ){
+    /*
+    if ( (b_run == 1 && b_lumi == 71671 && b_event == 79554298) ){
       std::cout << ">>> run: " << b_run << ", lumi: " << b_lumi << ", event: " << b_event << std::endl;
       std::cout << "Mu pT: " << iMuon->pt() << "; eta: " << iMuon->eta() << "; phi: " << iMuon->phi() <<std::endl;
+      //number of chambers with matched segments
+      std::cout << "Matched segments: " << iMuon->numberOfMatches(reco::Muon::SegmentAndTrackArbitration) << ", matched chambers: "<< iMuon->numberOfChambers() << ", matched DT/CSC: "<< iMuon->numberOfChambersCSCorDT()<<std::endl;
       std::cout << "   isLooseMuon: " << iMuon->isLooseMuon() << "; isMediumMuon: " << iMuon->isMediumMuon() << "; isTrackerMuon: " << iMuon->isTrackerMuon() << "; isGlobalMuon: " << iMuon->isGlobalMuon() << "; isPFMuon:" << iMuon->isPFMuon() << "; isStandAloneMuon: "<< iMuon->isStandAloneMuon() <<std::endl;
       if ( iMuon->innerTrack().isAvailable() ){
         std::cout << "   innerTrack available, pT: " << iMuon->innerTrack()->pt() << ", eta: "<< iMuon->innerTrack()->eta() << ", phi: "<< iMuon->innerTrack()->phi() << ", dxy: " << iMuon->innerTrack()->dxy(beamSpot->position()) << ", dz: " << iMuon->innerTrack()->dz(beamSpot->position()) << std::endl;
@@ -1614,6 +1622,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_muJetC_Mu1_charge = muJetC->muon(1)->charge();
     b_muJetF_Mu0_charge = muJetF->muon(0)->charge();
     b_muJetF_Mu1_charge = muJetF->muon(1)->charge();
+
+    //numberOfMatches(): https://github.com/cms-sw/cmssw/blob/master/DataFormats/MuonReco/interface/Muon.h#L257
+    b_muJetC_Mu0_matched_segs = muJetC->muon(0)->numberOfMatches(reco::Muon::SegmentAndTrackArbitration);
+    b_muJetC_Mu1_matched_segs = muJetC->muon(1)->numberOfMatches(reco::Muon::SegmentAndTrackArbitration);
+    b_muJetF_Mu0_matched_segs = muJetF->muon(0)->numberOfMatches(reco::Muon::SegmentAndTrackArbitration);
+    b_muJetF_Mu1_matched_segs = muJetF->muon(1)->numberOfMatches(reco::Muon::SegmentAndTrackArbitration);
+
   } else {
     b_massC = -999.;
     b_massF = -999.;
@@ -1637,6 +1652,11 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_muJetC_Mu1_charge = 0.;
     b_muJetF_Mu0_charge = 0.;
     b_muJetF_Mu1_charge = 0.;
+
+    b_muJetC_Mu0_matched_segs = -1;
+    b_muJetC_Mu1_matched_segs = -1;
+    b_muJetF_Mu0_matched_segs = -1;
+    b_muJetF_Mu1_matched_segs = -1;
   }
 
   //Now we have two distinct dimuons, we do a sanity check to reject rare events
@@ -2377,12 +2397,17 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   m_orphan_dimu_Mu1_isoTk0p3 = -999.;
   m_orphan_dimu_Mu1_isoTk0p4 = -999.;
   m_orphan_dimu_Mu1_isoTk0p5 = -999.;
+
   m_orphan_PtOrph  = -99.;
   m_orphan_EtaOrph = -99.;
+  m_orphan_matched_segs_Orph = -1;
   m_orphan_PtMu0   = -99.;
   m_orphan_EtaMu0  = -99.;
+  m_orphan_matched_segs_Mu0  = -1;
   m_orphan_PtMu1   = -99.;
   m_orphan_EtaMu1  = -99.;
+  m_orphan_matched_segs_Mu1  = -1;
+
   m_orphan_isoTk = -999.;
   m_orphan_dimu_nSAMu = 0;
   m_orphan_dimu_nNonTrackerMu = 0;
@@ -2436,10 +2461,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     pat::MultiMuonCollection::const_iterator muJet = muJets->begin();
     m_orphan_PtOrph  = orphans[0]->pt();
     m_orphan_EtaOrph = orphans[0]->eta();
+    m_orphan_matched_segs_Orph = orphans[0]->numberOfMatches(reco::Muon::SegmentAndTrackArbitration);
     m_orphan_PtMu0   = muJet->muon(0)->pt();
-    m_orphan_PtMu1   = muJet->muon(1)->pt();
     m_orphan_EtaMu0  = muJet->muon(0)->eta();
+    m_orphan_matched_segs_Mu0  = muJet->muon(0)->numberOfMatches(reco::Muon::SegmentAndTrackArbitration);
+    m_orphan_PtMu1   = muJet->muon(1)->pt();
     m_orphan_EtaMu1  = muJet->muon(1)->eta();
+    m_orphan_matched_segs_Mu1  = muJet->muon(1)->numberOfMatches(reco::Muon::SegmentAndTrackArbitration);
 
     if ( muJet->vertexValid() ){
       m_orphan_dimu_mass = muJet->vertexMass();
@@ -2998,6 +3026,8 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("muJetC_Mu1_phi",                 &b_muJetC_Mu1_phi,                 "muJetC_Mu1_phi/F");
   m_ttree->Branch("muJetC_Mu0_charge",              &b_muJetC_Mu0_charge,              "muJetC_Mu0_charge/F");
   m_ttree->Branch("muJetC_Mu1_charge",              &b_muJetC_Mu1_charge,              "muJetC_Mu1_charge/F");
+  m_ttree->Branch("muJetC_Mu0_matched_segs",        &b_muJetC_Mu0_matched_segs,        "muJetC_Mu0_matched_segs/I");
+  m_ttree->Branch("muJetC_Mu1_matched_segs",        &b_muJetC_Mu1_matched_segs,        "muJetC_Mu1_matched_segs/I");
 
   m_ttree->Branch("muJetF_Mu0_pt",                  &b_muJetF_Mu0_pt,                  "muJetF_Mu0_pt/F");
   m_ttree->Branch("muJetF_Mu1_pt",                  &b_muJetF_Mu1_pt,                  "muJetF_Mu1_pt/F");
@@ -3007,6 +3037,8 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("muJetF_Mu1_phi",                 &b_muJetF_Mu1_phi,                 "muJetF_Mu1_phi/F");
   m_ttree->Branch("muJetF_Mu0_charge",              &b_muJetF_Mu0_charge,              "muJetF_Mu0_charge/F");
   m_ttree->Branch("muJetF_Mu1_charge",              &b_muJetF_Mu1_charge,              "muJetF_Mu1_charge/F");
+  m_ttree->Branch("muJetF_Mu0_matched_segs",        &b_muJetF_Mu0_matched_segs,        "muJetF_Mu0_matched_segs/I");
+  m_ttree->Branch("muJetF_Mu1_matched_segs",        &b_muJetF_Mu1_matched_segs,        "muJetF_Mu1_matched_segs/I");
 
   m_ttree->Branch("reco4mu_pt",                     &b_reco4mu_pt,                     "reco4mu_pt/F");
   m_ttree->Branch("reco4mu_eta",                    &b_reco4mu_eta,                    "reco4mu_eta/F");
@@ -3107,10 +3139,13 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree_orphan->Branch("orph_passOffLineSelPtEta", &m_orphan_passOffLineSelPtEta, "orph_passOffLineSelPtEta/O");
   m_ttree_orphan->Branch("orph_PtOrph",  &m_orphan_PtOrph,  "orph_PtOrph/F");
   m_ttree_orphan->Branch("orph_EtaOrph", &m_orphan_EtaOrph, "orph_EtaOrph/F");
+  m_ttree_orphan->Branch("orph_matched_segs_Orph", &m_orphan_matched_segs_Orph, "orph_matched_segs_Orph/I");
   m_ttree_orphan->Branch("orph_PtMu0",   &m_orphan_PtMu0,   "orph_PtMu0/F");
   m_ttree_orphan->Branch("orph_EtaMu0",  &m_orphan_EtaMu0,  "orph_EtaMu0/F");
+  m_ttree_orphan->Branch("orph_matched_segs_Mu0", &m_orphan_matched_segs_Mu0, "orph_matched_segs_Mu0/I");
   m_ttree_orphan->Branch("orph_PtMu1",   &m_orphan_PtMu1,   "orph_PtMu1/F");
   m_ttree_orphan->Branch("orph_EtaMu1",  &m_orphan_EtaMu1,  "orph_EtaMu1/F");
+  m_ttree_orphan->Branch("orph_matched_segs_Mu1", &m_orphan_matched_segs_Mu1, "orph_matched_segs_Mu1/I");
   m_ttree_orphan->Branch("NPATJet",        &b_NPATJet,        "NPATJet/I");
   m_ttree_orphan->Branch("NPATJetTightB",  &b_NPATJetTightB,  "NPATJetTightB/I");
   m_ttree_orphan->Branch("NPATJetMediumB", &b_NPATJetMediumB, "NPATJetMediumB/I");

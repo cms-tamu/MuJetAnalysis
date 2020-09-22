@@ -31,14 +31,14 @@ process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_MiniAOD_cff")
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
+    'file:/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/DataFormats/scripts/patifyMC_13TeV/2BBCB9BA-7D95-A44D-8397-E436424290AD.root'
     #'file:02105075-21AE-E811-BA26-008CFA111184.root', ##TT_Dilept 2017
     #'file:DEF2411F-2DAC-E811-85F7-7845C4F92C96.root', ##TT_Dilept 2017
-    'file:F7D3D6CF-1B85-8241-933E-27452382FB9F.root', ##WZTo3LNu 2018 for trigger study
+    #'file:F7D3D6CF-1B85-8241-933E-27452382FB9F.root', ##WZTo3LNu 2018 for trigger study
     #'file:105518D4-CDCA-7640-B0E8-E2368C8FE208.root', ##2018 EraA MET
     #'file:/scratch/user/ws13/2017TestData/FAC28F5A-C639-E811-B4BB-10604BA8FC24.root', #one file from /DoubleMuon/Run2017C-31Mar2018-v1/MINIAOD
     #'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_58_cT_0_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/120000/0228EDB3-A855-E911-8BCD-842B2B180C66.root',
     #'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_58_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/110000/02E71858-9C36-EA11-9831-0CC47A57CEB4.root',
-    #'file:/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/DataFormats/scripts/patifyMC_13TeV/HIG-RunIIFall17MiniAODv2-03652.root' #private production of 400 events for 2017 mGammaD_25_cT_100
     #'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_5_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/100000/2C5B15B8-1CFF-3449-972E-2DB77E9361AF.root',
     #'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_5_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/100000/624E9E0B-ADC7-9140-B515-8DF9EDAFFF08.root',
     #'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_5_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/100000/78C8681A-A3EC-4D43-91ED-BFCFAF666E5E.root',

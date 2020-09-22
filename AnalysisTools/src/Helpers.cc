@@ -48,8 +48,8 @@ double tamu::helpers::My_dPhi (double phi1, double phi2) {
   return dPhi;
 }
 
-// Muon ID
 // Update muon ID requirement for run2 analysis: @Wei May12, 2020
+// Note: same ID requirement is in MuJetProducerRun2.cc when paring muons, better to combine the two into one single module
 bool tamu::helpers::PassMuonId (const reco::Muon* mu) {
   bool pass = false;
   //can be PF loose/standalone
@@ -57,17 +57,4 @@ bool tamu::helpers::PassMuonId (const reco::Muon* mu) {
     pass = true;
   }
   return pass;
-}
-
-// Private ID for Muons
-bool tamu::helpers::isTrackerMuonPrivateID (const reco::Muon* mu) {
-  bool isTrackerMuonPrivateID = false;
-  if (    fabs(mu->eta()) < 2.4
-       && mu->isTrackerMuon()
-       && mu->numberOfMatches(reco::Muon::SegmentAndTrackArbitration) >= 2
-       && mu->innerTrack()->numberOfValidHits() >= 8
-       && mu->innerTrack()->normalizedChi2() < 4. ) {
-    isTrackerMuonPrivateID = true;
-  }
-  return isTrackerMuonPrivateID;
 }
