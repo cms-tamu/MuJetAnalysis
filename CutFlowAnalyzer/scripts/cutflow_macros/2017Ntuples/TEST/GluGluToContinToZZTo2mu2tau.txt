@@ -1,0 +1,1 @@
+/scratch/user/hyunyong/newHLT/GluGluToContinToZZTo2mu2tau_13TeV_MCFM701_pythia8/Run2_2017_HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx/200616_170719/0000

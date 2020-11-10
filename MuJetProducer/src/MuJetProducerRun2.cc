@@ -254,10 +254,21 @@ MuJetProducerRun2::~MuJetProducerRun2()
 //
 
 bool MuJetProducerRun2::muonOkay(const pat::Muon &muon) {
-  if (muon.pt() < m_minPt ||  fabs(muon.eta()) > m_maxAbsEta) return false;
+  //This should be consistent with PassMuonId in main analysis code: CutFlowAnalyzer_MiniAOD,
+  //allow ONLY one of four muons can be a standalone muon, here it's pairing two muons, so can't enforce ONLY one of four be SA muon
+  //Just relax it allow SA muon in the pairing
+  if ( !muon.isStandAloneMuon() && ( !muon.isPFMuon() || ( (!muon.isTrackerMuon()) && (!muon.isGlobalMuon()) ) ) ) return false;
 
-  if ( !muon.isPFMuon() ) return false;
-  if ( (!muon.isTrackerMuon()) && (!muon.isGlobalMuon()) ) return false;
+  //muon pt is the muonBestTrack pT, which usually is the tracker track pT if it's tracker muon,
+  //otherwise it uses a tuneP algo pT or a PF algo pT which is usually close to globalTrack pT
+  //Reference: https://twiki.cern.ch/twiki/bin/view/CMSPublic/MuonReferenceScaleResolRun2
+  //In our case, if it's not a tracker mu, it means the tracker track/innerTrack can't find compatible hit in calo & muon sys.;
+  //it's high chance the global mu is wrong (pT) and the inner track not right, should just use the outerTrack pT
+  //Here: only use out-of-the-box pT if the muon is tracker muon & PF muon, otherwise use outerTrack pT
+  //if ( muon.isTrackerMuon() && muon.isPFMuon() && ( muon.pt() < m_minPt || fabs(muon.eta()) > m_maxAbsEta ) ) return false;
+  //else if ( muon.outerTrack().isAvailable() && ( muon.outerTrack()->pt() < m_minPt || fabs(muon.outerTrack()->eta()) > m_maxAbsEta ) ) return false;
+
+  if (muon.pt() < m_minPt || fabs(muon.eta()) > m_maxAbsEta) return false;
 
   if (m_minTrackerHits > 0) {
     if (muon.innerTrack().isNull()) return false;
@@ -476,7 +487,7 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   */
   //end DEBUG @Wei SHI 2019.04.18
 
-  //double PairCount=-1;
+  //double PairCount = 0;
   for (pat::MuonCollection::const_iterator one = muons->begin();  one != muons->end();  ++one) {
     if (muonOkay(*one)) {
 	    for (pat::MuonCollection::const_iterator two = one;  two != muons->end();  ++two) {
@@ -506,9 +517,9 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
 
           bool satisfied_deltaR = (muonPair.dR(0, 1, muonPair.vertexValid()) < m_maxDeltaR);
 
-          bool satisfied_mass = (muonPair.mass() < m_maxMass);
+          bool satisfied_mass = (muonPair.mass() < m_maxMass);//This is simply muon pair mass, not the fitted vtx mass
 
-          bool satisfied_vertexProb = (muonPair.vertexValid()  &&  muonPair.vertexProb() > m_minVertexProb);
+          bool satisfied_vertexProb = (muonPair.vertexValid() && muonPair.vertexProb() > m_minVertexProb);
 
           bool satisfied = false;
           if       (m_groupingMode == kGroupByDeltaR                  ) satisfied = satisfied_deltaR;
@@ -526,16 +537,33 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           else if (m_groupByCharge == kGroupByOppositeCharge) satisfied = satisfied  &&  (one->charge() != two->charge());
           else if (m_groupByCharge == kGroupBySameCharge    ) satisfied = satisfied  &&  (one->charge() == two->charge());
 
+          //Start DEBUG@WeiShi
+          /*std::cout <<"----------"<<std::endl;
+          std::cout << "Muon one (x,y,z)[cm]: " << one->vx() <<", "<< one->vy() <<", "<< one->vz() <<std::endl;
+          std::cout << "             pT[GeV]: " << one->pt() << "; eta: " << one->eta() << "; phi: " << one->phi() << "; q: " << one->charge() << "; Tracker Mu: " << one->isTrackerMuon() << "; Global Mu: " << one->isGlobalMuon() << "; PF Mu:" << one->isPFMuon() << "; SA Mu: " << one->isStandAloneMuon() <<std::endl;
+          if( one->innerTrack().isAvailable() )    std::cout << "  innerTrack pT[GeV]: " << one->innerTrack()->pt()    << "; eta: " << one->innerTrack()->eta()    << "; phi: " << one->innerTrack()->phi()    <<std::endl;
+          if( one->outerTrack().isAvailable() )    std::cout << "  outerTrack pT[GeV]: " << one->outerTrack()->pt()    << "; eta: " << one->outerTrack()->eta()    << "; phi: " << one->outerTrack()->phi()    <<std::endl;
+          if( one->globalTrack().isAvailable() )   std::cout << " globalTrack pT[GeV]: " << one->globalTrack()->pt()   << "; eta: " << one->globalTrack()->eta()   << "; phi: " << one->globalTrack()->phi()   <<std::endl;
+          if( one->muonBestTrack().isAvailable() ) std::cout << "   bestTrack pT[GeV]: " << one->muonBestTrack()->pt() << "; eta: " << one->muonBestTrack()->eta() << "; phi: " << one->muonBestTrack()->phi() <<std::endl;
+
+          std::cout << "Muon two (x,y,z)[cm]: " << two->vx() <<", "<< two->vy() <<", "<< two->vz() <<std::endl;
+          std::cout << "             pT[GeV]: " << two->pt() << "; eta: " << two->eta() << "; phi: " << two->phi() << "; q: " << two->charge() << "; Tracker Mu: " << two->isTrackerMuon() << "; Global Mu: " << two->isGlobalMuon() << "; PF Mu:" << two->isPFMuon() << "; SA Mu: " << two->isStandAloneMuon() <<std::endl;
+          if( two->innerTrack().isAvailable() )    std::cout << "  innerTrack pT[GeV]: " << two->innerTrack()->pt()    << "; eta: " << two->innerTrack()->eta()    << "; phi: " << two->innerTrack()->phi()    <<std::endl;
+          if( two->outerTrack().isAvailable() )    std::cout << "  outerTrack pT[GeV]: " << two->outerTrack()->pt()    << "; eta: " << two->outerTrack()->eta()    << "; phi: " << two->outerTrack()->phi()    <<std::endl;
+          if( two->globalTrack().isAvailable() )   std::cout << " globalTrack pT[GeV]: " << two->globalTrack()->pt()   << "; eta: " << two->globalTrack()->eta()   << "; phi: " << two->globalTrack()->phi()   <<std::endl;
+          if( two->muonBestTrack().isAvailable() ) std::cout << "   bestTrack pT[GeV]: " << two->muonBestTrack()->pt() << "; eta: " << two->muonBestTrack()->eta() << "; phi: " << two->muonBestTrack()->phi() <<std::endl;
+
+          std::cout << "muonPair fitted vtx valid: " << muonPair.vertexValid() <<", dR: "<< muonPair.dR(0, 1, muonPair.vertexValid()) <<std::endl;
+          if( muonPair.vertexValid() ) std::cout << "muonPair fitted vtx mass: " << muonPair.vertexMass() << ", prob.: "<< muonPair.vertexProb() <<std::endl;*/
+          //End DEBUG@WeiShi
+
           if (satisfied) {
             Pairs->push_back(muonPair);//All possible pairs
             jets.push_back(muonPair);//tmp jets/pairs, to be cleaned further
+            //Start DEBUG@WeiShi
             //PairCount++;
-            //std::cout <<"----------"<<std::endl;
-            //std::cout << "Pair #"<<PairCount<<std::endl;
-            //std::cout << "Muon one (x,y,z)[cm]: " << one->vx() <<", "<< one->vy() <<", "<< one->vz() <<std::endl;
-            //std::cout << "             pT[GeV]: " << one->pt() << "; eta: " << one->eta() << "; phi: " << one->phi() << "; q: " << one->charge() << "; Tracker Mu: " << one->isTrackerMuon() << "; Global Mu: " << one->isGlobalMuon() << "; PF Mu:" << one->isPFMuon() <<std::endl;
-            //std::cout << "Muon two (x,y,z)[cm]: " << two->vx() <<", "<< two->vy() <<", "<< two->vz() <<std::endl;
-            //std::cout << "             pT[GeV]: " << two->pt() << "; eta: " << two->eta() << "; phi: " << two->phi() << "; q: " << two->charge() << "; Tracker Mu: " << two->isTrackerMuon() << "; Global Mu: " << two->isGlobalMuon() << "; PF Mu:" << two->isPFMuon() <<std::endl;
+            //std::cout << "Satisfied pair #" << PairCount <<std::endl;
+            //End DEBUG@WeiShi
           }//end if satisfied
 
 	      }//end if muon two okay
@@ -554,27 +582,27 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
   std::vector<int> Alice;//1st pair index in jets: Alice.at(X)
   std::vector<int> Bob;//2nd pair index in jets: Bob.at(X)
 
-  //std::cout << "=================" << std::endl;
-  //std::cout << "pairs.size() = "<< jets.size() << std::endl;
   if ( jets.size() > 1 ){
-    //std::cout << " pairs.size() > 1" << std::endl;
     //Store |dM| b/t each two pairs
     for (unsigned int Ajet = 0;  Ajet < jets.size();  Ajet++) {
       for (unsigned int Bjet = Ajet+1;  Bjet < jets.size();  Bjet++) {
-
+        //Note: here need to use the fitted vertex mass, not the muon pair mass
+        //Need to check/calculate vertex before referernce to vertexMass
+        /*if( jets[Ajet].vertexValid() && jets[Bjet].vertexValid() ){
+          deltaMassTmp = fabs( jets[Ajet].vertexMass() - jets[Bjet].vertexMass() );
+          AbsdMass.push_back(deltaMassTmp);
+          Alice.push_back(Ajet);
+          Bob.push_back(Bjet);
+        }*/
         deltaMassTmp = fabs( jets[Ajet].mass() - jets[Bjet].mass() );
         AbsdMass.push_back(deltaMassTmp);
         Alice.push_back(Ajet);
         Bob.push_back(Bjet);
-        //std::cout << "  [pair #"<< Ajet<<", pair #"<<Bjet<<", |dm|] = ["<< jets[Ajet].mass()<<", "<<jets[Bjet].mass()<<", "<< deltaMassTmp <<"]"<< std::endl;
-
       }//end loop over pair A
     }//end loop over pair B
 
-    //std::cout << "=====" << std::endl;
     //std::cout << "AbsdMass size = "<< AbsdMass.size() << "; Alice size = " << Alice.size() << "; Bob size = " << Bob.size() << std::endl;
-    //Find two distinct pairs with min |dM|
-    //(i.e. don't have overlapping muon)
+    //Find two distinct pairs with min |dM|, i.e., don't have overlapping muon
     //Sanity Check
     if( ( AbsdMass.size() == Alice.size() ) &&
         ( AbsdMass.size() == Bob.size()   )   ){
@@ -582,9 +610,6 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
       //std::cout << "FinalJets size = "<< FinalJets.size() << std::endl;
       unsigned int FindCount = 0;//count how many times we find two pairs, terminate when it exceeds AbsdMass.size()-1 times
       while( FinalJets.size() != 2 && FindCount < AbsdMass.size() ){
-
-        //std::cout << ">>> FinalJets size != 2" << std::endl;
-
         //find two pairs with min |dM|
         double MinDeltaMass = 13000.;
         unsigned int Index = -1;
@@ -599,8 +624,6 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
           }//end if
         }//end find pairs with min |dM|
 
-        //std::cout << ">>> Found two pairs with min |dM|, [mass #"<<Alice.at(Index)<<", mass #"<<Bob.at(Index)<<", |dm|, Index] = ["<< PairOne.mass() <<", "<< PairTwo.mass() << ", "<<AbsdMass.at(Index)<<", " << Index <<"]"<< std::endl;
-
         //check if two pairs overlap
         if ( PairOne.overlaps(PairTwo) ) {
           //std::cout << ">>>>>> Two pairs overlap!" << std::endl;
@@ -610,7 +633,11 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
         else{
           FinalJets.push_back(PairOne);
           FinalJets.push_back(PairTwo);
-          //std::cout << ">>>>>> Two distinct pairs!" << std::endl;
+          //Start DEBUG@WeiShi
+          //std::cout << ">>> Two distinct pairs!" << std::endl;
+          //if( PairOne.vertexValid() ) std::cout << ">>>> Pair one fitted vtx mass: " << PairOne.vertexMass() << std::endl;
+          //if( PairTwo.vertexValid() ) std::cout << ">>>> Pair two fitted vtx mass: " << PairTwo.vertexMass() << std::endl;
+          //End DEBUG@WeiShi
         }//distinct pairs
 
       }//end while
@@ -622,14 +649,12 @@ void MuJetProducerRun2::produce(edm::Event& iEvent, const edm::EventSetup& iSetu
     else{
       std::cout << "WARNING! Alice and Bob don't have the same size." << std::endl;
     }//end sanity check
-
   }//end jets.size()>1
 
   if ( jets.size() == 1 ){
     //std::cout << "jets.size() == 1" << std::endl;
     FinalJets.push_back(jets[0]);
     PairOne = jets[0];
-    //std::cout << ">>> mass = "<< PairOne.mass() << std::endl;
   }
 
   // output #2: a collection of muons not belonging to any surviving pair

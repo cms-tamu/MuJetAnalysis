@@ -1,0 +1,1 @@
+/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_8p5_cT_0p2_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/260000/58FA6A74-575D-EA11-A904-20040FE94280.root

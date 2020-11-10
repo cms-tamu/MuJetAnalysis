@@ -1,0 +1,1 @@
+/scratch/user/hyunyong/newHLT/TTWJetsToLNu_TuneCP5_PSweights_13TeV-amcatnloFXFX-madspin-pythia8/Run2_2017_HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx/200616_170827/0000

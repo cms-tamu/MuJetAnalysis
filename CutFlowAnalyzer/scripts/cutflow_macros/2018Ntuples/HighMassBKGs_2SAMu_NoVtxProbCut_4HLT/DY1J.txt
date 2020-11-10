@@ -1,0 +1,2 @@
+/scratch/user/hyunyong/0922/DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2_2018/200923_000441/0000
+/scratch/user/hyunyong/0922/DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2_2018/200923_000441/0001

@@ -1,0 +1,2 @@
+/scratch/user/hyunyong/newHLT/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8/Run2_2017_HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx/200616_170914/0000
+/scratch/user/hyunyong/newHLT/TTJets_SingleLeptFromT_TuneCP5_13TeV-madgraphMLM-pythia8/Run2_2017_HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx/200616_170914/0001

@@ -1,0 +1,4 @@
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/DATA_2SAmu_NoVtxProbCut/2017C.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/DATA_2SAmu_NoVtxProbCut/2017D.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/DATA_2SAmu_NoVtxProbCut/2017E.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/DATA_2SAmu_NoVtxProbCut/2017F.txt

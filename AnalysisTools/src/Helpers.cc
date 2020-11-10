@@ -8,7 +8,7 @@ bool tamu::helpers::PtOrder (const reco::GenParticle* p1, const reco::GenParticl
   return (p1->pt() > p2->pt() );
 }
 //Added for PF muon sorting for 2017 and 2018 by Wei @01.15.2019
-bool tamu::helpers::PtOrderPFMu (const reco::Muon* p1, const reco::Muon* p2) {
+bool tamu::helpers::PtOrderRecoMu (const reco::Muon* p1, const reco::Muon* p2) {
   return (p1->pt() > p2->pt() );
 }
 
@@ -48,27 +48,13 @@ double tamu::helpers::My_dPhi (double phi1, double phi2) {
   return dPhi;
 }
 
-// Loose ID for PF Muons
-bool tamu::helpers::isPFMuonLoose (const reco::Muon* mu) {
-  bool isMuonLoose = false;
-  if (    fabs( mu->eta() ) < 2.4
-       && ( mu->isTrackerMuon() || mu->isGlobalMuon() )
-       && mu->isPFMuon()
-  ) {
-    isMuonLoose = true;
+// Update muon ID requirement for run2 analysis: @Wei May12, 2020
+// Note: same ID requirement is in MuJetProducerRun2.cc when paring muons, better to combine the two into one single module
+bool tamu::helpers::PassMuonId (const reco::Muon* mu) {
+  bool pass = false;
+  //can be PF loose/standalone
+  if ( fabs(mu->eta()) < 2.4 && ( ( (mu->isTrackerMuon() || mu->isGlobalMuon()) && mu->isPFMuon() ) || mu->isStandAloneMuon() ) ) {
+    pass = true;
   }
-  return isMuonLoose;
-}
-
-// Private ID for Muons
-bool tamu::helpers::isTrackerMuonPrivateID (const reco::Muon* mu) {
-  bool isTrackerMuonPrivateID = false;
-  if (    fabs(mu->eta()) < 2.4
-       && mu->isTrackerMuon()
-       && mu->numberOfMatches(reco::Muon::SegmentAndTrackArbitration) >= 2
-       && mu->innerTrack()->numberOfValidHits() >= 8
-       && mu->innerTrack()->normalizedChi2() < 4. ) {
-    isTrackerMuonPrivateID = true;
-  }
-  return isTrackerMuonPrivateID;
+  return pass;
 }

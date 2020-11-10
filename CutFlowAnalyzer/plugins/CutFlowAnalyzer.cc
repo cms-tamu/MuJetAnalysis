@@ -1471,7 +1471,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
   std::vector<const pat::Muon*> selMuons17;
 
   for (pat::MuonCollection::const_iterator iMuon = muons->begin();  iMuon != muons->end();  ++iMuon) {
-    if ( tamu::helpers::isPFMuonLoose( &(*iMuon) ) ) {
+    if ( tamu::helpers::PassMuonId( &(*iMuon) ) ) {
       selMuons.push_back( &(*iMuon) );
       if ( iMuon->pt() > m_threshold_Mu8_pT ) {
         selMuons8.push_back( &(*iMuon) );
@@ -2078,7 +2078,7 @@ CutFlowAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup
         if(tamu::helpers::sameTrack(&*track,&*(diMuonF->muon(k)->innerTrack()))){
           const reco::HitPattern& p = track->hitPattern();
           std::cout << "diMuF Mu"<<k<<" innerTrk(x,y,z)[cm]: " << diMuonF->muon(k)->innerTrack()->vx() << ", "<< diMuonF->muon(k)->innerTrack()->vy() <<", "<< diMuonF->muon(k)->innerTrack()->vz() <<std::endl;
-        
+
           /*
           static CheckHitPattern checkHitPattern;
           GlobalPoint pos(diMuonF->vertexPoint().x(), diMuonF->vertexPoint().y(), diMuonF->vertexPoint().z());
