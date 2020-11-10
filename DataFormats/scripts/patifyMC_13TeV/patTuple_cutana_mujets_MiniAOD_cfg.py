@@ -1,6 +1,13 @@
 import FWCore.ParameterSet.Config as cms
+from FWCore.ParameterSet.VarParsing import VarParsing
 
 process = cms.Process("MUONJET")
+
+options = VarParsing('analysis')
+options.register ("mc", False, VarParsing.multiplicity.singleton, VarParsing.varType.bool)
+options.register ("year", 2018, VarParsing.multiplicity.singleton, VarParsing.varType.int)
+options.register ("era", "ABC", VarParsing.multiplicity.singleton, VarParsing.varType.string)
+options.parseArguments()
 
 ## MessageLogger
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
@@ -15,11 +22,29 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 #Tags are specified here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmVAnalysisSummaryTable
-process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v20') #2018 MC
-#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12')              #2018 data: Era ABC
-#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v15')       #2018 data: Era D
-#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v17')       #2017 MC
-#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v11')               #2017 data
+globalTagChoice = ""
+if options.mc:
+    #2017 MC
+    if options.year == 2017:
+        globalTagChoice = '94X_mc2017_realistic_v17'
+    #2018 MC
+    if options.year == 2018:
+        globalTagChoice = '102X_upgrade2018_realistic_v20'
+else:
+    #2017 data
+    if options.year == 2017:
+        globalTagChoice = '94X_dataRun2_v11'
+    #2018 data
+    if options.year == 2018:
+        #2018 data: Era ABC
+        if options.era == "ABC":
+            globalTagChoice = '102X_dataRun2_v12'
+        #2018 data: Era D
+        else:
+            globalTagChoice = '102X_dataRun2_Prompt_v15'
+
+print "Chosen global tag", globalTagChoice
+process.GlobalTag = GlobalTag(process.GlobalTag, globalTagChoice)
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
 #process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
