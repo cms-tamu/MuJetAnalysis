@@ -4,7 +4,7 @@
 #SBATCH --ntasks=1
 #SBATCH --mem=9000M    #DATA/BKG need 1000M, MSSMD need 9000M
 #SBATCH --output=CutFlow.out.%j
-#SBATCH --account=122747014089
+#SBATCH --account=122747014489
 
 module load cctools
 export PARROT_CVMFS_ALIEN_CACHE=/scratch/group/mitchcomp/CVMFS_cache

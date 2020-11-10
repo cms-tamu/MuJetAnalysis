@@ -2338,10 +2338,14 @@ void analysis(const std::string SamplesList)
     //some efficiency plots showing flatness
     TH1F *ModelIndependentRatio  = new TH1F("ModelIndependentRatio", "", 100, 0., 1.);//binning 0.01
     TH1F *DimuonEfficiency  = new TH1F("DimuonEfficiency", "Signal Dimuon Pairing and Selection Efficiency", 100, 0., 1.);//binning 0.01
+    Float_t ErrSquareSum = 0.0;
     for (int iline = 0; iline < linecount; iline++) {
       ModelIndependentRatio->Fill(epsvsalph[iline]);
       DimuonEfficiency->Fill(counterGENMatch[iline][12]*1.0/counterGENMatch[iline][5]);
+      //sum stat. err squared of all samples
+      ErrSquareSum = ErrSquareSum + Err[iline]*Err[iline];
     }
+
     ModelIndependentRatio->SetLineColor(kBlue);
     ModelIndependentRatio->GetXaxis()->SetTitle("Model Independent Ratio (r)");
     ModelIndependentRatio->GetYaxis()->SetTitle("Number of Samples/0.01");
@@ -2351,6 +2355,8 @@ void analysis(const std::string SamplesList)
     DimuonEfficiency->GetXaxis()->SetTitle("Efficiency");
     DimuonEfficiency->GetYaxis()->SetTitle("Number of Samples/0.01");
     DimuonEfficiency->Write();
+
+    cout << "Sum of squared stat. err: "<< ErrSquareSum << endl;
 
     //=======================================
     //= Start: Efficiency for MSSMD: 2D plot

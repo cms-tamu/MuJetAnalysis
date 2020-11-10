@@ -478,7 +478,7 @@ private:
   Float_t b_selMu0_pT;
   Float_t b_selMu1_pT;
   Float_t b_selMu2_pT;
-  Float_t b_selMu3_pT;
+   Float_t b_selMu3_pT;
 
   Float_t b_selMu0_charge;
   Float_t b_selMu1_charge;
@@ -3155,6 +3155,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   m_ttree->Branch("is2MuJets",                      &b_is2MuJets,                      "is2MuJets/O");
   m_ttree->Branch("is2DiMuons",                     &b_is2DiMuons,                     "is2DiMuons/O");
+  m_ttree->Branch("isDrellYan",                     &b_isDrellYan,                     "isDrellYan/O");
   m_ttree->Branch("is2DiMuonsFittedVtxOK",          &b_is2DiMuonsFittedVtxOK,          "is2DiMuonsFittedVtxOK/O");
   m_ttree->Branch("isVertexOK",                     &b_isVertexOK,                     "isVertexOK/O");
   m_ttree->Branch("isSignalHLTFired",               &b_isSignalHLTFired,               "isSignalHLTFired/O");
