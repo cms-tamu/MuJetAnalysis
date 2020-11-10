@@ -1,0 +1,1 @@
+/scratch/user/hyunyong/newHLT/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/Run2_2017_HLT_TrkMu16_DoubleTrkMu6NoFiltersNoVtx/200616_170752/0000

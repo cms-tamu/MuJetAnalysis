@@ -1,0 +1,5 @@
+/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_35_cT_3_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/120000/1E557B30-3051-EA11-995D-20040FE9E9EC.root
+/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_35_cT_3_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/120000/30F46195-9D64-EA11-B1B4-001E674570BC.root
+/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_35_cT_3_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/120000/7C95FFAF-0D54-EA11-B528-B02628DEC400.root
+/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_35_cT_3_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/120000/84732039-1652-EA11-8D1A-20040FF4750C.root
+/scratch/group/mitchcomp/CMS/data/mc/RunIIFall17MiniAODv2/MSSMD_mH_125_mN1_60_mGammaD_35_cT_3_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/120000/9AEBD4AD-AF51-EA11-9D13-5065F37D4131.root

@@ -1,0 +1,7 @@
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/HighMassBKGs_2SAmu_NoVtxProbCut/DY0J.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/HighMassBKGs_2SAmu_NoVtxProbCut/DY1J.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/HighMassBKGs_2SAmu_NoVtxProbCut/DY2J.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/HighMassBKGs_2SAmu_NoVtxProbCut/qqToZZTo4L.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/HighMassBKGs_2SAmu_NoVtxProbCut/TTJets_DiLept.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/HighMassBKGs_2SAmu_NoVtxProbCut/ggHToZZTo4L.txt
+/home/ws13/Run2Analysis/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/cutflow_macros/2017Ntuples/HighMassBKGs_2SAmu_NoVtxProbCut/ggToZZTo4mu.txt

@@ -15,10 +15,11 @@ process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 from Configuration.AlCa.GlobalTag import GlobalTag
 
 #Tags are specified here: https://twiki.cern.ch/twiki/bin/viewauth/CMS/PdmVAnalysisSummaryTable
-#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v15')#2018 MC
-#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Sep2018Rereco_v1')#2018 data
-process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v17')#2017 MC
-#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v11')#2017 data
+process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v20') #2018 MC
+#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12')              #2018 data: Era ABC
+#process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v15')       #2018 data: Era D
+#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_mc2017_realistic_v17')       #2017 MC
+#process.GlobalTag = GlobalTag(process.GlobalTag, '94X_dataRun2_v11')               #2017 data
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
 #process.load("MuJetAnalysis.DataFormats.miniAODtoPAT_cff")
@@ -26,27 +27,37 @@ process.load("PhysicsTools.PatAlgos.slimming.unpackedTracksAndVertices_cfi")
 #process.load("MuJetAnalysis.MuJetProducer.MuJetProducer_MiniAOD_cff")#Pre-Run2 mu-jet cluster
 process.load("MuJetAnalysis.MuJetProducer.MuJetProducerRun2_cff")#Run2 mu-jet cluster
 process.load("MuJetAnalysis.CutFlowAnalyzer.CutFlowAnalyzer_MiniAOD_cff")
-#process.load("MuJetAnalysis.CutFlowAnalyzer.BaseLineSelectionFilter_MiniAOD_cfi")
 
 process.source = cms.Source(
     "PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:/afs/cern.ch/work/w/wshi/public/INPUT/460C5E54-06B0-E811-B24D-1CB72C1B6CCA.root'#2017 ALP MINIAODSIM (mALP=30)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/BA9717EC-3840-E911-A0A8-AC1F6B596094.root'#2017 MSSMD MINIAODSIM (mN1=10, mGammaD=5, cT=10)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/E8D69F89-6C33-E911-B440-D4856459AC30.root'#2017 MSSMD MINIAODSIM (mN1=10, mGammaD=5, cT=50)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/B654BC56-CC25-E911-812F-B083FECFF2BE.root'#2017 MSSMD MINIAODSIM (mN1=10, mGammaD=8.5, cT=2)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/2828BB5C-DE50-E911-A5C2-0CC47AF9B2FE.root'#2017 MSSMD MINIAODSIM (mN1=60, mGammaD=0.25, cT=100)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/02E0B5B4-8664-E911-9D57-0242AC1C0503.root'#2017 MSSMD MINIAODSIM (mN1=60, mGammaD=5, cT=100)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/26762963-A74E-E911-9C6D-D4AE52901D66.root'#2017 MSSMD MINIAODSIM (mN1=60, mGammaD=15, cT=100)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/82230C10-5931-E911-907C-008CFA1111D0.root'#2017 MSSMD MINIAODSIM (mN1=60, mGammaD=35, cT=2)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/7A3B1907-1B47-E911-AD34-AC1F6B0DE4A2.root'#2017 MSSMD MINIAODSIM (mN1=60, mGammaD=58, cT=50)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/76651043-7F44-E811-9D72-0025905A60C6.root'#2017 Data Era E DoubleMuon
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/DF223035-AD40-E34A-857B-5C55FC925EC8.root'#2018 NMSSM MINIAODSIM (MH=125, MA=3)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/HIG-RunIIFall17MiniAODv2-03562.root' # Private: 2017 MSSMD MINIAODSIM CMSSW_9_4_7 (mN1=10, mGammaD=5, cT=50)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/HIG-RunIIFall17MiniAODv2-03562_noPU.root' # Same as above except no PU simulation
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD.root' # Private: 2017 MSSMD ReMiniAODed under CMSSW_10_2_5(with displaceStandaloneMuon collection) (mN1=10, mGammaD=5, cT=50)
-        #'file:/afs/cern.ch/work/w/wshi/public/INPUT/ReMiniAOD_noPU.root' # Same as above except no PU simulation
-        )
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/0CABE26E-1139-274F-9FBC-524B81FF4DFF.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/141E5474-1D77-3B40-9668-26734EE7CFAE.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/17AD3880-5F49-4C48-B373-A03EF0FAA1B1.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/22D8D543-D0F4-5F4A-B74F-6B86086EC697.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/2B2EA0D9-9BDC-E143-91CF-2868D020449F.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/5BB2AC85-68FA-8943-B08A-0999B5327E83.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/A3043536-BF2F-D043-8FB6-E65F984534D1.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/AC3EE1A9-B10A-3045-B3CE-DD1F3F21CCF6.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/AFD20DC5-3C93-0347-983D-BDB9CD529942.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/DB853551-1045-F445-9618-32C306F0AB43.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/E9D33B62-2BC8-AA48-8777-DBD8BD799E7D.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/EE0C457B-5858-4F42-B75B-A1B1101279B7.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/00000/F2FAB06C-872E-1C42-BE79-A4ED09541A08.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/236E6B83-E3C6-EE43-822C-029F867D5CE1.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/2FA14425-F7E5-C243-866D-F542F9D43C78.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/516283AE-4CCE-344C-8EA1-7A60C9DC45BB.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/6639580B-CC85-F045-8FAE-1162A2279741.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/7AB3BE9D-4CB5-E94F-B340-35E11B0D284F.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/905967A1-B3BA-6D4B-98B6-3788426F4BE8.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/BD974275-4107-BE4A-8D7A-2F01A7D7CF8E.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/D654B382-A6D6-CC4F-8CDE-A734310F73C8.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/DB291F65-1A2C-F64C-AE5D-1C8F5CDD98B1.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/130000/FF605D79-C66B-C542-BEB5-5AA5486283DD.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/40000/3F7FE0F2-DE94-7E48-AA4E-A22E87171B26.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/40000/A2AD7897-2618-7246-9BA5-F7DAF9CB6200.root',
+    'file:/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_35_cT_100_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/40000/C7C6D175-61CA-2B40-8A68-DCB1EC6E6DFC.root',
+    )
 )
 
 process.out = cms.OutputModule(
@@ -54,27 +65,14 @@ process.out = cms.OutputModule(
     fileName = cms.untracked.string('patTuple.root')
     )
 
-### Add MuJet Dataformats
-#from MuJetAnalysis.DataFormats.EventContent_version11_cff import *
-#process = customizePatOutput(process)
-
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
-
-#Default run on data
-#runOnData = False
-#if runOnData: process.patifySelect = cms.Sequence(process.patifyData)
-#else:         process.patifySelect = cms.Sequence(process.patifyMC)
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
 
 process.p = cms.Path(
-#    process.baseLineSelectionFilter *
-#    process.patifySelect *
     process.unpackedTracksAndVertices *
     process.MuJetProducers *
     process.cutFlowAnalyzers
     )
 
-#process.outpath = cms.EndPath(process.out)
-
 process.TFileService = cms.Service("TFileService",
-    fileName = cms.string("out_ana.root")
+    fileName = cms.string("out_ana_1.root")
 )

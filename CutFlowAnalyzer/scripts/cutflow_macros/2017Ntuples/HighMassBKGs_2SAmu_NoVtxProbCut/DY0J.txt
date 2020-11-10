@@ -1,0 +1,2 @@
+/scratch/user/hyunyong/newHLT/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2_2017_bugFix/200707_174656/0000
+/scratch/user/hyunyong/newHLT/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/Run2_2017_bugFix/200707_174656/0001

@@ -1,0 +1,1 @@
+/scratch/group/mitchcomp/CMS/data/mc/RunIIAutumn18MiniAOD/MSSMD_mH_125_mN1_60_mGammaD_5_cT_50_TuneCP5_13TeV-madgraph-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/260000/AD777506-1926-1E4E-B4DB-3A06FEE564FD.root

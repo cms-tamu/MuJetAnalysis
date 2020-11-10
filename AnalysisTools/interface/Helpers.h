@@ -18,7 +18,7 @@ double cotan(double i);
 
 bool PtOrder (const reco::GenParticle* p1, const reco::GenParticle* p2);
 
-bool PtOrderPFMu (const reco::Muon* p1, const reco::Muon* p2);
+bool PtOrderRecoMu (const reco::Muon* p1, const reco::Muon* p2);
 
 bool sameTrack(const reco::Track *one, const reco::Track *two);
 
@@ -33,8 +33,8 @@ bool order(Float_t v1, Float_t v2);
 //******************************************************************************
 double My_dPhi (double phi1, double phi2);
 
-// Loose ID for PF Muons
-bool isPFMuonLoose (const reco::Muon* mu);
+// Muon ID requirement
+bool PassMuonId (const reco::Muon* mu);
 
 // Private ID for Muons
 bool isTrackerMuonPrivateID (const reco::Muon* mu);
