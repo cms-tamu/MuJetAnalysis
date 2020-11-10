@@ -81,15 +81,22 @@ FilterSample3RecoMu_MiniAOD::filter(edm::Event& iEvent, const edm::EventSetup& i
   iEvent.getByToken(m_muons, muons);
   const std::vector<pat::Muon>& muonC = *muons.product();
 
-  // require at least 3 muons
-  int nMu = 0;
+  int nMuPt5 = 0;
+  int nMuPt12 = 0;
   for (const auto& p : muonC){
     std::cout << p.pt() << " " << p.eta() << " " << p.phi() << std::endl;
-    if (p.pt() >= 5) nMu++;
+    if (p.pt() >= 5) nMuPt5++;
+    if (p.pt() >= 12) nMuPt12++;
   }
-  if (nMu >= 3)
+
+  // exactly 3 muons
+  if (nMuPt5 > 3) return false;
+
+  const bool pass(nMuPt5 >= 3 and nMuPt12>= 1);
+  if (pass)
     std::cout << "Pass" << std::endl;
-  return nMu >= 3;
+
+  return pass;
 }
 
 

@@ -26,6 +26,9 @@
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
+#include "DataFormats/METReco/interface/PFMETFwd.h"
+#include "DataFormats/METReco/interface/PFMET.h"
+#include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
@@ -324,7 +327,7 @@ private:
   edm::EDGetTokenT<reco::VertexCollection> m_primaryVertices;
   edm::EDGetTokenT<reco::VertexCollection> m_secondaryVertices;
   edm::EDGetTokenT<std::vector<pat::Jet> > m_PATJet;
-
+  edm::EDGetTokenT<pat::METCollection> m_patMET;
   edm::EDGetTokenT<std::vector<PileupSummaryInfo> > m_pileupCollection;
 
   Int_t         m_nThrowsConsistentVertexesCalculator;
@@ -487,6 +490,26 @@ private:
   Bool_t b_selMu2_SA;
   Bool_t b_selMu3_SA;
 
+  Bool_t b_selMu0_isMedium;
+  Bool_t b_selMu1_isMedium;
+  Bool_t b_selMu2_isMedium;
+  Bool_t b_selMu3_isMedium;
+
+  Bool_t b_selMu0_isTight;
+  Bool_t b_selMu1_isTight;
+  Bool_t b_selMu2_isTight;
+  Bool_t b_selMu3_isTight;
+
+  Float_t b_selMu0_dxy;
+  Float_t b_selMu1_dxy;
+  Float_t b_selMu2_dxy;
+  Float_t b_selMu3_dxy;
+
+  Float_t b_selMu0_dz;
+  Float_t b_selMu1_dz;
+  Float_t b_selMu2_dz;
+  Float_t b_selMu3_dz;
+
   Float_t b_diMuonC_FittedVtx_dR;
   Float_t b_diMuonC_FittedVtx_m;
   Float_t b_diMuonC_FittedVtx_px;
@@ -566,6 +589,11 @@ private:
 
   bool skimOutput_; //fill only events with 2 good dimuons
   bool useFinalDecision_;//L1 fin-OR
+
+  Float_t b_pfMET;
+  Float_t b_pfMET_phi;
+  Float_t b_patMET;
+  Float_t b_patMET_phi;
 
   Int_t b_NPATJet;
   Int_t b_NPATJetTightB;
@@ -683,6 +711,7 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   m_primaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("primaryVertices"));
   m_secondaryVertices = consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("secondaryVertices"));
   m_PATJet          = consumes<std::vector<pat::Jet> >(iConfig.getParameter<edm::InputTag>("PATJet"));
+  m_patMET          = consumes<pat::METCollection>(iConfig.getParameter<edm::InputTag>("patMET"));
   m_nThrowsConsistentVertexesCalculator = iConfig.getParameter<int>("nThrowsConsistentVertexesCalculator");
   m_barrelPixelLayer = iConfig.getParameter<int>("barrelPixelLayer");
   m_endcapPixelLayer = iConfig.getParameter<int>("endcapPixelLayer");
@@ -1288,6 +1317,13 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   if ( m_debug > 0 ) std::cout << m_events << " Start RECO Level" << std::endl;
 
+  edm::Handle<pat::METCollection> patMETH;
+  iEvent.getByToken(m_patMET, patMETH);
+  const pat::MET& patMET = patMETH.product()->front();
+
+  b_pfMET = patMET.pt(); // muon ET fraction!
+  b_pfMET_phi = patMET.phi();
+
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
   std::vector<const pat::Muon*> selMuons;
@@ -1333,6 +1369,18 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     }
   }
 
+  edm::Handle<reco::VertexCollection> primaryVertices;
+  iEvent.getByToken(m_primaryVertices, primaryVertices);
+
+  if ( m_debug > 10 ) std::cout << m_events << " Get WZ primary vertex" << std::endl;
+  reco::Vertex WZVertex;
+  for (const auto& vertex : *primaryVertices.product()) {
+    if (vertex.isValid() && !vertex.isFake() && vertex.tracksSize() >= 3 && fabs(vertex.z()) < 24.) {
+      WZVertex = vertex;
+      break;
+    }
+  }
+
   // Sort selMuons by pT (leading pT first)
   if ( selMuons.size() > 1 ) std::sort( selMuons.begin(), selMuons.end(), tamu::helpers::PtOrderRecoMu );
   b_nRecoMu = selMuons.size();
@@ -1345,6 +1393,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_eta = selMuons[0]->eta();
     b_selMu0_phi = selMuons[0]->phi();
     b_selMu0_charge = selMuons[0]->charge();
+    b_selMu0_isMedium = muon::isMediumMuon(*selMuons[0]);
+    b_selMu0_isTight = muon::isTightMuon(*selMuons[0], WZVertex);
+    b_selMu0_dxy = selMuons[0]->muonBestTrack()->dxy(WZVertex.position());
+    b_selMu0_dz = selMuons[0]->muonBestTrack()->dz(WZVertex.position());
     if( selMuons[0]->isStandAloneMuon() && !( selMuons[0]->isPFMuon() && ( selMuons[0]->isTrackerMuon() || selMuons[0]->isGlobalMuon() ) ) ) b_selMu0_SA = true;
   } else {
     b_selMu0_px  = -100.0;
@@ -1355,6 +1407,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_phi = -100.0;
     b_selMu0_charge = 0.;
     b_selMu0_SA  = false;
+    b_selMu0_isMedium = false;
+    b_selMu0_isTight = false;
+    b_selMu0_dxy = -9999;
+    b_selMu0_dz = -9999;
   }
 
   if ( selMuons.size() > 1 ) {
@@ -1366,6 +1422,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_phi = selMuons[1]->phi();
     b_selMu1_charge = selMuons[1]->charge();
     if( selMuons[1]->isStandAloneMuon() && !( selMuons[1]->isPFMuon() && ( selMuons[1]->isTrackerMuon() || selMuons[1]->isGlobalMuon() ) ) ) b_selMu1_SA = true;
+    b_selMu1_isMedium = muon::isMediumMuon(*selMuons[1]);
+    b_selMu1_isTight = muon::isTightMuon(*selMuons[1], WZVertex);
+    b_selMu1_dxy = selMuons[1]->muonBestTrack()->dxy(WZVertex.position());
+    b_selMu1_dz = selMuons[1]->muonBestTrack()->dz(WZVertex.position());
   } else {
     b_selMu1_px  = -100.0;
     b_selMu1_py  = -100.0;
@@ -1375,6 +1435,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_phi = -100.0;
     b_selMu1_charge = 0.;
     b_selMu1_SA  = false;
+    b_selMu1_isMedium = false;
+    b_selMu1_isTight = false;
+    b_selMu1_dxy = -9999;
+    b_selMu1_dz = -9999;
   }
 
   if ( selMuons.size() > 2 ) {
@@ -1386,6 +1450,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_phi = selMuons[2]->phi();
     b_selMu2_charge = selMuons[2]->charge();
     if( selMuons[2]->isStandAloneMuon() && !( selMuons[2]->isPFMuon() && ( selMuons[2]->isTrackerMuon() || selMuons[2]->isGlobalMuon() ) ) ) b_selMu2_SA = true;
+    b_selMu2_isMedium = muon::isMediumMuon(*selMuons[2]);
+    b_selMu2_isTight = muon::isTightMuon(*selMuons[2], WZVertex);
+    b_selMu2_dxy = selMuons[2]->muonBestTrack()->dxy(WZVertex.position());
+    b_selMu2_dz = selMuons[2]->muonBestTrack()->dz(WZVertex.position());
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
@@ -1395,6 +1463,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_phi = -100.0;
     b_selMu2_charge = 0.;
     b_selMu2_SA  = false;
+    b_selMu2_isMedium = false;
+    b_selMu2_isTight = false;
+    b_selMu2_dxy = -9999;
+    b_selMu2_dz = -9999;
   }
 
   if ( selMuons.size() > 3 ) {
@@ -1406,6 +1478,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_phi = selMuons[3]->phi();
     b_selMu3_charge = selMuons[3]->charge();
     if( selMuons[3]->isStandAloneMuon() && !( selMuons[3]->isPFMuon() && ( selMuons[3]->isTrackerMuon() || selMuons[3]->isGlobalMuon() ) ) ) b_selMu3_SA = true;
+    b_selMu3_isMedium = muon::isMediumMuon(*selMuons[3]);
+    b_selMu3_isTight = muon::isTightMuon(*selMuons[3], WZVertex);
+    b_selMu3_dxy = selMuons[3]->muonBestTrack()->dxy(WZVertex.position());
+    b_selMu3_dz = selMuons[3]->muonBestTrack()->dz(WZVertex.position());
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1415,6 +1491,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_phi = -100.0;
     b_selMu3_charge = 0.;
     b_selMu3_SA  = false;
+    b_selMu3_isMedium = false;
+    b_selMu3_isTight = false;
+    b_selMu3_dxy = -9999;
+    b_selMu3_dz = -9999;
   }
 
   if ( m_debug > 0 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
@@ -2638,9 +2718,6 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
         }
     }
   }
-
-  edm::Handle<reco::VertexCollection> primaryVertices;
-  iEvent.getByToken(m_primaryVertices, primaryVertices);
 
   b_isVertexOK = false;
   b_orphan_isVertexOK = false;
