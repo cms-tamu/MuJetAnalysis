@@ -14,7 +14,7 @@ from Helpers import *
 mmu = 105.6583745 * 0.001
 mZ = 91.1876
 
-fileName = "HLT_Z_peak_signal_2018MonteCarlo_WZ_13TeV.root"
+fileName = "HLT_signal_2018MonteCarlo_WZ_13TeV.root"
 
 def getPT(m1):
     px = m1[1]
@@ -401,9 +401,9 @@ def efficiency_trigger(dirNames, triggerPaths):
             ## was triggered?
             isTriggered = False
             for trigger in triggerPaths:
-                if (verbose): print list(tree.hltPaths)
+                #print list(tree.hltPaths)
                 if any(trigger in s for s in list(tree.hltPaths)):
-                    if (verbose): print trigger, "is available"
+                    #print trigger, "is available"
                     isTriggered = True
                     nEvents[15] += 1
 
@@ -475,13 +475,16 @@ def efficiency_trigger(dirNames, triggerPaths):
 
 dirNames = [
     '/eos/uscms/store/user/dildick/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/crab_WZTo3LNu_PATANA20201111_v1/201112_000925/0000/'
-    #'/eos/uscms/store/user/dildick/MET/crab_MET2018A_PATANA20201102_v1/201102_180818/0000/'
 ]
 #root://cmsxrootd-site.fnal.gov/
 
-efficiency_trigger(dirNames, ["HLT_TrkMu15_DoubleTrkMu5NoFiltersNoVtx"])
-
-#exit(1)
+efficiency_trigger(dirNames, [
+    "HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx",
+    "HLT_DoubleL2Mu23NoVtx_2Cha",
+    "HLT_TripleMu_12_10_5",
+    "HLT_Mu18_Mu9_SameSign"
+]
+)
 
 def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
 
@@ -502,9 +505,10 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
     hist.lumi = '2016 MET B-H, 35.9'
     hist.plotLUMI = False
     hist.drawStatUncertainty = True
-    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label=r'$Zjets \rightarrow 4\mu$')
+    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label=r'$WZ \rightarrow 3\mu$')
     plot = hist.execute()
     hist.savefig()
+
 
 MyFile = TFile(fileName)
 
