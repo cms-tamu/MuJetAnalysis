@@ -47,6 +47,20 @@
 #include "TVector2.h"
 #include "TLorentzVector.h"
 
+namespace{
+
+  float recoMuonPFIso(const pat::Muon* mu)
+  {
+    const float chargedHadronPV = mu->pfIsolationR04().sumChargedHadronPt;
+    const float neutralHadron = mu->pfIsolationR04().sumNeutralHadronEt;
+    const float photon = mu->pfIsolationR04().sumPhotonEt;
+    const float chargedHadronPU = mu->pfIsolationR04().sumPUPt;
+
+    return ( chargedHadronPV + std::max(0.,neutralHadron + photon - 0.5 * chargedHadronPU) ) / mu->pt();
+  }
+
+}
+
 //******************************************************************************
 //                           Class declaration
 //******************************************************************************
@@ -509,6 +523,12 @@ private:
   Float_t b_selMu1_dz;
   Float_t b_selMu2_dz;
   Float_t b_selMu3_dz;
+
+
+  Float_t b_selMu0_PFIso;
+  Float_t b_selMu1_PFIso;
+  Float_t b_selMu2_PFIso;
+  Float_t b_selMu3_PFIso;
 
   Float_t b_diMuonC_FittedVtx_dR;
   Float_t b_diMuonC_FittedVtx_m;
@@ -1398,6 +1418,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_dxy = selMuons[0]->muonBestTrack()->dxy(WZVertex.position());
     b_selMu0_dz = selMuons[0]->muonBestTrack()->dz(WZVertex.position());
     if( selMuons[0]->isStandAloneMuon() && !( selMuons[0]->isPFMuon() && ( selMuons[0]->isTrackerMuon() || selMuons[0]->isGlobalMuon() ) ) ) b_selMu0_SA = true;
+    b_selMu0_PFIso = recoMuonPFIso(selMuons[0]);
   } else {
     b_selMu0_px  = -100.0;
     b_selMu0_py  = -100.0;
@@ -1411,6 +1432,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu0_isTight = false;
     b_selMu0_dxy = -9999;
     b_selMu0_dz = -9999;
+    b_selMu0_PFIso = -999;
   }
 
   if ( selMuons.size() > 1 ) {
@@ -1426,6 +1448,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_isTight = muon::isTightMuon(*selMuons[1], WZVertex);
     b_selMu1_dxy = selMuons[1]->muonBestTrack()->dxy(WZVertex.position());
     b_selMu1_dz = selMuons[1]->muonBestTrack()->dz(WZVertex.position());
+    b_selMu1_PFIso = recoMuonPFIso(selMuons[1]);
   } else {
     b_selMu1_px  = -100.0;
     b_selMu1_py  = -100.0;
@@ -1439,6 +1462,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu1_isTight = false;
     b_selMu1_dxy = -9999;
     b_selMu1_dz = -9999;
+    b_selMu1_PFIso = -999;
   }
 
   if ( selMuons.size() > 2 ) {
@@ -1454,6 +1478,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_isTight = muon::isTightMuon(*selMuons[2], WZVertex);
     b_selMu2_dxy = selMuons[2]->muonBestTrack()->dxy(WZVertex.position());
     b_selMu2_dz = selMuons[2]->muonBestTrack()->dz(WZVertex.position());
+    b_selMu2_PFIso = recoMuonPFIso(selMuons[2]);
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
@@ -1467,6 +1492,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_isTight = false;
     b_selMu2_dxy = -9999;
     b_selMu2_dz = -9999;
+    b_selMu2_PFIso = -999;
   }
 
   if ( selMuons.size() > 3 ) {
@@ -1482,6 +1508,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_isTight = muon::isTightMuon(*selMuons[3], WZVertex);
     b_selMu3_dxy = selMuons[3]->muonBestTrack()->dxy(WZVertex.position());
     b_selMu3_dz = selMuons[3]->muonBestTrack()->dz(WZVertex.position());
+    b_selMu3_PFIso = recoMuonPFIso(selMuons[3]);
   } else {
     b_selMu3_px  = -100.0;
     b_selMu3_py  = -100.0;
@@ -1495,6 +1522,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_isTight = false;
     b_selMu3_dxy = -9999;
     b_selMu3_dz = -9999;
+    b_selMu3_PFIso = -999;
   }
 
   if ( m_debug > 0 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
@@ -3031,6 +3059,11 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("selMu1_dz", &b_selMu1_dz, "selMu1_dz/F");
   m_ttree->Branch("selMu2_dz", &b_selMu2_dz, "selMu2_dz/F");
   m_ttree->Branch("selMu3_dz", &b_selMu3_dz, "selMu3_dz/F");
+
+  m_ttree->Branch("selMu0_PFIso", &b_selMu0_PFIso, "selMu0_PFIso/F");
+  m_ttree->Branch("selMu1_PFIso", &b_selMu1_PFIso, "selMu1_PFIso/F");
+  m_ttree->Branch("selMu2_PFIso", &b_selMu2_PFIso, "selMu2_PFIso/F");
+  m_ttree->Branch("selMu3_PFIso", &b_selMu3_PFIso, "selMu3_PFIso/F");
 
   m_ttree->Branch("diMuonC_FittedVtx_dR",  &b_diMuonC_FittedVtx_dR,  "diMuonC_FittedVtx_dR/F");
   m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
