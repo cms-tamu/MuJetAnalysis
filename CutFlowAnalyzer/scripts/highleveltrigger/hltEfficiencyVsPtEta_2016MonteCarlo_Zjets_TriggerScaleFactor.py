@@ -86,6 +86,20 @@ def efficiency_trigger(dirNames, triggerPaths):
     leading_muon_pt = ROOT.TH1D("leading_muon_pt","",40,10,110)
     trig_leading_muon_pt = ROOT.TH1D("trig_leading_muon_pt","",40,10,110)
 
+    second_muon_eta = ROOT.TH1D("second_muon_eta","",24,0,2.4)
+    trig_second_muon_eta = ROOT.TH1D("trig_second_muon_eta","",24,0,2.4)
+    second_muon_phi = ROOT.TH1D("second_muon_phi","",32,-3.2,3.2)
+    trig_second_muon_phi = ROOT.TH1D("trig_second_muon_phi","",32,-3.2,3.2)
+    second_muon_pt = ROOT.TH1D("second_muon_pt","",40,10,110)
+    trig_second_muon_pt = ROOT.TH1D("trig_second_muon_pt","",40,10,110)
+
+    third_muon_eta = ROOT.TH1D("third_muon_eta","",24,0,2.4)
+    trig_third_muon_eta = ROOT.TH1D("trig_third_muon_eta","",24,0,2.4)
+    third_muon_phi = ROOT.TH1D("third_muon_phi","",32,-3.2,3.2)
+    trig_third_muon_phi = ROOT.TH1D("trig_third_muon_phi","",32,-3.2,3.2)
+    third_muon_pt = ROOT.TH1D("third_muon_pt","",40,10,110)
+    trig_third_muon_pt = ROOT.TH1D("trig_third_muon_pt","",40,10,110)
+
     print "Adding files to the chain"
     addfilesMany(chain, dirNames, "out_ana")
 
@@ -137,7 +151,7 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             nEvents[0] += 1
 
-            if nEvents[0]%1000==0: print "Processing event ", nEvents[0]
+            if nEvents[0]%10000==0: print "Processing event ", nEvents[0]
             tree.GetEntry(k)
 
             ## check for 4 reco muons
@@ -238,6 +252,7 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             nEvents[7] += 1
 
+            """
             PFIso0 = tree.selMu0_PFIso
             PFIso1 = tree.selMu1_PFIso
             PFIso2 = tree.selMu2_PFIso
@@ -246,11 +261,12 @@ def efficiency_trigger(dirNames, triggerPaths):
             if PFIso0 > 0.15: continue
             if PFIso1 > 0.15: continue
             if PFIso2 > 0.15: continue
+            """
 
             nEvents[8] += 1
 
-            pfMET = tree.pfMET
-            pfMET_phi = tree.pfMET_phi
+            #pfMET = tree.pfMET
+            #pfMET_phi = tree.pfMET_phi
             #print "pfMET", pfMET
             #print "pfMET_phi", pfMET_phi
 
@@ -330,7 +346,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             nEvents[11] += 1
 
             ## require 30 GeV MET from W decay
-            if pfMET < 30: continue
+            #if pfMET < 30: continue
 
             nEvents[12] += 1
 
@@ -349,28 +365,36 @@ def efficiency_trigger(dirNames, triggerPaths):
             nEvents[14] += 1
 
             ## apply a quality criterium on the transverse mass cut
-            Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(pfMET_phi))
+            #Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(pfMET_phi))
             #print "Wmu_nu_deltaPhi", Wmu_nu_deltaPhi, Wmu_phi - pfMET_phi
-            transverseWbosonMass = m.sqrt(2 * Wmu_pT * pfMET * (1-m.cos(Wmu_nu_deltaPhi)))
-            if (verbose):
-                print "transverseWbosonMass", transverseWbosonMass
+            #transverseWbosonMass = m.sqrt(2 * Wmu_pT * pfMET * (1-m.cos(Wmu_nu_deltaPhi)))
+            #if (verbose):
+            #    print "transverseWbosonMass", transverseWbosonMass
             ## remove the contamination from W+jets in the sample!
             #if transverseWbosonMass > 20: continue
 
-            print "Event passes full selection"
+            #print "Event passes full selection"
 
             Invariant_Mass12.Fill(bestMass)
-            Transverse_Mass.Fill(transverseWbosonMass)
+            #Transverse_Mass.Fill(transverseWbosonMass)
             Invariant_Mass123.Fill(invm3)
-            PFMET.Fill(pfMET)
+            #PFMET.Fill(pfMET)
             WmupT.Fill(Wmu_pT)
             WmuPhi.Fill(Wmu_phi)
-            METPhi.Fill(pfMET_phi)
-            WmNuDeltaPhi.Fill(Wmu_nu_deltaPhi)
+            #METPhi.Fill(pfMET_phi)
+            #WmNuDeltaPhi.Fill(Wmu_nu_deltaPhi)
 
             leading_muon_eta.Fill(abs(tree.selMu0_eta))
             leading_muon_phi.Fill(tree.selMu0_phi)
             leading_muon_pt.Fill(tree.selMu0_pT)
+
+            second_muon_eta.Fill(abs(tree.selMu1_eta))
+            second_muon_phi.Fill(tree.selMu1_phi)
+            second_muon_pt.Fill(tree.selMu1_pT)
+
+            third_muon_eta.Fill(abs(tree.selMu2_eta))
+            third_muon_phi.Fill(tree.selMu2_phi)
+            third_muon_pt.Fill(tree.selMu2_pT)
 
             ## was triggered?
             isTriggered = False
@@ -385,6 +409,14 @@ def efficiency_trigger(dirNames, triggerPaths):
                 trig_leading_muon_eta.Fill(abs(tree.selMu0_eta))
                 trig_leading_muon_phi.Fill(tree.selMu0_phi)
                 trig_leading_muon_pt.Fill(tree.selMu0_pT)
+
+                trig_second_muon_eta.Fill(abs(tree.selMu1_eta))
+                trig_second_muon_phi.Fill(tree.selMu1_phi)
+                trig_second_muon_pt.Fill(tree.selMu1_pT)
+
+                trig_third_muon_eta.Fill(abs(tree.selMu2_eta))
+                trig_third_muon_phi.Fill(tree.selMu2_phi)
+                trig_third_muon_pt.Fill(tree.selMu2_pT)
 
             if nMassesInZPeak>0 and verbose:
                 print "Muons"
@@ -423,10 +455,25 @@ def efficiency_trigger(dirNames, triggerPaths):
     eff_trig_leading_muon_phi.Write("eff_trig_leading_muon_phi")
     eff_trig_leading_muon_pt.Write("eff_trig_leading_muon_pt")
 
+    eff_trig_second_muon_eta = TEfficiency(trig_second_muon_eta, second_muon_eta)
+    eff_trig_second_muon_phi = TEfficiency(trig_second_muon_phi, second_muon_phi)
+    eff_trig_second_muon_pt = TEfficiency(trig_second_muon_pt, second_muon_pt)
+    eff_trig_second_muon_eta.Write("eff_trig_second_muon_eta")
+    eff_trig_second_muon_phi.Write("eff_trig_second_muon_phi")
+    eff_trig_second_muon_pt.Write("eff_trig_second_muon_pt")
+
+    eff_trig_third_muon_eta = TEfficiency(trig_third_muon_eta, third_muon_eta)
+    eff_trig_third_muon_phi = TEfficiency(trig_third_muon_phi, third_muon_phi)
+    eff_trig_third_muon_pt = TEfficiency(trig_third_muon_pt, third_muon_pt)
+    eff_trig_third_muon_eta.Write("eff_trig_third_muon_eta")
+    eff_trig_third_muon_phi.Write("eff_trig_third_muon_phi")
+    eff_trig_third_muon_pt.Write("eff_trig_third_muon_pt")
+
     MyFile.Close();
 
 dirNames = [
-    '/eos/uscms/store/user/dildick/MET/crab_MET2018A_PATANA20201102_v1/201102_180818/0000/'
+    '/eos/uscms/store/user/dildick/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/crab_WZTo3LNu_PATANA20201111_v1/201112_000925/0000/'
+    #'/eos/uscms/store/user/dildick/MET/crab_MET2018A_PATANA20201102_v1/201102_180818/0000/'
 ]
 #root://cmsxrootd-site.fnal.gov/
 
@@ -445,7 +492,7 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
     hist.x_label     = x_label# "Dimuon invariant mass"
     hist.y_label     = y_label
     hist.format      = format      # file format for saving image
-    hist.saveDir     = 'trigger_efficiency_plots_2016MonteCarlo_Zjetsto4L_20181029/'
+    hist.saveDir     = 'trigger_efficiency_plots/'
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_Zjetsto4L" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = 'Preliminary Simulation'  # ('Simulation')+'Internal' || 'Preliminary'
@@ -457,34 +504,60 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
     plot = hist.execute()
     hist.savefig()
 
-MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_Zjetsto4L_13TeV.root")
+MyFile = TFile("HLT_Z_peak_signal_2018MonteCarlo_WZ_13TeV.root")
 
 Invariant_Mass12 = MyFile.Get("Invariant_Mass12")
 makePlot(Invariant_Mass12, "histogram",
-         r"Dimuon invariant mass [GeV]", "Entries", "Z_peak_2016MonteCarlo_Zjetsto4L", format='pdf')
+         r"Dimuon invariant mass [GeV]", "Entries", "Z_peak_2018MonteCarlo_WZ", format='pdf')
 
 Invariant_Mass123 = MyFile.Get("Invariant_Mass123")
 makePlot(Invariant_Mass123, "histogram",
-         r"Trimuon invariant mass [GeV]", "Entries", "Trimuon_invariant_mass_2016MonteCarlo_Zjetsto4L", format='pdf')
+         r"Trimuon invariant mass [GeV]", "Entries", "Trimuon_invariant_mass_2018MonteCarlo_WZ", format='pdf')
 
 Transverse_Mass = MyFile.Get("Transverse_Mass")
 makePlot(Transverse_Mass, "histogram",
-         r"Transverse mass m_\mathrm{T} [GeV]", "Entries", "Transverse_mass_2016MonteCarlo_Zjetsto4L", format='pdf')
+         r"Transverse mass mT [GeV]", "Entries", "Transverse_mass_2018MonteCarlo_WZ", format='pdf')
 
 PFMET = MyFile.Get("PFMET")
 makePlot(PFMET, "histogram",
-         r"PFMET [GeV]", "Entries", "PFMET_2016MonteCarlo_Zjetsto4L", format='pdf')
+         r"PFMET [GeV]", "Entries", "PFMET_2018MonteCarlo_WZ", format='pdf')
 
 eff_trig_leading_muon_pt = MyFile.Get("eff_trig_leading_muon_pt")
 makePlot(eff_trig_leading_muon_pt, "efficiency",
-         r"Leading muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_leading_pt_2016MonteCarlo_Zjetsto4L", format='pdf')
+         r"Leading muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_leading_pt_2018MonteCarlo_WZ", format='pdf')
 
 eff_trig_leading_muon_eta = MyFile.Get("eff_trig_leading_muon_eta")
 makePlot(eff_trig_leading_muon_eta, "efficiency",
-         r"Leading muon $\eta$", "Trigger efficiency", "Trigger_efficiency_leading_eta_2016MonteCarlo_Zjetsto4L", format='pdf')
+         r"Leading muon $\eta$", "Trigger efficiency", "Trigger_efficiency_leading_eta_2018MonteCarlo_WZ", format='pdf')
 
 eff_trig_leading_muon_phi = MyFile.Get("eff_trig_leading_muon_phi")
 makePlot(eff_trig_leading_muon_phi, "efficiency",
-         r"Leading muon $\phi$", "Trigger efficiency", "Trigger_efficiency_leading_phi_2016MonteCarlo_Zjetsto4L", format='pdf')
+         r"Leading muon $\phi$", "Trigger efficiency", "Trigger_efficiency_leading_phi_2018MonteCarlo_WZ", format='pdf')
+
+
+eff_trig_second_muon_pt = MyFile.Get("eff_trig_second_muon_pt")
+makePlot(eff_trig_second_muon_pt, "efficiency",
+         r"Second muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_second_pt_2018MonteCarlo_WZ", format='pdf')
+
+eff_trig_second_muon_eta = MyFile.Get("eff_trig_second_muon_eta")
+makePlot(eff_trig_second_muon_eta, "efficiency",
+         r"Second muon $\eta$", "Trigger efficiency", "Trigger_efficiency_second_eta_2018MonteCarlo_WZ", format='pdf')
+
+eff_trig_second_muon_phi = MyFile.Get("eff_trig_second_muon_phi")
+makePlot(eff_trig_second_muon_phi, "efficiency",
+         r"Second muon $\phi$", "Trigger efficiency", "Trigger_efficiency_second_phi_2018MonteCarlo_WZ", format='pdf')
+
+
+eff_trig_third_muon_pt = MyFile.Get("eff_trig_third_muon_pt")
+makePlot(eff_trig_third_muon_pt, "efficiency",
+         r"Third muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_third_pt_2018MonteCarlo_WZ", format='pdf')
+
+eff_trig_third_muon_eta = MyFile.Get("eff_trig_third_muon_eta")
+makePlot(eff_trig_third_muon_eta, "efficiency",
+         r"Third muon $\eta$", "Trigger efficiency", "Trigger_efficiency_third_eta_2018MonteCarlo_WZ", format='pdf')
+
+eff_trig_third_muon_phi = MyFile.Get("eff_trig_third_muon_phi")
+makePlot(eff_trig_third_muon_phi, "efficiency",
+         r"Third muon $\phi$", "Trigger efficiency", "Trigger_efficiency_third_phi_2018MonteCarlo_WZ", format='pdf')
 
 MyFile.Close()
