@@ -14,6 +14,8 @@ from Helpers import *
 mmu = 105.6583745 * 0.001
 mZ = 91.1876
 
+fileName = "HLT_Z_peak_signal_2018MonteCarlo_WZ_13TeV.root"
+
 def getPT(m1):
     px = m1[1]
     py = m1[2]
@@ -437,7 +439,7 @@ def efficiency_trigger(dirNames, triggerPaths):
         print number, explanation
 
     ## save histogram in a root file
-    MyFile = TFile("HLT_Z_peak_signal_2016MonteCarlo_Zjetsto4L_13TeV.root","RECREATE");
+    MyFile = TFile(fileName,"RECREATE");
 
     Invariant_Mass12.Write("Invariant_Mass12")
     Transverse_Mass.Write("Transverse_Mass")
@@ -504,27 +506,11 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, format='pdf'):
     plot = hist.execute()
     hist.savefig()
 
-MyFile = TFile("HLT_Z_peak_signal_2018MonteCarlo_WZ_13TeV.root")
-
-Invariant_Mass12 = MyFile.Get("Invariant_Mass12")
-makePlot(Invariant_Mass12, "histogram",
-         r"Dimuon invariant mass [GeV]", "Entries", "Z_peak_2018MonteCarlo_WZ", format='pdf')
-
-Invariant_Mass123 = MyFile.Get("Invariant_Mass123")
-makePlot(Invariant_Mass123, "histogram",
-         r"Trimuon invariant mass [GeV]", "Entries", "Trimuon_invariant_mass_2018MonteCarlo_WZ", format='pdf')
-
-Transverse_Mass = MyFile.Get("Transverse_Mass")
-makePlot(Transverse_Mass, "histogram",
-         r"Transverse mass mT [GeV]", "Entries", "Transverse_mass_2018MonteCarlo_WZ", format='pdf')
-
-PFMET = MyFile.Get("PFMET")
-makePlot(PFMET, "histogram",
-         r"PFMET [GeV]", "Entries", "PFMET_2018MonteCarlo_WZ", format='pdf')
+MyFile = TFile(fileName)
 
 eff_trig_leading_muon_pt = MyFile.Get("eff_trig_leading_muon_pt")
 makePlot(eff_trig_leading_muon_pt, "efficiency",
-         r"Leading muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_leading_pt_2018MonteCarlo_WZ", format='pdf')
+         r"Leading muon pT [GeV]", "Trigger efficiency", "Trigger_efficiency_leading_pt_2018MonteCarlo_WZ", format='pdf')
 
 eff_trig_leading_muon_eta = MyFile.Get("eff_trig_leading_muon_eta")
 makePlot(eff_trig_leading_muon_eta, "efficiency",
@@ -537,7 +523,7 @@ makePlot(eff_trig_leading_muon_phi, "efficiency",
 
 eff_trig_second_muon_pt = MyFile.Get("eff_trig_second_muon_pt")
 makePlot(eff_trig_second_muon_pt, "efficiency",
-         r"Second muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_second_pt_2018MonteCarlo_WZ", format='pdf')
+         r"Second muon pT [GeV]", "Trigger efficiency", "Trigger_efficiency_second_pt_2018MonteCarlo_WZ", format='pdf')
 
 eff_trig_second_muon_eta = MyFile.Get("eff_trig_second_muon_eta")
 makePlot(eff_trig_second_muon_eta, "efficiency",
@@ -550,7 +536,7 @@ makePlot(eff_trig_second_muon_phi, "efficiency",
 
 eff_trig_third_muon_pt = MyFile.Get("eff_trig_third_muon_pt")
 makePlot(eff_trig_third_muon_pt, "efficiency",
-         r"Third muon $p_\mathrm{T}$ [GeV]", "Trigger efficiency", "Trigger_efficiency_third_pt_2018MonteCarlo_WZ", format='pdf')
+         r"Third muon pT [GeV]", "Trigger efficiency", "Trigger_efficiency_third_pt_2018MonteCarlo_WZ", format='pdf')
 
 eff_trig_third_muon_eta = MyFile.Get("eff_trig_third_muon_eta")
 makePlot(eff_trig_third_muon_eta, "efficiency",
@@ -559,5 +545,24 @@ makePlot(eff_trig_third_muon_eta, "efficiency",
 eff_trig_third_muon_phi = MyFile.Get("eff_trig_third_muon_phi")
 makePlot(eff_trig_third_muon_phi, "efficiency",
          r"Third muon $\phi$", "Trigger efficiency", "Trigger_efficiency_third_phi_2018MonteCarlo_WZ", format='pdf')
+
+
+Transverse_Mass = MyFile.Get("Transverse_Mass")
+makePlot(Transverse_Mass, "histogram",
+         r"Transverse mass mT [GeV]", "Entries", "Transverse_mass_2018MonteCarlo_WZ", format='pdf')
+
+PFMET = MyFile.Get("PFMET")
+makePlot(PFMET, "histogram",
+         r"PFMET [GeV]", "Entries", "PFMET_2018MonteCarlo_WZ", format='pdf')
+
+Invariant_Mass123 = MyFile.Get("Invariant_Mass123")
+makePlot(Invariant_Mass123, "histogram",
+         r"Trimuon invariant mass [GeV]", "Entries", "Trimuon_invariant_mass_2018MonteCarlo_WZ", format='pdf')
+
+
+Invariant_Mass12 = MyFile.Get("Invariant_Mass12")
+makePlot(Invariant_Mass12, "histogram",
+         r"Dimuon invariant mass [GeV]", "Entries", "Z_peak_2018MonteCarlo_WZ", format='pdf')
+
 
 MyFile.Close()
