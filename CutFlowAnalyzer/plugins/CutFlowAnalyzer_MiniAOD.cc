@@ -3012,6 +3012,26 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("selMu2_SA",  &b_selMu2_SA, "selMu2_SA/O");
   m_ttree->Branch("selMu3_SA",  &b_selMu3_SA, "selMu3_SA/O");
 
+  m_ttree->Branch("selMu0_isMedium", &b_selMu0_isMedium, "selMu0_isMedium/O");
+  m_ttree->Branch("selMu1_isMedium", &b_selMu1_isMedium, "selMu1_isMedium/O");
+  m_ttree->Branch("selMu2_isMedium", &b_selMu2_isMedium, "selMu2_isMedium/O");
+  m_ttree->Branch("selMu3_isMedium", &b_selMu3_isMedium, "selMu3_isMedium/O");
+
+  m_ttree->Branch("selMu0_isTight", &b_selMu0_isTight, "selMu0_isTight/O");
+  m_ttree->Branch("selMu1_isTight", &b_selMu1_isTight, "selMu1_isTight/O");
+  m_ttree->Branch("selMu2_isTight", &b_selMu2_isTight, "selMu2_isTight/O");
+  m_ttree->Branch("selMu3_isTight", &b_selMu3_isTight, "selMu3_isTight/O");
+
+  m_ttree->Branch("selMu0_dxy", &b_selMu0_dxy, "selMu0_dxy/F");
+  m_ttree->Branch("selMu1_dxy", &b_selMu1_dxy, "selMu1_dxy/F");
+  m_ttree->Branch("selMu2_dxy", &b_selMu2_dxy, "selMu2_dxy/F");
+  m_ttree->Branch("selMu3_dxy", &b_selMu3_dxy, "selMu3_dxy/F");
+
+  m_ttree->Branch("selMu0_dz", &b_selMu0_dz, "selMu0_dz/F");
+  m_ttree->Branch("selMu1_dz", &b_selMu1_dz, "selMu1_dz/F");
+  m_ttree->Branch("selMu2_dz", &b_selMu2_dz, "selMu2_dz/F");
+  m_ttree->Branch("selMu3_dz", &b_selMu3_dz, "selMu3_dz/F");
+
   m_ttree->Branch("diMuonC_FittedVtx_dR",  &b_diMuonC_FittedVtx_dR,  "diMuonC_FittedVtx_dR/F");
   m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");
   m_ttree->Branch("diMuonC_FittedVtx_px",  &b_diMuonC_FittedVtx_px,  "diMuonC_FittedVtx_px/F");
