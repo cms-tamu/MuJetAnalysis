@@ -3222,6 +3222,10 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("is2DiMuonsMassOK_FittedVtx",     &b_is2DiMuonsMassOK_FittedVtx,     "is2DiMuonsMassOK_FittedVtx/O");
   m_ttree->Branch("hltPaths",  &b_hltPaths);
 
+  m_ttree->Branch("pfMET",&b_pfMET,"pfMET/F");
+  m_ttree->Branch("pfMET_phi",&b_pfMET_phi,"pfMET_phi/F");
+
+
   //****************************************************************************
   //                       Main Tree for Control Region Events
   //****************************************************************************
