@@ -615,6 +615,7 @@ private:
   Float_t b_patMET;
   Float_t b_patMET_phi;
 
+  Int_t b_nBJet_20; // number of bjets with at least 20 GeV
   Int_t b_NPATJet;
   Int_t b_NPATJetTightB;
   Int_t b_NPATJetMediumB;
@@ -1343,6 +1344,22 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 
   b_pfMET = patMET.pt(); // muon ET fraction!
   b_pfMET_phi = patMET.phi();
+
+  edm::Handle<pat::JetCollection> patJetH;
+  iEvent.getByToken(m_PATJet, patJetH);
+  const std::vector<pat::Jet>& patJets = *patJetH.product();
+
+  b_nBJet_20 = 0;
+  // https://twiki.cern.ch/twiki/bin/viewauth/CMS/BtagRecommendation102X
+  for (auto iJet = patJets.begin();  iJet != patJets.end();  ++iJet) {
+    //   // number of tight b-jets with at least 20 GeV pT
+    if (iJet->bDiscriminator("pfDeepFlavourJetTags:probb + pfDeepFlavourJetTags:probbb + pfDeepFlavourJetTags:problepb")>0.7264 and iJet->pt()>20) {
+      std::cout << "B-jet with at least 20 GeV pt" << std::endl;
+      // std::cout << "jet" << std::endl;
+      b_nBJet_20++;
+    }
+  }
+
 
   edm::Handle<pat::MuonCollection> muons;
   iEvent.getByToken(m_muons, muons);
@@ -3224,6 +3241,7 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
 
   m_ttree->Branch("pfMET",&b_pfMET,"pfMET/F");
   m_ttree->Branch("pfMET_phi",&b_pfMET_phi,"pfMET_phi/F");
+  m_ttree->Branch("b_nBJet_20",&b_nBJet_20,"nBJet_20/I");
 
 
   //****************************************************************************
