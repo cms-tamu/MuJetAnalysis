@@ -23,7 +23,7 @@ def getPT(m1):
 
 def getPhi(m1):
     return m1[4]
-    
+
 def normalizePhi(result):
     while (result > M_PI):
         result -= 2*M_PI;
@@ -73,56 +73,56 @@ datasets = ['WZTo3LNu', 'ZZTo4Mu','TTWJetsToLNu', 'TTZJetsToLNu', 'METData']
 
 dataFiles = {}
 dataFiles['WZTo3LNu'] = [
-    #'/fdata/hepx/store/user/dildick/WZTo3LNu_0Jets_MLL-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/crab_WZTo3LNu_0Jets_MLL_ANA_v10/180227_231545/0000/'
-    '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v2/180227_231243/0000_backup/',
-    '/fdata/hepx/store/user/dildick/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/crab_WZTo3LNu_Inclusive_ANA_v2/180227_231243/0001_backup/'
 ]
 dataFiles['TTWJetsToLNu'] = [
-    '/fdata/hepx/store/user/dildick/TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8/crab_TTbarW_ANA_v1/180216_032728/0000_backup/'
 ]
 dataFiles['TTZJetsToLNu'] = [
-    '/fdata/hepx/store/user/dildick/TTZToLLNuNu_M-10_TuneCUETP8M1_13TeV-amcatnlo-pythia8/crab_TTbarZ_ANA_v2/180221_004015/0000_backup/'
 ]
 """
 dataFiles['ZZTo4Mu'] = [
-    '/fdata/hepx/store/user/dildick/EWK_13TeV_CALCHEP_50K_batch1_GEN_SIM_v1_TAMU/crab_ZZTo4L_ANA_v6/180208_060822/0000/',
-    '/fdata/hepx/store/user/dildick/EWK_13TeV_CALCHEP_50K_batch2_GEN_SIM_v3_TAMU/crab_ZZTo4L_ANA_v6_PartTwo/180208_060940/0000/'
 ]
 dataFiles['METData'] = [
-    '/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/out_ana_selected_MET_2016BH_20180307.dimuonMass.root'
 ]
 """
 
 
 ## define each chain for plotting purposes
-chain_WZ = ROOT.TChain("Events")
-addfilesMany(chain_WZ, dataFiles['WZTo3LNu'], "out_ana_clone")
+file_WZ = TFile("datafiles/out_ana_clone_WZ_2018.root")
+chain_WZ = file_WZ.Get("Events")
 
-chain_TTW = ROOT.TChain("Events")
-addfilesMany(chain_TTW, dataFiles['TTWJetsToLNu'], "out_ana_clone")
+file_TTZ = TFile("datafiles/out_ana_clone_TTZ_2018.root")
+chain_TTZ = file_TTZ.Get("Events")
 
-chain_TTZ = ROOT.TChain("Events")
-addfilesMany(chain_TTZ, dataFiles['TTZJetsToLNu'], "out_ana_clone")
+file_Data = TFile("datafiles/out_ana_clone_MET_2018.root")
+chain_Data = file_Data.Get("Events")
 
-file_Data = TFile("/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/out_ana_selected_MET_2016BH_20180307.dimuonMass.root")
-chain_Data = file_Data.Get("Events;6")
+#ROOT.TChain("Events")
+#addfilesMany(chain_WZ, dataFiles['WZTo3LNu'], "out_ana_clone")
 
-file_ZZ = TFile("/fdata/hepx/store/user/dildick/EWK_13TeV_CALCHEP_50K_batch1_GEN_SIM_v1_TAMU/crab_ZZTo4L_ANA_v6/180208_060822/0000/out_ana_all_ZZ_TrigBranch.root")
-chain_ZZ = file_ZZ.Get("Events")
+#chain_TTW = ROOT.TChain("Events")
+#addfilesMany(chain_TTW, dataFiles['TTWJetsToLNu'], "out_ana_clone")
+
+#chain_TTZ = ROOT.TChain("Events")
+#addfilesMany(chain_TTZ, dataFiles['TTZJetsToLNu'], "out_ana_clone")
+
+#"/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/out_ana_selected_MET_2016BH_20180307.dimuonMass.root")
+
+#file_ZZ = TFile("datafiles/")
+#chain_ZZ = file_ZZ.Get("Events")
 
 chains = {}
 chains['WZTo3LNu'] = chain_WZ
-chains['ZZTo4Mu'] = chain_ZZ
-chains['TTWJetsToLNu'] = chain_TTW
+#chains['ZZTo4Mu'] = chain_ZZ
+#chains['TTWJetsToLNu'] = chain_TTW
 chains['TTZJetsToLNu'] = chain_TTZ
 chains['METData'] = chain_Data
 
-lumi = 35.9 #data processing penalty
+lumi = 59.8
 
-WZ_xsec = 4430#fb#575
+WZ_xsec = 5052#fb#575
 ZZ_xsec = 55.884#fb
 TTW_xsec = 200.1 #fb
-TTZ_xsec = 252.9 #fb
+TTZ_xsec = 243.2 #fb
 
 WZ_events = 18000000. #496684.
 ZZ_events = 100000.
@@ -158,35 +158,35 @@ def scaleSample(sample, hist):
         pass
 
 ## make the selection
-nMuonCut = "int(selMu0_pT != -100) + int(selMu1_pT != -100) + int(selMu2_pT != -100) + int(selMu3_pT != -100) == 3"
-ptMuonCut= "selMu0_pT > 30 && selMu1_pT > 30 && selMu2_pT > 10" 
+nMuonCut = "nRecoMu == 3"
+ptMuonCut= "selMu0_pT > 30 && selMu1_pT > 30 && selMu2_pT > 10"
 muonTightCut = "selMu0_isTight==1 && selMu1_isTight==1 && selMu2_isTight==1"
 muonDxyCut = "selMu0_dxy < 0.01 && selMu1_dxy < 0.01 && selMu2_dxy < 0.01"
 muonDzCut = "selMu0_dz < 0.1 && selMu1_dz < 0.1 && selMu2_dz < 0.1"
 muonIsoCut = "selMu0_PFIso < 0.15 && selMu1_PFIso < 0.15 && selMu2_PFIso < 0.15"
 OK_MET  = "OK_MET==1"
-SS = 'selMu0_q == selMu1_q && selMu1_q == selMu2_q'
+SS = 'selMu0_charge == selMu1_charge && selMu1_charge == selMu2_charge'
 OS = '!(%s)'%SS
 bjetCut = "nBJet_20==0"
 dimuonMassCut = "abs(best_OS_dimuon_mass-91.2)<15"
 
 my_cut = (TCut(nMuonCut) +
           TCut(ptMuonCut) +
-          TCut(muonTightCut) +
-          TCut(muonDxyCut) +
-          TCut(muonDzCut) +
-          TCut(muonIsoCut) +
-          TCut(OK_MET) +
-          TCut(bjetCut)
+#          TCut(muonTightCut) +
+#          TCut(muonDxyCut) +
+#          TCut(muonDzCut) +
+#          TCut(muonIsoCut) +
+          TCut(OK_MET)
+#          TCut(bjetCut)
           )
 
-my_cut_dimuon = my_cut + TCut(dimuonMassCut) + TCut(OS) 
+my_cut_dimuon = my_cut + TCut(dimuonMassCut) + TCut(OS)
 my_cut_SS = my_cut + TCut(SS)
 
 my_cut_HLT = my_cut + TCut("OK_Signal==1")
 my_cut_dimuon_HLT = my_cut_dimuon + TCut("OK_Signal==1")
 
-out_directory = "trigger_efficiency_plots_2016Combined_WZ_20180511_AllCuts_30_30_10/"
+out_directory = "trigger_efficiency_plots/"
 
 print my_cut
 """
@@ -203,9 +203,9 @@ chain_TTZ_filtered_SS = chain_TTW.CopyTree(my_cut_SS.GetTitle())
 chain_Data_filtered_SS = chain_Data.CopyTree(my_cut_SS.GetTitle())
 """
 variables = {}
-variables["selMu0_q"] = (3,-1,1)
-variables["selMu1_q"] = (3,-1,1)
-variables["selMu2_q"] = (3,-1,1)
+variables["selMu0_charge"] = (3,-1,1)
+variables["selMu1_charge"] = (3,-1,1)
+variables["selMu2_charge"] = (3,-1,1)
 
 variables["selMu0_pT"] = (30,0,300)
 variables["selMu1_pT"] = (30,0,300)
@@ -251,8 +251,8 @@ variables["selMu0_PFIso"] = (100,0,100)
 variables["selMu1_PFIso"] = (100,0,100)
 variables["selMu2_PFIso"] = (100,0,100)
 """
-variables["patMET"] = (75,0,750)
-variables["patMET_phi"] = (16,-3.2,3.2)
+variables["pfMET"] = (75,0,750)
+variables["pfMET_phi"] = (16,-3.2,3.2)
 variables["nBJet_20"] = (5,0,4)
 variables["best_OS_dimuon_mass"] = (40,70,110)
 variables["best_SS_dimuon_mass"] = (40,70,110)
@@ -261,9 +261,9 @@ variables["m123"] = (50,0,500)
 
 
 x_axis_labels = {}
-x_axis_labels["selMu0_q"] = r"Leading muon charge"
-x_axis_labels["selMu1_q"] = r"Second leading muon charge"
-x_axis_labels["selMu2_q"] = r"Third leading muon charge"
+x_axis_labels["selMu0_charge"] = r"Leading muon charge"
+x_axis_labels["selMu1_charge"] = r"Second leading muon charge"
+x_axis_labels["selMu2_charge"] = r"Third leading muon charge"
 
 x_axis_labels["selMu0_pT"] = r"Leading muon $p_\mathrm{T}$ [GeV]"
 x_axis_labels["selMu1_pT"] = r"Second leading muon $p_\mathrm{T}$ [GeV]"
@@ -277,8 +277,8 @@ x_axis_labels["selMu0_eta"] = r"Leading muon $\eta$"
 x_axis_labels["selMu1_eta"] = r"Second leading muon $\eta$"
 x_axis_labels["selMu2_eta"] = r"Third leading muon $\eta$"
 
-x_axis_labels["patMET"] = r"MET [GeV]"
-x_axis_labels["patMET_phi"] = r"MET $\phi$"
+x_axis_labels["pfMET"] = r"MET [GeV]"
+x_axis_labels["pfMET_phi"] = r"MET $\phi$"
 x_axis_labels["nBJet_20"] = r"Number of $b$ jets with $p_\mathrm{T} > 20$ GeV"
 x_axis_labels["best_OS_dimuon_mass"] = "Best OS dimuon mass [GeV]"
 x_axis_labels["best_SS_dimuon_mass"] = "Best SS dimuon mass [GeV]"
@@ -286,8 +286,8 @@ x_axis_labels["m123"] = r"$m_{123}$ [GeV]"
 
 def makePlotDataVsMC(histogram1,
                      histogram2,
-                     histogram3, 
-                     histogram4,
+                     #histogram3,
+                     #histogram4,
                      histogram5,
                      x_label, y_label, saveAs, format='pdf'):
 
@@ -304,13 +304,13 @@ def makePlotDataVsMC(histogram1,
     hist.saveDir     = out_directory
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
-    hist.CMSlabelStatus = ''  # ('Simulation')+'Internal' || 'Preliminary' 
+    hist.CMSlabelStatus = ''  # ('Simulation')+'Internal' || 'Preliminary'
     hist.initialize()
-    hist.lumi = '2016 MET B-H, 35.9'
+    hist.lumi = '2018 MET, 59.8'
     hist.plotLUMI = True
-    hist.Add(histogram3, name='ttW', sampleType='background')
-    hist.Add(histogram4, name='ttZ', sampleType='background')
-    hist.Add(histogram2, name='ZZto4Mu', sampleType='background')
+    #    hist.Add(histogram3, name='ttW', sampleType='background')
+    hist.Add(histogram2, name='ttZ', sampleType='background')
+    #    hist.Add(histogram2, name='ZZto4Mu', sampleType='background')
     hist.Add(histogram1, name='WZto3Mu', sampleType='background')
     hist.Add(histogram5, name='data', sampleType='data')
     hist.drawSystUncertainty = False     # draw syst uncertainty separately
@@ -342,14 +342,14 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, isData = False, form
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     if isData:
-        hist.CMSlabelStatus = ''  # ('Simulation')+'Internal' || 'Preliminary' 
+        hist.CMSlabelStatus = ''  # ('Simulation')+'Internal' || 'Preliminary'
     else:
-        hist.CMSlabelStatus = 'Simulation'  # ('Simulation')+'Internal' || 'Preliminary' 
+        hist.CMSlabelStatus = 'Simulation'  # ('Simulation')+'Internal' || 'Preliminary'
     hist.initialize()
-    hist.lumi = '2016 MET B-H, 35.9'
+    hist.lumi = '2016 MET, 59.8'
     hist.plotLUMI = isData
-    hist.drawStatUncertainty = True    
-    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label='HLT\_TrkMu15\_DoubleTrkMu5NoFiltersNoVtx')
+    hist.drawStatUncertainty = True
+    hist.Add(histogram, draw='errorbar', color='black', linecolor='black', label='Signal Triggers')
 
     dataLabel = saveAs.split("_")[0]
     print dataLabel
@@ -376,7 +376,7 @@ for myvar in variables:
 
 
     print myvar
-    bins = "(" + str(variables[myvar][0]) + "," + str(variables[myvar][1]) + "," + str(variables[myvar][2]) + ")" 
+    bins = "(" + str(variables[myvar][0]) + "," + str(variables[myvar][1]) + "," + str(variables[myvar][2]) + ")"
     print bins
 
     """
@@ -393,8 +393,8 @@ for myvar in variables:
     chain_Data_filtered_OS.Draw(myvar + ">>h_Data_" + myvar + bins)
     """
 
-    chain_TTW.Draw(myvar + ">>h_TTW_" + myvar + bins, my_cut)
-    chain_ZZ.Draw(myvar + ">>h_ZZ_" + myvar + bins, my_cut)
+    #    chain_TTW.Draw(myvar + ">>h_TTW_" + myvar + bins, my_cut)
+    #    chain_ZZ.Draw(myvar + ">>h_ZZ_" + myvar + bins, my_cut)
     chain_WZ.Draw(myvar + ">>h_WZ_" + myvar + bins, my_cut_dimuon)
     chain_TTZ.Draw(myvar + ">>h_TTZ_" + myvar + bins, my_cut_dimuon)
     chain_Data.Draw(myvar + ">>h_Data_" + myvar + bins, my_cut_dimuon)
@@ -403,36 +403,37 @@ for myvar in variables:
     h_TTZ = TH1F(gDirectory.Get("h_TTZ_" + myvar).Clone("h_TTZ_" + myvar))
     h_Data = TH1F(gDirectory.Get("h_Data_" + myvar).Clone("h_Data_" + myvar))
 
-    if not (myvar is "best_OS_dimuon_mass" or myvar is"best_SS_dimuon_mass" or myvar is"m123"):
-        h_ZZ = TH1F(gDirectory.Get("h_ZZ_" + myvar).Clone("h_ZZ_" + myvar))
-        h_TTW = TH1F(gDirectory.Get("h_TTW_" + myvar).Clone("h_TTW_" + myvar))
-    else:
-        h_ZZ = TH1F("h_ZZ","",variables[myvar][0],variables[myvar][1],variables[myvar][2])
-        h_TTW = TH1F("h_TTW","",variables[myvar][0],variables[myvar][1],variables[myvar][2])
-    
-    scaleZZ(h_ZZ)
-    scaleTTW(h_TTW)
+    #    if not (myvar is "best_OS_dimuon_mass" or myvar is"best_SS_dimuon_mass" or myvar is"m123"):
+    #        h_ZZ = TH1F(gDirectory.Get("h_ZZ_" + myvar).Clone("h_ZZ_" + myvar))
+    #        h_TTW = TH1F(gDirectory.Get("h_TTW_" + myvar).Clone("h_TTW_" + myvar))
+    #    else:
+    #        h_ZZ = TH1F("h_ZZ","",variables[myvar][0],variables[myvar][1],variables[myvar][2])
+    #        h_TTW = TH1F("h_TTW","",variables[myvar][0],variables[myvar][1],variables[myvar][2])
+
+    #    scaleZZ(h_ZZ)
+    #    scaleTTW(h_TTW)
     scaleWZ(h_WZ)
     scaleTTZ(h_TTZ)
 
-    print h_Data.Integral() / (h_WZ.Integral() + h_ZZ.Integral() + h_TTZ.Integral() + h_TTW.Integral())
-    print h_Data.Integral(), h_WZ.Integral() + h_ZZ.Integral() + h_TTZ.Integral() + h_TTW.Integral()
+    #    print h_Data.Integral() / (h_WZ.Integral() + h_ZZ.Integral() + h_TTZ.Integral() + h_TTW.Integral())
+    #    print h_Data.Integral(), h_WZ.Integral() + h_ZZ.Integral() + h_TTZ.Integral() + h_TTW.Integral()
 
-    makePlotDataVsMC(h_WZ, h_ZZ, h_TTW, h_TTZ, h_Data, x_axis_labels[myvar], "Entries", "Combine_" + myvar, format='pdf')
+    makePlotDataVsMC(h_WZ, #h_ZZ, h_TTW,
+                     h_TTZ, h_Data, x_axis_labels[myvar], "Entries", "Combine_" + myvar, format='pdf')
 
 
 
 #exit(1)
 
 
-    
+
 ## efficiency plots
 for myvar in variables:
     if not ('pT' in myvar or 'eta' in myvar or 'phi' in myvar or 'best_OS_dimuon_mass' in myvar): continue
     print myvar
-    bins = "(" + str(variables[myvar][0]) + "," + str(variables[myvar][1]) + "," + str(variables[myvar][2]) + ")" 
+    bins = "(" + str(variables[myvar][0]) + "," + str(variables[myvar][1]) + "," + str(variables[myvar][2]) + ")"
     #    continue
-    
+
     myvar_actual = ""
     if 'best_OS_dimuon_mass' in myvar:
         myvar_actual = 'abs(' + myvar + '-91.2)'
@@ -440,62 +441,61 @@ for myvar in variables:
     else:
         myvar_actual = myvar
 
-    if 'best_OS_dimuon_mass' in myvar: 
+    if 'best_OS_dimuon_mass' in myvar:
         continue
 
     chain_WZ.Draw(myvar_actual + ">>h_WZ_" + myvar + bins, my_cut_dimuon)
-    chain_ZZ.Draw(myvar_actual + ">>h_ZZ_" + myvar + bins, my_cut)
-    chain_TTW.Draw(myvar_actual + ">>h_TTW_" + myvar + bins, my_cut)
+#    chain_ZZ.Draw(myvar_actual + ">>h_ZZ_" + myvar + bins, my_cut)
+#    chain_TTW.Draw(myvar_actual + ">>h_TTW_" + myvar + bins, my_cut)
     chain_TTZ.Draw(myvar_actual + ">>h_TTZ_" + myvar + bins, my_cut_dimuon)
     chain_Data.Draw(myvar_actual + ">>h_Data_" + myvar + bins, my_cut_dimuon)
 
-    if not (myvar is "best_OS_dimuon_mass" or myvar is"best_SS_dimuon_mass" or myvar is"m123"):
-        h_ZZ = TH1F(gDirectory.Get("h_ZZ_" + myvar).Clone("h_ZZ_" + myvar))
-        h_TTW = TH1F(gDirectory.Get("h_TTW_" + myvar).Clone("h_TTW_" + myvar))
-    else:
-        h_ZZ = TH1F("h_ZZ","",variables[myvar][0],variables[myvar][1],variables[myvar][2])
-        h_TTW = TH1F("h_TTW","",variables[myvar][0],variables[myvar][1],variables[myvar][2])
+#    if not (myvar is "best_OS_dimuon_mass" or myvar is"best_SS_dimuon_mass" or myvar is"m123"):
+#        h_ZZ = TH1F(gDirectory.Get("h_ZZ_" + myvar).Clone("h_ZZ_" + myvar))
+#        h_TTW = TH1F(gDirectory.Get("h_TTW_" + myvar).Clone("h_TTW_" + myvar))
+#    else:
+#        h_ZZ = TH1F("h_ZZ","",variables[myvar][0],variables[myvar][1],variables[myvar][2])
+#        h_TTW = TH1F("h_TTW","",variables[myvar][0],variables[myvar][1],variables[myvar][2])
 
     h_WZ = TH1F(gDirectory.Get("h_WZ_" + myvar).Clone("h_WZ_" + myvar))
     h_TTZ = TH1F(gDirectory.Get("h_TTZ_" + myvar).Clone("h_TTZ_" + myvar))
     h_Data = TH1F(gDirectory.Get("h_Data_" + myvar).Clone("h_Data_" + myvar))
 
     chain_WZ.Draw(myvar_actual + ">>h_WZ_" + myvar + "_HLT" + bins, my_cut_dimuon_HLT)
-    chain_ZZ.Draw(myvar_actual + ">>h_ZZ_" + myvar + "_HLT" + bins, my_cut_HLT)
-    chain_TTW.Draw(myvar_actual + ">>h_TTW_" + myvar + "_HLT" + bins, my_cut_HLT)
+#    chain_ZZ.Draw(myvar_actual + ">>h_ZZ_" + myvar + "_HLT" + bins, my_cut_HLT)
+#    chain_TTW.Draw(myvar_actual + ">>h_TTW_" + myvar + "_HLT" + bins, my_cut_HLT)
     chain_TTZ.Draw(myvar_actual + ">>h_TTZ_" + myvar + "_HLT" + bins, my_cut_dimuon_HLT)
     chain_Data.Draw(myvar_actual + ">>h_Data_" + myvar + "_HLT" + bins, my_cut_dimuon_HLT)
 
     h_WZ_HLT = TH1F(gDirectory.Get("h_WZ_" + myvar + "_HLT").Clone("h_WZ_" + myvar + "_HLT"))
-    h_ZZ_HLT = TH1F(gDirectory.Get("h_ZZ_" + myvar + "_HLT").Clone("h_ZZ_" + myvar + "_HLT"))
-    h_TTW_HLT = TH1F(gDirectory.Get("h_TTW_" + myvar + "_HLT").Clone("h_TTW_" + myvar + "_HLT"))
+#    h_ZZ_HLT = TH1F(gDirectory.Get("h_ZZ_" + myvar + "_HLT").Clone("h_ZZ_" + myvar + "_HLT"))
+#    h_TTW_HLT = TH1F(gDirectory.Get("h_TTW_" + myvar + "_HLT").Clone("h_TTW_" + myvar + "_HLT"))
     h_TTZ_HLT = TH1F(gDirectory.Get("h_TTZ_" + myvar + "_HLT").Clone("h_TTZ_" + myvar + "_HLT"))
     h_Data_HLT = TH1F(gDirectory.Get("h_Data_" + myvar + "_HLT").Clone("h_Data_" + myvar + "_HLT"))
-    
+
     h_WZ_HLT_Eff = TEfficiency(h_WZ_HLT, h_WZ)
-    h_ZZ_HLT_Eff = TEfficiency(h_ZZ_HLT, h_ZZ)
-    h_TTW_HLT_Eff = TEfficiency(h_TTW_HLT, h_TTW)
+#    h_ZZ_HLT_Eff = TEfficiency(h_ZZ_HLT, h_ZZ)
+#    h_TTW_HLT_Eff = TEfficiency(h_TTW_HLT, h_TTW)
     h_TTZ_HLT_Eff = TEfficiency(h_TTZ_HLT, h_TTZ)
     h_Data_HLT_Eff = TEfficiency(h_Data_HLT, h_Data)
 
     print float(h_Data.GetEntries())
-    print "WZ eff", h_WZ_HLT.GetEntries() / float(h_WZ.GetEntries()) 
-    print "ZZ eff", h_ZZ_HLT.GetEntries() / float(h_ZZ.GetEntries()) 
-    print "TTW eff", h_TTW_HLT.GetEntries() / float(h_TTW.GetEntries()) 
-    print "TTZ eff", h_TTZ_HLT.GetEntries() / float(h_TTZ.GetEntries()) 
-    print "Data eff", h_Data_HLT.GetEntries() / float(h_Data.GetEntries()) 
-    
+    print "WZ eff", h_WZ_HLT.GetEntries() / float(h_WZ.GetEntries())
+#    print "ZZ eff", h_ZZ_HLT.GetEntries() / float(h_ZZ.GetEntries())
+#    print "TTW eff", h_TTW_HLT.GetEntries() / float(h_TTW.GetEntries())
+    print "TTZ eff", h_TTZ_HLT.GetEntries() / float(h_TTZ.GetEntries())
+    print "Data eff", h_Data_HLT.GetEntries() / float(h_Data.GetEntries())
+
     x_label = x_axis_labels[myvar]
 
-    makePlot(h_WZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "WZ_" + myvar + "_HLT", 
+    makePlot(h_WZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "WZ_" + myvar + "_HLT",
              isData=False, format='pdf')
-    makePlot(h_ZZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "ZZ_" + myvar + "_HLT", 
-             isData=False, format='pdf')
-    makePlot(h_TTW_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "TTW_" + myvar + "_HLT", 
-             isData=False, format='pdf')
-    makePlot(h_TTZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "TTZ_" + myvar + "_HLT", 
+#    makePlot(h_ZZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "ZZ_" + myvar + "_HLT",
+#             isData=False, format='pdf')
+#    makePlot(h_TTW_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "TTW_" + myvar + "_HLT",
+#             isData=False, format='pdf')
+    makePlot(h_TTZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "TTZ_" + myvar + "_HLT",
              isData=False, format='pdf')
 
-    makePlot(h_Data_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "Data_" + myvar + "_HLT", 
+    makePlot(h_Data_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "Data_" + myvar + "_HLT",
              isData=True, format='pdf')
-

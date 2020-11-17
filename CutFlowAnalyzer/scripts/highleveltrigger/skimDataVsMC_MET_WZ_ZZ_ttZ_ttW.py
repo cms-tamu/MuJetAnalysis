@@ -186,16 +186,12 @@ newtree.Branch( 'm123', m123, 'm123/D')
 
 for k in range(0, tree.GetEntries()):
 
-    if k%1==0: print "Processing event ", k, "/",tree.GetEntries()
+    if k%1000==0: print "Processing event ", k, "/",tree.GetEntries()
     tree.GetEntry(k)
 
     q0 = tree.selMu0_charge
     q1 = tree.selMu1_charge
     q2 = tree.selMu2_charge
-
-    if q0 == q1 == q2:
-        print "\tSkip"
-        continue
 
     px0 = tree.selMu0_px
     px1 = tree.selMu1_px
