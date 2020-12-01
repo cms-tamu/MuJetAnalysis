@@ -39,6 +39,7 @@
 #include "MuJetAnalysis/AnalysisTools/interface/Helpers.h"
 
 #include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
+#include "SimDataFormats/GeneratorProducts/interface/GenEventInfoProduct.h"
 
 // user include files
 #include "TTree.h"
@@ -131,6 +132,9 @@ private:
   //****************************************************************************
 
   bool m_fillGenLevel; // TRUE for simulation, FALSE for data
+
+  float b_genWeight;
+  float b_pileupWeight;
 
   // GEN Level Branches
   Float_t b_genMu0_px;
@@ -343,6 +347,8 @@ private:
   edm::EDGetTokenT<std::vector<pat::Jet> > m_PATJet;
   edm::EDGetTokenT<pat::METCollection> m_patMET;
   edm::EDGetTokenT<std::vector<PileupSummaryInfo> > m_pileupCollection;
+  edm::EDGetTokenT<GenEventInfoProduct> m_genInfoCollection;
+  std::vector<double> pileupScaleFactor_;
 
   Int_t         m_nThrowsConsistentVertexesCalculator;
   Int_t         m_barrelPixelLayer;
@@ -739,6 +745,8 @@ hltProcess_(iConfig.getParameter<std::string>("hltProcess"))
   skimOutput_ = iConfig.getParameter<bool>("skimOutput");
   //useFinalDecision_ = iConfig.getParameter<bool>("useFinalDecision");
   m_pileupCollection = consumes<std::vector<PileupSummaryInfo> >(iConfig.getParameter<edm::InputTag>("pileupCollection"));
+  m_genInfoCollection = consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("genInfoCollection"));
+  pileupScaleFactor_ = iConfig.getParameter<std::vector<double> >("pileupScaleDataOverMC");
 
   m_randomSeed = 1234;
   m_trandom3   = TRandom3(m_randomSeed); // Random generator
@@ -847,6 +855,10 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   if (m_fillGenLevel){
 
     if ( m_debug > 0 ) std::cout << m_events << " Start GEN Level" << std::endl;
+
+    edm::Handle<GenEventInfoProduct> genInfo;
+    iEvent.getByToken(m_genInfoCollection, genInfo);
+    b_genWeight = (*genInfo).weight();
 
     edm::Handle<reco::GenParticleCollection> genParticles;
     iEvent.getByToken(m_genParticles, genParticles);
@@ -2762,6 +2774,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
                 continue;
         }
     }
+    b_pileupWeight = b_npv * pileupScaleFactor_[b_npv];
   }
 
   b_isVertexOK = false;
@@ -2963,6 +2976,9 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("genFakeDiMu_dR",    &b_genFakeDiMu_dR,    "genFakeDiMu_dR/F");
   m_ttree->Branch("genFakeDiMu_dM",    &b_genFakeDiMu_dM,    "genFakeDiMu_dM/F");
   m_ttree->Branch("gen_ddPhi",         &b_gen_ddPhi,         "gen_ddPhi/F");
+
+  m_ttree->Branch("genWeight",  &b_genWeight,  "genWeight/F");
+  m_ttree->Branch("pileupWeight",  &b_pileupWeight,  "pileupWeight/F");
 
   // GEN Level Muons
   m_ttree->Branch("genMu0_pT",  &b_genMu0_pT,  "genMu0_pT/F");
