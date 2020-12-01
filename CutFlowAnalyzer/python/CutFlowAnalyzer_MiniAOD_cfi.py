@@ -1,8 +1,11 @@
 import FWCore.ParameterSet.Config as cms
+from MuJetAnalysis.CutFlowAnalyzer.pileup_cfi import pileupScaleDataOverMC
+from MuJetAnalysis.CutFlowAnalyzer.hltMETPaths_cfi import orthogonalHltPaths
 
 cutFlowAnalyzer = cms.EDAnalyzer(
     'CutFlowAnalyzer_MiniAOD',
     analyzerDebug = cms.int32(-1),
+    pileupScaleDataOverMC = pileupScaleDataOverMC,
     muons = cms.InputTag("slimmedMuons"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
     muPairs = cms.InputTag("PFMuJetProducer05", "Pairs"),
@@ -18,6 +21,7 @@ cutFlowAnalyzer = cms.EDAnalyzer(
     TrackRefitter = cms.InputTag("TrackRefitter"),
     PrunedGenParticles = cms.InputTag("prunedGenParticles"),
     pileupCollection = cms.InputTag("slimmedAddPileupInfo"),
+    genInfoCollection = cms.InputTag("generator"),
     primaryVertices = cms.InputTag("unpackedTracksAndVertices"),
     secondaryVertices = cms.InputTag("unpackedTracksAndVertices","secondary"),
     PATJet = cms.InputTag("slimmedJets"),
@@ -40,25 +44,7 @@ cutFlowAnalyzer = cms.EDAnalyzer(
         'HLT_TripleMu_12_10_5',
     ),
     #PS=1 MET trigger in MET dataset 2018
-    orthogonalHltPaths = cms.vstring(
-        'HLT_PFMET100_PFMHT100_IDTight_CaloBTagDeepCSV_3p1',
-        'HLT_PFMET100_PFMHT100_IDTight_PFHT60',
-        'HLT_PFMET110_PFMHT110_IDTight_CaloBTagDeepCSV_',
-        'HLT_PFMET110_PFMHT110_IDTight',
-        'HLT_PFMET120_PFMHT120_IDTight_CaloBTagDeepCSV_3p1',
-        'HLT_PFMET120_PFMHT120_IDTight_PFHT60',
-        'HLT_PFMET120_PFMHT120_IDTight',
-        'HLT_PFMET130_PFMHT130_IDTight_CaloBTagDeepCSV_3p1',
-        'HLT_PFMET130_PFMHT130_IDTight',
-        'HLT_PFMET140_PFMHT140_IDTight_CaloBTagDeepCSV_3p1',
-        'HLT_PFMET140_PFMHT140_IDTight',
-        'HLT_PFMET200_HBHECleaned',
-        'HLT_PFMET200_HBHE_BeamHaloCleaned',
-        'HLT_PFMET200_NotCleaned',
-        'HLT_PFMET250_HBHECleaned',
-        'HLT_PFMET300_HBHECleaned',
-        'HLT_PFMETTypeOne100_PFMHT100_IDTight_PFHT60',
-    ),
+    orthogonalHltPaths = orthogonalHltPaths,
     controlHltPaths = cms.vstring(
         'HLT_TrkMu16NoFiltersNoVtx',
         'HLT_TrkMu6NoFiltersNoVtx',

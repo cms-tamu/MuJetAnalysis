@@ -2808,6 +2808,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
 void
 CutFlowAnalyzer_MiniAOD::beginJob() {
   std::cout << "BEGIN JOB" << std::endl;
+
   edm::Service<TFileService> tFileService;
 
   //****************************************************************************
