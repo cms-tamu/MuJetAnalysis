@@ -25,12 +25,10 @@ dataFiles['TTWJetsToLNu'] = [
 ]
 dataFiles['TTZJetsToLNu'] = [
 ]
-"""
 dataFiles['ZZTo4Mu'] = [
 ]
 dataFiles['METData'] = [
 ]
-"""
 
 
 ## define each chain for plotting purposes
@@ -57,33 +55,30 @@ chain_Data = file_Data.Get("Events")
 
 chains = {}
 chains['WZTo3LNu'] = chain_WZ
-#chains['ZZTo4Mu'] = chain_ZZ
-#chains['TTWJetsToLNu'] = chain_TTW
 chains['TTZJetsToLNu'] = chain_TTZ
 chains['METData'] = chain_Data
+#chains['ZZTo4Mu'] = chain_ZZ
+#chains['TTWJetsToLNu'] = chain_TTW
 
 lumi = 59.7
-
-WZ_xsec = 5052#fb
-ZZ_xsec = 55.884#fb
-TTW_xsec = 200.1 #fb
-TTZ_xsec = 243.2 #fb
-
-WZ_events = 10749269.
-ZZ_events = 100000.
-TTW_events = 3120397
-TTZ_events = 13280000
-
 def scaleWZ(hist):
+    WZ_xsec = 5052#fb
+    WZ_events = 10749269.
     hist.Scale(lumi*WZ_xsec/WZ_events)
 
 def scaleZZ(hist):
+    ZZ_xsec = 55.884#fb
+    ZZ_events = 100000.
     hist.Scale(lumi*ZZ_xsec/ZZ_events)
 
 def scaleTTW(hist):
+    TTW_xsec = 200.1 #fb
+    TTW_events = 3120397
     hist.Scale(lumi*TTW_xsec/TTW_events)
 
 def scaleTTZ(hist):
+    TTZ_xsec = 243.2 #fb
+    TTZ_events = 13280000
     hist.Scale(lumi*TTZ_xsec/TTZ_events)
 
 ## make the selection
@@ -93,7 +88,7 @@ muonTightCut = "selMu0_isTight==1 && selMu1_isTight==1 && selMu2_isTight==1"
 muonMediumCut = "selMu0_isMedium==1 && selMu1_isMedium==1 && selMu2_isMedium==1"
 muonDxyCut = "selMu0_dxy < 0.01 && selMu1_dxy < 0.01 && selMu2_dxy < 0.01"
 muonDzCut = "selMu0_dz < 0.1 && selMu1_dz < 0.1 && selMu2_dz < 0.1"
-muonIsoCut = "selMu0_PFIso < 0.15 && selMu1_PFIso < 0.15 && selMu2_PFIso < 0.15"
+muonIsoCut = "selMu0_PFIso < 0.2 && selMu1_PFIso < 0.2 && selMu2_PFIso < 0.2"
 OK_MET  = "OK_MET==1"
 SS = 'selMu0_charge == selMu1_charge && selMu1_charge == selMu2_charge'
 OS = '!(%s)'%SS
@@ -105,8 +100,8 @@ my_cut = (TCut(nMuonCut) +
           TCut(muonMediumCut) +
 #          TCut(muonDxyCut) +
 #          TCut(muonDzCut) +
-          TCut(muonIsoCut)
-          #          TCut(OK_MET)
+#          TCut(muonIsoCut)
+          TCut(OK_MET)
           #          TCut(bjetCut)
       )
 
@@ -116,9 +111,9 @@ my_cut_SS = my_cut + TCut(SS)
 my_cut_HLT = my_cut + TCut("OK_Signal==1")
 my_cut_dimuon_HLT = my_cut_dimuon + TCut("OK_Signal==1")
 
+out_dmc_directory = "data_vs_montecarlo_plots/"
 out_directory = "trigger_efficiency_plots/"
 
-print my_cut
 """
 chain_WZ_filtered_OS = chain_WZ.CopyTree(my_cut_OS.GetTitle())
 chain_ZZ_filtered_OS = chain_ZZ.CopyTree(my_cut_OS.GetTitle())
@@ -231,7 +226,7 @@ def makePlotDataVsMC(histogram1,
     hist.y_label     = y_label
     hist.y_ratio_label     = "Data/MC"
     hist.format      = format      # file format for saving image
-    hist.saveDir     = out_directory
+    hist.saveDir     = out_dmc_directory
     hist.saveAs      = saveAs# "Z_peak_2016MonteCarlo_WZ" # save figure with name
     hist.CMSlabel       = 'outer'  # 'top left', 'top right'; hack code for something else
     hist.CMSlabelStatus = ''  # ('Simulation')+'Internal' || 'Preliminary'
@@ -302,32 +297,15 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, isData = False, form
 
 ## for each kinematic property, plot all contributions
 for myvar in variables:
-    #continue
-
 
     print myvar
     bins = "(" + str(variables[myvar][0]) + "," + str(variables[myvar][1]) + "," + str(variables[myvar][2]) + ")"
-    print bins
 
-    """
-    print chain_WZ.GetEntries(my_cut.GetTitle())
-    print chain_ZZ.GetEntries(my_cut.GetTitle())
-    print chain_TTW.GetEntries(my_cut.GetTitle())
-    print chain_TTZ.GetEntries(my_cut.GetTitle())
-    print chain_Data.GetEntries(my_cut.GetTitle())
-
-    chain_WZ_filtered_OS.Draw(myvar + ">>h_WZ_" + myvar + bins)
-    chain_ZZ_filtered_OS.Draw(myvar + ">>h_ZZ_" + myvar + bins)
-    chain_TTW_filtered_OS.Draw(myvar + ">>h_TTW_" + myvar + bins)
-    chain_TTZ_filtered_OS.Draw(myvar + ">>h_TTZ_" + myvar + bins)
-    chain_Data_filtered_OS.Draw(myvar + ">>h_Data_" + myvar + bins)
-    """
-
-    #    chain_TTW.Draw(myvar + ">>h_TTW_" + myvar + bins, my_cut)
-    #    chain_ZZ.Draw(myvar + ">>h_ZZ_" + myvar + bins, my_cut)
     chain_WZ.Draw(myvar + ">>h_WZ_" + myvar + bins, my_cut_dimuon)
     chain_TTZ.Draw(myvar + ">>h_TTZ_" + myvar + bins, my_cut_dimuon)
     chain_Data.Draw(myvar + ">>h_Data_" + myvar + bins, my_cut_dimuon)
+    #    chain_TTW.Draw(myvar + ">>h_TTW_" + myvar + bins, my_cut)
+    #    chain_ZZ.Draw(myvar + ">>h_ZZ_" + myvar + bins, my_cut)
 
     h_WZ = TH1F(gDirectory.Get("h_WZ_" + myvar).Clone("h_WZ_" + myvar))
     h_TTZ = TH1F(gDirectory.Get("h_TTZ_" + myvar).Clone("h_TTZ_" + myvar))

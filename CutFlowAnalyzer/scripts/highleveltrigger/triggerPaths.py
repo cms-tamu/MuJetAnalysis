@@ -1,0 +1,26 @@
+signalPaths = [
+    "HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx",
+    "HLT_DoubleL2Mu23NoVtx_2Cha",
+    "HLT_TripleMu_12_10_5",
+    "HLT_Mu18_Mu9_SameSign"
+]
+
+controPaths = [
+    'HLT_PFMET100_PFMHT100_IDTight_CaloBTagDeepCSV_3p1',
+    'HLT_PFMET100_PFMHT100_IDTight_PFHT60',
+    'HLT_PFMET110_PFMHT110_IDTight_CaloBTagDeepCSV_',
+    'HLT_PFMET110_PFMHT110_IDTight',
+    'HLT_PFMET120_PFMHT120_IDTight_CaloBTagDeepCSV_3p1',
+    'HLT_PFMET120_PFMHT120_IDTight_PFHT60',
+    'HLT_PFMET120_PFMHT120_IDTight',
+    'HLT_PFMET130_PFMHT130_IDTight_CaloBTagDeepCSV_3p1',
+    'HLT_PFMET130_PFMHT130_IDTight',
+    'HLT_PFMET140_PFMHT140_IDTight_CaloBTagDeepCSV_3p1',
+    'HLT_PFMET140_PFMHT140_IDTight',
+    'HLT_PFMET200_HBHECleaned',
+    'HLT_PFMET200_HBHE_BeamHaloCleaned',
+    'HLT_PFMET200_NotCleaned',
+    'HLT_PFMET250_HBHECleaned',
+    'HLT_PFMET300_HBHECleaned',
+    'HLT_PFMETTypeOne100_PFMHT100_IDTight_PFHT60',
+]

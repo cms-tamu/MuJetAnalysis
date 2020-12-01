@@ -6,6 +6,7 @@ from hepPlotter import HepPlotter
 import hepPlotterTools as hpt
 #import hepPlotterLabels as hpl
 import math as m
+import numpy
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Helpers import *
@@ -19,7 +20,7 @@ fileName = "HLT_signal_2018MonteCarlo_WZ_13TeV.root"
 def getPT(m1):
     px = m1[1]
     py = m1[2]
-    return m.sqrt(px*px + py*py)
+    return numpy.sqrt(px*px + py*py)
 
 def getPhi(m1):
     return m1[4]
@@ -33,7 +34,7 @@ def normalizePhi(result):
 
 ## total energy of the muon
 def energy(mmu, px, py, pz):
-    return m.sqrt(mmu*mmu + px*px + py*py + pz*pz)
+    return numpy.sqrt(mmu*mmu + px*px + py*py + pz*pz)
 
 ## dimuon invariant mass
 def inner(m1, m2):
@@ -43,7 +44,7 @@ def invmass(m1, m2):
     a = inner(m1,m1)
     b = inner(m2,m2)
     c = 2*inner(m1,m2)
-    return m.sqrt(a+b+c)
+    return numpy.sqrt(a+b+c)
 
 def inv3mass(m1, m2, m3):
     a = inner(m1,m1)
@@ -52,7 +53,7 @@ def inv3mass(m1, m2, m3):
     d = 2*inner(m1,m2)
     e = 2*inner(m1,m3)
     f = 2*inner(m2,m3)
-    return m.sqrt(a+b+c+d+e+f)
+    return numpy.sqrt(a+b+c+d+e+f)
 
 def isMassInZPeak(m):
     return abs(m-mZ)<15
@@ -66,7 +67,7 @@ def bestMassInZPeak(m1, m2, m3):
 ##____________________________________________________________
 def efficiency_trigger(dirNames, triggerPaths):
 
-    verbose = False
+    verbose = True
 
     chain = ROOT.TChain("Events")
 
@@ -102,8 +103,8 @@ def efficiency_trigger(dirNames, triggerPaths):
     third_muon_pt = ROOT.TH1D("third_muon_pt","",40,10,110)
     trig_third_muon_pt = ROOT.TH1D("trig_third_muon_pt","",40,10,110)
 
-    print "Adding files to the chain"
-    addfilesMany(chain, dirNames, "out_ana")
+    print "Adding files to the chain", dirNames[0]
+    chain.Add(dirNames[0])#addfilesMany(chain, dirNames, "out_ana")
 
     print "Loop over the chain"
     nEventsWith2MassInZPeak = 0
@@ -141,6 +142,7 @@ def efficiency_trigger(dirNames, triggerPaths):
         if (verbose): print "Loading directory cutFlowAnalyzerPXBL4PXFL3"
 
         tree = myfile.Get("cutFlowAnalyzerPXBL4PXFL3/Events")
+        tree = myfile.Get("Events")
 
         if not tree:
             if (verbose): print "Tree cutFlowAnalyzerPXBL4PXFL3/Events does not exist"
@@ -148,8 +150,9 @@ def efficiency_trigger(dirNames, triggerPaths):
 
         if (verbose): print "  Events  ", tree.GetEntries()
 
+        nEventsToProcess = 1000000
         nTriggers = 0
-        for k in range(0, tree.GetEntries()):
+        for k in range(0, nEventsToProcess):
 
             nEvents[0] += 1
 
@@ -227,9 +230,14 @@ def efficiency_trigger(dirNames, triggerPaths):
             isTight2 = tree.selMu2_isTight
 
             ## high quality muons
-            if not isTight0: continue
-            if not isTight1: continue
-            if not isTight2: continue
+            #if not isTight0: continue
+            #if not isTight1: continue
+            #if not isTight2: continue
+
+            ## high quality muons
+            if not isMedium0: continue
+            if not isMedium1: continue
+            if not isMedium2: continue
 
             nEvents[5] += 1
 
@@ -267,10 +275,10 @@ def efficiency_trigger(dirNames, triggerPaths):
 
             nEvents[8] += 1
 
-            #pfMET = tree.pfMET
-            #pfMET_phi = tree.pfMET_phi
-            #print "pfMET", pfMET
-            #print "pfMET_phi", pfMET_phi
+            pfMET = tree.pfMET
+            pfMET_phi = tree.pfMET_phi
+            print "pfMET", pfMET
+            print "pfMET_phi", pfMET_phi
 
             ## calculate the energies
             E0 = energy(mmu, px0, py0, pz0)
@@ -348,7 +356,7 @@ def efficiency_trigger(dirNames, triggerPaths):
             nEvents[11] += 1
 
             ## require 30 GeV MET from W decay
-            #if pfMET < 30: continue
+            if pfMET < 30: continue
 
             nEvents[12] += 1
 
@@ -367,24 +375,24 @@ def efficiency_trigger(dirNames, triggerPaths):
             nEvents[14] += 1
 
             ## apply a quality criterium on the transverse mass cut
-            #Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(pfMET_phi))
-            #print "Wmu_nu_deltaPhi", Wmu_nu_deltaPhi, Wmu_phi - pfMET_phi
-            #transverseWbosonMass = m.sqrt(2 * Wmu_pT * pfMET * (1-m.cos(Wmu_nu_deltaPhi)))
+            Wmu_nu_deltaPhi = deltaPhi(Wmu_phi, normalizePhi(pfMET_phi))
+            print "Wmu_nu_deltaPhi", Wmu_nu_deltaPhi, Wmu_phi - pfMET_phi
+            transverseWbosonMass = numpy.sqrt(2 * Wmu_pT * pfMET * (1-numpy.cos(Wmu_nu_deltaPhi)))
             #if (verbose):
             #    print "transverseWbosonMass", transverseWbosonMass
             ## remove the contamination from W+jets in the sample!
-            #if transverseWbosonMass > 20: continue
+            if transverseWbosonMass > 20: continue
 
             #print "Event passes full selection"
 
             Invariant_Mass12.Fill(bestMass)
-            #Transverse_Mass.Fill(transverseWbosonMass)
+            Transverse_Mass.Fill(transverseWbosonMass)
             Invariant_Mass123.Fill(invm3)
-            #PFMET.Fill(pfMET)
+            PFMET.Fill(pfMET)
             WmupT.Fill(Wmu_pT)
             WmuPhi.Fill(Wmu_phi)
-            #METPhi.Fill(pfMET_phi)
-            #WmNuDeltaPhi.Fill(Wmu_nu_deltaPhi)
+            METPhi.Fill(pfMET_phi)
+            WmNuDeltaPhi.Fill(Wmu_nu_deltaPhi)
 
             leading_muon_eta.Fill(abs(tree.selMu0_eta))
             leading_muon_phi.Fill(tree.selMu0_phi)
@@ -436,7 +444,7 @@ def efficiency_trigger(dirNames, triggerPaths):
                 print
 
     for number, explanation in zip(nEvents, nEventsComments):
-        print number, explanation
+        print explanation, ": ", number
 
     ## save histogram in a root file
     MyFile = TFile(fileName,"RECREATE");
@@ -474,7 +482,8 @@ def efficiency_trigger(dirNames, triggerPaths):
     MyFile.Close();
 
 dirNames = [
-    '/eos/uscms/store/user/dildick/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/crab_WZTo3LNu_PATANA20201111_v1/201112_000925/0000/'
+    '/uscms_data/d3/dildick/work/DisplacedMuonJetAnalysis_Run2/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/highleveltrigger/datafiles/out_ana_clone_MET_2018.root'
+    #'/eos/uscms/store/user/dildick/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/crab_WZTo3LNu_PATANA20201111_v1/201112_000925/0000/'
 ]
 #root://cmsxrootd-site.fnal.gov/
 

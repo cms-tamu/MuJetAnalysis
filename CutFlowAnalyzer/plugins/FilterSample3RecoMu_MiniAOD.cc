@@ -89,9 +89,6 @@ FilterSample3RecoMu_MiniAOD::filter(edm::Event& iEvent, const edm::EventSetup& i
     if (p.pt() >= 12) nMuPt12++;
   }
 
-  // exactly 3 muons
-  if (nMuPt5 > 3) return false;
-
   const bool pass(nMuPt5 >= 3 and nMuPt12>= 1);
   if (pass)
     std::cout << "Pass" << std::endl;
