@@ -11,6 +11,8 @@ import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Helpers import *
 
+gStyle.SetOptStat(0)
+
 ## mass of the muon in GeV
 mmu = 105.6583745 * 0.001
 mZ = 91.1876
@@ -26,11 +28,16 @@ chain_Data = file_Data.Get("Events")
 lumi = 59.7
 WZ_xsec = 5114#fb
 WZ_events = 10749269.
+#WZ_xsec = 62170#fb
+#WZ_events = 89479400
+
 def WZScaled(events):
     return events / WZ_events * lumi * WZ_xsec
 
 def scaleWZ(hist):
-    hist.Scale(lumi*WZ_xsec/WZ_events)
+    scaleFactor = lumi * WZ_xsec / WZ_events
+    hist.Scale(lumi * WZ_xsec / WZ_events)
+    return hist
 
 ## make the selection
 nMuonCut = "nRecoMu == 3"
@@ -44,45 +51,45 @@ OK_MET  = "isOrthogonalHLTFired==1"
 SS = 'selMu0_charge == selMu1_charge && selMu1_charge == selMu2_charge'
 OS = '!(%s)'%SS
 bjetCut = "nBJet_20==0"
-dimuonMassCut = "abs(best_OS_dimuon_mass-91.2)<15"
+dimuonMassCut = "abs(best_OS_dimuon_mass-91.2)<20"
 ok_hlt = "(isSignalHLT_0_Fired==1 || isSignalHLT_1_Fired==1 || isSignalHLT_2_Fired==1 || isSignalHLT_3_Fired==1)"
 pfmet = "pfMET > 100"
 
 cuts = [0] * 11
-cuts[0] = "1==1"
-cuts[1] = cuts[0] + "&&" + ptMuonCut
-cuts[2] = cuts[1] + "&&" + muonMediumCut
-cuts[3] = cuts[2]
+cuts[0] = OK_MET
+cuts[1] = cuts[0] + "&&" + nMuonCut
+cuts[2] = cuts[1] + "&&" + OS
+cuts[3] = cuts[2] + "&&" + muonMediumCut
 cuts[4] = cuts[3] + "&&" + muonDxyCut
 cuts[5] = cuts[4] + "&&" + muonDzCut
 cuts[6] = cuts[5] + "&&" + muonIsoCut
-cuts[7] = cuts[6]
-cuts[8] = cuts[7] + "&&" + OS
-cuts[9] = cuts[8] + "&&" + OK_MET
-cuts[10] = cuts[9] + "&&" + ok_hlt
+cuts[7] = cuts[6] + "&&" + ptMuonCut
+cuts[8] = cuts[7] + "&&" + dimuonMassCut
+cuts[9] = cuts[8] + "&&" + ok_hlt
 
 print "No cut"
-print WZScaled(chain_WZ.GetEntries()), chain_Data.GetEntries()
+print chain_WZ.GetEntries(), WZScaled(chain_WZ.GetEntries()), chain_Data.GetEntries()
 
-for i in range(0,11):
+for i in range(0,10):
     print cuts[i]
-    print WZScaled(chain_WZ.GetEntries(cuts[i])), chain_Data.GetEntries(cuts[i])
+    print chain_WZ.GetEntries(cuts[i]), WZScaled(chain_WZ.GetEntries(cuts[i])), chain_Data.GetEntries(cuts[i])
     print
 
+dimuonMassCut = "abs(best_OS_dimuon_mass-91.2)<20"
 
-dimuonMassCut = "abs(best_OS_dimuon_mass-91.2)<15"
-
-my_cut = (TCut(nMuonCut) +
-          TCut(ptMuonCut) +
-          TCut(muonMediumCut) +
-          #          TCut(muonDxyCut) +
-          #          TCut(muonDzCut) +
-          #          TCut(muonIsoCut) +
-          TCut(OS) +
-          TCut(dimuonMassCut)
-#          TCut(OK_MET)
-          #          TCut(bjetCut)
-      )
+my_cut = (
+    TCut(nMuonCut) +
+    TCut(ptMuonCut) +
+    TCut(muonMediumCut) +
+    TCut(muonDxyCut) +
+    TCut(muonDzCut) +
+    TCut(muonIsoCut) +
+    TCut(OS) +
+    TCut(dimuonMassCut) +
+    TCut(OK_MET) +
+    TCut(ok_hlt)
+    #TCut(bjetCut)
+)
 
 my_cut_dimuon = my_cut
 
@@ -140,28 +147,28 @@ variables["m123"] = (50,0,500)
 
 
 x_axis_labels = {}
-x_axis_labels["selMu0_charge"] = r"Leading muon charge"
-x_axis_labels["selMu1_charge"] = r"Second leading muon charge"
-x_axis_labels["selMu2_charge"] = r"Third leading muon charge"
+x_axis_labels["selMu0_charge"] = "Leading muon charge"
+x_axis_labels["selMu1_charge"] = "Second leading muon charge"
+x_axis_labels["selMu2_charge"] = "Third leading muon charge"
 
-x_axis_labels["selMu0_pT"] = r"Leading muon $p_\mathrm{T}$ [GeV]"
-x_axis_labels["selMu1_pT"] = r"Second leading muon $p_\mathrm{T}$ [GeV]"
-x_axis_labels["selMu2_pT"] = r"Third leading muon $p_\mathrm{T}$ [GeV]"
+x_axis_labels["selMu0_pT"] = "Leading muon p_{T} [GeV]"
+x_axis_labels["selMu1_pT"] = "Second leading muon p_{T} [GeV]"
+x_axis_labels["selMu2_pT"] = "Third leading muon p_{T} [GeV]"
 
-x_axis_labels["selMu0_phi"] = r"Leading muon $\phi$"
-x_axis_labels["selMu1_phi"] = r"Second leading muon $\phi$"
-x_axis_labels["selMu2_phi"] = r"Third leading muon $\phi$"
+x_axis_labels["selMu0_phi"] = "Leading muon #phi"
+x_axis_labels["selMu1_phi"] = "Second leading muon #phi"
+x_axis_labels["selMu2_phi"] = "Third leading muon #phi"
 
-x_axis_labels["selMu0_eta"] = r"Leading muon $\eta$"
-x_axis_labels["selMu1_eta"] = r"Second leading muon $\eta$"
-x_axis_labels["selMu2_eta"] = r"Third leading muon $\eta$"
+x_axis_labels["selMu0_eta"] = "Leading muon #eta"
+x_axis_labels["selMu1_eta"] = "Second leading muon #eta"
+x_axis_labels["selMu2_eta"] = "Third leading muon #eta"
 
-x_axis_labels["pfMET"] = r"MET [GeV]"
-x_axis_labels["pfMET_phi"] = r"MET $\phi$"
-x_axis_labels["nBJet_20"] = r"Number of $b$ jets with $p_\mathrm{T} > 20$ GeV"
+x_axis_labels["pfMET"] = "MET [GeV]"
+x_axis_labels["pfMET_phi"] = "MET #phi"
+x_axis_labels["nBJet_20"] = "Number of b jets with p_{T} > 20 GeV"
 x_axis_labels["best_OS_dimuon_mass"] = "Best OS dimuon mass [GeV]"
 x_axis_labels["best_SS_dimuon_mass"] = "Best SS dimuon mass [GeV]"
-x_axis_labels["m123"] = r"$m_{123}$ [GeV]"
+x_axis_labels["m123"] = "m_{123} [GeV]"
 
 def makePlotDataVsMC(histogram1,
                      histogram2,
@@ -172,14 +179,20 @@ def makePlotDataVsMC(histogram1,
 
     c = TCanvas("c","",800,600)
     c.cd()
-    histogram2.SetTitle('CMS Simulation       2018 MET, 59.7')
-    histogram2.SetFillColor(kBlue)
-    histogram2.GetYaxis().SetTitle(x_label)
-    histogram2.GetYaxis().SetTitle(y_label)
-    histogram2.Draw()
-    histogram1.SetLineColor(kBlack)
-    histogram1.SetMarkerColor(kBlack)
-    histogram1.Draw("same")
+    histogram1.SetTitle('CMS Preliminary       59.7 fb^{-1} (13 TeV)')
+
+    histogram1.SetLineColor(kAzure-4)
+    histogram1.SetFillColor(kAzure-4)
+
+    histogram1.GetXaxis().SetTitle(x_label)
+    histogram1.GetYaxis().SetTitle(y_label)
+    histogram1.Draw("hist")
+
+    histogram2.SetMarkerColor(kBlack)
+    histogram2.SetMarkerStyle(8)
+    histogram2.SetMarkerSize(1)
+    histogram2.Draw("psame")
+
     c.SaveAs(out_dmc_directory + "/" + saveAs + cformat)
 
 
@@ -187,12 +200,13 @@ def makePlotDataVsMC(histogram1,
 for myvar in variables:
 
     bins = "(" + str(variables[myvar][0]) + "," + str(variables[myvar][1]) + "," + str(variables[myvar][2]) + ")"
-
-    chain_WZ.Draw("(" + myvar + ")" + ">>h_WZ_" + myvar + bins, my_cut)
+    chain_WZ.Draw(myvar + ">>h_WZ_" + myvar + bins, my_cut.GetTitle() + " * (sign(genWeight) * pileupWeight)" )
     chain_Data.Draw(myvar + ">>h_Data_" + myvar + bins, my_cut)
 
     h_WZ = TH1F(gDirectory.Get("h_WZ_" + myvar).Clone("h_WZ_" + myvar))
     h_Data = TH1F(gDirectory.Get("h_Data_" + myvar).Clone("h_Data_" + myvar))
-    scaleWZ(h_WZ)
-
+    h_WZ.Sumw2()
+    h_Data.Sumw2()
+    h_WZ = scaleWZ(h_WZ)
+    print myvar
     makePlotDataVsMC(h_WZ, h_Data, x_axis_labels[myvar], "Entries", "Combine_" + myvar)
