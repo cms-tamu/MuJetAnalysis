@@ -1,14 +1,7 @@
-from root_numpy import root2array, root2rec, tree2rec
-from root_numpy.testdata import get_filepath
-
 import sys
 from ROOT import *
 from argparse import ArgumentParser
 
-#from hepPlotter import HepPlotter
-#from hepPlotterDataMC import HepPlotterDataMC
-#import hepPlotterTools as hpt
-#import hepPlotterLabels as hpl
 import math as m
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -23,20 +16,8 @@ mZ = 91.1876
 
 verbose = True
 
-def getPT(m1):
-    px = m1[1]
-    py = m1[2]
-    return numpy.sqrt(px*px + py*py)
-
 def getPhi(m1):
     return m1[4]
-
-def normalizePhi(result):
-    while (result > M_PI):
-        result -= 2*M_PI;
-    while (result <= -M_PI):
-        result += 2*M_PI;
-    return result
 
 ## total energy of the muon
 def energy(mmu, px, py, pz):
@@ -76,84 +57,7 @@ def bestMassInZPeak(m1, m2):
     index = massdiffs.index(min(massdiffs))
     return masses[index]
 
-def wasTriggered(tree):
-    isTriggered = False
-    ## was triggered?
-    signalTriggers = [
-        "HLT_TrkMu12_DoubleTrkMu5NoFiltersNoVtx",
-        "HLT_DoubleL2Mu23NoVtx_2Cha",
-        "HLT_TripleMu_12_10_5",
-        "HLT_Mu18_Mu9_SameSign"
-    ]
-    for trigger in signalTriggers:
-        if any(trigger in s for s in list(tree.hltPaths)):
-            isTriggered = True
-    return isTriggered
-
-datasets = ['WZTo3LNu', 'ZZTo4Nu','TTWJetsToLNu', 'TTZJetsToLNu', 'METData']
-
-dataFiles = {}
-def add_ZZ(dataFiles):
-    dataFiles['ZZTo4Nu'] = [
-        '/home/dildick/out_ana_all_ZZ.root'
-        ]
-
-def add_WZ(dataFiles):
-    dataFiles['WZTo3LNu'] = [
-        '/uscms_data/d3/dildick/work/DisplacedMuonJetAnalysis_Run2/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/highleveltrigger/out_ana_WZ_2018.root'
-        ]
-
-def add_TTW(dataFiles):
-    dataFiles['TTWJetsToLNu'] = [
-        '/fdata/hepx/store/user/dildick/TTWJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8/crab_TTbarW_ANA_v1/180216_032728/0000/'
-        ]
-
-def add_TTZ(dataFiles):
-    dataFiles['TTZJetsToLNu'] = [
-        '/uscms_data/d3/dildick/work/DisplacedMuonJetAnalysis_Run2/CMSSW_10_2_18/src/MuJetAnalysis/CutFlowAnalyzer/scripts/highleveltrigger/out_ana_TTZ_2018.root'
-        ]
-
-def add_METData(dataFiles):
-    dataFiles['METData'] = [
-        '/home/dildick/DisplacedMuonJetAnalysis_2016/CMSSW_8_0_24/src/MuJetAnalysis/AnalysisRun2/scripts/HLTEfficiency/orthogonalMethod/out_ana_selected_MET_2016BH_20180208_clone.root'
-        ]
-
-#add_ZZ(dataFiles)
-add_WZ(dataFiles)
-#add_TTW(dataFiles)
-#add_TTZ(dataFiles)
-#add_METData(dataFiles)
-
-MET_Triger_Patterns = [
-    'HLT_PFMET100_PFMHT100_IDTight_CaloBTagDeepCSV_3p1',
-    'HLT_PFMET100_PFMHT100_IDTight_PFHT60',
-    'HLT_PFMET110_PFMHT110_IDTight_CaloBTagDeepCSV_',
-    'HLT_PFMET110_PFMHT110_IDTight',
-    'HLT_PFMET120_PFMHT120_IDTight_CaloBTagDeepCSV_3p1',
-    'HLT_PFMET120_PFMHT120_IDTight_PFHT60',
-    'HLT_PFMET120_PFMHT120_IDTight',
-    'HLT_PFMET130_PFMHT130_IDTight_CaloBTagDeepCSV_3p1',
-    'HLT_PFMET130_PFMHT130_IDTight',
-    'HLT_PFMET140_PFMHT140_IDTight_CaloBTagDeepCSV_3p1',
-    'HLT_PFMET140_PFMHT140_IDTight',
-    'HLT_PFMET200_HBHECleaned',
-    'HLT_PFMET200_HBHE_BeamHaloCleaned',
-    'HLT_PFMET200_NotCleaned',
-    'HLT_PFMET250_HBHECleaned',
-    'HLT_PFMET300_HBHECleaned',
-    'HLT_PFMETTypeOne100_PFMHT100_IDTight_PFHT60',
-]
-
-def wasMETTriggered(MET_Triger_Patterns, tree):
-    for s in MET_Triger_Patterns:
-        for p in list(tree.hltPaths):
-            if s in p:
-                return True
-    return False
-
 histograms = {}
-
-MET_triggers = set()
 
 print 'Number of arguments:', len(sys.argv), 'arguments.'
 print 'Argument List:', str(sys.argv)
@@ -163,9 +67,10 @@ inputFile = list(sys.argv)[1]
 print inputFile
 rootFile = ROOT.TFile(inputFile,"")
 
-tree = rootFile.Get("cutFlowAnalyzerPXBL4PXFL3/Events")
+#tree = rootFile.Get("cutFlowAnalyzerPXBL4PXFL3/Events")
+tree = rootFile.Get("Events")
 
-newTitle = inputFile#rootFile.GetTitle()
+newTitle = inputFile
 print
 newTitle = newTitle.replace('out_ana','out_ana_clone')
 print newTitle
@@ -173,21 +78,22 @@ print tree
 newfile = TFile(newTitle, "RECREATE")
 print newfile
 newtree = tree.CloneTree(0)
-OK_MET = numpy.zeros(1, dtype=int)
-OK_Signal = numpy.zeros(1, dtype=int)
+sumGenWeight = numpy.zeros(1, dtype=float)
 best_OS_dimuon_mass = numpy.zeros(1, dtype=float)
 best_SS_dimuon_mass = numpy.zeros(1, dtype=float)
 m123 = numpy.zeros(1, dtype=float)
-newtree.Branch( 'OK_MET', OK_MET, 'OK_MET/I' )
-newtree.Branch( 'OK_Signal', OK_Signal, 'OK_Signal/I' )
 newtree.Branch( 'best_OS_dimuon_mass', best_OS_dimuon_mass, 'best_OS_dimuon_mass/D')
 newtree.Branch( 'best_SS_dimuon_mass', best_SS_dimuon_mass, 'best_SS_dimuon_mass/D')
 newtree.Branch( 'm123', m123, 'm123/D')
+#newtree.Branch( 'sumGenWeight', sumGenWeight, 'sumGenWeight/D')
 
 for k in range(0, tree.GetEntries()):
 
     if k%1000==0: print "Processing event ", k, "/",tree.GetEntries()
     tree.GetEntry(k)
+
+    genWeight = tree.genWeight
+    #sumGenWeight += genWeight
 
     q0 = tree.selMu0_charge
     q1 = tree.selMu1_charge
@@ -250,96 +156,7 @@ for k in range(0, tree.GetEntries()):
     best_OS_dimuon_mass[0] = OS_dimuon_mass
     best_SS_dimuon_mass[0] = SS_dimuon_mass
 
-    OK_MET[0] = 0
-    if wasMETTriggered(MET_Triger_Patterns, tree):
-        OK_MET[0] = 1
-
-    OK_Signal[0] = 0
-    if wasTriggered(tree):
-        OK_Signal[0] = 1
-
     newtree.Fill()
 
 newfile.Write()
 newfile.Close()
-
-"""
-exit(1)
-
-for sample in dataFiles:
-
-    print "Running on sample", sample
-    print dataFiles[sample][0]
-    rootFile = TFile(dataFiles[sample][0],"UPDATE")
-
-    if sample == 'METData':
-
-        if (verbose): print "Loading tree Events"
-        tree = rootFile.Get("Events")
-    else:
-        if (verbose): print "Loading directory cutFlowAnalyzerPXBL3PXFL2"
-        tree = rootFile.Get("cutFlowAnalyzerPXBL3PXFL2/Events")
-
-        if not tree:
-            if (verbose): print "Tree cutFlowAnalyzerPXBL3PXFL2/Events does not exist"
-            continue
-
-    if (verbose): print "  Events  ", tree.GetEntries()
-
-    newtree = tree.CloneTree(0)
-
-    ## add OK_MET branch
-    ## add OK_Signal branch
-    OK_MET = numpy.zeros(1, dtype=int)
-    OK_Signal = numpy.zeros(1, dtype=int)
-    newtree.Branch( 'OK_MET', OK_MET, 'OK_MET/I' )
-    newtree.Branch( 'OK_Signal', OK_Signal, 'OK_Signal/I' )
-
-    nEvents = 0
-    for k in range(0, tree.GetEntries()):
-
-        nEvents += 1
-
-        if k%10000==0: print "Processing event ", k, "/",tree.GetEntries()
-        tree.GetEntry(k)
-        if k>1000000000: break
-
-        #print list(tree.hltPaths)
-        #for p in list(tree.hltPaths):
-        #    if "MET" in p:
-        #        MET_triggers.add(p)
-
-        OK_MET[0] = 0
-        if wasMETTriggered(MET_Triger_Patterns, tree):
-            OK_MET[0] = 1
-
-        OK_Signal[0] = 0
-        if wasTriggered(tree):
-            OK_Signal[0] = 1
-
-        newtree.Fill()
-
-    rootFile.Write()
-    rootFile.Close()
-
-    print "Saved tree with %d"  % ( nEvents )
-
-exit(1)
-
-print MET_triggers
-for p in MET_triggers:
-    print p
-
-MET_triggers_cleaned = set()
-for p in MET_triggers:
-    temp = p.find('_v')
-    index =  temp - len(p)
-    pp = p[:index]
-    MET_triggers_cleaned.add(pp)
-## remove the version number
-
-print
-print
-for p in MET_triggers_cleaned:
-    print p
-"""

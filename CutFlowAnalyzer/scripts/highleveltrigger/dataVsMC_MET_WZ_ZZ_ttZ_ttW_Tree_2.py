@@ -32,54 +32,21 @@ dataFiles['METData'] = [
 
 
 ## define each chain for plotting purposes
-file_WZ = TFile("datafiles/out_ana_clone_WZ_2018.root")
+file_WZ = TFile("datafiles/out_ana_clone_WZTo3LNu1_skim3mu.root")
 chain_WZ = file_WZ.Get("Events")
-
-file_TTZ = TFile("datafiles/out_ana_clone_TTZ_2018.root")
-chain_TTZ = file_TTZ.Get("Events")
 
 file_Data = TFile("datafiles/out_ana_clone_MET_2018.root")
 chain_Data = file_Data.Get("Events")
 
-#ROOT.TChain("Events")
-#addfilesMany(chain_WZ, dataFiles['WZTo3LNu'], "out_ana_clone")
-
-#chain_TTW = ROOT.TChain("Events")
-#addfilesMany(chain_TTW, dataFiles['TTWJetsToLNu'], "out_ana_clone")
-
-#chain_TTZ = ROOT.TChain("Events")
-#addfilesMany(chain_TTZ, dataFiles['TTZJetsToLNu'], "out_ana_clone")
-
-#file_ZZ = TFile("datafiles/")
-#chain_ZZ = file_ZZ.Get("Events")
-
 chains = {}
 chains['WZTo3LNu'] = chain_WZ
-chains['TTZJetsToLNu'] = chain_TTZ
 chains['METData'] = chain_Data
-#chains['ZZTo4Mu'] = chain_ZZ
-#chains['TTWJetsToLNu'] = chain_TTW
 
 lumi = 59.7
 def scaleWZ(hist):
     WZ_xsec = 5052#fb
     WZ_events = 10749269.
     hist.Scale(lumi*WZ_xsec/WZ_events)
-
-def scaleZZ(hist):
-    ZZ_xsec = 55.884#fb
-    ZZ_events = 100000.
-    hist.Scale(lumi*ZZ_xsec/ZZ_events)
-
-def scaleTTW(hist):
-    TTW_xsec = 200.1 #fb
-    TTW_events = 3120397
-    hist.Scale(lumi*TTW_xsec/TTW_events)
-
-def scaleTTZ(hist):
-    TTZ_xsec = 243.2 #fb
-    TTZ_events = 13280000
-    hist.Scale(lumi*TTZ_xsec/TTZ_events)
 
 ## make the selection
 nMuonCut = "nRecoMu == 3"
@@ -114,19 +81,8 @@ my_cut_dimuon_HLT = my_cut_dimuon + TCut("OK_Signal==1")
 out_dmc_directory = "data_vs_montecarlo_plots/"
 out_directory = "trigger_efficiency_plots/"
 
-"""
-chain_WZ_filtered_OS = chain_WZ.CopyTree(my_cut_OS.GetTitle())
-chain_ZZ_filtered_OS = chain_ZZ.CopyTree(my_cut_OS.GetTitle())
-chain_TTW_filtered_OS = chain_TTW.CopyTree(my_cut_OS.GetTitle())
-chain_TTZ_filtered_OS = chain_TTW.CopyTree(my_cut_OS.GetTitle())
-chain_Data_filtered_OS = chain_Data.CopyTree(my_cut_OS.GetTitle())
 
-chain_WZ_filtered_SS = chain_WZ.CopyTree(my_cut_SS.GetTitle())
-chain_ZZ_filtered_SS = chain_ZZ.CopyTree(my_cut_SS.GetTitle())
-chain_TTW_filtered_SS = chain_TTW.CopyTree(my_cut_SS.GetTitle())
-chain_TTZ_filtered_SS = chain_TTW.CopyTree(my_cut_SS.GetTitle())
-chain_Data_filtered_SS = chain_Data.CopyTree(my_cut_SS.GetTitle())
-"""
+
 variables = {}
 variables["selMu0_charge"] = (3,-1,1)
 variables["selMu1_charge"] = (3,-1,1)
@@ -210,7 +166,7 @@ x_axis_labels["best_SS_dimuon_mass"] = "Best SS dimuon mass [GeV]"
 x_axis_labels["m123"] = r"$m_{123}$ [GeV]"
 
 def makePlotDataVsMC(histogram1,
-                     histogram2,
+                     #histogram2,
                      #histogram3,
                      #histogram4,
                      histogram5,
@@ -234,9 +190,6 @@ def makePlotDataVsMC(histogram1,
     hist.lumi = '2018 MET, 59.7'
     hist.plotLUMI = True
     hist.Add(histogram1, name='WZto3Mu', sampleType='background')
-    hist.Add(histogram2, name='ttZ', sampleType='background')
-    #    hist.Add(histogram3, name='ttW', sampleType='background')
-    #    hist.Add(histogram2, name='ZZto4Mu', sampleType='background')
     hist.Add(histogram5, name='data', sampleType='data')
     hist.drawSystUncertainty = False     # draw syst uncertainty separately
     hist.drawStatSystUncertainty = False  # draw stat+syst uncertainty
@@ -284,9 +237,6 @@ def makePlot(histogram, plotType, x_label, y_label, saveAs, isData = False, form
     if dataLabel == "ZZ":
         extraText = r"$pp \rightarrow ZZ$"
         hist.extra_text.Add(extraText, coords=[0.1,0.3])
-    if dataLabel == "TTZ":
-        extraText = r"$pp \rightarrow t\bar{t}Z$"
-        hist.extra_text.Add(extraText, coords=[0.1,0.3])
     if dataLabel == "TTW":
         extraText = r"$pp \rightarrow t\bar{t}W$"
         hist.extra_text.Add(extraText, coords=[0.1,0.3])
@@ -301,14 +251,12 @@ for myvar in variables:
     print myvar
     bins = "(" + str(variables[myvar][0]) + "," + str(variables[myvar][1]) + "," + str(variables[myvar][2]) + ")"
 
-    chain_WZ.Draw(myvar + "* pileupWeight" + ">>h_WZ_" + myvar + bins, my_cut_dimuon)
-    chain_TTZ.Draw(myvar + "* pileupWeight" + ">>h_TTZ_" + myvar + bins, my_cut_dimuon)
+    chain_WZ.Draw("(" + myvar + "* pileupWeight)" + ">>h_WZ_" + myvar + bins, my_cut_dimuon)
     chain_Data.Draw(myvar + ">>h_Data_" + myvar + bins, my_cut_dimuon)
     #    chain_TTW.Draw(myvar + ">>h_TTW_" + myvar + bins, my_cut)
     #    chain_ZZ.Draw(myvar + ">>h_ZZ_" + myvar + bins, my_cut)
 
     h_WZ = TH1F(gDirectory.Get("h_WZ_" + myvar).Clone("h_WZ_" + myvar))
-    h_TTZ = TH1F(gDirectory.Get("h_TTZ_" + myvar).Clone("h_TTZ_" + myvar))
     h_Data = TH1F(gDirectory.Get("h_Data_" + myvar).Clone("h_Data_" + myvar))
 
     #    if not (myvar is "best_OS_dimuon_mass" or myvar is"best_SS_dimuon_mass" or myvar is"m123"):
@@ -321,12 +269,9 @@ for myvar in variables:
     #    scaleZZ(h_ZZ)
     #    scaleTTW(h_TTW)
     scaleWZ(h_WZ)
-    scaleTTZ(h_TTZ)
-    #    print h_Data.Integral() / (h_WZ.Integral() + h_ZZ.Integral() + h_TTZ.Integral() + h_TTW.Integral())
-    #    print h_Data.Integral(), h_WZ.Integral() + h_ZZ.Integral() + h_TTZ.Integral() + h_TTW.Integral()
 
     #h_ZZ, h_TTW,
-    makePlotDataVsMC(h_WZ, h_TTZ, h_Data, x_axis_labels[myvar], "Entries", "Combine_" + myvar, format='pdf')
+    makePlotDataVsMC(h_WZ, h_Data, x_axis_labels[myvar], "Entries", "Combine_" + myvar, format='pdf')
 
 
 ## efficiency plots
@@ -347,7 +292,6 @@ for myvar in variables:
         continue
 
     chain_WZ.Draw(myvar_actual + ">>h_WZ_" + myvar + bins, my_cut_dimuon)
-    chain_TTZ.Draw(myvar_actual + ">>h_TTZ_" + myvar + bins, my_cut_dimuon)
     chain_Data.Draw(myvar_actual + ">>h_Data_" + myvar + bins, my_cut_dimuon)
     #    chain_ZZ.Draw(myvar_actual + ">>h_ZZ_" + myvar + bins, my_cut)
     #    chain_TTW.Draw(myvar_actual + ">>h_TTW_" + myvar + bins, my_cut)
@@ -360,30 +304,25 @@ for myvar in variables:
     #        h_TTW = TH1F("h_TTW","",variables[myvar][0],variables[myvar][1],variables[myvar][2])
 
     h_WZ = TH1F(gDirectory.Get("h_WZ_" + myvar).Clone("h_WZ_" + myvar))
-    h_TTZ = TH1F(gDirectory.Get("h_TTZ_" + myvar).Clone("h_TTZ_" + myvar))
     h_Data = TH1F(gDirectory.Get("h_Data_" + myvar).Clone("h_Data_" + myvar))
 
     chain_WZ.Draw(myvar_actual + ">>h_WZ_" + myvar + "_HLT" + bins, my_cut_dimuon_HLT)
-    chain_TTZ.Draw(myvar_actual + ">>h_TTZ_" + myvar + "_HLT" + bins, my_cut_dimuon_HLT)
     chain_Data.Draw(myvar_actual + ">>h_Data_" + myvar + "_HLT" + bins, my_cut_dimuon_HLT)
     #    chain_ZZ.Draw(myvar_actual + ">>h_ZZ_" + myvar + "_HLT" + bins, my_cut_HLT)
     #    chain_TTW.Draw(myvar_actual + ">>h_TTW_" + myvar + "_HLT" + bins, my_cut_HLT)
 
     h_WZ_HLT = TH1F(gDirectory.Get("h_WZ_" + myvar + "_HLT").Clone("h_WZ_" + myvar + "_HLT"))
-    h_TTZ_HLT = TH1F(gDirectory.Get("h_TTZ_" + myvar + "_HLT").Clone("h_TTZ_" + myvar + "_HLT"))
     h_Data_HLT = TH1F(gDirectory.Get("h_Data_" + myvar + "_HLT").Clone("h_Data_" + myvar + "_HLT"))
     #    h_ZZ_HLT = TH1F(gDirectory.Get("h_ZZ_" + myvar + "_HLT").Clone("h_ZZ_" + myvar + "_HLT"))
     #    h_TTW_HLT = TH1F(gDirectory.Get("h_TTW_" + myvar + "_HLT").Clone("h_TTW_" + myvar + "_HLT"))
 
     h_WZ_HLT_Eff = TEfficiency(h_WZ_HLT, h_WZ)
-    h_TTZ_HLT_Eff = TEfficiency(h_TTZ_HLT, h_TTZ)
     h_Data_HLT_Eff = TEfficiency(h_Data_HLT, h_Data)
     #    h_ZZ_HLT_Eff = TEfficiency(h_ZZ_HLT, h_ZZ)
     #    h_TTW_HLT_Eff = TEfficiency(h_TTW_HLT, h_TTW)
 
     print float(h_Data.GetEntries())
     print "WZ eff", h_WZ_HLT.GetEntries() / float(h_WZ.GetEntries())
-    print "TTZ eff", h_TTZ_HLT.GetEntries() / float(h_TTZ.GetEntries())
     print "Data eff", h_Data_HLT.GetEntries() / float(h_Data.GetEntries())
     #    print "ZZ eff", h_ZZ_HLT.GetEntries() / float(h_ZZ.GetEntries())
     #    print "TTW eff", h_TTW_HLT.GetEntries() / float(h_TTW.GetEntries())
@@ -391,8 +330,6 @@ for myvar in variables:
     x_label = x_axis_labels[myvar]
 
     makePlot(h_WZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "WZ_" + myvar + "_HLT",
-             isData=False, format='pdf')
-    makePlot(h_TTZ_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "TTZ_" + myvar + "_HLT",
              isData=False, format='pdf')
 
     makePlot(h_Data_HLT_Eff, "efficiency", x_label, "Trigger efficiency", "Data_" + myvar + "_HLT",

@@ -11,6 +11,14 @@ import math
 
 M_PI = 4*math.atan(1)
 
+
+def normalizePhi(result):
+    while (result > M_PI):
+        result -= 2*M_PI;
+    while (result <= -M_PI):
+        result += 2*M_PI;
+    return result
+
 #______________________________________________________________________________
 def deltaPhi(phi1, phi2):
   result = phi1 - phi2;
