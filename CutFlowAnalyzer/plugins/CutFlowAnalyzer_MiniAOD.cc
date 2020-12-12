@@ -31,6 +31,7 @@
 #include "DataFormats/PatCandidates/interface/MET.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
+#include "CommonTools/Utils/interface/InvariantMass.h"
 #include "PhysicsTools/RecoUtils/interface/CheckHitPattern.h"
 #include "RecoTracker/MeasurementDet/interface/MeasurementTrackerEvent.h"
 #include "TrackingTools/PatternTools/interface/Trajectory.h"
@@ -48,6 +49,7 @@
 #include "TVector2.h"
 #include "TLorentzVector.h"
 
+
 namespace{
 
   float recoMuonPFIso(const pat::Muon* mu)
@@ -58,6 +60,18 @@ namespace{
     const float chargedHadronPU = mu->pfIsolationR04().sumPUPt;
 
     return ( chargedHadronPV + std::max(0.,neutralHadron + photon - 0.5 * chargedHadronPU) ) / mu->pt();
+  }
+
+  float bestMassInZPeak(float m1, float m2) {
+    const float mZ = 91.1876;
+    const float diff1 = std::abs(m1 - mZ);
+    const float diff2 = std::abs(m2 - mZ);
+    if (diff1 < diff2) {
+      return m1;
+    }
+    else {
+      return m2;
+    }
   }
 
 }
@@ -535,6 +549,14 @@ private:
   Float_t b_selMu1_PFIso;
   Float_t b_selMu2_PFIso;
   Float_t b_selMu3_PFIso;
+
+  Float_t b_mMu0Mu1;
+  Float_t b_mMu0Mu2;
+  Float_t b_mMu1Mu2;
+  Float_t b_mMuMu_SS;
+  Float_t b_mMuMu_OS1;
+  Float_t b_mMuMu_OS2;
+  Float_t b_mMuMu_OS;
 
   Float_t b_diMuonC_FittedVtx_dR;
   Float_t b_diMuonC_FittedVtx_m;
@@ -1508,6 +1530,30 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_dxy = selMuons[2]->muonBestTrack()->dxy(WZVertex.position());
     b_selMu2_dz = selMuons[2]->muonBestTrack()->dz(WZVertex.position());
     b_selMu2_PFIso = recoMuonPFIso(selMuons[2]);
+
+    // code for WZ control region
+    b_mMu0Mu1 = ROOT::Math::VectorUtil::InvariantMass(selMuons[0]->p4(), selMuons[1]->p4());
+    b_mMu0Mu2 = ROOT::Math::VectorUtil::InvariantMass(selMuons[0]->p4(), selMuons[2]->p4());
+    b_mMu1Mu2 = ROOT::Math::VectorUtil::InvariantMass(selMuons[1]->p4(), selMuons[2]->p4());
+
+    if (b_selMu0_charge * b_selMu1_charge > 0) {
+      b_mMuMu_SS = b_mMu0Mu1;
+      b_mMuMu_OS1 = b_mMu1Mu2;
+      b_mMuMu_OS2 = b_mMu0Mu2;
+      b_mMuMu_OS = bestMassInZPeak(b_mMuMu_OS1, b_mMuMu_OS2);
+    }
+    else if (b_selMu0_charge * b_selMu2_charge > 0) {
+      b_mMuMu_SS = b_mMu0Mu2;
+      b_mMuMu_OS1 = b_mMu0Mu1;
+      b_mMuMu_OS2 = b_mMu1Mu2;
+      b_mMuMu_OS = bestMassInZPeak(b_mMuMu_OS1, b_mMuMu_OS2);
+    }
+    else if (b_selMu1_charge * b_selMu2_charge > 0) {
+      b_mMuMu_SS = b_mMu1Mu2;
+      b_mMuMu_OS1 = b_mMu0Mu1;
+      b_mMuMu_OS2 = b_mMu0Mu2;
+      b_mMuMu_OS = bestMassInZPeak(b_mMuMu_OS1, b_mMuMu_OS2);
+    }
   } else {
     b_selMu2_px  = -100.0;
     b_selMu2_py  = -100.0;
@@ -1522,6 +1568,14 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu2_dxy = -9999;
     b_selMu2_dz = -9999;
     b_selMu2_PFIso = -999;
+
+    b_mMu0Mu1 = 0;
+    b_mMu0Mu2 = 0;
+    b_mMu1Mu2 = 0;
+    b_mMuMu_SS = 0;
+    b_mMuMu_OS1 = 0;
+    b_mMuMu_OS2 = 0;
+    b_mMuMu_OS = 0;
   }
 
   if ( selMuons.size() > 3 ) {
@@ -1553,6 +1607,7 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
     b_selMu3_dz = -9999;
     b_selMu3_PFIso = -999;
   }
+
 
   if ( m_debug > 0 ) std::cout << m_events << " Count selected RECO muons" << std::endl;
 
@@ -2017,7 +2072,8 @@ CutFlowAnalyzer_MiniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup
   for (int itrig = 0; itrig != ntrigs; ++itrig) {
     TString trigName = triggerNames.triggerName(itrig);
     std::string trigNameStr(trigName.Data());
-    if ( m_debug > 10 ) std::cout << "HLT Menu #"<<itrig<<": "<<trigNameStr << std::endl;
+    // if ( m_debug > 10 ) std::cout << "HLT Menu #"<<itrig<<": "<<trigNameStr << std::endl;
+    if ( m_debug > 10 ) std::cout << "'" << trigNameStr << "'," <<std::endl;
 
     if(trRes->accept(itrig)){
       b_hltPaths.push_back(trigNameStr);
@@ -3098,6 +3154,15 @@ CutFlowAnalyzer_MiniAOD::beginJob() {
   m_ttree->Branch("selMu1_PFIso", &b_selMu1_PFIso, "selMu1_PFIso/F");
   m_ttree->Branch("selMu2_PFIso", &b_selMu2_PFIso, "selMu2_PFIso/F");
   m_ttree->Branch("selMu3_PFIso", &b_selMu3_PFIso, "selMu3_PFIso/F");
+
+  m_ttree->Branch("mMu0Mu1", &b_mMu0Mu1, "mMu0Mu1/F");
+  m_ttree->Branch("mMu0Mu2", &b_mMu0Mu2, "mMu0Mu2/F");
+  m_ttree->Branch("mMu1Mu2", &b_mMu1Mu2, "mMu1Mu2/F");
+
+  m_ttree->Branch("mMuMu_SS", &b_mMuMu_SS, "mMuMu_SS/F");
+  m_ttree->Branch("mMuMu_OS1", &b_mMuMu_OS1, "mMuMu_OS1/F");
+  m_ttree->Branch("mMuMu_OS2", &b_mMuMu_OS2, "mMuMu_OS2/F");
+  m_ttree->Branch("mMuMu_OS", &b_mMuMu_OS, "mMuMu_OS/F");
 
   m_ttree->Branch("diMuonC_FittedVtx_dR",  &b_diMuonC_FittedVtx_dR,  "diMuonC_FittedVtx_dR/F");
   m_ttree->Branch("diMuonC_FittedVtx_m",   &b_diMuonC_FittedVtx_m,   "diMuonC_FittedVtx_m/F");

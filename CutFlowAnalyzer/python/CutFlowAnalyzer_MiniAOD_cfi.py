@@ -1,10 +1,11 @@
 import FWCore.ParameterSet.Config as cms
 from MuJetAnalysis.CutFlowAnalyzer.pileup_cfi import pileupScaleDataOverMC
-from MuJetAnalysis.CutFlowAnalyzer.hltMETPaths_cfi import orthogonalHltPaths
+#from MuJetAnalysis.CutFlowAnalyzer.hltMETPaths_cfi import orthogonalHltPaths
+from MuJetAnalysis.CutFlowAnalyzer.hltSingleMuPaths_cfi import orthogonalHltPaths
 
 cutFlowAnalyzer = cms.EDAnalyzer(
     'CutFlowAnalyzer_MiniAOD',
-    analyzerDebug = cms.int32(-1),
+    analyzerDebug = cms.int32(11),
     pileupScaleDataOverMC = pileupScaleDataOverMC,
     muons = cms.InputTag("slimmedMuons"),
     beamSpot = cms.InputTag("offlineBeamSpot"),
