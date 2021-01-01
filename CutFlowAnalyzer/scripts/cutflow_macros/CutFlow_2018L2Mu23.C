@@ -345,84 +345,84 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* FvtxProbSAmuInF = new TH1F("FvtxProbSAmuInF", "Di-#mu1 Vtx Fit Prob. (di-#mu1 has one SA mu)", 1000, 0., 1.);
 
   //Trigger accept eff as function of leading muon pT, eta and phi after cut #9
-  TH1F* leading_pt_pass_basic      = new TH1F("leading_pt_pass_basic",      "", 150,    0, 150); //per 1
+  TH1F* leading_pt_pass_basic      = new TH1F("leading_pt_pass_basic",      "",  30,    0, 150); //per 5
   TH1F* leading_eta_pass_basic     = new TH1F("leading_eta_pass_basic",     "",  50, -2.5, 2.5); //per 0.1
   TH1F* leading_phi_pass_basic     = new TH1F("leading_phi_pass_basic",     "",  70, -3.5, 3.5); //per 0.1
-  TH1F* HLT_leading_pt_pass_basic  = new TH1F("HLT_leading_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_leading_pt_pass_basic  = new TH1F("HLT_leading_pt_pass_basic",  "",  30,    0, 150);
   TH1F* HLT_leading_eta_pass_basic = new TH1F("HLT_leading_eta_pass_basic", "",  50, -2.5, 2.5);
   TH1F* HLT_leading_phi_pass_basic = new TH1F("HLT_leading_phi_pass_basic", "",  70, -3.5, 3.5);
-  TH1F* L1_leading_pt_pass_basic   = new TH1F("L1_leading_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_leading_pt_pass_basic   = new TH1F("L1_leading_pt_pass_basic",   "",  30,    0, 150);
   TH1F* L1_leading_eta_pass_basic  = new TH1F("L1_leading_eta_pass_basic",  "",  50, -2.5, 2.5);
   TH1F* L1_leading_phi_pass_basic  = new TH1F("L1_leading_phi_pass_basic",  "",  70, -3.5, 3.5);
 
-  TH1F* second_pt_pass_basic      = new TH1F("second_pt_pass_basic",      "", 150,    0, 150);
+  TH1F* second_pt_pass_basic      = new TH1F("second_pt_pass_basic",      "",  30,    0, 150);
   TH1F* second_eta_pass_basic     = new TH1F("second_eta_pass_basic",     "",  50, -2.5, 2.5);
   TH1F* second_phi_pass_basic     = new TH1F("second_phi_pass_basic",     "",  70, -3.5, 3.5);
-  TH1F* HLT_second_pt_pass_basic  = new TH1F("HLT_second_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_second_pt_pass_basic  = new TH1F("HLT_second_pt_pass_basic",  "",  30,    0, 150);
   TH1F* HLT_second_eta_pass_basic = new TH1F("HLT_second_eta_pass_basic", "",  50, -2.5, 2.5);
   TH1F* HLT_second_phi_pass_basic = new TH1F("HLT_second_phi_pass_basic", "",  70, -3.5, 3.5);
-  TH1F* L1_second_pt_pass_basic   = new TH1F("L1_second_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_second_pt_pass_basic   = new TH1F("L1_second_pt_pass_basic",   "",  30,    0, 150);
   TH1F* L1_second_eta_pass_basic  = new TH1F("L1_second_eta_pass_basic",  "",  50, -2.5, 2.5);
   TH1F* L1_second_phi_pass_basic  = new TH1F("L1_second_phi_pass_basic",  "",  70, -3.5, 3.5);
 
-  TH1F* third_pt_pass_basic      = new TH1F("third_pt_pass_basic",      "", 150,    0, 150);
+  TH1F* third_pt_pass_basic      = new TH1F("third_pt_pass_basic",      "",  30,    0, 150);
   TH1F* third_eta_pass_basic     = new TH1F("third_eta_pass_basic",     "",  50, -2.5, 2.5);
   TH1F* third_phi_pass_basic     = new TH1F("third_phi_pass_basic",     "",  70, -3.5, 3.5);
-  TH1F* HLT_third_pt_pass_basic  = new TH1F("HLT_third_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_third_pt_pass_basic  = new TH1F("HLT_third_pt_pass_basic",  "",  30,    0, 150);
   TH1F* HLT_third_eta_pass_basic = new TH1F("HLT_third_eta_pass_basic", "",  50, -2.5, 2.5);
   TH1F* HLT_third_phi_pass_basic = new TH1F("HLT_third_phi_pass_basic", "",  70, -3.5, 3.5);
-  TH1F* L1_third_pt_pass_basic   = new TH1F("L1_third_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_third_pt_pass_basic   = new TH1F("L1_third_pt_pass_basic",   "",  30,    0, 150);
   TH1F* L1_third_eta_pass_basic  = new TH1F("L1_third_eta_pass_basic",  "",  50, -2.5, 2.5);
   TH1F* L1_third_phi_pass_basic  = new TH1F("L1_third_phi_pass_basic",  "",  70, -3.5, 3.5);
 
-  TH1F* fourth_pt_pass_basic      = new TH1F("fourth_pt_pass_basic",      "", 150,    0, 150);
+  TH1F* fourth_pt_pass_basic      = new TH1F("fourth_pt_pass_basic",      "",  30,    0, 150);
   TH1F* fourth_eta_pass_basic     = new TH1F("fourth_eta_pass_basic",     "",  50, -2.5, 2.5);
   TH1F* fourth_phi_pass_basic     = new TH1F("fourth_phi_pass_basic",     "",  70, -3.5, 3.5);
-  TH1F* HLT_fourth_pt_pass_basic  = new TH1F("HLT_fourth_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_fourth_pt_pass_basic  = new TH1F("HLT_fourth_pt_pass_basic",  "",  30,    0, 150);
   TH1F* HLT_fourth_eta_pass_basic = new TH1F("HLT_fourth_eta_pass_basic", "",  50, -2.5, 2.5);
   TH1F* HLT_fourth_phi_pass_basic = new TH1F("HLT_fourth_phi_pass_basic", "",  70, -3.5, 3.5);
-  TH1F* L1_fourth_pt_pass_basic   = new TH1F("L1_fourth_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_fourth_pt_pass_basic   = new TH1F("L1_fourth_pt_pass_basic",   "",  30,    0, 150);
   TH1F* L1_fourth_eta_pass_basic  = new TH1F("L1_fourth_eta_pass_basic",  "",  50, -2.5, 2.5);
   TH1F* L1_fourth_phi_pass_basic  = new TH1F("L1_fourth_phi_pass_basic",  "",  70, -3.5, 3.5);
 
   //Trigger accept eff as function of leading 4 muons pT, eta and phi after cut #15
-  TH1F* leading_pt_pass_all      = new TH1F("leading_pt_pass_all",      "", 150,    0, 150);
+  TH1F* leading_pt_pass_all      = new TH1F("leading_pt_pass_all",      "",  30,    0, 150);
   TH1F* leading_eta_pass_all     = new TH1F("leading_eta_pass_all",     "",  50, -2.5, 2.5);
   TH1F* leading_phi_pass_all     = new TH1F("leading_phi_pass_all",     "",  70, -3.5, 3.5);
-  TH1F* HLT_leading_pt_pass_all  = new TH1F("HLT_leading_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_leading_pt_pass_all  = new TH1F("HLT_leading_pt_pass_all",  "",  30,    0, 150);
   TH1F* HLT_leading_eta_pass_all = new TH1F("HLT_leading_eta_pass_all", "",  50, -2.5, 2.5);
   TH1F* HLT_leading_phi_pass_all = new TH1F("HLT_leading_phi_pass_all", "",  70, -3.5, 3.5);
-  TH1F* L1_leading_pt_pass_all   = new TH1F("L1_leading_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_leading_pt_pass_all   = new TH1F("L1_leading_pt_pass_all",   "",  30,    0, 150);
   TH1F* L1_leading_eta_pass_all  = new TH1F("L1_leading_eta_pass_all",  "",  50, -2.5, 2.5);
   TH1F* L1_leading_phi_pass_all  = new TH1F("L1_leading_phi_pass_all",  "",  70, -3.5, 3.5);
 
-  TH1F* second_pt_pass_all      = new TH1F("second_pt_pass_all",      "", 150,    0, 150);
+  TH1F* second_pt_pass_all      = new TH1F("second_pt_pass_all",      "",  30,    0, 150);
   TH1F* second_eta_pass_all     = new TH1F("second_eta_pass_all",     "",  50, -2.5, 2.5);
   TH1F* second_phi_pass_all     = new TH1F("second_phi_pass_all",     "",  70, -3.5, 3.5);
-  TH1F* HLT_second_pt_pass_all  = new TH1F("HLT_second_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_second_pt_pass_all  = new TH1F("HLT_second_pt_pass_all",  "",  30,    0, 150);
   TH1F* HLT_second_eta_pass_all = new TH1F("HLT_second_eta_pass_all", "",  50, -2.5, 2.5);
   TH1F* HLT_second_phi_pass_all = new TH1F("HLT_second_phi_pass_all", "",  70, -3.5, 3.5);
-  TH1F* L1_second_pt_pass_all   = new TH1F("L1_second_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_second_pt_pass_all   = new TH1F("L1_second_pt_pass_all",   "",  30,    0, 150);
   TH1F* L1_second_eta_pass_all  = new TH1F("L1_second_eta_pass_all",  "",  50, -2.5, 2.5);
   TH1F* L1_second_phi_pass_all  = new TH1F("L1_second_phi_pass_all",  "",  70, -3.5, 3.5);
 
-  TH1F* third_pt_pass_all      = new TH1F("third_pt_pass_all",      "", 150,    0, 150);
+  TH1F* third_pt_pass_all      = new TH1F("third_pt_pass_all",      "",  30,    0, 150);
   TH1F* third_eta_pass_all     = new TH1F("third_eta_pass_all",     "",  50, -2.5, 2.5);
   TH1F* third_phi_pass_all     = new TH1F("third_phi_pass_all",     "",  70, -3.5, 3.5);
-  TH1F* HLT_third_pt_pass_all  = new TH1F("HLT_third_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_third_pt_pass_all  = new TH1F("HLT_third_pt_pass_all",  "",  30,    0, 150);
   TH1F* HLT_third_eta_pass_all = new TH1F("HLT_third_eta_pass_all", "",  50, -2.5, 2.5);
   TH1F* HLT_third_phi_pass_all = new TH1F("HLT_third_phi_pass_all", "",  70, -3.5, 3.5);
-  TH1F* L1_third_pt_pass_all   = new TH1F("L1_third_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_third_pt_pass_all   = new TH1F("L1_third_pt_pass_all",   "",  30,    0, 150);
   TH1F* L1_third_eta_pass_all  = new TH1F("L1_third_eta_pass_all",  "",  50, -2.5, 2.5);
   TH1F* L1_third_phi_pass_all  = new TH1F("L1_third_phi_pass_all",  "",  70, -3.5, 3.5);
 
-  TH1F* fourth_pt_pass_all      = new TH1F("fourth_pt_pass_all",      "", 150,    0, 150);
+  TH1F* fourth_pt_pass_all      = new TH1F("fourth_pt_pass_all",      "",  30,    0, 150);
   TH1F* fourth_eta_pass_all     = new TH1F("fourth_eta_pass_all",     "",  50, -2.5, 2.5);
   TH1F* fourth_phi_pass_all     = new TH1F("fourth_phi_pass_all",     "",  70, -3.5, 3.5);
-  TH1F* HLT_fourth_pt_pass_all  = new TH1F("HLT_fourth_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_fourth_pt_pass_all  = new TH1F("HLT_fourth_pt_pass_all",  "",  30,    0, 150);
   TH1F* HLT_fourth_eta_pass_all = new TH1F("HLT_fourth_eta_pass_all", "",  50, -2.5, 2.5);
   TH1F* HLT_fourth_phi_pass_all = new TH1F("HLT_fourth_phi_pass_all", "",  70, -3.5, 3.5);
-  TH1F* L1_fourth_pt_pass_all   = new TH1F("L1_fourth_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_fourth_pt_pass_all   = new TH1F("L1_fourth_pt_pass_all",   "",  30,    0, 150);
   TH1F* L1_fourth_eta_pass_all  = new TH1F("L1_fourth_eta_pass_all",  "",  50, -2.5, 2.5);
   TH1F* L1_fourth_phi_pass_all  = new TH1F("L1_fourth_phi_pass_all",  "",  70, -3.5, 3.5);
 
@@ -2478,30 +2478,30 @@ void analysis(const std::string SamplesList)
         }//end loop mass
         //cout << "ix: " << ix  << "; iy: " << iy << endl;
 
-        h_MSSMD_GENMatch_Cut6_5->SetBinContent(ix,  iy, round(counterGENMatch[i][6]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut7_5->SetBinContent(ix,  iy, round(counterGENMatch[i][7]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut8_5->SetBinContent(ix,  iy, round(counterGENMatch[i][8]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut9_5->SetBinContent(ix,  iy, round(counterGENMatch[i][9]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut10_5->SetBinContent(ix, iy, round(counterGENMatch[i][10]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut11_5->SetBinContent(ix, iy, round(counterGENMatch[i][11]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut12_5->SetBinContent(ix, iy, round(counterGENMatch[i][12]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut13_5->SetBinContent(ix, iy, round(counterGENMatch[i][13]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut14_5->SetBinContent(ix, iy, round(counterGENMatch[i][14]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut15_5->SetBinContent(ix, iy, round(counterGENMatch[i][15]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut16_5->SetBinContent(ix, iy, round(counterGENMatch[i][16]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut17_5->SetBinContent(ix, iy, round(counterGENMatch[i][17]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut6_5->SetBinContent(ix,  iy, round(counterGENMatch[i][6]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut7_5->SetBinContent(ix,  iy, round(counterGENMatch[i][7]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut8_5->SetBinContent(ix,  iy, round(counterGENMatch[i][8]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut9_5->SetBinContent(ix,  iy, round(counterGENMatch[i][9]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut10_5->SetBinContent(ix, iy, round(counterGENMatch[i][10]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut11_5->SetBinContent(ix, iy, round(counterGENMatch[i][11]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut12_5->SetBinContent(ix, iy, round(counterGENMatch[i][12]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut13_5->SetBinContent(ix, iy, round(counterGENMatch[i][13]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut14_5->SetBinContent(ix, iy, round(counterGENMatch[i][14]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut15_5->SetBinContent(ix, iy, round(counterGENMatch[i][15]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut16_5->SetBinContent(ix, iy, round(counterGENMatch[i][16]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut17_5->SetBinContent(ix, iy, round(counterGENMatch[i][17]*1000.0/counterGENMatch[i][5])/1000 );
 
-        h_MSSMD_GENMatch_Cut7_6->SetBinContent(ix,   iy, round(counterGENMatch[i][7]*10000.0/counterGENMatch[i][6])/10000 );
-        h_MSSMD_GENMatch_Cut8_7->SetBinContent(ix,   iy, round(counterGENMatch[i][8]*10000.0/counterGENMatch[i][7])/10000 );
-        h_MSSMD_GENMatch_Cut9_8->SetBinContent(ix,   iy, round(counterGENMatch[i][9]*10000.0/counterGENMatch[i][8])/10000 );
-        h_MSSMD_GENMatch_Cut10_9->SetBinContent(ix,  iy, round(counterGENMatch[i][10]*10000.0/counterGENMatch[i][9])/10000 );
-        h_MSSMD_GENMatch_Cut11_10->SetBinContent(ix, iy, round(counterGENMatch[i][11]*10000.0/counterGENMatch[i][10])/10000 );
-        h_MSSMD_GENMatch_Cut12_11->SetBinContent(ix, iy, round(counterGENMatch[i][12]*10000.0/counterGENMatch[i][11])/10000 );
-        h_MSSMD_GENMatch_Cut13_12->SetBinContent(ix, iy, round(counterGENMatch[i][13]*10000.0/counterGENMatch[i][12])/10000 );
-        h_MSSMD_GENMatch_Cut14_13->SetBinContent(ix, iy, round(counterGENMatch[i][14]*10000.0/counterGENMatch[i][13])/10000 );
-        h_MSSMD_GENMatch_Cut15_14->SetBinContent(ix, iy, round(counterGENMatch[i][15]*10000.0/counterGENMatch[i][14])/10000 );
-        h_MSSMD_GENMatch_Cut16_15->SetBinContent(ix, iy, round(counterGENMatch[i][16]*10000.0/counterGENMatch[i][15])/10000 );
-        h_MSSMD_GENMatch_Cut17_16->SetBinContent(ix, iy, round(counterGENMatch[i][17]*10000.0/counterGENMatch[i][16])/10000 );
+        h_MSSMD_GENMatch_Cut7_6->SetBinContent(ix,   iy, round(counterGENMatch[i][7]*1000.0/counterGENMatch[i][6])/1000 );
+        h_MSSMD_GENMatch_Cut8_7->SetBinContent(ix,   iy, round(counterGENMatch[i][8]*1000.0/counterGENMatch[i][7])/1000 );
+        h_MSSMD_GENMatch_Cut9_8->SetBinContent(ix,   iy, round(counterGENMatch[i][9]*1000.0/counterGENMatch[i][8])/1000 );
+        h_MSSMD_GENMatch_Cut10_9->SetBinContent(ix,  iy, round(counterGENMatch[i][10]*1000.0/counterGENMatch[i][9])/1000 );
+        h_MSSMD_GENMatch_Cut11_10->SetBinContent(ix, iy, round(counterGENMatch[i][11]*1000.0/counterGENMatch[i][10])/1000 );
+        h_MSSMD_GENMatch_Cut12_11->SetBinContent(ix, iy, round(counterGENMatch[i][12]*1000.0/counterGENMatch[i][11])/1000 );
+        h_MSSMD_GENMatch_Cut13_12->SetBinContent(ix, iy, round(counterGENMatch[i][13]*1000.0/counterGENMatch[i][12])/1000 );
+        h_MSSMD_GENMatch_Cut14_13->SetBinContent(ix, iy, round(counterGENMatch[i][14]*1000.0/counterGENMatch[i][13])/1000 );
+        h_MSSMD_GENMatch_Cut15_14->SetBinContent(ix, iy, round(counterGENMatch[i][15]*1000.0/counterGENMatch[i][14])/1000 );
+        h_MSSMD_GENMatch_Cut16_15->SetBinContent(ix, iy, round(counterGENMatch[i][16]*1000.0/counterGENMatch[i][15])/1000 );
+        h_MSSMD_GENMatch_Cut17_16->SetBinContent(ix, iy, round(counterGENMatch[i][17]*1000.0/counterGENMatch[i][16])/1000 );
 
         h_MSSMD_Cut6_1->SetBinContent(ix, iy, round(counter[i][6]*1000.0/counter[i][1])/1000 );
         h_MSSMD_Cut7_2->SetBinContent(ix, iy, round(counter[i][7]*1000.0/counter[i][2])/1000 );
