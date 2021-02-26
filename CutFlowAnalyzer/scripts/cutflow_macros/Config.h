@@ -41,7 +41,7 @@ namespace BKG_cfg {
       std::cout << "*** User input year is not 2018, please check. ***" << std::endl;
     }
 
-    header         = header + "#bf{CMS} #it{Preliminary}    " + Form("%.2f", luminosity) + "fb^{-1} (13 TeV)";
+    header         = header + "#bf{CMS} #it{Preliminary}    " + Form("%.1f", luminosity) + "fb^{-1} (13 TeV)";
     outFileTriggerSF = outFileTriggerSF + "TriggerZShape_" + Form("%d", year) + "_FINAL.root";
 
   } // End function

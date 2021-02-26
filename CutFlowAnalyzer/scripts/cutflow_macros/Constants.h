@@ -2,10 +2,10 @@
 //!  Common Constants !
 //!!!!!!!!!!!!!!!!!!!!!
 //Luminosity each year: unit: fb^-1
-const double lumi_2018 = 59.97;
+const double lumi_2018 = 59.7;
 
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//!  Constants used exclusively in HighMassBKGShape  !
+//!  Constants used exclusively in TriggerSF18.C     !
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //Mass range and bin size at high mass
 const double       HM_m_min  = 76.;

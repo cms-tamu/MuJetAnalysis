@@ -442,6 +442,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH2F *BKGShapeCR      = new TH2F("BKGShapeCR",      "", 14, 11., 60., 14, 11., 60.);//binning 3.5 GeV
   TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC", "", 14, 11., 60.);
   TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF", "", 14, 11., 60.);
+  // cross check shape agreement on Lxy
+  TH1F *BKGShapeCRLxyC = new TH1F("BKGShapeCRLxyC", "", 10, 0., 16.); //binning 1.6cm
+  TH1F *BKGShapeCRLxyF = new TH1F("BKGShapeCRLxyF", "", 10, 0., 16.);
+
   TH1F *NJetCR = new TH1F("NJetCR", "", 100, 0, 100);
   TH1F *NTightBCR  = new TH1F("NTightBCR",  "", 10, 0, 10);
   TH1F *NMediumBCR = new TH1F("NMediumBCR", "", 10, 0, 10);
@@ -1378,21 +1382,27 @@ void efficiency(const std::vector<std::string>& dirNames)
                           BKGShapeCRmassC->Fill(massC);
                           BKGShapeCRmassF->Fill(massF);
 
-                          //Number of jets
+                          // Cross check Lxy distribution MC-data agreement above 11 GeV
+                          if (massC > 11 && massC < 60 && massF > 11 && massF < 60) {// need this otherwise low mass will be included
+                            BKGShapeCRLxyC->Fill(fabs(diMuonC_FittedVtx_Lxy));
+                            BKGShapeCRLxyF->Fill(fabs(diMuonF_FittedVtx_Lxy));
+                          }
+
+                          // Number of jets
                           NJetCR->Fill(NPATJet);
-                          //Number of B jets
+                          // Number of B jets
                           NTightBCR->Fill(NPATJetTightB);
                           NMediumBCR->Fill(NPATJetMediumB);
                           NLooseBCR->Fill(NPATJetLooseB);
 
-                          //SA mu iso and trk multiplicity
+                          // SA mu iso and trk multiplicity
                           SAmuNTrkWP1CR->Fill(SAmu_nTrkWP1);
                           SAmuNTrkWP2CR->Fill(SAmu_nTrkWP2);
                           SAmuNTrkWP3CR->Fill(SAmu_nTrkWP3);
                           SAmuTrkIsoWP1CR->Fill(SAmu_TrkIsoWP1);
                           SAmuTrkIsoWP2CR->Fill(SAmu_TrkIsoWP2);
                           SAmuTrkIsoWP3CR->Fill(SAmu_TrkIsoWP3);
-                          //no dz version
+                          // no dz version
                           SAmuNTrkNoDzWP1CR->Fill(SAmu_nTrkNodzWP1);
                           SAmuNTrkNoDzWP2CR->Fill(SAmu_nTrkNodzWP2);
                           SAmuNTrkNoDzWP3CR->Fill(SAmu_nTrkNodzWP3);
@@ -1427,7 +1437,9 @@ void efficiency(const std::vector<std::string>& dirNames)
                             Lz_DimuF_CR_HighMass->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
                             SAmu_matched_segs_CR_HighMass->Fill(muJetF_Mu1_matched_segs);
                           }
+
                         }//end if ModelBKGShape
+
                       }//end else in loop 17
                     }//end 16
                   }//end 15
@@ -1960,7 +1972,7 @@ void efficiency(const std::vector<std::string>& dirNames)
     RECOrePaired2muLeadingdR->GetXaxis()->SetTitle("Leading dR of re-paired OS di-#mu"); RECOrePaired2muLeadingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muLeadingdR->Write();
     RECOrePaired2muTrailingdR->GetXaxis()->SetTitle("Trailing dR of re-paired OS di-#mu"); RECOrePaired2muTrailingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muTrailingdR->Write();
 
-    BKGShapeCR->Write(); BKGShapeCRmassC->Write(); BKGShapeCRmassF->Write();
+    BKGShapeCR->Write(); BKGShapeCRmassC->Write(); BKGShapeCRmassF->Write(); BKGShapeCRLxyC->Write(); BKGShapeCRLxyF->Write();
     NJetCR->Write(); NTightBCR->Write(); NMediumBCR->Write(); NLooseBCR->Write();
     SAmuTrkIsoWP1CR->Write(); SAmuTrkIsoWP2CR->Write(); SAmuTrkIsoWP3CR->Write(); SAmuNTrkWP1CR->Write(); SAmuNTrkWP2CR->Write(); SAmuNTrkWP3CR->Write();
     SAmuNTrkNoDzWP1CR->Write(); SAmuNTrkNoDzWP2CR->Write(); SAmuNTrkNoDzWP3CR->Write(); SAmuTrkIsoNoDzWP1CR->Write(); SAmuTrkIsoNoDzWP2CR->Write(); SAmuTrkIsoNoDzWP3CR->Write();
@@ -2195,7 +2207,7 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete genA_leading_Lz_pass_all; delete HLT_genA_leading_Lz_pass_all;
   delete diMuon_leading_Lxy_pass_all; delete HLT_diMuon_leading_Lxy_pass_all;
   delete diMuon_leading_Lz_pass_all; delete HLT_diMuon_leading_Lz_pass_all;
-  delete BKGShapeCR; delete BKGShapeCRmassC; delete BKGShapeCRmassF;
+  delete BKGShapeCR; delete BKGShapeCRmassC; delete BKGShapeCRmassF; delete BKGShapeCRLxyC; delete BKGShapeCRLxyF;
   delete BKGShapeSR; delete BKGShapeSRmassC; delete BKGShapeSRmassF;
   delete NJetCR; delete NTightBCR; delete NMediumBCR; delete NLooseBCR;
   delete NJetSR; delete NTightBSR; delete NMediumBSR; delete NLooseBSR;
