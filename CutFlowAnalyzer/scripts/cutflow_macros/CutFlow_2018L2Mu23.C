@@ -65,16 +65,17 @@ void efficiency(const std::vector<std::string>& dirNames)
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //! Flags for USER to configure  !
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  bool verbose(true);//Debug and printout basic info from ntuple
-  bool CutFlowTable(true);//Loop 2-dimu events and print cutflow table
-  bool TriggerSFPlot(false);//Study the trigger scale factor using MET and WZ MC
-  bool LoopOrphanTree(false);//Loop over orphan-dimu events
-  bool Model1DTemplate(false);//plot dimu mass in orphan-dimu events
-  bool PlotdZ(true);//Plot dZ of two dimuon vtx
-  bool PlotIso(true);//Plot isolation for dimuon(s)
-  bool PerEventTriggerEff(true);//Plot per event trigger eff.
-  bool ModelSRWidth(true);//Plot mass and fit to obtain width for 2D signal corridor
-  bool ModelBKGShape(true);//Plot histograms to be used in high mass background estimation
+  bool verbose(true); // Debug and printout basic info from ntuple
+  bool CutFlowTable(true); // Loop 2-dimu events and print cutflow table
+  bool TriggerSFPlot(false); // Study the trigger scale factor using MET and WZ MC
+  bool LoopOrphanTree(false); // Loop over orphan-dimu events
+  bool Model1DTemplate(false); // plot dimu mass in orphan-dimu events
+  bool PlotdZ(true); // Plot dZ of two dimuon vtx
+  bool PlotIso(true); // Plot isolation for dimuon(s)
+  bool PerEventTriggerEff(true); // Plot per event trigger eff.
+  bool ModelSRWidth(true); // Plot mass and fit to obtain width for 2D signal corridor
+  bool ModelBKGShape(true); // Plot histograms to be used in high mass background estimation
+  bool Unblinding(false); // printout masses at the signal region
 
   TString ext("out_ana_");
   cout<<"Directory Names  "<<dirNames[0]<<endl;
@@ -1315,9 +1316,13 @@ void efficiency(const std::vector<std::string>& dirNames)
                         std::cout << "    Reco 4mu mass: " <<  reco4mu_m << std::endl;
                         */
 
+                        //Print out signal region massC and massF
+                        if ( Unblinding ) {
+                          std::cout << "massC_SR = " << massC << "; massF_SR = " << massF << "; "<< std::endl;
+                        }
 
                         if ( ModelBKGShape ) {
-                          BKGShapeSR->Fill(massC,massF);
+                          BKGShapeSR->Fill(massC, massF);
                           BKGShapeSRmassC->Fill(massC);
                           BKGShapeSRmassF->Fill(massF);
 
