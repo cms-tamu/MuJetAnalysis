@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=DATA18
-#SBATCH --time=3:00:00 #DATA2017 need 2hr, MSSMD/BKG2017/TESTMC need 4hr
+#SBATCH --time=5:00:00 #DATA2018 need 5hr, MSSMD/BKG MC need 4hr
 #SBATCH --ntasks=1
-#SBATCH --mem=1000M    #DATA2017/BKG/TESTMC need 1000M, MSSMD2017 need 7000M
+#SBATCH --mem=2000M    #DATA2018/BKG need 1000M, MSSMD need 7000M
 #SBATCH --output=CutFlow.out.%j
 #SBATCH --account=122747014489
 
