@@ -1410,19 +1410,6 @@ void efficiency(const std::vector<std::string>& dirNames)
                         //=================================
                         // All offline selections finished
                         //=================================
-                        /*
-                        std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
-                        std::cout << ">>> dimuC mass: " << massC << ", Lxy: " << diMuonC_FittedVtx_Lxy << ", No. SAMu: " << dimuC_nSAMu << ", dz: " << diMuonC_FittedVtx_dz << std::endl;
-                        std::cout << "        Mu0 pT: " << muJetC_Mu0_pt << ", eta: " << muJetC_Mu0_eta << ", phi: " << muJetC_Mu0_phi <<", SA-only(?): "<< dimuC_Mu0_SA << std::endl;
-                        std::cout << "        Mu1 pT: " << muJetC_Mu1_pt << ", eta: " << muJetC_Mu1_eta << ", phi: " << muJetC_Mu1_phi <<", SA-only(?): "<< dimuC_Mu1_SA << std::endl;
-                        std::cout << "    dimuF mass: " << massF << ", Lxy: " << diMuonF_FittedVtx_Lxy << ", No. SAMu: " << dimuF_nSAMu << ", dz: " << diMuonF_FittedVtx_dz << std::endl;
-                        std::cout << "        Mu0 pT: " << muJetF_Mu0_pt << ", eta: " << muJetF_Mu0_eta << ", phi: " << muJetF_Mu0_phi <<", SA-only(?): "<< dimuF_Mu0_SA << std::endl;
-                        std::cout << "        Mu1 pT: " << muJetF_Mu1_pt << ", eta: " << muJetF_Mu1_eta << ", phi: " << muJetF_Mu1_phi <<", SA-only(?): "<< dimuF_Mu1_SA << std::endl;
-                        std::cout << "    Alternative trailing dR: " << recoRePaired2mutrailing_dR << ", alternative trailing mass: " << recoRePaired2mutrailing_m << std::endl;
-                        std::cout << "    Alternative leading  dR: " << recoRePaired2muleading_dR  << ", alternative leading  mass: " << recoRePaired2muleading_m << std::endl;
-                        std::cout << "    Reco 4mu mass: " <<  reco4mu_m << std::endl;
-                        */
-
                         // Print out signal region massC and massF
                         if ( Unblinding ) {
 
@@ -1432,7 +1419,16 @@ void efficiency(const std::vector<std::string>& dirNames)
                           }
                           else {
                             SR4muMass->Fill(reco4mu_m);
-                            std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << ", massC_SR = " << massC << "; massF_SR = " << massF << "; 4-mu inv. mass = "<< reco4mu_m << "; dimuC Lxy: " << diMuonC_FittedVtx_Lxy << "; dimuF Lxy: " << diMuonF_FittedVtx_Lxy << std::endl;
+                            std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
+                            std::cout << ">>> dimuC mass: " << massC << ", Lxy: " << diMuonC_FittedVtx_Lxy << ", No. SAMu: " << dimuC_nSAMu << ", dz: " << diMuonC_FittedVtx_dz << std::endl;
+                            std::cout << "        Mu0 pT: " << muJetC_Mu0_pt << ", eta: " << muJetC_Mu0_eta << ", phi: " << muJetC_Mu0_phi <<", SA-only(?): "<< dimuC_Mu0_SA << std::endl;
+                            std::cout << "        Mu1 pT: " << muJetC_Mu1_pt << ", eta: " << muJetC_Mu1_eta << ", phi: " << muJetC_Mu1_phi <<", SA-only(?): "<< dimuC_Mu1_SA << std::endl;
+                            std::cout << "    dimuF mass: " << massF << ", Lxy: " << diMuonF_FittedVtx_Lxy << ", No. SAMu: " << dimuF_nSAMu << ", dz: " << diMuonF_FittedVtx_dz << std::endl;
+                            std::cout << "        Mu0 pT: " << muJetF_Mu0_pt << ", eta: " << muJetF_Mu0_eta << ", phi: " << muJetF_Mu0_phi <<", SA-only(?): "<< dimuF_Mu0_SA << std::endl;
+                            std::cout << "        Mu1 pT: " << muJetF_Mu1_pt << ", eta: " << muJetF_Mu1_eta << ", phi: " << muJetF_Mu1_phi <<", SA-only(?): "<< dimuF_Mu1_SA << std::endl;
+                            std::cout << "    Alternative trailing dR: " << recoRePaired2mutrailing_dR << ", alternative trailing mass: " << recoRePaired2mutrailing_m << std::endl;
+                            std::cout << "    Alternative leading  dR: " << recoRePaired2muleading_dR  << ", alternative leading  mass: " << recoRePaired2muleading_m << std::endl;
+                            std::cout << "    Reco 4mu mass: " <<  reco4mu_m << std::endl;
                           }
 
                           // plot 4-mu inv mass distribution for m1/m2 mass above 11 GeV in entire m1-m2 plane
