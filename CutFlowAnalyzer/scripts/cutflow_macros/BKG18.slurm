@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=CutFlow18
-#SBATCH --time=4:00:00 #DATA need 3hr, MSSMD: 4.5hr; BKG: 4.5hr
+#SBATCH --job-name=BKG18
+#SBATCH --time=4:30:00 #DATA2017 need 2hr, MSSMD/BKG2017/TESTMC need 4hr
 #SBATCH --ntasks=1
-#SBATCH --mem=9000M    #DATA/BKG need 1000M, MSSMD need 9000M
+#SBATCH --mem=1000M    #DATA2017/BKG/TESTMC need 1000M, MSSMD2017 need 7000M
 #SBATCH --output=CutFlow.out.%j
 #SBATCH --account=122747014489
 
@@ -15,5 +15,5 @@ parrot_run $cmsMount $SHELL << EOF
 shopt -s expand_aliases
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cmsenv
-echo 'gROOT->ProcessLine(".L CutFlow_2018L2Mu23.C++"); analysis("SignalsList2018MSSMD_2SAmu_NoVtxProbCut_4HLT.txt")' | root -l -b
+echo 'gROOT->ProcessLine(".L CutFlow_2018L2Mu23.C++"); analysis("BKGsList2018_2SAmu_NoVtxProbCut_4HLT.txt")' | root -l -b
 EOF

@@ -65,16 +65,18 @@ void efficiency(const std::vector<std::string>& dirNames)
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   //! Flags for USER to configure  !
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  bool verbose(true);//Debug and printout basic info from ntuple
-  bool CutFlowTable(true);//Loop 2-dimu events and print cutflow table
-  bool TriggerSFPlot(false);//Study the trigger scale factor using MET and WZ MC
-  bool LoopOrphanTree(false);//Loop over orphan-dimu events
-  bool Model1DTemplate(false);//plot dimu mass in orphan-dimu events
-  bool PlotdZ(true);//Plot dZ of two dimuon vtx
-  bool PlotIso(true);//Plot isolation for dimuon(s)
-  bool PerEventTriggerEff(true);//Plot per event trigger eff.
-  bool ModelSRWidth(true);//Plot mass and fit to obtain width for 2D signal corridor
-  bool ModelBKGShape(true);//Plot histograms to be used in high mass background estimation
+
+  bool verbose(true); // Debug and printout basic info from ntuple
+  bool Unblinding(true); // printout masses at the signal region: default to false
+  bool CutFlowTable(true); // Loop 2-dimu events and print cutflow table
+  bool TriggerSFPlot(false); // Study the trigger scale factor using MET and WZ MC
+  bool LoopOrphanTree(false); // Loop over orphan-dimu events
+  bool Model1DTemplate(false); // plot dimu mass in orphan-dimu events
+  bool PlotdZ(true); // Plot dZ of two dimuon vtx
+  bool PlotIso(true); // Plot isolation for dimuon(s)
+  bool PerEventTriggerEff(true); // Plot per event trigger eff.
+  bool ModelSRWidth(true); // Plot mass and fit to obtain width for 2D signal corridor
+  bool ModelBKGShape(true); // Plot histograms to be used in high mass background estimation
 
   TString ext("out_ana_");
   cout<<"Directory Names  "<<dirNames[0]<<endl;
@@ -209,7 +211,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   Float_t diMuons_dz_FittedVtx;
   Float_t diMuonC_FittedVtx_dz;
   Float_t diMuonF_FittedVtx_dz;
-  Bool_t  is2DiMuonsMassOK;
 
   //Start DEBUG: many HLT paths
   Bool_t  isSignalHLT_0_Fired;
@@ -345,84 +346,84 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH1F* FvtxProbSAmuInF = new TH1F("FvtxProbSAmuInF", "Di-#mu1 Vtx Fit Prob. (di-#mu1 has one SA mu)", 1000, 0., 1.);
 
   //Trigger accept eff as function of leading muon pT, eta and phi after cut #9
-  TH1F* leading_pt_pass_basic      = new TH1F("leading_pt_pass_basic",      "", 150,    0, 150); //per 1
+  TH1F* leading_pt_pass_basic      = new TH1F("leading_pt_pass_basic",      "",  30,    0, 150); //per 5
   TH1F* leading_eta_pass_basic     = new TH1F("leading_eta_pass_basic",     "",  50, -2.5, 2.5); //per 0.1
   TH1F* leading_phi_pass_basic     = new TH1F("leading_phi_pass_basic",     "",  70, -3.5, 3.5); //per 0.1
-  TH1F* HLT_leading_pt_pass_basic  = new TH1F("HLT_leading_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_leading_pt_pass_basic  = new TH1F("HLT_leading_pt_pass_basic",  "",  30,    0, 150);
   TH1F* HLT_leading_eta_pass_basic = new TH1F("HLT_leading_eta_pass_basic", "",  50, -2.5, 2.5);
   TH1F* HLT_leading_phi_pass_basic = new TH1F("HLT_leading_phi_pass_basic", "",  70, -3.5, 3.5);
-  TH1F* L1_leading_pt_pass_basic   = new TH1F("L1_leading_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_leading_pt_pass_basic   = new TH1F("L1_leading_pt_pass_basic",   "",  30,    0, 150);
   TH1F* L1_leading_eta_pass_basic  = new TH1F("L1_leading_eta_pass_basic",  "",  50, -2.5, 2.5);
   TH1F* L1_leading_phi_pass_basic  = new TH1F("L1_leading_phi_pass_basic",  "",  70, -3.5, 3.5);
 
-  TH1F* second_pt_pass_basic      = new TH1F("second_pt_pass_basic",      "", 150,    0, 150);
+  TH1F* second_pt_pass_basic      = new TH1F("second_pt_pass_basic",      "",  30,    0, 150);
   TH1F* second_eta_pass_basic     = new TH1F("second_eta_pass_basic",     "",  50, -2.5, 2.5);
   TH1F* second_phi_pass_basic     = new TH1F("second_phi_pass_basic",     "",  70, -3.5, 3.5);
-  TH1F* HLT_second_pt_pass_basic  = new TH1F("HLT_second_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_second_pt_pass_basic  = new TH1F("HLT_second_pt_pass_basic",  "",  30,    0, 150);
   TH1F* HLT_second_eta_pass_basic = new TH1F("HLT_second_eta_pass_basic", "",  50, -2.5, 2.5);
   TH1F* HLT_second_phi_pass_basic = new TH1F("HLT_second_phi_pass_basic", "",  70, -3.5, 3.5);
-  TH1F* L1_second_pt_pass_basic   = new TH1F("L1_second_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_second_pt_pass_basic   = new TH1F("L1_second_pt_pass_basic",   "",  30,    0, 150);
   TH1F* L1_second_eta_pass_basic  = new TH1F("L1_second_eta_pass_basic",  "",  50, -2.5, 2.5);
   TH1F* L1_second_phi_pass_basic  = new TH1F("L1_second_phi_pass_basic",  "",  70, -3.5, 3.5);
 
-  TH1F* third_pt_pass_basic      = new TH1F("third_pt_pass_basic",      "", 150,    0, 150);
+  TH1F* third_pt_pass_basic      = new TH1F("third_pt_pass_basic",      "",  30,    0, 150);
   TH1F* third_eta_pass_basic     = new TH1F("third_eta_pass_basic",     "",  50, -2.5, 2.5);
   TH1F* third_phi_pass_basic     = new TH1F("third_phi_pass_basic",     "",  70, -3.5, 3.5);
-  TH1F* HLT_third_pt_pass_basic  = new TH1F("HLT_third_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_third_pt_pass_basic  = new TH1F("HLT_third_pt_pass_basic",  "",  30,    0, 150);
   TH1F* HLT_third_eta_pass_basic = new TH1F("HLT_third_eta_pass_basic", "",  50, -2.5, 2.5);
   TH1F* HLT_third_phi_pass_basic = new TH1F("HLT_third_phi_pass_basic", "",  70, -3.5, 3.5);
-  TH1F* L1_third_pt_pass_basic   = new TH1F("L1_third_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_third_pt_pass_basic   = new TH1F("L1_third_pt_pass_basic",   "",  30,    0, 150);
   TH1F* L1_third_eta_pass_basic  = new TH1F("L1_third_eta_pass_basic",  "",  50, -2.5, 2.5);
   TH1F* L1_third_phi_pass_basic  = new TH1F("L1_third_phi_pass_basic",  "",  70, -3.5, 3.5);
 
-  TH1F* fourth_pt_pass_basic      = new TH1F("fourth_pt_pass_basic",      "", 150,    0, 150);
+  TH1F* fourth_pt_pass_basic      = new TH1F("fourth_pt_pass_basic",      "",  30,    0, 150);
   TH1F* fourth_eta_pass_basic     = new TH1F("fourth_eta_pass_basic",     "",  50, -2.5, 2.5);
   TH1F* fourth_phi_pass_basic     = new TH1F("fourth_phi_pass_basic",     "",  70, -3.5, 3.5);
-  TH1F* HLT_fourth_pt_pass_basic  = new TH1F("HLT_fourth_pt_pass_basic",  "", 150,    0, 150);
+  TH1F* HLT_fourth_pt_pass_basic  = new TH1F("HLT_fourth_pt_pass_basic",  "",  30,    0, 150);
   TH1F* HLT_fourth_eta_pass_basic = new TH1F("HLT_fourth_eta_pass_basic", "",  50, -2.5, 2.5);
   TH1F* HLT_fourth_phi_pass_basic = new TH1F("HLT_fourth_phi_pass_basic", "",  70, -3.5, 3.5);
-  TH1F* L1_fourth_pt_pass_basic   = new TH1F("L1_fourth_pt_pass_basic",   "", 150,    0, 150);
+  TH1F* L1_fourth_pt_pass_basic   = new TH1F("L1_fourth_pt_pass_basic",   "",  30,    0, 150);
   TH1F* L1_fourth_eta_pass_basic  = new TH1F("L1_fourth_eta_pass_basic",  "",  50, -2.5, 2.5);
   TH1F* L1_fourth_phi_pass_basic  = new TH1F("L1_fourth_phi_pass_basic",  "",  70, -3.5, 3.5);
 
   //Trigger accept eff as function of leading 4 muons pT, eta and phi after cut #15
-  TH1F* leading_pt_pass_all      = new TH1F("leading_pt_pass_all",      "", 150,    0, 150);
+  TH1F* leading_pt_pass_all      = new TH1F("leading_pt_pass_all",      "",  30,    0, 150);
   TH1F* leading_eta_pass_all     = new TH1F("leading_eta_pass_all",     "",  50, -2.5, 2.5);
   TH1F* leading_phi_pass_all     = new TH1F("leading_phi_pass_all",     "",  70, -3.5, 3.5);
-  TH1F* HLT_leading_pt_pass_all  = new TH1F("HLT_leading_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_leading_pt_pass_all  = new TH1F("HLT_leading_pt_pass_all",  "",  30,    0, 150);
   TH1F* HLT_leading_eta_pass_all = new TH1F("HLT_leading_eta_pass_all", "",  50, -2.5, 2.5);
   TH1F* HLT_leading_phi_pass_all = new TH1F("HLT_leading_phi_pass_all", "",  70, -3.5, 3.5);
-  TH1F* L1_leading_pt_pass_all   = new TH1F("L1_leading_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_leading_pt_pass_all   = new TH1F("L1_leading_pt_pass_all",   "",  30,    0, 150);
   TH1F* L1_leading_eta_pass_all  = new TH1F("L1_leading_eta_pass_all",  "",  50, -2.5, 2.5);
   TH1F* L1_leading_phi_pass_all  = new TH1F("L1_leading_phi_pass_all",  "",  70, -3.5, 3.5);
 
-  TH1F* second_pt_pass_all      = new TH1F("second_pt_pass_all",      "", 150,    0, 150);
+  TH1F* second_pt_pass_all      = new TH1F("second_pt_pass_all",      "",  30,    0, 150);
   TH1F* second_eta_pass_all     = new TH1F("second_eta_pass_all",     "",  50, -2.5, 2.5);
   TH1F* second_phi_pass_all     = new TH1F("second_phi_pass_all",     "",  70, -3.5, 3.5);
-  TH1F* HLT_second_pt_pass_all  = new TH1F("HLT_second_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_second_pt_pass_all  = new TH1F("HLT_second_pt_pass_all",  "",  30,    0, 150);
   TH1F* HLT_second_eta_pass_all = new TH1F("HLT_second_eta_pass_all", "",  50, -2.5, 2.5);
   TH1F* HLT_second_phi_pass_all = new TH1F("HLT_second_phi_pass_all", "",  70, -3.5, 3.5);
-  TH1F* L1_second_pt_pass_all   = new TH1F("L1_second_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_second_pt_pass_all   = new TH1F("L1_second_pt_pass_all",   "",  30,    0, 150);
   TH1F* L1_second_eta_pass_all  = new TH1F("L1_second_eta_pass_all",  "",  50, -2.5, 2.5);
   TH1F* L1_second_phi_pass_all  = new TH1F("L1_second_phi_pass_all",  "",  70, -3.5, 3.5);
 
-  TH1F* third_pt_pass_all      = new TH1F("third_pt_pass_all",      "", 150,    0, 150);
+  TH1F* third_pt_pass_all      = new TH1F("third_pt_pass_all",      "",  30,    0, 150);
   TH1F* third_eta_pass_all     = new TH1F("third_eta_pass_all",     "",  50, -2.5, 2.5);
   TH1F* third_phi_pass_all     = new TH1F("third_phi_pass_all",     "",  70, -3.5, 3.5);
-  TH1F* HLT_third_pt_pass_all  = new TH1F("HLT_third_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_third_pt_pass_all  = new TH1F("HLT_third_pt_pass_all",  "",  30,    0, 150);
   TH1F* HLT_third_eta_pass_all = new TH1F("HLT_third_eta_pass_all", "",  50, -2.5, 2.5);
   TH1F* HLT_third_phi_pass_all = new TH1F("HLT_third_phi_pass_all", "",  70, -3.5, 3.5);
-  TH1F* L1_third_pt_pass_all   = new TH1F("L1_third_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_third_pt_pass_all   = new TH1F("L1_third_pt_pass_all",   "",  30,    0, 150);
   TH1F* L1_third_eta_pass_all  = new TH1F("L1_third_eta_pass_all",  "",  50, -2.5, 2.5);
   TH1F* L1_third_phi_pass_all  = new TH1F("L1_third_phi_pass_all",  "",  70, -3.5, 3.5);
 
-  TH1F* fourth_pt_pass_all      = new TH1F("fourth_pt_pass_all",      "", 150,    0, 150);
+  TH1F* fourth_pt_pass_all      = new TH1F("fourth_pt_pass_all",      "",  30,    0, 150);
   TH1F* fourth_eta_pass_all     = new TH1F("fourth_eta_pass_all",     "",  50, -2.5, 2.5);
   TH1F* fourth_phi_pass_all     = new TH1F("fourth_phi_pass_all",     "",  70, -3.5, 3.5);
-  TH1F* HLT_fourth_pt_pass_all  = new TH1F("HLT_fourth_pt_pass_all",  "", 150,    0, 150);
+  TH1F* HLT_fourth_pt_pass_all  = new TH1F("HLT_fourth_pt_pass_all",  "",  30,    0, 150);
   TH1F* HLT_fourth_eta_pass_all = new TH1F("HLT_fourth_eta_pass_all", "",  50, -2.5, 2.5);
   TH1F* HLT_fourth_phi_pass_all = new TH1F("HLT_fourth_phi_pass_all", "",  70, -3.5, 3.5);
-  TH1F* L1_fourth_pt_pass_all   = new TH1F("L1_fourth_pt_pass_all",   "", 150,    0, 150);
+  TH1F* L1_fourth_pt_pass_all   = new TH1F("L1_fourth_pt_pass_all",   "",  30,    0, 150);
   TH1F* L1_fourth_eta_pass_all  = new TH1F("L1_fourth_eta_pass_all",  "",  50, -2.5, 2.5);
   TH1F* L1_fourth_phi_pass_all  = new TH1F("L1_fourth_phi_pass_all",  "",  70, -3.5, 3.5);
 
@@ -442,6 +443,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH2F *BKGShapeCR      = new TH2F("BKGShapeCR",      "", 14, 11., 60., 14, 11., 60.);//binning 3.5 GeV
   TH1F *BKGShapeCRmassC = new TH1F("BKGShapeCRmassC", "", 14, 11., 60.);
   TH1F *BKGShapeCRmassF = new TH1F("BKGShapeCRmassF", "", 14, 11., 60.);
+  // cross check shape agreement on Lxy
+  TH1F *BKGShapeCRLxyC = new TH1F("BKGShapeCRLxyC", "", 10, 0., 16.); //binning 1.6cm
+  TH1F *BKGShapeCRLxyF = new TH1F("BKGShapeCRLxyF", "", 10, 0., 16.);
+
   TH1F *NJetCR = new TH1F("NJetCR", "", 100, 0, 100);
   TH1F *NTightBCR  = new TH1F("NTightBCR",  "", 10, 0, 10);
   TH1F *NMediumBCR = new TH1F("NMediumBCR", "", 10, 0, 10);
@@ -468,6 +473,15 @@ void efficiency(const std::vector<std::string>& dirNames)
   TH2F *BKGShapeSR      = new TH2F("BKGShapeSR",      "", 14, 11., 60., 14, 11., 60.);
   TH1F *BKGShapeSRmassC = new TH1F("BKGShapeSRmassC", "", 14, 11., 60.);
   TH1F *BKGShapeSRmassF = new TH1F("BKGShapeSRmassF", "", 14, 11., 60.);
+  TH1F *SR4muMass = new TH1F("SR4muMass", "", 1000, 0., 1000.); // 4 mu inv mass in SR
+  TH1F *SR4muMass2025 = new TH1F("SR4muMass2025", "", 1000, 0., 1000.); // 4 mu inv mass for 2mu mass b/t 20-25GeV in SR
+  TH1F *CRSR4muMass11 = new TH1F("CRSR4muMass11", "", 1000, 0., 1000.); // 4 mu inv mass for 2mu mass above 11 GeV in CR+SR
+  TH2F *CRSRdimuHiggs = new TH2F("CRSRdimuHiggs", "", 49, 11., 60., 49, 11., 60.); // Events from higgs: 2D mass
+  TH1F *CRSRmassCHiggs = new TH1F("CRSRmassCHiggs", "", 49, 11., 60.);
+  TH1F *CRSRmassFHiggs = new TH1F("CRSRmassFHiggs", "", 49, 11., 60.);
+  TH2F *CRSRdimuZ = new TH2F("CRSRdimuZ", "", 49, 11., 60., 49, 11., 60.); // Events from Z: 2D mass
+  TH1F *CRSRmassCZ = new TH1F("CRSRmassCZ", "", 49, 11., 60.);
+  TH1F *CRSRmassFZ = new TH1F("CRSRmassFZ", "", 49, 11., 60.);
   TH1F *NJetSR = new TH1F("NJetSR", "", 100, 0, 100);
   TH1F *NTightBSR  = new TH1F("NTightBSR",  "", 10, 0, 10);
   TH1F *NMediumBSR = new TH1F("NMediumBSR", "", 10, 0, 10);
@@ -740,7 +754,6 @@ void efficiency(const std::vector<std::string>& dirNames)
   t->SetBranchAddress("isSignalHLTFired",              &isSignalHLTFired);
   t->SetBranchAddress("isSignalHLTL1Fired",            &isSignalHLTL1Fired);
   t->SetBranchAddress("isOrthogonalHLTFired",          &isOrthogonalHLTFired);
-  t->SetBranchAddress("is2DiMuonsMassOK_FittedVtx",    &is2DiMuonsMassOK);
 
   //Get branch from orphan-dimuon tree
   o->SetBranchAddress("orph_passOffLineSelPtEta",    &orph_passOffLineSelPtEta); //offline pT, eta selection same as signal
@@ -813,6 +826,105 @@ void efficiency(const std::vector<std::string>& dirNames)
   int newcountHLT1 = 0;
   int newcountHLT2 = 0;
   int newcountHLT3 = 0;
+
+  // Create a tree file for kth sample - store unblinded events in CR+SR above 11 GeV
+  TString output0 = "";
+  output0 = output0 + "./DataAboveUpsilonCRSR_sample_" + Form("%d", k+1)+ ".root";
+  TFile f0(output0, "recreate");
+  TTree DataAboveUpsilonCRSR("DataAboveUpsilonCRSR", "DataAboveUpsilonCRSR");
+
+  DataAboveUpsilonCRSR.Branch("run",   &run,   "run/I");
+  DataAboveUpsilonCRSR.Branch("lumi",  &lumi,  "lumi/I");
+	DataAboveUpsilonCRSR.Branch("event", &event, "event/I");
+
+  DataAboveUpsilonCRSR.Branch("isVtxOK",       &isVtxOK,       "isVtxOK/O");
+  DataAboveUpsilonCRSR.Branch("nRecoMu",       &nRecoMu,       "nRecoMu/I");
+  DataAboveUpsilonCRSR.Branch("nSAMu",         &nSAMu,         "nSAMu/I");
+  DataAboveUpsilonCRSR.Branch("is2DiMuons",    &is2DiMuons,    "is2DiMuons/O");
+  DataAboveUpsilonCRSR.Branch("selMu0_pT",     &selMu0_pT,     "selMu0_pT/F");
+  DataAboveUpsilonCRSR.Branch("selMu1_pT",     &selMu1_pT,     "selMu1_pT/F");
+  DataAboveUpsilonCRSR.Branch("selMu2_pT",     &selMu2_pT,     "selMu2_pT/F");
+  DataAboveUpsilonCRSR.Branch("selMu3_pT",     &selMu3_pT,     "selMu3_pT/F");
+	DataAboveUpsilonCRSR.Branch("selMu0_eta",    &selMu0_eta,    "selMu0_eta/F");
+  DataAboveUpsilonCRSR.Branch("selMu1_eta",    &selMu1_eta,    "selMu1_eta/F");
+  DataAboveUpsilonCRSR.Branch("selMu2_eta",    &selMu2_eta,    "selMu2_eta/F");
+  DataAboveUpsilonCRSR.Branch("selMu3_eta",    &selMu3_eta,    "selMu3_eta/F");
+  DataAboveUpsilonCRSR.Branch("selMu0_phi",    &selMu0_phi,    "selMu0_phi/F");
+  DataAboveUpsilonCRSR.Branch("selMu1_phi",    &selMu1_phi,    "selMu1_phi/F");
+  DataAboveUpsilonCRSR.Branch("selMu2_phi",    &selMu2_phi,    "selMu2_phi/F");
+  DataAboveUpsilonCRSR.Branch("selMu3_phi",    &selMu3_phi,    "selMu3_phi/F");
+  DataAboveUpsilonCRSR.Branch("selMu0_charge", &selMu0_charge, "selMu0_charge/F");
+  DataAboveUpsilonCRSR.Branch("selMu1_charge", &selMu1_charge, "selMu1_charge/F");
+  DataAboveUpsilonCRSR.Branch("selMu2_charge", &selMu2_charge, "selMu2_charge/F");
+  DataAboveUpsilonCRSR.Branch("selMu3_charge", &selMu3_charge, "selMu3_charge/F");
+
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu0_pt",           &muJetC_Mu0_pt,           "diMuonC_Mu0_pt/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu1_pt",           &muJetC_Mu1_pt,           "diMuonC_Mu1_pt/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu0_pt",           &muJetF_Mu0_pt,           "diMuonF_Mu0_pt/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu1_pt",           &muJetF_Mu1_pt,           "diMuonF_Mu1_pt/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu0_eta",          &muJetC_Mu0_eta,          "diMuonC_Mu0_eta/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu1_eta",          &muJetC_Mu1_eta,          "diMuonC_Mu1_eta/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu0_eta",          &muJetF_Mu0_eta,          "diMuonF_Mu0_eta/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu1_eta",          &muJetF_Mu1_eta,          "diMuonF_Mu1_eta/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu0_phi",          &muJetC_Mu0_phi,          "diMuonC_Mu0_phi/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu1_phi",          &muJetC_Mu1_phi,          "diMuonC_Mu1_phi/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu0_phi",          &muJetF_Mu0_phi,          "diMuonF_Mu0_phi/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu1_phi",          &muJetF_Mu1_phi,          "diMuonF_Mu1_phi/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu0_matched_segs", &muJetC_Mu0_matched_segs, "diMuonC_Mu0_matched_segs/I");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu1_matched_segs", &muJetC_Mu1_matched_segs, "diMuonC_Mu1_matched_segs/I");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu0_matched_segs", &muJetF_Mu0_matched_segs, "diMuonF_Mu0_matched_segs/I");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu1_matched_segs", &muJetF_Mu1_matched_segs, "diMuonF_Mu1_matched_segs/I");
+  DataAboveUpsilonCRSR.Branch("diMuonC_nSAMu",            &dimuC_nSAMu,             "diMuonC_nSAMu/I");
+  DataAboveUpsilonCRSR.Branch("diMuonF_nSAMu",            &dimuF_nSAMu,             "diMuonF_nSAMu/I");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu0_SA",           &dimuC_Mu0_SA,            "diMuonC_Mu0_SA/O");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Mu1_SA",           &dimuC_Mu1_SA,            "diMuonC_Mu1_SA/O");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu0_SA",           &dimuF_Mu0_SA,            "diMuonF_Mu0_SA/O");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Mu1_SA",           &dimuF_Mu1_SA,            "diMuonF_Mu1_SA/O");
+  DataAboveUpsilonCRSR.Branch("diMuonC_vtx_prob",         &diMuonC_FittedVtx_prob,  "diMuonC_vtx_prob/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_vtx_prob",         &diMuonF_FittedVtx_prob,  "diMuonF_vtx_prob/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_two_mu_dR",        &diMuonC_FittedVtx_dR,    "diMuonC_two_mu_dR/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_two_mu_dR",        &diMuonF_FittedVtx_dR,    "diMuonF_two_mu_dR/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Lxy",              &diMuonC_FittedVtx_Lxy,   "diMuonC_Lxy/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_Lxy",              &diMuonF_FittedVtx_Lxy,   "diMuonF_Lxy/F");
+	DataAboveUpsilonCRSR.Branch("diMuonC_L",                &diMuonC_FittedVtx_L,     "diMuonC_L/F");
+	DataAboveUpsilonCRSR.Branch("diMuonF_L",                &diMuonF_FittedVtx_L,     "diMuonF_L/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_m",                &massC,                   "diMuonC_m/F");
+	DataAboveUpsilonCRSR.Branch("diMuonF_m",                &massF,                   "diMuonF_m/F");
+
+  DataAboveUpsilonCRSR.Branch("diMuonC_dz",                   &diMuonC_FittedVtx_dz,               "diMuonC_dz/F");
+  DataAboveUpsilonCRSR.Branch("diMuonF_dz",                   &diMuonF_FittedVtx_dz,               "diMuonF_dz/F");
+  DataAboveUpsilonCRSR.Branch("diMuons_dz",                   &diMuons_dz_FittedVtx,               "diMuons_dz/F");
+  DataAboveUpsilonCRSR.Branch("diMuonC_Iso_dR0p4",            &diMuonC_IsoTk_FittedVtx,            "diMuonC_Iso_dR0p4/F");
+	DataAboveUpsilonCRSR.Branch("diMuonF_Iso_dR0p4",            &diMuonF_IsoTk_FittedVtx,            "diMuonF_Iso_dR0p4/F");
+  DataAboveUpsilonCRSR.Branch("diMuonCMu0_Iso_dR0p3",         &diMuonCMu0_IsoTk0p3_FittedVtx,      "diMuonCMu0_Iso_dR0p3/F");
+  DataAboveUpsilonCRSR.Branch("diMuonCMu0_Iso_dR0p4",         &diMuonCMu0_IsoTk0p4_FittedVtx,      "diMuonCMu0_Iso_dR0p4/F");
+  DataAboveUpsilonCRSR.Branch("diMuonCMu0_Iso_dR0p5",         &diMuonCMu0_IsoTk0p5_FittedVtx,      "diMuonCMu0_Iso_dR0p5/F");
+  DataAboveUpsilonCRSR.Branch("diMuonCMu1_Iso_dR0p3",         &diMuonCMu1_IsoTk0p3_FittedVtx,      "diMuonCMu1_Iso_dR0p3/F");
+  DataAboveUpsilonCRSR.Branch("diMuonCMu1_Iso_dR0p4",         &diMuonCMu1_IsoTk0p4_FittedVtx,      "diMuonCMu1_Iso_dR0p4/F");
+  DataAboveUpsilonCRSR.Branch("diMuonCMu1_Iso_dR0p5",         &diMuonCMu1_IsoTk0p5_FittedVtx,      "diMuonCMu1_Iso_dR0p5/F");
+  DataAboveUpsilonCRSR.Branch("diMuonFMu0_Iso_dR0p3",         &diMuonFMu0_IsoTk0p3_FittedVtx,      "diMuonFMu0_Iso_dR0p3/F");
+  DataAboveUpsilonCRSR.Branch("diMuonFMu0_Iso_dR0p4",         &diMuonFMu0_IsoTk0p4_FittedVtx,      "diMuonFMu0_Iso_dR0p4/F");
+  DataAboveUpsilonCRSR.Branch("diMuonFMu0_Iso_dR0p5",         &diMuonFMu0_IsoTk0p5_FittedVtx,      "diMuonFMu0_Iso_dR0p5/F");
+  DataAboveUpsilonCRSR.Branch("diMuonFMu1_Iso_dR0p3",         &diMuonFMu1_IsoTk0p3_FittedVtx,      "diMuonFMu1_Iso_dR0p3/F");
+  DataAboveUpsilonCRSR.Branch("diMuonFMu1_Iso_dR0p4",         &diMuonFMu1_IsoTk0p4_FittedVtx,      "diMuonFMu1_Iso_dR0p4/F");
+  DataAboveUpsilonCRSR.Branch("diMuonFMu1_Iso_dR0p5",         &diMuonFMu1_IsoTk0p5_FittedVtx,      "diMuonFMu1_Iso_dR0p5/F");
+  DataAboveUpsilonCRSR.Branch("diMuonCMu0_has_valid_pixhit",  &diMuonC_m1_FittedVtx_hitpix_Phase1, "diMuonCMu0_has_valid_pixhit/I");
+	DataAboveUpsilonCRSR.Branch("diMuonCMu1_has_valid_pixhit",  &diMuonC_m2_FittedVtx_hitpix_Phase1, "diMuonCMu1_has_valid_pixhit/I");
+	DataAboveUpsilonCRSR.Branch("diMuonFMu0_has_valid_pixhit",  &diMuonF_m1_FittedVtx_hitpix_Phase1, "diMuonFMu0_has_valid_pixhit/I");
+	DataAboveUpsilonCRSR.Branch("diMuonFMu1_has_valid_pixhit",  &diMuonF_m2_FittedVtx_hitpix_Phase1, "diMuonFMu1_has_valid_pixhit/I");
+
+  DataAboveUpsilonCRSR.Branch("four_mu_m",                           &reco4mu_m,                  "four_mu_m/F");
+  DataAboveUpsilonCRSR.Branch("re_paired_diMuon_leading_m",          &recoRePaired2muleading_m,   "re_paired_diMuon_leading_m/F");
+  DataAboveUpsilonCRSR.Branch("re_paired_diMuon_trailing_m",         &recoRePaired2mutrailing_m,  "re_paired_diMuon_trailing_m/F");
+  DataAboveUpsilonCRSR.Branch("re_paired_diMuon_leading_two_mu_dR",  &recoRePaired2muleading_dR,  "re_paired_diMuon_leading_two_mu_dR/F");
+  DataAboveUpsilonCRSR.Branch("re_paired_diMuon_trailing_two_mu_dR", &recoRePaired2mutrailing_dR, "re_paired_diMuon_trailing_two_mu_dR/F");
+
+  DataAboveUpsilonCRSR.Branch("isSignalHLT_0_Fired",           &isSignalHLT_0_Fired, "isSignalHLT_0_Fired/O");
+  DataAboveUpsilonCRSR.Branch("isSignalHLT_1_Fired",           &isSignalHLT_1_Fired, "isSignalHLT_1_Fired/O");
+  DataAboveUpsilonCRSR.Branch("isSignalHLT_2_Fired",           &isSignalHLT_2_Fired, "isSignalHLT_2_Fired/O");
+  DataAboveUpsilonCRSR.Branch("isSignalHLT_3_Fired",           &isSignalHLT_3_Fired, "isSignalHLT_3_Fired/O");
+  DataAboveUpsilonCRSR.Branch("isSignalHLT_Final_OR_Fired",    &isSignalHLTFired,    "isSignalHLT_Final_OR_Fired/O");
+  DataAboveUpsilonCRSR.Branch("isSignalHLT_L1_Final_OR_Fired", &isSignalHLTL1Fired,  "isSignalHLT_L1_Final_OR_Fired/O");
 
   if ( verbose ) std::cout << "main tree entries: "<< nentries << std::endl;
 
@@ -1223,21 +1335,21 @@ void efficiency(const std::vector<std::string>& dirNames)
                             }//end ModelSRWidth
 
                             if ( fabs(massC - massF) < My_MassWindow(massC, massF) ) counterGENMatch[k][17]++; //end 17
-                          }//end 16
-                        }//end 15
-                      }//end 14
-                    }//end 13
-                  }//end 12
-                }//end 11
-              }//end 10
-            }//end 9
+                          } // end 16
+                        } // end 15
+                      } // end 14
+                    } // end 13
+                  } // end 12
+                } // end 11
+              } // end 10
+            } // end 9
 
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             //+   End using GEN Match counter ONLY, for signal MC studies  +
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        }//End fiducial volume cut on Phase-1 pixel @GEN
-      }//End asking for four muons @GEN
+        } // End fiducial volume cut on Phase-1 pixel @GEN
+      } // End asking for four muons @GEN
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       //!        Cut Flow Ends@ GEN Level         !
       //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1298,22 +1410,55 @@ void efficiency(const std::vector<std::string>& dirNames)
                         //=================================
                         // All offline selections finished
                         //=================================
-                        /*
-                        std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
-                        std::cout << ">>> dimuC mass: " << massC << ", Lxy: " << diMuonC_FittedVtx_Lxy << ", No. SAMu: " << dimuC_nSAMu << ", dz: " << diMuonC_FittedVtx_dz << std::endl;
-                        std::cout << "        Mu0 pT: " << muJetC_Mu0_pt << ", eta: " << muJetC_Mu0_eta << ", phi: " << muJetC_Mu0_phi <<", SA-only(?): "<< dimuC_Mu0_SA << std::endl;
-                        std::cout << "        Mu1 pT: " << muJetC_Mu1_pt << ", eta: " << muJetC_Mu1_eta << ", phi: " << muJetC_Mu1_phi <<", SA-only(?): "<< dimuC_Mu1_SA << std::endl;
-                        std::cout << "    dimuF mass: " << massF << ", Lxy: " << diMuonF_FittedVtx_Lxy << ", No. SAMu: " << dimuF_nSAMu << ", dz: " << diMuonF_FittedVtx_dz << std::endl;
-                        std::cout << "        Mu0 pT: " << muJetF_Mu0_pt << ", eta: " << muJetF_Mu0_eta << ", phi: " << muJetF_Mu0_phi <<", SA-only(?): "<< dimuF_Mu0_SA << std::endl;
-                        std::cout << "        Mu1 pT: " << muJetF_Mu1_pt << ", eta: " << muJetF_Mu1_eta << ", phi: " << muJetF_Mu1_phi <<", SA-only(?): "<< dimuF_Mu1_SA << std::endl;
-                        std::cout << "    Alternative trailing dR: " << recoRePaired2mutrailing_dR << ", alternative trailing mass: " << recoRePaired2mutrailing_m << std::endl;
-                        std::cout << "    Alternative leading  dR: " << recoRePaired2muleading_dR  << ", alternative leading  mass: " << recoRePaired2muleading_m << std::endl;
-                        std::cout << "    Reco 4mu mass: " <<  reco4mu_m << std::endl;
-                        */
+                        // Print out signal region massC and massF
+                        if ( Unblinding ) {
 
+                          // plot 4-mu inv mass distribution in entire signal region: 0.21-60 GeV
+                          if ( (massC > 2.72 && massC < 3.24 && massF > 2.72 && massF < 3.24) || (massC > 9 && massC < 11 && massF > 9 && massF < 11) ){
+                            std::cout << " >>> Excluded region <<< " << std::endl;
+                          }
+                          else {
+                            SR4muMass->Fill(reco4mu_m);
+                            std::cout << "run: " << run << ", lumi: " << lumi << ", event: " << event << std::endl;
+                            std::cout << ">>> dimuC mass: " << massC << ", Lxy: " << diMuonC_FittedVtx_Lxy << ", No. SAMu: " << dimuC_nSAMu << ", dz: " << diMuonC_FittedVtx_dz << std::endl;
+                            std::cout << "        Mu0 pT: " << muJetC_Mu0_pt << ", eta: " << muJetC_Mu0_eta << ", phi: " << muJetC_Mu0_phi <<", SA-only(?): "<< dimuC_Mu0_SA << std::endl;
+                            std::cout << "        Mu1 pT: " << muJetC_Mu1_pt << ", eta: " << muJetC_Mu1_eta << ", phi: " << muJetC_Mu1_phi <<", SA-only(?): "<< dimuC_Mu1_SA << std::endl;
+                            std::cout << "    dimuF mass: " << massF << ", Lxy: " << diMuonF_FittedVtx_Lxy << ", No. SAMu: " << dimuF_nSAMu << ", dz: " << diMuonF_FittedVtx_dz << std::endl;
+                            std::cout << "        Mu0 pT: " << muJetF_Mu0_pt << ", eta: " << muJetF_Mu0_eta << ", phi: " << muJetF_Mu0_phi <<", SA-only(?): "<< dimuF_Mu0_SA << std::endl;
+                            std::cout << "        Mu1 pT: " << muJetF_Mu1_pt << ", eta: " << muJetF_Mu1_eta << ", phi: " << muJetF_Mu1_phi <<", SA-only(?): "<< dimuF_Mu1_SA << std::endl;
+                            std::cout << "    Alternative trailing dR: " << recoRePaired2mutrailing_dR << ", alternative trailing mass: " << recoRePaired2mutrailing_m << std::endl;
+                            std::cout << "    Alternative leading  dR: " << recoRePaired2muleading_dR  << ", alternative leading  mass: " << recoRePaired2muleading_m << std::endl;
+                            std::cout << "    Reco 4mu mass: " <<  reco4mu_m << std::endl;
+                          }
+
+                          // plot 4-mu inv mass distribution for m1/m2 mass above 11 GeV in entire m1-m2 plane
+                          if ( massC > 11 && massC < 60 && massF > 11 && massF < 60 ) {
+                            CRSR4muMass11->Fill(reco4mu_m);
+                            // fill the tree
+                            DataAboveUpsilonCRSR.Fill();
+                          }
+
+                          // plot 4-mu inv mass distribution for 2mu mass in 20-25 GeV in signal region
+                          if ( massC > 20 && massC < 25 && massF > 20 && massF < 25 ) SR4muMass2025->Fill(reco4mu_m);
+
+                          // Events where the 4 muon mass is from the higgs
+                          if ( reco4mu_m > 115 && reco4mu_m < 135 && massC > 11 && massC < 60 && massF > 11 && massF < 60 ) {
+                            CRSRdimuHiggs->Fill(massC, massF);
+                            CRSRmassCHiggs->Fill(massC);
+                            CRSRmassFHiggs->Fill(massF);
+                          }
+
+                          // Events where the 4 muon mass is from the Z
+                          if ( reco4mu_m > 75 && reco4mu_m < 105 && massC > 11 && massC < 60 && massF > 11 && massF < 60 ) {
+                            CRSRdimuZ->Fill(massC, massF);
+                            CRSRmassCZ->Fill(massC);
+                            CRSRmassFZ->Fill(massF);
+                          }
+
+                        } // end unblinding
 
                         if ( ModelBKGShape ) {
-                          BKGShapeSR->Fill(massC,massF);
+                          BKGShapeSR->Fill(massC, massF);
                           BKGShapeSRmassC->Fill(massC);
                           BKGShapeSRmassF->Fill(massF);
 
@@ -1378,21 +1523,46 @@ void efficiency(const std::vector<std::string>& dirNames)
                           BKGShapeCRmassC->Fill(massC);
                           BKGShapeCRmassF->Fill(massF);
 
-                          //Number of jets
+                          if ( massC > 11 && massC < 60 && massF > 11 && massF < 60 ) {
+                            CRSR4muMass11->Fill(reco4mu_m);
+                            // fill the tree
+                            DataAboveUpsilonCRSR.Fill();
+                          }
+
+                          // Events where the 4 muon mass is from the higgs
+                          if ( reco4mu_m > 115 && reco4mu_m < 135 && massC > 11 && massC < 60 && massF > 11 && massF < 60 ) {
+                            CRSRdimuHiggs->Fill(massC, massF);
+                            CRSRmassCHiggs->Fill(massC);
+                            CRSRmassFHiggs->Fill(massF);
+                          }
+                          // Events where the 4 muon mass is from the Z
+                          if ( reco4mu_m > 75 && reco4mu_m < 105 && massC > 11 && massC < 60 && massF > 11 && massF < 60 ) {
+                            CRSRdimuZ->Fill(massC, massF);
+                            CRSRmassCZ->Fill(massC);
+                            CRSRmassFZ->Fill(massF);
+                          }
+
+                          // Cross check Lxy distribution MC-data agreement above 11 GeV
+                          if (massC > 11 && massC < 60 && massF > 11 && massF < 60) {// need this otherwise low mass will be included
+                            BKGShapeCRLxyC->Fill(fabs(diMuonC_FittedVtx_Lxy));
+                            BKGShapeCRLxyF->Fill(fabs(diMuonF_FittedVtx_Lxy));
+                          }
+
+                          // Number of jets
                           NJetCR->Fill(NPATJet);
-                          //Number of B jets
+                          // Number of B jets
                           NTightBCR->Fill(NPATJetTightB);
                           NMediumBCR->Fill(NPATJetMediumB);
                           NLooseBCR->Fill(NPATJetLooseB);
 
-                          //SA mu iso and trk multiplicity
+                          // SA mu iso and trk multiplicity
                           SAmuNTrkWP1CR->Fill(SAmu_nTrkWP1);
                           SAmuNTrkWP2CR->Fill(SAmu_nTrkWP2);
                           SAmuNTrkWP3CR->Fill(SAmu_nTrkWP3);
                           SAmuTrkIsoWP1CR->Fill(SAmu_TrkIsoWP1);
                           SAmuTrkIsoWP2CR->Fill(SAmu_TrkIsoWP2);
                           SAmuTrkIsoWP3CR->Fill(SAmu_TrkIsoWP3);
-                          //no dz version
+                          // no dz version
                           SAmuNTrkNoDzWP1CR->Fill(SAmu_nTrkNodzWP1);
                           SAmuNTrkNoDzWP2CR->Fill(SAmu_nTrkNodzWP2);
                           SAmuNTrkNoDzWP3CR->Fill(SAmu_nTrkNodzWP3);
@@ -1427,7 +1597,9 @@ void efficiency(const std::vector<std::string>& dirNames)
                             Lz_DimuF_CR_HighMass->Fill( sqrt( pow(diMuonF_FittedVtx_L,2) - pow(diMuonF_FittedVtx_Lxy,2) ) );
                             SAmu_matched_segs_CR_HighMass->Fill(muJetF_Mu1_matched_segs);
                           }
+
                         }//end if ModelBKGShape
+
                       }//end else in loop 17
                     }//end 16
                   }//end 15
@@ -1478,6 +1650,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   std::cout << "HLT3: "  << newcountHLT3*1.0/newcountHLT << std::endl;
   std::cout << "-------------------------" << std::endl;
   //End: DEBUG many HLT
+
+  // write events above 11 GeV after all cuts to file
+  DataAboveUpsilonCRSR.Write();
+  f0.Close();
 
   //Loop over orphan-dimuon tree
   mentries = o->GetEntries();
@@ -1558,10 +1734,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   cout<<"end{tabular}"<<endl;
   cout<<"end{landscape}"<<endl;
 
-  //kth sample
-  TString output="";
+  // kth sample
+  TString output = "";
   output = output + "./foo_modified_sample_" + Form("%d", k+1)+ ".root";
-  TFile myPlot(output,"RECREATE");
+  TFile myPlot(output, "RECREATE");
 
   //plots for trigger scale factor study using orthogonal method
   if ( TriggerSFPlot ){
@@ -1960,13 +2136,16 @@ void efficiency(const std::vector<std::string>& dirNames)
     RECOrePaired2muLeadingdR->GetXaxis()->SetTitle("Leading dR of re-paired OS di-#mu"); RECOrePaired2muLeadingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muLeadingdR->Write();
     RECOrePaired2muTrailingdR->GetXaxis()->SetTitle("Trailing dR of re-paired OS di-#mu"); RECOrePaired2muTrailingdR->GetYaxis()->SetTitle("Events/0.01"); RECOrePaired2muTrailingdR->Write();
 
-    BKGShapeCR->Write(); BKGShapeCRmassC->Write(); BKGShapeCRmassF->Write();
+    BKGShapeCR->Write(); BKGShapeCRmassC->Write(); BKGShapeCRmassF->Write(); BKGShapeCRLxyC->Write(); BKGShapeCRLxyF->Write();
     NJetCR->Write(); NTightBCR->Write(); NMediumBCR->Write(); NLooseBCR->Write();
     SAmuTrkIsoWP1CR->Write(); SAmuTrkIsoWP2CR->Write(); SAmuTrkIsoWP3CR->Write(); SAmuNTrkWP1CR->Write(); SAmuNTrkWP2CR->Write(); SAmuNTrkWP3CR->Write();
     SAmuNTrkNoDzWP1CR->Write(); SAmuNTrkNoDzWP2CR->Write(); SAmuNTrkNoDzWP3CR->Write(); SAmuTrkIsoNoDzWP1CR->Write(); SAmuTrkIsoNoDzWP2CR->Write(); SAmuTrkIsoNoDzWP3CR->Write();
     SAmuPtCR->Write(); SAmuEtaCR->Write(); SAmuPhiCR->Write(); SAmu_matched_segs_CR_HighMass->Write();
 
     BKGShapeSR->Write(); BKGShapeSRmassC->Write(); BKGShapeSRmassF->Write();
+    SR4muMass->Write(); SR4muMass2025->Write(); CRSR4muMass11->Write();
+    CRSRdimuHiggs->Write(); CRSRmassCHiggs->Write(); CRSRmassFHiggs->Write();
+    CRSRdimuZ->Write(); CRSRmassCZ->Write(); CRSRmassFZ->Write();
     NJetSR->Write(); NTightBSR->Write(); NMediumBSR->Write(); NLooseBSR->Write();
     SAmuTrkIsoWP1SR->Write(); SAmuTrkIsoWP2SR->Write(); SAmuTrkIsoWP3SR->Write(); SAmuNTrkWP1SR->Write(); SAmuNTrkWP2SR->Write(); SAmuNTrkWP3SR->Write();
     SAmuNTrkNoDzWP1SR->Write(); SAmuNTrkNoDzWP2SR->Write(); SAmuNTrkNoDzWP3SR->Write(); SAmuTrkIsoNoDzWP1SR->Write(); SAmuTrkIsoNoDzWP2SR->Write(); SAmuTrkIsoNoDzWP3SR->Write();
@@ -2195,8 +2374,10 @@ void efficiency(const std::vector<std::string>& dirNames)
   delete genA_leading_Lz_pass_all; delete HLT_genA_leading_Lz_pass_all;
   delete diMuon_leading_Lxy_pass_all; delete HLT_diMuon_leading_Lxy_pass_all;
   delete diMuon_leading_Lz_pass_all; delete HLT_diMuon_leading_Lz_pass_all;
-  delete BKGShapeCR; delete BKGShapeCRmassC; delete BKGShapeCRmassF;
-  delete BKGShapeSR; delete BKGShapeSRmassC; delete BKGShapeSRmassF;
+  delete BKGShapeCR; delete BKGShapeCRmassC; delete BKGShapeCRmassF; delete BKGShapeCRLxyC; delete BKGShapeCRLxyF;
+  delete BKGShapeSR; delete BKGShapeSRmassC; delete BKGShapeSRmassF; delete SR4muMass; delete SR4muMass2025; delete CRSR4muMass11;
+  delete CRSRdimuHiggs; delete CRSRmassCHiggs; delete CRSRmassFHiggs;
+  delete CRSRdimuZ; delete CRSRmassCZ; delete CRSRmassFZ;
   delete NJetCR; delete NTightBCR; delete NMediumBCR; delete NLooseBCR;
   delete NJetSR; delete NTightBSR; delete NMediumBSR; delete NLooseBSR;
   delete SAmuTrkIsoWP1CR; delete SAmuTrkIsoWP2CR; delete SAmuTrkIsoWP3CR; delete SAmuNTrkWP1CR; delete SAmuNTrkWP2CR; delete SAmuNTrkWP3CR;
@@ -2478,30 +2659,30 @@ void analysis(const std::string SamplesList)
         }//end loop mass
         //cout << "ix: " << ix  << "; iy: " << iy << endl;
 
-        h_MSSMD_GENMatch_Cut6_5->SetBinContent(ix,  iy, round(counterGENMatch[i][6]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut7_5->SetBinContent(ix,  iy, round(counterGENMatch[i][7]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut8_5->SetBinContent(ix,  iy, round(counterGENMatch[i][8]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut9_5->SetBinContent(ix,  iy, round(counterGENMatch[i][9]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut10_5->SetBinContent(ix, iy, round(counterGENMatch[i][10]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut11_5->SetBinContent(ix, iy, round(counterGENMatch[i][11]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut12_5->SetBinContent(ix, iy, round(counterGENMatch[i][12]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut13_5->SetBinContent(ix, iy, round(counterGENMatch[i][13]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut14_5->SetBinContent(ix, iy, round(counterGENMatch[i][14]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut15_5->SetBinContent(ix, iy, round(counterGENMatch[i][15]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut16_5->SetBinContent(ix, iy, round(counterGENMatch[i][16]*10000.0/counterGENMatch[i][5])/10000 );
-        h_MSSMD_GENMatch_Cut17_5->SetBinContent(ix, iy, round(counterGENMatch[i][17]*10000.0/counterGENMatch[i][5])/10000 );
+        h_MSSMD_GENMatch_Cut6_5->SetBinContent(ix,  iy, round(counterGENMatch[i][6]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut7_5->SetBinContent(ix,  iy, round(counterGENMatch[i][7]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut8_5->SetBinContent(ix,  iy, round(counterGENMatch[i][8]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut9_5->SetBinContent(ix,  iy, round(counterGENMatch[i][9]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut10_5->SetBinContent(ix, iy, round(counterGENMatch[i][10]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut11_5->SetBinContent(ix, iy, round(counterGENMatch[i][11]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut12_5->SetBinContent(ix, iy, round(counterGENMatch[i][12]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut13_5->SetBinContent(ix, iy, round(counterGENMatch[i][13]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut14_5->SetBinContent(ix, iy, round(counterGENMatch[i][14]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut15_5->SetBinContent(ix, iy, round(counterGENMatch[i][15]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut16_5->SetBinContent(ix, iy, round(counterGENMatch[i][16]*1000.0/counterGENMatch[i][5])/1000 );
+        h_MSSMD_GENMatch_Cut17_5->SetBinContent(ix, iy, round(counterGENMatch[i][17]*1000.0/counterGENMatch[i][5])/1000 );
 
-        h_MSSMD_GENMatch_Cut7_6->SetBinContent(ix,   iy, round(counterGENMatch[i][7]*10000.0/counterGENMatch[i][6])/10000 );
-        h_MSSMD_GENMatch_Cut8_7->SetBinContent(ix,   iy, round(counterGENMatch[i][8]*10000.0/counterGENMatch[i][7])/10000 );
-        h_MSSMD_GENMatch_Cut9_8->SetBinContent(ix,   iy, round(counterGENMatch[i][9]*10000.0/counterGENMatch[i][8])/10000 );
-        h_MSSMD_GENMatch_Cut10_9->SetBinContent(ix,  iy, round(counterGENMatch[i][10]*10000.0/counterGENMatch[i][9])/10000 );
-        h_MSSMD_GENMatch_Cut11_10->SetBinContent(ix, iy, round(counterGENMatch[i][11]*10000.0/counterGENMatch[i][10])/10000 );
-        h_MSSMD_GENMatch_Cut12_11->SetBinContent(ix, iy, round(counterGENMatch[i][12]*10000.0/counterGENMatch[i][11])/10000 );
-        h_MSSMD_GENMatch_Cut13_12->SetBinContent(ix, iy, round(counterGENMatch[i][13]*10000.0/counterGENMatch[i][12])/10000 );
-        h_MSSMD_GENMatch_Cut14_13->SetBinContent(ix, iy, round(counterGENMatch[i][14]*10000.0/counterGENMatch[i][13])/10000 );
-        h_MSSMD_GENMatch_Cut15_14->SetBinContent(ix, iy, round(counterGENMatch[i][15]*10000.0/counterGENMatch[i][14])/10000 );
-        h_MSSMD_GENMatch_Cut16_15->SetBinContent(ix, iy, round(counterGENMatch[i][16]*10000.0/counterGENMatch[i][15])/10000 );
-        h_MSSMD_GENMatch_Cut17_16->SetBinContent(ix, iy, round(counterGENMatch[i][17]*10000.0/counterGENMatch[i][16])/10000 );
+        h_MSSMD_GENMatch_Cut7_6->SetBinContent(ix,   iy, round(counterGENMatch[i][7]*1000.0/counterGENMatch[i][6])/1000 );
+        h_MSSMD_GENMatch_Cut8_7->SetBinContent(ix,   iy, round(counterGENMatch[i][8]*1000.0/counterGENMatch[i][7])/1000 );
+        h_MSSMD_GENMatch_Cut9_8->SetBinContent(ix,   iy, round(counterGENMatch[i][9]*1000.0/counterGENMatch[i][8])/1000 );
+        h_MSSMD_GENMatch_Cut10_9->SetBinContent(ix,  iy, round(counterGENMatch[i][10]*1000.0/counterGENMatch[i][9])/1000 );
+        h_MSSMD_GENMatch_Cut11_10->SetBinContent(ix, iy, round(counterGENMatch[i][11]*1000.0/counterGENMatch[i][10])/1000 );
+        h_MSSMD_GENMatch_Cut12_11->SetBinContent(ix, iy, round(counterGENMatch[i][12]*1000.0/counterGENMatch[i][11])/1000 );
+        h_MSSMD_GENMatch_Cut13_12->SetBinContent(ix, iy, round(counterGENMatch[i][13]*1000.0/counterGENMatch[i][12])/1000 );
+        h_MSSMD_GENMatch_Cut14_13->SetBinContent(ix, iy, round(counterGENMatch[i][14]*1000.0/counterGENMatch[i][13])/1000 );
+        h_MSSMD_GENMatch_Cut15_14->SetBinContent(ix, iy, round(counterGENMatch[i][15]*1000.0/counterGENMatch[i][14])/1000 );
+        h_MSSMD_GENMatch_Cut16_15->SetBinContent(ix, iy, round(counterGENMatch[i][16]*1000.0/counterGENMatch[i][15])/1000 );
+        h_MSSMD_GENMatch_Cut17_16->SetBinContent(ix, iy, round(counterGENMatch[i][17]*1000.0/counterGENMatch[i][16])/1000 );
 
         h_MSSMD_Cut6_1->SetBinContent(ix, iy, round(counter[i][6]*1000.0/counter[i][1])/1000 );
         h_MSSMD_Cut7_2->SetBinContent(ix, iy, round(counter[i][7]*1000.0/counter[i][2])/1000 );
